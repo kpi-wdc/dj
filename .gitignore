@@ -1,2 +1,7 @@
-/target
-/.idea
+# Maven output
+target
+
+# JetBrains IDEs
+.idea
+!.idea/runConfigurations
+*.iml
