@@ -2,6 +2,7 @@
 target
 
 # JetBrains IDEs
-.idea
-!.idea/runConfigurations
 *.iml
+.idea/*
+!.idea/runConfigurations
+
