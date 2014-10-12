@@ -1,5 +1,7 @@
 # World Data Center
 
+[![Build Status](https://magnum.travis-ci.com/sochka/wdc.svg?token=4kthbosoruq2YVD8Tbqf)](https://magnum.travis-ci.com/sochka/wdc)
+
 Prerequisites: maven is installed
   
 To run this project from terminal run the following command:
