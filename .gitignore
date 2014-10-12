@@ -1,16 +1,6 @@
 # Maven output
 target
 
-# Frontend-maven-plugin
-node
-
-# npm
-node_modules
-
-# Bower
-components
-bower_components
-
 # JetBrains IDEs
 *.iml
 .idea/*
