@@ -11,7 +11,7 @@
           <option name="goals">
             <list>
               <option value="compile" />
-              <option value="tomcat7:run-war" />
+              <option value="tomcat7:run" />
             </list>
           </option>
           <option name="profilesMap">
