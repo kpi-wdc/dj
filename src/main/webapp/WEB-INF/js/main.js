@@ -5,7 +5,9 @@ require.config({
     paths: {
         'angular': '/components/angular/angular.min',
         'angular-route': '/components/angular-route/angular-route.min',
-        'angularAMD': '/components/angularAMD/angularAMD.min'
+        'angularAMD': '/components/angularAMD/angularAMD.min',
+        'HomeController': 'HomeController',
+        'ViewController': 'ViewController'
     },
 
     // Add angular modules that does not support AMD out of the box, put it in a shim

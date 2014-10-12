@@ -12,12 +12,9 @@
     <div class="large-3 columns">
       <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
     </div>
-    <div class="large-9 columns">
+    <div class="large-9 columns" ng-controller="SectionsController">
       <ul class="inline-list right">
-        <li><a href="#">Section 1</a></li>
-        <li><a href="#">Section 2</a></li>
-        <li><a href="#">Section 3</a></li>
-        <li><a href="#">Section 4</a></li>
+        <li ng-repeat="section in sections"><a href="#/404">{{section}}</a></li>
       </ul>
     </div>
   </div>
@@ -29,12 +26,12 @@
 
     <nav class="large-3 pull-9 columns">
       <ul class="side-nav">
-        <li><a href="#/">Section 1</a></li>
-        <li><a href="#/view2">Section 2</a></li>
-        <li><a href="#/">Section 3</a></li>
-        <li><a href="#/">Section 4</a></li>
-        <li><a href="#/">Section 5</a></li>
-        <li><a href="#/">Section 6</a></li>
+        <li><a href="#/">Home</a></li>
+        <li><a href="#/page/1">Page 1</a></li>
+        <li><a href="#/page/2">Page 2</a></li>
+        <li><a href="#/page/3">Page 3</a></li>
+        <li><a href="#/page/4">Page 4</a></li>
+        <li><a href="#/page/5">Page 5</a></li>
       </ul>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>
@@ -46,14 +43,11 @@
       <hr/>
       <div class="row">
         <div class="large-6 columns">
-          <p>&copy; Copyright no one at all. Go to town.</p>
+          <p>&copy; Copyright Oleksandr Sochka & Victor Batytskyy</p>
         </div>
-        <div class="large-6 columns">
+        <div class="large-6 columns" ng-controller="SectionsController">
           <ul class="inline-list right">
-            <li><a href="#">Section 1</a></li>
-            <li><a href="#">Section 2</a></li>
-            <li><a href="#">Section 3</a></li>
-            <li><a href="#">Section 4</a></li>
+            <li ng-repeat="section in sections"><a href="#/404">{{section}}</a></li>
           </ul>
         </div>
       </div>

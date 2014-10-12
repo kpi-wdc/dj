@@ -4,12 +4,27 @@ define(['angularAMD', 'angular-route'], function (angularAMD) {
     app.config(function ($routeProvider) {
         $routeProvider
             .when("/", angularAMD.route({
-                templateUrl: 'views/1.html', controller: 'HomeCtrl', controllerUrl: 'con1'
+                templateUrl: 'views/home.html',
+                controller: 'HomeCtrl'
             }))
-            .when("/view2", angularAMD.route({
-                templateUrl: 'views/2.html', controller: 'View1Ctrl', controllerUrl: 'con2'
+            .when("/page/:name", angularAMD.route({
+                templateUrl: function (urlattr) {
+                    return 'views/' + urlattr.name + '.html';
+                }, controller: 'ViewCtrl'
             }))
-            .otherwise({redirectTo: "/"});
+            .when("/404", angularAMD.route({
+                templateUrl: 'views/404.html'
+            }))
+            .otherwise({redirectTo: "/404"});
+    });
+
+    app.controller('SectionsController', function ($scope) {
+        $scope.sections = [
+            'About',
+            'Index',
+            'Bla-bla',
+            'Some section'
+        ]
     });
 
     return angularAMD.bootstrap(app);

@@ -19,4 +19,4 @@ Suggested intellij idea plugins:
   - angularjs
   - markdown
 
-Also look into [src/main/webapp/README.md!](src/main/webapp/README.md) for front-end documentation.
+Also look into [src/main/webapp/README.md](src/main/webapp/README.md) for front-end documentation.
