@@ -1,0 +1,12 @@
+# Frontend-maven-plugin
+node
+
+# npm
+node_modules
+
+# Bower
+components
+bower_components
+
+# files created by gulp tasks
+generated-*
