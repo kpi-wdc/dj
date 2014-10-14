@@ -24,14 +24,10 @@
 
     </div>
 
-    <nav class="large-3 pull-9 columns">
+    <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
       <ul class="side-nav">
         <li><a href="#/">Home</a></li>
-        <li><a href="#/page/1">Page 1</a></li>
-        <li><a href="#/page/2">Page 2</a></li>
-        <li><a href="#/page/3">Page 3</a></li>
-        <li><a href="#/page/4">Page 4</a></li>
-        <li><a href="#/page/5">Page 5</a></li>
+        <li ng-repeat="page in pages"><a href="#/page/{{page.id}}">{{page.name}}</a></li>
       </ul>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>

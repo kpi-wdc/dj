@@ -27,5 +27,15 @@ define(['angularAMD', 'angular-route'], function (angularAMD) {
         ]
     });
 
+    app.controller('PageNavigationController', function ($scope, $http) {
+        $http.get('/json/pagelist.json').
+            success(function (data, status, header, config) {
+                $scope.pages = data;
+            }).
+            error(function (data, status, header, config) {
+                alert('$http error ' + status + ' - cannot load json/pagelist.json!');
+            });
+    });
+
     return angularAMD.bootstrap(app);
 });
