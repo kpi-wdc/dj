@@ -1,7 +1,9 @@
 define(['angularAMD', 'angular-route'], function (angularAMD) {
     var app = angular.module("webapp", ['ngRoute']);
 
-    app.config(function ($routeProvider) {
+    app.config(function ($routeProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
+
         $routeProvider
             .when("/", angularAMD.route({
                 templateUrl: 'views/home.html',

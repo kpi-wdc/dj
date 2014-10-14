@@ -14,7 +14,7 @@
     </div>
     <div class="large-9 columns" ng-controller="SectionsController">
       <ul class="inline-list right">
-        <li ng-repeat="section in sections"><a href="#/404">{{section}}</a></li>
+        <li ng-repeat="section in sections"><a href="/404">{{section}}</a></li>
       </ul>
     </div>
   </div>
@@ -27,7 +27,7 @@
     <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
       <ul class="side-nav">
         <li><a href="#/">Home</a></li>
-        <li ng-repeat="page in pages"><a href="#/page/{{page.id}}">{{page.name}}</a></li>
+        <li ng-repeat="page in pages"><a href="/page/{{page.id}}">{{page.name}}</a></li>
       </ul>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>
@@ -43,7 +43,7 @@
         </div>
         <div class="large-6 columns" ng-controller="SectionsController">
           <ul class="inline-list right">
-            <li ng-repeat="section in sections"><a href="#/404">{{section}}</a></li>
+            <li ng-repeat="section in sections"><a href="/404">{{section}}</a></li>
           </ul>
         </div>
       </div>
