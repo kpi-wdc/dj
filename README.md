@@ -1,13 +1,13 @@
 # World Data Center
 
-[![Build Status](https://magnum.travis-ci.com/sochka/wdc.svg?token=4kthbosoruq2YVD8Tbqf)](https://magnum.travis-ci.com/sochka/wdc)
+[![Build Status](https://travis-ci.org/sochka/wdc.svg)](https://travis-ci.org/sochka/wdc)
 
 Prerequisites: maven is installed
-  
+
 To run this project from terminal run the following command:
 
      mvn compile tomcat7:run
-     
+
 Intellij idea project has preconfigured run configuration.
 
 Suggested intellij idea plugins:
