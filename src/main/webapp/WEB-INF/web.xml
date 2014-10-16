@@ -38,6 +38,6 @@
     <!-- Define custom 404-error page -->
     <error-page>
         <error-code>404</error-code>
-        <location>/views/page404.html</location>
+        <location>/</location>
     </error-page>
 </web-app>  
