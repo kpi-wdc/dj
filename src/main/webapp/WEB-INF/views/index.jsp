@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="components/foundation/css/foundation.css"/>
-    <link rel="stylesheet" href="css/main.css"/>
-    <script data-main="js/main" src="components/requirejs/require.js"></script>
+    <link rel="stylesheet" href="/components/foundation/css/foundation.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <script data-main="/js/main" src="/components/requirejs/require.js"></script>
   </head>
 
   <body>
@@ -26,7 +26,7 @@
 
     <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
       <ul class="side-nav">
-        <li><a href="#/">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li ng-repeat="page in pages"><a href="/page/{{page.id}}">{{page.name}}</a></li>
       </ul>
 
