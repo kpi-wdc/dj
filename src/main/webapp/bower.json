@@ -11,9 +11,9 @@
   "dependencies": {
     "angular": "1.2.26",
     "foundation": "~5.4.6",
-    "angular-route": "~1.2",
-    "angularAMD": "~0.2.1",
-    "requirejs": "~2.1.15"
+    "angular-ui-router": "~0.2.11",
+    "requirejs": "~2.1.15",
+    "oclazyload": "~0.3.8"
   },
   "resolutions": {
     "angular": "1.2.26"

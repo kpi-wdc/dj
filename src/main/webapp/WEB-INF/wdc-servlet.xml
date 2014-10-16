@@ -23,4 +23,5 @@
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
     <mvc:resources mapping="/views/**" location="/WEB-INF/views/" />
     <mvc:resources mapping="/json/**" location="/WEB-INF/json/" />
+    <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/" />
 </beans>

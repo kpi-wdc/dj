@@ -1,23 +1,34 @@
-define(['angularAMD', 'angular-route'], function (angularAMD) {
-    var app = angular.module("webapp", ['ngRoute']);
+define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
+    var app = angular.module("webapp", ['ui.router']);
 
-    app.config(function ($routeProvider, $locationProvider) {
+    var pageListPromise;
+
+    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
 
-        $routeProvider
-            .when("/", angularAMD.route({
-                templateUrl: 'views/home.html',
-                controller: 'HomeCtrl'
-            }))
-            .when("/page/:name", angularAMD.route({
+        $stateProvider
+            .state("home", {
+                url: "/",
+                templateUrl: 'views/home.html'
+            })
+            .state("page", {
+                url: "/page/:name",
                 templateUrl: function (urlattr) {
-                    return 'views/' + urlattr.name + '.html';
-                }, controller: 'ViewCtrl'
-            }))
-            .when("/404", angularAMD.route({
+                    return '/templates/' + urlattr.name + '.html';
+                }, controller: 'PageCtrl'
+            })
+            .state("404", {
+                url: "/404",
                 templateUrl: 'views/404.html'
-            }))
-            .otherwise({redirectTo: "/404"});
+            });
+
+        $urlRouterProvider.otherwise("/404");
+    }).run(function ($http) {
+        pageListPromise = $http.get('/json/pagelist.json');
+    });
+
+    app.controller('PageCtrl', function ($scope) {
+       $scope.author = 'PageCtrl';
     });
 
     app.controller('SectionsController', function ($scope) {
@@ -30,14 +41,14 @@ define(['angularAMD', 'angular-route'], function (angularAMD) {
     });
 
     app.controller('PageNavigationController', function ($scope, $http) {
-        $http.get('/json/pagelist.json').
-            success(function (data, status, header, config) {
+        pageListPromise.
+            success(function (data) {
                 $scope.pages = data;
             }).
-            error(function (data, status, header, config) {
+            error(function (data, status) {
                 alert('$http error ' + status + ' - cannot load json/pagelist.json!');
             });
     });
 
-    return angularAMD.bootstrap(app);
+    return angular.bootstrap(document, ['webapp']);
 });
