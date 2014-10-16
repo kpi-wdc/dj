@@ -1,5 +1,5 @@
 define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
-    var app = angular.module("webapp", ['ui.router']);
+    var app = angular.module('webapp', ['ui.router', 'oc.lazyLoad']);
 
     var pageListPromise;
 
@@ -7,22 +7,22 @@ define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
         $locationProvider.html5Mode(true);
 
         $stateProvider
-            .state("home", {
-                url: "/",
+            .state('home', {
+                url: '/',
                 templateUrl: 'views/home.html'
             })
-            .state("page", {
-                url: "/page/:name",
+            .state('page', {
+                url: '/page/:name',
                 templateUrl: function (urlattr) {
                     return '/templates/' + urlattr.name + '.html';
                 }, controller: 'PageCtrl'
             })
-            .state("404", {
-                url: "/404",
+            .state('404', {
+                url: '/404',
                 templateUrl: 'views/404.html'
             });
 
-        $urlRouterProvider.otherwise("/404");
+        $urlRouterProvider.otherwise('/404');
     }).run(function ($http) {
         pageListPromise = $http.get('/json/pagelist.json');
     });

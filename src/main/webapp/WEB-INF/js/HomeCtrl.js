@@ -1,5 +1,5 @@
 define(['app'], function (app) {
     app.controller('HomeCtrl', function ($scope) {
-        $scope.author = "HomeCtrl";
+        $scope.author = 'HomeCtrl';
     });
 });
