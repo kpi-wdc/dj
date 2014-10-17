@@ -7,8 +7,8 @@
     <script data-main="/js/main" src="/components/requirejs/require.js"></script>
   </head>
 
-  <body>
-  <div class="row">
+  <body ng-cloak>
+  <header class="row">
     <div class="large-3 columns">
       <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
     </div>
@@ -17,17 +17,17 @@
         <li ng-repeat="section in sections"><a href="/404">{{section}}</a></li>
       </ul>
     </div>
-  </div>
+  </header>
 
   <div class="row">
     <div class="large-9 push-3 columns" ui-view>
-
+      Loading...
     </div>
 
     <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
       <ul class="side-nav">
         <li><a href="/">Home</a></li>
-        <li ng-repeat="page in pages"><a href="/page/{{page.id}}">{{page.name}}</a></li>
+        <li ng-repeat="page in pages"><a href="/page/{{page.href}}">{{page.name}}</a></li>
       </ul>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>
