@@ -1,21 +1,17 @@
 [
     {
-        "id": "0",
         "name": "Page 1",
         "href": "page-1"
     },
     {
-        "id": "1",
         "name": "Page 2",
         "href": "page-2"
     },
     {
-        "id": "3",
         "name": "Page 4",
         "href": "page-4"
     },
     {
-        "id": "5",
         "name": "Page 5",
         "href": "page-5"
     }

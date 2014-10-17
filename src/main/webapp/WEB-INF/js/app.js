@@ -14,20 +14,10 @@ define(['angular', 'angular-ui-router'], function (angular) {
                 url: '/page/:name',
                 resolve: {
                     pageConfig: function ($stateParams, $q, $http, pageListPromise) {
-                        return pageConfigPromise = pageListPromise.then(function (result) {
-                            var pages = result.data;
-                            var id = -1;
-                            for (var pageIndex in pages) {
-                                if (pages[pageIndex].href === $stateParams.name) {
-                                    id = pages[pageIndex].id;
-                                    return $http.get('/json/pageconfig/' + id + '.json')
-                                        .then(function (result) {
-                                            return result.data;
-                                        });
-                                }
-                            }
-                            return $q.reject('Can\'t find page id with href="' + $stateParams.name + '"');
-                        });
+                        return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
+                            .then(function (result) {
+                                return result.data;
+                            });
                     }
                 },
                 templateProvider: function ($http) {
