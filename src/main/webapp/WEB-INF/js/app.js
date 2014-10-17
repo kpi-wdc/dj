@@ -1,8 +1,6 @@
 define(['angular', 'angular-ui-router'], function (angular) {
     var app = angular.module('webapp', ['ui.router']);
 
-    var pageListPromise;
-
     app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
 
@@ -13,24 +11,30 @@ define(['angular', 'angular-ui-router'], function (angular) {
             })
             .state('page', {
                 url: '/page/:name',
-                templateProvider: function ($stateParams, $q, $http) {
-                    return pageListPromise.then(function (result) {
-                        var pages = result.data;
-                        var id = -1;
-                        for (var pageIndex in pages) {
-                            if (pages[pageIndex].href === $stateParams.name) {
-                                id = pages[pageIndex].id;
-                                return $http.get('/json/pageconfig/' + id + '.json')
-                                    .then(function (result) {
-                                        var config = result.data;
-                                        return $http.get('/templates/' + config.templateName + '.html')
-                                            .then(function (result) {
-                                               return result.data;
-                                            });
-                                    });
+                resolve: {
+                    pageConfig: function ($stateParams, $q, $http, $rootScope) {
+                        return $rootScope.pageConfigPromise = $rootScope.pageListPromise.then(function (result) {
+                            var pages = result.data;
+                            var id = -1;
+                            for (var pageIndex in pages) {
+                                if (pages[pageIndex].href === $stateParams.name) {
+                                    id = pages[pageIndex].id;
+                                    return $http.get('/json/pageconfig/' + id + '.json')
+                                        .then(function (result) {
+                                            return result.data;
+                                        });
+                                }
                             }
-                        }
-                        return $q.reject('Can\'t find page id with href="' + $stateParams.name + '"');
+                            return $q.reject('Can\'t find page id with href="' + $stateParams.name + '"');
+                        });
+                    }
+                },
+                templateProvider: function ($http, $rootScope) {
+                    return $rootScope.pageConfigPromise.then(function (pageConfig) {
+                        return $http.get('/templates/' + pageConfig.templateName + '.html')
+                            .then(function (result) {
+                                return result.data;
+                            });
                     });
                 },
                 controller: 'PageCtrl'
@@ -41,12 +45,13 @@ define(['angular', 'angular-ui-router'], function (angular) {
             });
 
         $urlRouterProvider.otherwise('/404');
-    }).run(function ($http) {
-        pageListPromise = $http.get('/json/pagelist.json');
+    }).run(function ($http, $rootScope) {
+        $rootScope.pageListPromise = $http.get('/json/pagelist.json');
     });
 
-    app.controller('PageCtrl', function ($scope) {
+    app.controller('PageCtrl', function ($scope, pageConfig) {
        $scope.author = 'PageCtrl';
+       $scope.config = angular.toJson(pageConfig, true);
     });
 
     app.directive('widgetHolder', function () {
@@ -65,8 +70,8 @@ define(['angular', 'angular-ui-router'], function (angular) {
         ]
     });
 
-    app.controller('PageNavigationController', function ($scope, $http) {
-        pageListPromise
+    app.controller('PageNavigationController', function ($rootScope, $scope, $http) {
+        $rootScope.pageListPromise
             .success(function (data) {
                 $scope.pages = data;
             })
