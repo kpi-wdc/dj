@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ViewsController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String prepare(ModelMap model) {
-        model.addAttribute("home", "page");
-        model.addAttribute("it", "is");
+    public String home() {
         return "index";
     }
 }
