@@ -57,7 +57,7 @@ define(['angular', 'angular-ui-router'], function (angular) {
                 });
 
                 scope.widgetTemplateUrl = function (href) {
-                    return '/widgets/' + href + '.html';
+                    return '/views/widgets/' + href + '.html';
                 };
             }
         }
