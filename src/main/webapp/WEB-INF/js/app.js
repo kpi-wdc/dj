@@ -56,8 +56,8 @@ define(['angular', 'angular-ui-router'], function (angular) {
                     scope.holderConfig = scope.config.holders[attrs.name];
                 });
 
-                scope.widgetTemplateUrl = function (templateName) {
-                    return '/widgets/' + templateName + '.html';
+                scope.widgetTemplateUrl = function (href) {
+                    return '/widgets/' + href + '.html';
                 };
             }
         }

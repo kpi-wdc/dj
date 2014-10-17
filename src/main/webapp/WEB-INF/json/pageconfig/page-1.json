@@ -4,39 +4,28 @@
         "topleft": {
             "widgets": [
                 {
-                    "templateName": "hello"
-                },
-                {
-                    "templateName": "bye"
-                },
-                {
-                    "templateName": "hello"
+                    "name": "Summator widget",
+                    "href": "summator"
                 }
             ]
         },
         "topright": {
             "widgets": [
                 {
-                    "templateName": "hello"
+                    "name": "Hello widget",
+                    "href": "hello"
                 },
                 {
-                    "templateName": "bye"
-                },
-                {
-                    "templateName": "hello"
+                    "name": "Hello widget 2",
+                    "href": "hello"
                 }
             ]
         },
         "bottom": {
             "widgets": [
                 {
-                    "templateName": "hello"
-                },
-                {
-                    "templateName": "bye"
-                },
-                {
-                    "templateName": "hello"
+                    "name": "Good bye!",
+                    "href": "bye"
                 }
             ]
         }

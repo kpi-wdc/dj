@@ -1,8 +1,7 @@
 <div>
-  I'm a widget holder
-  <div ng-repeat="widget in holderConfig.widgets">
-    Widget #{{widget.templateName}} <br>
-    <ng-include src="widgetTemplateUrl(widget.templateName)">Loading widget...</ng-include>
+  <div ng-repeat="widget in holderConfig.widgets" class="widget">
+    <div class="widget-title">{{widget.name}}</div> <br>
+    <ng-include src="widgetTemplateUrl(widget.href)" class="widget-contents">Loading widget...</ng-include>
     <hr>
   </div>
 </div>
