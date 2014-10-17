@@ -1,10 +1,11 @@
 {
     "templateName": "left-right-bottom",
+    "title": "Main page for testing, triangular template",
     "holders": {
         "topleft": {
             "widgets": [
                 {
-                    "title": "Summator widget",
+                    "title": "Summation widget",
                     "href": "summator"
                 }
             ]
