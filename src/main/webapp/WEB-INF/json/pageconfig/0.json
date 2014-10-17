@@ -1,3 +1,18 @@
 {
-    "templateName": "left-right-bottom"
+    "templateName": "left-right-bottom",
+    "holders": {
+        "topleft": {
+            "widgets": [
+                {
+                    "templateName": ""
+                }
+            ]
+        },
+        "topright": {
+            "widgets": []
+        },
+        "bottom": {
+            "widgets": []
+        }
+    }
 }
