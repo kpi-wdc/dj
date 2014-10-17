@@ -1,6 +1,8 @@
 <div>
   I'm a widget holder
   <div ng-repeat="widget in holderConfig.widgets">
-    Widget #{{widget.templateName}} <hr>
+    Widget #{{widget.templateName}} <br>
+    <ng-include src="widgetTemplateUrl(widget.templateName)">Loading widget...</ng-include>
+    <hr>
   </div>
 </div>

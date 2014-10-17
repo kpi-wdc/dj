@@ -4,39 +4,39 @@
         "topleft": {
             "widgets": [
                 {
-                    "templateName": "1"
+                    "templateName": "hello"
                 },
                 {
-                    "templateName": "2"
+                    "templateName": "bye"
                 },
                 {
-                    "templateName": "3"
+                    "templateName": "hello"
                 }
             ]
         },
         "topright": {
             "widgets": [
                 {
-                    "templateName": "1"
+                    "templateName": "hello"
                 },
                 {
-                    "templateName": "2"
+                    "templateName": "bye"
                 },
                 {
-                    "templateName": "3"
+                    "templateName": "hello"
                 }
             ]
         },
         "bottom": {
             "widgets": [
                 {
-                    "templateName": "1"
+                    "templateName": "hello"
                 },
                 {
-                    "templateName": "2"
+                    "templateName": "bye"
                 },
                 {
-                    "templateName": "3"
+                    "templateName": "hello"
                 }
             ]
         }

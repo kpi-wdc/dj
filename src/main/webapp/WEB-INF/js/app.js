@@ -65,6 +65,10 @@ define(['angular', 'angular-ui-router'], function (angular) {
                 scope.$watchCollection('scope.config.holders', function () {
                     scope.holderConfig = scope.config.holders[attrs.name];
                 });
+
+                scope.widgetTemplateUrl = function (templateName) {
+                    return '/widgets/' + templateName + '.html';
+                };
             }
         }
     });
