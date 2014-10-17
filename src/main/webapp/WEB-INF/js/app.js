@@ -13,9 +13,27 @@ define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
             })
             .state('page', {
                 url: '/page/:name',
-                templateUrl: function (urlattr) {
-                    return '/templates/' + urlattr.name + '.html';
-                }, controller: 'PageCtrl'
+                templateProvider: function ($stateParams, $q, $http) {
+                    return pageListPromise.then(function (result) {
+                        var pages = result.data;
+                        var id = -1;
+                        for (var pageIndex in pages) {
+                            if (pages[pageIndex].href === $stateParams.name) {
+                                id = pages[pageIndex].id;
+                                return $http.get('/json/pageconfig/' + id + '.json')
+                                    .then(function (result) {
+                                        var config = result.data;
+                                        return $http.get('/templates/' + config.templateId + '.html')
+                                            .then(function (result) {
+                                               return result.data;
+                                            });
+                                    });
+                            }
+                        }
+                        return $q.reject('Can\'t find page id with href="' + $stateParams.name + '"');
+                    });
+                },
+                controller: 'PageCtrl'
             })
             .state('404', {
                 url: '/404',
@@ -41,11 +59,11 @@ define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
     });
 
     app.controller('PageNavigationController', function ($scope, $http) {
-        pageListPromise.
-            success(function (data) {
+        pageListPromise
+            .success(function (data) {
                 $scope.pages = data;
-            }).
-            error(function (data, status) {
+            })
+            .error(function (data, status) {
                 alert('$http error ' + status + ' - cannot load json/pagelist.json!');
             });
     });
