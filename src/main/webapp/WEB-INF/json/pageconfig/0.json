@@ -4,15 +4,41 @@
         "topleft": {
             "widgets": [
                 {
-                    "templateName": ""
+                    "templateName": "1"
+                },
+                {
+                    "templateName": "2"
+                },
+                {
+                    "templateName": "3"
                 }
             ]
         },
         "topright": {
-            "widgets": []
+            "widgets": [
+                {
+                    "templateName": "1"
+                },
+                {
+                    "templateName": "2"
+                },
+                {
+                    "templateName": "3"
+                }
+            ]
         },
         "bottom": {
-            "widgets": []
+            "widgets": [
+                {
+                    "templateName": "1"
+                },
+                {
+                    "templateName": "2"
+                },
+                {
+                    "templateName": "3"
+                }
+            ]
         }
     }
 }

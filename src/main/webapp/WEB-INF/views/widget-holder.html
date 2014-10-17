@@ -1,1 +1,6 @@
-<div>I'm a widget holder</div>
+<div>
+  I'm a widget holder
+  <div ng-repeat="widget in holderConfig.widgets">
+    Widget #{{widget.templateName}} <hr>
+  </div>
+</div>

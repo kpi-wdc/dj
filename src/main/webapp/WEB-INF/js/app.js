@@ -52,13 +52,21 @@ define(['angular', 'angular-ui-router'], function (angular) {
 
     app.controller('PageCtrl', function ($scope, pageConfig) {
        $scope.author = 'PageCtrl';
-       $scope.config = angular.toJson(pageConfig, true);
+       $scope.config = pageConfig;
+       $scope.configStr = angular.toJson(pageConfig, true);
     });
 
     app.directive('widgetHolder', function () {
         return {
             restrict: 'E',
-            templateUrl: '/views/widget-holder.html'
+            templateUrl: '/views/widget-holder.html',
+            transclude: true,
+            scope: true,
+            link: function (scope, element, attrs) {
+                scope.$watchCollection('scope.config.holders', function () {
+                    scope.holderConfig = scope.config.holders[attrs.name];
+                });
+            }
         }
     });
 
