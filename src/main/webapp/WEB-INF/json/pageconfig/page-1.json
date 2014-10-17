@@ -14,11 +14,13 @@
             "widgets": [
                 {
                     "title": "Hello widget",
-                    "href": "hello"
+                    "href": "hello",
+                    "nojs": true
                 },
                 {
                     "title": "Hello widget 2",
-                    "href": "hello"
+                    "href": "hello",
+                    "nojs": true
                 }
             ]
         },
@@ -26,7 +28,8 @@
             "widgets": [
                 {
                     "title": "Good bye!",
-                    "href": "bye"
+                    "href": "bye",
+                    "nojs": true
                 }
             ]
         }

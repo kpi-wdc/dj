@@ -1,7 +1,52 @@
 define(['angular', 'angular-ui-router'], function (angular) {
-    var app = angular.module('webapp', ['ui.router']);
+    var app = angular.module('app', ['ui.router']);
 
-    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider,
+                         $controllerProvider, $provide, $compileProvider) {
+        function addSupportForComponentLoadingAfterBootstrapHack() {
+            // Let's keep the older references.
+            app._controller = app.controller;
+            app._service = app.service;
+            app._factory = app.factory;
+            app._value = app.value;
+            app._directive = app.directive;
+
+            // Provider-based controller.
+            app.controller = function (name, constructor) {
+                $controllerProvider.register(name, constructor);
+                return this;
+            };
+
+            // Provider-based service.
+            app.service = function (name, constructor) {
+                $provide.service(name, constructor);
+                return this;
+            };
+
+            // Provider-based factory.
+            app.factory = function (name, factory) {
+                $provide.factory(name, factory);
+                return this;
+            };
+
+            // Provider-based value.
+            app.value = function (name, value) {
+                $provide.value(name, value);
+                return this;
+            };
+
+            // Provider-based directive.
+            app.directive = function (name, factory) {
+                $compileProvider.directive(name, factory);
+                return this;
+            };
+
+            app.filter = function (name, filter) {
+                $filterProvider.filter(name, filter);
+            };
+        }
+        addSupportForComponentLoadingAfterBootstrapHack();
+
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
 
@@ -13,10 +58,30 @@ define(['angular', 'angular-ui-router'], function (angular) {
             .state('page', {
                 url: '/page/:name',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, pageListPromise) {
+                    pageConfig: function ($stateParams, $q, $http) {
                         return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
                             .then(function (result) {
-                                return result.data;
+                                var config = result.data;
+                                var deferredResult = $q.defer();
+
+                                var widgetControllerPromises = [];
+                                for (var holderName in config.holders) {
+                                    var widgets = config.holders[holderName].widgets;
+                                    for (var i = 0; i < widgets.length; ++i) {
+                                        if (!widgets[i].nojs) {
+                                            var ctrlUrl = '/js/widgets/' + widgets[i].href + '.js';
+                                            var d = $q.defer();
+                                            require([ctrlUrl], function () {
+                                                d.resolve();
+                                            });
+                                            widgetControllerPromises.push(d.promise);
+                                        }
+                                    }
+                                }
+                                $q.all(widgetControllerPromises).then(function () {
+                                    deferredResult.resolve(config);
+                                });
+                                return deferredResult.promise;
                             });
                     }
                 },
@@ -82,5 +147,6 @@ define(['angular', 'angular-ui-router'], function (angular) {
             });
     });
 
-    return angular.bootstrap(document, ['webapp']);
+    angular.bootstrap(document, ['app']);
+    return app;
 });
