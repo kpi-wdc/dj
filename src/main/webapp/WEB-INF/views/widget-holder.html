@@ -4,4 +4,7 @@
     <ng-include src="widgetTemplateUrl(widget.href)" class="widget-contents">Loading widget...</ng-include>
     <hr>
   </div>
+  <div ng-if="!holderConfig.widgets">
+    Empty holder
+  </div>
 </div>
