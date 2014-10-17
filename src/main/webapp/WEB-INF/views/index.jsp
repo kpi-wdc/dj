@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <base href="/">
     <link rel="stylesheet" href="/components/foundation/css/foundation.css"/>
     <link rel="stylesheet" href="/css/main.css"/>
     <script data-main="/js/main" src="/components/requirejs/require.js"></script>
