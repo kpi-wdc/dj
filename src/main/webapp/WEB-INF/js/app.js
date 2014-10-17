@@ -2,6 +2,7 @@ define(['angular', 'angular-ui-router'], function (angular) {
     var app = angular.module('webapp', ['ui.router']);
 
     app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+        var pageConfigPromise;
         $locationProvider.html5Mode(true);
 
         $stateProvider
@@ -12,8 +13,8 @@ define(['angular', 'angular-ui-router'], function (angular) {
             .state('page', {
                 url: '/page/:name',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $rootScope) {
-                        return $rootScope.pageConfigPromise = $rootScope.pageListPromise.then(function (result) {
+                    pageConfig: function ($stateParams, $q, $http, pageListPromise) {
+                        return pageConfigPromise = pageListPromise.then(function (result) {
                             var pages = result.data;
                             var id = -1;
                             for (var pageIndex in pages) {
@@ -29,8 +30,8 @@ define(['angular', 'angular-ui-router'], function (angular) {
                         });
                     }
                 },
-                templateProvider: function ($http, $rootScope) {
-                    return $rootScope.pageConfigPromise.then(function (pageConfig) {
+                templateProvider: function ($http) {
+                    return pageConfigPromise.then(function (pageConfig) {
                         return $http.get('/templates/' + pageConfig.templateName + '.html')
                             .then(function (result) {
                                 return result.data;
@@ -45,8 +46,8 @@ define(['angular', 'angular-ui-router'], function (angular) {
             });
 
         $urlRouterProvider.otherwise('/404');
-    }).run(function ($http, $rootScope) {
-        $rootScope.pageListPromise = $http.get('/json/pagelist.json');
+    }).factory('pageListPromise', function ($http) {
+        return $http.get('/json/pagelist.json');
     });
 
     app.controller('PageCtrl', function ($scope, pageConfig) {
@@ -70,8 +71,8 @@ define(['angular', 'angular-ui-router'], function (angular) {
         ]
     });
 
-    app.controller('PageNavigationController', function ($rootScope, $scope, $http) {
-        $rootScope.pageListPromise
+    app.controller('PageNavigationController', function (pageListPromise, $scope, $http) {
+        pageListPromise
             .success(function (data) {
                 $scope.pages = data;
             })
