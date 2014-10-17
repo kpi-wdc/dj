@@ -4,7 +4,7 @@
         "topleft": {
             "widgets": [
                 {
-                    "name": "Summator widget",
+                    "title": "Summator widget",
                     "href": "summator"
                 }
             ]
@@ -12,11 +12,11 @@
         "topright": {
             "widgets": [
                 {
-                    "name": "Hello widget",
+                    "title": "Hello widget",
                     "href": "hello"
                 },
                 {
-                    "name": "Hello widget 2",
+                    "title": "Hello widget 2",
                     "href": "hello"
                 }
             ]
@@ -24,7 +24,7 @@
         "bottom": {
             "widgets": [
                 {
-                    "name": "Good bye!",
+                    "title": "Good bye!",
                     "href": "bye"
                 }
             ]
