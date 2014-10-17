@@ -1,5 +1,5 @@
-define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
-    var app = angular.module('webapp', ['ui.router', 'oc.lazyLoad']);
+define(['angular', 'angular-ui-router'], function (angular) {
+    var app = angular.module('webapp', ['ui.router']);
 
     var pageListPromise;
 
