@@ -49,6 +49,13 @@ define(['angular', 'angular-ui-router', 'oclazyload'], function (angular) {
        $scope.author = 'PageCtrl';
     });
 
+    app.directive('widgetHolder', function () {
+        return {
+            restrict: 'E',
+            templateUrl: '/views/widget-holder.html'
+        }
+    });
+
     app.controller('SectionsController', function ($scope) {
         $scope.sections = [
             'About',

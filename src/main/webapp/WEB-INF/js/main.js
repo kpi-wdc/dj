@@ -3,9 +3,9 @@ require.config({
 
     // alias libraries paths.  Must set 'angular'
     paths: {
-        'angular': '/components/angular/angular.min',
-        'angular-ui-router': '/components/angular-ui-router/release/angular-ui-router.min',
-        'oclazyload': '/components/oclazyload/dist/ocLazyLoad.min'
+        'angular': '/components/angular/angular',
+        'angular-ui-router': '/components/angular-ui-router/release/angular-ui-router',
+        'oclazyload': '/components/oclazyload/dist/ocLazyLoad'
     },
 
     // Add angular modules that does not support AMD out of the box, put it in a shim
