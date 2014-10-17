@@ -51,7 +51,6 @@ define(['angular', 'angular-ui-router'], function (angular) {
     });
 
     app.controller('PageCtrl', function ($scope, pageConfig) {
-       $scope.author = 'PageCtrl';
        $scope.config = pageConfig;
        $scope.configStr = angular.toJson(pageConfig, true);
     });
