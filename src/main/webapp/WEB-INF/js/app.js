@@ -23,7 +23,7 @@ define(['angular', 'angular-ui-router'], function (angular) {
                                 return $http.get('/json/pageconfig/' + id + '.json')
                                     .then(function (result) {
                                         var config = result.data;
-                                        return $http.get('/templates/' + config.templateId + '.html')
+                                        return $http.get('/templates/' + config.templateName + '.html')
                                             .then(function (result) {
                                                return result.data;
                                             });
