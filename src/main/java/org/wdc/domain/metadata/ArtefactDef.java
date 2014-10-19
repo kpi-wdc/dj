@@ -113,4 +113,14 @@ public class ArtefactDef {
         result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ArtefactDef{" +
+                pk.toString() +
+                ", required=" + required +
+                ", unique=" + unique +
+                ", defaultValue='" + defaultValue + '\'' +
+                '}';
+    }
 }

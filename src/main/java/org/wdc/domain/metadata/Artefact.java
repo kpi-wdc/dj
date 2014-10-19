@@ -25,7 +25,7 @@ public class Artefact {
     private String artefactTable;
 
     @OneToMany(mappedBy = "pk.artefact")
-    private Set<ArtefactDef> artefactDefs = new HashSet<>();
+    private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
     public Artefact() { }
 

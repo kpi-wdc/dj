@@ -12,9 +12,11 @@ import java.io.Serializable;
 @Embeddable
 public class ArtefactDefId implements Serializable {
     @ManyToOne
+    @SuppressWarnings("all")
     private Artefact artefact;
 
     @ManyToOne
+    @SuppressWarnings("all")
     private MetadataKey metadataKey;
 
     public Artefact getArtefact() {
@@ -51,5 +53,13 @@ public class ArtefactDefId implements Serializable {
         int result = artefact != null ? artefact.hashCode() : 0;
         result = 31 * result + (metadataKey != null ? metadataKey.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ArtefactDefId{" +
+                "artefact=" + artefact +
+                ", metadataKey=" + metadataKey +
+                '}';
     }
 }
