@@ -1,6 +1,8 @@
 package org.wdc.domain.metadata;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by vii on 19.10.14.
@@ -16,6 +18,9 @@ public class MetadataKey {
 
     @Column(name = "key")
     private String key;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
+    private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
     public MetadataKey() { }
 

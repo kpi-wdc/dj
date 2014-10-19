@@ -1,6 +1,10 @@
 package org.wdc.domain.metadata;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vii on 18.10.14.
@@ -17,9 +21,11 @@ public class Artefact {
     @Column(name = "artefact_schema")
     private String artefactSchema;
 
-
     @Column(name = "artefact_table")
     private String artefactTable;
+
+    @OneToMany(mappedBy = "pk.artefact")
+    private Set<ArtefactDef> artefactDefs = new HashSet<>();
 
     public Artefact() { }
 
@@ -50,6 +56,14 @@ public class Artefact {
 
     public void setArtefactTable(String artefactTable) {
         this.artefactTable = artefactTable;
+    }
+
+    public Set<ArtefactDef> getArtefactDefs() {
+        return artefactDefs;
+    }
+
+    public void setArtefactDefs(Set<ArtefactDef> artefactDefs) {
+        this.artefactDefs = artefactDefs;
     }
 
     @Override
