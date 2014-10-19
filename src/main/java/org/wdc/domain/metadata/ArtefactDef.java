@@ -102,13 +102,15 @@ public class ArtefactDef {
         if (required != that.required) return false;
         if (unique != that.unique) return false;
         if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null) return false;
+        if (pk != null ? !pk.equals(that.pk) : that.pk != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (required ? 1 : 0);
+        int result = pk != null ? pk.hashCode() : 0;
+        result = 31 * result + (required ? 1 : 0);
         result = 31 * result + (unique ? 1 : 0);
         result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
         return result;
