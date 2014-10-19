@@ -23,12 +23,12 @@ public class ArtefactDaoImpl implements ArtefactDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public List<Artefact> getArtefact() {
+    public List<Artefact> getArtefacts() {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
+        //session.beginTransaction();
         Criteria criteria = session.createCriteria(Artefact.class);
         List<Artefact> artefacts = (List<Artefact>) criteria.list();
-        session.getTransaction().commit();
+        //session.getTransaction().commit();
 
 /*        List<Artefact> artefacts = sessionFactory.getCurrentSession()
                     .createCriteria(Artefact.class).list();*/
@@ -36,12 +36,19 @@ public class ArtefactDaoImpl implements ArtefactDao {
         return artefacts;
     }
 
+    @Override
+    public void add(Artefact artefact) {
+        Session session = sessionFactory.openSession();
+        session.save(artefact);
+    }
+
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/persistence-config.xml");
 
         ArtefactDaoImpl impl = (ArtefactDaoImpl) ctx.getBean("artefact");
 
-        System.out.println(impl.getArtefact());
+        impl.add(new Artefact("lol", "lol2"));
+        System.out.println(impl.getArtefacts());
         //impl.getArtefact();
     }
 }

@@ -8,5 +8,6 @@ import java.util.List;
  * Created by vii on 18.10.14.
  */
 public interface ArtefactDao {
-    public List<Artefact> getArtefact();
+    public List<Artefact> getArtefacts();
+    public void add(Artefact artefact);
 }
