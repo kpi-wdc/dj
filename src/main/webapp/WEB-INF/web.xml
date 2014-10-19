@@ -12,6 +12,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             /WEB-INF/wdc-servlet.xml
+            classpath*:spring/persistence-config.xml
         </param-value>
     </context-param>
 
