@@ -64,23 +64,19 @@ define(['angular', 'angular-ui-router'], function (angular) {
                                 var config = result.data;
                                 var deferredResult = $q.defer();
 
-                                var widgetControllerPromises = [];
+                                var widgetControllers = [];
                                 for (var holderName in config.holders) {
                                     var widgets = config.holders[holderName].widgets;
                                     for (var i = 0; i < widgets.length; ++i) {
                                         if (!widgets[i].nojs) {
-                                            var ctrlUrl = '/js/widgets/' + widgets[i].href + '.js';
-                                            var d = $q.defer();
-                                            require([ctrlUrl], function () {
-                                                d.resolve();
-                                            });
-                                            widgetControllerPromises.push(d.promise);
+                                            widgetControllers.push('widgets/' + widgets[i].href);
                                         }
                                     }
                                 }
-                                $q.all(widgetControllerPromises).then(function () {
+                                require(widgetControllers, function () {
                                     deferredResult.resolve(config);
                                 });
+
                                 return deferredResult.promise;
                             }, function (data) {
                                 alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
