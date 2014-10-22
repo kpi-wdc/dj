@@ -1,5 +1,9 @@
 [
     {
+        "name": "Constructed home",
+        "href": "home"
+    },
+    {
         "name": "Development page",
         "href": "page-1"
     },
