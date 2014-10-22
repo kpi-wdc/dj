@@ -82,6 +82,9 @@ define(['angular', 'angular-ui-router'], function (angular) {
                                     deferredResult.resolve(config);
                                 });
                                 return deferredResult.promise;
+                            }, function (data) {
+                                alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
+                                return $q.reject(data.status);
                             });
                     }
                 },
