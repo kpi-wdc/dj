@@ -121,7 +121,9 @@ define(['angular', 'angular-ui-router'], function (angular) {
             scope: true,
             link: function (scope, element, attrs) {
                 scope.$watchCollection('scope.config.holders', function () {
-                    scope.holderConfig = scope.config.holders[attrs.name];
+                    if (scope.config.holders) {
+                        scope.holderConfig = scope.config.holders[attrs.name] || {};
+                    }
                 });
 
                 scope.widgetTemplateUrl = function (href) {
