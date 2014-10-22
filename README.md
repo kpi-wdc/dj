@@ -14,10 +14,11 @@ Suggested intellij idea plugins:
 
   - maven
   - spring
+  - hibernate
   - LESS
   - gitignore (for syntax highlight)
   - angularjs
   - markdown
-  - hibernate
+ 
 
 Also look into [src/main/webapp/README.md](src/main/webapp/README.md) for front-end documentation.
