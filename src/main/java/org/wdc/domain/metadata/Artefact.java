@@ -6,10 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by vii on 18.10.14.
- */
-
 @Entity
 @Table(schema = "metadata", name = "artefact")
 public class Artefact {

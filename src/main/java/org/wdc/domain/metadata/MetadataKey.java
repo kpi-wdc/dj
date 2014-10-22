@@ -4,10 +4,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by vii on 19.10.14.
- */
-
 @Entity
 @Table(schema = "metadata", name = "metadatakey")
 public class MetadataKey {
