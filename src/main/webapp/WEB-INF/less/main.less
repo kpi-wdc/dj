@@ -14,10 +14,12 @@ widget-holder {
 }
 
 .widget {
-  margin-right: 15px;
-  margin-bottom: 15px;
-  padding: 5px;
   border: 2px dashed red;
+  padding: 5px;
+  margin-bottom: 15px;
+  &:last-of-type {
+    margin-bottom: 0px;
+  }
 }
 
 .widget-title {
