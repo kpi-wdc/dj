@@ -15,7 +15,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
             .state('page', {
                 url: '/:name',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad) {
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window) {
                         return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
                             .then(function (result) {
                                 var config = result.data;
@@ -37,12 +37,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                 $ocLazyLoad.load(widgetControllers).then(function () {
                                     deferredResult.resolve(config);
                                 }, function () {
-                                    alert('Error loading widget controllers');
+                                    $window.alert('Error loading widget controllers');
                                 });
 
                                 return deferredResult.promise;
                             }, function (data) {
-                                alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
+                                $window.alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
                                 return $q.reject(data.status);
                             });
                     }
@@ -111,13 +111,13 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         ]
     });
 
-    app.controller('PageNavigationController', function (pageListPromise, $scope, $http) {
+    app.controller('PageNavigationController', function (pageListPromise, $scope, $http, $window) {
         pageListPromise
             .success(function (data) {
                 $scope.pages = data;
             })
             .error(function (data, status) {
-                alert('$http error ' + status + ' - cannot load json/pagelist.json!');
+                $window.alert('$http error ' + status + ' - cannot load json/pagelist.json!');
             });
     });
 
