@@ -79,7 +79,6 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
 
     app.controller('PageCtrl', function ($scope, pageConfig) {
        $scope.config = pageConfig;
-       $scope.configStr = angular.toJson(pageConfig, true);
     });
 
     app.directive('widgetHolder', function () {
