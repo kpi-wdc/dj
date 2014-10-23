@@ -12,10 +12,6 @@ import org.wdc.domain.metadata.MetadataKey;
 
 import javax.transaction.Transactional;
 
-/**
- * Created by vii on 19.10.14.
- */
-
 @Transactional
 @Service("artefactDefService")
 public class ArtefactDefService {

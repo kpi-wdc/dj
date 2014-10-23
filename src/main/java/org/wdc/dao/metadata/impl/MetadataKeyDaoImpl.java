@@ -12,10 +12,6 @@ import org.wdc.domain.metadata.MetadataKey;
 
 import java.util.List;
 
-/**
- * Created by vii on 19.10.14.
- */
-
 @Repository("metadatakey")
 public class MetadataKeyDaoImpl implements MetadataKeyDao {
     @Autowired

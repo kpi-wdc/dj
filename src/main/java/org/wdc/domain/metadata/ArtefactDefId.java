@@ -5,10 +5,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 
-/**
- * Created by vii on 19.10.14.
- */
-
 @Embeddable
 public class ArtefactDefId implements Serializable {
     @ManyToOne

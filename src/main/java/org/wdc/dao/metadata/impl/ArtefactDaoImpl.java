@@ -13,10 +13,6 @@ import org.wdc.domain.metadata.Artefact;
 import javax.transaction.Transactional;
 import java.util.List;
 
-/**
- * Created by vii on 18.10.14.
- */
-
 @Repository("artefact")
 public class ArtefactDaoImpl implements ArtefactDao {
     @Autowired

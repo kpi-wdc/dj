@@ -4,10 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by vii on 19.10.14.
- */
-
 @Entity
 @Table(schema = "metadata", name = "artefact_def")
 @AssociationOverrides({
