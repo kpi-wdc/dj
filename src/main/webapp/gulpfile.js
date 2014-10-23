@@ -24,6 +24,7 @@ gulp.task('less', function () {
 gulp.task('clean', function (cb) {
    return del([
        './components',
-       './generated-css'
+       './generated-css',
+       './bower_components'
        ], cb);
 });
