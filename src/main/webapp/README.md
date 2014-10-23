@@ -7,4 +7,3 @@ Used:
   - gulp (js task runner)
   - angularjs (js framework)
   - foundation (css)
-  
