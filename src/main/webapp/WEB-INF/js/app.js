@@ -85,7 +85,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
             link: function (scope, element, attrs) {
                 scope.$watchCollection('scope.config.holders', function () {
                     if (scope.config.holders) {
-                        scope.holderConfig = scope.config.holders[attrs.name] || {};
+                        scope.holder = scope.config.holders[attrs.name] || {};
                     }
                 });
 
