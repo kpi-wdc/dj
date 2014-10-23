@@ -18,5 +18,8 @@
     {
         "title": "Page 5",
         "name": "page-5"
+    },
+    {
+        "name": "404"
     }
 ]

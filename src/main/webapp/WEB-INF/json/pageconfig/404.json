@@ -1,0 +1,14 @@
+{
+    "template": "1-col",
+    "title": "404 error",
+    "holders": {
+        "column": {
+            "widgets": [
+                {
+                    "name": "htmlwidget",
+                    "text": "Page not found"
+                }
+            ]
+        }
+    }
+}

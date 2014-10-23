@@ -27,7 +27,7 @@
 
     <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
       <ul class="side-nav">
-        <li ng-repeat="page in pages"><a href="/page/{{page.name}}">{{page.title}}</a></li>
+        <li ng-repeat="page in pages" ng-if="page.title"><a href="/{{page.name}}">{{page.title}}</a></li>
       </ul>
       <label>Debug mode: <input ng-model="globalConfig.debugMode" type="checkbox"></label>
 
