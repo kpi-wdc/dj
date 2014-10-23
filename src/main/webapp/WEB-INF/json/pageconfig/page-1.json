@@ -1,17 +1,17 @@
 {
-    "templateName": "left-right-bottom",
+    "template": "left-right-bottom",
     "title": "Main page for testing, triangular template",
     "holders": {
         "topleft": {
             "widgets": [
                 {
                     "title": "Summation widget",
-                    "href": "summator"
+                    "name": "summator"
                 },
 
                 {
                     "title": "Summation widget",
-                    "href": "summator"
+                    "name": "summator"
                 }
             ]
         },
@@ -19,12 +19,12 @@
             "widgets": [
                 {
                     "title": "Hello widget",
-                    "href": "hello",
+                    "name": "hello",
                     "nojs": true
                 },
                 {
                     "title": "Hello widget 2",
-                    "href": "hello",
+                    "name": "hello",
                     "nojs": true
                 }
             ]
@@ -33,7 +33,7 @@
             "widgets": [
                 {
                     "title": "Good bye!",
-                    "href": "bye",
+                    "name": "bye",
                     "nojs": true
                 }
             ]

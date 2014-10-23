@@ -31,8 +31,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                     for (var i = 0; i < widgets.length; ++i) {
                                         if (!widgets[i].nojs) {
                                             widgetControllers.push({
-                                                name: 'app.widgets.' + widgets[i].href,
-                                                files: ['widgets/' + widgets[i].href]
+                                                name: 'app.widgets.' + widgets[i].name,
+                                                files: ['/widgets/' + widgets[i].name + '/widget.js']
                                                 }
                                             );
                                         }
@@ -53,7 +53,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                 },
                 templateProvider: function ($http) {
                     return pageConfigPromise.then(function (pageConfig) {
-                        return $http.get('/templates/' + pageConfig.templateName + '.html')
+                        return $http.get('/templates/' + pageConfig.template + '.html')
                             .then(function (result) {
                                 return result.data;
                             });
@@ -89,8 +89,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                     }
                 });
 
-                scope.widgetTemplateUrl = function (href) {
-                    return '/views/widgets/' + href + '.html';
+                scope.widgetTemplateUrl = function (name) {
+                    return '/widgets/' + name + '/index.html';
                 };
             }
         }
