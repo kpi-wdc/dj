@@ -21,7 +21,7 @@
   </header>
 
   <div class="row">
-    <div class="large-9 push-3 columns" ui-view>
+    <div class="large-9 push-3 columns" id="page-view" ui-view>
       Loading...
     </div>
 

@@ -1,6 +1,13 @@
-<div class="page-title">{{config.title}}</div>
-<hr>
-<table style="width: 100%">
+<h2 class="page-title">{{config.title}}</h2>
+<style>
+  .left-right-bottom-table {
+    width: 100%;
+  }
+  .left-right-bottom-table td {
+    vertical-align: top;
+  }
+</style>
+<table class="left-right-bottom-table">
   <tr>
     <td>
       <widget-holder name="topleft"></widget-holder>
@@ -15,6 +22,6 @@
     </td>
   </tr>
 </table>
-<hr>
+
 Config: <br>
 <pre>{{configStr}}</pre>
