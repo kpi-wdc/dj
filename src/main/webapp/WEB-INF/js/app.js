@@ -1,51 +1,12 @@
-define(['angular', 'angular-ui-router'], function (angular) {
-    var app = angular.module('app', ['ui.router']);
+define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular) {
+    var app = angular.module('app', ['ui.router', 'oc.lazyLoad']);
 
-    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider,
-                         $controllerProvider, $provide, $compileProvider) {
-        function addSupportForComponentLoadingAfterBootstrapHack() {
-            // Let's keep the older references.
-            app._controller = app.controller;
-            app._service = app.service;
-            app._factory = app.factory;
-            app._value = app.value;
-            app._directive = app.directive;
+    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider) {
 
-            // Provider-based controller.
-            app.controller = function (name, constructor) {
-                $controllerProvider.register(name, constructor);
-                return this;
-            };
-
-            // Provider-based service.
-            app.service = function (name, constructor) {
-                $provide.service(name, constructor);
-                return this;
-            };
-
-            // Provider-based factory.
-            app.factory = function (name, factory) {
-                $provide.factory(name, factory);
-                return this;
-            };
-
-            // Provider-based value.
-            app.value = function (name, value) {
-                $provide.value(name, value);
-                return this;
-            };
-
-            // Provider-based directive.
-            app.directive = function (name, factory) {
-                $compileProvider.directive(name, factory);
-                return this;
-            };
-
-            app.filter = function (name, filter) {
-                $filterProvider.filter(name, filter);
-            };
-        }
-        addSupportForComponentLoadingAfterBootstrapHack();
+        $ocLazyLoadProvider.config({
+            loadedModules: ['app'],
+            asyncLoader: require
+        });
 
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
@@ -58,7 +19,7 @@ define(['angular', 'angular-ui-router'], function (angular) {
             .state('page', {
                 url: '/page/:name',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http) {
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad) {
                         return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
                             .then(function (result) {
                                 var config = result.data;
@@ -69,12 +30,18 @@ define(['angular', 'angular-ui-router'], function (angular) {
                                     var widgets = config.holders[holderName].widgets;
                                     for (var i = 0; i < widgets.length; ++i) {
                                         if (!widgets[i].nojs) {
-                                            widgetControllers.push('widgets/' + widgets[i].href);
+                                            widgetControllers.push({
+                                                name: 'app.widgets.' + widgets[i].href,
+                                                files: ['widgets/' + widgets[i].href]
+                                                }
+                                            );
                                         }
                                     }
                                 }
-                                require(widgetControllers, function () {
+                                $ocLazyLoad.load(widgetControllers).then(function () {
                                     deferredResult.resolve(config);
+                                }, function () {
+                                    alert('Error loading widget controllers');
                                 });
 
                                 return deferredResult.promise;
@@ -148,6 +115,5 @@ define(['angular', 'angular-ui-router'], function (angular) {
             });
     });
 
-    angular.bootstrap(document, ['app']);
-    return app;
+    return angular.bootstrap(document, ['app']);
 });
