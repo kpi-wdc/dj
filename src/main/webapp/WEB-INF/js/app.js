@@ -65,8 +65,16 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         $urlRouterProvider
             .otherwise('/404')
             .when('/', '/page/home');
-    }).factory('pageListPromise', function ($http) {
+    });
+
+    app.factory('pageListPromise', function ($http) {
         return $http.get('/json/pagelist.json');
+    });
+
+    app.controller('BodyController', function ($scope) {
+        $scope.globalConfig = {
+            debugMode: false
+        }
     });
 
     app.controller('PageCtrl', function ($scope, pageConfig) {

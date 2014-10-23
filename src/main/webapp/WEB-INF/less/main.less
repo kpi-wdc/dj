@@ -4,21 +4,32 @@
 }
 
 #page-view {
-  border: 2px dashed blue;
   padding: 0px;
 }
 
 widget-holder {
   display: block;
-  border: 2px dashed green;
 }
 
 .widget {
-  border: 2px dashed red;
   padding: 5px;
   margin-bottom: 15px;
   &:last-of-type {
     margin-bottom: 0px;
+  }
+}
+
+.debug-enabled {
+  .widget {
+    border: 2px dashed red;
+  }
+
+  widget-holder {
+    border: 2px dashed green;
+  }
+
+  #page-view {
+    border: 2px dashed blue;
   }
 }
 

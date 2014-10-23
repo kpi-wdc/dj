@@ -8,7 +8,7 @@
     <script data-main="/js/main" src="/components/requirejs/require.js"></script>
   </head>
 
-  <body ng-cloak>
+  <body ng-controller="BodyController" ng-class="{'debug-enabled': globalConfig.debugMode}">
   <header class="row">
     <div class="large-3 columns">
       <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
@@ -29,6 +29,7 @@
       <ul class="side-nav">
         <li ng-repeat="page in pages"><a href="/page/{{page.name}}">{{page.title}}</a></li>
       </ul>
+      <label>Debug mode: <input ng-model="globalConfig.debugMode" type="checkbox"></label>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>
     </nav>
