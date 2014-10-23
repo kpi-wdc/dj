@@ -28,7 +28,7 @@
     <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
       <ul class="side-nav">
         <li><a href="/">Home</a></li>
-        <li ng-repeat="page in pages"><a href="/page/{{page.href}}">{{page.name}}</a></li>
+        <li ng-repeat="page in pages"><a href="/page/{{page.name}}">{{page.title}}</a></li>
       </ul>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>

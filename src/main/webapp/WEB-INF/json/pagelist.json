@@ -1,22 +1,22 @@
 [
     {
-        "name": "Constructed home",
-        "href": "home"
+        "title": "Constructed home",
+        "name": "home"
     },
     {
-        "name": "Development page",
-        "href": "page-1"
+        "title": "Development page",
+        "name": "page-1"
     },
     {
-        "name": "2x2 template",
-        "href": "page-2"
+        "title": "2x2 template",
+        "name": "page-2"
     },
     {
-        "name": "Page with 2 columns",
-        "href": "page-4"
+        "title": "Page with 2 columns",
+        "name": "page-4"
     },
     {
-        "name": "Page 5",
-        "href": "page-5"
+        "title": "Page 5",
+        "name": "page-5"
     }
 ]
