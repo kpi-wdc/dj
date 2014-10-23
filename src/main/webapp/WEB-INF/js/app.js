@@ -12,10 +12,6 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         $locationProvider.html5Mode(true);
 
         $stateProvider
-            .state('home', {
-                url: '/',
-                templateUrl: 'views/home.html'
-            })
             .state('page', {
                 url: '/page/:name',
                 resolve: {
@@ -31,8 +27,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                     for (var i = 0; i < widgets.length; ++i) {
                                         if (!widgets[i].nojs) {
                                             widgetControllers.push({
-                                                name: 'app.widgets.' + widgets[i].name,
-                                                files: ['/widgets/' + widgets[i].name + '/widget.js']
+                                                    name: 'app.widgets.' + widgets[i].name,
+                                                    files: ['/widgets/' + widgets[i].name + '/widget.js']
                                                 }
                                             );
                                         }
@@ -66,7 +62,9 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                 templateUrl: 'views/404.html'
             });
 
-        $urlRouterProvider.otherwise('/404');
+        $urlRouterProvider
+            .otherwise('/404')
+            .when('/', '/page/home');
     }).factory('pageListPromise', function ($http) {
         return $http.get('/json/pagelist.json');
     });

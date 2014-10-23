@@ -1,5 +1,4 @@
 <div ng-repeat="widget in holder.widgets" class="widget">
-  <div class="widget-title">{{widget.title}}</div> <br>
   <ng-include src="widgetTemplateUrl(widget.name)" class="widget-contents">Loading widget...</ng-include>
   <!--<hr>-->
 </div>

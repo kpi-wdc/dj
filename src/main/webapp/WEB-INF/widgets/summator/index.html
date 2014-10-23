@@ -1,4 +1,5 @@
 <div ng-controller="SummatorWidgetController">
+<div class="widget-title" ng-if="widget.title">{{widget.title}}</div>
 <label>a = <input ng-model="a"></label><br>
 <label>b = <input ng-model="b"></label><br>
 a + b = {{ a }} + {{ b }} = {{ sum() }}
