@@ -13,7 +13,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
 
         $stateProvider
             .state('page', {
-                url: '/page/:name',
+                url: '/:name',
                 resolve: {
                     pageConfig: function ($stateParams, $q, $http, $ocLazyLoad) {
                         return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
@@ -64,7 +64,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
 
         $urlRouterProvider
             .otherwise('/404')
-            .when('/', '/page/home');
+            .when('/', '/home');
     });
 
     app.factory('pageListPromise', function ($http) {
