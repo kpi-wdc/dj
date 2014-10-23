@@ -10,7 +10,9 @@
                 },
 
                 {
-                    "name": "summator"
+                    "name": "summator",
+                    "a": 9,
+                    "b": 15
                 }
             ]
         },
