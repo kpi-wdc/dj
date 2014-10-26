@@ -69,6 +69,56 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         return $http.get('/json/pagelist.json');
     });
 
+    app.service('widgetEvents', function() {
+        var subscriptions = [];
+
+        this.createPublisher = function (scope) {
+            var publisherName = scope.widget.instanceName;
+            return {
+                send: function (eventName) {
+                    if (publisherName && typeof publisherName === "string") {
+                        for (var i = 0; i < subscriptions.length; i++) {
+                            var subscription = subscriptions[i];
+                            if (subscription && subscription.eventName === eventName &&
+                                    subscription.publisherName === publisherName) {
+                                var slicedArgs = Array.prototype.slice.call(arguments, 1);
+                                subscription.callback.apply({}, slicedArgs);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        this.createSubscriber = function (scope) {
+            scope.$on('destroy', function () {
+                for (var i = 0; i < subscriptions.length; ++i) {
+                    if (subscriptions[i] && subscriptions[i].subscriberScope === scope) {
+                        delete subscriptions[i];
+                    }
+                }
+            });
+
+            return {
+                on: function (slotName, callback) {
+                    if (scope.widget.subscriptions) {
+                        for (var i = 0; i < scope.widget.subscriptions.length; i++) {
+                            var subscription = scope.widget.subscriptions[i];
+                            if (subscription.slot === slotName) {
+                                subscriptions.push({
+                                    eventName: subscription.event,
+                                    publisherName: subscription.publisher,
+                                    subscriberScope: scope,
+                                    callback: callback
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    });
+
     app.controller('BodyController', function ($scope) {
         $scope.globalConfig = {
             debugMode: false

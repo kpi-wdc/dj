@@ -1,4 +1,30 @@
 {
-    "template": "2x2",
-    "title": "2x2 template page"
+    "template": "1-col",
+    "title": "Events testing page",
+    "holders": {
+        "column": {
+            "widgets": [
+                {
+                    "title": "Master widget",
+                    "name": "summator",
+                    "instanceName": "summator-master"
+                },
+
+                {
+                    "title": "Slave widget",
+                    "name": "summator",
+                    "subscriptions": [
+                        {
+                            "publisher": "summator-master",
+                            "event": "sumUpdated",
+                            "slot": "setValueOfA"
+                        }
+                    ],
+                    "a": 9,
+                    "b": 15,
+                    "aDisabled": true
+                }
+            ]
+        }
+    }
 }

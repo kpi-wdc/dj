@@ -8,16 +8,16 @@
         "name": "page-1"
     },
     {
+        "title": "Events testing",
+        "name": "events-page"
+    },
+    {
         "title": "2x2 template",
         "name": "page-2"
     },
     {
         "title": "Page with 2 columns",
         "name": "page-4"
-    },
-    {
-        "title": "Page 5",
-        "name": "page-5"
     },
     {
         "name": "404"
