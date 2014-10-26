@@ -163,7 +163,8 @@ SET search_path = metadata, pg_catalog;
 CREATE TABLE artefact (
     artefact_id integer NOT NULL,
     artefact_schema character varying(255),
-    artefact_table character varying(255)
+    artefact_table character varying(255),
+    key character varying(255)
 );
 
 
@@ -226,7 +227,8 @@ CREATE TABLE association (
     artefact_id integer,
     reference_id integer,
     localfield character varying(255),
-    foreignfield character varying(255)
+    foreignfield character varying(255),
+    key character varying(255)
 );
 
 
@@ -425,10 +427,10 @@ SET search_path = metadata, pg_catalog;
 -- Data for Name: artefact; Type: TABLE DATA; Schema: metadata; Owner: postgres
 --
 
-COPY artefact (artefact_id, artefact_schema, artefact_table) FROM stdin;
-2	data	object
-3	data	objectgroup
-4	data	objectgroupassoc
+COPY artefact (artefact_id, artefact_schema, artefact_table, key) FROM stdin;
+3	data	objectgroup	key1
+2	data	object	key2
+4	data	objectgroupassoc	key3
 \.
 
 
@@ -482,9 +484,9 @@ COPY artefactmetadata (artefact_id, metadatakey_id, value) FROM stdin;
 -- Data for Name: association; Type: TABLE DATA; Schema: metadata; Owner: postgres
 --
 
-COPY association (artefact_id, reference_id, localfield, foreignfield) FROM stdin;
-4	2	object_id	data.object.id
-4	3	objectgroup_id	data.objectgroup.id
+COPY association (artefact_id, reference_id, localfield, foreignfield, key) FROM stdin;
+4	3	objectgroup_id	data.objectgroup.id	key1
+4	2	object_id	data.object.id	key2
 \.
 
 
@@ -730,6 +732,22 @@ SET search_path = metadata, pg_catalog;
 
 ALTER TABLE ONLY artefact
     ADD CONSTRAINT artefact_pkey PRIMARY KEY (artefact_id);
+
+
+--
+-- Name: artefact_u1; Type: CONSTRAINT; Schema: metadata; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY artefact
+    ADD CONSTRAINT artefact_u1 UNIQUE (key);
+
+
+--
+-- Name: artefact_u2; Type: CONSTRAINT; Schema: metadata; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY association
+    ADD CONSTRAINT artefact_u2 UNIQUE (key);
 
 
 --
