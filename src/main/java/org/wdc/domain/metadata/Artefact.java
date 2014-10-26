@@ -21,13 +21,13 @@ public class Artefact {
     @Column(name = "key")
     private String key;
 
-    @OneToMany(mappedBy = "pk.artefact")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.artefact")
     private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
-    @OneToMany(mappedBy = "pk.artefact")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.artefact")
     private Set<ArtefactMetadata> artefactMetadatas = new HashSet<>(0);
 
-    @OneToMany(mappedBy = "pk.artefact")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.artefact")
     private Set<Association> associations = new HashSet<>(0);
 
     public Artefact() { }

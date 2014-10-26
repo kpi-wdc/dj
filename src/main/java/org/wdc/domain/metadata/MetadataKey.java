@@ -15,13 +15,13 @@ public class MetadataKey {
     @Column(name = "key")
     private String key;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.metadataKey")
     private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.metadataKey")
     private Set<ArtefactMetadata> artefactMetadatas = new HashSet<>(0);
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.metadataKey")
     private Set<MetadataKeyDef> metadataKeyDefs = new HashSet<>(0);
 
     public MetadataKey() { }
