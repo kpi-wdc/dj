@@ -21,6 +21,9 @@ public class MetadataKey {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
     private Set<ArtefactMetadata> artefactMetadatas = new HashSet<>(0);
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
+    private Set<MetadataKeyDef> metadataKeyDefs = new HashSet<>(0);
+
     public MetadataKey() { }
 
     public MetadataKey(String key) {
@@ -52,6 +55,9 @@ public class MetadataKey {
         return "MetadataKey{" +
                 "metadataKeyId=" + metadataKeyId +
                 ", key='" + key + '\'' +
+                ", artefactDefs=" + artefactDefs +
+                ", artefactMetadatas=" + artefactMetadatas +
+                ", metadataKeyDefs=" + metadataKeyDefs +
                 '}';
     }
 }
