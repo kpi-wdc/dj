@@ -82,8 +82,6 @@ public class Artefact {
         Artefact artefact = (Artefact) o;
 
         if (artefactId != artefact.artefactId) return false;
-        if (artefactDefs != null ? !artefactDefs.equals(artefact.artefactDefs) : artefact.artefactDefs != null)
-            return false;
         if (artefactSchema != null ? !artefactSchema.equals(artefact.artefactSchema) : artefact.artefactSchema != null)
             return false;
         if (artefactTable != null ? !artefactTable.equals(artefact.artefactTable) : artefact.artefactTable != null)
@@ -99,7 +97,6 @@ public class Artefact {
         result = 31 * result + (artefactSchema != null ? artefactSchema.hashCode() : 0);
         result = 31 * result + (artefactTable != null ? artefactTable.hashCode() : 0);
         result = 31 * result + (key != null ? key.hashCode() : 0);
-        result = 31 * result + (artefactDefs != null ? artefactDefs.hashCode() : 0);
         return result;
     }
 
@@ -111,6 +108,7 @@ public class Artefact {
                 ", artefactTable='" + artefactTable + '\'' +
                 ", key='" + key + '\'' +
                 ", artefactDefs=" + artefactDefs +
+                ", artefactMetadatas=" + artefactMetadatas +
                 '}';
     }
 }

@@ -60,8 +60,7 @@ public class ArtefactMetadata {
     @Override
     public String toString() {
         return "ArtefactMetadata{" +
-                "pk=" + pk +
-                ", value='" + value + '\'' +
+                "value='" + value + '\'' +
                 '}';
     }
 }

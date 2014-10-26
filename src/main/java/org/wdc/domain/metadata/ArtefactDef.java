@@ -115,8 +115,7 @@ public class ArtefactDef {
     @Override
     public String toString() {
         return "ArtefactDef{" +
-                pk.toString() +
-                ", required=" + required +
+                "required=" + required +
                 ", unique=" + unique +
                 ", defaultValue='" + defaultValue + '\'' +
                 '}';
