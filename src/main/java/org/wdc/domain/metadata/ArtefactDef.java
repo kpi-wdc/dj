@@ -1,8 +1,6 @@
 package org.wdc.domain.metadata;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(schema = "metadata", name = "artefact_def")

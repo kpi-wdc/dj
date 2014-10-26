@@ -2,9 +2,13 @@ package org.wdc.domain.metadata;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 
+/**
+ * Represents composite key for ArtefactDef intermediate table
+ * that connects Artefact and Metadatakey tables in many-to-many
+ * relation
+ */
 @Embeddable
 public class ArtefactDefId implements Serializable {
     @ManyToOne
