@@ -41,7 +41,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                 $ocLazyLoad.load(widgetControllers).then(function () {
                                     deferredResult.resolve(config);
                                 }, function (err) {
-                                    $window.alert('Error loading widget controllers');
+                                    $window.alert('Error loading widget controllers. \n\n' + err);
                                     deferredResult.reject(err);
                                 });
 
