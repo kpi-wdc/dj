@@ -1,16 +1,14 @@
-package org.wdc.domain.metadata;
+package org.wdc.domain.metadata.ids;
+
+import org.wdc.domain.metadata.Artefact;
+import org.wdc.domain.metadata.MetadataKey;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
-/**
- * Represents composite key for ArtefactDef intermediate table
- * that connects Artefact and Metadatakey tables in many-to-many
- * relation
- */
 @Embeddable
-public class ArtefactDefId implements Serializable {
+public class ArtefactMetadataId implements Serializable {
     @ManyToOne
     @SuppressWarnings("all")
     private Artefact artefact;
@@ -40,7 +38,7 @@ public class ArtefactDefId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ArtefactDefId that = (ArtefactDefId) o;
+        ArtefactMetadataId that = (ArtefactMetadataId) o;
 
         if (artefact != null ? !artefact.equals(that.artefact) : that.artefact != null) return false;
         if (metadataKey != null ? !metadataKey.equals(that.metadataKey) : that.metadataKey != null) return false;
@@ -57,7 +55,7 @@ public class ArtefactDefId implements Serializable {
 
     @Override
     public String toString() {
-        return "ArtefactDefId{" +
+        return "ArtefactMetadataId{" +
                 "artefact=" + artefact +
                 ", metadataKey=" + metadataKey +
                 '}';

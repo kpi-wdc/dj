@@ -1,5 +1,7 @@
 package org.wdc.domain.metadata;
 
+import org.wdc.domain.metadata.ids.ArtefactMetadataId;
+
 import javax.persistence.*;
 
 @Entity
