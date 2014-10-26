@@ -27,6 +27,9 @@ public class Artefact {
     @OneToMany(mappedBy = "pk.artefact")
     private Set<ArtefactMetadata> artefactMetadatas = new HashSet<>(0);
 
+    @OneToMany(mappedBy = "pk.artefact")
+    private Set<Association> associations = new HashSet<>(0);
+
     public Artefact() { }
 
     public Artefact(String artefactSchema, String artefactTable) {
@@ -64,6 +67,22 @@ public class Artefact {
 
     public void setArtefactDefs(Set<ArtefactDef> artefactDefs) {
         this.artefactDefs = artefactDefs;
+    }
+
+    public Set<ArtefactMetadata> getArtefactMetadatas() {
+        return artefactMetadatas;
+    }
+
+    public void setArtefactMetadatas(Set<ArtefactMetadata> artefactMetadatas) {
+        this.artefactMetadatas = artefactMetadatas;
+    }
+
+    public Set<Association> getAssociations() {
+        return associations;
+    }
+
+    public void setAssociations(Set<Association> associations) {
+        this.associations = associations;
     }
 
     public String getKey() {
@@ -109,6 +128,7 @@ public class Artefact {
                 ", key='" + key + '\'' +
                 ", artefactDefs=" + artefactDefs +
                 ", artefactMetadatas=" + artefactMetadatas +
+                ", associations=" + associations +
                 '}';
     }
 }

@@ -44,7 +44,7 @@ public class ArtefactDaoImpl implements ArtefactDao {
         ArtefactDaoImpl impl = (ArtefactDaoImpl) ctx.getBean("artefact");
 
         //impl.add(new Artefact("lol", "lol2"));
-        System.out.println(impl.getArtefacts());
+        System.out.println(impl.getArtefacts().get(0).getAssociations());
         //impl.getArtefact();
     }
 }

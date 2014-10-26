@@ -21,6 +21,24 @@ public class ArtefactMetadata {
 
     public ArtefactMetadata() { }
 
+    @Transient
+    public Artefact getArtefact() {
+        return getPk().getArtefact();
+    }
+
+    public void setArtefact(Artefact artefact) {
+        getPk().setArtefact(artefact);
+    }
+
+    @Transient
+    public MetadataKey getMetadataKey() {
+        return getPk().getMetadataKey();
+    }
+
+    public void setMetadataKey(MetadataKey metadataKey) {
+        getPk().setMetadataKey(metadataKey);
+    }
+
     public ArtefactMetadataId getPk() {
         return pk;
     }
