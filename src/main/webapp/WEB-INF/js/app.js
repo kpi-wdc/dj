@@ -19,7 +19,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
             .state('page', {
                 url: '/:name',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window) {
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state) {
                         return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
                             .then(function (result) {
                                 var config = result.data;
@@ -40,13 +40,15 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                 }
                                 $ocLazyLoad.load(widgetControllers).then(function () {
                                     deferredResult.resolve(config);
-                                }, function () {
+                                }, function (err) {
                                     $window.alert('Error loading widget controllers');
+                                    deferredResult.reject(err);
                                 });
 
                                 return deferredResult.promise;
                             }, function (data) {
-                                $window.alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
+                                // $window.alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
+                                $state.go('page', {name: 404});
                                 return $q.reject(data.status);
                             });
                     }
@@ -60,15 +62,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                     });
                 },
                 controller: 'PageCtrl'
-            })
-            .state('404', {
-                url: '/404',
-                templateUrl: 'views/404.html'
             });
-
-        $urlRouterProvider
-            .otherwise('/404')
-            .when('/', '/home');
     });
 
     app.factory('pageListPromise', function ($http) {
