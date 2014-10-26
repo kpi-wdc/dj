@@ -12,6 +12,10 @@
         "name": "events-page"
     },
     {
+        "title": "Maps",
+        "name": "maps"
+    },
+    {
         "title": "2x2 template",
         "name": "page-2"
     },
