@@ -20,6 +20,9 @@ public class Artefact {
     @Column(name = "artefact_table")
     private String artefactTable;
 
+    @Column(name = "key")
+    private String key;
+
     @OneToMany(mappedBy = "pk.artefact")
     private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
@@ -62,6 +65,14 @@ public class Artefact {
         this.artefactDefs = artefactDefs;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,10 +81,13 @@ public class Artefact {
         Artefact artefact = (Artefact) o;
 
         if (artefactId != artefact.artefactId) return false;
+        if (artefactDefs != null ? !artefactDefs.equals(artefact.artefactDefs) : artefact.artefactDefs != null)
+            return false;
         if (artefactSchema != null ? !artefactSchema.equals(artefact.artefactSchema) : artefact.artefactSchema != null)
             return false;
         if (artefactTable != null ? !artefactTable.equals(artefact.artefactTable) : artefact.artefactTable != null)
             return false;
+        if (key != null ? !key.equals(artefact.key) : artefact.key != null) return false;
 
         return true;
     }
@@ -83,6 +97,8 @@ public class Artefact {
         int result = artefactId;
         result = 31 * result + (artefactSchema != null ? artefactSchema.hashCode() : 0);
         result = 31 * result + (artefactTable != null ? artefactTable.hashCode() : 0);
+        result = 31 * result + (key != null ? key.hashCode() : 0);
+        result = 31 * result + (artefactDefs != null ? artefactDefs.hashCode() : 0);
         return result;
     }
 
@@ -92,6 +108,8 @@ public class Artefact {
                 "artefactId=" + artefactId +
                 ", artefactSchema='" + artefactSchema + '\'' +
                 ", artefactTable='" + artefactTable + '\'' +
+                ", key='" + key + '\'' +
+                ", artefactDefs=" + artefactDefs +
                 '}';
     }
 }
