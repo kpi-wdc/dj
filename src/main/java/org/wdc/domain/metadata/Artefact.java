@@ -24,6 +24,9 @@ public class Artefact {
     @OneToMany(mappedBy = "pk.artefact")
     private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
+    @OneToMany(mappedBy = "pk.artefact")
+    private Set<ArtefactMetadata> artefactMetadatas = new HashSet<>(0);
+
     public Artefact() { }
 
     public Artefact(String artefactSchema, String artefactTable) {

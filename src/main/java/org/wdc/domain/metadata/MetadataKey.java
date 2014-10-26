@@ -18,6 +18,9 @@ public class MetadataKey {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
     private Set<ArtefactDef> artefactDefs = new HashSet<>(0);
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.metadataKey")
+    private Set<ArtefactMetadata> artefactMetadatas = new HashSet<>(0);
+
     public MetadataKey() { }
 
     public MetadataKey(String key) {
