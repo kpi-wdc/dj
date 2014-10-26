@@ -11,6 +11,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
 
+        $urlRouterProvider
+            .when('/', '/home')
+            .otherwise('/404');
+
         $stateProvider
             .state('page', {
                 url: '/:name',
