@@ -1,10 +1,11 @@
-package org.wdc.dao;
+package org.wdc.dao.impl;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.wdc.dao.GenericDao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
