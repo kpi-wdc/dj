@@ -4,4 +4,9 @@ target
 # JetBrains IDEs
 *.iml
 .idea/*
+src/*/.idea
 !.idea/runConfigurations
+
+# vim
+*.swp
+
