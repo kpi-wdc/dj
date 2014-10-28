@@ -28,7 +28,7 @@ We suggest to learn about the following technologies first:
   - gulp (front-end task-runner)
   - angularjs (front-end, MVVM framework)
   - requirejs (front-end, runtime dependency management)
-  - less (font-end, css replacement)
+  - less (front-end, css replacement)
   - REST (back-end + front-end)
 
 Suggested intellij idea plugins:
