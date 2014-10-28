@@ -10,6 +10,12 @@ To run this project from terminal run the following command:
 
 Intellij idea project has preconfigured maven run configuration.
 
+Project style guides:
+
+  - MOST IMPORTANT: follow the existing code style
+  - Make sensible variable names
+  - Don't use ’git pull’, use ’git pull --rebase’ instead. Merge commits are evil. You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
+
 We suggest to learn about the following technologies first:
 
   - git (version control)
@@ -34,10 +40,10 @@ Suggested intellij idea plugins:
   - gitignore (for syntax highlight)
   - angularjs
   - markdown
- 
+
 Chrome extensions:
-  
+
   - angularjs batarang
-  - JetBrains IDE support 
+  - JetBrains IDE support
 
 Also look into [src/main/webapp/README.md](src/main/webapp/README.md) for front-end documentation.
