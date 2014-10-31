@@ -14,7 +14,7 @@ Project style guides:
 
   - MOST IMPORTANT: follow the existing code style
   - Make sensible variable names
-  - Don't use ’git pull’, use ’git pull --rebase’ instead. Merge commits are evil. You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
+  - Don't use `git pull`, use `git pull --rebase` instead. Merge commits are evil. You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
 
 We suggest to learn about the following technologies first:
 
