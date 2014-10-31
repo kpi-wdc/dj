@@ -9,8 +9,11 @@ var path = require('path');
 gulp.task('default', ['bower', 'less']);
 
 gulp.task('bower', function () {
-    // bower({directory: './components', cwd: './' });
-    bower('./components');
+    bower({
+      directory: './components',
+      // cwd: './',
+      cmd: 'update'
+    });
 });
 
 gulp.task('less', function () {
