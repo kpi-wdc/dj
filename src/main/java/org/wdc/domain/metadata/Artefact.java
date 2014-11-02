@@ -101,10 +101,6 @@ public class Artefact {
         Artefact artefact = (Artefact) o;
 
         if (artefactId != artefact.artefactId) return false;
-        if (artefactSchema != null ? !artefactSchema.equals(artefact.artefactSchema) : artefact.artefactSchema != null)
-            return false;
-        if (artefactTable != null ? !artefactTable.equals(artefact.artefactTable) : artefact.artefactTable != null)
-            return false;
         if (key != null ? !key.equals(artefact.key) : artefact.key != null) return false;
 
         return true;
