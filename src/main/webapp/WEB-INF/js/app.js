@@ -78,7 +78,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
     });
 
     app.factory('pageConfigsPromise', function ($http) {
-        return $http.get('/json/pages.json');
+        return $http.get('/config/pages.json');
     });
 
     app.service('widgetEvents', function() {
@@ -176,7 +176,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                 $scope.pages = data;
             })
             .error(function (data, status) {
-                $window.alert('$http error ' + status + ' - cannot load json/pagelist.json!');
+                $window.alert('$http error ' + status + ' - cannot load config/pages.json!');
             });
     });
 

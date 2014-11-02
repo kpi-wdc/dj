@@ -22,7 +22,7 @@
     <mvc:resources mapping="/css/**" location="/generated-css/" />
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
     <mvc:resources mapping="/views/**" location="/WEB-INF/views/" />
-    <mvc:resources mapping="/json/**" location="/WEB-INF/json/" />
+    <mvc:resources mapping="/config/**" location="/WEB-INF/config/" />
     <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/" />
     <mvc:resources mapping="/widgets/**" location="/WEB-INF/widgets/" />
 </beans>
