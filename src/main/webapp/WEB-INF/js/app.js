@@ -24,11 +24,18 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                             .then(function (result) {
                                 var configList = result.data;
                                 var config;
+                                var alternateConfig;
                                 for (var i = 0; i < configList.length; i++) {
                                     if ($stateParams.href === configList[i].href) {
                                         config = configList[i];
+                                        break;
+                                    }
+                                    if ('404' == configList[i].href) {
+                                        alternateConfig = configList[i];
                                     }
                                 }
+
+                                config = config || alternateConfig;
 
                                 var deferredResult = $q.defer();
 

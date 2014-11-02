@@ -120,6 +120,18 @@
         "title": "2-column template page"
     },
     {
-        "href": "404"
+        "href": "404",
+        "template": "1-col",
+        "title": "404 error",
+        "holders": {
+            "column": {
+                "widgets": [
+                    {
+                        "type": "htmlwidget",
+                        "text": "Page not found"
+                    }
+                ]
+            }
+        }
     }
 ]
