@@ -15,7 +15,7 @@ import java.util.List;
  * Basic DAO operations dependent with Hibernate's specific classes
  * @see SessionFactory
  */
-@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
+@Transactional(propagation = Propagation.REQUIRED, readOnly=false)
 public class HibernateDao<E, K extends Serializable> implements GenericDao<E, K> {
     private SessionFactory sessionFactory;
     protected Class<? extends E> daoType;
