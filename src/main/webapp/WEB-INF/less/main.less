@@ -12,7 +12,8 @@ widget-holder {
 }
 
 .widget {
-  @widget-design-bg: #c6ab87;
+  @widget-design-bg: #f5f5f5;
+  @widget-design-border: #ddd;
 
   padding: 5px;
   margin-bottom: 15px;
@@ -23,18 +24,24 @@ widget-holder {
   }
 
   .widget-design-panel {
-    .widget-type {
+    border: 0.1rem solid @widget-design-border;
+    .widget-type, .widget-name {
       float: left;
+      margin-left: 0.4rem;
+    }
+    .widget-type {
+      font-weight: bold;
+      margin-top: 0.2rem;
     }
     .widget-config-btn, .widget-delete-btn {
       float: right;
       margin: 0.2rem;
+      color: #9b9b9b;
     }
     background-color: @widget-design-bg;
     border-top-left-radius: 0.3rem;
     border-top-right-radius: 0.3rem;
     padding: 0.3rem;
-    font-weight: bold;
     font-style: italic;
   }
 
@@ -47,10 +54,10 @@ widget-holder {
     clear: both;
 
     &.widget-design-mode {
-      padding-top: 0.4rem;
-      border-left: 0.1rem solid @widget-design-bg;
-      border-right: 0.1rem solid @widget-design-bg;
-      border-bottom: 0.1rem solid @widget-design-bg;
+      padding: 0.4rem;
+      border-left: 0.1rem solid @widget-design-border;
+      border-right: 0.1rem solid @widget-design-border;
+      border-bottom: 0.1rem solid @widget-design-border;
     }
   }
 }

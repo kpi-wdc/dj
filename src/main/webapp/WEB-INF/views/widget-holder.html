@@ -1,7 +1,8 @@
 <div ng-repeat="widget in holder.widgets" class="widget">
   <div ng-show="globalConfig.designMode">
     <div class="widget-design-panel">
-      <span class="widget-type" ng-bind="widget.type"></span>
+      <span class="widget-name" ng-bind="widget.instanceName"></span>
+      <span class="widget-type label radius" ng-bind="widget.type"></span>
       <span class="widget-delete-btn"><i class="fi-x"></i></span>
       <span class="widget-config-btn"><i class="fi-wrench"></i></span>
       <div style="clear: both;"></div>
