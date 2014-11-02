@@ -25,4 +25,5 @@
     <mvc:resources mapping="/config/**" location="/WEB-INF/config/" />
     <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/" />
     <mvc:resources mapping="/widgets/**" location="/WEB-INF/widgets/" />
+    <mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
 </beans>
