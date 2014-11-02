@@ -32,7 +32,12 @@ public class Artefact {
 
     public Artefact() { }
 
-    public Artefact(String artefactSchema, String artefactTable) {
+    public Artefact(String key) {
+        this.key = key;
+    }
+
+    public Artefact(String key, String artefactSchema, String artefactTable) {
+        this.key = key;
         this.artefactSchema = artefactSchema;
         this.artefactTable = artefactTable;
     }
