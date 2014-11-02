@@ -7,13 +7,13 @@ import org.wdc.dao.impl.HibernateDao;
 import org.wdc.dao.metadata.ArtefactDao;
 import org.wdc.domain.metadata.Artefact;
 
-@Repository("artefact")
+@Repository("artefactDao")
 public class ArtefactDaoImpl extends HibernateDao<Artefact, Integer>
                              implements ArtefactDao {
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/persistence-config.xml");
 
-        ArtefactDao artefactDao = (ArtefactDao) ctx.getBean("artefact");
+        ArtefactDao artefactDao = (ArtefactDao) ctx.getBean("artefactDao");
 
         System.out.println(artefactDao.list());
     }

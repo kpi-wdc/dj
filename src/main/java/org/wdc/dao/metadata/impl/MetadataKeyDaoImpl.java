@@ -15,13 +15,13 @@ import org.wdc.domain.metadata.MetadataKey;
 
 import java.util.List;
 
-@Repository("metadatakey")
+@Repository("metadatakeyDao")
 public class MetadataKeyDaoImpl extends HibernateDao<MetadataKey, Integer>
                                 implements MetadataKeyDao {
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/persistence-config.xml");
 
-        MetadataKeyDao metadataKeyDao = (MetadataKeyDao) ctx.getBean("metadatakey");
+        MetadataKeyDao metadataKeyDao = (MetadataKeyDao) ctx.getBean("metadatakeyDao");
 
         System.out.println(metadataKeyDao.list());
     }
