@@ -17,12 +17,19 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
 
         $stateProvider
             .state('page', {
-                url: '/:name',
+                url: '/:href',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state) {
-                        return pageConfigPromise = $http.get('/json/pageconfig/' + $stateParams.name + '.json')
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, pageConfigsPromise) {
+                        return pageConfigPromise = pageConfigsPromise
                             .then(function (result) {
-                                var config = result.data;
+                                var configList = result.data;
+                                var config;
+                                for (var i = 0; i < configList.length; i++) {
+                                    if ($stateParams.href === configList[i].href) {
+                                        config = configList[i];
+                                    }
+                                }
+
                                 var deferredResult = $q.defer();
 
                                 var widgetControllers = [];
@@ -31,8 +38,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                     for (var i = 0; i < widgets.length; ++i) {
                                         if (!widgets[i].nojs) {
                                             widgetControllers.push({
-                                                    name: 'app.widgets.' + widgets[i].name,
-                                                    files: ['/widgets/' + widgets[i].name + '/widget.js']
+                                                    name: 'app.widgets.' + widgets[i].type,
+                                                    files: ['/widgets/' + widgets[i].type + '/widget.js']
                                                 }
                                             );
                                         }
@@ -47,8 +54,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
 
                                 return deferredResult.promise;
                             }, function (data) {
-                                // $window.alert('Error loading page config: ' + data.statusText + ' (' + data.status + ')');
-                                $state.go('page', {name: 404});
+                                $window.alert('Error loading page configurations: ' + data.statusText + ' (' + data.status + ')');
                                 return $q.reject(data.status);
                             });
                     }
@@ -65,8 +71,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
             });
     });
 
-    app.factory('pageListPromise', function ($http) {
-        return $http.get('/json/pagelist.json');
+    app.factory('pageConfigsPromise', function ($http) {
+        return $http.get('/json/pages.json');
     });
 
     app.service('widgetEvents', function() {
@@ -142,8 +148,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                     }
                 });
 
-                scope.widgetTemplateUrl = function (name) {
-                    return '/widgets/' + name + '/index.html';
+                scope.widgetTemplateUrl = function (type) {
+                    return '/widgets/' + type + '/index.html';
                 };
             }
         }
@@ -158,8 +164,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         ]
     });
 
-    app.controller('PageNavigationController', function (pageListPromise, $scope, $http, $window) {
-        pageListPromise
+    app.controller('PageNavigationController', function (pageConfigsPromise, $scope, $http, $window) {
+        pageConfigsPromise
             .success(function (data) {
                 $scope.pages = data;
             })
