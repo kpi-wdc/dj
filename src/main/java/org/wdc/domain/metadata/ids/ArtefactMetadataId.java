@@ -17,6 +17,13 @@ public class ArtefactMetadataId implements Serializable {
     @SuppressWarnings("all")
     private MetadataKey metadataKey;
 
+    public ArtefactMetadataId() { }
+
+    public ArtefactMetadataId(Artefact artefact, MetadataKey metadataKey) {
+        this.artefact = artefact;
+        this.metadataKey = metadataKey;
+    }
+
     public Artefact getArtefact() {
         return artefact;
     }

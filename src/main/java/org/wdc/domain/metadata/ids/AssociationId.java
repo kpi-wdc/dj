@@ -18,6 +18,11 @@ public class AssociationId implements Serializable {
 
     public AssociationId() { }
 
+    public AssociationId(Artefact artefact, Artefact reference) {
+        this.artefact = artefact;
+        this.reference = reference;
+    }
+
     public Artefact getArtefact() {
         return artefact;
     }

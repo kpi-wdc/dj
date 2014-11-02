@@ -22,6 +22,13 @@ public class ArtefactDefId implements Serializable {
     @SuppressWarnings("all")
     private MetadataKey metadataKey;
 
+    public ArtefactDefId() { }
+
+    public ArtefactDefId(Artefact artefact, MetadataKey metadataKey) {
+        this.artefact = artefact;
+        this.metadataKey = metadataKey;
+    }
+
     public Artefact getArtefact() {
         return artefact;
     }
