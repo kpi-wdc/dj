@@ -30,6 +30,10 @@ public class MetadataKey {
         this.key = key;
     }
 
+    public int getMetadataKeyId() {
+        return metadataKeyId;
+    }
+
     public String getKey() {
         return key;
     }
