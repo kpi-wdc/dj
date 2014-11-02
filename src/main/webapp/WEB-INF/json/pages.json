@@ -1,7 +1,7 @@
 [
     {
         "shortTitle": "Home",
-        "href": "home",
+        "href": "",
         "template": "1-col",
         "title": "Home Page",
         "holders": {
