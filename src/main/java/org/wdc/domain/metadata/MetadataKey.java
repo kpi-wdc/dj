@@ -69,10 +69,8 @@ public class MetadataKey {
 
         MetadataKey that = (MetadataKey) o;
 
-        if (metadataKeyId != that.metadataKeyId) return false;
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-
-        return true;
+        if (key == null) return false;
+        return key.equals(that.key);
     }
 
     @Override
