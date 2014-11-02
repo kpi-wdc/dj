@@ -7,11 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletContext;
 import java.io.InputStream;
-import java.util.Scanner;
 
 @Controller
 @RequestMapping("/")
@@ -20,10 +18,10 @@ public class ViewsController {
     private ServletContext servletContext;
 
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
-    public ResponseEntity home() {
+    public ResponseEntity<InputStreamResource> home() {
 
         InputStream in = servletContext.getResourceAsStream("/WEB-INF/views/index.html");
         InputStreamResource inputStreamResource = new InputStreamResource(in);
-        return new ResponseEntity(inputStreamResource, HttpStatus.OK);
+        return new ResponseEntity<>(inputStreamResource, HttpStatus.OK);
     }
 }
