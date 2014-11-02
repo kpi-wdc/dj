@@ -36,12 +36,12 @@
         </property>
     </bean>
 
-      <tx:annotation-driven />
+    <tx:annotation-driven />
 
-      <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-          <property name="sessionFactory" ref="sessionFactory" />
-      </bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
 
-      <bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/>
+    <bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/>
 
 </beans>
