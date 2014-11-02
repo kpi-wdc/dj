@@ -12,12 +12,46 @@ widget-holder {
 }
 
 .widget {
+  @widget-design-bg: #c6ab87;
+
   padding: 5px;
   margin-bottom: 15px;
   display: block;
   height: 100%;
   &:last-of-type {
     margin-bottom: 0px;
+  }
+
+  .widget-design-panel {
+    .widget-type {
+      float: left
+    }
+    .widget-config-btn {
+      float: right;
+      font-style: italic;
+    }
+    background-color: @widget-design-bg;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    padding: 0.3rem;
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  .widget-title {
+    font-weight: bold;
+  }
+
+  .widget-contents {
+    height: 100%;
+    clear: both;
+
+    &.widget-design-mode {
+      padding-top: 0.4rem;
+      border-left: 0.1rem solid @widget-design-bg;
+      border-right: 0.1rem solid @widget-design-bg;
+      border-bottom: 0.1rem solid @widget-design-bg;
+    }
   }
 }
 
@@ -33,12 +67,4 @@ widget-holder {
   #page-view {
     border: 2px dashed blue;
   }
-}
-
-.widget-title {
-  font-weight: bold;
-}
-
-.widget-contents {
-  height: 100%;
 }

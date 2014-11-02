@@ -1,5 +1,16 @@
 <div ng-repeat="widget in holder.widgets" class="widget">
-  <div ng-include src="widgetTemplateUrl(widget.type)" class="widget-contents">Loading widget...</div>
+  <div ng-show="globalConfig.designMode">
+    <div class="widget-design-panel">
+      <span class="widget-type" ng-bind="widget.type"></span>
+      <span class="widget-config-btn">Setup</span>
+      <div style="clear: both;"></div>
+    </div>
+  </div>
+  <div ng-include src="widgetTemplateUrl(widget.type)"
+       class="widget-contents"
+       ng-class="{'widget-design-mode': globalConfig.designMode}">
+    Loading widget...
+  </div>
 </div>
 <div ng-if="!holder.widgets" class="widget">
   Empty holder
