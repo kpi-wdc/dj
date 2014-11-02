@@ -1,5 +1,9 @@
 package org.wdc.dao.metadata;
 
-public interface ArtefactDefDao {
+import org.wdc.dao.GenericDao;
+import org.wdc.domain.metadata.ArtefactDef;
+import org.wdc.domain.metadata.ids.ArtefactDefId;
+
+public interface ArtefactDefDao extends GenericDao<ArtefactDef, ArtefactDefId> {
 
 }
