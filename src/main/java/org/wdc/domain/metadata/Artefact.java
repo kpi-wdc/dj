@@ -100,17 +100,13 @@ public class Artefact {
 
         Artefact artefact = (Artefact) o;
 
-        if (artefactId != artefact.artefactId) return false;
-        if (key != null ? !key.equals(artefact.key) : artefact.key != null) return false;
-
-        return true;
+        if (key == null) return false;
+        return key.equals(artefact.key);
     }
 
     @Override
     public int hashCode() {
         int result = artefactId;
-        result = 31 * result + (artefactSchema != null ? artefactSchema.hashCode() : 0);
-        result = 31 * result + (artefactTable != null ? artefactTable.hashCode() : 0);
         result = 31 * result + (key != null ? key.hashCode() : 0);
         return result;
     }
