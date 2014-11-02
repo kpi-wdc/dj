@@ -29,7 +29,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                                         config = configList[i];
                                         break;
                                     }
-                                    if ('404' == configList[i].href) {
+                                    if (configList[i].href === '404') {
                                         alternateConfig = configList[i];
                                     }
                                 }
