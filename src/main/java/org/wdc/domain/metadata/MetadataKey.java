@@ -30,6 +30,38 @@ public class MetadataKey {
         this.key = key;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Set<ArtefactDef> getArtefactDefs() {
+        return artefactDefs;
+    }
+
+    public void setArtefactDefs(Set<ArtefactDef> artefactDefs) {
+        this.artefactDefs = artefactDefs;
+    }
+
+    public Set<ArtefactMetadata> getArtefactMetadatas() {
+        return artefactMetadatas;
+    }
+
+    public void setArtefactMetadatas(Set<ArtefactMetadata> artefactMetadatas) {
+        this.artefactMetadatas = artefactMetadatas;
+    }
+
+    public Set<MetadataKeyDef> getMetadataKeyDefs() {
+        return metadataKeyDefs;
+    }
+
+    public void setMetadataKeyDefs(Set<MetadataKeyDef> metadataKeyDefs) {
+        this.metadataKeyDefs = metadataKeyDefs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
