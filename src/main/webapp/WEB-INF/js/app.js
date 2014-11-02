@@ -132,9 +132,14 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
     });
 
     app.controller('BodyController', function ($scope) {
-        $scope.globalConfig = {
-            debugMode: false
-        }
+        var cnf = $scope.globalConfig = {
+            debugMode: false,
+            designMode: true
+        };
+
+        $scope.$watch('globalConfig.designMode', function () {
+            cnf.debugMode = cnf.debugMode && !cnf.designMode;
+        });
     });
 
     app.controller('PageCtrl', function ($scope, pageConfig) {

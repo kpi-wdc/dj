@@ -28,7 +28,14 @@
       <ul class="side-nav">
         <li ng-repeat="page in pages" ng-if="page.shortTitle"><a href="/{{page.href}}">{{page.shortTitle}}</a></li>
       </ul>
-      <label>Debug mode: <input ng-model="globalConfig.debugMode" type="checkbox"></label>
+      <label>Design mode:
+        <input ng-model="globalConfig.designMode" type="checkbox">
+      </label>
+      <label>Debug mode:
+        <input ng-model="globalConfig.debugMode"
+               ng-disabled="globalConfig.designMode"
+               type="checkbox">
+      </label>
 
       <p><img src="http://placehold.it/320x240&text=Ad"/></p>
     </nav>
