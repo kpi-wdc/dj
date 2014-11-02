@@ -108,6 +108,21 @@
         }
     },
     {
+        "shortTitle": "Local-dependency demo",
+        "href": "widget-with-local-dependency",
+        "template": "1-col",
+        "title": "Widget on this page depends on non-visual local component",
+        "holders": {
+            "column": {
+                "widgets": [
+                    {
+                        "type": "widget-with-dependency"
+                    }
+                ]
+            }
+        }
+    },
+    {
         "shortTitle": "2x2 template",
         "href": "page-2",
         "template": "2x2",
