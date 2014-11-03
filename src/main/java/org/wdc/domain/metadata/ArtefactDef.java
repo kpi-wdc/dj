@@ -8,9 +8,9 @@ import javax.persistence.*;
 @Table(schema = "metadata", name = "artefact_def")
 @AssociationOverrides({
         @AssociationOverride(name = "pk.artefact",
-                 joinColumns = @JoinColumn(name = "artefact_id")),
+                joinColumns = @JoinColumn(name = "artefact_id")),
         @AssociationOverride(name = "pk.metadataKey",
-                 joinColumns = @JoinColumn(name = "metadatakey_id"))
+                joinColumns = @JoinColumn(name = "metadatakey_id"))
 })
 public class ArtefactDef {
     @EmbeddedId
