@@ -7,6 +7,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
+/**
+ * Represents composite key for artefactmetadata intermediate table
+ * that connects artefact and metadatakey tables in many-to-many
+ * relation
+ */
 @Embeddable
 public class ArtefactMetadataId implements Serializable {
     @ManyToOne

@@ -3,13 +3,12 @@ package org.wdc.domain.metadata.ids;
 import org.wdc.domain.metadata.Artefact;
 import org.wdc.domain.metadata.MetadataKey;
 
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Represents composite key for ArtefactDef intermediate table
- * that connects Artefact and Metadatakey tables in many-to-many
+ * Represents composite key for artefact_def intermediate table
+ * that connects artefact and metadatakey tables in many-to-many
  * relation
  */
 @Embeddable
@@ -63,13 +62,5 @@ public class ArtefactDefId implements Serializable {
         int result = artefact != null ? artefact.hashCode() : 0;
         result = 31 * result + (metadataKey != null ? metadataKey.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "ArtefactDefId{" +
-                "artefact=" + artefact +
-                ", metadataKey=" + metadataKey +
-                '}';
     }
 }

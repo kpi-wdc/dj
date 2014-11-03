@@ -6,6 +6,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
+/**
+ * Represents composite key for meradatakey_def intermediate table
+ * that connects metadatakey table on itself in many-to-many
+ * relation
+ */
 @Embeddable
 public class MetadataKeyDefId implements Serializable {
     @ManyToOne
@@ -17,11 +22,6 @@ public class MetadataKeyDefId implements Serializable {
     private MetadataKey def;
 
     public MetadataKeyDefId() { }
-
-    public MetadataKeyDefId(MetadataKey metadataKey, MetadataKey def) {
-        this.metadataKey = metadataKey;
-        this.def = def;
-    }
 
     public MetadataKey getMetadataKey() {
         return metadataKey;
