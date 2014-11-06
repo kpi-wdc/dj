@@ -4,7 +4,7 @@
       <span class="widget-name" ng-bind="widget.instanceName"></span>
       <span class="widget-type label radius" ng-bind="widget.type"></span>
       <span class="glyphicon widget-delete-btn" ng-click="deleteIthWidgetFromHolder(holder, $index)"><i class="fi-x"></i></span>
-      <span class="glyphicon widget-config-btn"><i class="fi-wrench"></i></span>
+      <span class="glyphicon widget-config-btn" ng-click="openWidgetConfigurationDialog(widget)"><i class="fi-wrench"></i></span>
       <div style="clear: both;"></div>
     </div>
   </div>

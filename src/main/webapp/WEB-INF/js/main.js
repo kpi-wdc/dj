@@ -5,7 +5,8 @@ require.config({
     paths: {
         'angular': '/components/angular/angular',
         'angular-ui-router': '/components/angular-ui-router/release/angular-ui-router',
-        'angular-oclazyload': '/components/oclazyload/dist/ocLazyLoad'
+        'angular-oclazyload': '/components/oclazyload/dist/ocLazyLoad',
+        'angular-foundation': '/components/angular-foundation/mm-foundation-tpls'
     },
 
     // Add angular modules that does not support AMD out of the box, put it in a shim
@@ -14,7 +15,8 @@ require.config({
             exports: 'angular'
         },
         'angular-ui-router': ['angular'],
-        'angular-oclazyload': ['angular']
+        'angular-oclazyload': ['angular'],
+        'angular-foundation': ['angular']
     },
 
     // kick start application

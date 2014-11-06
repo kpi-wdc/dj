@@ -17,6 +17,7 @@
     "oclazyload": "~0.3",
     "angular-leaflet": "~0.7",
     "leaflet": "~0.7",
-    "foundation-icon-fonts": "zurb/foundation-icon-fonts"
+    "foundation-icon-fonts": "zurb/foundation-icon-fonts",
+    "angular-foundation": "~0.4"
   }
 }

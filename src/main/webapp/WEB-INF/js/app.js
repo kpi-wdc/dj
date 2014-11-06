@@ -1,5 +1,5 @@
-define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular) {
-    var app = angular.module('app', ['ui.router', 'oc.lazyLoad']);
+define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundation'], function (angular) {
+    var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation']);
 
     app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider) {
 
@@ -142,10 +142,24 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
         });
     });
 
-    app.controller('PageCtrl', function ($scope, pageConfig) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
+        };
+
+        $scope.openWidgetConfigurationDialog = function (widget) {
+            $modal.open({
+                templateUrl: '/views/widget-modal-config.html',
+                controller: 'WidgetModalSettingsController',
+                resolve: {
+                    widgetConfig: function () {
+                        return angular.copy(widget)
+                    }
+                }
+            }).result.then(function (newWidgetConfig) {
+                angular.copy(widget, newWidgetConfig);
+            })
         };
     });
 
@@ -167,6 +181,18 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
                 };
             }
         }
+    });
+
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, widgetConfig) {
+        $scope.widgetConfig = widgetConfig;
+
+        $scope.ok = function () {
+            $modalInstance.close(widgetConfig);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
     });
 
     app.controller('SectionsController', function ($scope) {
