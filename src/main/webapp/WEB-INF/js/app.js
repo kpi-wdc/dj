@@ -190,13 +190,13 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('PageCtrl', function ($scope, $modal, pageConfig) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig, appUrls) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
         };
 
-        $scope.openWidgetConfigurationDialog = function (widget, appUrls) {
+        $scope.openWidgetConfigurationDialog = function (widget) {
             $modal.open({
                 templateUrl: appUrls.widgetModalConfigHTML,
                 controller: 'WidgetModalSettingsController',
