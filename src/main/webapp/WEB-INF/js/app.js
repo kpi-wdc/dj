@@ -206,7 +206,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                     }
                 }
             }).result.then(function (newWidgetConfig) {
-                angular.copy(widget, newWidgetConfig);
+                angular.copy(newWidgetConfig, widget);
             })
         };
     });
