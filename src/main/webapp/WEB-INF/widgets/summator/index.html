@@ -1,6 +1,12 @@
 <div ng-controller="SummatorWidgetController">
 <div class="widget-title" ng-if="widget.title">{{widget.title}}</div>
-<label>a = <input ng-model="a" ng-disabled="widget.aDisabled"></label><br>
-<label>b = <input ng-model="b"></label><br>
+<div class="row">
+  <div class="column small-2"><label class="inline">a&nbsp;&nbsp; = </label></div>
+  <div class="column small-10"><input type="number" ng-model="a" ng-disabled="widget.aDisabled"></div>
+</div>
+<div class="row">
+  <div class="column small-2"><label class="inline">b&nbsp;&nbsp; = </label></div>
+  <div class="column small-10"><input type="number" ng-model="b"></div><br>
+</div>
 Result = a + b = {{ a }} + {{ b }} = {{ sum() }}
 </div>
