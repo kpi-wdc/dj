@@ -81,15 +81,30 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         return $http.get('/config/app.json');
     });
 
-    app.factory('appConfig', function (pageConfigsPromise) {
-        var result = {
+    app.factory('appConfig', function ($http, appConfigPromise) {
+        var appConfig = {
+            config: {},
+            sendingToServer: false,
+            wasModified: true, // TODO: implement changing this state
+            submitToServer: function (callback) {
+                appConfig.sendingToServer = true;
+                return $http.put('/config/app.json', appConfig.config)
+                    .then(function () {
+                        appConfig.sendingToServer = false;
+                    }, function (data) {
+                        appConfig.sendingToServer = false;
+                        if (callback) {
+                            callback(data);
+                        }
+                    });
+            }
         };
 
         appConfigPromise.success(function (data) {
-            angular.extend(result, data);
+            angular.copy(data, appConfig.config);
         });
 
-        return result;
+        return appConfig;
     });
 
     app.service('widgetEvents', function() {
@@ -142,7 +157,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('MainController', function ($scope, appConfig) {
+    app.controller('MainController', function ($scope, $window, appConfig) {
         var cnf = $scope.globalConfig = {
             debugMode: false,
             designMode: true
@@ -153,6 +168,11 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         $scope.$watch('globalConfig.designMode', function () {
             cnf.debugMode = cnf.debugMode && !cnf.designMode;
         });
+
+        $scope.alertAppConfigSubmissionFailed = function (data) {
+            $window.alert('Error submitting application configuration!\n' +
+                'HTTP error ' + data.status + ': ' + data.statusText);
+        };
     });
 
     app.controller('PageCtrl', function ($scope, $modal, pageConfig) {

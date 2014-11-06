@@ -15,13 +15,24 @@
     </div>
     <div class="large-9 columns">
       <ul class="inline-list right">
-        <li ng-repeat="section in appConfig.sections"><a href="/404" ng-bind="section"></a></li>
+        <li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>
       </ul>
     </div>
   </header>
 
   <div class="row">
     <div class="large-9 push-3 columns" id="page-view">
+      <div ng-if="globalConfig.designMode" id="page-design-panel">
+        <h3>Design mode panel</h3>
+        <button class="button tiny" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
+                ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
+          Submit changes to server
+        </button>
+        <button class="button alert tiny" ng-disabled="true">
+          Delete page
+        </button>
+        <hr>
+      </div>
       <div ui-view>
         Loading...
       </div>
@@ -29,7 +40,7 @@
 
     <nav class="large-3 pull-9 columns">
       <ul class="side-nav">
-        <li ng-repeat="page in appConfig.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
+        <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
       <label>Design mode:
         <input ng-model="globalConfig.designMode" type="checkbox">
@@ -53,7 +64,7 @@
         </div>
         <div class="large-6 columns">
           <ul class="inline-list right">
-            <li ng-repeat="section in appConfig.sections"><a href="/404" ng-bind="section"></a></li>
+            <li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>
           </ul>
         </div>
       </div>
