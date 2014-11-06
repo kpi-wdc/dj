@@ -1,7 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run gulp" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$PROJECT_DIR$/src/main/webapp/node/node" path-to-js-file="node_modules/gulp/bin/gulp.js" working-dir="$PROJECT_DIR$/src/main/webapp">
-    <RunnerSettings RunnerId="NodeJS.run" />
-    <ConfigurationWrapper RunnerId="NodeJS.run" />
+  <configuration default="false" name="Run gulp" type="js.build_tools.gulp" factoryName="Gulp.js">
+    <node-options />
+    <gulpfile>$PROJECT_DIR$/src/main/webapp/gulpfile.js</gulpfile>
+    <tasks />
+    <pass-parent-envs>true</pass-parent-envs>
+    <envs />
+    <RunnerSettings RunnerId="Js.BuildTools.Gulp" />
+    <ConfigurationWrapper RunnerId="Js.BuildTools.Gulp" />
     <method />
   </configuration>
 </component>
