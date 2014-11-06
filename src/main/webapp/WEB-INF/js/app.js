@@ -21,7 +21,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                     pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, pageConfigsPromise) {
                         return pageConfigPromise = pageConfigsPromise
                             .then(function (result) {
-                                var configList = result.data;
+                                var configList = result.data.pages;
                                 var config;
                                 var alternateConfig;
                                 for (var i = 0; i < configList.length; i++) {
@@ -81,6 +81,17 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         return $http.get('/config/pages.json');
     });
 
+    app.factory('appConfig', function (pageConfigsPromise) {
+        var result = {
+        };
+
+        pageConfigsPromise.success(function (data) {
+            angular.extend(result, data);
+        });
+
+        return result;
+    });
+
     app.service('widgetEvents', function() {
         var subscriptions = [];
 
@@ -131,11 +142,13 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('BodyController', function ($scope) {
+    app.controller('MainController', function ($scope, appConfig) {
         var cnf = $scope.globalConfig = {
             debugMode: false,
             designMode: true
         };
+
+        $scope.appConfig = appConfig;
 
         $scope.$watch('globalConfig.designMode', function () {
             cnf.debugMode = cnf.debugMode && !cnf.designMode;
@@ -202,16 +215,6 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             'Bla-bla',
             'Some section'
         ]
-    });
-
-    app.controller('PageNavigationController', function (pageConfigsPromise, $scope, $http, $window) {
-        pageConfigsPromise
-            .success(function (data) {
-                $scope.pages = data;
-            })
-            .error(function (data, status) {
-                $window.alert('$http error ' + status + ' - cannot load config/pages.json!');
-            });
     });
 
     return angular.bootstrap(document, ['app']);

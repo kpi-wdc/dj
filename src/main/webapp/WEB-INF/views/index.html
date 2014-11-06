@@ -8,7 +8,7 @@
     <script data-main="/js/main" src="/components/requirejs/require.js"></script>
   </head>
 
-  <body ng-controller="BodyController" ng-class="{'debug-enabled': globalConfig.debugMode}">
+  <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
   <header class="row">
     <div class="large-3 columns">
       <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
@@ -21,13 +21,15 @@
   </header>
 
   <div class="row">
-    <div class="large-9 push-3 columns" id="page-view" ui-view>
-      Loading...
+    <div class="large-9 push-3 columns" id="page-view">
+      <div ui-view>
+        Loading...
+      </div>
     </div>
 
-    <nav class="large-3 pull-9 columns" ng-controller="PageNavigationController">
+    <nav class="large-3 pull-9 columns">
       <ul class="side-nav">
-        <li ng-repeat="page in pages" ng-if="page.shortTitle"><a href="/{{page.href}}">{{page.shortTitle}}</a></li>
+        <li ng-repeat="page in appConfig.pages" ng-if="page.shortTitle"><a href="/{{page.href}}">{{page.shortTitle}}</a></li>
       </ul>
       <label>Design mode:
         <input ng-model="globalConfig.designMode" type="checkbox">
