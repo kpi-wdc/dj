@@ -190,7 +190,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('PageCtrl', function ($scope, $modal, pageConfig, appUrls) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig, appUrls, $window) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
@@ -208,6 +208,15 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             }).result.then(function (newWidgetConfig) {
                 angular.copy(newWidgetConfig, widget);
             })
+        };
+
+        $scope.addNewWidget = function (holder) {
+            var widgetType = $window.prompt('Widget type (like summator):');
+            if (widgetType) {
+                holder.widgets.push({
+                    type: widgetType
+                });
+            }
         };
     });
 

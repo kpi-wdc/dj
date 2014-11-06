@@ -13,6 +13,11 @@
     Loading widget...
   </div>
 </div>
+<div ng-show="globalConfig.designMode" class="text-center">
+  <button class="button radius small" ng-click="addNewWidget(holder)">
+    <i class="fi-plus black"></i> Add new widget
+  </button>
+</div>
 <div ng-if="!holder.widgets" class="widget">
   Empty holder
 </div>
