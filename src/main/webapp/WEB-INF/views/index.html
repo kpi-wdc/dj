@@ -21,7 +21,7 @@
   </header>
 
   <div class="row">
-    <div class="large-9 push-3 columns" id="page-view">
+    <div class="large-9 columns" id="page-view">
       <div ng-if="globalConfig.designMode" id="page-design-panel">
         <h3>Design mode panel</h3>
         <button class="button tiny" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <nav class="large-3 pull-9 columns">
+    <nav class="large-3 columns">
       <ul class="side-nav">
         <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
