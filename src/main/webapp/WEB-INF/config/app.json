@@ -1,4 +1,10 @@
 {
+    "sections": [
+        "About",
+        "Index",
+        "Bla-bla",
+        "Some section"
+    ],
     "pages": [
         {
             "shortTitle": "Home",

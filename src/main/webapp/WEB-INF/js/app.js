@@ -208,14 +208,5 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('SectionsController', function ($scope) {
-        $scope.sections = [
-            'About',
-            'Index',
-            'Bla-bla',
-            'Some section'
-        ]
-    });
-
     return angular.bootstrap(document, ['app']);
 });

@@ -13,9 +13,9 @@
     <div class="large-3 columns">
       <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
     </div>
-    <div class="large-9 columns" ng-controller="SectionsController">
+    <div class="large-9 columns">
       <ul class="inline-list right">
-        <li ng-repeat="section in sections"><a href="/404">{{section}}</a></li>
+        <li ng-repeat="section in appConfig.sections"><a href="/404" ng-bind="section"></a></li>
       </ul>
     </div>
   </header>
@@ -29,7 +29,7 @@
 
     <nav class="large-3 pull-9 columns">
       <ul class="side-nav">
-        <li ng-repeat="page in appConfig.pages" ng-if="page.shortTitle"><a href="/{{page.href}}">{{page.shortTitle}}</a></li>
+        <li ng-repeat="page in appConfig.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
       <label>Design mode:
         <input ng-model="globalConfig.designMode" type="checkbox">
@@ -51,9 +51,9 @@
         <div class="large-6 columns">
           <p>&copy; Copyright Oleksandr Sochka & Victor Batytskyy</p>
         </div>
-        <div class="large-6 columns" ng-controller="SectionsController">
+        <div class="large-6 columns">
           <ul class="inline-list right">
-            <li ng-repeat="section in sections"><a href="/404">{{section}}</a></li>
+            <li ng-repeat="section in appConfig.sections"><a href="/404" ng-bind="section"></a></li>
           </ul>
         </div>
       </div>
