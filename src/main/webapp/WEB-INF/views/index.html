@@ -27,11 +27,11 @@
     <div class="large-9 push-3 columns" id="page-view">
       <div ng-if="globalConfig.designMode" id="page-design-panel">
         <h3>Design mode panel</h3>
-        <button class="button tiny" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
+        <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
                 ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
           Submit changes to server
         </button>
-        <button class="button alert tiny" ng-disabled="true">
+        <button class="button alert radius tiny" ng-disabled="true">
           Delete page
         </button>
         <hr>

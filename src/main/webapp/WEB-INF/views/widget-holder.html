@@ -1,11 +1,10 @@
 <div ng-repeat="widget in holder.widgets" class="widget">
   <div ng-show="globalConfig.designMode">
-    <div class="widget-design-panel">
-      <span class="widget-name" ng-bind="widget.instanceName"></span>
-      <span class="widget-type label radius" ng-bind="widget.type"></span>
-      <span class="widget-delete-btn" ng-click="deleteIthWidgetFromHolder(holder, $index)"><i class="glyphicon fi-x"></i></span>
-      <span class="widget-config-btn" ng-click="openWidgetConfigurationDialog(widget)"><i class="glyphicon fi-wrench"></i></span>
-      <div style="clear: both;"></div>
+    <div class="widget-design-panel clearfix">
+      <span class="widget-name left" ng-bind="widget.instanceName"></span>
+      <span class="widget-type label radius left" ng-bind="widget.type"></span>
+      <span class="widget-delete-btn right" ng-click="deleteIthWidgetFromHolder(holder, $index)"><i class="glyphicon fi-x"></i></span>
+      <span class="widget-config-btn right" ng-click="openWidgetConfigurationDialog(widget)"><i class="glyphicon fi-wrench"></i></span>
     </div>
   </div>
   <div ng-include src="widgetTemplateUrl(widget.type)"
