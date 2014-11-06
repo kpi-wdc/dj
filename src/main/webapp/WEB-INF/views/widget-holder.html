@@ -18,6 +18,6 @@
     <i class="fi-plus black"></i> Add new widget
   </button>
 </div>
-<div ng-if="!holder.widgets" class="widget">
+<div ng-show="!holder.widgets && !globalConfig.designMode" class="widget text-center">
   Empty holder
 </div>
