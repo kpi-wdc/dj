@@ -143,7 +143,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload'], function (angular
     });
 
     app.controller('PageCtrl', function ($scope, pageConfig) {
-       $scope.config = pageConfig;
+        $scope.config = pageConfig;
+        $scope.deleteIthWidgetFromHolder = function (holder, index) {
+            holder.widgets.splice(index, 1);
+        };
     });
 
     app.directive('widgetHolder', function () {
