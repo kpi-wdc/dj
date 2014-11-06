@@ -18,8 +18,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             .state('page', {
                 url: '/:href',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, pageConfigsPromise) {
-                        return pageConfigPromise = pageConfigsPromise
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, appConfigPromise) {
+                        return pageConfigPromise = appConfigPromise
                             .then(function (result) {
                                 var configList = result.data.pages;
                                 var config;
@@ -60,7 +60,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
                                 return deferredResult.promise;
                             }, function (data) {
-                                $window.alert('Error loading page configurations: ' + data.statusText + ' (' + data.status + ')');
+                                $window.alert('Error loading app configuration: ' + data.statusText + ' (' + data.status + ')');
                                 return $q.reject(data.status);
                             });
                     }
@@ -77,15 +77,15 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             });
     });
 
-    app.factory('pageConfigsPromise', function ($http) {
-        return $http.get('/config/pages.json');
+    app.factory('appConfigPromise', function ($http) {
+        return $http.get('/config/app.json');
     });
 
     app.factory('appConfig', function (pageConfigsPromise) {
         var result = {
         };
 
-        pageConfigsPromise.success(function (data) {
+        appConfigPromise.success(function (data) {
             angular.extend(result, data);
         });
 
