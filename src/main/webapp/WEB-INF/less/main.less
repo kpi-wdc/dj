@@ -4,7 +4,7 @@
 }
 
 #page-view {
-  padding: 0px;
+  padding: 0;
 }
 
 widget-holder {
@@ -21,7 +21,7 @@ widget-holder {
   display: block;
   height: 100%;
   &:last-of-type {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   .widget-design-panel {
@@ -38,6 +38,9 @@ widget-holder {
       float: right;
       margin: 0.2rem;
       color: #9b9b9b;
+    }
+    .glyphicon:hover {
+      color: #333;
     }
     background-color: @widget-design-bg;
     border-top-left-radius: @widget-design-border-radius;
