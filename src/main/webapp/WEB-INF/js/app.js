@@ -1,6 +1,21 @@
 define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundation'], function (angular) {
     var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation']);
 
+    app.constant('appUrls', {
+        appConfig: '/config/app.json',
+        widgetHolderHTML: '/views/widget-holder.html',
+        widgetModalConfigHTML: '/views/widget-modal-config.html',
+        templateHTML: function (templateName) {
+            return '/templates/' + templateName + '.html';
+        },
+        widgetJS: function (widgetName) {
+            return '/widgets/' + widgetName + '/widget.js';
+        },
+        widgetHTML: function (widgetName) {
+            return '/widgets/' + widgetName + '/index.html';
+        }
+    });
+
     app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider) {
 
         $ocLazyLoadProvider.config({
@@ -18,7 +33,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             .state('page', {
                 url: '/:href',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, appConfigPromise) {
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, appConfigPromise, appUrls) {
                         return pageConfigPromise = appConfigPromise
                             .then(function (result) {
                                 var configList = result.data.pages;
@@ -45,7 +60,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                                         if (!widgets[i].nojs) {
                                             widgetControllers.push({
                                                     name: 'app.widgets.' + widgets[i].type,
-                                                    files: ['/widgets/' + widgets[i].type + '/widget.js']
+                                                    files: [appUrls.widgetJS(widgets[i].type)]
                                                 }
                                             );
                                         }
@@ -65,9 +80,9 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                             });
                     }
                 },
-                templateProvider: function ($http) {
+                templateProvider: function ($http, appUrls) {
                     return pageConfigPromise.then(function (pageConfig) {
-                        return $http.get('/templates/' + pageConfig.template + '.html')
+                        return $http.get(appUrls.templateHTML(pageConfig.template))
                             .then(function (result) {
                                 return result.data;
                             });
@@ -77,18 +92,18 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             });
     });
 
-    app.factory('appConfigPromise', function ($http) {
-        return $http.get('/config/app.json');
+    app.factory('appConfigPromise', function ($http, appUrls) {
+        return $http.get(appUrls.appConfig);
     });
 
-    app.factory('appConfig', function ($http, appConfigPromise) {
+    app.factory('appConfig', function ($http, appConfigPromise, appUrls) {
         var appConfig = {
             config: {},
             sendingToServer: false,
             wasModified: true, // TODO: implement changing this state
             submitToServer: function (callback) {
                 appConfig.sendingToServer = true;
-                return $http.put('/config/app.json', appConfig.config)
+                return $http.put(appUrls.appConfig, appConfig.config)
                     .then(function () {
                         appConfig.sendingToServer = false;
                     }, function (data) {
@@ -181,9 +196,9 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             holder.widgets.splice(index, 1);
         };
 
-        $scope.openWidgetConfigurationDialog = function (widget) {
+        $scope.openWidgetConfigurationDialog = function (widget, appUrls) {
             $modal.open({
-                templateUrl: '/views/widget-modal-config.html',
+                templateUrl: appUrls.widgetModalConfigHTML,
                 controller: 'WidgetModalSettingsController',
                 resolve: {
                     widgetConfig: function () {
@@ -196,10 +211,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.directive('widgetHolder', function () {
+    app.directive('widgetHolder', function (appUrls) {
         return {
             restrict: 'E',
-            templateUrl: '/views/widget-holder.html',
+            templateUrl: appUrls.widgetHolderHTML,
             transclude: true,
             scope: true,
             link: function (scope, element, attrs) {
@@ -209,9 +224,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                     }
                 });
 
-                scope.widgetTemplateUrl = function (type) {
-                    return '/widgets/' + type + '/index.html';
-                };
+                scope.widgetTemplateUrl = appUrls.widgetHTML;
             }
         }
     });
