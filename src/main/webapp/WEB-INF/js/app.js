@@ -12,7 +12,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             return '/widgets/' + widgetName + '/widget.js';
         },
         widgetHTML: function (widgetName) {
-            return '/widgets/' + widgetName + '/index.html';
+            return '/widgets/' + widgetName + '/widget.html';
         }
     });
 
