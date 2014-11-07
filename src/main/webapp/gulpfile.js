@@ -6,28 +6,29 @@ var minifyCSS = require('gulp-minify-css');
 var del = require('del');
 var path = require('path');
 
-gulp.task('default', ['bower', 'less']);
+gulp.task('default', ['bower', 'build']);
 
 gulp.task('bower', function () {
     bower({
-      directory: './components',
-      // cwd: './',
-      cmd: 'update'
+      directory: 'build/components'
+      // , cwd: './'
+      // , cmd: 'update'
     });
 });
 
+gulp.task('build', ['less']);
+
 gulp.task('less', function () {
-    gulp.src('./WEB-INF/less/**/*.less')
+    gulp.src('WEB-INF/less/**/*.less')
         .pipe(cached('less'))
         .pipe(less())
         .pipe(minifyCSS())
-        .pipe(gulp.dest('./generated-css'));
+        .pipe(gulp.dest('build/css'));
 });
 
 gulp.task('clean', function (cb) {
    return del([
-       './components',
-       './generated-css',
-       './bower_components'
+       'build',
+       'bower_components'
        ], cb);
 });

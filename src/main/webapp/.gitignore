@@ -5,8 +5,8 @@ node
 node_modules
 
 # Bower
-components
 bower_components
 
 # files created by gulp tasks
-generated-*
+build
+
