@@ -89,9 +89,6 @@ public class MetadataKey {
         return "MetadataKey{" +
                 "metadataKeyId=" + metadataKeyId +
                 ", key='" + key + '\'' +
-                ", artefactDefs=" + artefactDefs +
-                ", artefactMetadatas=" + artefactMetadatas +
-                ", metadataKeyDefs=" + metadataKeyDefs +
                 '}';
     }
 }
