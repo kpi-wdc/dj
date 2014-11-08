@@ -23,7 +23,7 @@ var footer = require("gulp-footer");
 var rjs = require('gulp-requirejs');
 
 var onHeroku = !!process.env.HEROKU_ENV;
-var minifyCode = onHeroku;
+var minifyCode = onHeroku || !!process.env.MINIFY_CODE;
 
 gulp.task('default', ['build']);
 
