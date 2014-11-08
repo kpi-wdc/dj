@@ -31,16 +31,16 @@ gulp.task('bower-files', ['bower'], function () {
     var cssFilter = gulpFilter(['**/*.css']);
     var removeFilter = gulpFilter([
         '**/*',
-         '!**/src/**',
+        '!**/src/**',
         '!**/test/**',
         '!**/examples/**',
         '!**/grunt/**',
-        '!**/package.json',
-        '! * */*.md',
-        '!**/*grunt.js',
-        '!**/bower.json',
+        '!**/*.md',
         '!**/*.gzip',
-        '!**/*grunt.scss'
+        '!**/*.scss',
+        '!**/package.json',
+        '!**/grunt.js',
+        '!**/bower.json'
     ]);
     gulp.src('bower_components/**')
         .pipe(cached('bower_components'))
