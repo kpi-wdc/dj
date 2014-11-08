@@ -27,6 +27,10 @@ public class Association {
 
     public Association() { }
 
+    public Association(AssociationId pk) {
+        this.pk = pk;
+    }
+
     public Association(AssociationId pk, String key) {
         this.pk = pk;
         this.key = key;
