@@ -28,6 +28,7 @@ gulp.task('build', ['less', 'bower-files']);
 
 gulp.task('bower-files', ['bower'], function () {
     var jsFilter = gulpFilter(['**/*.js', '!**/*.min.js', '!**/src/**.']);
+    var cssFilter = gulpFilter(['**/*.css']);
     var removeFilter = gulpFilter([
         '**/*',
          '!**/src/**',
@@ -50,6 +51,9 @@ gulp.task('bower-files', ['bower'], function () {
         // TODO: add source maps
         .pipe(gulpif(onHeroku, uglify()))
         .pipe(jsFilter.restore())
+        .pipe(cssFilter)
+        .pipe(gulpif(onHeroku, minifyCSS())) // FIXME: minifyCss removes source map comment
+        .pipe(cssFilter.restore())
         .pipe(gulp.dest('build/components'));
 });
 
