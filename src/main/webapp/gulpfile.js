@@ -21,10 +21,12 @@ var amdOptimize = require("amd-optimize");
 var concat = require("gulp-concat");
 var footer = require("gulp-footer");
 var rjs = require('gulp-requirejs');
+var inlinesource = require('gulp-inline-source');
 
 var onHeroku = Boolean(process.env.HEROKU_ENV);
 var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
 var mergeJS = onHeroku || Boolean(process.env.MERGE_JS);
+var inlineJSandCSS = mergeJS && minifyCode;
 
 gulp.task('default', ['build']);
 
@@ -78,9 +80,12 @@ gulp.task('less', function () {
         .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('html', function () {
+gulp.task('html', ['js', 'css'], function () {
     return gulp.src('WEB-INF/index.html')
         .pipe(cached('html'))
+        .pipe(gulpif(inlineJSandCSS, inlinesource({
+            rootpath: 'build'
+        })))
         .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
         .pipe(size({showFiles: true, title: 'HTML'}))
         .pipe(gulp.dest('build'));
