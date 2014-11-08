@@ -24,6 +24,7 @@ var rjs = require('gulp-requirejs');
 
 var onHeroku = !!process.env.HEROKU_ENV;
 var minifyCode = onHeroku || !!process.env.MINIFY_CODE;
+var mergeJS = onHeroku || !!process.env.MERGE_JS;
 
 gulp.task('default', ['build']);
 
@@ -96,7 +97,7 @@ gulp.task('template-cache', function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('js', ['template-cache', 'widgets', 'components', 'movejs', 'amd-merge', 'annotate-js'], function () {
+gulp.task('js', ['template-cache', 'widgets', 'components', 'movejs', 'annotate-js'].concat(mergeJS ? ['amd-merge'] : []), function () {
     return gulp.src(['build/**/*.js'])
         .pipe(cached('js'))
         ////.pipe(gulpif(true, uglify()))

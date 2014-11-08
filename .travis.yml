@@ -1,5 +1,7 @@
 language: java
 env:
+  - MINIFY_CODE=true MERGE_JS=true
+  - MERGE_JS=true
   - MINIFY_CODE=true
   -
 

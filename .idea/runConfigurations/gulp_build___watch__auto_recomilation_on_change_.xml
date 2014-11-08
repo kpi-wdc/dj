@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gulp build + watch (auto-recomilation on change)" type="js.build_tools.gulp" factoryName="Gulp.js">
+    <node-options />
+    <gulpfile>$PROJECT_DIR$/src/main/webapp/gulpfile.js</gulpfile>
+    <tasks>
+      <task>watch</task>
+    </tasks>
+    <pass-parent-envs>true</pass-parent-envs>
+    <envs />
+    <RunnerSettings RunnerId="Js.BuildTools.Gulp" />
+    <ConfigurationWrapper RunnerId="Js.BuildTools.Gulp" />
+    <method />
+  </configuration>
+</component>
