@@ -20,10 +20,10 @@
 
     <mvc:resources mapping="/components/**" location="/build/components/" />
     <mvc:resources mapping="/css/**" location="/build/css/" />
-    <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
-    <mvc:resources mapping="/views/**" location="/WEB-INF/views/" />
-    <mvc:resources mapping="/config/**" location="/WEB-INF/config/" />
-    <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/" />
-    <mvc:resources mapping="/widgets/**" location="/WEB-INF/widgets/" />
-    <mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
+    <mvc:resources mapping="/js/**" location="/build/js/" />
+    <mvc:resources mapping="/views/**" location="/build/views/" />
+    <mvc:resources mapping="/config/**" location="/resources/config/" />
+    <mvc:resources mapping="/templates/**" location="/build/templates/" />
+    <mvc:resources mapping="/widgets/**" location="/build/widgets/" />
+    <mvc:resources mapping="/favicon.ico" location="/build/favicon.ico" />
 </beans>
