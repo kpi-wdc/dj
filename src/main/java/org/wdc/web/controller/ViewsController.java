@@ -20,7 +20,7 @@ public class ViewsController {
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public ResponseEntity<InputStreamResource> home() {
 
-        InputStream in = servletContext.getResourceAsStream("/WEB-INF/index.html");
+        InputStream in = servletContext.getResourceAsStream("/build/index.html");
         InputStreamResource inputStreamResource = new InputStreamResource(in);
         return new ResponseEntity<>(inputStreamResource, HttpStatus.OK);
     }
