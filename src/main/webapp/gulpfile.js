@@ -30,10 +30,16 @@ gulp.task('bower-files', ['bower'], function () {
     var jsFilter = gulpFilter(['**/*.js', '!**/*.min.js', '!**/src/**.']);
     var removeFilter = gulpFilter([
         '**/*',
-        '!**/bower.json', '!**/src/**',
-        '!**/package.json', '!**/*.md',
-        '!**/test/**', '!**/*grunt.js',
-        '!**/examples/**'
+         '!**/src/**',
+        '!**/test/**',
+        '!**/examples/**',
+        '!**/grunt/**',
+        '!**/package.json',
+        '! * */*.md',
+        '!**/*grunt.js',
+        '!**/bower.json',
+        '!**/*.gzip',
+        '!**/*grunt.scss'
     ]);
     gulp.src('bower_components/**')
         .pipe(cached('bower_components'))
@@ -41,7 +47,8 @@ gulp.task('bower-files', ['bower'], function () {
         // TODO: add css filter too
         .pipe(jsFilter)
         .pipe(gulpif(onHeroku, ngAnnotate()))
-        .pipe(gulpif(onHeroku, uglify()))// TODO: add source maps
+        // TODO: add source maps
+        .pipe(gulpif(onHeroku, uglify()))
         .pipe(jsFilter.restore())
         .pipe(gulp.dest('build/components'));
 });
