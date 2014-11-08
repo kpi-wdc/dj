@@ -155,6 +155,11 @@ gulp.task('favicon', function () {
         .pipe(gulp.dest('build'));
 });
 
+// Rerun the task when a file changes
+gulp.task('watch', ['build'], function() {
+    gulp.watch(['WEB-INF/**', 'resources/**', 'bower.json', 'favicon.ico'], ['build']);
+});
+
 gulp.task('clean', function (cb) {
    return del([
        'build',
