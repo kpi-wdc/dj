@@ -15,9 +15,7 @@ Project style guides:
   - MOST IMPORTANT: follow the existing code style
   - Make sensible variable names
   - Don't use `git pull`, use `git pull --rebase` instead. Merge commits are evil. You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
-  - [NEW]: Use commit names in format `[SUBPROJECT] explanation`
-  or `[FEATURE] explanation` or `[FILE] explanation`. Examples:
-
+  - [NEW]: Use commit names in format `[SUBPROJECT] explanation` or `[FEATURE] explanation` or `[FILE] explanation`. Examples:
       -  [build] Change gulp task
       -  [front-end] added new feature
       -  [hotfix] fixed mistake in previsous commit
