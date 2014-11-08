@@ -25,6 +25,19 @@ public class Association {
     @Column(name = "key")
     private String key;
 
+    public Association() { }
+
+    public Association(String localField, String foreignField) {
+        this.localField = localField;
+        this.foreignField = foreignField;
+    }
+
+    public Association(String localField, String foreignField, String key) {
+        this.localField = localField;
+        this.foreignField = foreignField;
+        this.key = key;
+    }
+
     @Transient
     public Artefact getArtefact() {
         return getPk().getArtefact();
