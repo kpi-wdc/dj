@@ -19,26 +19,5 @@ import org.wdc.domain.metadata.ids.ArtefactDefId;
 @Repository("artefactDefDao")
 public class ArtefactDefDaoImpl extends HibernateDao<ArtefactDef, ArtefactDefId>
                                                implements ArtefactDefDao {
-    @Transactional(propagation = Propagation.REQUIRED)
-    public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/persistence-config.xml");
 
-        ArtefactDefDao artefactDefDao =
-                (ArtefactDefDao) ctx.getBean("artefactDefDao");
-
-        ArtefactDao artefactDao =
-                (ArtefactDao) ctx.getBean("artefactDao");
-
-        MetadataKeyDao metadataKeyDao =
-                (MetadataKeyDao) ctx.getBean("metadataKeyDao");
-
-        Artefact artefact = artefactDao.findByKey("key1");
-        System.out.println("artefact id=" + artefact.getArtefactId());
-
-        MetadataKey metadataKey = metadataKeyDao.findByKey("wdc.objectgroup.name.ua");
-        System.out.println("metadatakey id=" + metadataKey.getMetadataKeyId());
-
-
-        System.out.println(artefactDefDao.find(new ArtefactDefId(artefact, metadataKey)));
-    }
 }

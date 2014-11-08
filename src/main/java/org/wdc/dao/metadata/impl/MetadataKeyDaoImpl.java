@@ -18,12 +18,4 @@ public class MetadataKeyDaoImpl extends HibernateDao<MetadataKey, Integer>
                 add(Restrictions.eq("key", key)).
                 uniqueResult();
     }
-
-    public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/persistence-config.xml");
-
-        MetadataKeyDao metadataKeyDao = (MetadataKeyDao) ctx.getBean("metadatakeyDao");
-
-        System.out.println(metadataKeyDao.findByKey("new KEY"));
-    }
 }

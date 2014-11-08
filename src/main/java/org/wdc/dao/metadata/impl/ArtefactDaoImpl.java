@@ -19,12 +19,4 @@ public class ArtefactDaoImpl extends HibernateDao<Artefact, Integer>
                 add(Restrictions.eq("key", key)).
                 uniqueResult();
     }
-
-    public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/persistence-config.xml");
-
-        ArtefactDao artefactDao = (ArtefactDao) ctx.getBean("artefactDao");
-
-        System.out.println(artefactDao.findByKey("key1"));
-    }
 }
