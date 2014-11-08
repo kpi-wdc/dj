@@ -4,7 +4,7 @@ env:
   -
 addons:
   postgresql: "9.1.14"
-
 before_script:
   - psql -c 'create database wdc2;' -U postgres
-  - psql wdc2 < wdc2.sql
+  - psql -f wdc2.sql -U postgres -d wdc2
+
