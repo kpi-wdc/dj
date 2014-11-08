@@ -11,6 +11,9 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         widgetJS: function (widgetName) {
             return '/widgets/' + widgetName + '/widget.js';
         },
+        widgetJSModule: function (widgetName) {
+            return 'widgets/' + widgetName + '/widget.js';
+        },
         widgetHTML: function (widgetName) {
             return '/widgets/' + widgetName + '/widget.html';
         }
@@ -60,7 +63,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                                         if (!widgets[i].nojs) {
                                             widgetControllers.push({
                                                     name: 'app.widgets.' + widgets[i].type,
-                                                    files: [appUrls.widgetJS(widgets[i].type)]
+                                                    files: [appUrls.widgetJSModule(widgets[i].type)]
                                                 }
                                             );
                                         }
@@ -80,12 +83,14 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                             });
                     }
                 },
-                templateProvider: function ($http, appUrls) {
+                templateProvider: function ($http, appUrls, $templateCache) {
                     return pageConfigPromise.then(function (pageConfig) {
-                        return $http.get(appUrls.templateHTML(pageConfig.template))
-                            .then(function (result) {
-                                return result.data;
-                            });
+                        var url = appUrls.templateHTML(pageConfig.template);
+                        return $templateCache.get(url) || $http.get(url)
+                                .then(function (result) {
+                                    $templateCache.put(url, result.data);
+                                    return result.data;
+                                });
                     });
                 },
                 controller: 'PageCtrl'
@@ -250,5 +255,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    return angular.bootstrap(document, ['app']);
+    return angular.bootstrap(document, ['app'], {
+        strictDi: true // should be false when non-minified js is used
+    });
 });

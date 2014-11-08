@@ -7,7 +7,7 @@
       <span class="widget-config-btn right" ng-click="openWidgetConfigurationDialog(widget)"><i class="glyphicon fi-wrench"></i></span>
     </div>
   </div>
-  <div ng-include src="widgetTemplateUrl(widget.type)"
+  <div ng-include="widgetTemplateUrl(widget.type)"
        class="widget-contents"
        ng-class="{'widget-design-mode': globalConfig.designMode}">
     Loading widget...

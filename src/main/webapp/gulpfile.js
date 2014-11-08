@@ -9,6 +9,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var less = require('gulp-less-sourcemap');
 var rename = require("gulp-rename");
 var plumber = require('gulp-plumber');
+var glob = require('glob');
 var cached = require('gulp-cached');
 var minifyCSS = require('gulp-minify-css');
 var del = require('del');
@@ -19,8 +20,10 @@ var templateCache = require('gulp-angular-templatecache');
 var amdOptimize = require("amd-optimize");
 var concat = require("gulp-concat");
 var footer = require("gulp-footer");
+var rjs = require('gulp-requirejs');
 
 var onHeroku = !!process.env.HEROKU_ENV;
+var minifyCode = onHeroku;
 
 gulp.task('default', ['build']);
 
@@ -30,19 +33,21 @@ gulp.task('bower', function () {
         .pipe(run('bower install'));
 });
 
-gulp.task('build', ['index.html', 'template-cache', 'less', 'components', 'js', 'amd-optimize', 'favicon']);
+gulp.task('build', ['html', 'css', 'js', 'favicon']);
 
 gulp.task('components', ['bower'], function () {
-    var nonMinJSFilter = gulpFilter(['**/*.js', '!**/*.min.js']);
     var removeFilter = gulpFilter([
         '**/*',
         '!**/src/**',
         '!**/test/**',
         '!**/examples/**',
         '!**/grunt/**',
+        '!**/tests/**',
         '!**/*.md',
         '!**/*.gzip',
         '!**/*.scss',
+        '!**/*.ts',
+        '!**/*.coffee',
         '!**/package.json',
         '!**/grunt.js',
         '!**/bower.json'
@@ -51,34 +56,31 @@ gulp.task('components', ['bower'], function () {
     return gulp.src('bower_components/**/*')
         .pipe(cached('bower_components'))
         .pipe(removeFilter)
-        .pipe(nonMinJSFilter)
-        .pipe(gulpif(onHeroku, ngAnnotate()))
-        // TODO: add source maps
-        .pipe(gulpif(onHeroku, uglify()))
-        .pipe(nonMinJSFilter.restore())
-        // gulp-filter not used because of some strange bug with css filter
-        .pipe(gulpif(onHeroku, gulpif(/.*\.css$/, minifyCSS())))
         .pipe(size({showFiles: true, title: 'components'}))
         .pipe(gulp.dest('build/components'));
 });
 
+gulp.task('css', ['less', 'components'], function () {
+    gulp.src('build/**/*.css')
+        .pipe(cached('css'))
+        .pipe(gulpif(minifyCode, minifyCSS()))
+        .pipe(size({showFiles: true, title: 'CSS'}))
+        .pipe(gulp.dest('build'))
+});
+
 gulp.task('less', function () {
-    var cssFilter = gulpFilter(['**/*.css']);
     return gulp.src('WEB-INF/less/**/*.less')
         .pipe(cached('less'))
         .pipe(gulp.dest('build/css'))
         .pipe(less())
-        .pipe(cssFilter)
-        .pipe(gulpif(onHeroku, minifyCSS()))
-        .pipe(cssFilter.restore())
-        .pipe(size({showFiles: true, title: 'CSS'}))
+        .pipe(size({showFiles: true, title: 'LESS -> CSS'}))
         .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('index.html', function () {
+gulp.task('html', function () {
     return gulp.src('WEB-INF/index.html')
         .pipe(cached('html'))
-        .pipe(minifyHTML({empty: true}))
+        .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
         .pipe(size({showFiles: true, title: 'HTML'}))
         .pipe(gulp.dest('build'));
 });
@@ -86,6 +88,7 @@ gulp.task('index.html', function () {
 gulp.task('template-cache', function () {
     return gulp.src(['WEB-INF/**/*/*.html', 'resources/**/*/*.html'])
         .pipe(cached('template-cache'))
+        .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
         .pipe(gulp.dest('build'))
         .pipe(templateCache('templates.js', {
             standalone: true
@@ -93,12 +96,24 @@ gulp.task('template-cache', function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('js', ['template-cache', 'widgets'], function () {
-    return gulp.src(['WEB-INF/**/*.js'])
+gulp.task('js', ['template-cache', 'widgets', 'components', 'movejs', 'amd-merge', 'annotate-js'], function () {
+    return gulp.src(['build/**/*.js'])
         .pipe(cached('js'))
-        .pipe(gulpif(true, ngAnnotate()))
-        .pipe(gulpif(onHeroku, uglify()))
-        .pipe(size({showFiles: true, title: 'JS'}))
+        ////.pipe(gulpif(true, uglify()))
+        //.pipe(size({showFiles: true, title: 'JS'}))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('movejs', function () {
+    return gulp.src('WEB-INF/js/**/*.js')
+        .pipe(cached('movejs'))
+        .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('annotate-js', ['template-cache', 'widgets', 'components', 'movejs'], function () {
+    return gulp.src('build/**/*.js')
+        .pipe(cached('annotate-js'))
+        .pipe(ngAnnotate())
         .pipe(gulp.dest('build'));
 });
 
@@ -108,42 +123,35 @@ gulp.task('widgets', function () {
         .pipe(gulp.dest('build/widgets'));
 });
 
-gulp.task('amd-optimize', ['js', 'components', 'widgets'], function () {
+gulp.task('amd-merge', ['amd-optimize'], function () {
+    gulp.src(['build/js/compiled.js', 'build/js/main.js'])
+        .pipe(concat('main.js'))
+        .pipe(gulpif(minifyCode, uglify()))
+        .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('amd-optimize', ['components', 'widgets', 'movejs', 'template-cache', 'annotate-js'], function () {
     return gulp.src(['build/**/*.js'], {
             base: 'build'
         })
         .pipe(cached('amd-optimize'))
         .pipe(size({showFiles: true, title: 'amd-optimize'}))
-        .pipe(amdOptimize('js/app', {
-            // alias libraries paths.  Must set 'angular'
-            paths: {
-                'angular': 'components/angular/angular',
-                'template-cached-pages': 'js/templates',
-                'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
-                'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad',
-                'angular-foundation': 'components/angular-foundation/mm-foundation-tpls'
-            },
-            // Add angular modules that does not support AMD out of the box, put it in a shim
-            shim: {
-                'angular': {
-                    exports: 'angular'
-                },
-                'template-cached-pages': ['angular'],
-                'angular-ui-router': ['angular'],
-                'angular-oclazyload': ['angular'],
-                'angular-foundation': ['angular']
-            }
+        .pipe(rjs({
+            mainConfigFile: "build/js/main.js",
+            out: "js/compiled.js",
+            name: "js/app",
+            include: glob.sync("widgets/**/widget.js", {
+                cwd: "build"
+            }),
+            baseUrl: "build"
         }))
-        .pipe(concat('js/main.js'))
-        .pipe(footer("require(['js/app']);"))
-        .pipe(ngAnnotate())
-        .pipe(uglify())
+        .pipe(gulpif(minifyCode, uglify()))
         .pipe(size({showFiles: true, title: 'amd-optimize'}))
         .pipe(gulp.dest('build'));
 });
 
 gulp.task('favicon', function () {
-    gulp.src('favicon.ico')
+    return gulp.src('favicon.ico')
         .pipe(gulp.dest('build'));
 });
 
