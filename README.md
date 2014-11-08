@@ -35,6 +35,7 @@ Suggested intellij idea plugins:
 
   - maven
   - spring
+  - gulp
   - hibernate
   - LESS
   - gitignore (for syntax highlight)
