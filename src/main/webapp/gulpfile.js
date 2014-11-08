@@ -42,6 +42,8 @@ gulp.task('bower-files', ['bower'], function () {
         '!**/grunt.js',
         '!**/bower.json'
     ]);
+
+    // FIXME: REPLACE gulp-filter with something else ASAP - it's BUGGY
     gulp.src('bower_components/**')
         .pipe(cached('bower_components'))
         .pipe(removeFilter)
@@ -51,9 +53,9 @@ gulp.task('bower-files', ['bower'], function () {
         // TODO: add source maps
         .pipe(gulpif(onHeroku, uglify()))
         .pipe(jsFilter.restore())
-        .pipe(cssFilter)
-        .pipe(gulpif(onHeroku, minifyCSS())) // FIXME: minifyCss removes source map comment
-        .pipe(cssFilter.restore())
+        //.pipe(cssFilter)
+        // .pipe(gulpif(onHeroku, gulpif(onHeroku, minifyCSS()))) // FIXME: minifyCss removes source map comment
+        //.pipe(cssFilter.restore())
         .pipe(gulp.dest('build/components'));
 });
 
