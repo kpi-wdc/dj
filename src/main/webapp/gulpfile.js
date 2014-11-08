@@ -38,9 +38,10 @@ gulp.task('bower-files', ['bower'], function () {
     gulp.src('bower_components/**')
         .pipe(cached('bower_components'))
         .pipe(removeFilter)
+        // TODO: add css filter too
         .pipe(jsFilter)
         .pipe(gulpif(onHeroku, ngAnnotate()))
-        .pipe(gulpif(onHeroku, uglify()))
+        .pipe(gulpif(onHeroku, uglify()))// TODO: add source maps
         .pipe(jsFilter.restore())
         .pipe(gulp.dest('build/components'));
 });

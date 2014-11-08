@@ -12,6 +12,7 @@
     "gulp": "~3.8.8"
   },
   "dependencies": {
+    "bower": "latest",
     "gulp-bower": "0.0.*",
     "del": "~0.1.*",
     "gulp-less": "~1.3.*",
