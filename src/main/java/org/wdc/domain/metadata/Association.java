@@ -27,12 +27,13 @@ public class Association {
 
     public Association() { }
 
-    public Association(String localField, String foreignField) {
-        this.localField = localField;
-        this.foreignField = foreignField;
+    public Association(AssociationId pk, String key) {
+        this.pk = pk;
+        this.key = key;
     }
 
-    public Association(String localField, String foreignField, String key) {
+    public Association(AssociationId pk, String localField, String foreignField, String key) {
+        this.pk = pk;
         this.localField = localField;
         this.foreignField = foreignField;
         this.key = key;
