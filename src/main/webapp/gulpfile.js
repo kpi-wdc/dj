@@ -22,9 +22,9 @@ var concat = require("gulp-concat");
 var footer = require("gulp-footer");
 var rjs = require('gulp-requirejs');
 
-var onHeroku = !!process.env.HEROKU_ENV;
-var minifyCode = onHeroku || !!process.env.MINIFY_CODE;
-var mergeJS = onHeroku || !!process.env.MERGE_JS;
+var onHeroku = Boolean(process.env.HEROKU_ENV);
+var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
+var mergeJS = onHeroku || Boolean(process.env.MERGE_JS);
 
 gulp.task('default', ['build']);
 
