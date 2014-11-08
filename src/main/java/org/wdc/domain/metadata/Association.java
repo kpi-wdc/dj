@@ -102,6 +102,7 @@ public class Association {
     @Override
     public String toString() {
         return "Association{" +
+                "artefact=" + getArtefact() +
                 ", reference=" + getReference() +
                 ", localField='" + localField + '\'' +
                 ", foreignField='" + foreignField + '\'' +

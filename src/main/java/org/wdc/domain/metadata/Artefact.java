@@ -123,9 +123,6 @@ public class Artefact {
                 ", artefactSchema='" + artefactSchema + '\'' +
                 ", artefactTable='" + artefactTable + '\'' +
                 ", key='" + key + '\'' +
-                ", artefactDefs=" + artefactDefs +
-                ", artefactMetadatas=" + artefactMetadatas +
-                ", associations=" + associations +
                 '}';
     }
 }
