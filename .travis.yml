@@ -1,19 +1,19 @@
 language: java
-env:
-  - MINIFY_CODE=true MERGE_JS=true
-  - MERGE_JS=true
-  - MINIFY_CODE=true
-  -
 cache:
   apt: true
   directories:
-   - $HOME/.m2 # maven
+  - $HOME/.m2 # maven
 before_script:
-  - psql -c 'create database wdc2;' -U postgres
-  - psql -f wdc2.sql -U postgres -d wdc2
+- psql -c 'create database wdc2;' -U postgres
+- psql -f wdc2.sql -U postgres -d wdc2
+env:
+- MINIFY_CODE=true MERGE_JS=true
+- MERGE_JS=true
+- MINIFY_CODE=true
+-
 os:
-  - linux
-  - osx
+- linux
+- osx
 deploy:
   provider: heroku
   api_key:
