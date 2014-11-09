@@ -1,14 +1,11 @@
 var gulp = require('gulp');
 var bower = require('gulp-bower');
 var run = require('gulp-run');
-var flatten = require('gulp-flatten');
 var uglify = require('gulp-uglify');
 var gulpif = require('gulp-if');
 var gulpFilter = require('gulp-filter');
 var ngAnnotate = require('gulp-ng-annotate');
 var less = require('gulp-less-sourcemap');
-var rename = require("gulp-rename");
-var plumber = require('gulp-plumber');
 var glob = require('glob');
 var cached = require('gulp-cached');
 var minifyCSS = require('gulp-minify-css');
@@ -17,9 +14,7 @@ var path = require('path');
 var minifyHTML = require('gulp-minify-html');
 var size = require('gulp-size');
 var templateCache = require('gulp-angular-templatecache');
-var amdOptimize = require("amd-optimize");
 var concat = require("gulp-concat");
-var footer = require("gulp-footer");
 var rjs = require('gulp-requirejs');
 var inlinesource = require('gulp-inline-source');
 
