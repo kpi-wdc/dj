@@ -5,7 +5,9 @@ cache:
   - $HOME/.m2 # maven
 before_script:
 - psql -c 'create database wdc2;' -U postgres
-- psql -f wdc2.sql -U postgres -d wdc2
+- psql -f schema_wdc2.sql -U postgres
+- psql -f data_wdc2.sql -U postgres
+
 env:
 - MINIFY_CODE=true MERGE_JS=true
 - MERGE_JS=true
