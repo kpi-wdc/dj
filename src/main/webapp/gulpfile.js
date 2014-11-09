@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var bower = require('gulp-bower');
 var run = require('gulp-run');
 var uglify = require('gulp-uglify');
 var gulpif = require('gulp-if');
