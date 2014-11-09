@@ -155,7 +155,7 @@ gulp.task('favicon', function () {
 
 // Rerun the task when a file changes
 gulp.task('watch', ['build'], function() {
-    return gulp.watch(['WEB-INF/**', 'resources/**', 'bower.json', 'favicon.ico', '!resources/config/**'], ['build']);
+    return gulp.watch(['WEB-INF/**', 'resources/**', 'bower.json', 'favicon.ico', '!resources/apps/**'], ['build']);
 });
 
 gulp.task('clean', function (cb) {
