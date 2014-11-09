@@ -27,15 +27,16 @@ public class ArtefactDef {
 
     public ArtefactDef() { }
 
-    public ArtefactDef(boolean required, boolean unique, String defaultValue) {
+    public ArtefactDef(ArtefactDefId pk) {
+        this.pk = pk;
+    }
+
+    public ArtefactDef(ArtefactDefId pk, boolean required, boolean unique,
+                       String defaultValue) {
+        this.pk = pk;
         this.required = required;
         this.unique = unique;
         this.defaultValue = defaultValue;
-    }
-
-    public ArtefactDef(boolean required, boolean unique) {
-        this.required = required;
-        this.unique = unique;
     }
 
     @Transient
