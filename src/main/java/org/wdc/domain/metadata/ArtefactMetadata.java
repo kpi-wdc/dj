@@ -21,6 +21,15 @@ public class ArtefactMetadata {
 
     public ArtefactMetadata() { }
 
+    public ArtefactMetadata(ArtefactMetadataId pk) {
+        this.pk = pk;
+    }
+
+    public ArtefactMetadata(ArtefactMetadataId pk, String value) {
+        this.pk = pk;
+        this.value = value;
+    }
+
     @Transient
     public Artefact getArtefact() {
         return getPk().getArtefact();
