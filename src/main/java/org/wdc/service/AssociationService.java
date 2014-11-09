@@ -13,6 +13,6 @@ public interface AssociationService {
                                   String newLocalField, String newForeignField);
     public void removeAssociation(String artefactKey, String referenceKey);
     public Association findByKey(String key);
-    public Association findByArtefactAndReferenceKey(String artefactKey, String referenceKey);
+    public Association findByArtefactAndReferenceKeys(String artefactKey, String referenceKey);
     public List<Association> list();
 }

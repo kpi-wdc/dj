@@ -104,7 +104,7 @@ public class AssociationServiceImpl implements AssociationService {
     }
 
     @Override
-    public Association findByArtefactAndReferenceKey(String artefactKey, String referenceKey) {
+    public Association findByArtefactAndReferenceKeys(String artefactKey, String referenceKey) {
         Artefact artefact = artefactDao.findByKey(artefactKey);
         Artefact reference = artefactDao.findByKey(referenceKey);
 
