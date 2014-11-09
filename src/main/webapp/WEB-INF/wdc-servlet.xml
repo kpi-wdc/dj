@@ -22,7 +22,6 @@
     <mvc:resources mapping="/css/**" location="/build/css/" />
     <mvc:resources mapping="/js/**" location="/build/js/" />
     <mvc:resources mapping="/views/**" location="/build/views/" />
-    <mvc:resources mapping="/apps/**" location="/resources/apps/" />
     <mvc:resources mapping="/templates/**" location="/build/templates/" />
     <mvc:resources mapping="/widgets/**" location="/build/widgets/" />
     <mvc:resources mapping="/favicon.ico" location="/build/favicon.ico" />
