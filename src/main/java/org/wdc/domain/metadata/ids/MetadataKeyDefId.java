@@ -23,6 +23,11 @@ public class MetadataKeyDefId implements Serializable {
 
     public MetadataKeyDefId() { }
 
+    public MetadataKeyDefId(MetadataKey metadataKey, MetadataKey def) {
+        this.metadataKey = metadataKey;
+        this.def = def;
+    }
+
     public MetadataKey getMetadataKey() {
         return metadataKey;
     }
