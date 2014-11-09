@@ -10,6 +10,7 @@ var glob = require('glob');
 var cached = require('gulp-cached');
 var minifyCSS = require('gulp-minify-css');
 var del = require('del');
+var bower = require('gulp-bower');
 var path = require('path');
 var minifyHTML = require('gulp-minify-html');
 var size = require('gulp-size');
@@ -26,9 +27,7 @@ var inlineJSandCSS = mergeJS && minifyCode;
 gulp.task('default', ['build']);
 
 gulp.task('bower', function () {
-    return gulp.src('./')
-        .pipe(cached('bower.json'))
-        .pipe(run('bower install'));
+    return bower();
 });
 
 gulp.task('build', ['html', 'css', 'js', 'favicon']);
