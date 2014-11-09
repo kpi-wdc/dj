@@ -11,4 +11,6 @@ cache:
 before_script:
   - psql -c 'create database wdc2;' -U postgres
   - psql -f wdc2.sql -U postgres -d wdc2
-
+os:
+  - linux
+  - osx
