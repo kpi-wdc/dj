@@ -120,7 +120,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
 
         appConfigPromise.success(function (data) {
-            angular.copy(data, appConfig.config);
+            appConfig.config = data;
         });
 
         return appConfig;
