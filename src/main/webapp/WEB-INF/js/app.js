@@ -1,4 +1,5 @@
 define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundation', 'template-cached-pages'], function (angular) {
+    "use strict";
     var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation', 'templates']);
 
     app.constant('appUrls', {
