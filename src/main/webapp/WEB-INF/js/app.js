@@ -86,9 +86,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                 templateProvider: function ($http, appUrls, $templateCache) {
                     return pageConfigPromise.then(function (pageConfig) {
                         var url = appUrls.templateHTML(pageConfig.template);
-                        return $templateCache.get(url) || $http.get(url)
+                        return $http.get(url, {cache: $templateCache})
                                 .then(function (result) {
-                                    $templateCache.put(url, result.data);
                                     return result.data;
                                 });
                     });
