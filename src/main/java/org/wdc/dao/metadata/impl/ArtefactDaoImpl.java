@@ -1,9 +1,6 @@
 package org.wdc.dao.metadata.impl;
 
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.wdc.dao.impl.HibernateDao;
 import org.wdc.dao.metadata.ArtefactDao;
