@@ -22,6 +22,15 @@ public class MetadataKeyDef {
 
     public MetadataKeyDef() { }
 
+    public MetadataKeyDef(MetadataKeyDefId pk) {
+        this.pk = pk;
+    }
+
+    public MetadataKeyDef(MetadataKeyDefId pk, String value) {
+        this.pk = pk;
+        this.value = value;
+    }
+
     @Transient
     public MetadataKey getMetadataKey() {
         return getPk().getMetadataKey();
