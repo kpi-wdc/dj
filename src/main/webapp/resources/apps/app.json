@@ -15,8 +15,7 @@
                     "widgets": [
                         {
                             "type": "title",
-                            "title": "Home page",
-                            "nojs" : true
+                            "title": "Home page"
                         },
                         {
                             "type": "htmlwidget",
@@ -32,11 +31,10 @@
             "template": "left-right-bottom",
             "holders": {
                 "column": {
-                    "widgets":[
+                    "widgets": [
                         {
                             "type":"title",
-                            "title":"Main page for testing, triangular template",
-                            "nojs":true
+                            "title":"Main page for testing, triangular template"
                         }
                     ]
                 },
@@ -57,13 +55,11 @@
                     "widgets": [
                         {
                             "title": "Hello widget",
-                            "type": "hello",
-                            "nojs": true
+                            "type": "hello"
                         },
                         {
                             "title": "Hello widget 2",
-                            "type": "hello",
-                            "nojs": true
+                            "type": "hello"
                         }
                     ]
                 },
@@ -71,8 +67,7 @@
                     "widgets": [
                         {
                             "title": "Good bye!",
-                            "type": "bye",
-                            "nojs": true
+                            "type": "bye"
                         }
                     ]
                 }
@@ -87,8 +82,7 @@
                     "widgets": [
                         {
                             "type": "title",
-                            "title": "Events testing page",
-                            "nojs": true
+                            "title": "Events testing page"
                         },
                         {
                             "title": "Master widget",
@@ -122,8 +116,7 @@
                     "widgets": [
                         {
                             "type": "title",
-                            "title": "Maps page",
-                            "nojs": true
+                            "title": "Maps page"
                         },
                         {
                             "type": "leaflet-map"
@@ -141,8 +134,7 @@
                     "widgets": [
                         {
                             "type": "title",
-                            "title": "Widget on this page depends on non-visual local component",
-                            "nojs": true
+                            "title": "Widget on this page depends on non-visual local component"
                         },
                         {
                             "type": "widget-with-dependency"
@@ -160,8 +152,7 @@
                     "widgets": [
                         {
                             "type":"title",
-                            "title": "2x2 template page",
-                            "nojs":true
+                            "title": "2x2 template page"
                         }
                     ]
                 }
@@ -176,8 +167,7 @@
                     "widgets": [
                         {
                             "type":"title",
-                            "title": "2-column template page",
-                            "nojs": true
+                            "title": "2-column template page"
                         }
                     ]
                 }
@@ -191,8 +181,7 @@
                     "widgets": [
                         {
                             "type": "title",
-                            "title": "404 error",
-                            "nojs": true
+                            "title": "404 error"
                         },
                         {
                             "type": "htmlwidget",

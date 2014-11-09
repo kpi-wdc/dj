@@ -1,0 +1,30 @@
+{
+  "bye": {
+    "description": "Description of widget \"bye\"",
+    "nojs": true
+  },
+  "hello": {
+    "description": "Description of widget \"hello\"",
+    "nojs": true
+  },
+  "htmlwidget": {
+    "description": "Description of widget \"htmlwidget\""
+  },
+  "leaflet-map": {
+    "description": "Description of widget \"leaflet-map\""
+  },
+  "non-visual-widget": {
+    "description": "Description of widget \"non-visual-widget\"",
+    "nohtml": true
+  },
+  "summator": {
+    "description": "Description of widget \"summator\""
+  },
+  "title": {
+    "description": "Description of widget \"title\"",
+    "nojs": true
+  },
+  "widget-with-dependency": {
+    "description": "Description of widget \"widget-with-dependency\""
+  }
+}

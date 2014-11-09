@@ -4,6 +4,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
     app.constant('appUrls', {
         appConfig: '/apps/app.json',
+        widgetsSetup: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         templateHTML: function (templateName) {
@@ -37,10 +38,11 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             .state('page', {
                 url: '/:href',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state, appConfigPromise, appUrls) {
+                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state,
+                                          appConfigPromise, widgetLoader) {
                         return pageConfigPromise = appConfigPromise
-                            .then(function (result) {
-                                var configList = result.data.pages;
+                            .then(function (p) {
+                                var configList = p.data.pages;
                                 var config;
                                 var alternateConfig;
                                 for (var i = 0; i < configList.length; i++) {
@@ -57,20 +59,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
                                 var deferredResult = $q.defer();
 
-                                var widgetControllers = [];
+                                var widgets = [];
                                 for (var holderName in config.holders) {
-                                    var widgets = config.holders[holderName].widgets;
-                                    for (var i = 0; i < widgets.length; ++i) {
-                                        if (!widgets[i].nojs) {
-                                            widgetControllers.push({
-                                                    name: 'app.widgets.' + widgets[i].type,
-                                                    files: [appUrls.widgetJSModule(widgets[i].type)]
-                                                }
-                                            );
-                                        }
-                                    }
+                                    widgets = widgets.concat(config.holders[holderName].widgets)
                                 }
-                                $ocLazyLoad.load(widgetControllers).then(function () {
+
+                                widgetLoader.load(widgets).then(function () {
                                     deferredResult.resolve(config);
                                 }, function (err) {
                                     $window.alert('Error loading widget controllers. \n\n' + err);
@@ -95,6 +89,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                 },
                 controller: 'PageCtrl'
             });
+    });
+
+    app.factory('widgetsSetupPromise', function ($http, appUrls) {
+        return $http.get(appUrls.widgetsSetup);
     });
 
     app.factory('appConfigPromise', function ($http, appUrls) {
@@ -125,6 +123,24 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         });
 
         return appConfig;
+    });
+
+    app.service('widgetLoader', function ($ocLazyLoad, appConfigPromise, widgetsSetupPromise, appUrls) {
+        this.load = function (widgets) {
+            widgets = angular.isArray(widgets) ? widgets : [widgets];
+            return widgetsSetupPromise.then(function (widgetsSetupHTTP) {
+                var widgetControllers = [];
+                for (var i = 0; i < widgets.length; ++i) {
+                    if (!widgetsSetupHTTP.data[widgets[i].type].nojs) {
+                        widgetControllers.push({
+                            name: 'app.widgets.' + widgets[i].type,
+                            files: [appUrls.widgetJSModule(widgets[i].type)]
+                        });
+                    }
+                }
+                return $ocLazyLoad.load(widgetControllers);
+            });
+        }
     });
 
     app.service('widgetEvents', function() {
