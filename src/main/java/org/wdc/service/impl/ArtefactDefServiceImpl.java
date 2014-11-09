@@ -1,6 +1,7 @@
 package org.wdc.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wdc.dao.metadata.ArtefactDao;
@@ -15,6 +16,7 @@ import org.wdc.service.ArtefactDefService;
 import java.util.List;
 
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+@Service("artefactDefService")
 public class ArtefactDefServiceImpl implements ArtefactDefService {
     @Autowired
     private ArtefactDefDao artefactDefDao;
