@@ -59,12 +59,14 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
                                 var deferredResult = $q.defer();
 
-                                var widgets = [];
+                                var widgetTypes = [];
                                 for (var holderName in config.holders) {
-                                    widgets = widgets.concat(config.holders[holderName].widgets)
+                                    var widgets = config.holders[holderName].widgets;
+                                    for (var i = 0; i < widgets.length; ++i) {
+                                        widgetTypes.push(widgets[i].type);
+                                    }
                                 }
-
-                                widgetLoader.load(widgets).then(function () {
+                                widgetLoader.load(widgetTypes).then(function () {
                                     deferredResult.resolve(config);
                                 }, function (err) {
                                     $window.alert('Error loading widget controllers. \n\n' + err);
@@ -131,10 +133,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             return widgetsSetupPromise.then(function (widgetsSetupHTTP) {
                 var widgetControllers = [];
                 for (var i = 0; i < widgets.length; ++i) {
-                    if (!widgetsSetupHTTP.data[widgets[i].type].nojs) {
+                    if (!widgetsSetupHTTP.data[widgets[i]].nojs) {
                         widgetControllers.push({
-                            name: 'app.widgets.' + widgets[i].type,
-                            files: [appUrls.widgetJSModule(widgets[i].type)]
+                            name: 'app.widgets.' + widgets[i],
+                            files: [appUrls.widgetJSModule(widgets[i])]
                         });
                     }
                 }
@@ -211,7 +213,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('PageCtrl', function ($scope, $ocLazyLoad, $modal, pageConfig, appUrls, $window) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig, $window, widgetLoader) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
@@ -234,14 +236,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         $scope.addNewWidget = function (holder) {
             var widgetType = $window.prompt('Widget type (like summator):');
             if (widgetType) {
-                $ocLazyLoad.load({
-                    name: 'app.widgets.' + widgetType,
-                    files: [appUrls.widgetJSModule(widgetType)]
-                }).then(function () {
-                    holder.widgets.push({
-                        type: widgetType
+                widgetLoader.load(widgetType)
+                    .then(function () {
+                        holder.widgets.push({
+                            type: widgetType
+                        });
                     });
-                });
             }
         };
     });
