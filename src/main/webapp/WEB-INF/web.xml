@@ -34,6 +34,16 @@
         <servlet-name>wdc</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    
+    <filter>
+        <filter-name>cache</filter-name>
+        <filter-class>org.springframework.web.filter.ShallowEtagHeaderFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>cache</filter-name>
+        <servlet-name>wdc</servlet-name>
+    </filter-mapping>
 
     <!-- Disables Servlet Container welcome file handling. Needed for compatibility with Servlet 3.0 and Tomcat 7.0 -->
     <welcome-file-list>
