@@ -2,7 +2,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
     var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation', 'templates']);
 
     app.constant('appUrls', {
-        appConfig: '/config/app.json',
+        appConfig: '/apps/app.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         templateHTML: function (templateName) {
