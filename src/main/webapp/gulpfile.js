@@ -82,7 +82,6 @@ gulp.task('less', function () {
 
 gulp.task('html', ['js', 'css'], function () {
     return gulp.src('WEB-INF/index.html')
-        .pipe(cached('html'))
         .pipe(gulpif(inlineJSandCSS, inlinesource({
             rootpath: 'build'
         })))
@@ -93,7 +92,6 @@ gulp.task('html', ['js', 'css'], function () {
 
 gulp.task('template-cache', function () {
     return gulp.src(['WEB-INF/**/*/*.html', 'resources/**/*/*.html'])
-        .pipe(cached('template-cache'))
         .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
         .pipe(gulp.dest('build'))
         .pipe(templateCache('templates.js', {
@@ -131,6 +129,7 @@ gulp.task('widgets', function () {
 
 gulp.task('amd-merge', ['amd-optimize'], function () {
     gulp.src(['build/js/compiled.js', 'build/js/main.js'])
+        .pipe(cached('amd-merge'))
         .pipe(concat('main.js'))
         .pipe(gulpif(minifyCode, uglify()))
         .pipe(gulp.dest('build/js'));
@@ -140,7 +139,6 @@ gulp.task('amd-optimize', ['components', 'widgets', 'movejs', 'template-cache', 
     return gulp.src(['build/**/*.js'], {
             base: 'build'
         })
-        .pipe(cached('amd-optimize'))
         .pipe(size({showFiles: true, title: 'amd-optimize'}))
         .pipe(rjs({
             mainConfigFile: "build/js/main.js",
@@ -158,6 +156,7 @@ gulp.task('amd-optimize', ['components', 'widgets', 'movejs', 'template-cache', 
 
 gulp.task('favicon', function () {
     return gulp.src('favicon.ico')
+        .pipe(cached('favicon'))
         .pipe(gulp.dest('build'));
 });
 
