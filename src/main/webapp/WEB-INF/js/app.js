@@ -127,13 +127,17 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         return appConfig;
     });
 
-    app.service('widgetLoader', function ($ocLazyLoad, appConfigPromise, widgetsSetupPromise, appUrls) {
+    app.service('widgetLoader', function ($q, $ocLazyLoad, appConfigPromise, widgetsSetupPromise, appUrls) {
         this.load = function (widgets) {
             widgets = angular.isArray(widgets) ? widgets : [widgets];
             return widgetsSetupPromise.then(function (widgetsSetupHTTP) {
                 var widgetControllers = [];
                 for (var i = 0; i < widgets.length; ++i) {
-                    if (!widgetsSetupHTTP.data[widgets[i]].nojs) {
+                    var widgetSetup = widgetsSetupHTTP.data[widgets[i]];
+                    if (angular.isUndefined(widgetSetup)) {
+                        return $q.reject('Widget "' + widgets[i] +'" doesn\'t exist!');
+                    }
+                    if (!widgetSetup.nojs) {
                         widgetControllers.push({
                             name: 'app.widgets.' + widgets[i],
                             files: [appUrls.widgetJSModule(widgets[i])]
@@ -241,6 +245,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                         holder.widgets.push({
                             type: widgetType
                         });
+                    }, function (error) {
+                        $window.alert('Cannot add widget: ' + error);
                     });
             }
         };
