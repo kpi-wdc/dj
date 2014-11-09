@@ -260,6 +260,6 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
     });
 
     return angular.bootstrap(document, ['app'], {
-        strictDi: true // should be false when non-minified js is used
+        strictDi: false // should be false when non-minified js is used
     });
 });
