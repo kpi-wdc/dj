@@ -18,9 +18,9 @@ Project style guides:
   - [NEW]: Use commit names in format `[SUBPROJECT] explanation` or `[FEATURE] explanation` or `[FILE] explanation`. Examples:
       -  [build] Change gulp task
       -  [front-end] added new feature
-      -  [hotfix] fixed mistake in previsous commit
+      -  [hotfix] fixed mistake in previous commit
       -  [test] added new tests
-      -  [hibernate] chaned configs
+      -  [hibernate] changed configs
       -  [travis] removed module
       -  [heroku] changed env variables
 
