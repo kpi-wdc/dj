@@ -217,7 +217,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('PageCtrl', function ($scope, $modal, pageConfig, $window, widgetLoader) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig, $window, widgetLoader, appUrls) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
