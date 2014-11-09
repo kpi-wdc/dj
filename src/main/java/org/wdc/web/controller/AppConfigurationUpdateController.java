@@ -16,4 +16,10 @@ public class AppConfigurationUpdateController {
                 new FileSystemResource("src/main/webapp/resources/apps/" + name + ".json");
         return new ResponseEntity<>(fileSystemResource, HttpStatus.OK);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/app.json", method = RequestMethod.PUT)
+    public void updateConfiguration(@RequestBody String body) {
+        System.out.println(body);
+    }
 }
