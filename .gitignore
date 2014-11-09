@@ -7,6 +7,8 @@ target
 src/*/.idea
 !.idea/runConfigurations
 
+.dpl # travis
+
 # vim
 *.swp
 
