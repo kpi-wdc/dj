@@ -4,7 +4,10 @@ env:
   - MERGE_JS=true
   - MINIFY_CODE=true
   -
-
+cache:
+  apt: true
+  directories:
+   - $HOME/.m2 # maven
 before_script:
   - psql -c 'create database wdc2;' -U postgres
   - psql -f wdc2.sql -U postgres -d wdc2
