@@ -1,58 +1,71 @@
 package org.wdc.service;
 
-import org.junit.Ignore;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/persistence-config.xml")
 @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class AssociationServiceTest {
+    @Autowired
+    AssociationService associationService;
 
-    @Test
-    public void testAddKey() throws Exception {
+
+    @BeforeClass
+    public static void addArtefacts() {
+
+    }
+
+    @AfterClass
+    public static void removeArtefacts() {
 
     }
 
     @Test
-    public void testAddAssociation() throws Exception {
+    public void testAddKey() {
+        //associationService.addKey("key1", "key2", "newKey");
+    }
+
+    @Test
+    public void testAddAssociation() {
 
     }
 
     @Test
-    public void testUpdateKey() throws Exception {
+    public void testUpdateKey() {
 
     }
 
     @Test
-    public void testUpdateAssociation() throws Exception {
+    public void testUpdateAssociation() {
 
     }
 
     @Test
-    public void testRemoveAssociation() throws Exception {
+    public void testRemoveAssociation() {
 
     }
 
     @Test
-    public void testFindByKey() throws Exception {
+    public void testFindByKey() {
+        //associationService.addKey();
+    }
+
+    @Test
+    public void testFindByArtefactAndReferenceKey() {
 
     }
 
     @Test
-    public void testFindByArtefactAndReferenceKey() throws Exception {
-
-    }
-
-    @Test
-    public void testList() throws Exception {
-
+    public void testList() {
+        //System.out.println(associationService.list());
     }
 }
