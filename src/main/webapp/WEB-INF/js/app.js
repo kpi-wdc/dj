@@ -39,19 +39,24 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                 url: '/:href',
                 resolve: {
                     pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state,
-                                          appConfigPromise, widgetLoader) {
+                                          appConfigPromise, appConfig, widgetLoader) {
+                        appConfig.isHomePageOpened = $stateParams.href === '';
+                        appConfig.is404PageOpened = $stateParams.href === '404';
                         return pageConfigPromise = appConfigPromise
                             .then(function (p) {
                                 var configList = p.data.pages;
                                 var config;
                                 var alternateConfig;
+                                appConfig.currentPageIndex = undefined;
                                 for (var i = 0; i < configList.length; i++) {
                                     if ($stateParams.href === configList[i].href) {
                                         config = configList[i];
+                                        appConfig.currentPageIndex = i;
                                         break;
                                     }
                                     if (configList[i].href === '404') {
                                         alternateConfig = configList[i];
+                                        appConfig.currentPageIndex = i;
                                     }
                                 }
 
@@ -101,11 +106,17 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         return $http.get(appUrls.appConfig);
     });
 
-    app.factory('appConfig', function ($http, appConfigPromise, appUrls) {
+    app.factory('appConfig', function ($http, $state, appConfigPromise, appUrls) {
         var appConfig = {
             config: {},
             sendingToServer: false,
             wasModified: true, // TODO: implement changing this state
+            deletePage: function (index) {
+                if (angular.isDefined(appConfig.config.pages) && angular.isDefined(appConfig.config.pages[index])) {
+                    appConfig.config.pages.splice(index, 1);
+                }
+                $state.go('page', {href: ''});
+            },
             submitToServer: function (callback) {
                 appConfig.sendingToServer = true;
                 return $http.put(appUrls.appConfig, appConfig.config)

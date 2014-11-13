@@ -34,7 +34,10 @@
                 ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
           Submit changes to server
         </button>
-        <button class="button alert radius tiny" ng-disabled="true" disabled>
+        <button class="button alert radius tiny"
+                ng-disabled="appConfig.isHomePageOpened || appConfig.is404PageOpened"
+                disabled
+                ng-click="appConfig.deletePage(appConfig.currentPageIndex)">
           Delete page
         </button>
         <hr>
