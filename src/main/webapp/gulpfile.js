@@ -30,9 +30,9 @@ gulp.task('bower', function () {
     return bower();
 });
 
-gulp.task('build', ['html', 'css', 'js', 'favicon']);
+gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon']);
 
-gulp.task('components', ['bower'], function () {
+gulp.task('build-components', ['bower'], function () {
     var removeFilter = gulpFilter([
         '**/*',
         '!**/src/**',
@@ -57,24 +57,24 @@ gulp.task('components', ['bower'], function () {
         .pipe(gulp.dest('build/components'));
 });
 
-gulp.task('css', ['less', 'components'], function () {
+gulp.task('build-css', ['build-less', 'build-components'], function () {
     gulp.src('build/**/*.css')
-        .pipe(cached('css'))
+        .pipe(cached('build-css'))
         .pipe(gulpif(minifyCode, minifyCSS()))
         .pipe(size({showFiles: true, title: 'CSS'}))
         .pipe(gulp.dest('build'))
 });
 
-gulp.task('less', function () {
+gulp.task('build-less', function () {
     return gulp.src('WEB-INF/less/**/*.less')
-        .pipe(cached('less'))
+        .pipe(cached('build-less'))
         .pipe(gulp.dest('build/css'))
         .pipe(less())
         .pipe(size({showFiles: true, title: 'LESS -> CSS'}))
         .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('html', ['js', 'css'], function () {
+gulp.task('build-html', ['build-js', 'build-css'], function () {
     return gulp.src('WEB-INF/index.html')
         .pipe(gulpif(inlineJSandCSS, inlinesource({
             rootpath: 'build'
@@ -84,7 +84,7 @@ gulp.task('html', ['js', 'css'], function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('template-cache', function () {
+gulp.task('build-template-cache', function () {
     return gulp.src(['WEB-INF/**/*/*.html', 'resources/**/*/*.html'])
         .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
         .pipe(gulp.dest('build'))
@@ -94,10 +94,11 @@ gulp.task('template-cache', function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('js', ['template-cache', 'widgets', 'components', 'movejs', 'annotate-js', 'movetest'].concat(mergeJS ? ['amd-merge'] : []), function () {
+gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
+    'movejs', 'annotate-js', 'movetest'].concat(mergeJS ? ['amd-merge'] : []), function () {
     var nonTestJSFilter = gulpFilter(["!test/**/*.js"]);
     return gulp.src(['build/**/*.js'])
-        .pipe(cached('js'))
+        .pipe(cached('build-js'))
         .pipe(nonTestJSFilter)
         .pipe(gulpif(minifyCode, uglify()))
         .pipe(nonTestJSFilter.restore())
@@ -117,16 +118,16 @@ gulp.task('movetest', function () {
         .pipe(gulp.dest('build/test'));
 });
 
-gulp.task('annotate-js', ['template-cache', 'widgets', 'components', 'movejs'], function () {
+gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'movejs'], function () {
     return gulp.src('build/**/*.js')
         .pipe(cached('annotate-js'))
         .pipe(ngAnnotate())
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('widgets', function () {
+gulp.task('build-widgets', function () {
     return gulp.src(['resources/widgets/**'])
-        .pipe(cached('widgets'))
+        .pipe(cached('build-widgets'))
         .pipe(gulp.dest('build/widgets'));
 });
 
@@ -137,7 +138,8 @@ gulp.task('amd-merge', ['amd-optimize'], function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('amd-optimize', ['components', 'widgets', 'movejs', 'template-cache', 'annotate-js'], function () {
+gulp.task('amd-optimize', ['build-components', 'build-widgets',
+    'movejs', 'build-template-cache', 'annotate-js'], function () {
     return gulp.src(['build/**/*.js'], {
             base: 'build'
         })
@@ -155,9 +157,9 @@ gulp.task('amd-optimize', ['components', 'widgets', 'movejs', 'template-cache', 
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('favicon', function () {
+gulp.task('build-favicon', function () {
     return gulp.src('favicon.ico')
-        .pipe(cached('favicon'))
+        .pipe(cached('build-favicon'))
         .pipe(gulp.dest('build'));
 });
 
