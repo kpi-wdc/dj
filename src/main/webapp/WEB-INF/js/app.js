@@ -210,7 +210,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.controller('MainController', function ($scope, $window, appConfig) {
+    app.controller('MainCtrl', function ($scope, $window, appConfig) {
         var cnf = $scope.globalConfig = {
             debugMode: false,
             designMode: true
