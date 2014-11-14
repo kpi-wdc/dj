@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "prepublish": "gulp build",
-    "test": "node ./node_modules/karma/bin/karma start --single-run"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",

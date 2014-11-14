@@ -150,7 +150,7 @@
                     <execution>
                         <id>js tests</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
                         <configuration>
                             <arguments>test</arguments>
