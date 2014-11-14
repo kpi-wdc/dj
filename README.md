@@ -4,8 +4,14 @@
 
 #### Prerequisites
 - maven is installed
-- node is installed (very highly recommended)
-- npm is installed (very highly recommended)
+
+For developers:
+
+- node is installed
+- npm is installed
+- gulp is installed `npm install -g gulp`
+- karma is installed `npm install -g karma`
+- protractor is installed `npm install -g protractor`
 
 
 ## Build
