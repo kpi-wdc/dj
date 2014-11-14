@@ -1,18 +1,18 @@
 module.exports = function(config){
   config.set({
 
-    basePath : './',
+    basePath : './build',
 
     files : [
-      {pattern: 'build/widgets/**/*.js', included: false},
-      {pattern: 'build/js/*.js', included: false},
-      {pattern: 'build/components/**/*.js', included: false},
+      {pattern: 'widgets/**/*.js', included: false},
+      {pattern: 'js/*.js', included: false},
+      {pattern: 'components/**/*.js', included: false},
       {pattern: 'test/**/*Spec.js', included: false},
       'test/test-main.js'
     ],
 
     exclude: [
-      'build/js/main.js'
+      'js/main.js'
     ],
 
     autoWatch : true,

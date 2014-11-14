@@ -8,7 +8,7 @@ for (var file in window.__karma__.files) {
 }
 
 require.config({
-    baseUrl: '/base/build',
+    baseUrl: '/base',
     // alias libraries paths.  Must set 'angular'
     paths: {
         'angular': 'components/angular/angular',
@@ -43,3 +43,4 @@ require.config({
     // start test run, once Require.js is done
     callback: window.__karma__.start
 });
+

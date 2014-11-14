@@ -94,11 +94,14 @@ gulp.task('template-cache', function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('js', ['template-cache', 'widgets', 'components', 'movejs', 'annotate-js'].concat(mergeJS ? ['amd-merge'] : []), function () {
+gulp.task('js', ['template-cache', 'widgets', 'components', 'movejs', 'annotate-js', 'movetest'].concat(mergeJS ? ['amd-merge'] : []), function () {
+    var nonTestJSFilter = gulpFilter(["!test/**/*.js"]);
     return gulp.src(['build/**/*.js'])
         .pipe(cached('js'))
-        ////.pipe(gulpif(true, uglify()))
-        //.pipe(size({showFiles: true, title: 'JS'}))
+        .pipe(nonTestJSFilter)
+        .pipe(gulpif(minifyCode, uglify()))
+        .pipe(nonTestJSFilter.restore())
+        .pipe(size({showFiles: true, title: 'JS'}))
         .pipe(gulp.dest('build'));
 });
 
@@ -106,6 +109,12 @@ gulp.task('movejs', function () {
     return gulp.src('WEB-INF/js/**/*.js')
         .pipe(cached('movejs'))
         .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('movetest', function () {
+    return gulp.src('test/**/*.js')
+        .pipe(cached('movetest'))
+        .pipe(gulp.dest('build/test'));
 });
 
 gulp.task('annotate-js', ['template-cache', 'widgets', 'components', 'movejs'], function () {
@@ -125,7 +134,6 @@ gulp.task('amd-merge', ['amd-optimize'], function () {
     gulp.src(['build/js/compiled.js', 'build/js/main.js'])
         .pipe(cached('amd-merge'))
         .pipe(concat('main.js'))
-        .pipe(gulpif(minifyCode, uglify()))
         .pipe(gulp.dest('build/js'));
 });
 
@@ -143,7 +151,6 @@ gulp.task('amd-optimize', ['components', 'widgets', 'movejs', 'template-cache', 
             }),
             baseUrl: "build"
         }))
-        .pipe(gulpif(minifyCode, uglify()))
         .pipe(size({showFiles: true, title: 'amd-optimize'}))
         .pipe(gulp.dest('build'));
 });
@@ -174,9 +181,9 @@ gulp.task('watch', ['build'], function() {
 });
 
 // Rerun the task when a file changes
-gulp.task('watch-test', ['build'], function() {
+gulp.task('watch-test', ['build'], function (done) {
     var conf = {
-        configFile: __dirname + '/karma.conf.js',
+        configFile: __dirname + '/karma.conf.js'
     };
     if (process.env.CI) {
         conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
