@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Karma" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="$PROJECT_DIR$/src/main/webapp/karma.conf.js">
+    <envs />
+    <RunnerSettings RunnerId="KarmaCoverageProgramRunner" />
+    <RunnerSettings RunnerId="KarmaJavaScriptTestRunnerDebug" />
+    <RunnerSettings RunnerId="KarmaJavaScriptTestRunnerRun" />
+    <ConfigurationWrapper RunnerId="KarmaCoverageProgramRunner" />
+    <ConfigurationWrapper RunnerId="KarmaJavaScriptTestRunnerDebug" />
+    <ConfigurationWrapper RunnerId="KarmaJavaScriptTestRunnerRun" />
+    <method />
+  </configuration>
+</component>
