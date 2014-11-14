@@ -8,7 +8,7 @@ module.exports = function(config){
       {pattern: 'js/*.js', included: false},
       {pattern: 'components/**/*.js', included: false},
       {pattern: 'test/unit/**/*Spec.js', included: false},
-      'test/test-main.js'
+      'test/unit/test-main.js'
     ],
 
     exclude: [
