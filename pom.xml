@@ -148,13 +148,6 @@
                     </execution>
 
                     <execution>
-                        <id>gulp build</id>
-                        <goals>
-                            <goal>gulp</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
                         <id>js tests</id>
                         <goals>
                             <goal>gulp</goal>
