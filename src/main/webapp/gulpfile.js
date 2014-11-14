@@ -18,6 +18,7 @@ var concat = require("gulp-concat");
 var rjs = require('gulp-requirejs');
 var inlinesource = require('gulp-inline-source');
 var karma = require('karma').server;
+var protractor = require("gulp-protractor").protractor;
 
 var onHeroku = Boolean(process.env.HEROKU_ENV);
 var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
@@ -163,10 +164,9 @@ gulp.task('build-favicon', function () {
         .pipe(gulp.dest('build'));
 });
 
-/**
- * Run test once and exit
- */
-gulp.task('test', ['build'], function (done) {
+gulp.task('test', ['unit-test', 'e2e-test']);
+
+gulp.task('unit-test', ['build'], function (done) {
     var conf = {
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
@@ -177,6 +177,16 @@ gulp.task('test', ['build'], function (done) {
     karma.start(conf, done);
 });
 
+gulp.task('e2e-test', ['build'], function () {
+    return gulp.src(["build/test/e2e/**/*Spec.js"])
+        .pipe(protractor({
+            configFile: __dirname + '/protractor.conf.js'
+        }))
+        .on('error', function(e) {
+            throw e;
+        });
+});
+
 // Rerun the task when a file changes
 gulp.task('watch', ['build'], function() {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
@@ -184,7 +194,7 @@ gulp.task('watch', ['build'], function() {
 });
 
 // Rerun the task when a file changes
-gulp.task('watch-test', ['build'], function (done) {
+gulp.task('watch-unit-test', ['build'], function (done) {
     var conf = {
         configFile: __dirname + '/karma.conf.js',
         singleRun: false
