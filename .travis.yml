@@ -10,6 +10,9 @@ before_script:
 - psql -c 'create database wdc2;' -U postgres
 - psql -d wdc2 -f schema_wdc2.sql -U postgres
 - psql -d wdc2 -f data_wdc2.sql -U postgres
+- mvn tomcat7:run
+- node src/main/webapp/node_modules/protractor/bin/webdriver-manager/webdriver-manager update
+- sleep 30
 env:
 - MINIFY_CODE=true MERGE_JS=true
 - MERGE_JS=true
