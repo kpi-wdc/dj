@@ -2,7 +2,7 @@
   "name": "wdc",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/karma/bin/karma start --single-run"
   },
   "repository": {
     "type": "git",
@@ -12,6 +12,11 @@
     "gulp": "~3.8.8"
   },
   "dependencies": {
+    "protractor": "~1.1.1",
+    "http-server": "^0.6.1",
+    "shelljs": "~0.2.6",
+    "karma-junit-reporter": "~0.2.2",
+    "karma-requirejs": "~0.2.2",
     "bower": "latest",
     "gulp-bower": "0.0.*",
     "del": "~0.1.*",
@@ -36,6 +41,12 @@
     "gulp-requirejs": "~0.1.3",
     "gulp-amd-optimizer": "~0.2.0",
     "glob": "~4.0.6",
-    "gulp-inline-source": "~1.1.0"
+    "gulp-inline-source": "~1.1.0",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-coverage": "~0.2.6",
+    "karma-chrome-launcher": "~0.1.5",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma": "~0.12.24",
+    "karma-jasmine": "~0.2.3"
   }
 }

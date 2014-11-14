@@ -153,6 +153,18 @@
                             <goal>gulp</goal>
                         </goals>
                     </execution>
+
+                    <execution>
+                        <id>js tests</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>test</arguments>
+                        </configuration>
+
+                        <phase>test</phase>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

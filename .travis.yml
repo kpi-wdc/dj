@@ -3,11 +3,13 @@ cache:
   apt: true
   directories:
   - $HOME/.m2 # maven
+before_install:
+- export DISPLAY=:99.0 # for JS testing in real browser
+- sh -e /etc/init.d/xvfb start
 before_script:
 - psql -c 'create database wdc2;' -U postgres
 - psql -d wdc2 -f schema_wdc2.sql -U postgres
 - psql -d wdc2 -f data_wdc2.sql -U postgres
-
 env:
 - MINIFY_CODE=true MERGE_JS=true
 - MERGE_JS=true
@@ -16,6 +18,9 @@ env:
 os:
 - linux
 - osx
+node_js:
+- "0.11"
+- "0.10"
 deploy:
   provider: heroku
   api_key:

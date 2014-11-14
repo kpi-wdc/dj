@@ -17,6 +17,7 @@ var templateCache = require('gulp-angular-templatecache');
 var concat = require("gulp-concat");
 var rjs = require('gulp-requirejs');
 var inlinesource = require('gulp-inline-source');
+var karma = require('karma').server;
 
 var onHeroku = Boolean(process.env.HEROKU_ENV);
 var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
@@ -153,9 +154,34 @@ gulp.task('favicon', function () {
         .pipe(gulp.dest('build'));
 });
 
+/**
+ * Run test once and exit
+ */
+gulp.task('test', ['build'], function (done) {
+    var conf = {
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    };
+    if (process.env.CI) {
+        conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
+    }
+    karma.start(conf, done);
+});
+
 // Rerun the task when a file changes
 gulp.task('watch', ['build'], function() {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'bower.json', 'favicon.ico', '!resources/apps/**'], ['build']);
+});
+
+// Rerun the task when a file changes
+gulp.task('watch-test', ['build'], function() {
+    var conf = {
+        configFile: __dirname + '/karma.conf.js',
+    };
+    if (process.env.CI) {
+        conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
+    }
+    karma.start(conf, done);
 });
 
 gulp.task('clean', function (cb) {
