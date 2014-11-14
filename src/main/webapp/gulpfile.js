@@ -179,7 +179,8 @@ gulp.task('test', ['build'], function (done) {
 
 // Rerun the task when a file changes
 gulp.task('watch', ['build'], function() {
-    return gulp.watch(['WEB-INF/**', 'resources/**', 'bower.json', 'favicon.ico', '!resources/apps/**'], ['build']);
+    return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
+        'bower.json', 'favicon.ico', '!resources/apps/**'], ['build']);
 });
 
 // Rerun the task when a file changes
