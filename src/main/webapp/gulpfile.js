@@ -185,10 +185,11 @@ gulp.task('watch', ['build'], function() {
 // Rerun the task when a file changes
 gulp.task('watch-test', ['build'], function (done) {
     var conf = {
-        configFile: __dirname + '/karma.conf.js'
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: false
     };
     if (process.env.CI) {
-        conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
+        conf.browsers = ['PhantomJS'];
     }
     karma.start(conf, done);
 });
