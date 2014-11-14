@@ -7,7 +7,7 @@ module.exports = function(config){
       {pattern: 'widgets/**/*.js', included: false},
       {pattern: 'js/*.js', included: false},
       {pattern: 'components/**/*.js', included: false},
-      {pattern: 'test/**/*Spec.js', included: false},
+      {pattern: 'test/unit/**/*Spec.js', included: false},
       'test/test-main.js'
     ],
 
