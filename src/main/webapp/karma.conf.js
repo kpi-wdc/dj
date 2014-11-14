@@ -23,7 +23,12 @@ module.exports = function(config){
     reporters: ['progress', 'coverage'],
 
     preprocessors: {
-      '**/*.js': ['coverage']
+      '!(components|test)/**/*.js': ['coverage']
+    },
+
+    coverageReporter: {
+        type : 'html',
+        dir : 'coverage/'
     },
 
     plugins : [
