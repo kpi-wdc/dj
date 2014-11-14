@@ -19,7 +19,7 @@ module.exports = function(config){
 
     frameworks: ['jasmine', 'requirejs'],
 
-    browsers : ['Chrome', 'PhantomJS'],
+    browsers : ['PhantomJS'],
     reporters: ['progress', 'coverage'],
 
     preprocessors: {

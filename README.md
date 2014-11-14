@@ -34,6 +34,7 @@ We suggest to learn about the following technologies first:
   - npm (front-end dev. dependencies)
   - bower (front-end dependencies)
   - gulp (front-end task-runner)
+  - karma (JS test runner)
   - angularjs (front-end, MVVM framework)
   - requirejs (front-end, runtime dependency management)
   - less (front-end, css replacement)
@@ -44,6 +45,7 @@ Suggested intellij idea plugins:
   - maven
   - spring
   - gulp
+  - karma
   - hibernate
   - LESS
   - gitignore (for syntax highlight)
