@@ -9,9 +9,9 @@ exports.config = {
 
     framework: 'jasmine',
 
-    sauceUser: process.env.SAUCE_USERNAME,
+    //sauceUser: process.env.SAUCE_USERNAME,
 
-    sauceKey: process.env.SAUCE_ACCESS_KEY,
+    //sauceKey: process.env.SAUCE_ACCESS_KEY,
 
     onPrepare: function() {
         // implicit and page load timeouts
