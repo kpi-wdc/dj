@@ -1,5 +1,5 @@
 language: java
-cache:
+cache: # only for private repos
   apt: true
   directories:
   - $HOME/.m2
@@ -29,13 +29,14 @@ env:
   - MINIFY_CODE=true
   -
   global:
+  # sauce
   - secure: XQXmNe9FkpcNxWvmr+8qvvMFj6E/GAE6d7KFDAVw/LYfquSImZkqMcRqlRkDmVHh9B8N6eALFMbS7biO2cRPfRKhN5YVegrX2PUbjszWvnrLiCO1/u14d2bdGWLtP/j+wvwtNCCAtwprlNbTDDXQib9IlRSGs9ofQEvM8n6Tn5M=
   - secure: Y0u9BWagQ3uUAY8KjmJlLKHYPJBubKmapF5hNLYbKWZxQ62ylFn5SqOHplRxRbmEUeVWE4PcRhWJAG+AofNHg2ZpIuUOQnTxXDr+FDL35zHYscATGRd+UHXqKeApDTt6oqZPIQbQjqZ9CCI5n4KdFeKvI5ovil+wkMT57XMP1iA=
 addons:
   sauce_connect: true
 os:
 - linux
-- osx
+- osx # temporary not available on travis
 node_js:
 - "0.11"
 - "0.10"
