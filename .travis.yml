@@ -8,7 +8,7 @@ before_install:
 - export DISPLAY=:99.0 # for JS testing in real browser
 - sh -e /etc/init.d/xvfb start
 install:
-- mvn process-test-classes
+- mvn process-test-classes # don't use mvn install or default settings because of the bug in frontend-maven plugin
 before_script:
 - echo Starting tomcat server...
 - mvn tomcat7:run &
@@ -23,8 +23,6 @@ before_script:
 - sleep 60
 script:
 - mvn test
-after_script:
-#- mvn tomcat7:shutdown
 env:
 - MINIFY_CODE=true MERGE_JS=true
 - MERGE_JS=true
