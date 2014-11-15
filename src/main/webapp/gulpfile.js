@@ -164,7 +164,7 @@ gulp.task('build-favicon', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('test', ['unit-test', 'e2e-test']);
+gulp.task('test', (onHeroku? []:['unit-test', 'e2e-test'])); // disable tests on heroku
 
 gulp.task('unit-test', ['build'], function (done) {
     var conf = {
