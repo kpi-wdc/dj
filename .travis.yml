@@ -11,10 +11,6 @@ install:
 before_script:
 - echo Starting tomcat server...
 - mvn tomcat7:run &
-- echo Updating webdriver...
-- node src/main/webapp/node_modules/protractor/bin/webdriver-manager update
-- echo Starting webdriver...
-- node src/main/webapp/node_modules/protractor/bin/webdriver-manager start &
 - psql -c 'create database wdc2;' -U postgres
 - psql -d wdc2 -f schema_wdc2.sql -U postgres
 - psql -d wdc2 -f data_wdc2.sql -U postgres
