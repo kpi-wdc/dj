@@ -1,6 +1,9 @@
-describe("End-to-end tests", function () {
-    it('Home page test', function() {
+describe("Home page", function () {
+    beforeEach(function () {
         browser.get('/');
+    });
+
+    it('Home page test', function() {
         $('body').getText().then(function (text) {
             console.dir(text);
         });

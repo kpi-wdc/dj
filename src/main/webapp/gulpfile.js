@@ -20,6 +20,7 @@ var inlinesource = require('gulp-inline-source');
 var runSequence = require('run-sequence');
 var karma = require('karma').server;
 var protractor = require("gulp-protractor").protractor;
+var webdriver_update = require('gulp-protractor').webdriver_update;
 var sauceConnectLauncher = require('sauce-connect-launcher');
 
 var onHeroku = Boolean(process.env.HEROKU_ENV);
@@ -223,7 +224,10 @@ gulp.task('e2e-test', function (cb) {
     //}
 });
 
-gulp.task('e2e-run-test', ['build'], function () {
+// Downloads the selenium webdriver
+gulp.task('webdriver-update', webdriver_update);
+
+gulp.task('e2e-run-test', ['build', 'webdriver-update'], function () {
     return gulp.src(["build/test/e2e/**/*Spec.js"])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
