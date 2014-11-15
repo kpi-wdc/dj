@@ -17,8 +17,10 @@ var templateCache = require('gulp-angular-templatecache');
 var concat = require("gulp-concat");
 var rjs = require('gulp-requirejs');
 var inlinesource = require('gulp-inline-source');
+var runSequence = require('run-sequence');
 var karma = require('karma').server;
 var protractor = require("gulp-protractor").protractor;
+var sauceConnectLauncher = require('sauce-connect-launcher');
 
 var onHeroku = Boolean(process.env.HEROKU_ENV);
 var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
@@ -177,7 +179,36 @@ gulp.task('unit-test', ['build'], function (done) {
     karma.start(conf, done);
 });
 
-gulp.task('e2e-test', ['build'], function () {
+var sauceConnectProcess = undefined;
+
+gulp.task('run-sauce', function (cb) {
+    sauceConnectLauncher({}, function (err, _sauceConnectProcess) {
+        if (err) {
+            console.error(err.message);
+            throw err.message;
+            return;
+        }
+        console.log("Sauce Connect ready");
+        sauceConnectProcess = _sauceConnectProcess;
+        cb();
+    });
+});
+
+gulp.task('stop-sauce', function () {
+    sauceConnectProcess.close(function () {
+        console.log("Closed Sauce Connect process");
+    })
+});
+
+gulp.task('e2e-test', function (cb) {
+    if (process.env.SAUCE_USERNAME) {
+        runSequence('run-sauce', 'e2e-run-test', 'stop-sauce', cb);
+    } else {
+        runSequence('e2e-run-test', cb);
+    }
+});
+
+gulp.task('e2e-run-test', ['build'], function () {
     return gulp.src(["build/test/e2e/**/*Spec.js"])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'

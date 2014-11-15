@@ -22,7 +22,8 @@
     "karma-firefox-launcher": "^0.1.3",
     "karma": "^0.12.24",
     "karma-jasmine": "^0.2.3",
-    "gulp-protractor": "^0.0.11"
+    "gulp-protractor": "^0.0.11",
+    "sauce-connect-launcher": "^0.9.0"
   },
   "dependencies": {
     "gulp": "3.8.8",
@@ -48,6 +49,7 @@
     "amd-optimize": "^0.2.8",
     "bower": "^1.3.12",
     "del": "^0.1.0",
-    "glob": "^4.0.6"
+    "glob": "^4.0.6",
+    "run-sequence": "^1.0.1"
   }
 }
