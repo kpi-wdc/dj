@@ -202,11 +202,12 @@ gulp.task('stop-sauce', function () {
 });
 
 gulp.task('e2e-test', function (cb) {
-    if (process.env.SAUCE_USERNAME) {
-        runSequence('run-sauce', 'e2e-run-test', 'stop-sauce', cb);
-    } else {
+    // Disable SAUCE usage because of travis instability.
+    //if (process.env.SAUCE_USERNAME) {
+    //    runSequence('run-sauce', 'e2e-run-test', 'stop-sauce', cb);
+    //} else {
         runSequence('e2e-run-test', cb);
-    }
+    //}
 });
 
 gulp.task('e2e-run-test', ['build'], function () {
