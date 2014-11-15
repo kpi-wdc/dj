@@ -9,7 +9,17 @@ describe("Webapp", function () {
         });
     });
 
-    it('should have home page title', function() {
+    it('should have home page title', function () {
         expect($('.page-title').getText()).toBe("Home page");
     });
+
+    it('should route to 404 page correctly', function () {
+        var errPage = $('[href="/404"]');
+        errPage.isPresent().then(function (present) {
+           if (present) {
+               errPage.click();
+               expect(browser.getLocationAbsUrl()).toBe('/404');
+           }
+        });
+    })
 });
