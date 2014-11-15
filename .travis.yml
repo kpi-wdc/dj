@@ -20,7 +20,7 @@ before_script:
 - psql -d wdc2 -f schema_wdc2.sql -U postgres
 - psql -d wdc2 -f data_wdc2.sql -U postgres
 - echo Waiting until server starts..
-- sleep 60
+- sleep 120
 script:
 - mvn test
 env:
