@@ -27,6 +27,8 @@ var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
 var mergeJS = onHeroku || Boolean(process.env.MERGE_JS);
 var inlineJSandCSS = mergeJS && minifyCode;
 
+var showFilesLog = false;
+
 gulp.task('default', ['build']);
 
 gulp.task('bower', function () {
@@ -56,7 +58,7 @@ gulp.task('build-components', ['bower'], function () {
     return gulp.src('bower_components/**/*')
         .pipe(cached('bower_components'))
         .pipe(removeFilter)
-        .pipe(size({showFiles: true, title: 'components'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'components'})))
         .pipe(gulp.dest('build/components'));
 });
 
@@ -64,7 +66,7 @@ gulp.task('build-css', ['build-less', 'build-components'], function () {
     gulp.src('build/**/*.css')
         .pipe(cached('build-css'))
         .pipe(gulpif(minifyCode, minifyCSS()))
-        .pipe(size({showFiles: true, title: 'CSS'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'CSS'})))
         .pipe(gulp.dest('build'))
 });
 
@@ -73,7 +75,7 @@ gulp.task('build-less', function () {
         .pipe(cached('build-less'))
         .pipe(gulp.dest('build/css'))
         .pipe(less())
-        .pipe(size({showFiles: true, title: 'LESS -> CSS'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'LESS -> CSS'})))
         .pipe(gulp.dest('build/css'));
 });
 
@@ -83,7 +85,7 @@ gulp.task('build-html', ['build-js', 'build-css'], function () {
             rootpath: 'build'
         })))
         .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
-        .pipe(size({showFiles: true, title: 'HTML'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'HTML'})))
         .pipe(gulp.dest('build'));
 });
 
@@ -105,7 +107,7 @@ gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-component
         .pipe(nonTestJSFilter)
         .pipe(gulpif(minifyCode, uglify()))
         .pipe(nonTestJSFilter.restore())
-        .pipe(size({showFiles: true, title: 'JS'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'JS'})))
         .pipe(gulp.dest('build'));
 });
 
@@ -146,7 +148,7 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
     return gulp.src(['build/**/*.js'], {
             base: 'build'
         })
-        .pipe(size({showFiles: true, title: 'amd-optimize'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'amd-optimize'})))
         .pipe(rjs({
             mainConfigFile: "build/js/main.js",
             out: "js/compiled.js",
@@ -156,7 +158,7 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
             }),
             baseUrl: "build"
         }))
-        .pipe(size({showFiles: true, title: 'amd-optimize'}))
+        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'amd-optimize'})))
         .pipe(gulp.dest('build'));
 });
 
@@ -186,7 +188,6 @@ gulp.task('run-sauce', function (cb) {
         if (err) {
             console.error(err.message);
             throw err.message;
-            return;
         }
         console.log("Sauce Connect ready");
         sauceConnectProcess = _sauceConnectProcess;
