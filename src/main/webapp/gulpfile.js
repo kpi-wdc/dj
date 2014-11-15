@@ -29,10 +29,15 @@ var inlineJSandCSS = mergeJS && minifyCode;
 
 var showFilesLog = false;
 
+function handleError(err) {
+    console.log(err.toString());
+    this.emit('end');
+}
+
 gulp.task('default', ['build']);
 
 gulp.task('bower', function () {
-    return bower();
+    return bower().on('error', handleError);
 });
 
 gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon']);
@@ -59,6 +64,7 @@ gulp.task('build-components', ['bower'], function () {
         .pipe(cached('bower_components'))
         .pipe(removeFilter)
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'components'})))
+        .on('error', handleError)
         .pipe(gulp.dest('build/components'));
 });
 
@@ -66,6 +72,7 @@ gulp.task('build-css', ['build-less', 'build-components'], function () {
     gulp.src('build/**/*.css')
         .pipe(cached('build-css'))
         .pipe(gulpif(minifyCode, minifyCSS()))
+        .on('error', handleError)
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'CSS'})))
         .pipe(gulp.dest('build'))
 });
@@ -75,6 +82,7 @@ gulp.task('build-less', function () {
         .pipe(cached('build-less'))
         .pipe(gulp.dest('build/css'))
         .pipe(less())
+        .on('error', handleError)
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'LESS -> CSS'})))
         .pipe(gulp.dest('build/css'));
 });
@@ -85,6 +93,7 @@ gulp.task('build-html', ['build-js', 'build-css'], function () {
             rootpath: 'build'
         })))
         .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
+        .on('error', handleError)
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'HTML'})))
         .pipe(gulp.dest('build'));
 });
@@ -92,6 +101,7 @@ gulp.task('build-html', ['build-js', 'build-css'], function () {
 gulp.task('build-template-cache', function () {
     return gulp.src(['WEB-INF/**/*/*.html', 'resources/**/*/*.html'])
         .pipe(gulpif(minifyCode, minifyHTML({empty: true})))
+        .on('error', handleError)
         .pipe(gulp.dest('build'))
         .pipe(templateCache('templates.js', {
             standalone: true
@@ -106,6 +116,7 @@ gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-component
         .pipe(cached('build-js'))
         .pipe(nonTestJSFilter)
         .pipe(gulpif(minifyCode, uglify()))
+        .on('error', handleError)
         .pipe(nonTestJSFilter.restore())
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'JS'})))
         .pipe(gulp.dest('build'));
@@ -127,6 +138,7 @@ gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-compon
     return gulp.src('build/**/*.js')
         .pipe(cached('annotate-js'))
         .pipe(ngAnnotate())
+        .on('error', handleError)
         .pipe(gulp.dest('build'));
 });
 
@@ -140,6 +152,7 @@ gulp.task('amd-merge', ['amd-optimize'], function () {
     gulp.src(['build/js/compiled.js', 'build/js/main.js'])
         .pipe(cached('amd-merge'))
         .pipe(concat('main.js'))
+        .on('error', handleError)
         .pipe(gulp.dest('build/js'));
 });
 
@@ -148,7 +161,6 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
     return gulp.src(['build/**/*.js'], {
             base: 'build'
         })
-        .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'amd-optimize'})))
         .pipe(rjs({
             mainConfigFile: "build/js/main.js",
             out: "js/compiled.js",
@@ -158,6 +170,7 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
             }),
             baseUrl: "build"
         }))
+        .on('error', handleError)
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'amd-optimize'})))
         .pipe(gulp.dest('build'));
 });
