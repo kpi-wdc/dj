@@ -4,9 +4,11 @@ describe("Webapp", function () {
     });
 
     it('should have some content', function () {
-        $('html').getText().then(function (text) {
+        var text = $('html').getText();
+        text.then(function (text) {
             console.dir(text); // log for debugging on Travis CI
         });
+        expect(text).toContain('Home page');
     });
 
     it('should have home page title', function () {
@@ -16,10 +18,24 @@ describe("Webapp", function () {
     it('should route to 404 page correctly', function () {
         var errPage = $('[href="/404"]');
         errPage.isPresent().then(function (present) {
-           if (present) {
-               errPage.click();
-               expect(browser.getLocationAbsUrl()).toBe('/404');
-           }
+            if (present) {
+                errPage.click();
+                expect(browser.getLocationAbsUrl()).toBe('/404');
+            }
         });
-    })
+    });
+
+    it('should have non-clickable delete button on home page', function () {
+        expect($('#deletePageBtn').isEnabled()).toBeFalsy();
+    });
+
+    it('should have non-clickable delete button on home page', function () {
+        browser.setLocation('404');
+        expect($('#deletePageBtn').isEnabled()).toBeFalsy();
+    });
+
+    it('should have clickable delete button on other pages', function () {
+        browser.setLocation('dev-page');
+        expect($('#deletePageBtn').isEnabled()).toBeTruthy();
+    });
 });

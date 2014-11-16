@@ -31,10 +31,12 @@
       <div ng-if="globalConfig.designMode" id="page-design-panel">
         <h3>Design mode panel</h3>
         <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
+                id="submitChangesToServerBtn"
                 ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
           Submit changes to server
         </button>
         <button class="button alert radius tiny"
+                id="deletePageBtn"
                 ng-disabled="appConfig.isHomePageOpened || appConfig.is404PageOpened"
                 disabled
                 ng-click="appConfig.deletePage(appConfig.currentPageIndex)">
