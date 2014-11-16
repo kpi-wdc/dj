@@ -1,20 +1,30 @@
 define(['js/app', 'angular-mocks'], function () {
-    describe("Testing services", function () {
-        var urls;
+    describe("Testing controllers", function () {
         var MainCtrlScope;
+        var PageCtrlScope;
+        var $controller;
         beforeEach(module('app'));
-        beforeEach(inject(function ($controller, $rootScope, appUrls) {
-            urls = appUrls;
+        beforeEach(inject(function (_$controller_, $rootScope) {
+            $controller = _$controller_;
             MainCtrlScope = $rootScope.$new();
-            $controller('MainCtrl', {$scope: MainCtrlScope});
+            PageCtrlScope = $rootScope.$new();
         }));
 
         it('ensure MainCtrl exists and works', function() {
+            $controller('MainCtrl', {$scope: MainCtrlScope, $window: {alert: angular.noop}});
             expect(MainCtrlScope).toBeDefined();
             MainCtrlScope.alertAppConfigSubmissionFailed({ data: {
                 status: 404,
                 statusText: 'Page not found'
             }});
+        });
+
+        it('ensure PageCtrl exists and works', function() {
+            $controller('PageCtrl', {$scope: PageCtrlScope, pageConfig: {}, $window: {
+                prompt: angular.noop,
+                alert: angular.noop
+            }});
+            expect(PageCtrlScope).toBeDefined();
         });
     });
 });
