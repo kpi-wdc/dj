@@ -63,4 +63,12 @@ public class ArtefactDefId implements Serializable {
         result = 31 * result + (metadataKey != null ? metadataKey.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ArtefactDefId{" +
+                "artefact.key=" + artefact.getKey() +
+                ", metadataKey.key=" + metadataKey.getKey() +
+                '}';
+    }
 }
