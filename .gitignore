@@ -8,6 +8,5 @@ src/*/.idea
 !.idea/runConfigurations
 
 # Other
-.dpl # travis
 *.log
 *.swp # vim
