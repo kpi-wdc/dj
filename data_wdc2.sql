@@ -154,6 +154,7 @@ COPY artefact_def (artefact_id, metadatakey_id, required, uniq, default_value) F
 3	17	t	t	\N
 3	18	f	f	\N
 3	20	f	f	\N
+2	7	t	t	\N
 \.
 
 
@@ -261,7 +262,7 @@ COPY metadatakey_def (metadatakey_id, def_id, value) FROM stdin;
 -- Name: metadatakey_id_seq; Type: SEQUENCE SET; Schema: metadata; Owner: postgres
 --
 
-SELECT pg_catalog.setval('metadatakey_id_seq', 47, true);
+SELECT pg_catalog.setval('metadatakey_id_seq', 54, true);
 
 
 --
