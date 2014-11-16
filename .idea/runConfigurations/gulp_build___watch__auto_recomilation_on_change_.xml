@@ -9,6 +9,8 @@
     <envs />
     <RunnerSettings RunnerId="Js.BuildTools.Gulp" />
     <ConfigurationWrapper RunnerId="Js.BuildTools.Gulp" />
-    <method />
+    <method>
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="gulp build" run_configuration_type="js.build_tools.gulp" />
+    </method>
   </configuration>
 </component>

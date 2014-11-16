@@ -191,7 +191,7 @@ gulp.task('test', (Boolean(argv.skipTests) ? []:
     }
 });
 
-gulp.task('unit-test', ['build'], function (done) {
+gulp.task('unit-test', [], function (done) {
     var conf = {
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
@@ -245,7 +245,7 @@ gulp.task('e2e-run-test', ['build', 'webdriver-update'], function () {
 });
 
 // Rerun the task when a file changes
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
         'bower.json', 'favicon.ico', '!resources/apps/**'], ['build']);
 });
