@@ -5,13 +5,14 @@
 #### Prerequisites
 - maven is installed
 
-For developers:
+For developers (optional):
 
-- node is installed
+- node.js is installed
 - npm is installed
 - gulp is installed `npm install -g gulp`
 - karma is installed `npm install -g karma`
 - protractor is installed `npm install -g protractor`
+- firefox and chrome are installed
 
 
 ## Build
@@ -40,6 +41,11 @@ Intellij idea project has preconfigured maven run configuration.
       -  [hibernate] changed configs
       -  [travis] removed module
       -  [heroku] changed env variables
+  - Use branches:
+     - `master` branch for stable code synced from `develop` and bugfixes.
+     - `develop` branch for code in development. Should be regularly merged into `master`
+     - feature-branches for single features development. Should be merged into `develop`.
+     - git tags on master branch to mark releases (like `v0.4.3` or `v1.0`)
 
 ## Used technologies
 
@@ -51,16 +57,21 @@ Intellij idea project has preconfigured maven run configuration.
   - npm (front-end dev. dependencies)
   - bower (front-end dependencies)
   - gulp (front-end task-runner)
-  - karma (JS test runner)
+  - karma (JS unit-test runner)
+  - protractor (JS end-to-end test runner)
+  - jasmine (JS test framework)
   - angularjs (front-end, MVVM framework)
   - requirejs (front-end, runtime dependency management)
   - less (front-end, css replacement)
   - REST (back-end + front-end)
+  - travis (continuous integration)
+  - heroku (PaaS, used for app deployment)
 
 ## Suggested intellij idea plugins:
 
   - maven
   - spring
+  - NodeJS
   - gulp
   - karma
   - hibernate
@@ -68,6 +79,8 @@ Intellij idea project has preconfigured maven run configuration.
   - gitignore (for syntax highlight)
   - angularjs
   - markdown
+
+If you are a front-end dev, you can also install TypeScript community stubs to make Idea aware of code completion when other JS libraries are used.
 
 ## Suggested Chrome extensions:
 
