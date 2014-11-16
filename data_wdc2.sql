@@ -155,6 +155,20 @@ COPY artefact_def (artefact_id, metadatakey_id, required, "unique", default_valu
 3	18	f	f	\N
 3	19	f	f	\N
 3	20	f	f	\N
+2	7	t	t	\N
+2	8	t	t	\N
+2	9	t	t	\N
+2	10	t	t	\N
+2	11	t	t	\N
+2	12	f	f	\N
+2	13	f	f	\N
+2	14	f	f	\N
+3	15	t	t	\N
+3	16	t	t	\N
+3	17	t	t	\N
+3	18	f	f	\N
+3	19	f	f	\N
+3	20	f	f	\N
 \.
 
 
@@ -163,6 +177,15 @@ COPY artefact_def (artefact_id, metadatakey_id, required, "unique", default_valu
 --
 
 COPY artefactmetadata (artefact_id, metadatakey_id, value) FROM stdin;
+2	21	Objects
+2	22	Об"єкти
+2	23	Объекты
+3	21	Object Groups
+3	22	Групи об"єктів
+3	23	Группы объектов
+4	21	Object Groups Association
+4	22	Групування об"єктів
+4	23	Группировка объектов
 2	21	Objects
 2	22	Об"єкти
 2	23	Объекты
@@ -183,7 +206,6 @@ COPY association (artefact_id, reference_id, localfield, foreignfield, key) FROM
 4	3	objectgroup_id	data.objectgroup.id	key1
 4	2	object_id	data.object.id	key2
 4	2	\N	\N	LOLKEY
-\N	2	\N	\N	LOLKEY2
 \.
 
 
@@ -192,6 +214,71 @@ COPY association (artefact_id, reference_id, localfield, foreignfield, key) FROM
 --
 
 COPY metadatakey_def (metadatakey_id, def_id, value) FROM stdin;
+7	1	Object Name (en)
+8	1	Object Name (ua)
+9	1	Object Name (ru)
+10	1	Code ISO2
+11	1	Code ISO3
+12	1	Object Comment (en)
+13	1	Object Comment (ua)
+14	1	Object Comment (ru)
+7	2	Назва об"єкта (en)
+8	2	Назва об"єкта (ua)
+9	2	Назва об"єкта (ru)
+10	2	Код ISO2
+11	2	Код ISO3
+12	2	Коментар (en)
+13	2	Коментар (ua)
+14	2	Коментар (ru)
+7	3	Название объєкта (en)
+8	3	Название объєкта (ua)
+9	3	Название объєкта (ru)
+10	3	Код ISO2
+11	3	Код ISO3
+12	3	Комментарий (en)
+13	3	Комментарий (ua)
+14	3	Комментарий (ru)
+7	5	Назва об"єкта  англійсською мовою
+8	5	Назва об"єкта українською мовою
+9	5	Назва об"єкта російською мовою
+10	5	Код ISO2 об"єкта у відповідності до стандарту. Див. посилання www.google.com
+11	5	Код ISO3 об"єкта у відповідності до стандарту. Див. посилання www.google.com
+12	5	Коментар англійською мовою містить загальну характеристику для об"єкта. Заповнюється експертами.
+13	5	Коментар українською мовою містить загальну характеристику для об"єкта. Заповнюється експертами.
+14	5	Коментар російською мовою містить загальну характеристику для об"єкта. Заповнюється експертами.
+15	1	Object Group Name (en)
+16	1	Object Group Name (ua)
+17	1	Object Group Name (ru)
+18	1	Object Group Comment (en)
+19	1	Object Group Comment (ua)
+20	1	Object Group Comment (ru)
+15	2	Назва групи об"єктів (en)
+16	2	Назва групи об"єктів (ua)
+17	2	Назва групи об"єктів (ru)
+18	2	Коментар (en)
+19	2	Коментар (ua)
+20	2	Коментар (ru)
+15	3	Название группы объєктов (en)
+16	3	Название группы объєктов (ua)
+17	3	Название группы объєктов (ru)
+18	3	Комментарий (en)
+19	3	Комментарий (ua)
+20	3	Комментарий (ru)
+15	5	Назва групи об"єктів англійською мовою
+16	5	Назва групи об"єктів українською мовою
+17	5	Назва групи об"єктів російською мовою
+18	5	Коментар англійською мовою містить загальну характеристику для групи об"єктів. Заповнюється експертами.
+19	5	Коментар українською мовою містить загальну характеристику для групи об"єктів. Заповнюється експертами.
+20	5	Коментар російською мовою містить загальну характеристику для групи об"єктів. Заповнюється експертами.
+21	1	Artefact(en)
+22	1	Artefact(ua)
+23	1	Artefact(ru)
+21	2	Артефакт(en)
+22	2	Артефакт(ua)
+23	2	Артефакт(ru)
+21	3	Артефакт(en)
+22	3	Артефакт(ua)
+23	3	Артефакт(ru)
 7	1	Object Name (en)
 8	1	Object Name (ua)
 9	1	Object Name (ru)
@@ -280,6 +367,87 @@ COPY objectgroupmetadata (metadatakey_id, subject_id, value) FROM stdin;
 --
 
 COPY objectmetadata (metadatakey_id, subject_id, value) FROM stdin;
+7	1	Autonomous Republic of Crimea
+8	1	АР Крим
+10	1	UA.KR
+7	2	Cherkasy region
+8	2	Черкаська
+10	2	UA.CK
+7	3	Chernihiv region
+8	3	Чернігівська
+10	3	UA.CH
+7	4	Chernivtsi region
+8	4	Чернівецька
+10	4	UA.CV
+7	5	Dnipropetrov'sk region
+8	5	Дніпропетровська
+10	5	UA.DP
+7	6	Donets'k region
+8	6	Донецька
+10	6	UA.DT
+7	7	Ivano-Frankivs'k region
+8	7	Івано-Франківська
+10	7	UA.IF
+7	8	Kharkiv region
+8	8	Харківська
+10	8	UA.KK
+7	9	Kherson region
+8	9	Херсонська
+10	9	UA.KS
+7	10	Khmelnytsky region
+8	10	Хмельницька
+10	10	UA.KM
+7	11	Kirovohrad region
+8	11	Кіровоградська
+10	11	UA.KH
+7	12	Kyiv region
+8	12	Київська
+10	12	UA.KV
+7	13	L'viv region
+8	13	Львівська
+10	13	UA.LV
+7	14	Luhansk region
+8	14	Луганська
+10	14	UA.LH
+7	15	Mykolayiv region
+8	15	Миколаївська
+10	15	UA.MY
+7	16	Odesa region
+8	16	Одеська
+10	16	UA.OD
+7	17	Poltava region
+8	17	Полтавська
+10	17	UA.PL
+7	18	Rivne region
+8	18	Рівненська
+10	18	UA.RV
+7	19	Sevastopol
+8	19	Севастополь
+10	19	UA.SC
+7	20	Sumy region
+8	20	Сумська
+10	20	UA.SM
+7	21	Ternopil' region
+8	21	Тернопільська
+10	21	UA.TP
+7	22	Vinnytsya region
+8	22	Вінницька
+10	22	UA.VI
+7	23	Volyn region
+8	23	Волинська
+10	23	UA.VO
+7	24	Zakarpattya region
+8	24	Закарпатська
+10	24	UA.ZK
+7	25	Zaporizhya region
+8	25	Запорізька
+10	25	UA.ZP
+7	26	Zhytomyr region
+8	26	Житомирська
+10	26	UA.ZT
+7	27	Kyiv
+8	27	Київ
+10	27	UA.KC
 7	1	Autonomous Republic of Crimea
 8	1	АР Крим
 10	1	UA.KR

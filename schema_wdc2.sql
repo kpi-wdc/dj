@@ -196,8 +196,8 @@ ALTER SEQUENCE artefact_artefact_id_seq OWNED BY artefact.artefact_id;
 --
 
 CREATE TABLE artefact_def (
-    artefact_id integer,
-    metadatakey_id integer,
+    artefact_id integer NOT NULL,
+    metadatakey_id integer NOT NULL,
     required boolean DEFAULT true,
     "unique" boolean DEFAULT false,
     default_value character varying(255)[]
@@ -211,8 +211,8 @@ ALTER TABLE metadata.artefact_def OWNER TO postgres;
 --
 
 CREATE TABLE artefactmetadata (
-    artefact_id integer,
-    metadatakey_id integer,
+    artefact_id integer NOT NULL,
+    metadatakey_id integer NOT NULL,
     value character varying(255)
 );
 
@@ -224,8 +224,8 @@ ALTER TABLE metadata.artefactmetadata OWNER TO postgres;
 --
 
 CREATE TABLE association (
-    artefact_id integer,
-    reference_id integer,
+    artefact_id integer NOT NULL,
+    reference_id integer NOT NULL,
     localfield character varying(255),
     foreignfield character varying(255),
     key character varying(255)
@@ -251,8 +251,8 @@ ALTER TABLE metadata.metadatakey OWNER TO postgres;
 --
 
 CREATE TABLE metadatakey_def (
-    metadatakey_id integer,
-    def_id integer,
+    metadatakey_id integer NOT NULL,
+    def_id integer NOT NULL,
     value character varying(255)
 );
 
