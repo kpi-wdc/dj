@@ -21,6 +21,7 @@ var runSequence = require('run-sequence');
 var karma = require('karma').server;
 var protractor = require("gulp-protractor").protractor;
 var webdriver_update = require('gulp-protractor').webdriver_update;
+var argv = require('yargs').argv;
 var sauceConnectLauncher = require('sauce-connect-launcher');
 
 var onHeroku = Boolean(process.env.HEROKU_ENV);
@@ -182,7 +183,13 @@ gulp.task('build-favicon', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('test', (onHeroku? []:['unit-test', 'e2e-test'])); // disable tests on heroku
+gulp.task('test', (Boolean(argv.skipTests) ? []:
+    ['unit-test', 'e2e-test']), function () {
+    // disable tests on heroku or when --skipTests=true is passed
+    if (Boolean(argv.skipTests)) {
+        console.log('Skipping tests because skipTests flag is passed');
+    }
+});
 
 gulp.task('unit-test', ['build'], function (done) {
     var conf = {
