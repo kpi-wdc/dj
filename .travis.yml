@@ -4,16 +4,16 @@ cache: # only for private repos
   directories:
   - $HOME/.m2
 before_install:
+- sudo apt-get install expect -y -qq
+before_script:
+# start virtual X frame-buffer for end-to-end testing with real browser
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-before_script:
-- echo Starting tomcat server for end-to-end testing...
-- mvn tomcat7:run &
 - psql -c 'create database wdc2;' -U postgres
 - psql -d wdc2 -f schema_wdc2.sql -U postgres
 - psql -d wdc2 -f data_wdc2.sql -U postgres
-- echo Waiting until server starts..
-- sleep 120
+script:
+- expect -c 'spawn mvn tomcat7:run; expect "Starting ProtocolHandler"; system mvn test;'
 env:
   matrix:
   - MINIFY_CODE=true MERGE_JS=true
