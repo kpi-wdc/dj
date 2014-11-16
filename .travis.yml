@@ -25,17 +25,15 @@ env:
   - MINIFY_CODE=true
   -
   global:
-  # sauce
+  # SAUCE_USERNAME
   - secure: XQXmNe9FkpcNxWvmr+8qvvMFj6E/GAE6d7KFDAVw/LYfquSImZkqMcRqlRkDmVHh9B8N6eALFMbS7biO2cRPfRKhN5YVegrX2PUbjszWvnrLiCO1/u14d2bdGWLtP/j+wvwtNCCAtwprlNbTDDXQib9IlRSGs9ofQEvM8n6Tn5M=
+  # SAUCE_ACCESS_KEY
   - secure: Y0u9BWagQ3uUAY8KjmJlLKHYPJBubKmapF5hNLYbKWZxQ62ylFn5SqOHplRxRbmEUeVWE4PcRhWJAG+AofNHg2ZpIuUOQnTxXDr+FDL35zHYscATGRd+UHXqKeApDTt6oqZPIQbQjqZ9CCI5n4KdFeKvI5ovil+wkMT57XMP1iA=
-# addons: # should be disable if sauce-connect-launcher is used
+# addons: # should be disabled if sauce-connect-launcher is used
 #  sauce_connect: true
 os:
 - linux
 - osx # temporary not available on travis
-node_js:
-- "0.11"
-- "0.10"
 deploy:
   provider: heroku
   api_key:
