@@ -140,7 +140,7 @@ COPY metadatakey (metadatakey_id, key) FROM stdin;
 -- Data for Name: artefact_def; Type: TABLE DATA; Schema: metadata; Owner: postgres
 --
 
-COPY artefact_def (artefact_id, metadatakey_id, required, "unique", default_value) FROM stdin;
+COPY artefact_def (artefact_id, metadatakey_id, required, uniq, default_value) FROM stdin;
 2	7	t	t	\N
 2	8	t	t	\N
 2	9	t	t	\N
@@ -169,6 +169,7 @@ COPY artefact_def (artefact_id, metadatakey_id, required, "unique", default_valu
 3	18	f	f	\N
 3	19	f	f	\N
 3	20	f	f	\N
+2	7	t	t	\N
 \.
 
 

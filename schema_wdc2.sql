@@ -199,8 +199,8 @@ CREATE TABLE artefact_def (
     artefact_id integer NOT NULL,
     metadatakey_id integer NOT NULL,
     required boolean DEFAULT true,
-    "unique" boolean DEFAULT false,
-    default_value character varying(255)[]
+    uniq boolean DEFAULT false,
+    default_value character varying(255)
 );
 
 
