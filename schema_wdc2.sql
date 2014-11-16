@@ -413,6 +413,38 @@ ALTER TABLE ONLY metadatakey
     ADD CONSTRAINT metadatakey_pkey PRIMARY KEY (metadatakey_id);
 
 
+--
+-- Name: uniq_id_1; Type: CONSTRAINT; Schema: metadata; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY artefact_def
+    ADD CONSTRAINT uniq_id_1 UNIQUE (artefact_id, metadatakey_id);
+
+
+--
+-- Name: uniq_id_2; Type: CONSTRAINT; Schema: metadata; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY artefactmetadata
+    ADD CONSTRAINT uniq_id_2 UNIQUE (artefact_id, metadatakey_id);
+
+
+--
+-- Name: uniq_id_3; Type: CONSTRAINT; Schema: metadata; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY association
+    ADD CONSTRAINT uniq_id_3 UNIQUE (artefact_id, reference_id);
+
+
+--
+-- Name: uniq_id_4; Type: CONSTRAINT; Schema: metadata; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY metadatakey_def
+    ADD CONSTRAINT uniq_id_4 UNIQUE (metadatakey_id, def_id);
+
+
 SET search_path = data, pg_catalog;
 
 --
