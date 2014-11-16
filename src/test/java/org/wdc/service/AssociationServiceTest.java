@@ -18,7 +18,6 @@ public class AssociationServiceTest {
     @Autowired
     AssociationService associationService;
 
-
     @BeforeClass
     public static void addArtefacts() {
 
