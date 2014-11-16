@@ -19,7 +19,7 @@ public class ArtefactDef {
     @Column(name = "required")
     private boolean required;
 
-    @Column(name = "unique")
+    @Column(name = "uniq")
     private boolean unique;
 
     @Column(name = "default_value")
