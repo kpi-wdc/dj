@@ -1,18 +1,8 @@
 describe("Webapp", function () {
     beforeEach(function () {
         browser.get('/');
-        var loaded = false;
-        var fn = function () {
-            browser.executeScript("return window.angular !== undefined").then(function (result) {
-                loaded = result;
-                if (!loaded) {
-                    fn();
-                }
-            });
-        };
-        fn();
         browser.wait(function () {
-            return loaded;
+            return browser.executeScript("return window.angular !== undefined");
         }, 3000);
     });
 
