@@ -213,9 +213,7 @@ gulp.task('unit-test', [], function (done) {
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
     };
-    if (isEnvEnabled('CI')) {
-        conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
-    }
+    conf.browsers = ['PhantomJS'];
     karma.start(conf, done);
 });
 
