@@ -13,7 +13,7 @@ before_script:
 - psql -d wdc2 -f schema_wdc2.sql -U postgres
 - psql -d wdc2 -f data_wdc2.sql -U postgres
 script:
-- expect -c 'spawn mvn tomcat7:run; expect "Starting ProtocolHandler"; system mvn test;'
+- ./run-tomcat-and-tests
 env:
   matrix:
   - MINIFY_CODE=true MERGE_JS=true

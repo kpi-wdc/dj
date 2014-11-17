@@ -1,0 +1,8 @@
+#!/usr/bin/env expect
+spawn mvn tomcat7:run
+expect "Starting ProtocolHandler"
+system mvn test
+expect eof
+catch wait result
+exit [lindex $result 3]
+
