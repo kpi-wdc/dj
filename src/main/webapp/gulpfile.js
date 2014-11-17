@@ -25,9 +25,18 @@ var webdriver_update = require('gulp-protractor').webdriver_update;
 var argv = require('yargs').argv;
 var sauceConnectLauncher = require('sauce-connect-launcher');
 
-var onHeroku = Boolean(process.env.HEROKU_ENV);
-var minifyCode = onHeroku || Boolean(process.env.MINIFY_CODE);
-var mergeJS = onHeroku || Boolean(process.env.MERGE_JS);
+var isFlagPositive = function (value) {
+    return value !== undefined && value !== 'false';
+};
+
+var isEnvEnabled = function (name) {
+    return isFlagPositive(process.env[name]);
+};
+
+
+var onHeroku = isEnvEnabled('HEROKU_ENV');
+var minifyCode = onHeroku || isEnvEnabled('MINIFY_CODE');
+var mergeJS = onHeroku || isEnvEnabled('MERGE_JS');
 var inlineJSandCSS = mergeJS && minifyCode;
 
 var showFilesLog = false;
@@ -184,10 +193,10 @@ gulp.task('build-favicon', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('test', (Boolean(argv.skipTests) ? []:
+gulp.task('test', (isFlagPositive(argv.skipTests) ? []:
     ['unit-test', 'e2e-test']), function () {
     // disable tests on heroku or when --skipTests=true is passed
-    if (Boolean(argv.skipTests)) {
+    if (isFlagPositive(argv.skipTests)) {
         console.log('Skipping tests because skipTests flag is passed');
     }
 });
@@ -197,7 +206,7 @@ gulp.task('unit-test', [], function (done) {
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
     };
-    if (process.env.CI) {
+    if (isEnvEnabled('CI')) {
         conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
     }
     karma.start(conf, done);
