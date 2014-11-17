@@ -19,7 +19,7 @@ env:
   - MINIFY_CODE=true MERGE_JS=true
   - MERGE_JS=true
   - MINIFY_CODE=true
-  -
+  - SEND_COVERAGE=true
   global:
   # SAUCE_USERNAME
   - secure: XQXmNe9FkpcNxWvmr+8qvvMFj6E/GAE6d7KFDAVw/LYfquSImZkqMcRqlRkDmVHh9B8N6eALFMbS7biO2cRPfRKhN5YVegrX2PUbjszWvnrLiCO1/u14d2bdGWLtP/j+wvwtNCCAtwprlNbTDDXQib9IlRSGs9ofQEvM8n6Tn5M=
