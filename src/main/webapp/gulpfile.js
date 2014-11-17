@@ -235,7 +235,7 @@ gulp.task('e2e-test', function (cb) {
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', webdriver_update);
 
-gulp.task('e2e-run-test', ['build', 'webdriver-update'], function () {
+gulp.task('e2e-run-test', ['webdriver-update'], function () {
     return gulp.src(["build/test/e2e/**/*Spec.js"])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
