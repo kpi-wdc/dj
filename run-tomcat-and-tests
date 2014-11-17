@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+TOMCAT_LOG="tomcat7.log"
+mvn tomcat7:run > $TOMCAT_LOG 2>&1 &
+tomcat_pid=$!
+tail -f $TOMCAT_LOG | while read LOGLINE
+do
+    echo $LOGLINE;
+    [[ "${LOGLINE}" == *"Starting ProtocolHandler"* ]] && pkill -P $$ tail
+done
+echo "Tomcat is up and running!"
+mvn test
+kill $tomcat_pid
+

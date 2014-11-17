@@ -1,6 +1,9 @@
 describe("Webapp", function () {
     beforeEach(function () {
         browser.get('/');
+        browser.wait(function () {
+            return browser.executeScript("return window.angular !== undefined");
+        }, 3000);
     });
 
     it('should have some content', function () {
