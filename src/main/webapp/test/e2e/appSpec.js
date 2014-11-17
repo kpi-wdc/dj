@@ -16,10 +16,10 @@ describe("Webapp", function () {
     });
 
     it('should route to 404 page correctly', function () {
-        var errPage = $('[href="/404"]');
-        errPage.isPresent().then(function (present) {
+        var errPageBtn = $$('[href="/404"]').first();
+        errPageBtn.isPresent().then(function (present) {
             if (present) {
-                errPage.click();
+                errPageBtn.click();
                 expect(browser.getLocationAbsUrl()).toBe('/404');
             }
         });
