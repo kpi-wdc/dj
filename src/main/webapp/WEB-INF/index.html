@@ -37,7 +37,7 @@
         </button>
         <button class="button alert radius tiny"
                 id="deletePageBtn"
-                ng-disabled="appConfig.isHomePageOpened || appConfig.is404PageOpened"
+                ng-disabled="appConfig.isHomePageOpened() || appConfig.is404PageOpened()"
                 disabled
                 ng-click="appConfig.deletePage(appConfig.currentPageIndex)">
           Delete page

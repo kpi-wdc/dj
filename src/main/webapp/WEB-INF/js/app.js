@@ -4,7 +4,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
     app.constant('appUrls', {
         appConfig: '/apps/app.json',
-        widgetsSetup: '/widgets/widgets.json',
+        widgetsDescription: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         templateHTML: function (templateName) {
@@ -38,50 +38,33 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             .state('page', {
                 url: '/:href',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state,
-                                          appConfigPromise, appConfig, widgetLoader, EventEmitter) {
-                        appConfig.isHomePageOpened = $stateParams.href === '';
-                        appConfig.is404PageOpened = $stateParams.href === '404';
+                    pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader, EventEmitter) {
                         return pageConfigPromise = appConfigPromise
-                            .then(function (p) {
-                                var configList = p.data.pages;
-                                var config;
-                                var alternateConfig;
-                                appConfig.currentPageIndex = undefined;
-                                for (var i = 0; i < configList.length; i++) {
-                                    if ($stateParams.href === configList[i].href) {
-                                        config = configList[i];
-                                        appConfig.currentPageIndex = i;
-                                        break;
-                                    }
-                                    if (configList[i].href === '404') {
-                                        alternateConfig = configList[i];
-                                        appConfig.currentPageIndex = i;
-                                    }
-                                }
-
-                                config = config || alternateConfig;
+                            .then(function () {
+                                var pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
 
                                 var deferredResult = $q.defer();
 
                                 var widgetTypes = [];
-                                for (var holderName in config.holders) {
-                                    var widgets = config.holders[holderName].widgets;
-                                    for (var i = 0; i < widgets.length; ++i) {
-                                        widgetTypes.push(widgets[i].type);
+                                for (var holderName in pageConfig.holders) {
+                                    if (pageConfig.holders.hasOwnProperty(holderName)) {
+                                        var widgets = pageConfig.holders[holderName].widgets;
+                                        for (var i = 0; i < widgets.length; ++i) {
+                                            widgetTypes.push(widgets[i].type);
+                                        }
                                     }
                                 }
                                 widgetLoader.load(widgetTypes).then(function () {
-                                    EventEmitter.replacePageSubscriptions(config.subscriptions);
-                                    deferredResult.resolve(config);
+                                    EventEmitter.replacePageSubscriptions(pageConfig.subscriptions);
+                                    deferredResult.resolve(pageConfig);
                                 }, function (err) {
-                                    $window.alert('Error loading widget controllers. \n\n' + err);
+                                    alert.error('Error loading widget controllers. <br><br>' + err);
                                     deferredResult.reject(err);
                                 });
 
                                 return deferredResult.promise;
                             }, function (data) {
-                                $window.alert('Error loading app configuration: ' + data.statusText + ' (' + data.status + ')');
+                                alert.error('Error loading app configuration: ' + data.statusText + ' (' + data.status + ')');
                                 return $q.reject(data.status);
                             });
                     }
@@ -99,18 +82,51 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             });
     });
 
-    app.factory('widgetsSetupPromise', function ($http, appUrls) {
-        return $http.get(appUrls.widgetsSetup);
+    app.factory('alert', function ($modal, $log) {
+        return {
+            error: function (msg) {
+                $log.error(msg);
+                $modal.open({
+                    template: msg,
+                    windowClass: "error-message"
+                });
+            }
+        }
+    });
+
+    app.factory('widgetsDescriptionPromise', function ($http, appUrls) {
+        return $http.get(appUrls.widgetsDescription);
     });
 
     app.factory('appConfigPromise', function ($http, appUrls) {
         return $http.get(appUrls.appConfig);
     });
 
-    app.factory('appConfig', function ($http, $state, appConfigPromise, appUrls) {
+    app.factory('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls) {
         var appConfig = {
             config: {},
+            isAvailable: false,
             sendingToServer: false,
+            isHomePageOpened: function () {
+                return $stateParams.href === '';
+            },
+            is404PageOpened: function () {
+                return $stateParams.href === '404';
+            },
+            pageIndexByHref: function (href) {
+                var result;
+
+                for (var i = 0; i < appConfig.config.pages.length; i++) {
+                    if (appConfig.config.pages[i].href === href) {
+                        result = i;
+                        break;
+                    }
+                    if (appConfig.config.pages[i].href === '404') {
+                        result = i;
+                    }
+                }
+                return result;
+            },
             wasModified: true, // TODO: implement changing this state
             deletePage: function (index) {
                 if (angular.isDefined(appConfig.config.pages) && angular.isDefined(appConfig.config.pages[index])) {
@@ -133,19 +149,20 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
 
         appConfigPromise.success(function (data) {
+            appConfig.isAvailable = true;
             appConfig.config = data;
         });
 
         return appConfig;
     });
 
-    app.service('widgetLoader', function ($q, $ocLazyLoad, appConfigPromise, widgetsSetupPromise, appUrls) {
+    app.service('widgetLoader', function ($q, $ocLazyLoad, widgetsDescriptionPromise, appUrls) {
         this.load = function (widgets) {
             widgets = angular.isArray(widgets) ? widgets : [widgets];
-            return widgetsSetupPromise.then(function (widgetsSetupHTTP) {
+            return widgetsDescriptionPromise.then(function (widgetsDescriptionHTTP) {
                 var widgetControllers = [];
                 for (var i = 0; i < widgets.length; ++i) {
-                    var widgetSetup = widgetsSetupHTTP.data[widgets[i]];
+                    var widgetSetup = widgetsDescriptionHTTP.data[widgets[i]];
                     if (angular.isUndefined(widgetSetup)) {
                         return $q.reject('Widget "' + widgets[i] +'" doesn\'t exist!');
                     }
@@ -279,7 +296,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         return EventPublisher;
     });
 
-    app.controller('MainCtrl', function ($scope, $window, appConfig) {
+    app.controller('MainCtrl', function ($scope, alert, appConfig) {
         var cnf = $scope.globalConfig = {
             debugMode: false,
             designMode: true
@@ -292,12 +309,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         });
 
         $scope.alertAppConfigSubmissionFailed = function (data) {
-            $window.alert('Error submitting application configuration!\n' +
+            alert.error('Error submitting application configuration!<br>' +
                 'HTTP error ' + data.status + ': ' + data.statusText);
         };
     });
 
-    app.controller('PageCtrl', function ($scope, $modal, pageConfig, $window, widgetLoader, appUrls) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig, alert, $window, widgetLoader, appUrls) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
@@ -326,7 +343,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                             type: widgetType
                         });
                     }, function (error) {
-                        $window.alert('Cannot add widget: ' + error);
+                        alert.error('Cannot add widget: ' + error);
                     });
             }
         };
