@@ -25,17 +25,20 @@ describe("Webapp", function () {
         });
     });
 
-    it('should have non-clickable delete button on home page', function () {
-        expect($('#deletePageBtn').isEnabled()).toBeFalsy();
+    describe("delete button", function () {
+        it('should have non-clickable delete button on home page', function () {
+            expect($('#deletePageBtn').isEnabled()).toBeFalsy();
+        });
+
+        it('should have non-clickable delete button on home page', function () {
+            browser.setLocation('404');
+            expect($('#deletePageBtn').isEnabled()).toBeFalsy();
+        });
+
+        it('should have clickable delete button on other pages', function () {
+            browser.setLocation('dev-page');
+            expect($('#deletePageBtn').isEnabled()).toBeTruthy();
+        });
     });
 
-    it('should have non-clickable delete button on home page', function () {
-        browser.setLocation('404');
-        expect($('#deletePageBtn').isEnabled()).toBeFalsy();
-    });
-
-    it('should have clickable delete button on other pages', function () {
-        browser.setLocation('dev-page');
-        expect($('#deletePageBtn').isEnabled()).toBeTruthy();
-    });
 });
