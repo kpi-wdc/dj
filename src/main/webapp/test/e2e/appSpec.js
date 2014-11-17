@@ -1,8 +1,19 @@
 describe("Webapp", function () {
     beforeEach(function () {
         browser.get('/');
-        browser.sleep(100);
-        browser.ignoreSynchronization = false;
+        var loaded = false;
+        var fn = function () {
+            browser.executeScript("return window.angular !== undefined").then(function (result) {
+                loaded = result;
+                if (!loaded) {
+                    fn();
+                }
+            });
+        };
+        fn();
+        browser.wait(function () {
+            return loaded;
+        }, 3000);
     });
 
     it('should have some content', function () {
