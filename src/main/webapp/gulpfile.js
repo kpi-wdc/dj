@@ -21,6 +21,8 @@ var inlinesource = require('gulp-inline-source');
 var runSequence = require('run-sequence');
 var karma = require('karma').server;
 var protractor = require("gulp-protractor").protractor;
+var coveralls = require('gulp-coveralls');
+var replace = require('gulp-replace');
 var webdriver_update = require('gulp-protractor').webdriver_update;
 var argv = require('yargs').argv;
 var sauceConnectLauncher = require('sauce-connect-launcher');
@@ -194,10 +196,15 @@ gulp.task('build-favicon', function () {
 });
 
 gulp.task('test', (isFlagPositive(argv.skipTests) ? []:
-    ['unit-test', 'e2e-test']), function () {
+    ['unit-test', 'e2e-test']), function (cb) {
     // disable tests on heroku or when --skipTests=true is passed
     if (isFlagPositive(argv.skipTests)) {
         console.log('Skipping tests because skipTests flag is passed');
+        cb();
+        return;
+    }
+    if (Boolean(process.env.CI)) {
+        runSequence('coveralls', cb);
     }
 });
 
@@ -210,6 +217,13 @@ gulp.task('unit-test', [], function (done) {
         conf.browsers = [(process.env.CI ? 'Firefox' : 'Chrome'), 'PhantomJS'];
     }
     karma.start(conf, done);
+});
+
+gulp.task('coveralls', function () {
+    return gulp.src('build/coverage/**/lcov.info')
+        .pipe(replace(/SF:\./g, 'SF:./build'))
+        .pipe(gulp.dest('build/omg'))
+        .pipe(coveralls());
 });
 
 var sauceConnectProcess = undefined;
