@@ -65,7 +65,6 @@ define(['js/app', 'angular-mocks'], function () {
                 var slot = jasmine.createSpy('slot');
                 b.provide('slot', slot);
                 EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
-                debugger;
                 a.emit('hello');
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
@@ -91,7 +90,6 @@ define(['js/app', 'angular-mocks'], function () {
                 var b = new APIProvider(scopeB);
                 var slot = jasmine.createSpy('slot');
                 b.provide('slot', slot);
-                debugger;
                 expect(a.invoke('b', 'slot')).toBeTruthy();
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
