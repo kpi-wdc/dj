@@ -17,5 +17,7 @@ exports.config = {
         // implicit and page load timeouts
         browser.manage().timeouts().pageLoadTimeout(40000);
         browser.manage().timeouts().implicitlyWait(25000);
+
+        browser.ignoreSynchronization = true;
     }
 };
