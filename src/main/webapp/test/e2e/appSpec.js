@@ -41,4 +41,15 @@ describe("Webapp", function () {
         });
     });
 
+    describe('widget events', function () {
+        it('should react to events', function () {
+            browser.setLocation('/events-page');
+            var inputs = $$('[ng-controller=SummatorWidgetController]').$$('input');
+            expect(inputs.count()).toBe(4);
+            inputs.get(0).sendKeys(protractor.Key.CONTROL, "a", protractor.Key.NULL, '123');
+            inputs.get(1).sendKeys(protractor.Key.CONTROL, "a", protractor.Key.NULL, '321');
+            debugger;
+            expect(inputs.get(2).getAttribute('value')).toBe('444');
+        });
+    });
 });
