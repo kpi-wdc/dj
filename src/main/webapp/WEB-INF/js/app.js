@@ -262,7 +262,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
         EventPublisher.replacePageSubscriptions = function (subsriptions) {
             for (var emitterName in eventWires) {
-                if (emitterName.hasOwnProperty(emitterName)) {
+                if (eventWires.hasOwnProperty(emitterName)) {
                     delete eventWires[emitterName];
                 }
             }
@@ -272,12 +272,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
             }
             for (var i = 0; i < subsriptions.length; i++) {
                 var s = subsriptions[i];
-                eventWires[s.emitter] = eventWires[s.emitter] || [];
-                eventWires[s.emitter].push({
-                    emitterName: s.emitter,
-                    signalName: s.signal,
-                    providerName: s.receiver
-                });
+                EventPublisher.wireSignalWithSlot(s.emitter, s.signal, s.receiver, s.slot);
             }
         };
 
