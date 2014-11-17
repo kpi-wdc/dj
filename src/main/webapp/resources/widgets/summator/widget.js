@@ -1,8 +1,19 @@
 define(['angular'], function (angular) {
     angular.module('app.widgets.summator', [])
-        .controller('SummatorWidgetController', function ($scope, widgetEvents) {
-            var publisher = widgetEvents.createPublisher($scope);
-            var subscriber = widgetEvents.createSubscriber($scope);
+        .controller('SummatorWidgetController', function ($scope, EventEmitter, APIProvider) {
+            var eventEmitter = new EventEmitter($scope);
+            // For direct slot invocation
+            // inject APIUser and use the following code
+            // var apiUser = new APIUser($scope);
+            // apiUser.invoke('widgetName', 'slotName', args...)
+
+            new APIProvider($scope)
+                .provide('setValueOfA', function (evt, value) {
+                    $scope.a = value;
+                })
+                .provide('setValueOfB', function (evt, value) {
+                    $scope.b = value;
+                });
 
             $scope.a = $scope.widget.a || 3;
             $scope.b = $scope.widget.b || 5;
@@ -11,11 +22,7 @@ define(['angular'], function (angular) {
             };
 
             $scope.$watch('sum()', function (newValue) {
-                publisher.send('sumUpdated', newValue);
+                eventEmitter.emit('sumUpdated', newValue);
             });
-
-            subscriber.on('setValueOfA', function (value) {
-                $scope.a = value;
-            });
-    });
+        });
 });

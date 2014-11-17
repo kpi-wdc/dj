@@ -68,17 +68,19 @@
         }, {
           "title" : "Slave widget",
           "type" : "summator",
-          "subscriptions" : [ {
-            "publisher" : "summator-master",
-            "event" : "sumUpdated",
-            "slot" : "setValueOfA"
-          } ],
+          "instanceName": "summator-slave",
           "a" : 9,
           "b" : 15,
           "aDisabled" : true
         } ]
       }
-    }
+    },
+    "subscriptions" : [ {
+      "emitter" : "summator-master",
+      "receiver" : "summator-slave",
+      "signal" : "sumUpdated",
+      "slot" : "setValueOfA"
+    } ]
   }, {
     "shortTitle" : "Maps",
     "href" : "maps",
