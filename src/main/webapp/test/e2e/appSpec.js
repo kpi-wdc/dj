@@ -1,6 +1,7 @@
 describe("Webapp", function () {
     beforeEach(function () {
         browser.get('/');
+        browser.sleep(100);
         browser.ignoreSynchronization = false;
     });
 
