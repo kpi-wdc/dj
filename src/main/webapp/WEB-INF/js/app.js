@@ -39,7 +39,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                 url: '/:href',
                 resolve: {
                     pageConfig: function ($stateParams, $q, $http, $ocLazyLoad, $window, $state,
-                                          appConfigPromise, appConfig, widgetLoader) {
+                                          appConfigPromise, appConfig, widgetLoader, EventEmitter) {
                         appConfig.isHomePageOpened = $stateParams.href === '';
                         appConfig.is404PageOpened = $stateParams.href === '404';
                         return pageConfigPromise = appConfigPromise
@@ -72,6 +72,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                                     }
                                 }
                                 widgetLoader.load(widgetTypes).then(function () {
+                                    EventEmitter.replacePageSubscriptions(config.subscriptions);
                                     deferredResult.resolve(config);
                                 }, function (err) {
                                     $window.alert('Error loading widget controllers. \n\n' + err);
@@ -160,54 +161,127 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         }
     });
 
-    app.service('widgetEvents', function() {
-        var subscriptions = [];
+    app.constant('eventWires', {}); // emitterName -> [{signalName, providerName, slotName}]
+    app.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
 
-        this.createPublisher = function (scope) {
-            var publisherName = scope.widget.instanceName;
-            return {
-                send: function (eventName) {
-                    if (publisherName && typeof publisherName === "string") {
-                        for (var i = 0; i < subscriptions.length; i++) {
-                            var subscription = subscriptions[i];
-                            if (subscription && subscription.eventName === eventName &&
-                                    subscription.publisherName === publisherName) {
-                                var slicedArgs = Array.prototype.slice.call(arguments, 1);
-                                subscription.callback.apply({}, slicedArgs);
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        this.createSubscriber = function (scope) {
-            scope.$on('destroy', function () {
-                for (var i = 0; i < subscriptions.length; ++i) {
-                    if (subscriptions[i] && subscriptions[i].subscriberScope === scope) {
-                        delete subscriptions[i];
-                    }
-                }
+    app.factory('APIProvider', function (widgetSlots) {
+        return function (scope) {
+            var providerName = function () {
+                return scope.widget.instanceName;
+            };
+            scope.$on('$destroy', function () {
+                delete widgetSlots[providerName()];
             });
 
-            return {
-                on: function (slotName, callback) {
-                    if (scope.widget.subscriptions) {
-                        for (var i = 0; i < scope.widget.subscriptions.length; i++) {
-                            var subscription = scope.widget.subscriptions[i];
-                            if (subscription.slot === slotName) {
-                                subscriptions.push({
-                                    eventName: subscription.event,
-                                    publisherName: subscription.publisher,
-                                    subscriberScope: scope,
-                                    callback: callback
-                                });
-                            }
+            this.provide = function (slotName, slot) {
+                if (typeof slot !== 'function') {
+                    throw "Second argument should be a function, " +
+                        (typeof slot) + "passed instead";
+                }
+                widgetSlots[providerName()] = widgetSlots[providerName()] || [];
+                widgetSlots[providerName()].push({
+                    slotName: slotName,
+                    fn: slot
+                });
+                return this;
+            };
+        };
+    });
+
+    app.factory('APIUser', function (widgetSlots) {
+        return function (scope) {
+            var userName = function () {
+                return scope.widget.instanceName;
+            };
+
+            this.invoke = function (providerName, slotName) {
+                if (!widgetSlots[providerName]) {
+                    return false;
+                }
+                // TODO invoke should return slot's return value
+                // check that there is only one slot
+                var called = false;
+                for (var i = 0; i < widgetSlots[providerName].length; i++) {
+                    var slot = widgetSlots[providerName][i];
+                    if (slot.slotName === slotName) {
+                        called = true;
+                        slot.fn.apply(undefined, [{
+                            emitterName: userName(),
+                            signalName: undefined
+                        }].concat(Array.prototype.slice.call(arguments, 2)));
+                    }
+                }
+                return called;
+            };
+        };
+    });
+
+    app.factory('EventEmitter', function (eventWires, widgetSlots, $log) {
+        var EventPublisher =  function (scope) {
+            var emitterName = function () {
+                return scope.widget.instanceName;
+            };
+
+            this.emit = function (signalName) {
+                if (!emitterName() || typeof emitterName() !== "string") {
+                    $log.info("Not emitting event because widget's instanceName is not set");
+                }
+                var wires = eventWires[emitterName()];
+                if (!wires) {
+                    return;
+                }
+                for (var i = 0; i < wires.length; i++) {
+                    var wire = wires[i];
+                    if (wire && wire.signalName === signalName) {
+
+                        var slots = widgetSlots[wire.providerName];
+                        if (!slots) {
+                            continue;
+                        }
+
+                        for (var j = 0; j < slots.length; j++) {
+                            if (!slots[j]) continue;
+                            slots[j].fn.apply(undefined, [{
+                                emitterName: emitterName(),
+                                signalName: signalName
+                            }].concat(Array.prototype.slice.call(arguments, 1)));
                         }
                     }
                 }
+            };
+        };
+
+        EventPublisher.wireSignalWithSlot = function (emitterName, signalName, provideName, slotName) {
+            eventWires[emitterName] = eventWires[emitterName] || [];
+            eventWires[emitterName].push({
+                signalName: signalName,
+                providerName: provideName,
+                slotName: slotName
+            });
+        };
+
+        EventPublisher.replacePageSubscriptions = function (subsriptions) {
+            for (var emitterName in eventWires) {
+                if (emitterName.hasOwnProperty(emitterName)) {
+                    delete eventWires[emitterName];
+                }
+            }
+
+            if (!subsriptions) {
+                return;
+            }
+            for (var i = 0; i < subsriptions.length; i++) {
+                var s = subsriptions[i];
+                eventWires[s.emitter] = eventWires[s.emitter] || [];
+                eventWires[s.emitter].push({
+                    emitterName: s.emitter,
+                    signalName: s.signal,
+                    providerName: s.receiver
+                });
             }
         };
+
+        return EventPublisher;
     });
 
     app.controller('MainCtrl', function ($scope, $window, appConfig) {

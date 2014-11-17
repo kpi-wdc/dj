@@ -20,6 +20,13 @@ module.exports = function(config){
     frameworks: ['jasmine', 'requirejs'],
 
     browsers : ['PhantomJS'],
+
+    singleRun: true,
+
+    captureTimeout: 10000,
+
+    reportSlowerThan: 5000,
+
     reporters: ['progress', 'coverage'],
 
     preprocessors: {
