@@ -203,7 +203,7 @@ gulp.task('test', (isFlagPositive(argv.skipTests) ? []:
         cb();
         return;
     }
-    if (isEnvEnabled('CI')) {
+    if (isEnvEnabled('SEND_COVERAGE')) {
         runSequence('coveralls', cb);
     } else {
         cb();
