@@ -257,7 +257,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                         }
 
                         for (var j = 0; j < slots.length; j++) {
-                            if (!slots[j]) continue;
+                            if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
                             slots[j].fn.apply(undefined, [{
                                 emitterName: emitterName(),
                                 signalName: signalName
