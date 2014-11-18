@@ -1,12 +1,14 @@
 describe("Webapp", function () {
-    beforeEach(function () {
+    beforeEach(function (cb) {
         browser.driver.get(browser.baseUrl + '/');
         browser.wait(function () {
             return browser.driver.executeScript(function () {
                 return window.angular !== undefined &&
                     window.angular.bootstrap !== undefined;
             });
-        }, 3000);
+        }, 3000).then(function () {
+            cb();
+        });
     });
 
     it('should have some content', function () {
