@@ -233,38 +233,42 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         };
     });
 
-    app.factory('EventEmitter', function (eventWires, widgetSlots, $log) {
+    app.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope) {
         var EventPublisher =  function (scope) {
             var emitterName = function () {
                 return scope.widget.instanceName;
             };
 
             this.emit = function (signalName) {
-                if (!emitterName() || typeof emitterName() !== "string") {
-                    $log.info("Not emitting event because widget's instanceName is not set");
-                }
-                var wires = eventWires[emitterName()];
-                if (!wires) {
-                    return;
-                }
-                for (var i = 0; i < wires.length; i++) {
-                    var wire = wires[i];
-                    if (wire && wire.signalName === signalName) {
+                var args = Array.prototype.slice.call(arguments, 1);
 
-                        var slots = widgetSlots[wire.providerName];
-                        if (!slots) {
-                            continue;
-                        }
+                $rootScope.$evalAsync(function () {
+                    if (!emitterName() || typeof emitterName() !== "string") {
+                        $log.info("Not emitting event because widget's instanceName is not set");
+                    }
+                    var wires = eventWires[emitterName()];
+                    if (!wires) {
+                        return;
+                    }
+                    for (var i = 0; i < wires.length; i++) {
+                        var wire = wires[i];
+                        if (wire && wire.signalName === signalName) {
 
-                        for (var j = 0; j < slots.length; j++) {
-                            if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
-                            slots[j].fn.apply(undefined, [{
-                                emitterName: emitterName(),
-                                signalName: signalName
-                            }].concat(Array.prototype.slice.call(arguments, 1)));
+                            var slots = widgetSlots[wire.providerName];
+                            if (!slots) {
+                                continue;
+                            }
+
+                            for (var j = 0; j < slots.length; j++) {
+                                if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
+                                slots[j].fn.apply(undefined, [{
+                                    emitterName: emitterName(),
+                                    signalName: signalName
+                                }].concat(args));
+                            }
                         }
                     }
-                }
+                });
             };
         };
 
