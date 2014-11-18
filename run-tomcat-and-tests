@@ -11,5 +11,5 @@ echo "Tomcat is up and running!"
 mvn test
 ret_code=$?
 kill $tomcat_pid
-exit ret_code
+exit $ret_code
 

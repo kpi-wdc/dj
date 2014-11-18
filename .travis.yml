@@ -3,8 +3,6 @@ cache: # only for private repos
   apt: true
   directories:
   - $HOME/.m2
-before_install:
-- sudo apt-get install expect -y -qq
 before_script:
 # start virtual X frame-buffer for end-to-end testing with real browser
 - export DISPLAY=:99.0
