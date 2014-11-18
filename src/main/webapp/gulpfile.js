@@ -203,7 +203,7 @@ gulp.task('test', (isFlagPositive(argv.skipTests) ? []:
         cb();
         return;
     }
-    if (Boolean(process.env.CI)) {
+    if (isEnvEnabled('CI')) {
         runSequence('coveralls', cb);
     } else {
         cb();
