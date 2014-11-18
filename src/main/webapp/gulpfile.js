@@ -36,9 +36,9 @@ var isEnvEnabled = function (name) {
 };
 
 
-var onHeroku = isEnvEnabled('HEROKU_ENV');
-var minifyCode = onHeroku || isEnvEnabled('MINIFY_CODE');
-var mergeJS = onHeroku || isEnvEnabled('MERGE_JS');
+var production = isEnvEnabled('PRODUCTION');
+var minifyCode = production || isEnvEnabled('MINIFY_CODE');
+var mergeJS = production || isEnvEnabled('MERGE_JS');
 var inlineJSandCSS = mergeJS && minifyCode;
 
 var showFilesLog = false;
