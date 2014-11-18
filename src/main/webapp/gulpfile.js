@@ -83,7 +83,7 @@ gulp.task('build-components', ['bower'], function () {
 });
 
 gulp.task('build-css', ['build-less', 'build-components'], function () {
-    gulp.src('build/**/*.css')
+    return gulp.src('build/**/*.css')
         .pipe(cached('build-css'))
         .pipe(gulpif(minifyCode, minifyCSS()))
         .on('error', handleError)
@@ -163,7 +163,7 @@ gulp.task('build-widgets', function () {
 });
 
 gulp.task('amd-merge', ['amd-optimize'], function () {
-    gulp.src(['build/js/compiled.js', 'build/js/main.js'])
+    return gulp.src(['build/js/compiled.js', 'build/js/main.js'])
         .pipe(cached('amd-merge'))
         .pipe(concat('main.js'))
         .on('error', handleError)
@@ -240,9 +240,10 @@ gulp.task('run-sauce', function (cb) {
     });
 });
 
-gulp.task('stop-sauce', function () {
+gulp.task('stop-sauce', function (cb) {
     sauceConnectProcess.close(function () {
         console.log("Closed Sauce Connect process");
+        cb();
     })
 });
 
