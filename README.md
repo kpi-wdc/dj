@@ -1,5 +1,6 @@
 # World Data Center
 
+[![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/sochka/wdc)
 [![Build Status](https://travis-ci.org/sochka/wdc.svg)](https://travis-ci.org/sochka/wdc)
 [![Coverage Status](https://img.shields.io/coveralls/sochka/wdc.svg)](https://coveralls.io/r/sochka/wdc)
 
