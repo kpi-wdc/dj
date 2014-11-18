@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 TOMCAT_LOG="tomcat7.log"
-mvn tomcat7:run > $TOMCAT_LOG 2>&1 &
+stdbuf -o0 mvn tomcat7:run > $TOMCAT_LOG 2>&1 &
 tomcat_pid=$!
-tail -f $TOMCAT_LOG | while read LOGLINE
+stdbuf -o0 tail -f $TOMCAT_LOG | while read LOGLINE
 do
     echo $LOGLINE;
     [[ "${LOGLINE}" == *"Starting ProtocolHandler"* ]] && pkill -P $$ tail
