@@ -1,8 +1,11 @@
 describe("Webapp", function () {
     beforeEach(function () {
-        browser.get('/');
+        browser.driver.get(browser.baseUrl + '/');
         browser.wait(function () {
-            return browser.executeScript("return window.angular !== undefined");
+            return browser.driver.executeScript(function () {
+                return window.angular !== undefined &&
+                    window.angular.bootstrap !== undefined;
+            });
         }, 3000);
     });
 
