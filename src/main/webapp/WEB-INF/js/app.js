@@ -4,7 +4,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
 
     app.constant('appUrls', {
         appConfig: '/apps/app.json',
-        widgetsDescription: '/widgets/widgets.json',
+        widgetTypes: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         templateHTML: function (templateName) {
@@ -94,8 +94,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         }
     });
 
-    app.factory('widgetsDescriptionPromise', function ($http, appUrls) {
-        return $http.get(appUrls.widgetsDescription);
+    app.factory('widgetTypesPromise', function ($http, appUrls) {
+        return $http.get(appUrls.widgetTypes);
     });
 
     app.factory('appConfigPromise', function ($http, appUrls) {
@@ -156,17 +156,17 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         return appConfig;
     });
 
-    app.service('widgetLoader', function ($q, $ocLazyLoad, widgetsDescriptionPromise, appUrls) {
+    app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
         this.load = function (widgets) {
             widgets = angular.isArray(widgets) ? widgets : [widgets];
-            return widgetsDescriptionPromise.then(function (widgetsDescriptionHTTP) {
+            return widgetTypesPromise.then(function (widgetTypesHTTP) {
                 var widgetControllers = [];
                 for (var i = 0; i < widgets.length; ++i) {
-                    var widgetSetup = widgetsDescriptionHTTP.data[widgets[i]];
-                    if (angular.isUndefined(widgetSetup)) {
+                    var widgetType = widgetTypesHTTP.data[widgets[i]];
+                    if (angular.isUndefined(widgetType)) {
                         return $q.reject('Widget "' + widgets[i] +'" doesn\'t exist!');
                     }
-                    if (!widgetSetup.nojs) {
+                    if (!widgetType.nojs) {
                         widgetControllers.push({
                             name: 'app.widgets.' + widgets[i],
                             files: [appUrls.widgetJSModule(widgets[i])]
