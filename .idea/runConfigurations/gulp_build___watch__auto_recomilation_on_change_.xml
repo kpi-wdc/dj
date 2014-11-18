@@ -3,14 +3,13 @@
     <node-options />
     <gulpfile>$PROJECT_DIR$/src/main/webapp/gulpfile.js</gulpfile>
     <tasks>
+      <task>build</task>
       <task>watch</task>
     </tasks>
     <pass-parent-envs>true</pass-parent-envs>
     <envs />
     <RunnerSettings RunnerId="Js.BuildTools.Gulp" />
     <ConfigurationWrapper RunnerId="Js.BuildTools.Gulp" />
-    <method>
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="gulp build" run_configuration_type="js.build_tools.gulp" />
-    </method>
+    <method />
   </configuration>
 </component>
