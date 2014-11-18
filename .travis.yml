@@ -14,7 +14,7 @@ script:
 - ./run-tomcat-and-tests
 env:
   matrix:
-  - MINIFY_CODE=true MERGE_JS=true
+  - PRODUCTION=true
   - MERGE_JS=true
   - MINIFY_CODE=true
   - SEND_COVERAGE=true
@@ -33,6 +33,7 @@ deploy:
   api_key:
     secure: ZZa7bwqqwgk/9OzXr3GH6xjQwTydFxvAeNSvkWM8SRQUm7JiXKNaTgjuUoG3sYrjURI5oWNkDUgj+QIUk8UztA1yX2JRhntp+Co2w6fbDdaDONhVgTi69zYiMFT8pgrYrduFl/p/OY6drOz/Jh8IBZzUK5egidv+qmjEIGa3DpY=
   app: wdc-app
-  strategy: git
   on:
     repo: sochka/wdc
+    condition: "$PRODUCTION = true"
+    branch: travis-heroku-deployment
