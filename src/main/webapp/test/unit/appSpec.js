@@ -30,6 +30,7 @@ define(['js/app', 'angular-mocks'], function () {
 
     describe("Services", function () {
         describe("widgets service", function () {
+            var $rootScope;
             var scopeA;
             var scopeB;
             var scopeC;
@@ -37,8 +38,9 @@ define(['js/app', 'angular-mocks'], function () {
             var APIProvider;
             var APIUser;
             var EventEmitter;
-            beforeEach(inject(function ($rootScope, _widgetSlots_,
+            beforeEach(inject(function (_$rootScope_, _widgetSlots_,
                 _APIProvider_, _APIUser_, _EventEmitter_) {
+                $rootScope = _$rootScope_;
                 widgetSlots = _widgetSlots_;
                 APIProvider = _APIProvider_;
                 APIUser = _APIUser_;
@@ -66,6 +68,7 @@ define(['js/app', 'angular-mocks'], function () {
                 b.provide('slot', slot);
                 EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
                 a.emit('hello');
+                $rootScope.$digest();
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
                     signalName: 'hello'
@@ -79,6 +82,7 @@ define(['js/app', 'angular-mocks'], function () {
                 b.provide('slot', slot);
                 EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
                 a.emit('hello', 123);
+                $rootScope.$digest();
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
                     signalName: 'hello'
