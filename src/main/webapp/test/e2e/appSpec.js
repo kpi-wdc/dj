@@ -7,6 +7,7 @@ describe("Webapp", function () {
                     window.angular.bootstrap !== undefined;
             });
         }, 3000).then(function () {
+            browser.ignoreSynchronization = false;
             cb();
         });
     });
