@@ -1,7 +1,7 @@
 describe("Webapp", function () {
     beforeEach(function (cb) {
         browser.driver.get(browser.baseUrl + '/');
-        browser.wait(function () {
+        browser.driver.wait(function () {
             return browser.driver.executeScript(function () {
                 return window.angular !== undefined &&
                     window.angular.bootstrap !== undefined;
