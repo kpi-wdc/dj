@@ -16,6 +16,8 @@ require.config({
         'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
         'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad',
         'angular-foundation': 'components/angular-foundation/mm-foundation-tpls',
+        'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor',
+        'json-editor': 'components/json-editor/dist/jsoneditor',
         'leaflet': 'components/leaflet/dist/leaflet',
         'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
         'angular-mocks': 'components/angular-mocks/angular-mocks'
@@ -33,6 +35,7 @@ require.config({
         'angular-ui-router': ['angular'],
         'angular-oclazyload': ['angular'],
         'angular-foundation': ['angular'],
+        'angular-json-editor': ['angular', 'json-editor'],
         'template-cached-pages': ['angular'],
         'angular-mocks': ['angular']
     },
