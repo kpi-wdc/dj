@@ -160,6 +160,18 @@
 
                         <phase>test</phase>
                     </execution>
+
+                    <execution>
+                        <id>gulp clean</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>clean</arguments>
+                        </configuration>
+
+                        <phase>clean</phase>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
