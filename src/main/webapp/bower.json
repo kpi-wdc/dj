@@ -2,10 +2,11 @@
   "name": "WDC",
   "private": true,
   "ignore": [
-    "**/.*",
     "node_modules",
     "components",
     "bower_components",
+    "build",
+    "node",
     "test",
     "tests"
   ],
