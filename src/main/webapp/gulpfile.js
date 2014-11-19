@@ -59,7 +59,7 @@ gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon']);
 gulp.task('build-components', ['bower'], function () {
     var removeFilter = gulpFilter([
         '**/*',
-        '!**/src/**',
+        '!**/jquery/src/**',
         '!**/test/**',
         '!**/examples/**',
         '!**/grunt/**',

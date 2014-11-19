@@ -1,6 +1,8 @@
-define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundation', 'template-cached-pages'], function (angular) {
+define(['angular', 'angular-ui-router', 'angular-oclazyload',
+    'angular-foundation', 'angular-json-editor', 'template-cached-pages'], function (angular) {
     "use strict";
-    var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation', 'templates']);
+    var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation',
+        'angular-json-editor', 'templates']);
 
     app.constant('appUrls', {
         appConfig: '/apps/app.json',
@@ -21,12 +23,17 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         }
     });
 
-    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider) {
+    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JsonEditorConfig) {
 
         $ocLazyLoadProvider.config({
             loadedModules: ['app'],
             asyncLoader: require
         });
+
+        // angular-json-editor configuration
+        JsonEditorConfig.iconlib = 'foundation3'; // icons have their own versions
+        JsonEditorConfig.theme = 'foundation5';
+        JsonEditorConfig.required_by_default = true;
 
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
@@ -330,7 +337,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
                 controller: 'WidgetModalSettingsController',
                 resolve: {
                     widgetConfig: function () {
-                        return angular.copy(widget)
+                        return widget;
+                    },
+                    widgetType: function (widgetTypesPromise) {
+                        return widgetTypesPromise.then(function (widgetTypesHTTP) {
+                            return widgetTypesHTTP.data[widget.type];
+                        });
                     }
                 }
             }).result.then(function (newWidgetConfig) {
@@ -371,16 +383,46 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload', 'angular-foundatio
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, widgetConfig) {
-        $scope.widgetConfig = widgetConfig;
+
+    app.service('widgetConfigEditor', function () {
+        var data = {};
+        this.setData = function (newData) {
+            data = newData;
+        };
+        this.getData = function () {
+            return data;
+        };
+    });
+
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, widgetConfig, widgetType, widgetConfigEditor) {
+        $scope.widgetType = widgetType;
+        $scope.widgetConfig = angular.copy(widgetConfig);
+        delete $scope.widgetConfig.instanceName;
+        delete $scope.widgetConfig.type;
+        $scope.basicProperties = {
+            type: widgetConfig.type,
+            instanceName: widgetConfig.instanceName
+        };
 
         $scope.ok = function () {
-            $modalInstance.close(widgetConfig);
+            $modalInstance.close(angular.extend(widgetConfigEditor.getData(), $scope.basicProperties));
         };
 
         $scope.cancel = function () {
             $modalInstance.dismiss();
         };
+    });
+
+    app.controller('WidgetModalConfigButtonsController', function ($scope, widgetConfigEditor) {
+        var subscribed = false;
+        $scope.$watch('editor', function (editor) {
+            if (!subscribed && editor.on) {
+                editor.on('change', function () {
+                    widgetConfigEditor.setData(editor && editor.getValue());
+                });
+                subscribed = true;
+            }
+        });
     });
 
     return angular.bootstrap(document, ['app'], {
