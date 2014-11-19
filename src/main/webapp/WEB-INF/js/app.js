@@ -335,6 +335,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
             $modal.open({
                 templateUrl: appUrls.widgetModalConfigHTML,
                 controller: 'WidgetModalSettingsController',
+                backdrop: 'static',
                 resolve: {
                     widgetConfig: function () {
                         return widget;
