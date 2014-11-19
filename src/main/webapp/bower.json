@@ -21,6 +21,6 @@
     "foundation-icon-fonts": "zurb/foundation-icon-fonts",
     "angular-foundation": "~0.4",
     "angular-mocks": "~1.3.2",
-    "angular-json-editor": "rodikh/angular-json-editor"
+    "angular-json-editor": "^0.1.1"
   }
 }
