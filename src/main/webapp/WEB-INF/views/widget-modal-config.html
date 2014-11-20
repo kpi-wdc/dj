@@ -8,6 +8,7 @@
   <tab heading="Custom settings" ng-if="widgetType.schema">
     <div class="container">
       <json-editor schema="widgetType.schema" startval="widgetConfig"
+                   on-change="updateData($editorValue)"
                    buttons-controller="WidgetModalConfigButtonsController">
       </json-editor>
     </div>

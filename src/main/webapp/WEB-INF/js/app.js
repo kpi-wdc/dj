@@ -400,31 +400,26 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         $scope.widgetConfig = angular.copy(widgetConfig);
         delete $scope.widgetConfig.instanceName;
         delete $scope.widgetConfig.type;
+        var data = $scope.widgetConfig;
         $scope.basicProperties = {
             type: widgetConfig.type,
             instanceName: widgetConfig.instanceName
         };
 
         $scope.ok = function () {
-            $modalInstance.close(angular.extend(widgetConfigEditor.getData(), $scope.basicProperties));
+            $modalInstance.close(angular.extend(data, $scope.basicProperties));
         };
 
         $scope.cancel = function () {
             $modalInstance.dismiss();
         };
+
+        $scope.updateData = function (value) {
+            data = value;
+        };
     });
 
-    app.controller('WidgetModalConfigButtonsController', function ($scope, widgetConfigEditor) {
-        var subscribed = false;
-        $scope.$watch('editor', function (editor) {
-            if (!subscribed && editor.on) {
-                editor.on('change', function () {
-                    widgetConfigEditor.setData(editor && editor.getValue());
-                });
-                subscribed = true;
-            }
-        });
-    });
+    app.controller('WidgetModalConfigButtonsController', angular.noop);
 
     return angular.bootstrap(document, ['app'], {
         strictDi: false // should be false when non-minified js is used
