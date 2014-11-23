@@ -467,6 +467,6 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
     app.controller('WidgetModalConfigButtonsController', angular.noop);
 
     return angular.bootstrap(document, ['app'], {
-        strictDi: false // should be false when non-minified js is used
+        strictDi: true
     });
 });
