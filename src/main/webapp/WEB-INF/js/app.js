@@ -399,11 +399,13 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
 
         $scope.addNewWidget = function (holder) {
             var widgetType = $window.prompt('Widget type (like summator):');
+            var instanceName = Math.random().toString(36).substring(2);
             if (widgetType) {
                 widgetLoader.load(widgetType)
                     .then(function () {
                         holder.widgets.push({
-                            type: widgetType
+                            type: widgetType,
+                            instanceName: instanceName
                         });
                     }, function (error) {
                         alert.error('Cannot add widget: ' + error);
