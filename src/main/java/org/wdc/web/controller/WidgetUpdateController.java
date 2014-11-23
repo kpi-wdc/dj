@@ -2,6 +2,7 @@ package org.wdc.web.controller;
 
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Controller
-@RequestMapping("/widgets")
+@RequestMapping(name = "/widgets", method = RequestMethod.PUT)
 public class WidgetUpdateController {
     private static final String[] EXT_WHITELIST = {"js", "png", ".css", ".html", "txt", "json"};
     private static final int WIDGET_HTML = 0;
@@ -23,6 +24,15 @@ public class WidgetUpdateController {
 
     // TODO: move to servlet environment constants
     private static final String WIDGETS_JSON_PATH = "src/main/webapp/resources/widgets/widgets.json";
+/*
+    @RequestMapping(value="{path}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<FileSystemResource> get(@PathVariable String path) {
+        System.out.println(path);
+        FileSystemResource fileSystemResource =
+                new FileSystemResource("src/main/webapp/resources/widgets/" + path);
+        return new ResponseEntity<>(fileSystemResource, HttpStatus.OK);
+    }*/
 
     @RequestMapping(value="{widgetName}", method = RequestMethod.PUT)
     @ResponseBody
