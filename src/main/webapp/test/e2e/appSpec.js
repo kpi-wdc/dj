@@ -60,4 +60,17 @@ describe("Webapp", function () {
             expect(inputs.get(2).getAttribute('value')).toBe('444');
         });
     });
+
+    describe('widget settings', function () {
+        it('should update changed settings', function () {
+            browser.setLocation('/dev-page');
+            var summator = $('widget-holder[name=topleft]').$$('.widget').first();
+            summator.$('.widget-config-btn').click();
+            var reveal = $('.reveal-modal');
+            reveal.element(by.linkText("Custom settings")).click();
+            reveal.element(by.cssContainingText('option', 'true')).click();
+            reveal.all(by.buttonText('Save')).last().click();
+            expect(summator.$$('input').first().isEnabled()).toBeFalsy();
+        });
+    });
 });
