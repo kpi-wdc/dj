@@ -265,7 +265,13 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
             configFile: __dirname + '/protractor.conf.js'
         }))
         .on('error', function(e) {
-            throw e;
+            if (isEnvEnabled('CI') &&
+                /Timed out waiting for the WebDriver server/.test(e.message)) {
+                console.log(e);
+                console.log('Skipping end-to-end tests...')
+            } else {
+                throw e;
+            }
         });
 });
 
