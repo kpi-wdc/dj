@@ -212,9 +212,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                 return this;
             };
 
-            this.config = function (slotFn) {
+            this.config = function (slotFn, enableReconfiguring) {
+                enableReconfiguring = enableReconfiguring === undefined ? enableReconfiguring : true;
                 slotFn();
-                self.provide(APIProvider.RECONFIG_SLOT, slotFn);
+                if (enableReconfiguring) {
+                    self.provide(APIProvider.RECONFIG_SLOT, slotFn);
+                }
                 return this;
             };
         };
