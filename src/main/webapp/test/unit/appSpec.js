@@ -53,6 +53,12 @@ define(['js/app', 'angular-mocks'], function () {
                 scopeC.widget = {instanceName: "c"};
             }));
 
+            afterEach(function () {
+                scopeA.$destroy();
+                scopeB.$destroy();
+                scopeC.$destroy();
+            });
+
             it('should correctly clean-up widgetSlots when scope is destroyed', function () {
                 var a = new APIProvider(scopeA);
                 a.provide('slot', angular.noop);
@@ -92,14 +98,16 @@ define(['js/app', 'angular-mocks'], function () {
             it('ensure APIUser::invoke calls', function () {
                 var a = new APIUser(scopeA);
                 var b = new APIProvider(scopeB);
-                var slot = jasmine.createSpy('slot');
+                var slot = jasmine.createSpy('slot').and.returnValue(1234);
                 b.provide('slot', slot);
-                expect(a.invoke('b', 'slot')).toBeTruthy();
+                expect(a.invoke('b', 'slot')).toBe(1234);
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
                     signalName: undefined
                 });
-                expect(a.invoke('b', 'non-existing-slot')).toBeFalsy();
+                expect(function () {
+                    a.invoke('b', 'non-existing-slot')
+                }).toThrow();
             });
         });
     });

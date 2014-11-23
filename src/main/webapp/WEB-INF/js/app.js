@@ -190,9 +190,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
     app.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
 
     app.factory('APIProvider', function (widgetSlots) {
-        return function (scope) {
+        var APIProvider = function (scope) {
+            var self = this;
             var providerName = function () {
-                return scope.widget && scope.widget.instanceName;
+                return scope && scope.widget && scope.widget.instanceName;
             };
             scope.$on('$destroy', function () {
                 delete widgetSlots[providerName()];
@@ -210,41 +211,82 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                 });
                 return this;
             };
+
+            this.config = function (slotFn) {
+                slotFn();
+                self.provide(APIProvider.RECONFIG_SLOT, slotFn);
+                return this;
+            };
         };
+
+        APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
+        return APIProvider;
     });
 
     app.factory('APIUser', function (widgetSlots) {
         return function (scope) {
             var userName = function () {
-                return scope.widget && scope.widget.instanceName;
+                return scope && scope.widget && scope.widget.instanceName;
             };
 
             this.invoke = function (providerName, slotName) {
                 if (!widgetSlots[providerName]) {
-                    return false;
+                    throw "Provider " + providerName + " doesn't exist";
                 }
-                // TODO invoke should return slot's return value
-                // check that there is only one slot
-                var called = false;
                 for (var i = 0; i < widgetSlots[providerName].length; i++) {
                     var slot = widgetSlots[providerName][i];
                     if (slot.slotName === slotName) {
-                        called = true;
-                        slot.fn.apply(undefined, [{
+                        return slot.fn.apply(undefined, [{
                             emitterName: userName(),
                             signalName: undefined
                         }].concat(Array.prototype.slice.call(arguments, 2)));
                     }
                 }
-                return called;
+                throw "Provider " + providerName + " doesn't have slot called " + slotName;
             };
+
+            this.tryInvoke = function (providerName, slotName) {
+                try {
+                    return {
+                        success: true,
+                        result: invoke(providerName, slotName) // might throw
+                    }
+                } catch (e) {
+                    if (typeof(e) === 'string' && e.indexOf("Provider") > -1) {
+                        return {
+                            success: false
+                        }
+                    } else {
+                        throw e;
+                    }
+                }
+            };
+
+            this.invokeAll = function (slotName) {
+                var called = false;
+                for (var providerName in widgetSlots) {
+                    if (widgetSlots.hasOwnProperty(providerName)) {
+                        for (var i = 0; i < widgetSlots[providerName].length; i++) {
+                            var slot = widgetSlots[providerName][i];
+                            if (slot.slotName === slotName) {
+                                called = true;
+                                slot.fn.apply(undefined, [{
+                                    emitterName: userName(),
+                                    signalName: undefined
+                                }].concat(Array.prototype.slice.call(arguments, 2)));
+                            }
+                        }
+                    }
+                }
+                return called;
+            }
         };
     });
 
     app.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope) {
         var EventPublisher = function (scope) {
             var emitterName = function () {
-                return scope.widget && scope.widget.instanceName;
+                return scope && scope.widget && scope.widget.instanceName;
             };
 
             this.emit = function (signalName) {
@@ -322,11 +364,12 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
 
         $scope.alertAppConfigSubmissionFailed = function (data) {
             alert.error('Error submitting application configuration!<br>' +
-                'HTTP error ' + data.status + ': ' + data.statusText);
+            'HTTP error ' + data.status + ': ' + data.statusText);
         };
     });
 
-    app.controller('PageCtrl', function ($scope, $modal, pageConfig, alert, $window, widgetLoader, appUrls) {
+    app.controller('PageCtrl', function ($scope, $modal, pageConfig, alert, $window,
+                                         APIUser, APIProvider, widgetLoader, appUrls) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
             holder.widgets.splice(index, 1);
@@ -349,6 +392,8 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                 }
             }).result.then(function (newWidgetConfig) {
                 angular.copy(newWidgetConfig, widget);
+                var user = new APIUser();
+                user.invokeAll(APIProvider.RECONFIG_SLOT);
             });
         };
 
