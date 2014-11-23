@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var gulp = require('gulp');
 var run = require('gulp-run');
 var uglify = require('gulp-uglify');
@@ -15,12 +15,12 @@ var path = require('path');
 var minifyHTML = require('gulp-minify-html');
 var size = require('gulp-size');
 var templateCache = require('gulp-angular-templatecache');
-var concat = require("gulp-concat");
+var concat = require('gulp-concat');
 var rjs = require('gulp-requirejs');
 var inlinesource = require('gulp-inline-source');
 var runSequence = require('run-sequence');
 var karma = require('karma').server;
-var protractor = require("gulp-protractor").protractor;
+var protractor = require('gulp-protractor').protractor;
 var coveralls = require('gulp-coveralls');
 var replace = require('gulp-replace');
 var webdriver_update = require('gulp-protractor').webdriver_update;
@@ -125,7 +125,7 @@ gulp.task('build-template-cache', function () {
 
 gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
     'movejs', 'annotate-js', 'movetest'].concat(mergeJS ? ['amd-merge'] : []), function () {
-    var nonTestJSFilter = gulpFilter(["!test/**/*.js"]);
+    var nonTestJSFilter = gulpFilter(['!test/**/*.js']);
     return gulp.src(['build/**/*.js'])
         .pipe(cached('build-js'))
         .pipe(nonTestJSFilter)
@@ -176,13 +176,13 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
             base: 'build'
         })
         .pipe(rjs({
-            mainConfigFile: "build/js/main.js",
-            out: "js/compiled.js",
-            name: "js/app",
-            include: glob.sync("widgets/**/widget.js", {
-                cwd: "build"
+            mainConfigFile: 'build/js/main.js',
+            out: 'js/compiled.js',
+            name: 'js/app',
+            include: glob.sync('widgets/**/widget.js', {
+                cwd: 'build'
             }),
-            baseUrl: "build"
+            baseUrl: 'build'
         }))
         .on('error', handleError)
         .pipe(gulpif(showFilesLog, size({showFiles: true, title: 'amd-optimize'})))
@@ -234,7 +234,7 @@ gulp.task('run-sauce', function (cb) {
             console.error(err.message);
             throw err.message;
         }
-        console.log("Sauce Connect ready");
+        console.log('Sauce Connect ready');
         sauceConnectProcess = _sauceConnectProcess;
         cb();
     });
@@ -242,7 +242,7 @@ gulp.task('run-sauce', function (cb) {
 
 gulp.task('stop-sauce', function (cb) {
     sauceConnectProcess.close(function () {
-        console.log("Closed Sauce Connect process");
+        console.log('Closed Sauce Connect process');
         cb();
     })
 });
@@ -260,7 +260,7 @@ gulp.task('e2e-test', function (cb) {
 gulp.task('webdriver-update', webdriver_update);
 
 gulp.task('e2e-run-test', ['webdriver-update'], function () {
-    return gulp.src(["build/test/e2e/**/*Spec.js"])
+    return gulp.src(['build/test/e2e/**/*Spec.js'])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
         }))
@@ -272,8 +272,8 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
 // Rerun the task when a file changes
 gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
-        'bower.json', 'favicon.ico', '!resources/apps/**', "!resources/widgets/widgets.json"],
-        ['build']);
+        'bower.json', 'favicon.ico', '!resources/apps/**',
+        '!resources/widgets/widgets.json'], ['build']);
 });
 
 // Rerun the task when a file changes
