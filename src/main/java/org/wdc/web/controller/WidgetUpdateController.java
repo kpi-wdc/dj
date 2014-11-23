@@ -17,7 +17,7 @@ import java.util.zip.ZipInputStream;
 @Controller
 @RequestMapping(name = "/widgets", method = RequestMethod.PUT)
 public class WidgetUpdateController {
-    private static final String[] EXT_WHITELIST = {"js", "png", ".css", ".html", "txt", "json"};
+    private static final String[] EXT_WHITELIST = {".js", ".png", ".css", ".html", ".txt", ".json"};
     private static final int WIDGET_HTML = 0;
     private static final int WIDGET_JS = 1;
     private static final int ICON_PNG = 2;
