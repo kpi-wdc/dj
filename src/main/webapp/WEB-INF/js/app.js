@@ -89,16 +89,14 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
             });
     });
 
-    app.factory('alert', function ($modal, $log) {
-        return {
-            error: function (msg) {
-                $log.error(msg);
-                $modal.open({
-                    template: msg,
-                    windowClass: "error-message"
-                });
-            }
-        }
+    app.service('alert', function ($modal, $log) {
+        this.error = function (msg) {
+            $log.error(msg);
+            $modal.open({
+                template: msg,
+                windowClass: "error-message"
+            });
+        };
     });
 
     app.factory('widgetTypesPromise', function ($http, appUrls) {
@@ -109,58 +107,61 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         return $http.get(appUrls.appConfig);
     });
 
-    app.factory('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls) {
-        var appConfig = {
-            config: {},
-            isAvailable: false,
-            sendingToServer: false,
-            isHomePageOpened: function () {
-                return $stateParams.href === '';
-            },
-            is404PageOpened: function () {
-                return $stateParams.href === '404';
-            },
-            pageIndexByHref: function (href) {
-                var result;
+    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls) {
+        var self = this;
+        this.config = {};
+        this.isAvailable = false;
+        this.sendingToServer = false;
 
-                for (var i = 0; i < appConfig.config.pages.length; i++) {
-                    if (appConfig.config.pages[i].href === href) {
-                        result = i;
-                        break;
-                    }
-                    if (appConfig.config.pages[i].href === '404') {
-                        result = i;
-                    }
+        this.isHomePageOpened = function () {
+            return $stateParams.href === '';
+        };
+
+        this.is404PageOpened = function () {
+            return $stateParams.href === '404';
+        };
+
+        this.pageIndexByHref = function (href) {
+            var result;
+
+            for (var i = 0; i < self.config.pages.length; i++) {
+                if (self.config.pages[i].href === href) {
+                    result = i;
+                    break;
                 }
-                return result;
-            },
-            wasModified: true, // TODO: implement changing this state
-            deletePage: function (index) {
-                if (angular.isDefined(appConfig.config.pages) && angular.isDefined(appConfig.config.pages[index])) {
-                    appConfig.config.pages.splice(index, 1);
+                if (self.config.pages[i].href === '404') {
+                    result = i;
                 }
-                $state.go('page', {href: ''});
-            },
-            submitToServer: function (callback) {
-                appConfig.sendingToServer = true;
-                return $http.put(appUrls.appConfig, appConfig.config)
-                    .then(function () {
-                        appConfig.sendingToServer = false;
-                    }, function (data) {
-                        appConfig.sendingToServer = false;
-                        if (callback) {
-                            callback(data);
-                        }
-                    });
             }
+            return result;
+        };
+
+        this.wasModified = true; // TODO: implement changing this state
+
+        this.deletePage = function (index) {
+            if (angular.isDefined(self.config.pages) && angular.isDefined(self.config.pages[index])) {
+                self.config.pages.splice(index, 1);
+            }
+            $state.go('page', {href: ''});
+        };
+
+        this.submitToServer = function (callback) {
+            self.sendingToServer = true;
+            return $http.put(appUrls.self, self.config)
+                .then(function () {
+                    self.sendingToServer = false;
+                }, function (data) {
+                    self.sendingToServer = false;
+                    if (callback) {
+                        callback(data);
+                    }
+                });
         };
 
         appConfigPromise.success(function (data) {
-            appConfig.isAvailable = true;
-            appConfig.config = data;
+            self.isAvailable = true;
+            self.config = data;
         });
-
-        return appConfig;
     });
 
     app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
