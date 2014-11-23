@@ -80,9 +80,9 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                     return pageConfigPromise.then(function (pageConfig) {
                         var url = appUrls.templateHTML(pageConfig.template);
                         return $http.get(url, {cache: $templateCache})
-                                .then(function (result) {
-                                    return result.data;
-                                });
+                            .then(function (result) {
+                                return result.data;
+                            });
                     });
                 },
                 controller: 'PageCtrl'
@@ -172,7 +172,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                 for (var i = 0; i < widgets.length; ++i) {
                     var widgetType = widgetTypesHTTP.data[widgets[i]];
                     if (angular.isUndefined(widgetType)) {
-                        return $q.reject('Widget "' + widgets[i] +'" doesn\'t exist!');
+                        return $q.reject('Widget "' + widgets[i] + '" doesn\'t exist!');
                     }
                     if (!widgetType.nojs) {
                         widgetControllers.push({
@@ -192,7 +192,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
     app.factory('APIProvider', function (widgetSlots) {
         return function (scope) {
             var providerName = function () {
-                return scope.widget.instanceName;
+                return scope.widget && scope.widget.instanceName;
             };
             scope.$on('$destroy', function () {
                 delete widgetSlots[providerName()];
@@ -216,7 +216,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
     app.factory('APIUser', function (widgetSlots) {
         return function (scope) {
             var userName = function () {
-                return scope.widget.instanceName;
+                return scope.widget && scope.widget.instanceName;
             };
 
             this.invoke = function (providerName, slotName) {
@@ -242,9 +242,9 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
     });
 
     app.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope) {
-        var EventPublisher =  function (scope) {
+        var EventPublisher = function (scope) {
             var emitterName = function () {
-                return scope.widget.instanceName;
+                return scope.widget && scope.widget.instanceName;
             };
 
             this.emit = function (signalName) {
@@ -349,7 +349,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                 }
             }).result.then(function (newWidgetConfig) {
                 angular.copy(newWidgetConfig, widget);
-            })
+            });
         };
 
         $scope.addNewWidget = function (holder) {
@@ -385,18 +385,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         }
     });
 
-
-    app.service('widgetConfigEditor', function () {
-        var data = {};
-        this.setData = function (newData) {
-            data = newData;
-        };
-        this.getData = function () {
-            return data;
-        };
-    });
-
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, widgetConfig, widgetType, widgetConfigEditor) {
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, widgetConfig, widgetType) {
         $scope.widgetType = widgetType;
         $scope.widgetConfig = angular.copy(widgetConfig);
         delete $scope.widgetConfig.instanceName;
