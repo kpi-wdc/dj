@@ -24,15 +24,6 @@ public class WidgetUpdateController {
 
     // TODO: move to servlet environment constants
     private static final String WIDGETS_JSON_PATH = "src/main/webapp/resources/widgets/widgets.json";
-/*
-    @RequestMapping(value="{path}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<FileSystemResource> get(@PathVariable String path) {
-        System.out.println(path);
-        FileSystemResource fileSystemResource =
-                new FileSystemResource("src/main/webapp/resources/widgets/" + path);
-        return new ResponseEntity<>(fileSystemResource, HttpStatus.OK);
-    }*/
 
     @RequestMapping(value="{widgetName}", method = RequestMethod.PUT)
     @ResponseBody
