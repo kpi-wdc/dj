@@ -213,7 +213,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
             };
 
             this.config = function (slotFn, enableReconfiguring) {
-                enableReconfiguring = enableReconfiguring === undefined ? enableReconfiguring : true;
+                enableReconfiguring = enableReconfiguring === undefined ? true : enableReconfiguring;
                 slotFn();
                 if (enableReconfiguring) {
                     self.provide(APIProvider.RECONFIG_SLOT, slotFn);
