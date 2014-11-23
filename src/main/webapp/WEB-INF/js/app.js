@@ -220,6 +220,11 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
                 }
                 return this;
             };
+
+            this.reconfig = function (slotFn) {
+                self.provide(APIProvider.RECONFIG_SLOT, slotFn);
+                return this;
+            };
         };
 
         APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
