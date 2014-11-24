@@ -11,7 +11,8 @@ require.config({
         'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor',
         'json-editor': 'components/json-editor/dist/jsoneditor',
         'leaflet': 'components/leaflet/dist/leaflet',
-        'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive'
+        'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
+        'sceditor': 'components/SCEditor/src/jquery.sceditor'
     },
 
     // Add angular modules that does not support AMD out of the box, put it in a shim
@@ -30,6 +31,8 @@ require.config({
         'angular-ui-router': ['angular'],
         'angular-oclazyload': ['angular'],
         'angular-foundation': ['angular'],
+        'sceditor': ['jquery'],
+        'json-editor': ['sceditor'],
         'angular-json-editor': ['angular', 'json-editor'],
         'template-cached-pages': ['angular']
     },

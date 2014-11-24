@@ -21,7 +21,8 @@ require.config({
         'json-editor': 'components/json-editor/dist/jsoneditor',
         'leaflet': 'components/leaflet/dist/leaflet',
         'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
-        'angular-mocks': 'components/angular-mocks/angular-mocks'
+        'angular-mocks': 'components/angular-mocks/angular-mocks',
+        'sceditor': 'components/SCEdtior/src/jquery.sceditor'
     },
 
     // Add angular modules that does not support AMD out of the box, put it in a shim
@@ -40,7 +41,8 @@ require.config({
         'angular-ui-router': ['angular'],
         'angular-oclazyload': ['angular'],
         'angular-foundation': ['angular'],
-        'angular-json-editor': ['angular', 'json-editor'],
+        'sceditor': ['jquery'],
+        'angular-json-editor': ['angular', 'json-editor', 'sceditor'],
         'template-cached-pages': ['angular'],
         'angular-mocks': ['angular']
     },

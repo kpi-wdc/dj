@@ -1,5 +1,5 @@
 define(['angular', 'angular-ui-router', 'angular-oclazyload',
-    'angular-foundation', 'angular-json-editor', 'template-cached-pages'], function (angular) {
+    'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular) {
     "use strict";
     var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation',
         'angular-json-editor', 'templates']);
@@ -34,6 +34,14 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         JsonEditorConfig.iconlib = 'foundation3'; // icons have their own versions
         JsonEditorConfig.theme = 'foundation5';
         JsonEditorConfig.required_by_default = true;
+        window.JSONEditor.plugins = { // todo: add support for plugin properties in angular-json-editor
+            sceditor: {
+                style: '/components/SCEditor/minified/jquery.sceditor.default.min.css',
+                resizeWidth: false,
+                height: '300',
+                width: '100%'
+            }
+        };
 
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
