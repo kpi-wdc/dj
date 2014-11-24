@@ -11,6 +11,7 @@ require.config({
     baseUrl: '/base',
     // alias libraries paths.  Must set 'angular'
     paths: {
+        'jquery': 'components/jquery/dist/jquery',
         'angular': 'components/angular/angular',
         'template-cached-pages': 'js/templates',
         'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
@@ -26,10 +27,14 @@ require.config({
     // Add angular modules that does not support AMD out of the box, put it in a shim
     shim: {
         'angular': {
+            deps: ['jquery'],
             exports: 'angular'
         },
         'leaflet': {
             exports: 'L'
+        },
+        'jquery': {
+            exports: '$'
         },
         'angular-leaflet': ['angular', 'leaflet'],
         'angular-ui-router': ['angular'],
