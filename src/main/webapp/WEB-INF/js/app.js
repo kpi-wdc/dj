@@ -23,7 +23,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         }
     });
 
-    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JsonEditorConfig) {
+    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
 
         $ocLazyLoadProvider.config({
             loadedModules: ['app'],
@@ -31,9 +31,15 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         });
 
         // angular-json-editor configuration
-        JsonEditorConfig.iconlib = 'foundation3'; // icons have their own versions
-        JsonEditorConfig.theme = 'foundation5';
-        JsonEditorConfig.required_by_default = true;
+        JSONEditorProvider.configure({
+            defaults: {
+                options: {
+                    iconlib: 'foundation3',
+                    theme: 'foundation5',
+                    required_by_default: true
+                }
+            }
+        });
 
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
