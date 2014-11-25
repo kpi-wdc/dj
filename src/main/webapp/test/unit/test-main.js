@@ -22,7 +22,7 @@ require.config({
         'leaflet': 'components/leaflet/dist/leaflet',
         'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
         'angular-mocks': 'components/angular-mocks/angular-mocks',
-        'sceditor': 'components/SCEdtior/src/jquery.sceditor'
+        'sceditor': 'components/SCEditor/src/jquery.sceditor'
     },
 
     // Add angular modules that does not support AMD out of the box, put it in a shim
