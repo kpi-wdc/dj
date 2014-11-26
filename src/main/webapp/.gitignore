@@ -10,3 +10,5 @@ bower_components
 # files created by gulp tasks
 build
 
+# widgets.json
+resources/widgets/widgets.json
