@@ -1,0 +1,27 @@
+{
+  "description": "Description of widget \"summator\"",
+  "schema": {
+    "type": "object",
+    "title": "Summator settings",
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Widget title"
+      },
+      "a": {
+        "type": "integer",
+        "title": "Default value for first input",
+        "default": 3
+      },
+      "b": {
+        "type": "integer",
+        "title": "Default value for second input",
+        "default": 5
+      },
+      "aDisabled": {
+        "type": "boolean",
+        "title": "Should first field be disabled?"
+      }
+    }
+  }
+}

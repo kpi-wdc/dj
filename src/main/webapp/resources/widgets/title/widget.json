@@ -1,0 +1,14 @@
+{
+  "description": "Description of widget \"title\"",
+  "nojs": true,
+  "schema": {
+    "type": "object",
+    "title": "Title widget",
+    "properties": {
+      "title": {
+        "title": "Set title",
+        "type": "string"
+      }
+    }
+  }
+}
