@@ -16,6 +16,11 @@
         <property name="suffix" value=".html" />
     </bean>
 
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/> <!-- 10 MiB max -->
+    </bean>
+
     <mvc:annotation-driven/>
 
     <mvc:resources mapping="/components/**" location="/build/components/" />
