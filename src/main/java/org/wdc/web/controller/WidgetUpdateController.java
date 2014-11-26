@@ -1,5 +1,6 @@
 package org.wdc.web.controller;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.LinkedHashMap;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -32,6 +34,11 @@ public class WidgetUpdateController {
         ObjectMapper mapper = new ObjectMapper();
         LinkedHashMap<String, LinkedHashMap<String, Object>> widgets = null;
 
+        Process gulpBuild = null;
+
+        // parent directory for all files of the widget
+        String destination = "resources/widgets" + widgetName;
+
         // decompress zip archive to the correct directory
         try (InputStream is = file.getInputStream();
              ZipInputStream zipInputStream = new ZipInputStream(is)) {
@@ -46,8 +53,7 @@ public class WidgetUpdateController {
             boolean[] widgetFileExistence = new boolean[3];
 
             ZipEntry entry;
-            // parent directory for all files of the widget
-            String destination = "resources/widgets" + widgetName;
+
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 File entryDestination = new File(destination, entry.getName());
                 entryDestination.getParentFile().mkdirs();
@@ -71,11 +77,22 @@ public class WidgetUpdateController {
                     writeValue(new FileOutputStream(WIDGETS_JSON_PATH), widgets);
 
             // TODO: if needed add Windows process
-            // TODO: handle exception gracefully
-            Process myProcess = Runtime.getRuntime().exec("gulp build");
+            gulpBuild = new ProcessBuilder("gulp", "build")
+                    .directory(new File("src/main/webapp/"))
+                    .start();
         } catch (Exception e) {
             e.printStackTrace();
+
+            // delete directory if its contents weren't created normally
+            try {
+                FileUtils.deleteDirectory(new File(destination));
+            } catch (IOException cantDeleteDirEx) {
+                cantDeleteDirEx.printStackTrace();
+            }
             return new ResponseEntity<>(e.toString(), HttpStatus.BAD_REQUEST);
+        } finally {
+            // kill process if something went wrong
+            if (gulpBuild != null) gulpBuild.destroy();
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
