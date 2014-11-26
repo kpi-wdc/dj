@@ -26,6 +26,8 @@ var replace = require('gulp-replace');
 var webdriver_update = require('gulp-protractor').webdriver_update;
 var argv = require('yargs').argv;
 var sauceConnectLauncher = require('sauce-connect-launcher');
+var extend = require('gulp-extend');
+var tap = require('gulp-tap');
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -299,4 +301,18 @@ gulp.task('clean', function (cb) {
        'build',
        'bower_components'
        ], cb);
+});
+
+gulp.task('merge', function () {
+    return gulp.src('resources/widgets/**/widget.json')
+        .pipe(tap(function(file) {
+            var dir = path.dirname(file.path).split('/').pop();
+            file.contents = Buffer.concat([
+                new Buffer('{\"' + dir + '\":'),
+                file.contents,
+                new Buffer('}')
+            ]);
+        }))
+        .pipe(extend('widgets.json'))
+        .pipe(gulp.dest('resources/widgets'))
 });
