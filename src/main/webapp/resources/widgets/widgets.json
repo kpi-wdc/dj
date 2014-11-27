@@ -15,8 +15,11 @@
       "properties": {
         "text": {
           "title": "Edit html code",
-          "format": "textarea",
-          "type": "string"
+          "format": "html",
+          "type": "string",
+          "options": {
+            "wysiwyg": true
+          }
         }
       }
     }
