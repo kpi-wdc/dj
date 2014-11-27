@@ -1,9 +1,12 @@
 require.config({
     baseUrl: '/',
-    // alias libraries paths.  Must set 'angular'
+    // alias libraries paths.
+    // IMPORTANT NOTE: don't add slash before components
+    // (use components instead of /components)
     paths: {
         'jquery': 'components/jquery/dist/jquery',
         'angular': 'components/angular/angular',
+        'angular-mocks': 'components/angular-mocks/angular-mocks',
         'template-cached-pages': 'js/templates',
         'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
         'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad',
@@ -27,6 +30,7 @@ require.config({
         'jquery': {
             exports: '$'
         },
+        'angular-mocks': ['angular'],
         'angular-leaflet': ['angular', 'leaflet'],
         'angular-ui-router': ['angular'],
         'angular-oclazyload': ['angular'],
@@ -40,3 +44,22 @@ require.config({
     // kick start application
     deps: ['js/app']
 });
+
+// are we unit-testing now?
+var isUnitTesting = window.__karma__ !== undefined;
+
+if (isUnitTesting) {
+    var tests = [];
+    for (var file in window.__karma__.files) {
+        if (window.__karma__.files.hasOwnProperty(file)) {
+            if (/Spec\.js$/.test(file)) {
+                tests.push(file);
+            }
+        }
+    }
+    require.config({
+        baseUrl: '/base',
+        deps: tests,
+        callback: window.__karma__.start
+    })
+}
