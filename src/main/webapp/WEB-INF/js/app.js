@@ -1,5 +1,5 @@
-define(['angular', 'angular-ui-router', 'angular-oclazyload',
-    'angular-foundation', 'angular-json-editor', 'template-cached-pages'], function (angular) {
+define(['angular', 'jquery', 'angular-ui-router', 'angular-oclazyload',
+    'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular, $) {
     "use strict";
     var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation',
         'angular-json-editor', 'templates']);
@@ -23,17 +23,30 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         }
     });
 
-    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JsonEditorConfig) {
+    app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
 
         $ocLazyLoadProvider.config({
             loadedModules: ['app'],
             asyncLoader: require
         });
 
-        // angular-json-editor configuration
-        JsonEditorConfig.iconlib = 'foundation3'; // icons have their own versions
-        JsonEditorConfig.theme = 'foundation5';
-        JsonEditorConfig.required_by_default = true;
+        JSONEditorProvider.configure({
+            defaults: {
+                options: {
+                    iconlib: 'foundation3',
+                    theme: 'foundation5',
+                    required_by_default: true
+                }
+            },
+            plugins: {
+              sceditor: {
+                  style: '/components/SCEditor/minified/jquery.sceditor.default.min.css',
+                  resizeWidth: false,
+                  height: '300',
+                  width: '100%'
+              }
+            }
+        });
 
         var pageConfigPromise;
         $locationProvider.html5Mode(true);
@@ -440,7 +453,7 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, widgetConfig, widgetType) {
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout, widgetConfig, widgetType) {
         $scope.widgetType = widgetType;
         $scope.widgetConfig = angular.copy(widgetConfig);
         delete $scope.widgetConfig.instanceName;
@@ -462,6 +475,10 @@ define(['angular', 'angular-ui-router', 'angular-oclazyload',
         $scope.updateData = function (value) {
             data = value;
         };
+
+        $timeout(function () {
+            $('json-editor .sceditor-container iframe').height('20rem').width('98%');
+        }, 0);
     });
 
     app.controller('WidgetModalConfigButtonsController', angular.noop);
