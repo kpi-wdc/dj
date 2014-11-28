@@ -304,7 +304,7 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('merge-widget-configs', function () {
-    return gulp.src('resources/widgets/**/widget.json')
+    return gulp.src('build/widgets/**/widget.json')
         .pipe(tap(function(file) {
             var dir = path.dirname(file.path).split('/').pop();
             file.contents = Buffer.concat([
@@ -314,5 +314,5 @@ gulp.task('merge-widget-configs', function () {
             ]);
         }))
         .pipe(extend('widgets.json'))
-        .pipe(gulp.dest('resources/widgets'))
+        .pipe(gulp.dest('build/widgets'))
 });
