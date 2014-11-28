@@ -270,12 +270,13 @@ define(['angular', 'jquery', 'angular-ui-router', 'angular-oclazyload',
                 try {
                     return {
                         success: true,
-                        result: invoke(providerName, slotName) // might throw
+                        result: this.invoke(providerName, slotName) // might throw
                     }
                 } catch (e) {
                     if (typeof(e) === 'string' && e.indexOf("Provider") > -1) {
                         return {
-                            success: false
+                            success: false,
+                            result: undefined
                         }
                     } else {
                         throw e;
@@ -299,7 +300,7 @@ define(['angular', 'jquery', 'angular-ui-router', 'angular-oclazyload',
                         }
                     }
                 }
-                return called;
+                return undefined;
             }
         };
     });
