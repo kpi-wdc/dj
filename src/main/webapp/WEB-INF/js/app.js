@@ -1,4 +1,4 @@
-define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-oclazyload',
+define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', 'angular-oclazyload',
     'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular, $) {
     "use strict";
     var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation',
@@ -110,6 +110,12 @@ define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-ocla
         };
     });
 
+    app.factory('prompt', function ($window) {
+        return function (text) {
+            return $window.prompt(text);
+        };
+    });
+
     app.factory('widgetTypesPromise', function ($http, appUrls) {
         return $http.get(appUrls.widgetTypes);
     });
@@ -197,34 +203,14 @@ define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-ocla
         }
     });
 
-    app.controller('MainCtrl', function ($scope, alert, appConfig) {
-        var cnf = $scope.globalConfig = {
-            debugMode: false,
-            designMode: true
-        };
-
-        $scope.appConfig = appConfig;
-
-        $scope.$watch('globalConfig.designMode', function () {
-            cnf.debugMode = cnf.debugMode && !cnf.designMode;
-        });
-
-        $scope.alertAppConfigSubmissionFailed = function (data) {
-            alert.error('Error submitting application configuration!<br>' +
-            'HTTP error ' + data.status + ': ' + data.statusText);
-        };
-    });
-
-    app.controller('PageCtrl', function ($scope, $modal, pageConfig, alert, $window,
-                                         APIUser, APIProvider, widgetLoader, appUrls) {
-        $scope.config = pageConfig;
-        $scope.deleteIthWidgetFromHolder = function (holder, index) {
+    app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, prompt) {
+        this.deleteIthWidgetFromHolder = function (holder, index) {
             var removedWidget = holder.widgets.splice(index, 1)[0];
             var user = new APIUser();
             user.tryInvoke(removedWidget.instanceName, APIProvider.DESTROY_SLOT);
         };
 
-        $scope.openWidgetConfigurationDialog = function (widget) {
+        this.openWidgetConfigurationDialog = function (widget) {
             $modal.open({
                 templateUrl: appUrls.widgetModalConfigHTML,
                 controller: 'WidgetModalSettingsController',
@@ -246,8 +232,8 @@ define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-ocla
             });
         };
 
-        $scope.addNewWidget = function (holder) {
-            var widgetType = $window.prompt('Widget type (like summator):');
+        this.addNewWidgetToHolder = function (holder) {
+            var widgetType = prompt('Widget type (like summator):');
             var instanceName = Math.random().toString(36).substring(2);
             if (widgetType) {
                 widgetLoader.load(widgetType)
@@ -261,6 +247,32 @@ define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-ocla
                     });
             }
         };
+    });
+
+    app.controller('MainCtrl', function ($scope, alert, appConfig) {
+        var cnf = $scope.globalConfig = {
+            debugMode: false,
+            designMode: true
+        };
+
+        $scope.appConfig = appConfig;
+
+        $scope.$watch('globalConfig.designMode', function () {
+            cnf.debugMode = cnf.debugMode && !cnf.designMode;
+        });
+
+        $scope.alertAppConfigSubmissionFailed = function (data) {
+            alert.error('Error submitting application configuration!<br>' +
+            'HTTP error ' + data.status + ': ' + data.statusText);
+        };
+    });
+
+    app.controller('PageCtrl', function ($scope, pageConfig, widgetManager) {
+        $scope.config = pageConfig;
+        // bind is not used because PhantomJS doesn't support it until v2 is out.
+        $scope.deleteIthWidgetFromHolder = widgetManager.deleteIthWidgetFromHolder.bind(widgetManager);
+        $scope.openWidgetConfigurationDialog = widgetManager.openWidgetConfigurationDialog.bind(widgetManager);
+        $scope.addNewWidgetToHolder = widgetManager.addNewWidgetToHolder.bind(widgetManager);
     });
 
     app.directive('widgetHolder', function (appUrls) {

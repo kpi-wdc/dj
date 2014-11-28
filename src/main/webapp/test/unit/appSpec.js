@@ -11,7 +11,7 @@ define(['js/app', 'angular-mocks'], function () {
         }));
 
         it('ensure MainCtrl exists and works', function() {
-            $controller('MainCtrl', {$scope: MainCtrlScope, $window: {alert: angular.noop}});
+            $controller('MainCtrl', {$scope: MainCtrlScope});
             expect(MainCtrlScope).toBeDefined();
             MainCtrlScope.alertAppConfigSubmissionFailed({ data: {
                 status: 404,
@@ -20,10 +20,7 @@ define(['js/app', 'angular-mocks'], function () {
         });
 
         it('ensure PageCtrl exists and works', function() {
-            $controller('PageCtrl', {$scope: PageCtrlScope, pageConfig: {}, $window: {
-                prompt: angular.noop,
-                alert: angular.noop
-            }});
+            $controller('PageCtrl', {$scope: PageCtrlScope, pageConfig: {}});
             expect(PageCtrlScope).toBeDefined();
         });
     });
