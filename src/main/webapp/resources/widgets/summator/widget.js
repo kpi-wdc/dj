@@ -21,6 +21,9 @@ define(['angular'], function (angular) {
                 })
                 .provide('setValueOfB', function (evt, value) {
                     $scope.b = value;
+                })
+                .destroy(function () {
+                    console.log('Summator widget is destroyed');
                 });
 
             $scope.$watch('sum()', function (newValue) {

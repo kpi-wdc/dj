@@ -238,9 +238,15 @@ define(['angular', 'jquery', 'angular-ui-router', 'angular-oclazyload',
                 self.provide(APIProvider.RECONFIG_SLOT, slotFn);
                 return this;
             };
+
+            this.destroy = function (slotFn) {
+                self.provide(APIProvider.DESTROY_SLOT, slotFn);
+                return this;
+            };
         };
 
         APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
+        APIProvider.DESTROY_SLOT = 'DESTROY_SLOT';
         return APIProvider;
     });
 
@@ -394,7 +400,9 @@ define(['angular', 'jquery', 'angular-ui-router', 'angular-oclazyload',
                                          APIUser, APIProvider, widgetLoader, appUrls) {
         $scope.config = pageConfig;
         $scope.deleteIthWidgetFromHolder = function (holder, index) {
-            holder.widgets.splice(index, 1);
+            var removedWidget = holder.widgets.splice(index, 1)[0];
+            var user = new APIUser();
+            user.tryInvoke(removedWidget.instanceName, APIProvider.DESTROY_SLOT);
         };
 
         $scope.openWidgetConfigurationDialog = function (widget) {
