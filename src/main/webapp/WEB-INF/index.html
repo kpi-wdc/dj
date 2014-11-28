@@ -16,10 +16,10 @@
 
   <body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
   <header class="row">
-    <div class="large-3 columns">
+    <div class="medium-3 columns">
       <h1><img src="/img/logo.gif"/></h1>
     </div>
-    <div class="large-9 columns">
+    <div class="medium-9 columns">
       <ul class="inline-list right">
         <li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>
       </ul>
@@ -27,7 +27,7 @@
   </header>
 
   <div class="row">
-    <div class="large-9 push-3 columns" id="page-view">
+    <div class="medium-9 push-3 columns" id="page-view">
       <div ng-if="globalConfig.designMode" id="page-design-panel">
         <h3>Design mode panel</h3>
         <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <nav class="large-3 pull-9 columns">
+    <nav class="medium-3 pull-9 columns">
       <ul class="side-nav">
         <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
@@ -67,13 +67,13 @@
   </div>
 
   <footer class="row">
-    <div class="large-12 columns">
+    <div class="medium-12 columns">
       <hr/>
       <div class="row">
-        <div class="large-6 columns">
+        <div class="medium-6 columns">
           <p>&copy; Copyright</p>
         </div>
-        <div class="large-6 columns">
+        <div class="medium-6 columns">
           <ul class="inline-list right">
             <li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>
           </ul>
