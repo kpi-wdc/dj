@@ -269,7 +269,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
     app.controller('PageCtrl', function ($scope, pageConfig, widgetManager) {
         $scope.config = pageConfig;
-        // bind is not used because PhantomJS doesn't support it until v2 is out.
+        
         $scope.deleteIthWidgetFromHolder = widgetManager.deleteIthWidgetFromHolder.bind(widgetManager);
         $scope.openWidgetConfigurationDialog = widgetManager.openWidgetConfigurationDialog.bind(widgetManager);
         $scope.addNewWidgetToHolder = widgetManager.addNewWidgetToHolder.bind(widgetManager);
