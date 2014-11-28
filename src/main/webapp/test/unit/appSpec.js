@@ -109,6 +109,52 @@ define(['js/app', 'angular-mocks'], function () {
                     a.invoke('b', 'non-existing-slot')
                 }).toThrow();
             });
+
+            it('ensure APIUser::tryInvoke calls', function () {
+                var a = new APIUser(scopeA);
+                var b = new APIProvider(scopeB);
+                var slot = jasmine.createSpy('slot').and.returnValue(1234);
+                b.provide('slot', slot);
+                var okInvocation = a.tryInvoke('b', 'slot');
+                expect(okInvocation.success).toBe(true);
+                expect(okInvocation.result).toBe(1234);
+                expect(slot).toHaveBeenCalledWith({
+                    emitterName: 'a',
+                    signalName: undefined
+                });
+                var badInvocation = a.tryInvoke('b', 'non-existing-slot');
+                expect(badInvocation.success).toBe(false);
+                expect(badInvocation.result).toBeUndefined();
+            });
+
+
+
+            it('ensure APIUser::invokeAll calls', function () {
+                var aUser = new APIUser(scopeA);
+                var aProvider = new APIProvider(scopeA);
+                var bUser = new APIUser(scopeB);
+                var bProvider = new APIProvider(scopeB);
+                var slotB = jasmine.createSpy('slotB').and.returnValue(1);
+                var slotA = jasmine.createSpy('slotA').and.returnValue(2);
+                var slotOther = jasmine.createSpy('slotOther').and.returnValue(3);
+                bProvider.provide('slot', slotB);
+                expect(aUser.invokeAll('slot'));
+                expect(slotB).toHaveBeenCalledWith({
+                    emitterName: 'a',
+                    signalName: undefined
+                });
+                aProvider.provide('slot', slotA);
+                expect(bUser.invokeAll('slot'));
+                expect(slotA).toHaveBeenCalledWith({
+                    emitterName: 'b',
+                    signalName: undefined
+                });
+                expect(slotB).toHaveBeenCalledWith({
+                    emitterName: 'b',
+                    signalName: undefined
+                });
+                expect(slotOther).not.toHaveBeenCalled();
+            });
         });
     });
 });
