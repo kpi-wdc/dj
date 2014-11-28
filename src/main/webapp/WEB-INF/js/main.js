@@ -30,13 +30,16 @@ require.config({
         'jquery': {
             exports: '$'
         },
+        'json-editor': {
+            deps: ['sceditor'],
+            exports: 'JSONEditor'
+        },
+        'sceditor': ['jquery'],
         'angular-mocks': ['angular'],
         'angular-leaflet': ['angular', 'leaflet'],
         'angular-ui-router': ['angular'],
         'angular-oclazyload': ['angular'],
         'angular-foundation': ['angular'],
-        'sceditor': ['jquery'],
-        'json-editor': ['sceditor'],
         'angular-json-editor': ['angular', 'json-editor'],
         'template-cached-pages': ['angular']
     },
