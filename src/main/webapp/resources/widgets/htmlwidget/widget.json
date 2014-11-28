@@ -2,12 +2,15 @@
   "description": "Description of widget \"htmlwidget\"",
   "schema": {
     "type": "object",
-    "title": "Title widget",
+    "title": "Visual editor",
     "properties": {
       "text": {
         "title": "Edit html code",
-        "format": "textarea",
-        "type": "string"
+        "format": "html",
+        "type": "string",
+        "options": {
+          "wysiwyg": true
+        }
       }
     }
   }

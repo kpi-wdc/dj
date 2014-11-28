@@ -41,9 +41,7 @@ define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-ocla
             plugins: {
               sceditor: {
                   style: '/components/SCEditor/minified/jquery.sceditor.default.min.css',
-                  resizeWidth: false,
-                  height: '300',
-                  width: '100%'
+                  resizeWidth: false
               }
             }
         });
@@ -307,6 +305,8 @@ define(['angular', 'jquery', 'js/widget-api', 'angular-ui-router', 'angular-ocla
         };
 
         $timeout(function () {
+            // HORRIBLE HACK!
+            // sceditor doesn't want to play with foundation modal dialogs nicely.
             $('json-editor .sceditor-container iframe').height('20rem').width('98%');
         }, 0);
     });
