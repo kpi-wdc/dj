@@ -53,14 +53,23 @@
       <ul class="side-nav">
         <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
-      <label>Design mode:
-        <input ng-model="globalConfig.designMode" type="checkbox">
-      </label>
-      <label>Debug mode:
-        <input ng-model="globalConfig.debugMode"
-               ng-disabled="globalConfig.designMode"
-               type="checkbox">
-      </label>
+
+      <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="designModeCheckbox"
+               ng-model="globalConfig.designMode">
+        <label for="designModeCheckbox"></label>
+      </div>
+      <br>
+      <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="debugModeCheckbox"
+               ng-model="globalConfig.debugMode"
+               ng-disabled="globalConfig.designMode">
+        <label for="debugModeCheckbox"></label>
+      </div>
 
       <p><img src="/img/ad.gif"/></p>
     </nav>
