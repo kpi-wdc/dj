@@ -35,6 +35,9 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
                 options: {
                     iconlib: 'foundation3',
                     theme: 'foundation5',
+                    disable_collapse: true,
+                    disable_edit_json: true,
+                    disable_properties: true,
                     required_by_default: true
                 }
             },
