@@ -305,7 +305,6 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
 gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
         'bower-base.json', 'favicon.ico', '!resources/apps/**',
-        'resources/widgets/**/bower.json',
         '!resources/widgets/widgets.json'], ['build']);
 });
 
