@@ -52,13 +52,13 @@ function handleError(err) {
 
 gulp.task('default', ['build']);
 
-gulp.task('bower', function () {
+gulp.task('bower-install', function () {
     return bower().on('error', handleError);
 });
 
 gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
 
-gulp.task('build-components', ['bower'], function () {
+gulp.task('build-components', ['bower-install'], function () {
     var removeFilter = gulpFilter([
         '**/*',
         '!**/jquery/src/**',
