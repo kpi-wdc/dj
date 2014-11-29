@@ -280,7 +280,8 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
 // Rerun the task when a file changes
 gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
-        'bower.json', 'favicon.ico', '!resources/apps/**',
+        'bower-base.json', 'favicon.ico', '!resources/apps/**',
+        'resources/widgets/**/bower.json',
         '!resources/widgets/widgets.json'], ['build']);
 });
 
