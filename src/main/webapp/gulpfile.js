@@ -53,13 +53,13 @@ function handleError(err) {
 
 gulp.task('default', ['build']);
 
-gulp.task('bower-install', function () {
+gulp.task('bower-install', ['generate-bower-json'], function () {
     return bower().on('error', handleError);
 });
 
 // collect all bower-dependencies in collectedBowerDeps object
 var collectedBowerDeps = {};
-gulp.task('collect-bower-dependencies', function() {
+gulp.task('collect-bower-dependencies', function () {
     return gulp.src('resources/widgets/**/bower.json')
         .pipe(jeditor(function(json) {
             // TODO: if necessary don't add widgets with no dependencies at all
@@ -68,7 +68,7 @@ gulp.task('collect-bower-dependencies', function() {
         }))
 });
 
-gulp.task('generate-bower-json', ['collect-bower-dependencies'], function() {
+gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
     return gulp.src('bower-base.json')
         .pipe(jeditor(function(json) {
             for (var dep in collectedBowerDeps) {
@@ -80,8 +80,7 @@ gulp.task('generate-bower-json', ['collect-bower-dependencies'], function() {
         .pipe(gulp.dest('.'))
 });
 
-gulp.task('build', ['build-html', 'generate-bower-json', 'build-css', 'build-js',
-    'build-favicon', 'merge-widget-configs']);
+gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
 
 gulp.task('build-components', ['bower-install'], function () {
     var removeFilter = gulpFilter([
