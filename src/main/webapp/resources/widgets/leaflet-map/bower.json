@@ -1,0 +1,9 @@
+{
+  "name": "leaflet-map",
+  "private": true,
+  "dependencies": {
+    "angular-leaflet": "^0.7",
+    "leaflet": "^0.7"
+  }
+}
+        
