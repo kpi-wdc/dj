@@ -299,7 +299,8 @@ gulp.task('watch-unit-test', ['build'], function (done) {
 gulp.task('clean', function (cb) {
    return del([
        'build',
-       'bower_components'
+       'bower_components',
+       'bower.json'
        ], cb);
 });
 
