@@ -8,11 +8,17 @@ define(['angular'], function (angular) {
     widgetApi.factory('APIProvider', function (widgetSlots) {
         var APIProvider = function (scope) {
             var self = this;
-            var providerName = function () {
-                return scope && scope.widget && scope.widget.instanceName;
-            };
+            var providerName = scope.widget.instanceName;
+            scope.$watch('widget.instanceName', function (newName) {
+                if (newName === providerName) {
+                    return;
+                }
+                widgetSlots[newName] = widgetSlots[providerName];
+                delete widgetSlots[providerName];
+                providerName = newName;
+            });
             scope.$on('$destroy', function () {
-                delete widgetSlots[providerName()];
+                delete widgetSlots[providerName];
             });
 
             this.provide = function (slotName, slot) {
@@ -20,8 +26,8 @@ define(['angular'], function (angular) {
                     throw "Second argument should be a function, " +
                     (typeof slot) + "passed instead";
                 }
-                widgetSlots[providerName()] = widgetSlots[providerName()] || [];
-                widgetSlots[providerName()].push({
+                widgetSlots[providerName] = widgetSlots[providerName] || [];
+                widgetSlots[providerName].push({
                     slotName: slotName,
                     fn: slot
                 });

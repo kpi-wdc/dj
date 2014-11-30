@@ -72,6 +72,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
                                         var widgets = pageConfig.holders[holderName].widgets;
                                         for (var i = 0; i < widgets.length; ++i) {
                                             widgetTypes.push(widgets[i].type);
+                                            appConfig.updateEventsOnNameChange(widgets[i]);
                                         }
                                     }
                                 }
@@ -126,7 +127,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         return $http.get(appUrls.appConfig);
     });
 
-    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls) {
+    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls, $rootScope) {
         var self = this;
         this.config = {};
         this.isAvailable = false;
@@ -192,6 +193,26 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
                         callback(data);
                     }
                 });
+        };
+
+        this.updateEventsOnNameChange = function (widget) {
+            $rootScope.$watch(function () {
+                return widget.instanceName;
+            }, function (newName, oldName) {
+                if (newName !== oldName && newName != undefined) {
+                    var subscriptions = self.pageConfig().subscriptions;
+                    for (var i = 0; i < (subscriptions ? subscriptions.length : 0); i++) {
+                        var subscription = subscriptions[i];
+                        if (subscription.emitter === oldName) {
+                            subscription.emitter = newName;
+                        }
+
+                        if (subscription.receiver === oldName) {
+                            subscription.receiver = newName;
+                        }
+                    }
+                }
+            });
         };
 
         appConfigPromise.success(function (data) {
