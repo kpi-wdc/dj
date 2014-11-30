@@ -363,8 +363,6 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }, 0);
     });
 
-    app.controller('WidgetModalConfigButtonsController', angular.noop);
-
     return angular.bootstrap(document, ['app'], {
         strictDi: false
     });
