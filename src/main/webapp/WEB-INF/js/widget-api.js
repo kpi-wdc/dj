@@ -62,7 +62,11 @@ define(['angular'], function (angular) {
     widgetApi.factory('APIUser', function (widgetSlots) {
         return function (scope) {
             var userName = function () {
-                return scope && scope.widget && scope.widget.instanceName;
+                if (scope && scope.widget) {
+                    return scope.widget.instanceName;
+                } else {
+                    return undefined;
+                }
             };
 
             this.invoke = function (providerName, slotName) {
@@ -123,7 +127,11 @@ define(['angular'], function (angular) {
     widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope, appConfig) {
         var EventPublisher = function (scope) {
             var emitterName = function () {
-                return scope && scope.widget && scope.widget.instanceName;
+                if (scope && scope.widget) {
+                    return scope.widget.instanceName;
+                } else {
+                    return undefined;
+                }
             };
 
             this.emit = function (signalName) {
