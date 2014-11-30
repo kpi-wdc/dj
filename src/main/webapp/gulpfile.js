@@ -68,6 +68,7 @@ gulp.task('collect-bower-dependencies', function () {
             collectedBowerDeps[json["name"]] = "./resources/widgets/" + json["name"] + "/";
             return json;
         }))
+        .on('error', handleError);
 });
 
 gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
@@ -79,6 +80,7 @@ gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
             return json;
         }))
         .pipe(extend('bower.json'))
+        .on('error', handleError)
         .pipe(gulp.dest('.'))
 });
 
@@ -226,6 +228,7 @@ gulp.task('merge-widget-configs', function () {
             ]);
         }))
         .pipe(extend('widgets.json'))
+        .on('error', handleError)
         .pipe(gulp.dest('build/widgets'))
 });
 
