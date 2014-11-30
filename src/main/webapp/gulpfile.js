@@ -220,7 +220,7 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
 gulp.task('merge-widget-configs', function () {
     return gulp.src('resources/widgets/**/widget.json')
         .pipe(tap(function(file) {
-            var dir = path.dirname(file.path).split('/').pop();
+            var dir = path.basename(path.dirname(file.path));
             file.contents = Buffer.concat([
                 new Buffer('{\"' + dir + '\":'),
                 file.contents,
