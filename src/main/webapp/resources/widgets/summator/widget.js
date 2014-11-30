@@ -13,7 +13,7 @@ define(['angular'], function (angular) {
                     $scope.a = $scope.widget.a || 3;
                     $scope.b = $scope.widget.b || 5;
                     $scope.sum = function () {
-                        return parseInt($scope.a) + parseInt($scope.b);
+                        return parseFloat($scope.a) + parseFloat($scope.b);
                     };
                 })
                 .provide('setValueOfA', function (evt, value) {

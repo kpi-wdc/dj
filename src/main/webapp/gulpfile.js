@@ -28,6 +28,7 @@ var argv = require('yargs').argv;
 var sauceConnectLauncher = require('sauce-connect-launcher');
 var extend = require('gulp-extend');
 var tap = require('gulp-tap');
+var jeditor = require("gulp-json-editor");
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -52,13 +53,36 @@ function handleError(err) {
 
 gulp.task('default', ['build']);
 
-gulp.task('bower', function () {
+gulp.task('bower-install', ['generate-bower-json'], function () {
     return bower().on('error', handleError);
+});
+
+// collect all bower-dependencies in collectedBowerDeps object
+var collectedBowerDeps = {};
+gulp.task('collect-bower-dependencies', function () {
+    return gulp.src('resources/widgets/**/bower.json')
+        .pipe(jeditor(function(json) {
+            // TODO: if necessary don't add widgets with no dependencies at all
+            collectedBowerDeps[json["name"]] = "./resources/widgets/" + json["name"] + "/";
+            return json;
+        }))
+});
+
+gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
+    return gulp.src('bower-base.json')
+        .pipe(jeditor(function(json) {
+            for (var dep in collectedBowerDeps) {
+                json["dependencies"][dep] = collectedBowerDeps[dep];
+            }
+            return json;
+        }))
+        .pipe(extend('bower.json'))
+        .pipe(gulp.dest('.'))
 });
 
 gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
 
-gulp.task('build-components', ['bower'], function () {
+gulp.task('build-components', ['bower-install'], function () {
     var removeFilter = gulpFilter([
         '**/*',
         '!**/jquery/src/**',
@@ -280,7 +304,7 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
 // Rerun the task when a file changes
 gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
-        'bower.json', 'favicon.ico', '!resources/apps/**',
+        'bower-base.json', 'favicon.ico', '!resources/apps/**',
         '!resources/widgets/widgets.json'], ['build']);
 });
 
@@ -299,7 +323,8 @@ gulp.task('watch-unit-test', ['build'], function (done) {
 gulp.task('clean', function (cb) {
    return del([
        'build',
-       'bower_components'
+       'bower_components',
+       'bower.json'
        ], cb);
 });
 

@@ -114,7 +114,7 @@ define(['angular'], function (angular) {
         };
     });
 
-    widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope) {
+    widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope, appConfig) {
         var EventPublisher = function (scope) {
             var emitterName = function () {
                 return scope && scope.widget && scope.widget.instanceName;
@@ -177,6 +177,14 @@ define(['angular'], function (angular) {
                 EventPublisher.wireSignalWithSlot(s.emitter, s.signal, s.receiver, s.slot);
             }
         };
+
+        $rootScope.$watch(function () {
+            return appConfig.pageConfig() && appConfig.pageConfig().subscriptions;
+        }, function (newSubscriptions) {
+            if (newSubscriptions !== undefined) {
+                EventPublisher.replacePageSubscriptions(newSubscriptions);
+            }
+        }, true);
 
         return EventPublisher;
     });

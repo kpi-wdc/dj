@@ -11,9 +11,10 @@ For developers (optional):
 
 - node.js is installed
 - npm is installed
-- gulp is installed `npm install -g gulp`
-- karma is installed `npm install -g karma`
-- protractor is installed `npm install -g protractor`
+- bower is installed (run `npm install -g bower` as admin)
+- gulp is installed (run `npm install -g gulp` as admin)
+- karma is installed (run `npm install -g karma` as admin)
+- protractor is installed (run `npm install -g protractor` as admin)
 - firefox and chrome are installed
 
 

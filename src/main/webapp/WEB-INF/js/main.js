@@ -30,13 +30,16 @@ require.config({
         'jquery': {
             exports: '$'
         },
+        'json-editor': {
+            deps: ['sceditor'],
+            exports: 'JSONEditor'
+        },
+        'sceditor': ['jquery'],
         'angular-mocks': ['angular'],
         'angular-leaflet': ['angular', 'leaflet'],
         'angular-ui-router': ['angular'],
         'angular-oclazyload': ['angular'],
         'angular-foundation': ['angular'],
-        'sceditor': ['jquery'],
-        'json-editor': ['sceditor'],
         'angular-json-editor': ['angular', 'json-editor'],
         'template-cached-pages': ['angular']
     },
@@ -45,21 +48,22 @@ require.config({
     deps: ['js/app']
 });
 
-// are we unit-testing now?
-var isUnitTesting = window.__karma__ !== undefined;
-
-if (isUnitTesting) {
-    var tests = [];
-    for (var file in window.__karma__.files) {
-        if (window.__karma__.files.hasOwnProperty(file)) {
-            if (/Spec\.js$/.test(file)) {
-                tests.push(file);
+(function () {
+    // are we unit-testing now?
+    var isUnitTesting = window.__karma__ !== undefined;
+    if (isUnitTesting) {
+        var tests = [];
+        for (var file in window.__karma__.files) {
+            if (window.__karma__.files.hasOwnProperty(file)) {
+                if (/Spec\.js$/.test(file)) {
+                    tests.push(file);
+                }
             }
         }
+        require.config({
+            baseUrl: '/base',
+            deps: tests,
+            callback: window.__karma__.start
+        })
     }
-    require.config({
-        baseUrl: '/base',
-        deps: tests,
-        callback: window.__karma__.start
-    })
-}
+})();
