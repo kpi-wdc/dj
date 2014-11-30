@@ -1,5 +1,24 @@
 define(['js/app', 'angular-mocks'], function () {
     beforeEach(module('app'));
+
+    var emptyAppJson = {
+        "sections" : [],
+        "pages" : []
+    };
+
+    var noWidgetsJson = {
+    };
+
+    var $httpBackend;
+
+    beforeEach(inject(function (_$httpBackend_) {
+        $httpBackend = _$httpBackend_;
+        $httpBackend.whenGET('/apps/app.json')
+            .respond(JSON.stringify(emptyAppJson));
+        $httpBackend.whenGET('/widgets/widgets.json')
+            .respond(JSON.stringify(noWidgetsJson));
+    }));
+
     describe("Testing controllers", function () {
         var MainCtrlScope;
         var PageCtrlScope;
