@@ -53,6 +53,8 @@ function handleError(err) {
 
 gulp.task('default', ['build']);
 
+gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
+
 gulp.task('bower-install', ['generate-bower-json'], function () {
     return bower().on('error', handleError);
 });
@@ -79,8 +81,6 @@ gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
         .pipe(extend('bower.json'))
         .pipe(gulp.dest('.'))
 });
-
-gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
 
 gulp.task('build-components', ['bower-install'], function () {
     var removeFilter = gulpFilter([
@@ -215,6 +215,20 @@ gulp.task('amd-optimize', ['build-components', 'build-widgets',
         .pipe(gulp.dest('build'));
 });
 
+gulp.task('merge-widget-configs', function () {
+    return gulp.src('resources/widgets/**/widget.json')
+        .pipe(tap(function(file) {
+            var dir = path.dirname(file.path).split('/').pop();
+            file.contents = Buffer.concat([
+                new Buffer('{\"' + dir + '\":'),
+                file.contents,
+                new Buffer('}')
+            ]);
+        }))
+        .pipe(extend('widgets.json'))
+        .pipe(gulp.dest('build/widgets'))
+});
+
 gulp.task('build-favicon', function () {
     return gulp.src('favicon.ico')
         .pipe(cached('build-favicon'))
@@ -326,18 +340,4 @@ gulp.task('clean', function (cb) {
        'bower_components',
        'bower.json'
        ], cb);
-});
-
-gulp.task('merge-widget-configs', function () {
-    return gulp.src('resources/widgets/**/widget.json')
-        .pipe(tap(function(file) {
-            var dir = path.dirname(file.path).split('/').pop();
-            file.contents = Buffer.concat([
-                new Buffer('{\"' + dir + '\":'),
-                file.contents,
-                new Buffer('}')
-            ]);
-        }))
-        .pipe(extend('widgets.json'))
-        .pipe(gulp.dest('build/widgets'))
 });
