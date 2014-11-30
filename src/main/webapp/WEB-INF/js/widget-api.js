@@ -179,11 +179,10 @@ define(['angular'], function (angular) {
         };
 
         $rootScope.$watch(function () {
-            return appConfig.pageConfig() && appConfig.pageConfig().subscriptions;
+            var pageConf = appConfig.pageConfig();
+            return  pageConf && pageConf.subscriptions;
         }, function (newSubscriptions) {
-            if (newSubscriptions !== undefined) {
-                EventPublisher.replacePageSubscriptions(newSubscriptions);
-            }
+            EventPublisher.replacePageSubscriptions(newSubscriptions);
         }, true);
 
         return EventPublisher;
