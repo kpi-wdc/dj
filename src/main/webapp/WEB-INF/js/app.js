@@ -59,7 +59,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             .state('page', {
                 url: '/:href',
                 resolve: {
-                    pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader, EventEmitter) {
+                    pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
                         return pageConfigPromise = appConfigPromise
                             .then(function () {
                                 var pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
