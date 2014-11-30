@@ -184,7 +184,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
         this.submitToServer = function (callback) {
             self.sendingToServer = true;
-            return $http.put(appUrls.self, self.config)
+            return $http.put(appUrls.appConfig, self.config)
                 .then(function () {
                     self.sendingToServer = false;
                 }, function (data) {
