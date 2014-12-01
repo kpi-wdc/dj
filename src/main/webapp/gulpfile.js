@@ -62,7 +62,7 @@ gulp.task('bower-install', ['generate-bower-json'], function () {
 // collect all bower-dependencies in collectedBowerDeps object
 var collectedBowerDeps = {};
 gulp.task('collect-bower-dependencies', function () {
-    return gulp.src('resources/widgets/**/bower.json')
+    return gulp.src('resources/widgets/*/bower.json')
         .pipe(jeditor(function(json) {
             // TODO: if necessary don't add widgets with no dependencies at all
             collectedBowerDeps[json["name"]] = "./resources/widgets/" + json["name"] + "/";
