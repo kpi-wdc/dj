@@ -13,4 +13,4 @@ build
 # widgets.json
 resources/widgets/widgets.json
 
-bower.json
+/bower.json
