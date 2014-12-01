@@ -143,8 +143,6 @@ define(['js/app', 'angular-mocks'], function () {
                 expect(badInvocation.result).toBeUndefined();
             });
 
-
-
             it('ensure APIUser::invokeAll calls', function () {
                 var aUser = new APIUser(scopeA);
                 var aProvider = new APIProvider(scopeA);
