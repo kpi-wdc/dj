@@ -1,8 +1,4 @@
 {
   "name": "bye",
-  "private": true,
-  "dependencies": {
-
-  }
+  "private": true
 }
-

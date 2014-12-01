@@ -1,4 +1,5 @@
 define(function () {
+    "use strict";
     // ES5 Function.prototype.bind
     // doesn't work in pre-v2 PhantomJS
     if (typeof Function.prototype.bind != 'function') {

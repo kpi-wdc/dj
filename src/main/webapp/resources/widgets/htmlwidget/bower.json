@@ -1,8 +1,4 @@
 {
   "name": "htmlwidget",
-  "private": true,
-  "dependencies": {
-
-  }
+  "private": true
 }
-

@@ -1,8 +1,4 @@
 {
   "name": "title",
-  "private": true,
-  "dependencies": {
-
-  }
+  "private": true
 }
-

@@ -1,8 +1,4 @@
 {
   "name": "widget-with-dependency",
-  "private": true,
-  "dependencies": {
-
-  }
+  "private": true
 }
-

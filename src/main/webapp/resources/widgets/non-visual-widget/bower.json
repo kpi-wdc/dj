@@ -1,8 +1,4 @@
 {
   "name": "non-visual-widget",
-  "private": true,
-  "dependencies": {
-
-  }
+  "private": true
 }
-

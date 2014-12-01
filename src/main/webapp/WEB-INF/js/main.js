@@ -49,6 +49,7 @@ require.config({
 });
 
 (function () {
+    "use strict";
     // are we unit-testing now?
     var isUnitTesting = window.__karma__ !== undefined;
     if (isUnitTesting) {

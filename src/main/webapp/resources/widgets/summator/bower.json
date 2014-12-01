@@ -1,8 +1,4 @@
 {
   "name": "summator",
-  "private": true,
-  "dependencies": {
-
-  }
+  "private": true
 }
-
