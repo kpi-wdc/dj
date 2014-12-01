@@ -171,6 +171,23 @@ define(['js/app', 'angular-mocks'], function () {
                 });
                 expect(slotOther).not.toHaveBeenCalled();
             });
+
+            it('ensure getScopeByName works', function () {
+                var a = new APIUser(scopeA);
+                var b = new APIProvider(scopeB);
+                $rootScope.$digest();
+                expect(a.getScopeByInstanceName('b')).toBe(scopeB);
+            });
+
+            it('ensure getScopeByName works after renaming', function () {
+                var a = new APIUser(scopeA);
+                var b = new APIProvider(scopeB);
+                $rootScope.$digest();
+                expect(a.getScopeByInstanceName('b')).toBe(scopeB);
+                scopeB.widget.instanceName = 'b2';
+                scopeB.$digest();
+                expect(a.getScopeByInstanceName('b2')).toBe(scopeB);
+            });
         });
     });
 });

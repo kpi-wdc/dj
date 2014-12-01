@@ -4,8 +4,9 @@ define(['angular'], function (angular) {
 
     widgetApi.constant('eventWires', {}); // emitterName -> [{signalName, providerName, slotName}]
     widgetApi.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
+    widgetApi.constant('instanceNameToScope', {}); // name -> scope
 
-    widgetApi.factory('APIProvider', function (widgetSlots) {
+    widgetApi.factory('APIProvider', function (widgetSlots, instanceNameToScope) {
         var APIProvider = function (scope) {
             var self = this;
             var providerName = scope.widget.instanceName;
@@ -15,6 +16,10 @@ define(['angular'], function (angular) {
                 }
                 widgetSlots[newName] = widgetSlots[providerName];
                 delete widgetSlots[providerName];
+
+                instanceNameToScope[newName] = scope;
+                delete instanceNameToScope[providerName];
+
                 providerName = newName;
             });
             scope.$on('$destroy', function () {
@@ -59,7 +64,7 @@ define(['angular'], function (angular) {
         return APIProvider;
     });
 
-    widgetApi.factory('APIUser', function (widgetSlots) {
+    widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
         return function (scope) {
             var userName = function () {
                 if (scope && scope.widget) {
@@ -120,7 +125,11 @@ define(['angular'], function (angular) {
                     }
                 }
                 return undefined;
-            }
+            };
+
+            this.getScopeByInstanceName = function (name) {
+                return instanceNameToScope[name];
+            };
         };
     });
 
