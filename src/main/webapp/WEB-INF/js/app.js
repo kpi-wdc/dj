@@ -114,7 +114,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
     });
 
     app.factory('prompt', function ($window) {
-        return $window.prompt(text);
+        return $window.prompt;
     });
 
     app.factory('widgetTypesPromise', function ($http, appUrls) {
