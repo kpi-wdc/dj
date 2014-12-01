@@ -254,6 +254,9 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
                 controller: 'WidgetModalSettingsController',
                 backdrop: 'static',
                 resolve: {
+                    widgetScope: function () {
+                        return (new APIUser).getScopeByInstanceName(widget.instanceName);
+                    },
                     widgetConfig: function () {
                         return widget;
                     },
@@ -331,7 +334,9 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout, widgetConfig, widgetType) {
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
+                                                              widgetScope, widgetConfig, widgetType) {
+        $scope.widgetScope = widgetScope;
         $scope.widgetType = widgetType;
         $scope.widgetConfig = angular.copy(widgetConfig);
         delete $scope.widgetConfig.instanceName;
