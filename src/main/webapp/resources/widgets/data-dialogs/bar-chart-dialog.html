@@ -1,0 +1,165 @@
+<tabset>
+    <tab heading = "1.Select Dataset">
+        <div class="panel" style="font-size:small;">
+
+            <div  ng-click="dialog.setState(2,dataset)" class="row" ng-repeat="dataset in dialog.datasetList" ng-style="dialog.getDatasetStyle(dataset)" style=" border-style: solid;border-width: 1px;border-color: #d8d8d8;cursor:pointer">
+                <label style="font-size:medium;font-weight: bold">
+                    {{dialog.provider.getDatasetLabel(dataset)}}
+                </label>
+                <label style="font-size:smaller"><b>Source:</b> {{dialog.provider.getDatasetSource(dataset)}}</label>
+                <label style="font-size:smaller"><b>Updated:</b> {{dialog.provider.getDatasetUpdated(dataset)}}</label>
+            </div>
+            <div class="row" style="text-align:right; font-size:smaller; padding:0 1rem 0 1rem; margin:0">
+                {{dialog.selection.dataset}}<br/>
+                <label style="font-size:small">
+                    <b>URL:</b> <a href="{{dialog.provider.dataURL}}"> {{dialog.provider.dataURL}}</a>
+                </label>
+                <label style="font-size:small">
+
+                    <b>Format:</b><a href="{{dialog.provider.dataFormatRef}}"> {{dialog.provider.dataFormat}}</a>
+                </label>
+            </div>
+        </div>
+    </tab>
+
+    <tab heading="2.Select Data" ng-if="dialog.state >= 2">
+        <div class="panel">
+            <div class="row" ng-repeat=" dim in dialog.provider.getDimensionList(dialog.selection.dataset)" style="border-style: solid;border-width: 1px;border-color: #d8d8d8;">
+                <label style="padding: 0 0 0.2rem 0; font-size: medium">
+                    <b>{{dialog.provider.getDimensionLabel(dialog.selection.dataset,dim)}}&nbsp;[&nbsp;{{dim}}&nbsp;]&nbsp;</b>
+                    <span style="font-size:smaller">({{dialog.selection.dimensions[dim].length()}} items selected)</span>
+                </label>
+                <label style="padding: 0 0 0.2rem 0;">
+                    <button ng-click="dialog.selectAllCategories(dim)" class="button tiny radius" style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">Select All</button>
+                    <button ng-click="dialog.unselectAllCategories(dim)" class="button tiny radius" style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">Clear</button>
+                </label>
+                <div class="columns left  medium-3 container-top" style="font-size: smaller; vertical-align: middle;"  ng-repeat="m in dialog.provider.getDimensionIdList(dialog.selection.dataset, dim)">
+                    <input type="checkbox"  ng-click="dialog.selectCategory(dim,m)" ng-checked="dialog.selection.dimensions[dim].contains(m)" style="margin-bottom: 0">
+                    <a ng-click="dialog.selectCategory(dim,m)">&nbsp;{{dialog.provider.getCategoryLabel(dialog.selection.dataset,dim,m)}}&nbsp;[&nbsp;{{m}}&nbsp;]</a>
+                </div>
+            </div>
+            <div class="row" style="margin:0;">
+                <button ng-disabled="!dialog.readyForDataFetch()" ng-click="dialog.setState(3)" class="right" style="margin: 0;">Get Data</button>
+            </div>
+        </div>
+    </tab>
+
+
+    <tab heading="Data View" ng-if="dialog.state >= 3">
+        <div class="panel" style="overflow: auto">
+            <table cellpadding="0px" cellspacing="0px" style="padding: 0px; margin: 0px;">
+                <thead>
+                <tr>
+                    <th  ng-repeat="h in dialog.selection.result.header" style=" font-size: smaller">
+                        {{h}}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="r in dialog.selection.result.data">
+                    <td ng-repeat="h in dialog.selection.result.header" style=" font-size: smaller" >
+                        {{(r[h])?r[h]:' - '}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </tab>
+
+    <tab heading="3.Define Role for Attributes" ng-if="dialog.state >= 3">
+        <div class="panel">
+            <div class="row" style="padding-bottom: 0; margin-bottom: 0">
+                <div class="columns left  medium-6 container-top" style="font-size: small; padding-bottom:0rem;">
+                    <label> <b>Select Serie key, Label and Value</b></label>
+                </div>
+            </div>
+            <div class="row" style="border: 1px solid #d8d8d8">
+                <div ng-style="dialog.getFieldStyle(f)" ng-repeat="f in dialog.selection.result.header" class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label ng-style="dialog.getFieldStyle(f)">{{f}} <span style="font-size: small"> as </span></label>
+                    <select ng-model="dialog.selection.fields[f]" ng-change="dialog.changeFieldRole(f)">
+                        <option>Not Used</option>
+                        <option>Serie</option>
+                        <option>Label</option>
+                        <option>Value</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="row" style="border: 1px solid #d8d8d8">
+                <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label> <b>Order series by serie key</b>
+                        <select ng-model="dialog.selection.seriesOrder" ng-change="dialog.setState(3)">
+                            <option>None</option>
+                            <option>A-Z</option>
+                            <option>Z-A</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label> <b>Order serie items by</b>
+                        <select ng-model="dialog.selection.itemsOrder" ng-change="dialog.setState(3)">
+                            <option>None</option>
+                            <option>Value (A-Z)</option>
+                            <option>Value (Z-A)</option>
+                            <option>Label (A-Z)</option>
+                            <option>Label (Z-A)</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="row" style="margin:0;">
+                <button ng-disabled="!dialog.readyForSeriesGeneration()" ng-click="dialog.setState(4)" class="right" style="margin: 0;">Generate Series</button>
+            </div>
+        </div>
+    </tab>
+
+
+
+    <tab heading="Series View" ng-if="dialog.state >= 4">
+        <div class="panel" style="font-size:small;">
+
+            <div  class="row" ng-repeat="serie in dialog.selection.series" style=" border-style: solid;border-width: 1px;border-color: #d8d8d8;cursor:pointer; overflow: auto">
+                <label style="font-size:medium;font-weight: bold">
+                    Serie: {{serie.key}}
+                </label>
+                <table cellpadding="0px" cellspacing="0px" style="padding: 0px; margin: 0px;">
+                    <thead>
+                    <tr>
+
+                        <th  ng-repeat="v in serie.values" style=" font-size: smaller">
+                            {{v.label}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+
+                        <td ng-repeat="v in serie.values" style=" font-size: smaller" >
+                            {{(v.value)?v.value:' - '}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </tab>
+
+    <tab heading="4.Set Chart Options" ng-if="dialog.state >= 4">
+        <div class="panel">
+            <div class="row">
+                <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label> Save data in widget configuration
+                        <input type="checkbox" ng-model="dialog.selection.standalone">
+                    </label>
+                </div>
+            </div>
+            <div class="row" style="margin:0;">
+                <button ng-click="dialog.setState(5)" class="right" style="margin: 0;">Apply</button>
+            </div>
+        </div>
+    </tab>
+
+
+</tabset>

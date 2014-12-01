@@ -1,0 +1,24 @@
+<div style="font-size: small" ng-controller="DataSourceController" ng-show="globalConfig.designMode">
+    <div class="panel" style="font-size:small;">
+
+        <div class="row" ng-repeat="dataset in provider.getDatasetIdList()" style=" border-style: solid;border-width: 1px;border-color: #d8d8d8;cursor:pointer">
+            <label style="font-size:medium;font-weight: bold">
+                {{provider.getDatasetLabel(dataset)}}
+            </label>
+            <label style="font-size:smaller"><b>Source:</b> {{provider.getDatasetSource(dataset)}}</label>
+            <label style="font-size:smaller"><b>Updated:</b> {{provider.getDatasetUpdated(dataset)}}</label>
+        </div>
+        <div class="row" style="text-align:right; font-size:smaller; padding:0 1rem 0 1rem; margin:0">
+            <label style="font-size:small">
+                <b>URL:</b> <a href="{{provider.dataURL}}"> {{provider.dataURL}}</a>
+            </label>
+            <label style="font-size:small">
+
+                <b>Format:</b><a href="{{provider.dataFormatRef}}"> {{provider.dataFormat}}</a>
+            </label>
+        </div>
+    </div>
+
+    <div ng-show="!url">Datasource not configured</div>
+
+</div>
