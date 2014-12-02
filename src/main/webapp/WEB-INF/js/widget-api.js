@@ -10,6 +10,7 @@ define(['angular'], function (angular) {
         var APIProvider = function (scope) {
             var self = this;
             var providerName = scope.widget.instanceName;
+            instanceNameToScope[providerName] = scope;
             scope.$watch('widget.instanceName', function (newName) {
                 if (newName === providerName) {
                     return;
