@@ -8,6 +8,12 @@ describe("Webapp", function () {
             });
         }, 3000).then(function () {
             browser.ignoreSynchronization = false;
+            browser.executeScript(function () {
+                window.sessionStorage = {
+                    loggedIn: true,
+                    designMode: true
+                };
+            });
             cb();
         });
     });
