@@ -53,6 +53,11 @@ define(['angular'], function (angular) {
                 return this;
             };
 
+            this.openCustomSettings = function (slotFn) {
+                self.provide(APIProvider.OPEN_CUSTOM_SETTINGS_SLOT, slotFn);
+                return this;
+            };
+
             this.destroy = function (slotFn) {
                 self.provide(APIProvider.DESTROY_SLOT, slotFn);
                 return this;
@@ -61,6 +66,7 @@ define(['angular'], function (angular) {
 
         APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
         APIProvider.DESTROY_SLOT = 'DESTROY_SLOT';
+        APIProvider.OPEN_CUSTOM_SETTINGS_SLOT = 'OPEN_CUSTOM_SETTINGS_SLOT';
         return APIProvider;
     });
 

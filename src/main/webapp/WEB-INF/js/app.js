@@ -249,6 +249,13 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         };
 
         this.openWidgetConfigurationDialog = function (widget) {
+            var invocation = (new APIUser).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
+            if (!invocation.success) {
+                this.openDefaultWidgetConfigurationDialog(widget);
+            }
+        };
+
+        this.openDefaultWidgetConfigurationDialog = function (widget) {
             $modal.open({
                 templateUrl: appUrls.widgetModalConfigHTML,
                 controller: 'WidgetModalSettingsController',
