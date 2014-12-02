@@ -8,14 +8,17 @@ describe("Webapp", function () {
             });
         }, 3000).then(function () {
             browser.ignoreSynchronization = false;
-            browser.executeScript(function () {
-                window.sessionStorage = {
-                    loggedIn: true,
-                    designMode: true
-                };
-            });
+            $('#logInButton').click();
+            $('#designModeCheckbox').click();
             cb();
         });
+    });
+
+    afterEach(function (cb) {
+        browser.executeScript(function () {
+            window.localStorage.clear();
+        });
+        cb();
     });
 
     it('should have some content', function () {
