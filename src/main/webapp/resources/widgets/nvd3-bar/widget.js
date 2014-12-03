@@ -32,6 +32,7 @@ define([
     var m = angular.module('app.widgets.nvd3-bar', ['nvd3',
                                                     'app.widgets.data-dialogs.bar-chart-dialog',
                                                     'app.widgets.data-util.adapter',
+
                                                     /*'app.widgets.palletes',*/
                                                     {files: ['/components/nvd3/nv.d3.css']}
                                                    ]);
@@ -69,6 +70,12 @@ define([
          .provide('setDataProvider', $scope.setDataProvider);
 
         $scope.$watch('widget.data', $scope.update);
+
+
+        $scope.openConfigDialog = function(){
+            $scope.dialog = new BarChartDialog($scope);
+            $scope.dialog.open();
+        }
 
 
         $scope.options ={

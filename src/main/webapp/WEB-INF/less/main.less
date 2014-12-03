@@ -99,3 +99,80 @@ widget-holder {
     border: 2px dashed blue;
   }
 }
+
+
+
+
+.tabs dd > a, .tabs .tab-title > a {
+  outline: none;
+  display: block;
+  background-color: #FFFFFF;
+  color: #222222;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-size: 0.675rem;
+}
+
+
+.tabs dd.active a, .tabs .tab-title.active a {
+  background-color: #efefef;
+  color: #222222;
+}
+
+input[type="file"], input[type="checkbox"], input[type="radio"], select {
+  margin: 0 0 0 0;
+}
+
+.row {
+  width: auto;
+  margin-left: -0.9375rem;
+  margin-right: -0.9375rem;
+  margin-top: 0;
+  margin-bottom: 0.875rem;
+  max-width: none;
+  font-size: small;
+  padding: 1rem;
+}
+
+.tabs-content > .content {
+  display: none;
+  float: left;
+  padding: 0;
+  width: 100%;
+}
+
+table tr th, table tr td {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.875rem;
+  color: #222222;
+  text-align: left;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+select {
+  -webkit-appearance: none !important;
+  -webkit-border-radius: 0px;
+  background-color: #fafafa;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdтАжJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
+  background-position: 100% center;
+  background-repeat: no-repeat;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #cccccc;
+  padding: 0.2rem;
+  font-size: 0.875rem;
+  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.75);
+  line-height: normal;
+  border-radius: 0;
+  height: 1.5rem;
+}
+
+button.disabled, button[disabled], .button.disabled, .button[disabled] {
+  background-color: #ADB8BB;
+  border-color: #007095;
+  color: white;
+  cursor: default;
+  opacity: 0.7;
+  box-shadow: none;
+}

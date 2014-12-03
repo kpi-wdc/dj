@@ -24,6 +24,7 @@
     <mvc:resources mapping="/templates/**" location="/build/templates/" />
     <mvc:resources mapping="/widgets/**" location="/build/widgets/" />
     <mvc:resources mapping="/img/**" location="/resources/img/" />
+    <mvc:resources mapping="/data/**" location="/resources/data/" />
     <mvc:resources mapping="/favicon.ico" location="/build/favicon.ico" />
     <mvc:resources mapping="/index.html" location="/build/index.html" />
     <mvc:view-controller path="/" view-name="/index.html"/>

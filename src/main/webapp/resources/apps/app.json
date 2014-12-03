@@ -80,7 +80,8 @@
       "receiver" : "summator-slave",
       "signal" : "sumUpdated",
       "slot" : "setValueOfA"
-    } ]
+    }
+    ]
   }, {
     "shortTitle" : "Maps",
     "href" : "maps",
@@ -147,5 +148,51 @@
         } ]
       }
     }
-  } ]
+  },
+      {
+        "shortTitle" : "NVD3 Charts",
+
+        "href" : "nvd3",
+      "template" : "1-col",
+      "holders" : {
+        "column" : {
+          "widgets" : [
+            {
+              "url" : "http://localhost:8080/data/oecd-canada.json",
+              "type" : "datasource",
+              "instanceName" : "source"
+            }, {
+              "datasource" : "source",
+              "decoration" : {
+                "title" : {
+                  "text" : "sadsadsad",
+                  "class" : "h4"
+                },
+                "subtitle" : {
+                  "text" : "sdsadsads",
+                  "class" : ""
+                },
+                "caption" : {
+                  "text" : "sdsdsdsd",
+                  "class" : ""
+                },
+                "chart" : {
+                  "width" : 400,
+                  "height" : 400
+                }
+              },
+              "type" : "nvd3-bar",
+              "instanceName" : "bar"
+            }
+          ]
+        }
+      },
+      "subscriptions" : [ {
+                            "emitter" : "source",
+                            "receiver" : "bar",
+                            "signal" : "loadDataSuccess",
+                            "slot" : "setDataProvider"
+                          }
+      ]
+    }]
 }

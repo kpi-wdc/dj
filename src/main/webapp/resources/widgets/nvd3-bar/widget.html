@@ -1,7 +1,9 @@
 <div  ng-controller="Nvd3BarChartCtrl" style="overflow:auto;" >
     <div nvd3 options="options" data="series"></div>
-
+    <button ng-click="openConfigDialog()">Configure...</button>
+<!--
     <div class="panel" ng-show="globalConfig.designMode">
         <div class="panel" ng-include="$location+'/widgets/data-dialogs/bar-chart-dialog.html'"/>
     </div>
+-->
 </div>

@@ -1,8 +1,8 @@
-define(["angular","/widgets/data-util/keyset.js"],
+define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
     function (angular) {
-        var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', ['app.widgets.data-util.keyset']);
+        var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', ['app.widgets.data-util.keyset','mm.foundation']);
 
-        m.factory("BarChartDialog", ['KeySet', function(KeySet) {
+        m.factory("BarChartDialog", ['KeySet','$modal', function(KeySet,$modal) {
 
             BarChartDialog = function(scope){
                 this.scope = scope;
@@ -284,11 +284,60 @@ define(["angular","/widgets/data-util/keyset.js"],
                     } else {
                         return false
                     }
+                },
+
+                open: function(){
+                    this.restoreState(this.scope.widget.data,this.scope.provider)
+                    var s = this.scope;
+                    $modal.open({
+                        templateUrl: 'widgets/data-dialogs/bar-chart-dialog.html',
+                        controller: 'BarChartConfigDialog',
+                        backdrop: 'static',
+                        resolve: {
+                            widgetScope: function () {
+                                //return widget;
+                                console.log("resolve",s);
+                                return s;
+                            }
+                        }
+                    }).result.then(function (newWidgetConfig) {
+                            //angular.copy(newWidgetConfig, widget);
+                            //var user = new APIUser();
+                            //user.invokeAll(APIProvider.RECONFIG_SLOT);
+                    });
                 }
             }
 
             return BarChartDialog;
 
         }]);
+
+        m.controller('BarChartConfigDialog', function ($scope, $modalInstance, widgetScope) {
+            //$scope.widgetConfig = angular.copy(widgetConfig);
+            //delete $scope.widgetConfig.instanceName;
+            //delete $scope.widgetConfig.type;
+            //var data = $scope.widgetConfig;
+            //$scope.basicProperties = {
+            //    type: widgetConfig.type,
+            //    instanceName: widgetConfig.instanceName
+            //};
+            //
+
+            console.log("DIALOG CTRL",widgetScope)
+            $scope.dialog = widgetScope.dialog;
+
+            $scope.ok = function () {
+                $modalInstance.close(/*angular.extend(data, $scope.basicProperties)*/);
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss();
+            };
+
+            //$scope.updateData = function (value) {
+            //    data = value;
+            //};
+
+        });
 
     })
