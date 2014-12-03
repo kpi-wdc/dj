@@ -286,6 +286,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             if (widgetType) {
                 widgetLoader.load(widgetType)
                     .then(function () {
+                        holder.widgets = holder.widgets || [];
                         holder.widgets.push({
                             type: widgetType,
                             instanceName: instanceName
