@@ -4,17 +4,23 @@ define(['angular'], function (angular) {
 
     widgetApi.constant('eventWires', {}); // emitterName -> [{signalName, providerName, slotName}]
     widgetApi.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
+    widgetApi.constant('instanceNameToScope', {}); // name -> scope
 
-    widgetApi.factory('APIProvider', function (widgetSlots) {
+    widgetApi.factory('APIProvider', function (widgetSlots, instanceNameToScope) {
         var APIProvider = function (scope) {
             var self = this;
             var providerName = scope.widget.instanceName;
+            instanceNameToScope[providerName] = scope;
             scope.$watch('widget.instanceName', function (newName) {
                 if (newName === providerName) {
                     return;
                 }
                 widgetSlots[newName] = widgetSlots[providerName];
                 delete widgetSlots[providerName];
+
+                instanceNameToScope[newName] = scope;
+                delete instanceNameToScope[providerName];
+
                 providerName = newName;
             });
             scope.$on('$destroy', function () {
@@ -48,6 +54,11 @@ define(['angular'], function (angular) {
                 return this;
             };
 
+            this.openCustomSettings = function (slotFn) {
+                self.provide(APIProvider.OPEN_CUSTOM_SETTINGS_SLOT, slotFn);
+                return this;
+            };
+
             this.destroy = function (slotFn) {
                 self.provide(APIProvider.DESTROY_SLOT, slotFn);
                 return this;
@@ -56,10 +67,11 @@ define(['angular'], function (angular) {
 
         APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
         APIProvider.DESTROY_SLOT = 'DESTROY_SLOT';
+        APIProvider.OPEN_CUSTOM_SETTINGS_SLOT = 'OPEN_CUSTOM_SETTINGS_SLOT';
         return APIProvider;
     });
 
-    widgetApi.factory('APIUser', function (widgetSlots) {
+    widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
         return function (scope) {
             var userName = function () {
                 if (scope && scope.widget) {
@@ -120,7 +132,11 @@ define(['angular'], function (angular) {
                     }
                 }
                 return undefined;
-            }
+            };
+
+            this.getScopeByInstanceName = function (name) {
+                return instanceNameToScope[name];
+            };
         };
     });
 

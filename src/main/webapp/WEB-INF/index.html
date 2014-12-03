@@ -53,23 +53,29 @@
         <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
 
-      <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
-      <div class="switch tiny">
-        <input type="checkbox"
-               id="designModeCheckbox"
-               ng-model="globalConfig.designMode">
-        <label for="designModeCheckbox"></label>
+      <div ng-if="globalConfig.loggedIn">
+        <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+        <div class="switch tiny">
+          <input type="checkbox"
+                 id="designModeCheckbox"
+                 ng-model="globalConfig.designMode">
+          <label for="designModeCheckbox"></label>
+        </div>
+        <br>
+        <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
+        <div class="switch tiny">
+          <input type="checkbox"
+                 id="debugModeCheckbox"
+                 ng-model="globalConfig.debugMode"
+                 ng-disabled="globalConfig.designMode">
+          <label for="debugModeCheckbox"></label>
+        </div>
+        <br>
+        <button class="button tiny alert left" ng-click="logOut()">Log out</button>
       </div>
-      <br>
-      <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
-      <div class="switch tiny">
-        <input type="checkbox"
-               id="debugModeCheckbox"
-               ng-model="globalConfig.debugMode"
-               ng-disabled="globalConfig.designMode">
-        <label for="debugModeCheckbox"></label>
+      <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
+        <button class="button tiny" id="logInButton">Log in</button>
       </div>
-
       <p><img src="/img/ad.gif"/></p>
     </nav>
   </div>

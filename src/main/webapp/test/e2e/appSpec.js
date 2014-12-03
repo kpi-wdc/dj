@@ -4,12 +4,23 @@ describe("Webapp", function () {
         browser.driver.wait(function () {
             return browser.driver.executeScript(function () {
                 return window.angular !== undefined &&
-                    window.angular.bootstrap !== undefined;
+                    window.angular.bootstrap !== undefined &&
+                    window.$ &&
+                    window.$.isReady;
             });
         }, 3000).then(function () {
             browser.ignoreSynchronization = false;
+            $('#logInButton').click();
+            $('#designModeCheckbox').click();
             cb();
         });
+    });
+
+    afterEach(function (cb) {
+        browser.executeScript(function () {
+            window.localStorage.clear();
+        });
+        cb();
     });
 
     it('should have some content', function () {

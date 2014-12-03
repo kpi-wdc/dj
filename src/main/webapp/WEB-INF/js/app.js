@@ -1,7 +1,7 @@
-define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', 'angular-oclazyload',
+define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
     'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular, $) {
     "use strict";
-    var app = angular.module('app', ['ui.router', 'oc.lazyLoad', 'mm.foundation',
+    var app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
         'angular-json-editor', 'templates', 'app.widgetApi']);
 
     app.constant('appUrls', {
@@ -249,11 +249,21 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         };
 
         this.openWidgetConfigurationDialog = function (widget) {
+            var invocation = (new APIUser).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
+            if (!invocation.success) {
+                this.openDefaultWidgetConfigurationDialog(widget);
+            }
+        };
+
+        this.openDefaultWidgetConfigurationDialog = function (widget) {
             $modal.open({
                 templateUrl: appUrls.widgetModalConfigHTML,
                 controller: 'WidgetModalSettingsController',
                 backdrop: 'static',
                 resolve: {
+                    widgetScope: function () {
+                        return (new APIUser).getScopeByInstanceName(widget.instanceName);
+                    },
                     widgetConfig: function () {
                         return widget;
                     },
@@ -287,16 +297,34 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         };
     });
 
-    app.controller('MainCtrl', function ($scope, alert, appConfig) {
-        var cnf = $scope.globalConfig = {
-            debugMode: false,
-            designMode: true
-        };
+    app.controller('MainCtrl', function ($scope, $localStorage, alert, appConfig) {
+        if ($localStorage.localStorageInitialized === undefined) {
+            $localStorage.globalConfig = {
+                debugMode: false,
+                designMode: false,
+                loggedIn: false
+            };
+            $localStorage.localStorageInitialized = true;
+        }
+        var cnf = $scope.globalConfig = $localStorage.globalConfig;
 
         $scope.appConfig = appConfig;
 
+        $scope.logIn = function () {
+            cnf.loggedIn = true;
+        };
+
+        $scope.logOut = function () {
+            cnf.loggedIn = false;
+        };
+
         $scope.$watch('globalConfig.designMode', function () {
             cnf.debugMode = cnf.debugMode && !cnf.designMode;
+        });
+
+        $scope.$watch('globalConfig.loggedIn', function () {
+            cnf.debugMode = cnf.debugMode && cnf.loggedIn;
+            cnf.designMode = cnf.designMode && cnf.loggedIn;
         });
 
         $scope.alertAppConfigSubmissionFailed = function (data) {
@@ -331,9 +359,14 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout, widgetConfig, widgetType) {
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
+                                                              widgetScope, widgetConfig, widgetType) {
+        $scope.widgetScope = widgetScope;
         $scope.widgetType = widgetType;
+
         $scope.widgetConfig = angular.copy(widgetConfig);
+        // split widgetConfig into basicProperties (not available in json-editor)
+        // and $scope.widgetConfig - everything else, modifyable in json-editor
         delete $scope.widgetConfig.instanceName;
         delete $scope.widgetConfig.type;
         var data = $scope.widgetConfig;

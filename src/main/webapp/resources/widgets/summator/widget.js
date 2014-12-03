@@ -22,6 +22,9 @@ define(['angular'], function (angular) {
                 .provide('setValueOfB', function (evt, value) {
                     $scope.b = value;
                 })
+                //.openCustomSettings(function () {
+                //    console.log('Opening custom settings...');
+                //})
                 .destroy(function () {
                     console.log('Summator widget is destroyed');
                 });
