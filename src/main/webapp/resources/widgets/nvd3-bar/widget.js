@@ -67,15 +67,19 @@ define([
             if($scope.widget.datasourceName)
             $scope.APIUser.invoke($scope.widget.datasourceName, 'appendListener')
         })
+         .openCustomSettings( function(){
+                $scope.dialog = new BarChartDialog($scope);
+                $scope.dialog.open();
+            })
          .provide('setDataProvider', $scope.setDataProvider);
 
         $scope.$watch('widget.data', $scope.update);
 
 
-        $scope.openConfigDialog = function(){
-            $scope.dialog = new BarChartDialog($scope);
-            $scope.dialog.open();
-        }
+        //$scope.openConfigDialog = function(){
+        //    $scope.dialog = new BarChartDialog($scope);
+        //    $scope.dialog.open();
+        //}
 
 
         $scope.options ={

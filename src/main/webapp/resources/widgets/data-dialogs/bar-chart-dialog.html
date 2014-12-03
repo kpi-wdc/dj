@@ -2,16 +2,34 @@
 <label><i> Configure General Settings > Configure Data Settings > Configure Chart Decoration</i></label>
 <hr/>
 <tabset>
+    <tab heading="0.General Settings">
+        <div class="panel" style="font-size:small;">
+            <div class="row">
+                <h5>Select Widget Name and Datasource</h5>
+                <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label>Widget name:<input type="text" ng-model="dialog.scope.widget.instanceName"></label>
+                </div>
+                <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label>Datasource:<input type="text"/></label>
+                </div>
+            </div>
+            <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+                <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
+                <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="ok()">Next</button>
+            </div>
+        </div>
+    </tab>
     <tab heading = "1.Select Dataset">
         <div class="panel" style="font-size:small;">
+                <h5>Available Datasets:</h5>
+                <div  ng-click="dialog.setState(2,dataset)" class="row" ng-repeat="dataset in dialog.datasetList" ng-style="dialog.getDatasetStyle(dataset)" style="cursor:pointer; margin: 0 0.875rem 0.875rem 0">
+                    <label style="font-size:medium;font-weight: bold">
+                        {{dialog.provider.getDatasetLabel(dataset)}}
+                    </label>
+                    <label style="font-size:smaller"><b>Source:</b> {{dialog.provider.getDatasetSource(dataset)}}</label>
+                    <label style="font-size:smaller"><b>Updated:</b> {{dialog.provider.getDatasetUpdated(dataset)}}</label>
+                </div>
 
-            <div  ng-click="dialog.setState(2,dataset)" class="row" ng-repeat="dataset in dialog.datasetList" ng-style="dialog.getDatasetStyle(dataset)" style=" border-style: solid;border-width: 1px;border-color: #d8d8d8;cursor:pointer">
-                <label style="font-size:medium;font-weight: bold">
-                    {{dialog.provider.getDatasetLabel(dataset)}}
-                </label>
-                <label style="font-size:smaller"><b>Source:</b> {{dialog.provider.getDatasetSource(dataset)}}</label>
-                <label style="font-size:smaller"><b>Updated:</b> {{dialog.provider.getDatasetUpdated(dataset)}}</label>
-            </div>
             <div class="row" style="text-align:right; font-size:smaller; padding:0 1rem 0 1rem; margin:0">
                 {{dialog.selection.dataset}}<br/>
                 <label style="font-size:small">

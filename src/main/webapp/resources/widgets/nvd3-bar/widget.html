@@ -1,9 +1,11 @@
 <div  ng-controller="Nvd3BarChartCtrl" style="overflow:auto;" >
-    <div nvd3 options="options" data="series"></div>
-    <button ng-click="openConfigDialog()">Configure...</button>
-<!--
-    <div class="panel" ng-show="globalConfig.designMode">
-        <div class="panel" ng-include="$location+'/widgets/data-dialogs/bar-chart-dialog.html'"/>
-    </div>
--->
+
+    <div nvd3 options="options" data="series" ng-if="series"></div>
+    <h1 ng-if="!series" style="color:#eeeeee; text-align: center;">Widget Not Configured</h1>
+    <!--    <button ng-click="openConfigDialog()">Configure...</button>
+
+        <div class="panel" ng-show="globalConfig.designMode">
+            <div class="panel" ng-include="$location+'/widgets/data-dialogs/bar-chart-dialog.html'"/>
+        </div>
+    -->
 </div>
