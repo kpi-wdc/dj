@@ -4,7 +4,9 @@ describe("Webapp", function () {
         browser.driver.wait(function () {
             return browser.driver.executeScript(function () {
                 return window.angular !== undefined &&
-                    window.angular.bootstrap !== undefined;
+                    window.angular.bootstrap !== undefined &&
+                    window.$ &&
+                    window.$.isReady;
             });
         }, 3000).then(function () {
             browser.ignoreSynchronization = false;

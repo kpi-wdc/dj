@@ -56,7 +56,9 @@ gulp.task('default', ['build']);
 gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
 
 gulp.task('bower-install', ['generate-bower-json'], function () {
-    return bower().on('error', handleError);
+    return bower({}, [undefined, {
+        "forceLatest": true
+    }]).on('error', handleError);
 });
 
 // collect all bower-dependencies in collectedBowerDeps object

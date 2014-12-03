@@ -34,6 +34,10 @@ module.exports = function(config){
         dir : 'coverage/'
     },
 
+    client: {
+        requireJsShowNoTimestampsError: false
+    },
+
     plugins : [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
