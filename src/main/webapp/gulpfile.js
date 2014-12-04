@@ -326,7 +326,8 @@ gulp.task('docs', shell.task([
     '-c node_modules/angular-jsdoc/conf.json ' + // config file
     '-t node_modules/angular-jsdoc/template ' + // template file
     '-d build/docs ' + // output directory
-    '-r WEB-INF/js' // source code directory
+    '-r WEB-INF/js ' + // source code directory
+    '../../../README.md' // index.html text
 ]));
 
 // Rerun the task when a file changes
