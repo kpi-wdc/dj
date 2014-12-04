@@ -25,7 +25,6 @@ var coveralls = require('gulp-coveralls');
 var replace = require('gulp-replace');
 var webdriver_update = require('gulp-protractor').webdriver_update;
 var argv = require('yargs').argv;
-var sauceConnectLauncher = require('sauce-connect-launcher');
 var extend = require('gulp-extend');
 var tap = require('gulp-tap');
 var jeditor = require("gulp-json-editor");
@@ -272,35 +271,7 @@ gulp.task('coveralls', function () {
         .pipe(coveralls());
 });
 
-var sauceConnectProcess = undefined;
-
-gulp.task('run-sauce', function (cb) {
-    sauceConnectLauncher({}, function (err, _sauceConnectProcess) {
-        if (err) {
-            console.error(err.message);
-            throw err.message;
-        }
-        console.log('Sauce Connect ready');
-        sauceConnectProcess = _sauceConnectProcess;
-        cb();
-    });
-});
-
-gulp.task('stop-sauce', function (cb) {
-    sauceConnectProcess.close(function () {
-        console.log('Closed Sauce Connect process');
-        cb();
-    })
-});
-
-gulp.task('e2e-test', function (cb) {
-    // Disable SAUCE usage because of travis instability.
-    //if (process.env.SAUCE_USERNAME) {
-    //    runSequence('run-sauce', 'e2e-run-test', 'stop-sauce', cb);
-    //} else {
-        runSequence('e2e-run-test', cb);
-    //}
-});
+gulp.task('e2e-test', ['e2e-run-test']);
 
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', webdriver_update);
