@@ -217,4 +217,31 @@ define(['angular'], function (angular) {
 
         return EventPublisher;
     });
+
+
+    /**
+     * @ngdoc service
+     * @name pageSubscriptions
+     *
+     * @description Injectable function which returns
+     * a plain JavaScript array of subscriptions on the current page.
+     * All the Array.prototype methods are available
+     * @example
+     * // To add one more subscription, inject pageSubscriptions and execute
+     * pageSubscriptions().push({
+     *   emitter: "summator-master",
+     *   receiver: "summator-slave",
+     *   signal: "sumUpdated",
+     *   slot: "setValueOfA"
+     * });
+     *
+     * @returns {Array}
+     */
+    widgetApi.factory('pageSubscriptions', function (appConfig) {
+        return function () {
+            var pageConf = appConfig.pageConfig();
+            pageConf.subscriptions = pageConf.subscriptions || [];
+            return pageConf.subscriptions;
+        };
+    });
 });
