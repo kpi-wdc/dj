@@ -245,7 +245,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         this.deleteIthWidgetFromHolder = function (holder, index) {
             var removedWidget = holder.widgets.splice(index, 1)[0];
             var user = new APIUser();
-            user.tryInvoke(removedWidget.instanceName, APIProvider.DESTROY_SLOT);
+            user.tryInvoke(removedWidget.instanceName, APIProvider.REMOVAL_SLOT);
         };
 
         this.openWidgetConfigurationDialog = function (widget) {

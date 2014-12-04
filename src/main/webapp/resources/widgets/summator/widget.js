@@ -25,7 +25,7 @@ define(['angular'], function (angular) {
                 //.openCustomSettings(function () {
                 //    console.log('Opening custom settings...');
                 //})
-                .destroy(function () {
+                .removal(function () {
                     console.log('Summator widget is destroyed');
                 });
 
