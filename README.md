@@ -71,6 +71,7 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
   - angularjs (front-end, MVVM framework)
   - requirejs (front-end, runtime dependency management)
   - less (front-end, css replacement)
+  - jsdoc (JavaScript documentation engine)
   - REST (back-end + front-end)
   - travis (continuous integration)
   - heroku (PaaS, used for app deployment)
