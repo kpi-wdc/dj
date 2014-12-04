@@ -25,6 +25,11 @@ To run this project from terminal run the following command:
 
 Intellij idea project has preconfigured maven run configuration.
 
+## API docs
+To generate API documentation run `gulp docs`
+
+Open `src/main/webapp/build/docs/index.html` to access it in the browser.
+
 ## Debugging:
 
   If you want to debug javascript code - set your breakpoints in `src/main/webapp/build`,
