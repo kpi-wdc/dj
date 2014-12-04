@@ -29,6 +29,7 @@ var sauceConnectLauncher = require('sauce-connect-launcher');
 var extend = require('gulp-extend');
 var tap = require('gulp-tap');
 var jeditor = require("gulp-json-editor");
+var shell = require('gulp-shell');
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -319,6 +320,14 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
             }
         });
 });
+
+gulp.task('docs', shell.task([
+    'node_modules/angular-jsdoc/node_modules/jsdoc/jsdoc.js ' +
+    '-c node_modules/angular-jsdoc/conf.json ' + // config file
+    '-t node_modules/angular-jsdoc/template ' + // template file
+    '-d build/docs ' + // output directory
+    '-r WEB-INF/js' // source code directory
+]));
 
 // Rerun the task when a file changes
 gulp.task('watch', function () {
