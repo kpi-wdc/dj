@@ -367,7 +367,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
         $scope.widgetConfig = angular.copy(widgetConfig);
         // split widgetConfig into basicProperties (not available in json-editor)
-        // and $scope.widgetConfig - everything else, modifyable in json-editor
+        // and $scope.widgetConfig - everything else, modifiable in json-editor
         delete $scope.widgetConfig.instanceName;
         delete $scope.widgetConfig.type;
         var data = $scope.widgetConfig;
