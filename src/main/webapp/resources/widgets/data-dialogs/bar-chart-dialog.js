@@ -6,6 +6,8 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
 
             BarChartDialog = function(scope){
                 this.scope = scope;
+                this.datasource = scope.widget.datasource;
+                this.instanceName = scope.widget.instanceName;
             }
 
             BarChartDialog.prototype =  {
@@ -17,6 +19,12 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 dimensionList: [],
 
                 state: 0,
+                step:[true,false,false,false,false,false],
+
+                gotoStep: function(index){
+                    //for(i in this.step)this.step=false;
+                    this.step[index] = true;
+                },
 
                 selection: {
                     dataset: undefined,

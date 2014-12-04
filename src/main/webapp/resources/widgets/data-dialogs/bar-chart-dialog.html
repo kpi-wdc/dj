@@ -1,26 +1,26 @@
-<h4>Widget Settings</h4>
-<label><i> Configure General Settings > Configure Data Settings > Configure Chart Decoration</i></label>
-<hr/>
+<h4>Widget Settings Wizard</h4>
 <tabset>
-    <tab heading="0.General Settings">
+    <tab heading="0.General Settings" active="dialog.step[0]">
         <div class="panel" style="font-size:small;">
+            <hr/>
             <div class="row">
                 <h5>Select Widget Name and Datasource</h5>
                 <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
-                    <label>Widget name:<input type="text" ng-model="dialog.scope.widget.instanceName"></label>
+                    <label>Widget name:<input type="text" ng-model="dialog.instanceName"></label>
                 </div>
                 <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
-                    <label>Datasource:<input type="text"/></label>
+                    <label>Datasource:<input type="text" ng-model="dialog.datasource"/></label>
                 </div>
             </div>
             <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
                 <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
-                <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="ok()">Next</button>
+                <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="dialog.gotoStep(1)">Next</button>
             </div>
         </div>
     </tab>
-    <tab heading = "1.Select Dataset">
+    <tab heading = "1.Select Dataset" active="dialog.step[1]">
         <div class="panel" style="font-size:small;">
+            <hr/>
                 <h5>Available Datasets:</h5>
                 <div  ng-click="dialog.setState(2,dataset)" class="row" ng-repeat="dataset in dialog.datasetList" ng-style="dialog.getDatasetStyle(dataset)" style="cursor:pointer; margin: 0 0.875rem 0.875rem 0">
                     <label style="font-size:medium;font-weight: bold">
@@ -36,14 +36,13 @@
                     <b>URL:</b> <a href="{{dialog.provider.dataURL}}"> {{dialog.provider.dataURL}}</a>
                 </label>
                 <label style="font-size:small">
-
-                    <b>Format:</b><a href="{{dialog.provider.dataFormatRef}}"> {{dialog.provider.dataFormat}}</a>
+                  <b>Format:</b><a href="{{dialog.provider.dataFormatRef}}"> {{dialog.provider.dataFormat}}</a>
                 </label>
             </div>
         </div>
     </tab>
 
-    <tab heading="2.Select Data" ng-if="dialog.state >= 2">
+    <tab heading="2.Select Data" ng-if="dialog.state >= 2" active="dialog.step[2]">
         <div class="panel">
             <div class="row" ng-repeat=" dim in dialog.provider.getDimensionList(dialog.selection.dataset)" style="border-style: solid;border-width: 1px;border-color: #d8d8d8;">
                 <label style="padding: 0 0 0.2rem 0; font-size: medium">
@@ -87,7 +86,7 @@
         </div>
     </tab>
 
-    <tab heading="3.Define Role for Attributes" ng-if="dialog.state >= 3">
+    <tab heading="3.Define Role for Attributes" ng-if="dialog.state >= 3" active="dialog.step[3]">
         <div class="panel">
             <div class="row" style="padding-bottom: 0; margin-bottom: 0">
                 <div class="columns left  medium-6 container-top" style="font-size: small; padding-bottom:0rem;">
@@ -136,7 +135,7 @@
 
 
 
-    <tab heading="Series View" ng-if="dialog.state >= 4">
+    <tab heading="Series View" ng-if="dialog.state >= 4" active="dialog.step[4]">
         <div class="panel" style="font-size:small;">
 
             <div  class="row" ng-repeat="serie in dialog.selection.series" style=" border-style: solid;border-width: 1px;border-color: #d8d8d8;cursor:pointer; overflow: auto">
@@ -167,7 +166,7 @@
         </div>
     </tab>
 
-    <tab heading="4.Set Chart Options" ng-if="dialog.state >= 4">
+    <tab heading="4.Set Chart Options" ng-if="dialog.state >= 4" active="dialog.step[5]">
         <div class="panel">
             <div class="row">
                 <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
@@ -184,7 +183,8 @@
 
 
 </tabset>
-
+<!--
 
 <button class="button tiny alert right" ng-click="cancel()">Cancel</button>
 <button class="button tiny right" ng-click="ok()">Save</button>
+-->

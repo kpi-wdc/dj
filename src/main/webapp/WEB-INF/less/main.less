@@ -18,7 +18,7 @@
   padding: 0;
 }
 
-widget-holder {
+.widget-holder {
   display: block;
 }
 
@@ -95,7 +95,7 @@ widget-holder {
     border: 2px dashed red;
   }
 
-  widget-holder {
+  .widget-holder {
     border: 2px dashed green;
   }
 
@@ -135,13 +135,24 @@ input[type="file"], input[type="checkbox"], input[type="radio"], select {
   margin-bottom: 0.875rem;
   max-width: none;
   font-size: small;
-  padding: 1rem;
+  padding: 0 1rem 0 1rem;
+  border:0;
 }
 
 .column, .columns {
   position: relative;
   padding-left: 0.9375rem;
   margin-right: 0.875rem;
+}
+
+.panel {
+  margin-bottom: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #333333;
+  border:0;
+  margin:0.75rem;
+}
 
 .tabs-content > .content {
   display: none;
@@ -184,4 +195,20 @@ button.disabled, button[disabled], .button.disabled, .button[disabled] {
   cursor: default;
   opacity: 0.7;
   box-shadow: none;
+}
+
+.reveal-modal, dialog {
+  visibility: hidden;
+  display: none;
+  position: absolute;
+  z-index: 1005;
+  width: 100vw;
+  top: 0;
+  border-radius: 3px;
+  left: 0;
+  background-color: white;
+  padding: 0.75rem;
+  border: solid 1px #666666;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  /* padding: 1.875rem; */
 }
