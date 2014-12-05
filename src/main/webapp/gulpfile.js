@@ -293,12 +293,13 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
 });
 
 gulp.task('docs', shell.task([
-    'node_modules/angular-jsdoc/node_modules/jsdoc/jsdoc.js ' +
-    '-c node_modules/angular-jsdoc/conf.json ' + // config file
-    '-t node_modules/angular-jsdoc/template ' + // template file
-    '-d build/docs ' + // output directory
-    '-r WEB-INF/js ' + // source code directory
-    '../../../README.md' // index.html text
+    path.join('node', 'node') +
+    ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
+    ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
+    ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
+    ' -d ' + path.join('build', 'docs') + // output directory
+    ' -r ' + path.join('WEB-INF', 'js') + // source code directory
+    ' ' + path.resolve('..', '..', '..', 'README.md') // index.html text
 ]));
 
 // Rerun the task when a file changes
