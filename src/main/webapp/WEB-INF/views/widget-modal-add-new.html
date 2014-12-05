@@ -1,0 +1,21 @@
+<h3>Choose widget type <input ng-model="searchText"></h3>
+   <div class = "addWidget">
+       <table>
+           <thead>
+           <tr>
+               <th>Type</th>
+               <th>Description</th>
+           </tr>
+           </thead>
+           <tbody ng-repeat="widget in widgetTypes | filter:searchText"
+                  ng-click="addWidget(widget.type)">
+               <tr>
+                   <td> {{widget.type}} </td>
+                   <td> {{widget.description}} </td>
+               </tr>
+           </tbody>
+       </table>
+   </div>
+<button class="button" ng-click="add()">Add {{chosenWidgetType}}</button>
+<button class="button alert" ng-click="cancel()">Cancel</button>
+<a class="close-reveal-modal" ng-click="cancel()">&#215;</a>
