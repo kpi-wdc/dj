@@ -105,22 +105,39 @@
 }
 
 
+.tabs {
+  margin-bottom: 1rem !important;
+  margin-left: 0;
+}
+
+.tabs dd, .tabs .tab-title {
+  position: relative;
+ /* margin-bottom: 0 !important;*/
+  list-style: none;
+  float: left;
+}
 
 
 .tabs dd > a, .tabs .tab-title > a {
   outline: none;
   display: block;
-  background-color: #FFFFFF;
+  background: transparent;
   color: #222222;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin: 0.5rem 1rem 0.5rem 1rem;
+  padding:0;
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-size: 0.675rem;
 }
 
+.tabs dd > a:hover, .tabs .tab-title > a:hover {
+  background: transparent;
+
+}
+
 
 .tabs dd.active a, .tabs .tab-title.active a {
-  background-color: #efefef;
-  color: #222222;
+  background-color: #008cba;
+  color: #ffffff;
 }
 
 input[type="file"], input[type="checkbox"], input[type="radio"], select {
@@ -129,28 +146,23 @@ input[type="file"], input[type="checkbox"], input[type="radio"], select {
 
 .row {
   width: auto;
-  margin-left: -0.9375rem;
-  margin-right: -0.9375rem;
-  margin-top: 0;
-  margin-bottom: 0.875rem;
+  margin-bottom: 0.5rem;
   max-width: none;
   font-size: small;
   padding: 0 1rem 0 1rem;
   border:0;
 }
 
-.column, .columns {
-  position: relative;
-  padding-left: 0.9375rem;
-  margin-right: 0.875rem;
+.border {
+  border: 1px solid #dfdfdf;
+  padding:0.5rem;
+  margin:0.5rem;
 }
 
 .panel {
-  margin-bottom: 0;
-  padding: 0;
+  padding: 0.5rem;
   background: #ffffff;
   color: #333333;
-  border:0;
   margin:0.75rem;
 }
 
@@ -163,11 +175,18 @@ input[type="file"], input[type="checkbox"], input[type="radio"], select {
 
 table tr th, table tr td {
   padding: 0.2rem 0.5rem;
-  font-size: 0.875rem;
+/*  font-size: 0.875rem;*/
   color: #222222;
   text-align: left;
   border-bottom: 1px solid #d8d8d8;
 }
+
+table thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, table tbody tr td, table tr td {
+  display: table-cell;
+  line-height: 1.125rem;
+  font-size: 0.675rem;
+}
+
 
 select {
   -webkit-appearance: none !important;

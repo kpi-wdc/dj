@@ -19,11 +19,61 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 dimensionList: [],
 
                 state: 0,
-                step:[true,false,false,false,false,false],
+
+                currentStep: 0,
+
+                step:[  {access:"enable",active:true},
+                        {access:"enable",active:false},
+                        {access:"disable",active:false},
+                        {access:"disable",active:false},
+                        {access:"disable",active:false},
+                        {access:"disable",active:false},
+                        {access:"disable",active:false}
+                     ],
+
+                styles:{
+                    "enable":{
+                        "background-color":"rgba(0, 149, 41, 0.31)",
+                        "border-radius":"20px"
+                    },
+                    "disable":{
+                        "background-color":"rgb(247, 219, 219)",
+                        "border-radius":"20px"
+                    },
+                    "active":{
+                        "background-color":"#008cba",
+                        "border-radius":"20px"
+                    }
+                },
 
                 gotoStep: function(index){
                     //for(i in this.step)this.step=false;
-                    this.step[index] = true;
+                    this.step[index].active = true;
+                    this.currentStep = index;
+                },
+
+                tryGotoStep: function(index){
+                  if(this.step[index].access == "enable") {
+                      this.gotoStep(index);
+                      return;
+                  }
+                    this.gotoStep(this.currentStep);
+                },
+
+                setEnable: function(steps){
+                    for(i in steps)
+                    this.step[steps[i]].access = "enable";
+                },
+                setDisable: function(steps){
+                    for(i in steps)
+                    this.step[steps[i]].access = "disable";
+                },
+
+                getStyle:function(index){
+                    if(this.step[index].active){
+                        return this.styles["active"];
+                    }
+                    return this.styles[this.step[index].access];
                 },
 
                 selection: {
@@ -86,6 +136,9 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                                 role: {},
                                 fields: {}
                             };
+                            this.setEnable([0]);
+                            this.setDisable([1,2,3,4,5,6]);
+                            this.gotoStep(0);
                             break;
 
                         case 1: // set data provider
@@ -100,6 +153,10 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                             this.selection.role = undefined;
                             this.selection.fields = undefined;
                             this.selection.dimensions = undefined;
+
+                            this.setEnable([0,1]);
+                            this.setDisable([2,3,4,5,6]);
+                            this.gotoStep(1);
 
                             break;
 
@@ -117,6 +174,10 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                             this.selection.result = undefined;
                             this.selection.series = undefined;
                             this.selection.queries = undefined;
+
+                            this.setEnable([0,1,2]);
+                            this.setDisable([3,4,5,6]);
+                            this.gotoStep(2);
                             break;
 
                         case 3: // get data from dataset provider, fields role selection in process
@@ -136,6 +197,10 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                             this.selection.series = undefined;
                             this.selection.queries = undefined;
                             this.state = 3;
+
+                            this.setEnable([0,1,2,3,4]);
+                            this.setDisable([5,6]);
+                            this.gotoStep(4);
 
                             break;
 
@@ -189,6 +254,11 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
 
                             this.selection.series = tmpResult;
                             this.state = 4;
+
+                            this.setEnable([0,1,2,3,4,5,6]);
+                            //this.setDisable([5,6]);
+                            this.gotoStep(6);
+
                             break;
 
                         case 5: // Set widget data configuration
@@ -205,18 +275,25 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                                 "standalone": this.selection.standalone
                             }
 
-
+                            this.modal.close();
                             //$scope.result = $scope.getData($scope.widget.data, $scope.provider);
                             break;
                     }
                     //console.log("Dialog state ", this.state, this);
                 },
 
-
+                autoselect: function(dataset, dimension){
+                    var ids = this.provider.getDimensionIdList(dataset, dimension);
+                    if (ids.length > 1) return false;
+                    if (ids.length == 1) {
+                        this.selection.dimensions[dimension].add(ids[0]);
+                        return true;
+                    }
+                },
 
                 getDatasetStyle: function (dataset) {
                     if (this.selection.dataset == dataset) {
-                        return {"background-color": "rgb(170, 200, 210)"}
+                        return {"background-color": "rgba(170, 200, 210, 0.43)"}
                     } else {
                         return {}
                     }
@@ -252,7 +329,10 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
 
                 readyForDataFetch: function () {
                     for (i in this.selection.dimensions)
-                        if (this.selection.dimensions[i].length() == 0) return false;
+                        if (this.selection.dimensions[i].length() == 0){
+                            this.setDisable([3,4,5,6]);
+                            return false;
+                        }
                     return true;
                 },
 
@@ -290,6 +370,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                         angular.isDefined(this.selection.role["Value"])) {
                         return true
                     } else {
+                        this.setDisable([5,6]);
                         return false
                     }
                 },
@@ -331,8 +412,9 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
             //};
             //
 
-            console.log("DIALOG CTRL",widgetScope)
+            //console.log("DIALOG CTRL",widgetScope)
             $scope.dialog = widgetScope.dialog;
+            widgetScope.dialog.modal = $modalInstance;
 
             $scope.ok = function () {
                 $modalInstance.close(/*angular.extend(data, $scope.basicProperties)*/);
