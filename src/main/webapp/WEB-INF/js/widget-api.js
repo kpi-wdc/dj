@@ -59,14 +59,14 @@ define(['angular'], function (angular) {
                 return this;
             };
 
-            this.destroy = function (slotFn) {
-                self.provide(APIProvider.DESTROY_SLOT, slotFn);
+            this.removal = function (slotFn) {
+                self.provide(APIProvider.REMOVAL_SLOT, slotFn);
                 return this;
             };
         };
 
         APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
-        APIProvider.DESTROY_SLOT = 'DESTROY_SLOT';
+        APIProvider.REMOVAL_SLOT = 'DESTROY_SLOT';
         APIProvider.OPEN_CUSTOM_SETTINGS_SLOT = 'OPEN_CUSTOM_SETTINGS_SLOT';
         return APIProvider;
     });
@@ -216,5 +216,32 @@ define(['angular'], function (angular) {
         }, true);
 
         return EventPublisher;
+    });
+
+
+    /**
+     * @ngdoc service
+     * @name pageSubscriptions
+     *
+     * @description Injectable function which returns
+     * a plain JavaScript array of subscriptions on the current page.
+     * All the Array.prototype methods are available
+     * @example
+     * // To add one more subscription, inject pageSubscriptions and execute
+     * pageSubscriptions().push({
+     *   emitter: "summator-master",
+     *   receiver: "summator-slave",
+     *   signal: "sumUpdated",
+     *   slot: "setValueOfA"
+     * });
+     *
+     * @returns {Array}
+     */
+    widgetApi.factory('pageSubscriptions', function (appConfig) {
+        return function () {
+            var pageConf = appConfig.pageConfig();
+            pageConf.subscriptions = pageConf.subscriptions || [];
+            return pageConf.subscriptions;
+        };
     });
 });

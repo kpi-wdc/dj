@@ -245,7 +245,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         this.deleteIthWidgetFromHolder = function (holder, index) {
             var removedWidget = holder.widgets.splice(index, 1)[0];
             var user = new APIUser();
-            user.tryInvoke(removedWidget.instanceName, APIProvider.DESTROY_SLOT);
+            user.tryInvoke(removedWidget.instanceName, APIProvider.REMOVAL_SLOT);
         };
 
         this.openWidgetConfigurationDialog = function (widget) {
@@ -367,7 +367,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
         $scope.widgetConfig = angular.copy(widgetConfig);
         // split widgetConfig into basicProperties (not available in json-editor)
-        // and $scope.widgetConfig - everything else, modifyable in json-editor
+        // and $scope.widgetConfig - everything else, modifiable in json-editor
         delete $scope.widgetConfig.instanceName;
         delete $scope.widgetConfig.type;
         var data = $scope.widgetConfig;
