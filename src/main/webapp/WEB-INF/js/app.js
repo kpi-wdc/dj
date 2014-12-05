@@ -9,6 +9,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         widgetTypes: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
+        widgetModalAddNewHTML: '/views/widget-modal-add-new.html',
         templateHTML: function (templateName) {
             return '/templates/' + templateName + '.html';
         },
@@ -281,20 +282,22 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         };
 
         this.addNewWidgetToHolder = function (holder) {
-            var widgetType = prompt('Widget type (like summator):');
-            var instanceName = Math.random().toString(36).substring(2);
-            if (widgetType) {
-                widgetLoader.load(widgetType)
-                    .then(function () {
-                        holder.widgets = holder.widgets || [];
-                        holder.widgets.push({
-                            type: widgetType,
-                            instanceName: instanceName
-                        });
-                    }, function (error) {
-                        alert.error('Cannot add widget: ' + error);
-                    });
-            }
+            $modal.open({
+                templateUrl: appUrls.widgetModalAddNewHTML,
+                controller: 'WidgetModalAddNewController',
+                backdrop: 'static',
+                resolve: {
+                    widgetTypes: function (widgetTypesPromise) {
+                        return widgetTypesPromise;
+                    },
+                    widgetLoader: function () {
+                        return widgetLoader;
+                    },
+                    holder: function () {
+                        return holder;
+                    }
+                }
+            });
         };
     });
 
@@ -393,6 +396,46 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             // sceditor doesn't want to play with foundation modal dialogs nicely.
             $('json-editor .sceditor-container iframe').height('20rem').width('98%');
         }, 0);
+    });
+
+    app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
+                                                            widgetLoader, holder) {
+        // create array instead of map (easy filtering)
+        var widgetTypesArr = [];
+        var currentWidget;
+
+        for (var type in widgetTypes.data) {
+            currentWidget = {};
+            currentWidget.type = type;
+            currentWidget.description = widgetTypes.data[type]['description'];
+            widgetTypesArr.push(currentWidget);
+        }
+
+        $scope.widgetTypes = widgetTypesArr;
+
+        $scope.addWidget = function (widgetType) {
+            $scope.chosenWidgetType = widgetType;
+        };
+
+        $scope.add = function () {
+            var instanceName = Math.random().toString(36).substring(2);
+            widgetLoader.load($scope.chosenWidgetType)
+                .then(function () {
+                    holder.widgets = holder.widgets || [];
+                    holder.widgets.push({
+                        type: $scope.chosenWidgetType,
+                        instanceName: instanceName
+                    });
+                    $scope.chosenWidgetType = "";
+                }, function (error) {
+                    alert.error('Cannot add widget: ' + error);
+                });
+            $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
     });
 
     return angular.bootstrap(document, ['app'], {
