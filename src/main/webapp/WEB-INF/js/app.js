@@ -408,6 +408,16 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             currentWidget = {};
             currentWidget.type = type;
             currentWidget.description = widgetTypes.data[type]['description'];
+
+            // TODO: move to constants
+            var noiconPath = "/widgets/noicon.png";
+
+            // add path to icon of a widget
+            if (widgetTypes.data[type]['noicon']) {
+                currentWidget.icon = noiconPath;
+            } else {
+                currentWidget.icon = "/widgets/" + currentWidget.type + "/icon.png  ";
+            }
             widgetTypesArr.push(currentWidget);
         }
 
