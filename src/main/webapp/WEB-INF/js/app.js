@@ -415,7 +415,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
             // add path to icon of a widget
             if (widgetTypes.data[type].noicon) {
-                currentWidget.icon = appUrls.defaultWidgetIconPNG;
+                currentWidget.icon = appUrls.defaultWidgetIcon;
             } else {
                 currentWidget.icon = appUrls.widgetIcon(currentWidget.type);
             }
