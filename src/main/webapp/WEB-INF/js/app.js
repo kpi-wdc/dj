@@ -9,6 +9,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         widgetTypes: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
+        pageModalConfigHTML: '/views/page-modal-config.html',
         templateHTML: function (templateName) {
             return '/templates/' + templateName + '.html';
         },
@@ -125,7 +126,8 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         return $http.get(appUrls.appConfig);
     });
 
-    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls, $rootScope) {
+    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
+                                       appUrls, $rootScope, $modal) {
         var self = this;
         this.config = {};
         this.isAvailable = false;
@@ -210,6 +212,18 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
                         }
                     }
                 }
+            });
+        };
+
+        this.addNewPage = function (page) {
+            self.config.pages.push(page);
+        };
+
+        this.addNewPageInModal = function () {
+            $modal.open({
+                templateUrl: appUrls.pageModalConfigHTML,
+                controller: 'PageModalSettingsController',
+                backdrop: 'static'
             });
         };
 
@@ -336,7 +350,6 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
     app.controller('PageCtrl', function ($scope, pageConfig, widgetManager) {
         $scope.config = pageConfig;
-        
         $scope.deleteIthWidgetFromHolder = widgetManager.deleteIthWidgetFromHolder.bind(widgetManager);
         $scope.openWidgetConfigurationDialog = widgetManager.openWidgetConfigurationDialog.bind(widgetManager);
         $scope.addNewWidgetToHolder = widgetManager.addNewWidgetToHolder.bind(widgetManager);
@@ -393,6 +406,38 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             // sceditor doesn't want to play with foundation modal dialogs nicely.
             $('json-editor .sceditor-container iframe').height('20rem').width('98%');
         }, 0);
+    });
+
+    app.controller('PageModalSettingsController', function ($scope, $modalInstance, alert, appConfig) {
+        $scope.add = function (shortTitle, href) {
+            if (shortTitle && href) {
+                var page = {};
+                page.shortTitle = shortTitle;
+                page.href = href;
+
+                // TODO: change hard-coded template and its holders
+                page.template = '1-col';
+                page.holders = {
+                    column: {
+                        widgets: [{
+                            type: "title",
+                            title: "Home page"
+                        }, {
+                            type: "htmlwidget",
+                            text: "<h3>Page Title <small>Page subtitle</small></h3>"
+                        }]
+                    }
+                };
+                appConfig.addNewPage(page);
+                $modalInstance.close();
+            } else {
+                alert.error('All fields must be filled');
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
     });
 
     return angular.bootstrap(document, ['app'], {
