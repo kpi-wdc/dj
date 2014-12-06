@@ -411,7 +411,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         for (var type in widgetTypes.data) {
             currentWidget = {};
             currentWidget.type = type;
-            currentWidget.description = widgetTypes.data[type]['description'];
+            currentWidget.description = widgetTypes.data[type].description;
 
             // add path to icon of a widget
             if (widgetTypes.data[type].noicon) {
