@@ -154,21 +154,15 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             return result;
         };
 
+        this.currentPageIndex = function () {
+            return this.pageIndexByHref($stateParams.href);
+        };
+
         this.pageConfig = function () {
             if (!self.config.pages) {
                 return undefined;
             }
-            var index404;
-
-            for (var i = 0; i < self.config.pages.length; i++) {
-                if (self.config.pages[i].href === $stateParams.href) {
-                    return self.config.pages[i];
-                }
-                if (self.config.pages[i].href === '404') {
-                    index404 = i;
-                }
-            }
-            return index404;
+            return this.config.pages[this.currentPageIndex()];
         };
 
         this.wasModified = true; // TODO: implement changing this state
