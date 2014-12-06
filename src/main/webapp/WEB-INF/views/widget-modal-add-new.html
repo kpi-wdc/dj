@@ -10,7 +10,7 @@
            </thead>
            <tbody ng-repeat="widget in widgetTypes | filter:searchText"
                   ng-click="addWidget(widget.type)">
-               <tr ng-click="selectRow($index)" class="{{changeClass($index)}}">
+               <tr ng-click="selectRow($index)" ng-class="{selected: isSelected($index)}">
                    <td class="row1"><img src="{{widget.icon}}"></td>
                    <td class="row2"> {{widget.type}} </td>
                    <td> {{widget.description}} </td>

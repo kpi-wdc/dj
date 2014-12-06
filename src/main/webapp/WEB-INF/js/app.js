@@ -452,8 +452,8 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             $scope.selectedRow = row;
         };
 
-        $scope.changeClass = function (index) {
-            return $scope.selectedRow == index ? 'selected' : '';
+        $scope.isSelected = function (index) {
+            return $scope.selectedRow === index;
         };
     });
 
