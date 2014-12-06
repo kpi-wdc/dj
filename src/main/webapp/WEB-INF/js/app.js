@@ -10,6 +10,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         widgetModalAddNewHTML: '/views/widget-modal-add-new.html',
+        defaultWidgetIconPNG: '/widgets/noicon.png',
         templateHTML: function (templateName) {
             return '/templates/' + templateName + '.html';
         },
@@ -21,6 +22,9 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         },
         widgetHTML: function (widgetName) {
             return '/widgets/' + widgetName + '/widget.html';
+        },
+        widgetIcon: function(widgetName) {
+            return '/widgets/' + widgetName + '/icon.png';
         }
     });
 
@@ -242,7 +246,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }
     });
 
-    app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, prompt) {
+    app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls) {
         this.deleteIthWidgetFromHolder = function (holder, index) {
             var removedWidget = holder.widgets.splice(index, 1)[0];
             var user = new APIUser();
@@ -399,7 +403,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
     });
 
     app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
-                                                            widgetLoader, holder) {
+                                                            widgetLoader, holder, appUrls) {
         // create array instead of map (easy filtering)
         var widgetTypesArr = [];
         var currentWidget;
@@ -409,14 +413,11 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             currentWidget.type = type;
             currentWidget.description = widgetTypes.data[type]['description'];
 
-            // TODO: move to constants
-            var noiconPath = "/widgets/noicon.png";
-
             // add path to icon of a widget
-            if (widgetTypes.data[type]['noicon']) {
-                currentWidget.icon = noiconPath;
+            if (widgetTypes.data[type].noicon) {
+                currentWidget.icon = appUrls.defaultWidgetIconPNG;
             } else {
-                currentWidget.icon = "/widgets/" + currentWidget.type + "/icon.png  ";
+                currentWidget.icon = appUrls.widgetIcon(currentWidget.type);
             }
             widgetTypesArr.push(currentWidget);
         }
