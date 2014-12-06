@@ -23,5 +23,6 @@
         "title": "Should first field be disabled?"
       }
     }
-  }
+  },
+  "noicon": true
 }

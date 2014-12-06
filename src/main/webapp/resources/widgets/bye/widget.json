@@ -1,4 +1,5 @@
 {
     "description": "Description of widget \"bye\"",
-    "nojs": true
+    "nojs": true,
+    "noicon": true
 }
