@@ -354,7 +354,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance,
                                                               widgetScope, widgetConfig, widgetType) {
         $scope.widgetScope = widgetScope;
         $scope.widgetType = widgetType;
@@ -381,12 +381,6 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         $scope.updateData = function (value) {
             data = value;
         };
-
-        $timeout(function () {
-            // HORRIBLE HACK!
-            // sceditor doesn't want to play with foundation modal dialogs nicely.
-            $('json-editor .sceditor-container iframe').height('20rem').width('98%');
-        }, 0);
     });
 
     return angular.bootstrap(document, ['app'], {
