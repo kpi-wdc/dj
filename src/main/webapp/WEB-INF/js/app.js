@@ -446,6 +446,14 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         $scope.cancel = function () {
             $modalInstance.dismiss();
         };
+
+        $scope.selectRow = function (row) {
+            $scope.selectedRow = row;
+        };
+
+        $scope.changeClass = function (index) {
+            return $scope.selectedRow == index ? 'selected' : '';
+        };
     });
 
     return angular.bootstrap(document, ['app'], {
