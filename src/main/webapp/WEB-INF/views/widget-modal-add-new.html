@@ -11,13 +11,13 @@
       <tbody ng-repeat="widget in widgetTypes | filter:searchText"
                   ng-click="addWidget(widget.type)">
         <tr ng-click="selectRow($index)" ng-class="{selected: isSelected($index)}">
-          <td class="row1"><img src="{{widget.icon}}"></td>
+          <td class="row1"><img ng-src="{{widget.icon}}"></td>
           <td class="row2" ng-bind="widget.type"></td>
           <td ng-bind="widget.description"></td>
         </tr>
       </tbody>
     </table>
   </div>
-<button class="button" ng-click="add()">Add {{chosenWidgetType}}</button>
+<button class="button" ng-click="add()" ng-bind="">Add {{chosenWidgetType}}</button>
 <button class="button alert" ng-click="cancel()">Cancel</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>
