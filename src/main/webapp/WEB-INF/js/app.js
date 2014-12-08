@@ -354,7 +354,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance,
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
                                                               widgetScope, widgetConfig, widgetType) {
         $scope.widgetScope = widgetScope;
         $scope.widgetType = widgetType;
