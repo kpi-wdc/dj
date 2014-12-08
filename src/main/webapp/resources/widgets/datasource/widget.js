@@ -45,6 +45,9 @@ define([
                     .provide('appendListener', function (evt) {
                         if(angular.isDefined($scope.provider))
                             eventEmitter.emit('loadDataSuccess',$scope.provider);
+                    })
+                    .provide('getDataProvider',function(evt){
+                        return $scope.provider;
                     });
             }
         );

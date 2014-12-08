@@ -21,16 +21,23 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
     m.service('adapter',function(){
         this.getData = function(conf,provider) {
 
-            if(angular.isUndefined(conf) || angular.isUndefined(provider)) return undefined;
+            if(angular.isUndefined(conf) &&  angular.isUndefined(provider)) return undefined;
 
-            if (conf.standalone && conf.series) return conf.series;
-            var result = provider.getData(conf.dataset, conf.dimensions).data;
-            for (i in conf.queries) {
-                var query = new jsinq.Query(conf.queries[i]);
-                query.setValue(0, new jsinq.Enumerable(result));
-                result = query.execute().toArray();
+            if(angular.isDefined(conf)) {
+                if (conf.standalone && conf.series) return conf.series;
             }
-            return result;
+
+            if(angular.isDefined(provider)) {
+
+                var result = provider.getData(conf.dataset, conf.dimensions).data;
+                for (i in conf.queries) {
+                    var query = new jsinq.Query(conf.queries[i]);
+                    query.setValue(0, new jsinq.Enumerable(result));
+                    result = query.execute().toArray();
+                }
+                return result;
+            }
         }
+
     })
 })

@@ -68,7 +68,7 @@
         }, {
           "title" : "Slave widget",
           "type" : "summator",
-          "instanceName": "summator-slave",
+          "instanceName" : "summator-slave",
           "a" : 9,
           "b" : 15,
           "aDisabled" : true
@@ -80,8 +80,7 @@
       "receiver" : "summator-slave",
       "signal" : "sumUpdated",
       "slot" : "setValueOfA"
-    }
-    ]
+    } ]
   }, {
     "shortTitle" : "Maps",
     "href" : "maps",
@@ -148,51 +147,444 @@
         } ]
       }
     }
-  },
-      {
-        "shortTitle" : "NVD3 Charts",
-
-        "href" : "nvd3",
-      "template" : "1-col",
-      "holders" : {
-        "column" : {
-          "widgets" : [
-            {
-              "url" : "http://localhost:8080/data/oecd-canada.json",
-              "type" : "datasource",
-              "instanceName" : "source"
+  }, {
+    "shortTitle" : "NVD3 Charts",
+    "href" : "nvd3",
+    "template" : "1-col",
+    "holders" : {
+      "column" : {
+        "widgets" : [ {
+          "url" : "http://localhost:8080/data/oecd-canada.json",
+          "type" : "datasource",
+          "instanceName" : "source"
+        }, {
+          "type" : "nvd3-bar",
+          "instanceName" : "bar",
+          "data" : {
+            "series" : [ {
+              "key" : "Australia",
+              "values" : [ {
+                "label" : "2003",
+                "value" : 5.943826289,
+                "series" : 0
+              }, {
+                "label" : "2004",
+                "value" : 5.39663128,
+                "series" : 0
+              }, {
+                "label" : "2005",
+                "value" : 5.044790587,
+                "series" : 0
+              }, {
+                "label" : "2006",
+                "value" : 4.789362794,
+                "series" : 0
+              }, {
+                "label" : "2007",
+                "value" : 4.379649386,
+                "series" : 0
+              }, {
+                "label" : "2008",
+                "value" : 4.249093453,
+                "series" : 0
+              }, {
+                "label" : "2009",
+                "value" : 5.592226603,
+                "series" : 0
+              }, {
+                "label" : "2010",
+                "value" : 5.230660289,
+                "series" : 0
+              }, {
+                "label" : "2011",
+                "value" : 5.099422942,
+                "series" : 0
+              }, {
+                "label" : "2012",
+                "value" : 5.224336088,
+                "series" : 0
+              }, {
+                "label" : "2013",
+                "value" : 5.50415003,
+                "series" : 0
+              }, {
+                "label" : "2014",
+                "value" : 5.462866231,
+                "series" : 0
+              } ]
             }, {
-              "datasource" : "source",
-              "decoration" : {
-                "title" : {
-                  "text" : "sadsadsad",
-                  "class" : "h4"
-                },
-                "subtitle" : {
-                  "text" : "sdsadsads",
-                  "class" : ""
-                },
-                "caption" : {
-                  "text" : "sdsdsdsd",
-                  "class" : ""
-                },
-                "chart" : {
-                  "width" : 400,
-                  "height" : 400
-                }
+              "key" : "Chile",
+              "values" : [ {
+                "label" : "2003",
+                "value" : 9.5433848,
+                "series" : 1
+              }, {
+                "label" : "2004",
+                "value" : 10.00149582,
+                "series" : 1
+              }, {
+                "label" : "2005",
+                "value" : 9.224422554,
+                "series" : 1
+              }, {
+                "label" : "2006",
+                "value" : 7.773166282,
+                "series" : 1
+              }, {
+                "label" : "2007",
+                "value" : 7.150623348,
+                "series" : 1
+              }, {
+                "label" : "2008",
+                "value" : 7.787221805,
+                "series" : 1
+              }, {
+                "label" : "2009",
+                "value" : 10.80236438,
+                "series" : 1
+              }, {
+                "label" : "2010",
+                "value" : 8.121579077,
+                "series" : 1
+              }, {
+                "label" : "2011",
+                "value" : 7.104778251,
+                "series" : 1
+              }, {
+                "label" : "2012",
+                "value" : 6.477468723,
+                "series" : 1
+              }, {
+                "label" : "2013",
+                "value" : 6.78101031,
+                "series" : 1
+              }, {
+                "label" : "2014",
+                "value" : 6.780198936,
+                "series" : 1
+              } ]
+            }, {
+              "key" : "Finland",
+              "values" : [ {
+                "label" : "2003",
+                "value" : 9.017860131,
+                "series" : 2
+              }, {
+                "label" : "2004",
+                "value" : 8.80435787,
+                "series" : 2
+              }, {
+                "label" : "2005",
+                "value" : 8.368797468,
+                "series" : 2
+              }, {
+                "label" : "2006",
+                "value" : 7.702632855,
+                "series" : 2
+              }, {
+                "label" : "2007",
+                "value" : 6.850344695,
+                "series" : 2
+              }, {
+                "label" : "2008",
+                "value" : 6.368216471,
+                "series" : 2
+              }, {
+                "label" : "2009",
+                "value" : 8.269856093,
+                "series" : 2
+              }, {
+                "label" : "2010",
+                "value" : 8.381534292,
+                "series" : 2
+              }, {
+                "label" : "2011",
+                "value" : 7.774845319,
+                "series" : 2
+              }, {
+                "label" : "2012",
+                "value" : 7.722836877,
+                "series" : 2
+              }, {
+                "label" : "2013",
+                "value" : 7.962718148,
+                "series" : 2
+              }, {
+                "label" : "2014",
+                "value" : 7.757742455,
+                "series" : 2
+              } ]
+            } ],
+            "standalone" : true
+          },
+          "decoration" : {
+            "height" : 300,
+            "title" : "Write Your Title 111",
+            "subtitle" : "Write Your Subtitle 111",
+            "caption" : "Figure 1. Write Your Caption text. 111",
+            "xAxisName" : "qqqqqqqqqqqqqqqqq",
+            "yAxisName" : "dddddddddddddddddddd",
+            "xAxisAngle" : 30,
+            "reduceXTicks" : true,
+            "staggerLabels" : true
+          }
+        }, {
+          "type" : "nvd3-hbar",
+          "instanceName" : "3p0jjpmfoclq5mi",
+          "decoration" : {
+            "height" : 250,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "yAxisName" : "bbbb",
+            "xAxisAngle" : -30,
+            "staggerLabels" : false
+          },
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "oecd",
+            "dimensions" : {
+              "concept" : {
+                "collection" : [ "UNR" ]
               },
-              "type" : "nvd3-bar",
-              "instanceName" : "bar"
-            }
-          ]
-        }
-      },
-      "subscriptions" : [ {
-                            "emitter" : "source",
-                            "receiver" : "bar",
-                            "signal" : "loadDataSuccess",
-                            "slot" : "setDataProvider"
-                          }
-      ]
-    }]
+              "area" : {
+                "collection" : [ "AU", "CL", "FI", "HU" ]
+              },
+              "year" : {
+                "collection" : [ "2003", "2007", "2011" ]
+              }
+            },
+            "role" : {
+              "Serie" : "area_Label",
+              "Label" : "year_Label",
+              "Value" : "value"
+            },
+            "queries" : [ "from r in $0 group {label: r.year_Label, value: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "nsvi855dlrspp66r",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Title for Line Chart",
+            "subtitle" : "Subtitle for simple line chart.",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : true
+          },
+          "data" : {
+            "series" : [ {
+              "key" : "Chile",
+              "values" : [ {
+                "x" : "2009",
+                "y" : 10.80236438,
+                "series" : 0
+              }, {
+                "x" : "2003",
+                "y" : 9.5433848,
+                "series" : 0
+              }, {
+                "x" : "2004",
+                "y" : 10.00149582,
+                "series" : 0
+              }, {
+                "x" : "2005",
+                "y" : 9.224422554,
+                "series" : 0
+              }, {
+                "x" : "2006",
+                "y" : 7.773166282,
+                "series" : 0
+              }, {
+                "x" : "2007",
+                "y" : 7.150623348,
+                "series" : 0
+              }, {
+                "x" : "2008",
+                "y" : 7.787221805,
+                "series" : 0
+              }, {
+                "x" : "2010",
+                "y" : 8.121579077,
+                "series" : 0
+              }, {
+                "x" : "2011",
+                "y" : 7.104778251,
+                "series" : 0
+              }, {
+                "x" : "2012",
+                "y" : 6.477468723,
+                "series" : 0
+              }, {
+                "x" : "2013",
+                "y" : 6.78101031,
+                "series" : 0
+              }, {
+                "x" : "2014",
+                "y" : 6.780198936,
+                "series" : 0
+              } ],
+              "seriesIndex" : 0
+            }, {
+              "key" : "Australia",
+              "values" : [ {
+                "x" : "2003",
+                "y" : 5.943826289,
+                "series" : 1
+              }, {
+                "x" : "2005",
+                "y" : 5.044790587,
+                "series" : 1
+              }, {
+                "x" : "2006",
+                "y" : 4.789362794,
+                "series" : 1
+              }, {
+                "x" : "2007",
+                "y" : 4.379649386,
+                "series" : 1
+              }, {
+                "x" : "2008",
+                "y" : 4.249093453,
+                "series" : 1
+              }, {
+                "x" : "2009",
+                "y" : 5.592226603,
+                "series" : 1
+              }, {
+                "x" : "2010",
+                "y" : 5.230660289,
+                "series" : 1
+              }, {
+                "x" : "2011",
+                "y" : 5.099422942,
+                "series" : 1
+              }, {
+                "x" : "2012",
+                "y" : 5.224336088,
+                "series" : 1
+              }, {
+                "x" : "2013",
+                "y" : 5.50415003,
+                "series" : 1
+              }, {
+                "x" : "2014",
+                "y" : 5.462866231,
+                "series" : 1
+              }, {
+                "x" : "2004",
+                "y" : 5.39663128,
+                "series" : 1
+              } ],
+              "seriesIndex" : 1
+            }, {
+              "key" : "Finland",
+              "values" : [ {
+                "x" : "2003",
+                "y" : 9.017860131,
+                "series" : 2
+              }, {
+                "x" : "2004",
+                "y" : 8.80435787,
+                "series" : 2
+              }, {
+                "x" : "2005",
+                "y" : 8.368797468,
+                "series" : 2
+              }, {
+                "x" : "2006",
+                "y" : 7.702632855,
+                "series" : 2
+              }, {
+                "x" : "2007",
+                "y" : 6.850344695,
+                "series" : 2
+              }, {
+                "x" : "2008",
+                "y" : 6.368216471,
+                "series" : 2
+              }, {
+                "x" : "2009",
+                "y" : 8.269856093,
+                "series" : 2
+              }, {
+                "x" : "2010",
+                "y" : 8.381534292,
+                "series" : 2
+              }, {
+                "x" : "2011",
+                "y" : 7.774845319,
+                "series" : 2
+              }, {
+                "x" : "2012",
+                "y" : 7.722836877,
+                "series" : 2
+              }, {
+                "x" : "2013",
+                "y" : 7.962718148,
+                "series" : 2
+              }, {
+                "x" : "2014",
+                "y" : 7.757742455,
+                "series" : 2
+              } ],
+              "seriesIndex" : 2
+            } ],
+            "standalone" : true
+          }
+        }, {
+          "type" : "nvd3-pie",
+          "instanceName" : "bprchcot0xczyqfr",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text."
+          },
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "canada",
+            "dimensions" : {
+              "country" : {
+                "collection" : [ "CA" ]
+              },
+              "year" : {
+                "collection" : [ "2012" ]
+              },
+              "age" : {
+                "collection" : [ "19", "39", "59", "79" ]
+              },
+              "concept" : {
+                "collection" : [ "POP" ]
+              },
+              "sex" : {
+                "collection" : [ "T" ]
+              }
+            },
+            "role" : {
+              "Serie" : "year",
+              "Label" : "age_Label",
+              "Value" : "value"
+            },
+            "queries" : [ "from r in $0 group {label: r.age_Label, value: r.value} by r.year into d select {key:d.key, values:d.toArray()}" ]
+          }
+        } ]
+      }
+    },
+    "subscriptions" : [ {
+      "emitter" : "source",
+      "receiver" : "3p0jjpmfoclq5mi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "bprchcot0xczyqfr",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    } ]
+  } ]
 }

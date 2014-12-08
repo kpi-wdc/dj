@@ -1,15 +1,15 @@
 define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
     function (angular) {
-        var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', [
+        var m = angular.module('app.widgets.data-dialogs.line-chart-dialog', [
             'app.widgets.data-util.keyset',
             'mm.foundation',
             'app.widgetApi']);
 
-        m.factory("BarChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions',
+        m.factory("LineChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions',
 
             function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions) {
 
-            BarChartDialog = function(scope){
+            LineChartDialog = function(scope){
                 this.scope = scope;
                 this.storeDatasource = scope.widget.datasource;
                 this.datasource = scope.widget.datasource;
@@ -37,7 +37,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 this.restoreState(scope.widget.data,scope.provider)
             }
 
-            BarChartDialog.prototype =  {
+            LineChartDialog.prototype =  {
 
 
                 styles:{
@@ -123,11 +123,11 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     if (angular.isDefined(this.selection.role["Serie"])) {
                         this.selection.fields[this.selection.role["Serie"]] = "Serie";
                     }
-                    if (angular.isDefined(this.selection.role["Label"])) {
-                        this.selection.fields[this.selection.role["Label"]] = "Label";
+                    if (angular.isDefined(this.selection.role["X Value"])) {
+                        this.selection.fields[this.selection.role["X Value"]] = "X Value";
                     }
-                    if (angular.isDefined(this.selection.role["Value"])) {
-                        this.selection.fields[this.selection.role["Value"]] = "Value";
+                    if (angular.isDefined(this.selection.role["Y Value"])) {
+                        this.selection.fields[this.selection.role["Y Value"]] = "Y Value";
                     }
                     this.selection.itemsOrder = conf.itemsOrder;
                     this.selection.seriesOrder = conf.seriesOrder;
@@ -294,7 +294,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                             queryStr = "from r " +
                             "in $0 " +
                             "group " +
-                            "{label: r." + this.selection.role.Label + ", value: r." + this.selection.role.Value + "}" +
+                            "{x: r." + this.selection.role["X Value"] + ", y: r." + this.selection.role["Y Value"] + "}" +
                             " by r." + this.selection.role.Serie +
                             " into d select {key:d.key, values:d.toArray()}";
                             this.selection.queries.push(queryStr);
@@ -428,8 +428,8 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     }
 
                     if (this.selection.role["Serie"] == field) this.selection.role["Serie"] = undefined;
-                    if (this.selection.role["Label"] == field) this.selection.role["Label"] = undefined;
-                    if (this.selection.role["Value"] == field) this.selection.role["Value"] = undefined;
+                    if (this.selection.role["X Value"] == field) this.selection.role["X Value"] = undefined;
+                    if (this.selection.role["Y Value"] == field) this.selection.role["Y Value"] = undefined;
 
                     if (newRole != "Not Used") {
                         this.selection.role[newRole] = field;
@@ -438,18 +438,18 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     if (angular.isDefined(this.selection.role["Serie"])) {
                         this.selection.fields[this.selection.role["Serie"]] = "Serie";
                     }
-                    if (angular.isDefined(this.selection.role["Label"])) {
-                        this.selection.fields[this.selection.role["Label"]] = "Label";
+                    if (angular.isDefined(this.selection.role["X Value"])) {
+                        this.selection.fields[this.selection.role["X Value"]] = "X Value";
                     }
-                    if (angular.isDefined(this.selection.role["Value"])) {
-                        this.selection.fields[this.selection.role["Value"]] = "Value";
+                    if (angular.isDefined(this.selection.role["Y Value"])) {
+                        this.selection.fields[this.selection.role["Y Value"]] = "Y Value";
                     }
                 },
 
                 readyForSeriesGeneration: function () {
                     if (angular.isDefined(this.selection.role["Serie"]) &&
-                        angular.isDefined(this.selection.role["Label"]) &&
-                        angular.isDefined(this.selection.role["Value"])) {
+                        angular.isDefined(this.selection.role["X Value"]) &&
+                        angular.isDefined(this.selection.role["Y Value"])) {
                         return true
                     } else {
                         this.setDisable([5,6]);
@@ -461,8 +461,8 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     //this.restoreState(this.scope.widget.data,this.scope.provider)
                     var s = this.scope;
                     $modal.open({
-                        templateUrl: 'widgets/data-dialogs/bar-chart-dialog.html',
-                        controller: 'BarChartConfigDialog',
+                        templateUrl: 'widgets/data-dialogs/line-chart-dialog.html',
+                        controller: 'LineChartConfigDialog',
                         backdrop: 'static',
                         resolve: {
                             widgetScope: function () {
@@ -474,11 +474,11 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 }
             }
 
-            return BarChartDialog;
+            return LineChartDialog;
 
         }]);
 
-        m.controller('BarChartConfigDialog', function ($scope, $modalInstance, widgetScope) {
+        m.controller('LineChartConfigDialog', function ($scope, $modalInstance, widgetScope) {
             $scope.dialog = widgetScope.dialog;
             widgetScope.dialog.modal = $modalInstance;
 

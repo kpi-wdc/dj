@@ -2,7 +2,7 @@ require.config({
     paths: {
         'jsinq': 'components/jsinq/source/jsinq',
         'jsinq-query': 'components/jsinq/source/jsinq-query',
-        'json-stat': 'components/jsonstat/json-stat'
+        'json-stat': 'components/jsonstat/json-stat.max'
 
     },
     shim: {

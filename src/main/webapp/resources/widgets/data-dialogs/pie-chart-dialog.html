@@ -253,41 +253,40 @@
                     </label>
             </div>
 
-            <h5>Axises</h5>
+            <h5>Pie</h5>
             <div class="row border">
-                <label class="left">Stagger X Axis Labels: &nbsp;&nbsp; </label>
-                <div class="switch tiny">
-                    <input type="checkbox"
-                           id="xStaggerLabelsCheckbox"
-                           ng-model="dialog.decoration.staggerLabels">
-                    <label for="xStaggerLabelsCheckbox"></label>
-                </div>
-                <br>
-                <label class="left">Reduce X Axis Labels: &nbsp;&nbsp; </label>
-                <div class="switch tiny">
-                    <input type="checkbox"
-                           id="reduceCheckbox"
-                           ng-model="dialog.decoration.reduceXTicks">
-                    <label for="reduceCheckbox"></label>
-                </div>
-                <br>
+                <div class="column left  medium-3">
+                    <label class="left">Donut: &nbsp;&nbsp; </label>
+                    <div class="switch tiny">
+                        <input type="checkbox"
+                               id="donutCheckbox"
+                               ng-model="dialog.decoration.donut">
+                        <label for="donutCheckbox"></label>
+                    </div>
+                    <br/>
 
-                <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
-                    <label> X Axis Title
-                        <input type="text" ng-model="dialog.decoration.xAxisName">
-                    </label>
-                </div>
-                <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
-                    <label> X Axis Label Rotation Angle
-                        <input type="number" ng-model="dialog.decoration.xAxisAngle">
-                    </label>
-                </div>
-                <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
-                    <label> Y Axis Title
-                        <input type="text" ng-model="dialog.decoration.yAxisName">
+                    <label ng-if="dialog.decoration.donut">Donut Ratio:&nbsp;&nbsp;
+                        <input class="left" type="number" ng-model="dialog.decoration.donutRatio">
                     </label>
                 </div>
 
+                <div class="column left  medium-5">
+                    <label class="left">Show Labels Outside: &nbsp;&nbsp; </label>
+                    <div class="switch tiny">
+                        <input type="checkbox"
+                               id="labelsOutsideCheckbox"
+                               ng-model="dialog.decoration.labelsOutside">
+                        <label for="labelsOutsideCheckbox"></label>
+                    </div>
+                    <br/>
+                    <label class="left">Show Value as Label: &nbsp;&nbsp; </label>
+                    <div class="switch tiny">
+                        <input type="checkbox"
+                               id="valueAsLabelCheckbox"
+                               ng-model="dialog.decoration.valueAsLabel">
+                        <label for="valueAsLabelCheckbox"></label>
+                    </div>
+                </div>
             </div>
 
             <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">

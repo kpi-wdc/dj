@@ -1,15 +1,15 @@
 define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
     function (angular) {
-        var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', [
+        var m = angular.module('app.widgets.data-dialogs.pie-chart-dialog', [
             'app.widgets.data-util.keyset',
             'mm.foundation',
             'app.widgetApi']);
 
-        m.factory("BarChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions',
+        m.factory("PieChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions',
 
             function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions) {
 
-            BarChartDialog = function(scope){
+            PieChartDialog = function(scope){
                 this.scope = scope;
                 this.storeDatasource = scope.widget.datasource;
                 this.datasource = scope.widget.datasource;
@@ -37,7 +37,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 this.restoreState(scope.widget.data,scope.provider)
             }
 
-            BarChartDialog.prototype =  {
+            PieChartDialog.prototype =  {
 
 
                 styles:{
@@ -461,8 +461,8 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     //this.restoreState(this.scope.widget.data,this.scope.provider)
                     var s = this.scope;
                     $modal.open({
-                        templateUrl: 'widgets/data-dialogs/bar-chart-dialog.html',
-                        controller: 'BarChartConfigDialog',
+                        templateUrl: 'widgets/data-dialogs/pie-chart-dialog.html',
+                        controller: 'PieChartConfigDialog',
                         backdrop: 'static',
                         resolve: {
                             widgetScope: function () {
@@ -474,11 +474,11 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 }
             }
 
-            return BarChartDialog;
+            return PieChartDialog;
 
         }]);
 
-        m.controller('BarChartConfigDialog', function ($scope, $modalInstance, widgetScope) {
+        m.controller('PieChartConfigDialog', function ($scope, $modalInstance, widgetScope) {
             $scope.dialog = widgetScope.dialog;
             widgetScope.dialog.modal = $modalInstance;
 

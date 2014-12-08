@@ -241,7 +241,7 @@ define(['angular'], function (angular) {
         return function () {
             var pageConf = appConfig.pageConfig();
             pageConf.subscriptions = pageConf.subscriptions || [];
-            return pageConf.subscriptions;
+           return pageConf.subscriptions;
         };
     });
 });

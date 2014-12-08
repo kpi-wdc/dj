@@ -138,8 +138,8 @@
                         <select ng-model="dialog.selection.fields[f]" ng-change="dialog.changeFieldRole(f)">
                             <option>Not Used</option>
                             <option>Serie</option>
-                            <option>Label</option>
-                            <option>Value</option>
+                            <option>X Value</option>
+                            <option>Y Value</option>
                         </select>
                     </div>
                 </div>
@@ -238,6 +238,14 @@
                     <label>Height
                         <input type="number" ng-model="dialog.decoration.height">
                     </label>
+                </div>
+                <br/>
+                <label class="left">Show Line Area: &nbsp;&nbsp; </label>
+                <div class="switch tiny">
+                    <input type="checkbox"
+                           id="showLineAreaCheckbox"
+                           ng-model="dialog.decoration.isArea">
+                    <label for="showLineAreaCheckbox"></label>
                 </div>
             </div>
             <h5>Titles</h5>
