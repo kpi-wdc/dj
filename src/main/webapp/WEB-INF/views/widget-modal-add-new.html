@@ -18,6 +18,6 @@
       </tbody>
     </table>
   </div>
-<button class="button" ng-click="add()">Add {{chosenWidgetType}}</button>
+<button class="button" ng-click="add()" ng-bind="'Add ' + chosenWidgetType"></button>
 <button class="button alert" ng-click="cancel()">Cancel</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>
