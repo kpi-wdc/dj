@@ -1,68 +1,132 @@
 define(['angular'], function (angular) {
     "use strict";
+    /**
+     * @ngdoc module
+     * @name app.widgetApi
+     * @module app.widgetApi
+     * @description
+     * Services from this module are a public API for all the widget developers.
+     * They are documented and are allowed to use.
+     */
     var widgetApi = angular.module('app.widgetApi', []);
 
+    /**
+     * @ngdoc object
+     * @name eventWires
+     * @description Array of event-to-slot wires
+     * @returns {Object.<string, object>}
+     */
     widgetApi.constant('eventWires', {}); // emitterName -> [{signalName, providerName, slotName}]
+
+    /**
+     * @ngdoc object
+     * @name widgetSlots
+     * @description Mapping from providerName to it's slot and slot's name
+     * @returns {Object.<string, object>}
+     */
     widgetApi.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
+
+    /**
+     * @ngdoc object
+     * @name instanceNameToScope
+     * @description Mapping from instance name to it's scope
+     * @returns {Object.<string, object>}
+     */
     widgetApi.constant('instanceNameToScope', {}); // name -> scope
 
     widgetApi.factory('APIProvider', function (widgetSlots, instanceNameToScope) {
+        /**
+         * @class APIProvider
+         * @description Injectable class
+         * @param {$rootScope.Scope} scope Widget's scope
+         * @param [scope.widget.instanceName] Widget's unique name
+         */
         var APIProvider = function (scope) {
             var self = this;
-            var providerName = scope.widget.instanceName;
-            instanceNameToScope[providerName] = scope;
+            this.providerName = scope.widget.instanceName;
+            instanceNameToScope[this.providerName] = scope;
             scope.$watch('widget.instanceName', function (newName) {
-                if (newName === providerName) {
+                if (newName === self.providerName) {
                     return;
                 }
-                widgetSlots[newName] = widgetSlots[providerName];
-                delete widgetSlots[providerName];
+                widgetSlots[newName] = widgetSlots[self.providerName];
+                delete widgetSlots[self.providerName];
 
                 instanceNameToScope[newName] = scope;
-                delete instanceNameToScope[providerName];
+                delete instanceNameToScope[self.providerName];
 
-                providerName = newName;
+                self.providerName = newName;
             });
             scope.$on('$destroy', function () {
-                delete widgetSlots[providerName];
+                delete widgetSlots[self.providerName];
             });
+        };
 
-            this.provide = function (slotName, slot) {
-                if (typeof slot !== 'function') {
-                    throw "Second argument should be a function, " +
-                    (typeof slot) + "passed instead";
-                }
-                widgetSlots[providerName] = widgetSlots[providerName] || [];
-                widgetSlots[providerName].push({
-                    slotName: slotName,
-                    fn: slot
-                });
-                return this;
-            };
+        /**
+         * @description Provides a slot
+         * @param {string} slotName Name of the slot
+         * @param {Function} slot Slot function
+         * @returns {APIProvider}
+         */
+        APIProvider.prototype.provide = function (slotName, slot) {
+            if (typeof slot !== 'function') {
+                throw "Second argument should be a function, " +
+                (typeof slot) + "passed instead";
+            }
+            widgetSlots[this.providerName] = widgetSlots[this.providerName] || [];
+            widgetSlots[this.providerName].push({
+                slotName: slotName,
+                fn: slot
+            });
+            return this;
+        };
 
-            this.config = function (slotFn, enableReconfiguring) {
-                enableReconfiguring = enableReconfiguring === undefined ? true : enableReconfiguring;
-                slotFn();
-                if (enableReconfiguring) {
-                    self.provide(APIProvider.RECONFIG_SLOT, slotFn);
-                }
-                return this;
-            };
+        /**
+         * @description Provides a slot automatically called when widget is instantiated and
+         * optionally when config was changed
+         * @param {Function} slotFn
+         * @param {boolean} enableReconfiguring
+         * @returns {APIProvider}
+         */
+        APIProvider.prototype.config = function (slotFn, enableReconfiguring) {
+            enableReconfiguring = enableReconfiguring === undefined ? true : enableReconfiguring;
+            slotFn();
+            if (enableReconfiguring) {
+                this.provide(APIProvider.RECONFIG_SLOT, slotFn);
+            }
+            return this;
+        };
 
-            this.reconfig = function (slotFn) {
-                self.provide(APIProvider.RECONFIG_SLOT, slotFn);
-                return this;
-            };
+        /**
+         * @description Provides a slot which is
+         * automatically called when widget config was changed
+         * @param {Function} slotFn
+         * @returns {APIProvider}
+         */
+        APIProvider.prototype.reconfig = function (slotFn) {
+            this.provide(APIProvider.RECONFIG_SLOT, slotFn);
+            return this;
+        };
 
-            this.openCustomSettings = function (slotFn) {
-                self.provide(APIProvider.OPEN_CUSTOM_SETTINGS_SLOT, slotFn);
-                return this;
-            };
+        /**
+         * @description Provides a slot which is
+         * automatically called when widget settings are opened
+         * @param {Function} slotFn
+         * @returns {APIProvider}
+         */
+        APIProvider.prototype.openCustomSettings = function (slotFn) {
+            this.provide(APIProvider.OPEN_CUSTOM_SETTINGS_SLOT, slotFn);
+            return this;
+        };
 
-            this.removal = function (slotFn) {
-                self.provide(APIProvider.REMOVAL_SLOT, slotFn);
-                return this;
-            };
+        /**
+         * @description Provides a slot automatically called when widget is removed by user
+         * @param {Function} slotFn
+         * @returns {APIProvider}
+         */
+        APIProvider.prototype.removal = function (slotFn) {
+            this.provide(APIProvider.REMOVAL_SLOT, slotFn);
+            return this;
         };
 
         APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
@@ -72,117 +136,178 @@ define(['angular'], function (angular) {
     });
 
     widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
-        return function (scope) {
-            var userName = function () {
-                if (scope && scope.widget) {
-                    return scope.widget.instanceName;
-                } else {
-                    return undefined;
-                }
-            };
-
-            this.invoke = function (providerName, slotName) {
-                if (!widgetSlots[providerName]) {
-                    throw "Provider " + providerName + " doesn't exist";
-                }
-                for (var i = 0; i < widgetSlots[providerName].length; i++) {
-                    var slot = widgetSlots[providerName][i];
-                    if (slot.slotName === slotName) {
-                        return slot.fn.apply(undefined, [{
-                            emitterName: userName(),
-                            signalName: undefined
-                        }].concat(Array.prototype.slice.call(arguments, 2)));
-                    }
-                }
-                throw "Provider " + providerName + " doesn't have slot called " + slotName;
-            };
-
-            this.tryInvoke = function (providerName, slotName) {
-                try {
-                    return {
-                        success: true,
-                        result: this.invoke(providerName, slotName) // might throw
-                    }
-                } catch (e) {
-                    if (typeof(e) === 'string' && e.indexOf("Provider") > -1) {
-                        return {
-                            success: false,
-                            result: undefined
-                        }
-                    } else {
-                        throw e;
-                    }
-                }
-            };
-
-            this.invokeAll = function (slotName) {
-                var called = false;
-                for (var providerName in widgetSlots) {
-                    if (widgetSlots.hasOwnProperty(providerName)) {
-                        for (var i = 0; i < widgetSlots[providerName].length; i++) {
-                            var slot = widgetSlots[providerName][i];
-                            if (slot.slotName === slotName) {
-                                called = true;
-                                slot.fn.apply(undefined, [{
-                                    emitterName: userName(),
-                                    signalName: undefined
-                                }].concat(Array.prototype.slice.call(arguments, 2)));
-                            }
-                        }
-                    }
-                }
-                return undefined;
-            };
-
-            this.getScopeByInstanceName = function (name) {
-                return instanceNameToScope[name];
-            };
+        /**
+         * @class APIUser
+         * @description Provides a class which allows to consume widget's
+         * public API provided with `APIProvider`
+         * @param scope Widget's scope
+         */
+        var APIUser =  function (scope) {
+            this.scope = scope;
         };
+
+        /**
+         * @private
+         * @returns {string|undefined}
+         */
+        APIUser.prototype.userName = function () {
+            if (this.scope && this.scope.widget) {
+                return this.scope.widget.instanceName;
+            } else {
+                return undefined;
+            }
+        };
+
+        /**
+         * Invokes widget's slot
+         * @param providerName
+         * @param slotName
+         * @throws if widget doesn't provide this slot
+         * @returns {*}
+         */
+        APIUser.prototype.invoke = function (providerName, slotName) {
+            if (!widgetSlots[providerName]) {
+                throw "Provider " + providerName + " doesn't exist";
+            }
+            for (var i = 0; i < widgetSlots[providerName].length; i++) {
+                var slot = widgetSlots[providerName][i];
+                if (slot.slotName === slotName) {
+                    return slot.fn.apply(undefined, [{
+                        emitterName: this.userName(),
+                        signalName: undefined
+                    }].concat(Array.prototype.slice.call(arguments, 2)));
+                }
+            }
+            throw "Provider " + providerName + " doesn't have slot called " + slotName;
+        };
+
+        /**
+         * Invokes widget's slot
+         * @param providerName
+         * @param slotName
+         * @returns {object} invocation
+         * @returns {boolean} invocation.success - was slot found?
+         * @returns {*} invocation.result - value returned by slot
+         */
+        APIUser.prototype.tryInvoke = function (providerName, slotName) {
+            try {
+                return {
+                    success: true,
+                    result: this.invoke(providerName, slotName) // might throw
+                }
+            } catch (e) {
+                if (typeof(e) === 'string' && e.indexOf("Provider") > -1) {
+                    return {
+                        success: false,
+                        result: undefined
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        };
+
+        /**
+         * Invokes slot on all widgets
+         * @param slotName Name of the slot
+         */
+        APIUser.prototype.invokeAll = function (slotName) {
+            var called = false;
+            for (var providerName in widgetSlots) {
+                if (widgetSlots.hasOwnProperty(providerName)) {
+                    for (var i = 0; i < widgetSlots[providerName].length; i++) {
+                        var slot = widgetSlots[providerName][i];
+                        if (slot.slotName === slotName) {
+                            called = true;
+                            slot.fn.apply(undefined, [{
+                                emitterName: this.userName(),
+                                signalName: undefined
+                            }].concat(Array.prototype.slice.call(arguments, 2)));
+                        }
+                    }
+                }
+            }
+            return undefined;
+        };
+
+        /**
+         * Returns registered scope by widget's name
+         * @param name Widget's instanceName
+         * @returns {$rootScope.Scope|undefined}
+         */
+        APIUser.prototype.getScopeByInstanceName = function (name) {
+            return instanceNameToScope[name];
+        };
+
+        return APIUser;
     });
 
     widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope, appConfig) {
+        /**
+         * @class EventEmitter
+         * @description Provides a class which allows to emit events which, in row, can invoke slots on other widgets
+         * using publish/subscribe mechanism
+         */
         var EventPublisher = function (scope) {
-            var emitterName = function () {
-                if (scope && scope.widget) {
-                    return scope.widget.instanceName;
-                } else {
-                    return undefined;
-                }
-            };
-
-            this.emit = function (signalName) {
-                var args = Array.prototype.slice.call(arguments, 1);
-
-                $rootScope.$evalAsync(function () {
-                    if (!emitterName() || typeof emitterName() !== "string") {
-                        $log.info("Not emitting event because widget's instanceName is not set");
-                    }
-                    var wires = eventWires[emitterName()];
-                    if (!wires) {
-                        return;
-                    }
-                    for (var i = 0; i < wires.length; i++) {
-                        var wire = wires[i];
-                        if (wire && wire.signalName === signalName) {
-
-                            var slots = widgetSlots[wire.providerName];
-                            if (!slots) {
-                                continue;
-                            }
-
-                            for (var j = 0; j < slots.length; j++) {
-                                if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
-                                slots[j].fn.apply(undefined, [{
-                                    emitterName: emitterName(),
-                                    signalName: signalName
-                                }].concat(args));
-                            }
-                        }
-                    }
-                });
-            };
+            this.scope = scope;
         };
 
+        /**
+         * @private
+         * @returns {string|undefined}
+         */
+        EventPublisher.prototype.emitterName = function () {
+            if (this.scope && this.scope.widget) {
+                return this.scope.widget.instanceName;
+            } else {
+                return undefined;
+            }
+        };
+
+        /**
+         * Emit event
+         * This automatically calls slots on all subscribed providers
+         * @param signalName Name of the signal
+         */
+        EventPublisher.prototype.emit = function (signalName) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            var self = this;
+            $rootScope.$evalAsync(function () {
+                if (!self.emitterName() || typeof self.emitterName() !== "string") {
+                    $log.info("Not emitting event because widget's instanceName is not set");
+                }
+                var wires = eventWires[self.emitterName()];
+                if (!wires) {
+                    return;
+                }
+                for (var i = 0; i < wires.length; i++) {
+                    var wire = wires[i];
+                    if (wire && wire.signalName === signalName) {
+
+                        var slots = widgetSlots[wire.providerName];
+                        if (!slots) {
+                            continue;
+                        }
+
+                        for (var j = 0; j < slots.length; j++) {
+                            if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
+                            slots[j].fn.apply(undefined, [{
+                                emitterName: self.emitterName(),
+                                signalName: signalName
+                            }].concat(args));
+                        }
+                    }
+                }
+            });
+        };
+
+        /**
+         * @private
+         * @param emitterName
+         * @param signalName
+         * @param provideName
+         * @param slotName
+         */
         EventPublisher.wireSignalWithSlot = function (emitterName, signalName, provideName, slotName) {
             eventWires[emitterName] = eventWires[emitterName] || [];
             eventWires[emitterName].push({
@@ -192,18 +317,22 @@ define(['angular'], function (angular) {
             });
         };
 
-        EventPublisher.replacePageSubscriptions = function (subsriptions) {
+        /**
+         * @private
+         * @param subscriptions
+         */
+        EventPublisher.replacePageSubscriptions = function (subscriptions) {
             for (var emitterName in eventWires) {
                 if (eventWires.hasOwnProperty(emitterName)) {
                     delete eventWires[emitterName];
                 }
             }
 
-            if (!subsriptions) {
+            if (!subscriptions) {
                 return;
             }
-            for (var i = 0; i < subsriptions.length; i++) {
-                var s = subsriptions[i];
+            for (var i = 0; i < subscriptions.length; i++) {
+                var s = subscriptions[i];
                 EventPublisher.wireSignalWithSlot(s.emitter, s.signal, s.receiver, s.slot);
             }
         };
@@ -220,7 +349,7 @@ define(['angular'], function (angular) {
 
 
     /**
-     * @ngdoc service
+     * @ngdoc function
      * @name pageSubscriptions
      *
      * @description Injectable function which returns

@@ -154,21 +154,15 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             return result;
         };
 
+        this.currentPageIndex = function () {
+            return this.pageIndexByHref($stateParams.href);
+        };
+
         this.pageConfig = function () {
             if (!self.config.pages) {
                 return undefined;
             }
-            var index404;
-
-            for (var i = 0; i < self.config.pages.length; i++) {
-                if (self.config.pages[i].href === $stateParams.href) {
-                    return self.config.pages[i];
-                }
-                if (self.config.pages[i].href === '404') {
-                    index404 = i;
-                }
-            }
-            return index404;
+            return this.config.pages[this.currentPageIndex()];
         };
 
         this.wasModified = true; // TODO: implement changing this state
@@ -360,7 +354,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }
     });
 
-    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
+    app.controller('WidgetModalSettingsController', function ($scope, $modalInstance,
                                                               widgetScope, widgetConfig, widgetType) {
         $scope.widgetScope = widgetScope;
         $scope.widgetType = widgetType;
@@ -387,12 +381,6 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         $scope.updateData = function (value) {
             data = value;
         };
-
-        $timeout(function () {
-            // HORRIBLE HACK!
-            // sceditor doesn't want to play with foundation modal dialogs nicely.
-            $('json-editor .sceditor-container iframe').height('20rem').width('98%');
-        }, 0);
     });
 
     return angular.bootstrap(document, ['app'], {
