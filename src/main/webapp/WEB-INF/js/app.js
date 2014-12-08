@@ -371,7 +371,13 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         };
 
         $scope.ok = function () {
-            $modalInstance.close(angular.extend(data, $scope.basicProperties));
+            // Use $timeout as a fix for android
+            // On mobile devices (at least android) `data` is updated AFTER `ng-click` event happens if 
+            // submit button is pressed while input fields are still focused.
+            // this is probably related to touch vs mouse behaviour and underlying json-editor behaviour.
+            $timeout(function () {
+                $modalInstance.close(angular.extend(data, $scope.basicProperties));
+            }, 100);
         };
 
         $scope.cancel = function () {
