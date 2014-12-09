@@ -1,5 +1,5 @@
 {
-  "name": "nvd3-bar",
+  "name": "nvd3-line",
   "private": true,
 
   "dependencies": {

@@ -1,5 +1,5 @@
 {
-  "name": "nvd3-pie",
+  "name": "nvd3-stacked-area",
   "private": true,
 
   "dependencies": {

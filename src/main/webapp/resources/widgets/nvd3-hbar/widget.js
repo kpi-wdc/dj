@@ -1,87 +1,58 @@
-require.config({
-    paths: {
-        'd3': '/components/d3/d3',
-        'nv.d3': '/components/nvd3/nv.d3',
-        'angular-nvd3': '/components/angular-nvd3/dist/angular-nvd3'
-    },
-    shim: {
-        'd3': {
-            exports: 'd3'
-        },
-        'nv.d3': {
-            exports: 'nv',
-            deps: ['d3']
-        },
-        'angular-nvd3': {
-            deps: ['nv.d3']
-        }
-    }
-});
-
 define([
         'angular',
-        'angular-nvd3',
-        '/widgets/data-dialogs/bar-chart-dialog.js',
-        '/widgets/data-util/adapter.js',
-        '/widgets/nvd3-hbar/nvd3-hbar-adapter.js'
+        '/widgets/nvd3-widget/nvd3-widget.js',
+        '/widgets/data-dialogs/bar-chart-dialog.js'
     ],
     function (angular) {
 
-        var m = angular.module('app.widgets.nvd3-hbar',
-            ['nvd3',
-                'app.widgets.data-dialogs.bar-chart-dialog',
-                'app.widgets.data-util.adapter',
-                'app.widgets.nvd3.nvd3-hbar-adapter',
-                {files: ['/components/nvd3/nv.d3.css']}
+        var m = angular.module('app.widgets.nvd3-hbar',[
+            'app.widgets.nvd3-widget',
+            'app.widgets.data-dialogs.bar-chart-dialog'
             ]);
-        m.controller('Nvd3HBarChartCtrl',
-            function ($scope, $http, EventEmitter, APIProvider, APIUser, BarChartDialog, adapter, NVD3HBarAdapter) {
 
-                $scope.APIProvider = new APIProvider($scope);
-                $scope.APIUser = new APIUser($scope);
+        m.service('NVD3HBarAdapter', function () {
+            this.applyDecoration = function (options, decoration) {
+                if(angular.isDefined(decoration)&&angular.isDefined(options)) {
+                    console.log(options)
+                    options.chart.height = decoration.height;
+                    options.title.text = decoration.title;
+                    options.subtitle.text = decoration.subtitle;
+                    options.caption.text = decoration.caption;
+                    options.chart.xAxis.axisLabel = decoration.xAxisName;
+                    options.chart.yAxis.axisLabel = decoration.yAxisName;
+                    options.chart.xAxis.staggerLabels = decoration.staggerLabels;
+                    options.chart.rotateLabels = decoration.xAxisAngle;
+                    options.chart.reduceXTicks = decoration.reduceXTicks;
+                }
+                return options;
+            }
 
-                $http.get("/widgets/nvd3-hbar/options.json").success(
-                    function (data) {
-                        $scope.options = data;
-                        $scope.options.chart.x = function (d) {
-                            return d.label
-                        };
-                        $scope.options.chart.y = function (d) {
-                            return d.value
-                        };
+            this.getDecoration = function (options){
+                if(angular.isDefined(options)) {
+                    var decoration = {}
+                    decoration.height = options.chart.height;
+                    decoration.title = options.title.text;
+                    decoration.subtitle = options.subtitle.text;
+                    decoration.caption = options.caption.text;
+                    decoration.xAxisName = options.chart.xAxis.axisLabel;
+                    decoration.yAxisName = options.chart.yAxis.axisLabel;
+                    decoration.xAxisAngle = options.chart.rotateLabels;
+                    decoration.reduceXTicks = options.chart.reduceXTicks;
+                    decoration.staggerLabels = options.chart.xAxis.staggerLabels;
+                    return decoration;
+                }
+            }
+        })
 
-                        if($scope.widget.decoration) {
-                            $scope.options = NVD3HBarAdapter.applyDecoration($scope.options, $scope.widget.decoration)
-                        }else{
-                            $scope.widget.decoration = NVD3HBarAdapter.getDecoration($scope.options);
-                        }
-
-                    });
-
-                $scope.APIProvider
-
-                    .config(function () {
-                        if($scope.widget.decoration) {
-                            $scope.options =NVD3HBarAdapter.applyDecoration($scope.options, $scope.widget.decoration)
-                        }else{
-                            $scope.widget.decoration = NVD3HBarAdapter.getDecoration($scope.options);
-                        }
-                        if ($scope.widget.data && $scope.widget.data.standalone) {
-                        $scope.series = adapter.getData($scope.widget.data);
-                        return;
-                        }
-                        if ($scope.widget.datasource)
-                            $scope.APIUser.invoke($scope.widget.datasource, 'appendListener')
-                    }, true)
-
-                    .openCustomSettings(function () {
-                        $scope.dialog = new BarChartDialog($scope);
-                        $scope.dialog.open();
-                    })
-
-                    .provide('setDataProvider', function (evt, provider) {
-                        $scope.provider = provider;
-                        $scope.series = adapter.getData($scope.widget.data, $scope.provider);
-                    });
+        m.controller('Nvd3HBarChartCtrl',function($scope,BarChartDialog,NVD3HBarAdapter,NVD3Widget){
+            new NVD3Widget($scope,{
+                dialog: BarChartDialog,
+                decorationAdapter: NVD3HBarAdapter,
+                optionsURL: "/widgets/nvd3-hbar/options.json",
+                serieAdapter:{
+                    getX:function(d){return d.label},
+                    getY:function(d){return d.value}
+                }
             })
+        });
     });

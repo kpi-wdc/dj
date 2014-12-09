@@ -373,204 +373,64 @@
             "caption" : "Figure 1. Write Your Caption text.",
             "xAxisName" : "",
             "yAxisName" : "",
-            "staggerLabels" : true
+            "staggerLabels" : true,
+            "isArea" : true
           },
           "data" : {
-            "series" : [ {
-              "key" : "Chile",
-              "values" : [ {
-                "x" : "2009",
-                "y" : 10.80236438,
-                "series" : 0
-              }, {
-                "x" : "2003",
-                "y" : 9.5433848,
-                "series" : 0
-              }, {
-                "x" : "2004",
-                "y" : 10.00149582,
-                "series" : 0
-              }, {
-                "x" : "2005",
-                "y" : 9.224422554,
-                "series" : 0
-              }, {
-                "x" : "2006",
-                "y" : 7.773166282,
-                "series" : 0
-              }, {
-                "x" : "2007",
-                "y" : 7.150623348,
-                "series" : 0
-              }, {
-                "x" : "2008",
-                "y" : 7.787221805,
-                "series" : 0
-              }, {
-                "x" : "2010",
-                "y" : 8.121579077,
-                "series" : 0
-              }, {
-                "x" : "2011",
-                "y" : 7.104778251,
-                "series" : 0
-              }, {
-                "x" : "2012",
-                "y" : 6.477468723,
-                "series" : 0
-              }, {
-                "x" : "2013",
-                "y" : 6.78101031,
-                "series" : 0
-              }, {
-                "x" : "2014",
-                "y" : 6.780198936,
-                "series" : 0
-              } ],
-              "seriesIndex" : 0
-            }, {
-              "key" : "Australia",
-              "values" : [ {
-                "x" : "2003",
-                "y" : 5.943826289,
-                "series" : 1
-              }, {
-                "x" : "2005",
-                "y" : 5.044790587,
-                "series" : 1
-              }, {
-                "x" : "2006",
-                "y" : 4.789362794,
-                "series" : 1
-              }, {
-                "x" : "2007",
-                "y" : 4.379649386,
-                "series" : 1
-              }, {
-                "x" : "2008",
-                "y" : 4.249093453,
-                "series" : 1
-              }, {
-                "x" : "2009",
-                "y" : 5.592226603,
-                "series" : 1
-              }, {
-                "x" : "2010",
-                "y" : 5.230660289,
-                "series" : 1
-              }, {
-                "x" : "2011",
-                "y" : 5.099422942,
-                "series" : 1
-              }, {
-                "x" : "2012",
-                "y" : 5.224336088,
-                "series" : 1
-              }, {
-                "x" : "2013",
-                "y" : 5.50415003,
-                "series" : 1
-              }, {
-                "x" : "2014",
-                "y" : 5.462866231,
-                "series" : 1
-              }, {
-                "x" : "2004",
-                "y" : 5.39663128,
-                "series" : 1
-              } ],
-              "seriesIndex" : 1
-            }, {
-              "key" : "Finland",
-              "values" : [ {
-                "x" : "2003",
-                "y" : 9.017860131,
-                "series" : 2
-              }, {
-                "x" : "2004",
-                "y" : 8.80435787,
-                "series" : 2
-              }, {
-                "x" : "2005",
-                "y" : 8.368797468,
-                "series" : 2
-              }, {
-                "x" : "2006",
-                "y" : 7.702632855,
-                "series" : 2
-              }, {
-                "x" : "2007",
-                "y" : 6.850344695,
-                "series" : 2
-              }, {
-                "x" : "2008",
-                "y" : 6.368216471,
-                "series" : 2
-              }, {
-                "x" : "2009",
-                "y" : 8.269856093,
-                "series" : 2
-              }, {
-                "x" : "2010",
-                "y" : 8.381534292,
-                "series" : 2
-              }, {
-                "x" : "2011",
-                "y" : 7.774845319,
-                "series" : 2
-              }, {
-                "x" : "2012",
-                "y" : 7.722836877,
-                "series" : 2
-              }, {
-                "x" : "2013",
-                "y" : 7.962718148,
-                "series" : 2
-              }, {
-                "x" : "2014",
-                "y" : 7.757742455,
-                "series" : 2
-              } ],
-              "seriesIndex" : 2
-            } ],
-            "standalone" : true
-          }
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "oecd",
+            "dimensions" : {
+              "concept" : {
+                "collection" : [ "UNR" ]
+              },
+              "area" : {
+                "collection" : [ "SE", "ES", "IT", "FI", "BE" ]
+              },
+              "year" : {
+                "collection" : [ "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014" ]
+              }
+            },
+            "role" : {
+              "Serie" : "area_Label",
+              "Y Value" : "value",
+              "X Value" : "year"
+            },
+            "queries" : [ "from r in $0 group {x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
+          },
+          "datasource" : "source"
         }, {
-          "type" : "nvd3-pie",
-          "instanceName" : "bprchcot0xczyqfr",
+          "type" : "nvd3-stacked-area",
+          "instanceName" : "rylu7963gie019k9",
           "decoration" : {
             "height" : 450,
             "title" : "Write Your Title",
             "subtitle" : "Write Your Subtitle",
-            "caption" : "Figure 1. Write Your Caption text."
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : null,
+            "yAxisName" : null,
+            "staggerLabels" : false
           },
           "datasource" : "source",
           "data" : {
             "url" : "http://localhost:8080/data/oecd-canada.json",
-            "dataset" : "canada",
+            "dataset" : "oecd",
             "dimensions" : {
-              "country" : {
-                "collection" : [ "CA" ]
+              "concept" : {
+                "collection" : [ "UNR" ]
+              },
+              "area" : {
+                "collection" : [ "UK", "AT", "FR", "DK", "DE" ]
               },
               "year" : {
-                "collection" : [ "2012" ]
-              },
-              "age" : {
-                "collection" : [ "19", "39", "59", "79" ]
-              },
-              "concept" : {
-                "collection" : [ "POP" ]
-              },
-              "sex" : {
-                "collection" : [ "T" ]
+                "collection" : [ "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014" ]
               }
             },
             "role" : {
-              "Serie" : "year",
-              "Label" : "age_Label",
-              "Value" : "value"
+              "Serie" : "area_Label",
+              "Y Value" : "value",
+              "X Value" : "year"
             },
-            "queries" : [ "from r in $0 group {label: r.age_Label, value: r.value} by r.year into d select {key:d.key, values:d.toArray()}" ]
+            "queries" : [ "from r in $0 group {x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
           }
         } ]
       }
@@ -583,6 +443,16 @@
     }, {
       "emitter" : "source",
       "receiver" : "bprchcot0xczyqfr",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "nsvi855dlrspp66r",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "rylu7963gie019k9",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]

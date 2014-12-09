@@ -1,87 +1,59 @@
-require.config({
-    paths: {
-        'd3': '/components/d3/d3',
-        'nv.d3': '/components/nvd3/nv.d3',
-        'angular-nvd3': '/components/angular-nvd3/dist/angular-nvd3'
-    },
-    shim: {
-        'd3': {
-            exports: 'd3'
-        },
-        'nv.d3': {
-            exports: 'nv',
-            deps: ['d3']
-        },
-        'angular-nvd3': {
-            deps: ['nv.d3']
-        }
-    }
-});
-
 define([
         'angular',
-        'angular-nvd3',
-        '/widgets/data-dialogs/pie-chart-dialog.js',
-        '/widgets/data-util/adapter.js',
-        '/widgets/nvd3-pie/nvd3-pie-adapter.js'
+        '/widgets/nvd3-widget/nvd3-widget.js',
+        '/widgets/data-dialogs/pie-chart-dialog.js'
     ],
     function (angular) {
 
-        var m = angular.module('app.widgets.nvd3-pie',
-            ['nvd3',
-                'app.widgets.data-dialogs.pie-chart-dialog',
-                'app.widgets.data-util.adapter',
-                'app.widgets.nvd3.nvd3-pie-adapter',
-                {files: ['/components/nvd3/nv.d3.css']}
-            ]);
-        m.controller('Nvd3PieChartCtrl',
-            function ($scope, $http, EventEmitter, APIProvider, APIUser, PieChartDialog, adapter, NVD3PieAdapter) {
+        var m = angular.module('app.widgets.nvd3-pie', [
+            'app.widgets.nvd3-widget',
+            'app.widgets.data-dialogs.pie-chart-dialog'
+        ]);
 
-                $scope.APIProvider = new APIProvider($scope);
-                $scope.APIUser = new APIUser($scope);
+        m.service('NVD3PieAdapter', function () {
+            this.applyDecoration = function (options, decoration) {
+                if(angular.isDefined(decoration)&&angular.isDefined(options)) {
+                    options.chart.height = decoration.height;
+                    options.title.text = decoration.title;
+                    options.subtitle.text = decoration.subtitle;
+                    options.caption.text = decoration.caption;
+                    options.chart.donut = decoration.donut;
+                    options.chart.donutRatio = decoration.donutRatio;
+                    options.chart.donutLabelsOutside = decoration.labelsOutside;
+                    options.chart.pieLabelsOutside = decoration.labelsOutside;
+                    options.chart.labelType = (decoration.valueAsLabel)?"value":"key";
+                }
+                return options;
+            }
 
-                $http.get("/widgets/nvd3-pie/options.json").success(
-                    function (data) {
-                        $scope.options = data;
-                        $scope.options.chart.x = function (d) {
-                            return d.label
-                        };
-                        $scope.options.chart.y = function (d) {
-                            return d.value
-                        };
+            this.getDecoration = function (options){
+                if(angular.isDefined(options)) {
+                    var decoration = {}
+                    decoration.height = options.chart.height;
+                    decoration.title = options.title.text;
+                    decoration.subtitle = options.subtitle.text;
+                    decoration.caption = options.caption.text;
+                    decoration.donut = options.chart.donut;
+                    decoration.donutRatio = options.chart.donutRatio;
+                    decoration.labelsOutside = options.chart.donutLabelsOutside || options.chart.pieLabelsOutside;
+                    decoration.valueAsLabel = (options.chart.labelType =="value");
+                    return decoration;
+                }
+            }
+        })
 
-                        if($scope.widget.decoration) {
-                            $scope.options = NVD3PieAdapter.applyDecoration($scope.options, $scope.widget.decoration)
-                        }else{
-                            $scope.widget.decoration = NVD3PieAdapter.getDecoration($scope.options);
-                        }
 
-                    });
-
-                $scope.APIProvider
-
-                    .config(function () {
-                        if($scope.widget.decoration) {
-                            $scope.options = NVD3PieAdapter.applyDecoration($scope.options, $scope.widget.decoration)
-                        }else{
-                            $scope.widget.decoration = NVD3PieAdapter.getDecoration($scope.options);
-                        }
-                        if ($scope.widget.data && $scope.widget.data.standalone) {
-                        $scope.series = adapter.getData($scope.widget.data)[0].values;
-                        return;
-                        }
-                        if ($scope.widget.datasource)
-                            $scope.APIUser.invoke($scope.widget.datasource, 'appendListener')
-                    }, true)
-
-                    .openCustomSettings(function () {
-                        $scope.dialog = new PieChartDialog($scope);
-                        $scope.dialog.open();
-                    })
-
-                    .provide('setDataProvider', function (evt, provider) {
-                        $scope.provider = provider;
-                        $scope.series = adapter.getData($scope.widget.data, $scope.provider)[0].values;
-                    });
+        m.controller('Nvd3PieChartCtrl',function($scope,PieChartDialog,NVD3PieAdapter,NVD3Widget){
+            new NVD3Widget($scope,{
+                dialog: PieChartDialog,
+                decorationAdapter: NVD3PieAdapter,
+                optionsURL: "/widgets/nvd3-pie/options.json",
+                serieAdapter:{
+                    getX:function(d){return d.label},
+                    getY:function(d){return d.value},
+                    getSeries:function(series){return series[0].values}
+                }
             })
+        });
+
     });
