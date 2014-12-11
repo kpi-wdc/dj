@@ -10,7 +10,8 @@
 For developers (optional):
 
 - node.js is installed
-- npm is installed
+- npm is installed (1.2 doesn't work, 1.4 works fine, check with `npm --version`.
+Install new npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
 - bower is installed (run `npm install -g bower` as admin)
 - gulp is installed (run `npm install -g gulp` as admin)
 - karma is installed (run `npm install -g karma` as admin)
