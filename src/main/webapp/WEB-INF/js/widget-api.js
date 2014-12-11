@@ -1,5 +1,4 @@
 define(['angular'], function (angular) {
-    "use strict";
     /**
      * @ngdoc module
      * @name app.widgetApi
@@ -8,7 +7,7 @@ define(['angular'], function (angular) {
      * Services from this module are a public API for all the widget developers.
      * They are documented and are allowed to use.
      */
-    var widgetApi = angular.module('app.widgetApi', []);
+    let widgetApi = angular.module('app.widgetApi', []);
 
     /**
      * @ngdoc object
@@ -41,11 +40,11 @@ define(['angular'], function (angular) {
          * @param {$rootScope.Scope} scope Widget's scope
          * @param [scope.widget.instanceName] Widget's unique name
          */
-        var APIProvider = function (scope) {
-            var self = this;
+        let APIProvider = function (scope) {
+            let self = this;
             this.providerName = scope.widget.instanceName;
             instanceNameToScope[this.providerName] = scope;
-            scope.$watch('widget.instanceName', function (newName) {
+            scope.$watch('widget.instanceName', (newName) => {
                 if (newName === self.providerName) {
                     return;
                 }
@@ -57,7 +56,7 @@ define(['angular'], function (angular) {
 
                 self.providerName = newName;
             });
-            scope.$on('$destroy', function () {
+            scope.$on('$destroy', () => {
                 delete widgetSlots[self.providerName];
             });
         };
@@ -70,8 +69,7 @@ define(['angular'], function (angular) {
          */
         APIProvider.prototype.provide = function (slotName, slot) {
             if (typeof slot !== 'function') {
-                throw "Second argument should be a function, " +
-                (typeof slot) + "passed instead";
+                throw `Second argument should be a function, ${typeof slot} passed instead`;
             }
             widgetSlots[this.providerName] = widgetSlots[this.providerName] || [];
             widgetSlots[this.providerName].push({
@@ -142,7 +140,7 @@ define(['angular'], function (angular) {
          * public API provided with `APIProvider`
          * @param scope Widget's scope
          */
-        var APIUser =  function (scope) {
+        let APIUser =  function (scope) {
             this.scope = scope;
         };
 
@@ -167,10 +165,10 @@ define(['angular'], function (angular) {
          */
         APIUser.prototype.invoke = function (providerName, slotName) {
             if (!widgetSlots[providerName]) {
-                throw "Provider " + providerName + " doesn't exist";
+                throw `Provider ${providerName} doesn't exist`;
             }
-            for (var i = 0; i < widgetSlots[providerName].length; i++) {
-                var slot = widgetSlots[providerName][i];
+            for (let i = 0; i < widgetSlots[providerName].length; i++) {
+                let slot = widgetSlots[providerName][i];
                 if (slot.slotName === slotName) {
                     return slot.fn.apply(undefined, [{
                         emitterName: this.userName(),
@@ -178,7 +176,7 @@ define(['angular'], function (angular) {
                     }].concat(Array.prototype.slice.call(arguments, 2)));
                 }
             }
-            throw "Provider " + providerName + " doesn't have slot called " + slotName;
+            throw `Provider ${providerName} doesn't have slot called ${slotName}`;
         };
 
         /**
@@ -212,11 +210,10 @@ define(['angular'], function (angular) {
          * @param slotName Name of the slot
          */
         APIUser.prototype.invokeAll = function (slotName) {
-            var called = false;
-            for (var providerName in widgetSlots) {
+            let called = false;
+            for (let providerName in widgetSlots) {
                 if (widgetSlots.hasOwnProperty(providerName)) {
-                    for (var i = 0; i < widgetSlots[providerName].length; i++) {
-                        var slot = widgetSlots[providerName][i];
+                    for (let slot of widgetSlots[providerName]) {
                         if (slot.slotName === slotName) {
                             called = true;
                             slot.fn.apply(undefined, [{
@@ -248,7 +245,7 @@ define(['angular'], function (angular) {
          * @description Provides a class which allows to emit events which, in row, can invoke slots on other widgets
          * using publish/subscribe mechanism
          */
-        var EventPublisher = function (scope) {
+        let EventPublisher = function (scope) {
             this.scope = scope;
         };
 
@@ -270,29 +267,28 @@ define(['angular'], function (angular) {
          * @param signalName Name of the signal
          */
         EventPublisher.prototype.emit = function (signalName) {
-            var args = Array.prototype.slice.call(arguments, 1);
-            var self = this;
-            $rootScope.$evalAsync(function () {
-                if (!self.emitterName() || typeof self.emitterName() !== "string") {
+            let args = Array.prototype.slice.call(arguments, 1);
+            $rootScope.$evalAsync(() => {
+                if (!this.emitterName() || typeof this.emitterName() !== "string") {
                     $log.info("Not emitting event because widget's instanceName is not set");
                 }
-                var wires = eventWires[self.emitterName()];
+                let wires = eventWires[this.emitterName()];
                 if (!wires) {
                     return;
                 }
-                for (var i = 0; i < wires.length; i++) {
-                    var wire = wires[i];
+                for (let i = 0; i < wires.length; i++) {
+                    let wire = wires[i];
                     if (wire && wire.signalName === signalName) {
 
-                        var slots = widgetSlots[wire.providerName];
+                        let slots = widgetSlots[wire.providerName];
                         if (!slots) {
                             continue;
                         }
 
-                        for (var j = 0; j < slots.length; j++) {
+                        for (let j = 0; j < slots.length; j++) {
                             if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
                             slots[j].fn.apply(undefined, [{
-                                emitterName: self.emitterName(),
+                                emitterName: this.emitterName(),
                                 signalName: signalName
                             }].concat(args));
                         }
@@ -308,7 +304,7 @@ define(['angular'], function (angular) {
          * @param provideName
          * @param slotName
          */
-        EventPublisher.wireSignalWithSlot = function (emitterName, signalName, provideName, slotName) {
+        EventPublisher.wireSignalWithSlot = (emitterName, signalName, provideName, slotName) => {
             eventWires[emitterName] = eventWires[emitterName] || [];
             eventWires[emitterName].push({
                 signalName: signalName,
@@ -321,8 +317,8 @@ define(['angular'], function (angular) {
          * @private
          * @param subscriptions
          */
-        EventPublisher.replacePageSubscriptions = function (subscriptions) {
-            for (var emitterName in eventWires) {
+        EventPublisher.replacePageSubscriptions = (subscriptions) => {
+            for (let emitterName in eventWires) {
                 if (eventWires.hasOwnProperty(emitterName)) {
                     delete eventWires[emitterName];
                 }
@@ -331,16 +327,16 @@ define(['angular'], function (angular) {
             if (!subscriptions) {
                 return;
             }
-            for (var i = 0; i < subscriptions.length; i++) {
-                var s = subscriptions[i];
+            for (let i = 0; i < subscriptions.length; i++) {
+                let s = subscriptions[i];
                 EventPublisher.wireSignalWithSlot(s.emitter, s.signal, s.receiver, s.slot);
             }
         };
 
-        $rootScope.$watch(function () {
-            var pageConf = appConfig.pageConfig();
+        $rootScope.$watch(() => {
+            let pageConf = appConfig.pageConfig();
             return  pageConf && pageConf.subscriptions;
-        }, function (newSubscriptions) {
+        }, (newSubscriptions) => {
             EventPublisher.replacePageSubscriptions(newSubscriptions);
         }, true);
 
@@ -367,8 +363,8 @@ define(['angular'], function (angular) {
      * @returns {Array}
      */
     widgetApi.factory('pageSubscriptions', function (appConfig) {
-        return function () {
-            var pageConf = appConfig.pageConfig();
+        return () => {
+            let pageConf = appConfig.pageConfig();
             pageConf.subscriptions = pageConf.subscriptions || [];
             return pageConf.subscriptions;
         };
