@@ -67,7 +67,7 @@ gulp.task('collect-bower-dependencies', function () {
     return gulp.src('resources/widgets/*/bower.json')
         .pipe(jeditor(function(json) {
             // TODO: if necessary don't add widgets with no dependencies at all
-            collectedBowerDeps[json["name"]] = "./resources/widgets/" + json["name"] + "/";
+            collectedBowerDeps[json.name] = "./resources/widgets/" + json.name + "/";
             return json;
         }))
         .on('error', handleError);
@@ -77,7 +77,7 @@ gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
     return gulp.src('bower-base.json')
         .pipe(jeditor(function(json) {
             for (var dep in collectedBowerDeps) {
-                json["dependencies"][dep] = collectedBowerDeps[dep];
+                json.dependencies[dep] = collectedBowerDeps[dep];
             }
             return json;
         }))
