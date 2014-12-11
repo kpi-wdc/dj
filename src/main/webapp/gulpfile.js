@@ -148,7 +148,8 @@ gulp.task('build-template-cache', function () {
         .on('error', handleError)
         .pipe(gulp.dest('build'))
         .pipe(templateCache('templates.js', {
-            standalone: true
+            standalone: true,
+            moduleSystem: 'RequireJS'
         }))
         .pipe(gulp.dest('build/js'));
 });
