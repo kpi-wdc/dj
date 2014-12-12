@@ -165,7 +165,7 @@ gulp.task('copy-es6-polyfill', function () {
 });
 
 gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
-    'compile-js', 'annotate-js', 'movetest', 'copy-es6-polyfill'].concat(mergeJS ? ['amd-merge'] : []), function () {
+    'compile-js', 'annotate-js', 'copy-es6-polyfill'].concat(mergeJS ? ['amd-merge'] : []), function () {
     var nonTestJSFilter = gulpFilter(['!test/**/*.js']);
     return gulp.src(['build/**/*.js'])
         .pipe(cached('build-js'))
@@ -185,12 +185,6 @@ gulp.task('compile-js', function () {
         .pipe(sourcemaps.write('.'))
         .on('error', handleError)
         .pipe(gulp.dest('build/js'));
-});
-
-gulp.task('movetest', function () {
-    return gulp.src('test/**/*.js')
-        .pipe(cached('movetest'))
-        .pipe(gulp.dest('build/test'));
 });
 
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'compile-js'], function () {
@@ -282,13 +276,22 @@ gulp.task('test', (isFlagPositive(argv.skipTests) ? []:
     }
 });
 
-gulp.task('unit-test', [], function (done) {
+gulp.task('unit-test', ['build', 'build-unit-test'], function (done) {
     var conf = {
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
     };
     conf.browsers = ['PhantomJS'].concat(isEnvEnabled('CI') ? 'Firefox' : []);
     karma.start(conf, done);
+});
+
+gulp.task('build-unit-test', function () {
+    return gulp.src('test/unit/**/*.js')
+        .pipe(cached('build-unit-test'))
+        .pipe(sourcemaps.init())
+        .pipe(to5())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('build/test/unit'));
 });
 
 gulp.task('coveralls', function () {
@@ -303,7 +306,7 @@ gulp.task('e2e-test', ['e2e-run-test']);
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', webdriver_update);
 
-gulp.task('e2e-run-test', ['webdriver-update'], function () {
+gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], function () {
     return gulp.src(['build/test/e2e/**/*Spec.js'])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
@@ -317,6 +320,12 @@ gulp.task('e2e-run-test', ['webdriver-update'], function () {
                 throw e;
             }
         });
+});
+
+gulp.task('build-e2e-test', function () {
+    return gulp.src('test/e2e/**/*.js')
+        .pipe(cached('build-e2e-test'))
+        .pipe(gulp.dest('build/test/e2e'));
 });
 
 gulp.task('docs', shell.task([
