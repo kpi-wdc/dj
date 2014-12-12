@@ -61,6 +61,7 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
 
   - git (version control)
   - maven (back-end task-runner & dependency management system)
+  - javascript (ES6)
   - java/spring (back-end)
   - databases (back-end)
   - hibernate (back-end)
@@ -78,7 +79,7 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
   - travis (continuous integration)
   - heroku (PaaS, used for app deployment)
 
-## Suggested intellij idea plugins:
+## Intellij Idea
 
   - maven
   - spring
@@ -90,8 +91,6 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
   - gitignore (for syntax highlight)
   - angularjs
   - markdown
-
-If you are a front-end dev, you can also install TypeScript community stubs to make Idea aware of code completion when other JS libraries are used.
 
 ## Suggested Chrome extensions:
 
