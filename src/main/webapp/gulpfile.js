@@ -31,6 +31,7 @@ var jeditor = require("gulp-json-editor");
 var shell = require('gulp-shell');
 var to5 = require('gulp-6to5');
 var rename = require('gulp-rename');
+var sourcemaps = require('gulp-sourcemaps');
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -179,7 +180,9 @@ gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-component
 gulp.task('compile-js', function () {
     return gulp.src('WEB-INF/js/**/*.js')
         .pipe(cached('compile-js'))
+        .pipe(sourcemaps.init())
         .pipe(to5())
+        .pipe(sourcemaps.write('.'))
         .on('error', handleError)
         .pipe(gulp.dest('build/js'));
 });
