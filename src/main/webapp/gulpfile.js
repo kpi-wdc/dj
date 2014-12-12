@@ -210,7 +210,9 @@ gulp.task('move-widgets', function () {
 gulp.task('build-widgets-js', ['move-widgets'], function () {
     return gulp.src('build/widgets/**/*.js')
         .pipe(cached('build-widgets-js'))
+        .pipe(sourcemaps.init())
         .pipe(to5())
+        .pipe(sourcemaps.write('.'))
         .on('error', handleError)
         .pipe(gulp.dest('build/widgets'));
 });
