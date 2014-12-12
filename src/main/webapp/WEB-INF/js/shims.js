@@ -1,17 +1,16 @@
 define(function () {
-    "use strict";
     // ES5 Function.prototype.bind
     // doesn't work in pre-v2 PhantomJS
     if (typeof Function.prototype.bind != 'function') {
         Function.prototype.bind = (function () {
-            var slice = Array.prototype.slice;
+            let slice = Array.prototype.slice;
             return function (thisArg) {
-                var target = this, boundArgs = slice.call(arguments, 1);
+                let target = this, boundArgs = slice.call(arguments, 1);
 
                 if (typeof target != 'function') throw new TypeError();
 
                 function Bound() {
-                    var args = boundArgs.concat(slice.call(arguments));
+                    let args = boundArgs.concat(slice.call(arguments));
                     target.apply(this instanceof Bound ? this : thisArg, args);
                 }
 

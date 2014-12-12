@@ -29,6 +29,9 @@ var extend = require('gulp-extend');
 var tap = require('gulp-tap');
 var jeditor = require("gulp-json-editor");
 var shell = require('gulp-shell');
+var to5 = require('gulp-6to5');
+var rename = require('gulp-rename');
+var sourcemaps = require('gulp-sourcemaps');
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -154,8 +157,15 @@ gulp.task('build-template-cache', function () {
         .pipe(gulp.dest('build/js'));
 });
 
+gulp.task('copy-es6-polyfill', function () {
+    return gulp.src('node_modules/gulp-6to5/node_modules/6to5/browser-polyfill.js')
+        .pipe(cached('copy-es6-polyfill'))
+        .pipe(rename('es6-polyfill.js'))
+        .pipe(gulp.dest('build/js'));
+});
+
 gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
-    'movejs', 'annotate-js', 'movetest'].concat(mergeJS ? ['amd-merge'] : []), function () {
+    'compile-js', 'annotate-js', 'movetest', 'copy-es6-polyfill'].concat(mergeJS ? ['amd-merge'] : []), function () {
     var nonTestJSFilter = gulpFilter(['!test/**/*.js']);
     return gulp.src(['build/**/*.js'])
         .pipe(cached('build-js'))
@@ -167,9 +177,13 @@ gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-component
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('movejs', function () {
+gulp.task('compile-js', function () {
     return gulp.src('WEB-INF/js/**/*.js')
-        .pipe(cached('movejs'))
+        .pipe(cached('compile-js'))
+        .pipe(sourcemaps.init())
+        .pipe(to5())
+        .pipe(sourcemaps.write('.'))
+        .on('error', handleError)
         .pipe(gulp.dest('build/js'));
 });
 
@@ -179,7 +193,7 @@ gulp.task('movetest', function () {
         .pipe(gulp.dest('build/test'));
 });
 
-gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'movejs'], function () {
+gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'compile-js'], function () {
     return gulp.src('build/**/*.js')
         .pipe(cached('annotate-js'))
         .pipe(ngAnnotate())
@@ -187,11 +201,21 @@ gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-compon
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('build-widgets', function () {
-    return gulp.src(['resources/widgets/**'])
-        .pipe(cached('build-widgets'))
+gulp.task('move-widgets', function () {
+    return gulp.src('resources/widgets/**')
+        .pipe(cached('move-widgets'))
         .pipe(gulp.dest('build/widgets'));
 });
+
+gulp.task('build-widgets-js', ['move-widgets'], function () {
+    return gulp.src('build/widgets/**/*.js')
+        .pipe(cached('build-widgets-js'))
+        .pipe(to5())
+        .on('error', handleError)
+        .pipe(gulp.dest('build/widgets'));
+});
+
+gulp.task('build-widgets', ['move-widgets', 'build-widgets-js']);
 
 gulp.task('amd-merge', ['amd-optimize'], function () {
     return gulp.src(['build/js/compiled.js', 'build/js/main.js'])
@@ -202,7 +226,7 @@ gulp.task('amd-merge', ['amd-optimize'], function () {
 });
 
 gulp.task('amd-optimize', ['build-components', 'build-widgets',
-    'movejs', 'build-template-cache', 'annotate-js'], function () {
+    'compile-js', 'build-template-cache', 'annotate-js', 'copy-es6-polyfill'], function () {
     return gulp.src(['build/**/*.js'], {
             base: 'build'
         })
