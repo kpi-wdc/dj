@@ -8,7 +8,7 @@
 - maven is installed and available in `PATH`
 - git is installed and available in `PATH`
 
-For developers (optional):
+For developers:
 
 - node.js is installed
 - npm is installed (1.2 doesn't work, 1.4 works fine, check with `npm --version`.
@@ -17,7 +17,7 @@ Install new npm with `npm install -g npm` and make sure new npm is in `PATH` wit
 - gulp is installed (run `npm install -g gulp` as admin)
 - karma is installed (run `npm install -g karma` as admin)
 - protractor is installed (run `npm install -g protractor` as admin)
-- firefox and chrome are installed
+- chrome and firefox (optional) are installed
 
 
 ## Build
