@@ -51,7 +51,7 @@ require.config({
 
 (function () {
     // are we unit-testing now?
-    var isUnitTesting = window.__karma__ !== undefined;
+    let isUnitTesting = window.__karma__ !== undefined;
     if (isUnitTesting) {
         let tests = [];
         for (let file in window.__karma__.files) {

@@ -42,23 +42,22 @@ define(['angular'], function (angular) {
          */
         class APIProvider {
             constructor(scope) {
-                let self = this;
                 this.providerName = scope.widget.instanceName;
                 instanceNameToScope[this.providerName] = scope;
                 scope.$watch('widget.instanceName', (newName) => {
-                    if (newName === self.providerName) {
+                    if (newName === this.providerName) {
                         return;
                     }
-                    widgetSlots[newName] = widgetSlots[self.providerName];
-                    delete widgetSlots[self.providerName];
+                    widgetSlots[newName] = widgetSlots[this.providerName];
+                    delete widgetSlots[this.providerName];
 
                     instanceNameToScope[newName] = scope;
-                    delete instanceNameToScope[self.providerName];
+                    delete instanceNameToScope[this.providerName];
 
-                    self.providerName = newName;
+                    this.providerName = newName;
                 });
                 scope.$on('$destroy', () => {
-                    delete widgetSlots[self.providerName];
+                    delete widgetSlots[this.providerName];
                 });
             }
 
@@ -340,7 +339,7 @@ define(['angular'], function (angular) {
 
         $rootScope.$watch(() => {
             let pageConf = appConfig.pageConfig();
-            return  pageConf && pageConf.subscriptions;
+            return pageConf && pageConf.subscriptions;
         }, (newSubscriptions) => {
             EventPublisher.replacePageSubscriptions(newSubscriptions);
         }, true);

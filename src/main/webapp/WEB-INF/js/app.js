@@ -61,8 +61,8 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
                                 let deferredResult = $q.defer();
 
-                                var widgetTypes = [];
-                                for (var holderName in pageConfig.holders) {
+                                let widgetTypes = [];
+                                for (let holderName in pageConfig.holders) {
                                     if (pageConfig.holders.hasOwnProperty(holderName)) {
                                         for (let widget of pageConfig.holders[holderName].widgets) {
                                             widgetTypes.push(widget.type);
@@ -79,7 +79,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
                                 return deferredResult.promise;
                             }, (data) => {
-                                alert.error('Error loading app configuration: ' + data.statusText + ' (' + data.status + ')');
+                                alert.error(`Error loading app configuration: ${data.statusText} (${data.status})`);
                                 return $q.reject(data.status);
                             });
                     }
@@ -210,7 +210,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
                 for (let widget of widgets) {
                     let widgetType = widgetTypesHTTP.data[widget];
                     if (angular.isUndefined(widgetType)) {
-                        return $q.reject('Widget "' + widget + '" doesn\'t exist!');
+                        return $q.reject(`Widget "${widget}" doesn't exist!`);
                     }
                     if (!widgetType.nojs) {
                         widgetControllers.push({
