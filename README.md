@@ -81,6 +81,14 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
 
 ## Intellij Idea
 
+The following steps will make your work with Intellij Idea more productive
+
+1. Set Java version >= 7
+2. Set JavaScript version - EcmaScript 6
+3. Install TypeScript community stubs for front-end javascript dependencies.
+
+### Suggested intellij idea plugins:
+
   - maven
   - spring
   - NodeJS
