@@ -30,6 +30,7 @@ var tap = require('gulp-tap');
 var jeditor = require("gulp-json-editor");
 var shell = require('gulp-shell');
 var to5 = require('gulp-6to5');
+var rename = require('gulp-rename');
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -157,6 +158,8 @@ gulp.task('build-template-cache', function () {
 
 gulp.task('copy-es6-polyfill', function () {
     return gulp.src('node_modules/gulp-6to5/node_modules/6to5/browser-polyfill.js')
+        .pipe(cached('copy-es6-polyfill'))
+        .pipe(rename('es6-polyfill.js'))
         .pipe(gulp.dest('build/js'));
 });
 

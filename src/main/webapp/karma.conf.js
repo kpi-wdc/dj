@@ -4,7 +4,7 @@ module.exports = function(config){
     basePath : './build',
 
     files : [
-        'js/browser-polyfill.js',
+        'js/es6-polyfill.js',
         // HACK: manually inject RequireJS framework
         // otherwise it's impossible to load polyfills before other code
         // Note: RequireJS is not listed in `frameworks` property
