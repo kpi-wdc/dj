@@ -243,7 +243,7 @@ gulp.task('build-favicon', function () {
 
 gulp.task('test', (isFlagPositive(argv.skipTests) ? []:
     ['unit-test', 'e2e-test']), function (cb) {
-    // disable tests on heroku or when --skipTests=true is passed
+    // disable tests when --skipTests=true is passed
     if (isFlagPositive(argv.skipTests)) {
         console.log('Skipping tests because skipTests flag is passed');
         cb();
