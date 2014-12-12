@@ -5,7 +5,8 @@
 [![Coverage Status](https://img.shields.io/coveralls/sochka/wdc.svg)](https://coveralls.io/r/sochka/wdc)
 
 #### Prerequisites
-- maven is installed
+- maven is installed and available in `PATH`
+- git is installed and available in `PATH`
 
 For developers (optional):
 
