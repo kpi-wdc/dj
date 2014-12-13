@@ -9,6 +9,8 @@ exports.config = {
 
     framework: 'jasmine',
 
+    resultJsonOutputFile: 'protractor.log',
+
     onPrepare: function() {
         // implicit and page load timeouts
         browser.manage().timeouts().pageLoadTimeout(40000);

@@ -32,6 +32,7 @@ var shell = require('gulp-shell');
 var to5 = require('gulp-6to5');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
+var fs = require('fs');
 
 var isFlagPositive = function (value) {
     return value !== undefined && value !== 'false';
@@ -312,10 +313,9 @@ gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], funct
             configFile: __dirname + '/protractor.conf.js'
         }))
         .on('error', function(e) {
-            if (isEnvEnabled('CI') &&
-                /Timed out waiting for the WebDriver server/.test(e.message)) {
-                console.log(e);
-                console.log('Skipping end-to-end tests...')
+            if (isEnvEnabled('CI') && !fs.existsSync('protractor.log')) {
+                console.log('protractor.log not found!');
+                console.log('Skipping end-to-end tests...');
             } else {
                 throw e;
             }
