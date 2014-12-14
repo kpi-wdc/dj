@@ -10,7 +10,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         widgetModalAddNewHTML: '/views/widget-modal-add-new.html',
-        defaultWidgetIcon: '/widgets/noicon.png',
+        defaultWidgetIcon: '/widgets/default_widgets_icon.png',
         templateHTML: function (templateName) {
             return '/templates/' + templateName + '.html';
         },
