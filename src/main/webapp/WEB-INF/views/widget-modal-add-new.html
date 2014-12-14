@@ -1,4 +1,4 @@
-<h3>Choose widget type <input ng-model="searchText"></h3>
+<h3>Choose widget type <input ng-model="searchText" placeholder="Search for..."></h3>
   <div class="addWidget">
     <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
       <li ng-repeat="widget in widgetTypes | filter:searchText" ng-click="addWidget(widget.type)"
