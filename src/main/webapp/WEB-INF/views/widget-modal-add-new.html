@@ -1,15 +1,12 @@
 <h3>Choose widget type <input ng-model="searchText"></h3>
   <div class="addWidget">
-    <div ng-repeat="widget in widgetTypes | filter:searchText"
-         ng-click="addWidget(widget.type)">
-      <div class="row has-tip" align="center"
-           ng-click="selectRow($index)" ng-class="{selected: isSelected($index)}">
-        <div class="columns" title="{{widget.description}}">
-          <img ng-src="{{widget.icon}}">
-          <div ng-bind="widget.type"></div>
-        </div>
-      </div>
-    </div>
+    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+      <li ng-repeat="widget in widgetTypes | filter:searchText" ng-click="addWidget(widget.type)"
+              class="th" title="{{widget.description}}">
+        <img ng-src="{{widget.icon}}"/>
+        <div>{{widget.type}}</div>
+      </li>
+    </ul>
   </div>
 <button class="button" ng-click="add()" ng-bind="'Add ' + chosenWidgetType"></button>
 <button class="button alert" ng-click="cancel()">Cancel</button>
