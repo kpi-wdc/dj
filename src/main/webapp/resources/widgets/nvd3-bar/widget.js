@@ -1,22 +1,20 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
-        '/widgets/data-dialogs/bar-chart-dialog.js',
-        '/widgets/nvd3-bar/nvd3-bar-adapter.js'
+        '/widgets/data-dialogs/bar-chart-dialog.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.nvd3-bar',[
             'app.widgets.nvd3-widget',
-            'app.widgets.data-dialogs.bar-chart-dialog',
-            'app.widgets.nvd3.nvd3-bar-adapter'
+            'app.widgets.data-dialogs.bar-chart-dialog'
             ]);
 
+        console.log(nv)
 
         m.service('NVD3BarAdapter', function () {
             this.applyDecoration = function (options, decoration) {
                 if(angular.isDefined(decoration)&&angular.isDefined(options)) {
-                    console.log(options)
                     options.chart.height = decoration.height;
                     options.title.text = decoration.title;
                     options.subtitle.text = decoration.subtitle;
@@ -26,6 +24,7 @@ define([
                     options.chart.xAxis.staggerLabels = decoration.staggerLabels;
                     options.chart.rotateLabels = decoration.xAxisAngle;
                     options.chart.reduceXTicks = decoration.reduceXTicks;
+                    options.chart.color = (decoration.color) ? decoration.color : null;
                 }
                 return options;
             }
@@ -41,6 +40,7 @@ define([
                     decoration.xAxisAngle = options.chart.rotateLabels;
                     decoration.reduceXTicks = options.chart.reduceXTicks;
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
+                    decoration.color = options.chart.color;
                     return decoration;
                 }
             }

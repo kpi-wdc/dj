@@ -1,21 +1,24 @@
-define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
+define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widgets/data-dialogs/palettes1.js"],
     function (angular) {
         var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', [
             'app.widgets.data-util.keyset',
             'mm.foundation',
-            'app.widgetApi']);
+            'app.widgetApi',
+            'app.widgets.palettes1'
+        ]);
 
-        m.factory("BarChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions',
+        m.factory("BarChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions','Palettes1',
 
-            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions) {
+            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions, Palettes1) {
 
             BarChartDialog = function(scope){
+
                 this.scope = scope;
                 this.storeDatasource = scope.widget.datasource;
                 this.datasource = scope.widget.datasource;
                 this.instanceName = scope.widget.instanceName;
                 this.decoration = scope.widget.decoration || {};
-
+                this.palettes = Palettes1;
                 this.step=[];
                 for(var i=0;i<7;i++) this.step.push({access:"enable",active:false});
                 this.currentStep= 0;
@@ -53,6 +56,24 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                         "background-color":"#008cba",
                         "border-radius":"20px"
                     }
+                },
+
+                setColor: function(palette){
+                  if(angular.isDefined(palette))
+                  this.decoration.color = (this.inverseColor)?this.inverse(palette):palette;
+                },
+
+                inverseColor: function(palette){
+                    if(angular.isDefined(palette))
+                        this.decoration.color = this.inverse(palette);
+                },
+
+                inverse : function(palette){
+                    var result = new Array();
+                    for(var i=0;i<palette.length;i++){
+                        result[i] = palette[palette.length-i-1];
+                    }
+                    return result;
                 },
 
                 gotoStep: function(index){

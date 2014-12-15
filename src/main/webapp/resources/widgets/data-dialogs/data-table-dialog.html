@@ -212,6 +212,8 @@
                     </tbody>
                 </table>
             </div>
+
+            <pre><code>{{dialog.table|json}}</code></pre>
             <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
                 <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
                 <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="dialog.gotoStep(6)">Next</button>
@@ -220,7 +222,7 @@
         </div>
     </tab>
 
-    <tab heading="Set Chart Options"  ng-click="dialog.tryGotoStep(6)" active="dialog.step[6].active" ng-style="dialog.getStyle(6)">
+    <tab heading="Set Table Options"  ng-click="dialog.tryGotoStep(6)" active="dialog.step[6].active" ng-style="dialog.getStyle(6)">
         <div ng-if="dialog.state >= 4 || dialog.step[6].access == 'enable'">
         <div class="panel">
             <h5>Data Settings</h5>
@@ -233,6 +235,42 @@
                     <label for="standaloneCheckbox"></label>
                 </div>
             </div>
+            <h5>Table Header</h5>
+            <div class="panel">
+                <label ng-repeat="t in dialog.theader track by $index">
+
+                    <input type="text" ng-model="dialog.theader[$index]">
+                </label>
+
+                <div>
+                   <div class="table caption">Table 1. Table Caption</div>
+                   <div class="table title">Table Title</div>
+                   <table cellpadding="0px" cellspacing="0px" width="100%"  align="center" style="padding: 0px; margin: 0px; ">
+
+                       <thead>
+                       <tr>
+                           <th  ng-repeat="t in dialog.theader track by $index">
+                               {{dialog.theader[$index]}}
+                           </th>
+                       </tr>
+
+                       </thead>
+
+                       <tbody>
+
+                       <tr ng-repeat="row in dialog.table">
+                           <td ng-repeat="cell in row.values">
+                               {{(cell.value) ? cell.value : ' - '}}
+                           </td>
+                       </tr>
+                       </tbody>
+                   </table>
+                   <div class="table subtitle">Table Subtitle</div>
+               </div>
+            </div>
+
+
+
             <h5>General Chart Settings</h5>
             <div class="row border">
                 <div class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">

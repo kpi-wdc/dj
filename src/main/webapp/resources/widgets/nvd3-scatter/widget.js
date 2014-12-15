@@ -1,19 +1,20 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
-        '/widgets/data-dialogs/bar-chart-dialog.js'
+        '/widgets/data-dialogs/line-chart-dialog.js'
     ],
     function (angular) {
 
-        var m = angular.module('app.widgets.nvd3-hbar',[
-            'app.widgets.nvd3-widget',
-            'app.widgets.data-dialogs.bar-chart-dialog'
+        var m = angular.module('app.widgets.nvd3-scatter',
+            ['app.widgets.nvd3-widget',
+             'app.widgets.data-dialogs.line-chart-dialog'
             ]);
 
-        m.service('NVD3HBarAdapter', function () {
+
+        m.service('NVD3ScatterAdapter', function () {
+
             this.applyDecoration = function (options, decoration) {
                 if(angular.isDefined(decoration)&&angular.isDefined(options)) {
-                    console.log(options)
                     options.chart.height = decoration.height;
                     options.title.text = decoration.title;
                     options.subtitle.text = decoration.subtitle;
@@ -23,6 +24,7 @@ define([
                     options.chart.xAxis.staggerLabels = decoration.staggerLabels;
                     options.chart.rotateLabels = decoration.xAxisAngle;
                     options.chart.reduceXTicks = decoration.reduceXTicks;
+                    options.chart.isArea = decoration.isArea;
                     options.chart.color = (decoration.color) ? decoration.color : null;
                 }
                 return options;
@@ -40,21 +42,26 @@ define([
                     decoration.xAxisAngle = options.chart.rotateLabels;
                     decoration.reduceXTicks = options.chart.reduceXTicks;
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
+                    decoration.isArea = options.chart.isArea;
                     decoration.color = options.chart.color;
                     return decoration;
                 }
             }
-        })
+        });
 
-        m.controller('Nvd3HBarChartCtrl',function($scope,BarChartDialog,NVD3HBarAdapter,NVD3Widget){
+        m.controller('Nvd3ScatterChartCtrl',function($scope,LineChartDialog,NVD3ScatterAdapter,NVD3Widget){
             new NVD3Widget($scope,{
-                dialog: BarChartDialog,
-                decorationAdapter: NVD3HBarAdapter,
-                optionsURL: "/widgets/nvd3-hbar/options.json",
+                dialog: LineChartDialog,
+                decorationAdapter: NVD3ScatterAdapter,
+                optionsURL: "/widgets/nvd3-scatter/options.json",
                 serieAdapter:{
-                    getX:function(d){return d.label},
-                    getY:function(d){return d.value}
+                    getX:function(d){return d.x},
+                    getY:function(d){return d.y},
+                    tooltipContent: function(serie,x,y,s){
+                        return "<b>"+serie + ": </b><i>" + s.point.label+"</i>"
+                    }
                 }
             })
         });
+
     });

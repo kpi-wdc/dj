@@ -1,23 +1,23 @@
-define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widgets/data-dialogs/palettes1.js"],
+define(["angular","/widgets/data-util/keyset.js", "/widgets/data-util/table-adapter.js",'angular-foundation'],
     function (angular) {
-        var m = angular.module('app.widgets.data-dialogs.pie-chart-dialog', [
+        var m = angular.module('app.widgets.data-dialogs.data-table-dialog', [
             'app.widgets.data-util.keyset',
+            'app.widgets.data-util.table-adapter',
             'mm.foundation',
-            'app.widgetApi',
-            'app.widgets.palettes1'
+            'app.widgetApi'
         ]);
 
-        m.factory("PieChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions', 'Palettes1',
+        m.factory("DataTableDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions','TableAdapter',
 
-            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions,Palettes1) {
+            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions,TableAdapter) {
 
-            PieChartDialog = function(scope){
+                DataTableDialog = function(scope){
+
                 this.scope = scope;
                 this.storeDatasource = scope.widget.datasource;
                 this.datasource = scope.widget.datasource;
                 this.instanceName = scope.widget.instanceName;
                 this.decoration = scope.widget.decoration || {};
-                this.palettes = Palettes1;
 
                 this.step=[];
                 for(var i=0;i<7;i++) this.step.push({access:"enable",active:false});
@@ -34,13 +34,14 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 this.url= "";
                 this.provider= undefined;
                 this.dimensionList = [];
+                this.theader = [];
 
                 this.state = 0;
 
                 this.restoreState(scope.widget.data,scope.provider)
             }
 
-            PieChartDialog.prototype =  {
+                DataTableDialog.prototype =  {
 
 
                 styles:{
@@ -59,8 +60,8 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 },
 
                 setColor: function(palette){
-
-                    this.decoration.color = (this.inverseColor)?this.inverse(palette):palette;
+                  if(angular.isDefined(palette))
+                  this.decoration.color = (this.inverseColor)?this.inverse(palette):palette;
                 },
 
                 inverseColor: function(palette){
@@ -74,6 +75,10 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                         result[i] = palette[palette.length-i-1];
                     }
                     return result;
+                },
+
+                changeHeader:function(index,t){
+                    this.theader[index] = t;
                 },
 
                 gotoStep: function(index){
@@ -243,6 +248,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                             if (arguments[1] && this.selection.dataset != arguments[1]) {
                                 this.selection.dataset = arguments[1];
                                 var dimensions = {};
+
                                 var dims = this.provider.getDimensionList(this.selection.dataset);
                                 angular.forEach(dims, function (dim) {
                                     dimensions[dim] = new KeySet();
@@ -253,6 +259,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                             this.selection.result = undefined;
                             this.selection.series = undefined;
                             this.selection.queries = undefined;
+                            //this.header = [];
 
                             this.setEnable([0,1,2]);
                             this.setDisable([3,4,5,6]);
@@ -262,6 +269,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                         case 3: // get data from dataset provider, fields role selection in process
                             if (arguments[0] && this.state < arguments[0]) {
                                 this.selection.fields = {};
+                                //this.header = [];
                                 this.selection.role = {
                                     Serie: undefined,
                                     Label: undefined,
@@ -285,6 +293,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                         case 4: // generate series
                             this.selection.queries = [];
+                            this.theader = [];
                             var queryStr = "", itemsCriteria = "", order = "";
                             var tmpResult = this.selection.result.data;
 
@@ -332,6 +341,13 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                             }
 
                             this.selection.series = tmpResult;
+                            this.table = TableAdapter.getData(tmpResult);
+
+                            for(i in this.table[0].values){
+                                this.theader.push(this.table[0].values[i].label)
+                            }
+
+
                             this.state = 4;
 
                             this.setEnable([0,1,2,3,4,5,6]);
@@ -482,8 +498,8 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                     //this.restoreState(this.scope.widget.data,this.scope.provider)
                     var s = this.scope;
                     $modal.open({
-                        templateUrl: 'widgets/data-dialogs/pie-chart-dialog.html',
-                        controller: 'PieChartConfigDialog',
+                        templateUrl: 'widgets/data-dialogs/data-table-dialog.html',
+                        controller: 'DataTableConfigDialog',
                         backdrop: 'static',
                         resolve: {
                             widgetScope: function () {
@@ -495,11 +511,11 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 }
             }
 
-            return PieChartDialog;
+            return DataTableDialog;
 
         }]);
 
-        m.controller('PieChartConfigDialog', function ($scope, $modalInstance, widgetScope) {
+        m.controller('DataTableConfigDialog', function ($scope, $modalInstance, widgetScope) {
             $scope.dialog = widgetScope.dialog;
             widgetScope.dialog.modal = $modalInstance;
 

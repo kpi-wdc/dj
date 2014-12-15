@@ -239,6 +239,30 @@
                         <input type="number" ng-model="dialog.decoration.height">
                     </label>
                 </div>
+                <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
+                    <label>Palette
+                        <div>
+                            <a class="button dropdown tiny left" dropdown-toggle="#dropdown-example-3">
+                                <div class="button tiny left" ng-repeat="color in  dialog.decoration.color" style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
+                                    &nbsp;
+                                </div>
+                            </a>
+                            <ul id="dropdown-example-3" class="f-dropdown tiny" style="height:10rem; overflow: auto;">
+                                <li ng-repeat="palette in dialog.palettes">
+                                    <a style="padding: 0; margin: 0;" ng-click="dialog.setColor(palette)">
+                                      <span>
+                                          <span ng-repeat="color in palette" style="background-color: {{color}};width:10px;height:10px;display: inline-block; margin:0;padding:0;border:1px solid #afafaf;">
+                                          </span>
+                                      </span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <button class="button tiny left" style="margin:0 0 0 0.785rem" ng-click="dialog.inverseColor(dialog.decoration.color)">Inverse Palette</button>
+
+                        </div>
+                    </label>
+                </div>
+
             </div>
             <h5>Titles</h5>
             <div class="row border">

@@ -22,6 +22,7 @@ define([
                     options.chart.donutLabelsOutside = decoration.labelsOutside;
                     options.chart.pieLabelsOutside = decoration.labelsOutside;
                     options.chart.labelType = (decoration.valueAsLabel)?"value":"key";
+                    options.chart.color = (decoration.color) ? decoration.color : null;
                 }
                 return options;
             }
@@ -37,6 +38,7 @@ define([
                     decoration.donutRatio = options.chart.donutRatio;
                     decoration.labelsOutside = options.chart.donutLabelsOutside || options.chart.pieLabelsOutside;
                     decoration.valueAsLabel = (options.chart.labelType =="value");
+                    decoration.color = options.chart.color;
                     return decoration;
                 }
             }

@@ -326,7 +326,8 @@
             "yAxisName" : "dddddddddddddddddddd",
             "xAxisAngle" : 30,
             "reduceXTicks" : true,
-            "staggerLabels" : true
+            "staggerLabels" : true,
+            "color" : [ "#084594", "#2171b5", "#4292c6", "#6baed6", "#9ecae1", "#c6dbef", "#deebf7", "#f7fbff" ]
           }
         }, {
           "type" : "nvd3-hbar",
@@ -339,7 +340,8 @@
             "xAxisName" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "yAxisName" : "bbbb",
             "xAxisAngle" : -30,
-            "staggerLabels" : false
+            "staggerLabels" : false,
+            "color" : [ "#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2" ]
           },
           "datasource" : "source",
           "data" : {
@@ -374,7 +376,8 @@
             "xAxisName" : "",
             "yAxisName" : "",
             "staggerLabels" : true,
-            "isArea" : true
+            "isArea" : true,
+            "color" : [ "#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2" ]
           },
           "data" : {
             "url" : "http://localhost:8080/data/oecd-canada.json",
@@ -393,9 +396,10 @@
             "role" : {
               "Serie" : "area_Label",
               "Y Value" : "value",
-              "X Value" : "year"
+              "X Value" : "year",
+              "Label" : "year_Label"
             },
-            "queries" : [ "from r in $0 group {x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
+            "queries" : [ "from r in $0 group {label: r.year_Label, x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
           },
           "datasource" : "source"
         }, {
@@ -408,7 +412,8 @@
             "caption" : "Figure 1. Write Your Caption text.",
             "xAxisName" : null,
             "yAxisName" : null,
-            "staggerLabels" : false
+            "staggerLabels" : false,
+            "color" : [ "#a6611a", "#dfc27d", "#80cdc1", "#018571" ]
           },
           "datasource" : "source",
           "data" : {
@@ -428,10 +433,141 @@
             "role" : {
               "Serie" : "area_Label",
               "Y Value" : "value",
-              "X Value" : "year"
+              "X Value" : "year",
+              "Label" : "year_Label"
             },
-            "queries" : [ "from r in $0 group {x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
+            "queries" : [ "from r in $0 group {label: r.year_Label, x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
           }
+        }, {
+          "type" : "nvd3-pie",
+          "instanceName" : "vb6rgpbl9p4uc8fr",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "donut" : true,
+            "donutRatio" : 0.3,
+            "labelsOutside" : true,
+            "valueAsLabel" : true,
+            "color" : [ "#014636", "#016c59", "#02818a", "#3690c0", "#67a9cf", "#a6bddb", "#d0d1e6", "#ece2f0", "#fff7fb" ]
+          },
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "oecd",
+            "dimensions" : {
+              "concept" : {
+                "collection" : [ "UNR" ]
+              },
+              "area" : {
+                "collection" : [ "AU", "AT", "BE", "CA" ]
+              },
+              "year" : {
+                "collection" : [ "2003" ]
+              }
+            },
+            "role" : {
+              "Serie" : "year",
+              "Label" : "area_Label",
+              "Value" : "value"
+            },
+            "queries" : [ "from r in $0 group {label: r.area_Label, value: r.value} by r.year into d select {key:d.key, values:d.toArray()}" ]
+          }
+        }, {
+          "type" : "nvd3-scatter",
+          "instanceName" : "4jwmuc3en8vholxr",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "X Axis",
+            "yAxisName" : "Y Axis",
+            "staggerLabels" : false,
+            "color" : [ "#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850", "#006837" ]
+          },
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "oecd",
+            "dimensions" : {
+              "concept" : {
+                "collection" : [ "UNR" ]
+              },
+              "area" : {
+                "collection" : [ "AU", "CL", "FI" ]
+              },
+              "year" : {
+                "collection" : [ "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014" ]
+              }
+            },
+            "role" : {
+              "Serie" : "area_Label",
+              "Y Value" : "value",
+              "X Value" : "year",
+              "Label" : "year_Label"
+            },
+            "queries" : [ "from r in $0 group {label: r.year_Label, x: r.year, y: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
+          }
+        }, {
+          "type" : "table",
+          "instanceName" : "6zdnsvxzikg4aemi",
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "oecd",
+            "dimensions" : {
+              "concept" : {
+                "collection" : [ "UNR" ]
+              },
+              "area" : {
+                "collection" : [ "AU", "CL", "FI", "HU" ]
+              },
+              "year" : {
+                "collection" : [ "2003", "2007", "2011" ]
+              }
+            },
+            "role" : {
+              "Serie" : "area_Label",
+              "Label" : "year",
+              "Value" : "value"
+            },
+            "queries" : [ "from r in $0 group {label: r.year, value: r.value} by r.area_Label into d select {key:d.key, values:d.toArray()}" ]
+          },
+          "decoration" : { }
+        }, {
+          "type" : "table",
+          "instanceName" : "ekgwf7ljn1rwwmi",
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "dataset" : "canada",
+            "dimensions" : {
+              "country" : {
+                "collection" : [ "CA" ]
+              },
+              "year" : {
+                "collection" : [ "2012" ]
+              },
+              "age" : {
+                "collection" : [ "T", "4", "9", "14", "19", "24", "29", "34", "39", "44", "49", "54", "59", "64", "69", "74", "79", "84", "89", "older" ]
+              },
+              "concept" : {
+                "collection" : [ "PERCENT" ]
+              },
+              "sex" : {
+                "collection" : [ "T", "M", "F" ]
+              }
+            },
+            "role" : {
+              "Serie" : "age_Label",
+              "Label" : "sex_Label",
+              "Value" : "value"
+            },
+            "queries" : [ "from r in $0 group {label: r.sex_Label, value: r.value} by r.age_Label into d select {key:d.key, values:d.toArray()}" ]
+          },
+          "decoration" : { }
         } ]
       }
     },
@@ -453,6 +589,26 @@
     }, {
       "emitter" : "source",
       "receiver" : "rylu7963gie019k9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "vb6rgpbl9p4uc8fr",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "4jwmuc3en8vholxr",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "6zdnsvxzikg4aemi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "ekgwf7ljn1rwwmi",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]

@@ -5,12 +5,14 @@ define([
     ],
     function (angular) {
 
-        var m = angular.module('app.widgets.nvd3-hbar',[
+        var m = angular.module('app.widgets.nvd3-radar',[
             'app.widgets.nvd3-widget',
             'app.widgets.data-dialogs.bar-chart-dialog'
+
             ]);
 
-        m.service('NVD3HBarAdapter', function () {
+
+        m.service('NVD3RadarAdapter', function () {
             this.applyDecoration = function (options, decoration) {
                 if(angular.isDefined(decoration)&&angular.isDefined(options)) {
                     console.log(options)
@@ -23,11 +25,9 @@ define([
                     options.chart.xAxis.staggerLabels = decoration.staggerLabels;
                     options.chart.rotateLabels = decoration.xAxisAngle;
                     options.chart.reduceXTicks = decoration.reduceXTicks;
-                    options.chart.color = (decoration.color) ? decoration.color : null;
                 }
                 return options;
             }
-
             this.getDecoration = function (options){
                 if(angular.isDefined(options)) {
                     var decoration = {}
@@ -40,21 +40,40 @@ define([
                     decoration.xAxisAngle = options.chart.rotateLabels;
                     decoration.reduceXTicks = options.chart.reduceXTicks;
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
-                    decoration.color = options.chart.color;
                     return decoration;
                 }
             }
         })
 
-        m.controller('Nvd3HBarChartCtrl',function($scope,BarChartDialog,NVD3HBarAdapter,NVD3Widget){
-            new NVD3Widget($scope,{
-                dialog: BarChartDialog,
-                decorationAdapter: NVD3HBarAdapter,
-                optionsURL: "/widgets/nvd3-hbar/options.json",
-                serieAdapter:{
-                    getX:function(d){return d.label},
-                    getY:function(d){return d.value}
-                }
-            })
+        m.controller('Nvd3RadarChartCtrl',function($scope) {
+            $scope.options = {
+                "chart": {
+                    "type": "radarChart",
+                    "height": 450
+                }}
+            $scope.series = [{
+                key:"First Serie",
+                values:[{label:"L1", value:20},{label:"L2", value:20},{label:"L3", value:20}]
+            },{
+                key:"Serie",
+                values:[{label:"L1", value:2},{label:"L2", value:50},{label:"L3", value:10}]
+            }]
+
+
         });
+
+
+
+
+            //,BarChartDialog,NVD3RadarAdapter,NVD3Widget){
+            //new NVD3Widget($scope,{
+            //        dialog: BarChartDialog,
+            //        decorationAdapter: NVD3BarAdapter,
+            //        optionsURL: "/widgets/nvd3-radar/options.json",
+            //        serieAdapter:{
+            //            getX:function(d){return d.label},
+            //            getY:function(d){return d.value}
+            //        }
+            //    })
+            //});
     });

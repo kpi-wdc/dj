@@ -25,6 +25,7 @@ define([
                     options.chart.rotateLabels = decoration.xAxisAngle;
                     options.chart.reduceXTicks = decoration.reduceXTicks;
                     options.chart.isArea = decoration.isArea;
+                    options.chart.color = (decoration.color) ? decoration.color : null;
                 }
                 return options;
             }
@@ -42,6 +43,7 @@ define([
                     decoration.reduceXTicks = options.chart.reduceXTicks;
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
                     decoration.isArea = options.chart.isArea;
+                    decoration.color = options.chart.color;
                     return decoration;
                 }
             }

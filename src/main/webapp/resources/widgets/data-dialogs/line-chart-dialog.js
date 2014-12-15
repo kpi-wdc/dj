@@ -1,13 +1,14 @@
-define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
+define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widgets/data-dialogs/palettes1.js"],
     function (angular) {
         var m = angular.module('app.widgets.data-dialogs.line-chart-dialog', [
             'app.widgets.data-util.keyset',
             'mm.foundation',
-            'app.widgetApi']);
+            'app.widgetApi',
+            'app.widgets.palettes1']);
 
-        m.factory("LineChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions',
+        m.factory("LineChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions', 'Palettes1',
 
-            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions) {
+            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions,Palettes1) {
 
             LineChartDialog = function(scope){
                 this.scope = scope;
@@ -15,6 +16,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                 this.datasource = scope.widget.datasource;
                 this.instanceName = scope.widget.instanceName;
                 this.decoration = scope.widget.decoration || {};
+                this.palettes = Palettes1;
 
                 this.step=[];
                 for(var i=0;i<7;i++) this.step.push({access:"enable",active:false});
@@ -53,6 +55,24 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                         "background-color":"#008cba",
                         "border-radius":"20px"
                     }
+                },
+
+                setColor: function(palette){
+
+                    this.decoration.color = (this.inverseColor)?this.inverse(palette):palette;
+                },
+
+                inverseColor: function(palette){
+                    if(angular.isDefined(palette))
+                        this.decoration.color = this.inverse(palette);
+                },
+
+                inverse : function(palette){
+                    var result = new Array();
+                    for(var i=0;i<palette.length;i++){
+                        result[i] = palette[palette.length-i-1];
+                    }
+                    return result;
                 },
 
                 gotoStep: function(index){
@@ -128,6 +148,9 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     }
                     if (angular.isDefined(this.selection.role["Y Value"])) {
                         this.selection.fields[this.selection.role["Y Value"]] = "Y Value";
+                    }
+                    if (angular.isDefined(this.selection.role["Label"])) {
+                        this.selection.fields[this.selection.role["Label"]] = "Label";
                     }
                     this.selection.itemsOrder = conf.itemsOrder;
                     this.selection.seriesOrder = conf.seriesOrder;
@@ -294,7 +317,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                             queryStr = "from r " +
                             "in $0 " +
                             "group " +
-                            "{x: r." + this.selection.role["X Value"] + ", y: r." + this.selection.role["Y Value"] + "}" +
+                            "{label: r."+this.selection.role["Label"]+", x: r." + this.selection.role["X Value"] + ", y: r." + this.selection.role["Y Value"] + "}" +
                             " by r." + this.selection.role.Serie +
                             " into d select {key:d.key, values:d.toArray()}";
                             this.selection.queries.push(queryStr);
@@ -430,6 +453,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     if (this.selection.role["Serie"] == field) this.selection.role["Serie"] = undefined;
                     if (this.selection.role["X Value"] == field) this.selection.role["X Value"] = undefined;
                     if (this.selection.role["Y Value"] == field) this.selection.role["Y Value"] = undefined;
+                    if (this.selection.role["Label"] == field) this.selection.role["Label"] = undefined;
 
                     if (newRole != "Not Used") {
                         this.selection.role[newRole] = field;
@@ -444,10 +468,14 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation'],
                     if (angular.isDefined(this.selection.role["Y Value"])) {
                         this.selection.fields[this.selection.role["Y Value"]] = "Y Value";
                     }
+                    if (angular.isDefined(this.selection.role["Label"])) {
+                        this.selection.fields[this.selection.role["Label"]] = "Label";
+                    }
                 },
 
                 readyForSeriesGeneration: function () {
                     if (angular.isDefined(this.selection.role["Serie"]) &&
+                        angular.isDefined(this.selection.role["Label"]) &&
                         angular.isDefined(this.selection.role["X Value"]) &&
                         angular.isDefined(this.selection.role["Y Value"])) {
                         return true

@@ -1,0 +1,28 @@
+<div class="border" ng-controller="TableCtrl" style="overflow:auto;" >
+    <div class="table caption">Table 1. Table Caption</div>
+    <div class="table title">Table Title</div>
+    <table cellpadding="0px" cellspacing="0px" width="100%"  align="center" style="padding: 0px; margin: 0px; ">
+
+        <thead>
+            <tr>
+                <th  ng-repeat="cell in header">
+                    <a>{{cell}}</a>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        <tr ng-repeat="row in table">
+            <th>
+                {{row.key}}
+            </th>
+            <td ng-repeat="cell in row.values">
+                {{(cell.value) ? cell.value : ' - '}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+<div class="table subtitle">Table Subtitle</div>
+    <h1 ng-if="!table" style="color:#eeeeee; text-align: center;">Widget Not Configured</h1>
+</div>

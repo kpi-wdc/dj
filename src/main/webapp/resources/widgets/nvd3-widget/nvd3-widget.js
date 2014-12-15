@@ -2,6 +2,7 @@ require.config({
     paths: {
         'd3': '/components/d3/d3',
         'nv.d3': '/components/nvd3/nv.d3',
+        'nv.d3.ext':'/widgets/nvd3-widget/nv.d3.ext',
         'angular-nvd3': '/components/angular-nvd3/dist/angular-nvd3'
     },
     shim: {
@@ -12,6 +13,12 @@ require.config({
             exports: 'nv',
             deps: ['d3']
         },
+
+        'nv.d3.ext': {
+
+            deps: ['nv.d3']
+        },
+
         'angular-nvd3': {
             deps: ['nv.d3']
         }
@@ -21,6 +28,7 @@ require.config({
 define([
         'angular',
         'angular-oclazyload',
+        'nv.d3.ext',
         'angular-nvd3',
         '/widgets/data-dialogs/palettes.js',
         '/widgets/data-util/adapter.js'
@@ -41,7 +49,7 @@ define([
 
             function($http, $ocLazyLoad,APIProvider, APIUser, adapter, Palettes) {
 
-                $ocLazyLoad.load( {files: ['/components/nvd3/nv.d3.css']});
+                $ocLazyLoad.load( {files: ['/components/nvd3/nv.d3.css','/widgets/nvd3-widget/nvd3-widget.css']});
 
                 var NVD3Widget = function($scope,params){
                     $scope.APIProvider = new APIProvider($scope);
@@ -50,12 +58,14 @@ define([
                     $http.get(params.optionsURL).success(
                         function (data) {
                             $scope.options = data;
+
                             $scope.options.chart.x = params.serieAdapter.getX;
                             $scope.options.chart.y = params.serieAdapter.getY;
+                            $scope.options.chart.tooltipContent = params.serieAdapter.tooltipContent;
 
-                            $scope.options.chart.color = function (d,i) {
-                                return Palettes["Spectral"][6][i%6]
-                            };
+                            //$scope.options.chart.color = function (d,i) {
+                            //    return Palettes["Spectral"][6][i%6]
+                            //};
 
                             if($scope.widget.decoration) {
                                 $scope.options = params.decorationAdapter.applyDecoration($scope.options, $scope.widget.decoration)
