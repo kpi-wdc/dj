@@ -388,7 +388,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         let widgetTypesArr = [];
         let currentWidget;
 
-        for (var type in widgetTypes.data) {
+        for (let type in widgetTypes.data) {
             currentWidget = {};
             currentWidget.type = type;
             currentWidget.description = widgetTypes.data[type].description;
@@ -404,21 +404,21 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
         $scope.widgetTypes = widgetTypesArr;
 
-        $scope.addWidget = function (widgetType) {
+        $scope.addWidget = (widgetType) => {
             $scope.chosenWidgetType = widgetType;
         };
 
         $scope.add = () => {
             let instanceName = Math.random().toString(36).substring(2);
             widgetLoader.load($scope.chosenWidgetType)
-                .then(function () {
+                .then(() => {
                     holder.widgets = holder.widgets || [];
                     holder.widgets.push({
                         type: $scope.chosenWidgetType,
                         instanceName: instanceName
                     });
                     $scope.chosenWidgetType = "";
-                }, function (error) {
+                }, (error) => {
                     alert.error('Cannot add widget: ' + error);
                 });
             $modalInstance.close();
@@ -426,14 +426,6 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
         $scope.cancel = () => {
             $modalInstance.dismiss();
-        };
-
-        $scope.selectRow = (row) => {
-            $scope.selectedRow = row;
-        };
-
-        $scope.isSelected = (index) => {
-            return $scope.selectedRow === index;
         };
     });
 
