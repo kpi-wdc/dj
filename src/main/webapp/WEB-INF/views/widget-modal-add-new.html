@@ -1,8 +1,8 @@
 <h3>Choose widget type <input ng-model="searchText" placeholder="Search for..."></h3>
   <div class="addWidget">
-    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+    <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
       <li ng-repeat="widget in widgetTypes | filter:searchText" ng-click="addWidget(widget.type)"
-              class="th" title="{{widget.description}}">
+              class="th has-tip" title="{{widget.description}}">
         <img ng-src="{{widget.icon}}"/>
         <div>{{widget.type}}</div>
       </li>
