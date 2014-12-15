@@ -7,6 +7,9 @@ node_modules
 # Bower
 bower_components
 
+# logs
+*.log
+
 # files created by gulp tasks
 build
 

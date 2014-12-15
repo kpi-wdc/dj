@@ -4,19 +4,19 @@
     <base href="/">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link inline rel="stylesheet" href="/components/foundation/css/normalize.css"/>
-    <link inline rel="stylesheet" href="/components/foundation/css/foundation.css"/>
+    <link inline rel="stylesheet" href="/components/foundation/css/normalize.css">
+    <link inline rel="stylesheet" href="/components/foundation/css/foundation.css">
     <!-- Don't use inline because of relative paths used inside following CSS-libs -->
-    <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css"/>
-    <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css"/>
-    <link inline rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css">
+    <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
+    <link inline rel="stylesheet" href="/css/main.css">
     <title>World Data Center</title>
   </head>
 
   <body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
   <header class="row">
     <div class="medium-3 columns">
-      <h1><img src="/img/logo.gif"/></h1>
+      <h1><img src="/img/logo.gif"></h1>
     </div>
     <div class="medium-9 columns">
       <ul class="inline-list right">
@@ -31,6 +31,7 @@
         <h3>Design mode panel</h3>
         <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
                 id="submitChangesToServerBtn"
+                disabled
                 ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
           Submit changes to server
         </button>
@@ -38,7 +39,7 @@
                 id="deletePageBtn"
                 ng-disabled="appConfig.isHomePageOpened() || appConfig.is404PageOpened()"
                 disabled
-                ng-click="appConfig.deletePage(appConfig.currentPageIndex)">
+                ng-click="appConfig.deletePage(appConfig.currentPageIndex())">
           Delete page
         </button>
         <hr>
@@ -76,13 +77,13 @@
       <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
         <button class="button tiny" id="logInButton">Log in</button>
       </div>
-      <p><img src="/img/ad.gif"/></p>
+      <p><img src="/img/ad.gif"></p>
     </nav>
   </div>
 
   <footer class="row">
     <div class="medium-12 columns">
-      <hr/>
+      <hr>
       <div class="row">
         <div class="medium-6 columns">
           <p>&copy; Copyright</p>
@@ -95,7 +96,10 @@
       </div>
     </div>
   </footer>
-  <script inline src="/components/requirejs/require.js"></script>
-  <script inline src="/js/main.js"></script>
+  <!-- ES6 polyfill. Load before everything else -->
+  <script inline src="js/es6-polyfill.js"></script>
+  <!-- Don't inline js/main as in compiled form it might contain closing </script> tags in code -->
+  <!-- See https://github.com/popeindustries/inline-source/issues/9 -->
+  <script data-main="js/main" src="/components/requirejs/require.js"></script>
   </body>
 </html>

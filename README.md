@@ -5,17 +5,19 @@
 [![Coverage Status](https://img.shields.io/coveralls/sochka/wdc.svg)](https://coveralls.io/r/sochka/wdc)
 
 #### Prerequisites
-- maven is installed
+- maven is installed and available in `PATH`
+- git is installed and available in `PATH`
 
-For developers (optional):
+For developers:
 
 - node.js is installed
-- npm is installed
+- npm is installed (1.2 doesn't work, 1.4 works fine, check with `npm --version`.
+Install new npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
 - bower is installed (run `npm install -g bower` as admin)
 - gulp is installed (run `npm install -g gulp` as admin)
 - karma is installed (run `npm install -g karma` as admin)
 - protractor is installed (run `npm install -g protractor` as admin)
-- firefox and chrome are installed
+- chrome and firefox (optional) are installed
 
 
 ## Build
@@ -59,6 +61,7 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
 
   - git (version control)
   - maven (back-end task-runner & dependency management system)
+  - javascript (ES6)
   - java/spring (back-end)
   - databases (back-end)
   - hibernate (back-end)
@@ -76,7 +79,15 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
   - travis (continuous integration)
   - heroku (PaaS, used for app deployment)
 
-## Suggested intellij idea plugins:
+## Intellij Idea
+
+The following steps will make your work with Intellij Idea more productive
+
+1. Set Java version >= 7
+2. Set JavaScript version - EcmaScript 6
+3. Install TypeScript community stubs for front-end javascript dependencies.
+
+### Suggested intellij idea plugins:
 
   - maven
   - spring
@@ -88,8 +99,6 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
   - gitignore (for syntax highlight)
   - angularjs
   - markdown
-
-If you are a front-end dev, you can also install TypeScript community stubs to make Idea aware of code completion when other JS libraries are used.
 
 ## Suggested Chrome extensions:
 
