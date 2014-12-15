@@ -11,7 +11,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         pageModalConfigHTML: '/views/page-modal-config.html',
         templateHTML: function (templateName) {
-            return '/templates/' + templateName + '.html';
+            return '/templates/' + templateName + '/template.html';
         },
         widgetJS: function (widgetName) {
             return '/widgets/' + widgetName + '/widget.js';
@@ -419,13 +419,7 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
                 page.template = '1-col';
                 page.holders = {
                     column: {
-                        widgets: [{
-                            type: "title",
-                            title: "Home page"
-                        }, {
-                            type: "htmlwidget",
-                            text: "<h3>Page Title <small>Page subtitle</small></h3>"
-                        }]
+                        widgets: []
                     }
                 };
                 appConfig.addNewPage(page);
