@@ -53,7 +53,8 @@ function handleError(err) {
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
+gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs',
+    'copy-templates-json', 'build-template-images']);
 
 gulp.task('bower-install', ['generate-bower-json'], function () {
     return bower({}, [undefined, {
@@ -232,6 +233,16 @@ gulp.task('merge-widget-configs', function () {
         .pipe(extend('widgets.json'))
         .on('error', handleError)
         .pipe(gulp.dest('build/widgets'))
+});
+
+gulp.task('copy-templates-json', function () {
+    return gulp.src('resources/templates/templates.json')
+        .pipe(gulp.dest('build/templates'))
+});
+
+gulp.task('build-template-images', function () {
+    return gulp.src('resources/templates/**/icon.png')
+        .pipe(gulp.dest('build/templates'))
 });
 
 gulp.task('build-favicon', function () {
