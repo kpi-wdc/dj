@@ -1,0 +1,43 @@
+{
+  "1-col": {
+    "description": "Description of template \"1-col\"",
+    "holders" : {
+      "column" : {
+        "widgets" : [ ]
+      }
+    }
+  },
+  "2-cols": {
+    "description": "Description of template \"2-cols\"",
+    "holders" : {
+      "column" : {
+        "widgets" : [ ]
+      }
+    }
+  },
+  "2x2": {
+    "description": "Description of template \"2x2\"",
+    "holders" : {
+      "column" : {
+        "widgets" : [ ]
+      }
+    }
+  },
+  "left-right-bottom": {
+    "description": "Description of template \"left-right-bottom\"",
+    "holders" : {
+      "column" : {
+        "widgets" : [ ]
+      },
+      "topleft" : {
+        "widgets" : [ ]
+      },
+      "topright" : {
+        "widgets" : [ ]
+      },
+      "bottom" : {
+        "widgets" : [ ]
+      }
+    }
+  }
+}
