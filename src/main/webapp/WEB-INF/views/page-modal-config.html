@@ -6,14 +6,14 @@
   <input type="text" ng-model="href" placeholder="Unique href"/>
 </label>
 <div class="addPage">
-    <label>Template<input ng-model="searchText" placeholder="Search for template ..."></label>
-    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
-        <li ng-repeat="template in templateTypes | filter:searchText" ng-click="chooseTemplate(template)"
-            class="th" title="{{template.description}}">
-            <img ng-src="{{template.icon}}"/>
-            <div>{{template.type}}</div>
-        </li>
-    </ul>
+  <label>Template<input ng-model="searchText" placeholder="Search for template ..."></label>
+  <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+    <li ng-repeat="template in templateTypes | filter:searchText" ng-click="chooseTemplate(template)"
+        class="th" title="{{template.description}}">
+      <img ng-src="{{template.icon}}"/>
+      <div>{{template.type}}</div>
+    </li>
+  </ul>
 </div>
 <button class="button" ng-click="add(shortTitle, href)" ng-bind="'Add ' + chosenTemplate.type"></button>
 <button class="button alert" ng-click="cancel()">Cancel</button>
