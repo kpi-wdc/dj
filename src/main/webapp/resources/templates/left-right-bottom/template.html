@@ -1,0 +1,31 @@
+<h2 class="page-title">{{config.title}}</h2>
+<style>
+  .left-right-bottom-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+  .left-right-bottom-table td {
+    vertical-align: top;
+  }
+</style>
+<widget-holder name="column"></widget-holder>
+<table class="left-right-bottom-table">
+  <tr>
+    <td>
+      <widget-holder name="topleft"></widget-holder>
+    </td>
+    <td>
+      <widget-holder name="topright"></widget-holder>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: center">
+      <widget-holder name="bottom"></widget-holder>
+    </td>
+  </tr>
+</table>
+
+<div ng-if="globalConfig.debugMode">
+  Config: <br>
+  <pre>{{config | json}}</pre>
+</div>
