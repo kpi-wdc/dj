@@ -23,10 +23,10 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
             console.log("TableAdapter",series);
             var result = [];
             // generate [{key:"",values:[]}]
-            for(j in series[0].values){
+            for(var j in series[0].values){
                 var row = {};
                 var values = [];
-                for(i in series){
+                for(var i in series){
                     values.push({label:series[i].key,value:series[i].values[j].value});
                 }
                 row.values = values;

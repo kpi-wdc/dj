@@ -11,7 +11,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
             function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions, Palettes1) {
 
-            BarChartDialog = function(scope){
+            var BarChartDialog = function(scope){
 
                 this.scope = scope;
                 this.storeDatasource = scope.widget.datasource;
@@ -77,7 +77,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 },
 
                 gotoStep: function(index){
-                    //for(i in this.step)this.step=false;
+                    //for (var i in this.step)this.step=false;
                     this.step[index].active = true;
                     this.currentStep = index;
                 },
@@ -90,11 +90,11 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 },
 
                 setEnable: function(steps){
-                    for(i in steps)
+                    for(var i in steps)
                     this.step[steps[i]].access = "enable";
                 },
                 setDisable: function(steps){
-                    for(i in steps)
+                    for(var i in steps)
                     this.step[steps[i]].access = "disable";
                 },
 
@@ -129,7 +129,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                     if (!conf.dataset)return;
                     this.setState(2, conf.dataset);
                     if (!conf.dimensions)return;
-                    for (i in conf.dimensions) {
+                    for (var i in conf.dimensions) {
                         this.selection.dimensions[i].set(conf.dimensions[i].collection)
                     }
 
@@ -138,7 +138,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                     this.selection.role = conf.role;
 
-                    for (i in this.selection.fields) {
+                    for (var i in this.selection.fields) {
                         this.selection.fields[i] = "Not Used";
                     }
                     if (angular.isDefined(this.selection.role["Serie"])) {
@@ -162,7 +162,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                 appendIfNotExist: function(subscription){
                     var subscriptions = pageSubscriptions();
-                    for(i in subscriptions){
+                    for(var i in subscriptions){
                         if(subscriptions[i].emitter == subscription.emitter
                         && subscriptions[i].receiver == subscription.receiver
                         ) return;
@@ -172,7 +172,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                 removeIfExist: function(subscription){
                     var subscriptions = pageSubscriptions();
-                    for(i in subscriptions){
+                    for(var i in subscriptions){
                         if(subscriptions[i].emitter == subscription.emitter
                             && subscriptions[i].receiver == subscription.receiver
                         ){
@@ -268,7 +268,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                                     Value: undefined
                                 };
                                 this.selection.result = this.provider.getData(this.selection.dataset, this.selection.dimensions);
-                                for (i in this.selection.result.header) {
+                                for (var i in this.selection.result.header) {
                                     this.selection.fields[this.selection.result.header[i]] = "Not Used";
                                 }
                             }
@@ -431,7 +431,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 },
 
                 readyForDataFetch: function () {
-                    for (i in this.selection.dimensions)
+                    for (var i in this.selection.dimensions)
                         if (this.selection.dimensions[i].length() == 0){
                             this.setDisable([3,4,5,6]);
                             return false;
@@ -444,7 +444,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                     var newRole = this.selection.fields[field];
 
-                    for (i in this.selection.fields) {
+                    for (var i in this.selection.fields) {
                         this.selection.fields[i] = "Not Used";
                     }
 

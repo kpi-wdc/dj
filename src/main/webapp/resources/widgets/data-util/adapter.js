@@ -30,7 +30,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
             if(angular.isDefined(provider)) {
 
                 var result = provider.getData(conf.dataset, conf.dimensions).data;
-                for (i in conf.queries) {
+                for (var i in conf.queries) {
                     var query = new jsinq.Query(conf.queries[i]);
                     query.setValue(0, new jsinq.Enumerable(result));
                     result = query.execute().toArray();

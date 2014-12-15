@@ -52,7 +52,7 @@
             selection.each(function (data) {
 
 
-                for (i in data) {
+                for (var i in data) {
                     data[i].values.push(data[i].values[0]);
                 }
 
@@ -205,7 +205,7 @@
                 d3.transition(lineRadar)
                     .attr('d', line);
 
-                for (i in data) {
+                for (var i in data) {
                     data[i].values.pop()
                 }
 
@@ -384,7 +384,7 @@
             selection.each(function (data) {
 
                 legs = [];
-                for (i in data[0].values) {
+                for (var i in data[0].values) {
                     legs.push({label: data[0].values[i].label, color: "#000000"});
                 }
                 //console.log(legs)

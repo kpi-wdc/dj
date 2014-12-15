@@ -24,7 +24,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
 
     m.factory('JSONstatDataProvider', ["$http", function($http){
 
-        JSONstatDataProvider = function(data,dataURL){
+        var JSONstatDataProvider = function(data,dataURL){
             if(JSONstatDataProvider.isCompatible(data)) {
                 this.data = data;
                 this.dataURL = dataURL;
@@ -38,7 +38,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
             var match = function(source,pattern){
                 if(typeof(source)!==typeof(pattern)) return false;
                 var result = true;
-                for(key in pattern){
+                for(var key in pattern){
                     if(source.hasOwnProperty(key)) {
                         result = result && match(source[key],pattern[key]);
                         if (result == false) return false;
@@ -105,11 +105,11 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
 
             getData: function(dataset,dimensions){
                 var test = [];
-                for(i in dimensions){
+                for(var i in dimensions){
                     var tmp = [];
                     var cats = dimensions[i].collection;
                     var dim = i;
-                    for(j in cats){
+                    for(var j in cats){
                         var item = "r."+dim + " == ";
                         item = (angular.isString(cats[j]))?item+"'"+cats[j]+"'" : item+cats[j];
                         tmp.push(item);
@@ -129,14 +129,14 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 var header = [];
                 var provider = this.provider;
                 angular.forEach(data,function(current){
-                    for(key in current){
+                    for(var key in current){
                         if(key!="value"){
                             current[key+"_Label"] = provider.Dataset(dataset).Dimension(key).Category(current[key]).label;
                         }
                     }
                 });
 
-                for(key in data[0]){
+                for(var key in data[0]){
                     header.push(key);
                 }
 

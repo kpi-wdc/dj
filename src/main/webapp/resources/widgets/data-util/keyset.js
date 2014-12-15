@@ -9,7 +9,7 @@ define(['angular'], function (angular) {
 
         KeySet.prototype = {
             _getIndex: function(category){
-                for(i in this.collection){
+                for(var i in this.collection){
                     if(this.collection[i]==category) {
                         return i;
                     }
