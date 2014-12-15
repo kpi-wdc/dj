@@ -9,9 +9,7 @@ exports.config = {
 
     framework: 'jasmine',
 
-    //sauceUser: process.env.SAUCE_USERNAME,
-
-    //sauceKey: process.env.SAUCE_ACCESS_KEY,
+    resultJsonOutputFile: 'protractor.log',
 
     onPrepare: function() {
         // implicit and page load timeouts

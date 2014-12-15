@@ -42,8 +42,7 @@ require.config({
         'ngstorage': ['angular'],
         'angular-oclazyload': ['angular'],
         'angular-foundation': ['angular'],
-        'angular-json-editor': ['angular', 'json-editor'],
-        'template-cached-pages': ['angular']
+        'angular-json-editor': ['angular', 'json-editor']
     },
 
     // kick start application
@@ -51,12 +50,11 @@ require.config({
 });
 
 (function () {
-    "use strict";
     // are we unit-testing now?
-    var isUnitTesting = window.__karma__ !== undefined;
+    let isUnitTesting = window.__karma__ !== undefined;
     if (isUnitTesting) {
-        var tests = [];
-        for (var file in window.__karma__.files) {
+        let tests = [];
+        for (let file in window.__karma__.files) {
             if (window.__karma__.files.hasOwnProperty(file)) {
                 if (/Spec\.js$/.test(file)) {
                     tests.push(file);

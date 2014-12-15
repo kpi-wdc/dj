@@ -8,28 +8,27 @@ define(['angular'], function (angular) {
             // apiUser.invoke('widgetName', 'slotName', args...)
 
             new APIProvider($scope)
-                .config(function () {
-                    console.log('widget ' + $scope.widget.instanceName + ' is (re)configuring...');
+                .config(() => {
+                    console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
                     $scope.a = $scope.widget.a || 3;
                     $scope.b = $scope.widget.b || 5;
-                    $scope.sum = function () {
-                        return parseFloat($scope.a) + parseFloat($scope.b);
-                    };
+                    $scope.sum = ()  =>
+                        parseFloat($scope.a) + parseFloat($scope.b);
                 })
-                .provide('setValueOfA', function (evt, value) {
+                .provide('setValueOfA', (evt, value) => {
                     $scope.a = value;
                 })
-                .provide('setValueOfB', function (evt, value) {
+                .provide('setValueOfB', (evt, value) => {
                     $scope.b = value;
                 })
-                //.openCustomSettings(function () {
+                //.openCustomSettings(() => {
                 //    console.log('Opening custom settings...');
                 //})
-                .removal(function () {
+                .removal(() => {
                     console.log('Summator widget is destroyed');
                 });
 
-            $scope.$watch('sum()', function (newValue) {
+            $scope.$watch('sum()', (newValue) => {
                 eventEmitter.emit('sumUpdated', newValue);
             });
         });

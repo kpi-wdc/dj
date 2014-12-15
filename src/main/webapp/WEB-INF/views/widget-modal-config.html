@@ -10,6 +10,13 @@
       <json-editor schema="widgetType.schema" startval="widgetConfig"
                    on-change="updateData($editorValue)">
       </json-editor>
+      <script>
+        window.setTimeout(function () {
+          // HORRIBLE HACK!
+          // sceditor doesn't want to play with foundation modal dialogs nicely.
+          $('json-editor .sceditor-container iframe').height('20rem').width('98%');
+        }, 0);
+      </script>
     </div>
   </tab>
   <tab heading="Event settings">
