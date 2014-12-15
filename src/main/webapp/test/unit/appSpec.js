@@ -1,17 +1,17 @@
-define(['js/app', 'angular-mocks'], function () {
+define(['js/app', 'angular-mocks'], () => {
     beforeEach(module('app'));
 
-    var emptyAppJson = {
+    let emptyAppJson = {
         "sections" : [],
         "pages" : []
     };
 
-    var noWidgetsJson = {
+    let noWidgetsJson = {
     };
 
-    var $httpBackend;
+    let $httpBackend;
 
-    beforeEach(inject(function (_$httpBackend_) {
+    beforeEach(inject((_$httpBackend_) => {
         $httpBackend = _$httpBackend_;
         $httpBackend.whenGET('/apps/app.json')
             .respond(JSON.stringify(emptyAppJson));
@@ -19,17 +19,17 @@ define(['js/app', 'angular-mocks'], function () {
             .respond(JSON.stringify(noWidgetsJson));
     }));
 
-    describe("Testing controllers", function () {
-        var MainCtrlScope;
-        var PageCtrlScope;
-        var $controller;
-        beforeEach(inject(function (_$controller_, $rootScope) {
+    describe("Testing controllers", () => {
+        let MainCtrlScope;
+        let PageCtrlScope;
+        let $controller;
+        beforeEach(inject((_$controller_, $rootScope) => {
             $controller = _$controller_;
             MainCtrlScope = $rootScope.$new();
             PageCtrlScope = $rootScope.$new();
         }));
 
-        it('ensure MainCtrl exists and works', function() {
+        it('ensure MainCtrl exists and works', () => {
             $controller('MainCtrl', {$scope: MainCtrlScope});
             expect(MainCtrlScope).toBeDefined();
             MainCtrlScope.alertAppConfigSubmissionFailed({ data: {
@@ -38,24 +38,24 @@ define(['js/app', 'angular-mocks'], function () {
             }});
         });
 
-        it('ensure PageCtrl exists and works', function() {
+        it('ensure PageCtrl exists and works', () => {
             $controller('PageCtrl', {$scope: PageCtrlScope, pageConfig: {}});
             expect(PageCtrlScope).toBeDefined();
         });
     });
 
-    describe("Services", function () {
-        describe("widgets service", function () {
-            var $rootScope;
-            var scopeA;
-            var scopeB;
-            var scopeC;
-            var widgetSlots;
-            var APIProvider;
-            var APIUser;
-            var EventEmitter;
-            beforeEach(inject(function (_$rootScope_, _widgetSlots_,
-                _APIProvider_, _APIUser_, _EventEmitter_) {
+    describe("Services", () => {
+        describe("widgets service", () => {
+            let $rootScope;
+            let scopeA;
+            let scopeB;
+            let scopeC;
+            let widgetSlots;
+            let APIProvider;
+            let APIUser;
+            let EventEmitter;
+            beforeEach(inject((_$rootScope_, _widgetSlots_, _APIProvider_,
+                               _APIUser_, _EventEmitter_) => {
                 $rootScope = _$rootScope_;
                 widgetSlots = _widgetSlots_;
                 APIProvider = _APIProvider_;
@@ -69,24 +69,24 @@ define(['js/app', 'angular-mocks'], function () {
                 scopeC.widget = {instanceName: "c"};
             }));
 
-            afterEach(function () {
+            afterEach(() => {
                 scopeA.$destroy();
                 scopeB.$destroy();
                 scopeC.$destroy();
             });
 
-            it('should correctly clean-up widgetSlots when scope is destroyed', function () {
-                var a = new APIProvider(scopeA);
+            it('should correctly clean-up widgetSlots when scope is destroyed', () => {
+                let a = new APIProvider(scopeA);
                 a.provide('slot', angular.noop);
                 expect(Object.keys(widgetSlots).length).toEqual(1);
                 scopeA.$destroy();
                 expect(Object.keys(widgetSlots).length).toEqual(0);
             });
 
-            it('slot handlers should be called with correct evt object', function () {
-                var a = new EventEmitter(scopeA);
-                var b = new APIProvider(scopeB);
-                var slot = jasmine.createSpy('slot');
+            it('slot handlers should be called with correct evt object', () => {
+                let a = new EventEmitter(scopeA);
+                let b = new APIProvider(scopeB);
+                let slot = jasmine.createSpy('slot');
                 b.provide('slot', slot);
                 EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
                 a.emit('hello');
@@ -97,10 +97,10 @@ define(['js/app', 'angular-mocks'], function () {
                 });
             });
 
-            it('slot handlers should be called with correct arguments', function () {
-                var a = new EventEmitter(scopeA);
-                var b = new APIProvider(scopeB);
-                var slot = jasmine.createSpy('slot');
+            it('slot handlers should be called with correct arguments', () => {
+                let a = new EventEmitter(scopeA);
+                let b = new APIProvider(scopeB);
+                let slot = jasmine.createSpy('slot');
                 b.provide('slot', slot);
                 EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
                 a.emit('hello', 123);
@@ -111,46 +111,46 @@ define(['js/app', 'angular-mocks'], function () {
                 }, 123);
             });
 
-            it('ensure APIUser::invoke calls', function () {
-                var a = new APIUser(scopeA);
-                var b = new APIProvider(scopeB);
-                var slot = jasmine.createSpy('slot').and.returnValue(1234);
+            it('ensure APIUser::invoke calls', () => {
+                let a = new APIUser(scopeA);
+                let b = new APIProvider(scopeB);
+                let slot = jasmine.createSpy('slot').and.returnValue(1234);
                 b.provide('slot', slot);
                 expect(a.invoke('b', 'slot')).toBe(1234);
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
                     signalName: undefined
                 });
-                expect(function () {
+                expect(() => {
                     a.invoke('b', 'non-existing-slot')
                 }).toThrow();
             });
 
-            it('ensure APIUser::tryInvoke calls', function () {
-                var a = new APIUser(scopeA);
-                var b = new APIProvider(scopeB);
-                var slot = jasmine.createSpy('slot').and.returnValue(1234);
+            it('ensure APIUser::tryInvoke calls', () => {
+                let a = new APIUser(scopeA);
+                let b = new APIProvider(scopeB);
+                let slot = jasmine.createSpy('slot').and.returnValue(1234);
                 b.provide('slot', slot);
-                var okInvocation = a.tryInvoke('b', 'slot');
+                let okInvocation = a.tryInvoke('b', 'slot');
                 expect(okInvocation.success).toBe(true);
                 expect(okInvocation.result).toBe(1234);
                 expect(slot).toHaveBeenCalledWith({
                     emitterName: 'a',
                     signalName: undefined
                 });
-                var badInvocation = a.tryInvoke('b', 'non-existing-slot');
+                let badInvocation = a.tryInvoke('b', 'non-existing-slot');
                 expect(badInvocation.success).toBe(false);
                 expect(badInvocation.result).toBeUndefined();
             });
 
-            it('ensure APIUser::invokeAll calls', function () {
-                var aUser = new APIUser(scopeA);
-                var aProvider = new APIProvider(scopeA);
-                var bUser = new APIUser(scopeB);
-                var bProvider = new APIProvider(scopeB);
-                var slotB = jasmine.createSpy('slotB').and.returnValue(1);
-                var slotA = jasmine.createSpy('slotA').and.returnValue(2);
-                var slotOther = jasmine.createSpy('slotOther').and.returnValue(3);
+            it('ensure APIUser::invokeAll calls', () => {
+                let aUser = new APIUser(scopeA);
+                let aProvider = new APIProvider(scopeA);
+                let bUser = new APIUser(scopeB);
+                let bProvider = new APIProvider(scopeB);
+                let slotB = jasmine.createSpy('slotB').and.returnValue(1);
+                let slotA = jasmine.createSpy('slotA').and.returnValue(2);
+                let slotOther = jasmine.createSpy('slotOther').and.returnValue(3);
                 bProvider.provide('slot', slotB);
                 expect(aUser.invokeAll('slot'));
                 expect(slotB).toHaveBeenCalledWith({
@@ -170,16 +170,16 @@ define(['js/app', 'angular-mocks'], function () {
                 expect(slotOther).not.toHaveBeenCalled();
             });
 
-            it('ensure getScopeByName works', function () {
-                var a = new APIUser(scopeA);
-                var b = new APIProvider(scopeB);
+            it('ensure getScopeByName works', () => {
+                let a = new APIUser(scopeA);
+                new APIProvider(scopeB);
                 $rootScope.$digest();
                 expect(a.getScopeByInstanceName('b')).toBe(scopeB);
             });
 
-            it('ensure getScopeByName works after renaming', function () {
-                var a = new APIUser(scopeA);
-                var b = new APIProvider(scopeB);
+            it('ensure getScopeByName works after renaming', () => {
+                let a = new APIUser(scopeA);
+                new APIProvider(scopeB);
                 $rootScope.$digest();
                 expect(a.getScopeByInstanceName('b')).toBe(scopeB);
                 scopeB.widget.instanceName = 'b2';
