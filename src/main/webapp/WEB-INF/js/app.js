@@ -6,12 +6,16 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
 
     app.constant('appUrls', {
         appConfig: '/apps/app.json',
+        templateTypes: '/templates/templates.json',
         widgetTypes: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
         pageModalConfigHTML: '/views/page-modal-config.html',
         templateHTML: function (templateName) {
             return '/templates/' + templateName + '/template.html';
+        },
+        templateIcon: function (templateName) {
+            return '/templates/' + templateName + '/icon.png';
         },
         widgetJS: function (widgetName) {
             return '/widgets/' + widgetName + '/widget.js';
@@ -122,6 +126,10 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         return $http.get(appUrls.widgetTypes);
     });
 
+    app.factory('templateTypesPromise', function ($http, appUrls) {
+       return $http.get(appUrls.templateTypes);
+    });
+
     app.factory('appConfigPromise', function ($http, appUrls) {
         return $http.get(appUrls.appConfig);
     });
@@ -223,7 +231,12 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
             $modal.open({
                 templateUrl: appUrls.pageModalConfigHTML,
                 controller: 'PageModalSettingsController',
-                backdrop: 'static'
+                backdrop: 'static',
+                resolve: {
+                    templateTypes: function (templateTypesPromise) {
+                        return templateTypesPromise;
+                    }
+                }
             });
         };
 
@@ -408,25 +421,52 @@ define(['angular', 'jquery', 'js/shims', 'js/widget-api', 'angular-ui-router', '
         }, 0);
     });
 
-    app.controller('PageModalSettingsController', function ($scope, $modalInstance, alert, appConfig) {
-        $scope.add = function (shortTitle, href) {
-            if (shortTitle && href) {
-                var page = {};
-                page.shortTitle = shortTitle;
-                page.href = href;
+    app.controller('PageModalSettingsController', function ($scope, $modalInstance, alert,
+                                                            appConfig, templateTypes, appUrls) {
+        var templateTypesArr = [];
 
-                // TODO: change hard-coded template and its holders
-                page.template = '1-col';
-                page.holders = {
-                    column: {
-                        widgets: []
-                    }
-                };
-                appConfig.addNewPage(page);
-                $modalInstance.close();
-            } else {
-                alert.error('All fields must be filled');
+        for (var type in templateTypes.data) {
+            var currentTemplate = {};
+            currentTemplate.type = type;
+            currentTemplate.description = templateTypes.data[type].description;
+            currentTemplate.holders = templateTypes.data[type].holders;
+            currentTemplate.icon = appUrls.templateIcon(currentTemplate.type);
+
+            templateTypesArr.push(currentTemplate);
+        }
+
+        $scope.templateTypes = templateTypesArr;
+
+        $scope.add = function (shortTitle, href) {
+            if (!shortTitle) {
+                alert.error('Fill page short title field');
+                return;
             }
+
+            if (!href) {
+                alert.error('Fill page href field');
+                return;
+            }
+
+            if (!$scope.chosenTemplate) {
+                alert.error('Choose a template to add');
+                return;
+            }
+
+            var page = {};
+            page.shortTitle = shortTitle;
+            page.href = href;
+
+            page.template = $scope.chosenTemplate.type;
+            page.holders = $scope.chosenTemplate.holders;
+
+            appConfig.addNewPage(page);
+            $modalInstance.close();
+
+        };
+
+        $scope.chooseTemplate = function (template) {
+            $scope.chosenTemplate = template;
         };
 
         $scope.cancel = function () {
