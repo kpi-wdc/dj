@@ -12,6 +12,12 @@
     "holders" : {
       "column" : {
         "widgets" : [ ]
+      },
+      "left" : {
+        "widgets" : [ ]
+      },
+      "right" : {
+        "widgets" : [ ]
       }
     }
   },
@@ -19,6 +25,18 @@
     "description": "Description of template \"2x2\"",
     "holders" : {
       "column" : {
+        "widgets" : [ ]
+      },
+      "topleft" : {
+        "widgets" : [ ]
+      },
+      "topright" : {
+        "widgets" : [ ]
+      },
+      "bottomleft" : {
+        "widgets" : [ ]
+      },
+      "bottomright" : {
         "widgets" : [ ]
       }
     }

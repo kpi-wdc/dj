@@ -119,6 +119,21 @@
           "type" : "title",
           "title" : "2x2 template page"
         } ]
+      },
+      "topleft" : {
+        "widgets" : [ {
+          "type" : "title",
+          "title" : "2x2 template page"
+        } ]
+      },
+      "topright" : {
+        "widgets" : [ ]
+      },
+      "bottomleft" : {
+        "widgets" : [ ]
+      },
+      "bottomright" : {
+        "widgets" : [ ]
       }
     }
   }, {
@@ -131,6 +146,15 @@
           "type" : "title",
           "title" : "2-column template page"
         } ]
+      },
+      "left" : {
+        "widgets" : [ {
+          "type" : "htmlwidget",
+          "instanceName" : "yrki46emr4dbzkt9"
+        } ]
+      },
+      "right" : {
+        "widgets" : [ ]
       }
     }
   }, {
