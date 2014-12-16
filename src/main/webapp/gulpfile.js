@@ -190,7 +190,7 @@ gulp.task('compile-js', function () {
 });
 
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'compile-js'], function () {
-    return gulp.src('build/**/*.js')
+    return gulp.src(['build/**/*.js', '!build/components/**/*'])
         .pipe(cached('annotate-js'))
         .pipe(ngAnnotate())
         .on('error', handleError)
