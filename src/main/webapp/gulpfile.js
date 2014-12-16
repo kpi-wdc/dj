@@ -303,6 +303,7 @@ gulp.task('build-unit-test', function () {
         .pipe(sourcemaps.init())
         .pipe(to5())
         .pipe(sourcemaps.write('.'))
+        .on('error', handleError)
         .pipe(gulp.dest('build/test/unit'));
 });
 
@@ -339,15 +340,17 @@ gulp.task('build-e2e-test', function () {
         .pipe(gulp.dest('build/test/e2e'));
 });
 
-gulp.task('docs', shell.task([
-    path.join('node', 'node') +
-    ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
-    ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
-    ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
-    ' -d ' + path.join('build', 'docs') + // output directory
-    ' -r ' + path.join('WEB-INF', 'js') + // source code directory
-    ' ' + path.resolve('..', '..', '..', 'README.md') // index.html text
-]));
+gulp.task('docs', function () {
+    return shell.task([
+        path.join('node', 'node') +
+        ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
+        ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
+        ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
+        ' -d ' + path.join('build', 'docs') + // output directory
+        ' -r ' + path.join('WEB-INF', 'js') + // source code directory
+        ' ' + path.resolve('..', '..', '..', 'README.md') // index.html text
+    ])().on('error', handleError)
+});
 
 // Rerun the task when a file changes
 gulp.task('watch', function () {
