@@ -319,8 +319,9 @@ gulp.task('e2e-test', ['e2e-run-test']);
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', webdriver_update);
 
-gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], function () {
-    return gulp.src(['build/test/e2e/**/*Spec.js'])
+gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], function (cb) {
+    var called = false;
+    gulp.src(['build/test/e2e/**/*Spec.js'])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
         }))
@@ -328,8 +329,18 @@ gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], funct
             if (isEnvEnabled('CI') && !fs.existsSync('protractor.log')) {
                 console.log('protractor.log not found!');
                 console.log('Skipping end-to-end tests...');
+                if (!called) {
+                    called = true;
+                    cb();
+                }
             } else {
                 throw e;
+            }
+        })
+        .on('end', function () {
+            if (!called) {
+                called = true;
+                cb();
             }
         });
 });
