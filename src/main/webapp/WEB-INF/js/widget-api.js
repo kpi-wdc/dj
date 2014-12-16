@@ -373,4 +373,30 @@ define(['angular'], function (angular) {
             return pageConf.subscriptions;
         };
     });
+
+    /**
+     * @ngdoc function
+     * @name pageWidgets
+     *
+     * @description Injectable function which returns
+     * a plain JavaScript array of widgets
+     * (their config objects containing at least `type` and `instanceName`)
+     * on the current page.
+     * All the Array.prototype methods are available on the returned result
+     *
+     * Please don't modify returned object!
+     * @returns {Array}
+     */
+    widgetApi.factory('pageWidgets', function (appConfig) {
+        return () => {
+            let holders = appConfig.pageConfig().holders;
+            let widgets = [];
+            for (let holderName in holders) {
+                if (holders.hasOwnProperty(holderName)) {
+                    widgets = widgets.concat(holders[holderName].widgets);
+                }
+            }
+            return widgets;
+        };
+    });
 });
