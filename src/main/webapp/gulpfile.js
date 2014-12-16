@@ -356,7 +356,7 @@ gulp.task('docs', function () {
 gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
         'bower-base.json', 'favicon.ico', '!resources/apps/**',
-        '!resources/widgets/widgets.json'], ['build', 'docs']);
+        '!resources/widgets/widgets.json'], ['build']);
 });
 
 // Rerun the task when a file changes
