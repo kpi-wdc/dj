@@ -57,7 +57,8 @@ function handleError(err) {
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs']);
+gulp.task('build', ['build-html', 'build-css', 'build-js', 'build-favicon', 'merge-widget-configs',
+    'copy-templates-json', 'build-template-images']);
 
 gulp.task('bower-install', ['generate-bower-json'], function () {
     return bower({}, [undefined, {
@@ -189,7 +190,7 @@ gulp.task('compile-js', function () {
 });
 
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'compile-js'], function () {
-    return gulp.src('build/**/*.js')
+    return gulp.src(['build/**/*.js', '!build/components/**/*'])
         .pipe(cached('annotate-js'))
         .pipe(ngAnnotate())
         .on('error', handleError)
@@ -256,6 +257,16 @@ gulp.task('merge-widget-configs', function () {
         .pipe(gulp.dest('build/widgets'))
 });
 
+gulp.task('copy-templates-json', function () {
+    return gulp.src('resources/templates/templates.json')
+        .pipe(gulp.dest('build/templates'))
+});
+
+gulp.task('build-template-images', function () {
+    return gulp.src('resources/templates/**/icon.png')
+        .pipe(gulp.dest('build/templates'))
+});
+
 gulp.task('build-favicon', function () {
     return gulp.src('favicon.ico')
         .pipe(cached('build-favicon'))
@@ -292,6 +303,7 @@ gulp.task('build-unit-test', function () {
         .pipe(sourcemaps.init())
         .pipe(to5())
         .pipe(sourcemaps.write('.'))
+        .on('error', handleError)
         .pipe(gulp.dest('build/test/unit'));
 });
 
@@ -307,8 +319,9 @@ gulp.task('e2e-test', ['e2e-run-test']);
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', webdriver_update);
 
-gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], function () {
-    return gulp.src(['build/test/e2e/**/*Spec.js'])
+gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], function (cb) {
+    var called = false;
+    gulp.src(['build/test/e2e/**/*Spec.js'])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
         }))
@@ -316,8 +329,18 @@ gulp.task('e2e-run-test', ['webdriver-update', 'build', 'build-e2e-test'], funct
             if (isEnvEnabled('CI') && !fs.existsSync('protractor.log')) {
                 console.log('protractor.log not found!');
                 console.log('Skipping end-to-end tests...');
+                if (!called) {
+                    called = true;
+                    cb();
+                }
             } else {
                 throw e;
+            }
+        })
+        .on('end', function () {
+            if (!called) {
+                called = true;
+                cb();
             }
         });
 });
@@ -328,21 +351,23 @@ gulp.task('build-e2e-test', function () {
         .pipe(gulp.dest('build/test/e2e'));
 });
 
-gulp.task('docs', shell.task([
-    path.join('node', 'node') +
-    ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
-    ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
-    ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
-    ' -d ' + path.join('build', 'docs') + // output directory
-    ' -r ' + path.join('WEB-INF', 'js') + // source code directory
-    ' ' + path.resolve('..', '..', '..', 'README.md') // index.html text
-]));
+gulp.task('docs', function () {
+    return shell.task([
+        path.join('node', 'node') +
+        ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
+        ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
+        ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
+        ' -d ' + path.join('build', 'docs') + // output directory
+        ' -r ' + path.join('WEB-INF', 'js') + // source code directory
+        ' ' + path.resolve('..', '..', '..', 'README.md') // index.html text
+    ])().on('error', handleError)
+});
 
 // Rerun the task when a file changes
 gulp.task('watch', function () {
     return gulp.watch(['WEB-INF/**', 'resources/**', 'test/**',
         'bower-base.json', 'favicon.ico', '!resources/apps/**',
-        '!resources/widgets/widgets.json'], ['build', 'docs']);
+        '!resources/widgets/widgets.json'], ['build']);
 });
 
 // Rerun the task when a file changes

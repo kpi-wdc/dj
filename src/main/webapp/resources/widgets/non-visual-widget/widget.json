@@ -1,4 +1,5 @@
 {
     "description": "Description of widget \"non-visual-widget\"",
-    "nohtml": true
+    "nohtml": true,
+    "noicon": true
 }

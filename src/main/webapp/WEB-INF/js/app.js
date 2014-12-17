@@ -5,17 +5,25 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
     app.constant('appUrls', {
         appConfig: '/apps/app.json',
+        templateTypes: '/templates/templates.json',
         widgetTypes: '/widgets/widgets.json',
         widgetHolderHTML: '/views/widget-holder.html',
         widgetModalConfigHTML: '/views/widget-modal-config.html',
+        pageModalConfigHTML: '/views/page-modal-config.html',
+        widgetModalAddNewHTML: '/views/widget-modal-add-new.html',
+        defaultWidgetIcon: '/widgets/default_widgets_icon.png',
         templateHTML: templateName =>
-            `/templates/${templateName}.html`,
+            `/templates/${templateName}/template.html`,
+        templateIcon: templateName =>
+            `/templates/${templateName}/icon.png`,
         widgetJS: widgetName =>
             `/widgets/${widgetName}/widget.js`,
         widgetJSModule: widgetName =>
             `widgets/${widgetName}/widget.js`,
         widgetHTML: widgetName =>
-            `/widgets/${widgetName}/widget.html`
+            `/widgets/${widgetName}/widget.html`,
+        widgetIcon: widgetName =>
+            `/widgets/${widgetName}/icon.png`
     });
 
     app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
@@ -113,11 +121,16 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         return $http.get(appUrls.widgetTypes);
     });
 
+    app.factory('templateTypesPromise', function ($http, appUrls) {
+       return $http.get(appUrls.templateTypes);
+    });
+
     app.factory('appConfigPromise', function ($http, appUrls) {
         return $http.get(appUrls.appConfig);
     });
 
-    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise, appUrls, $rootScope) {
+    app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
+                                       appUrls, $rootScope, $modal) {
         this.config = {};
         this.isAvailable = false;
         this.sendingToServer = false;
@@ -196,6 +209,23 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
             });
         };
 
+        this.addNewPage = (page) => {
+            this.config.pages.push(page);
+        };
+
+        this.addNewPageInModal = () => {
+            $modal.open({
+                templateUrl: appUrls.pageModalConfigHTML,
+                controller: 'PageModalSettingsController',
+                backdrop: 'static',
+                resolve: {
+                    templateTypes: function (templateTypesPromise) {
+                        return templateTypesPromise;
+                    }
+                }
+            });
+        };
+
         appConfigPromise.success((data) => {
             this.isAvailable = true;
             this.config = data;
@@ -264,20 +294,22 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         };
 
         this.addNewWidgetToHolder = (holder) => {
-            let widgetType = prompt('Widget type (like summator):');
-            let instanceName = Math.random().toString(36).substring(2);
-            if (widgetType) {
-                widgetLoader.load(widgetType)
-                    .then(() => {
-                        holder.widgets = holder.widgets || [];
-                        holder.widgets.push({
-                            type: widgetType,
-                            instanceName: instanceName
-                        });
-                    }, (error) => {
-                        alert.error('Cannot add widget: ' + error);
-                    });
-            }
+            $modal.open({
+                templateUrl: appUrls.widgetModalAddNewHTML,
+                controller: 'WidgetModalAddNewController',
+                backdrop: 'static',
+                resolve: {
+                    widgetTypes: function (widgetTypesPromise) {
+                        return widgetTypesPromise;
+                    },
+                    widgetLoader: function () {
+                        return widgetLoader;
+                    },
+                    holder: function () {
+                        return holder;
+                    }
+                }
+            });
         };
     });
 
@@ -319,7 +351,6 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
     app.controller('PageCtrl', function ($scope, pageConfig, widgetManager) {
         $scope.config = pageConfig;
-        
         $scope.deleteIthWidgetFromHolder = widgetManager.deleteIthWidgetFromHolder.bind(widgetManager);
         $scope.openWidgetConfigurationDialog = widgetManager.openWidgetConfigurationDialog.bind(widgetManager);
         $scope.addNewWidgetToHolder = widgetManager.addNewWidgetToHolder.bind(widgetManager);
@@ -373,6 +404,106 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
         $scope.updateData = (value) => {
             data = value;
+        };
+    });
+
+    app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
+                                                            widgetLoader, holder, appUrls) {
+        // create array instead of map (easy filtering)
+        let widgetTypesArr = [];
+        let currentWidget;
+
+        for (let type in widgetTypes.data) {
+            currentWidget = {};
+            currentWidget.type = type;
+            currentWidget.description = widgetTypes.data[type].description;
+
+            // add path to icon of a widget
+            if (widgetTypes.data[type].noicon) {
+                currentWidget.icon = appUrls.defaultWidgetIcon;
+            } else {
+                currentWidget.icon = appUrls.widgetIcon(currentWidget.type);
+            }
+            widgetTypesArr.push(currentWidget);
+        }
+
+        $scope.widgetTypes = widgetTypesArr;
+
+        $scope.addWidget = (widgetType) => {
+            $scope.chosenWidgetType = widgetType;
+        };
+
+        $scope.add = () => {
+            let instanceName = Math.random().toString(36).substring(2);
+            widgetLoader.load($scope.chosenWidgetType)
+                .then(() => {
+                    holder.widgets = holder.widgets || [];
+                    holder.widgets.push({
+                        type: $scope.chosenWidgetType,
+                        instanceName: instanceName
+                    });
+                    $scope.chosenWidgetType = "";
+                }, (error) => {
+                    alert.error('Cannot add widget: ' + error);
+                });
+            $modalInstance.close();
+        };
+
+        $scope.cancel = () => {
+            $modalInstance.dismiss();
+        };
+    });
+
+    app.controller('PageModalSettingsController', function ($scope, $modalInstance, alert,
+                                                            appConfig, templateTypes, appUrls) {
+        let templateTypesArr = [];
+
+        for (let type in templateTypes.data) {
+            let currentTemplate = {};
+            currentTemplate.type = type;
+            currentTemplate.description = templateTypes.data[type].description;
+            currentTemplate.holders = templateTypes.data[type].holders;
+            currentTemplate.icon = appUrls.templateIcon(currentTemplate.type);
+
+            templateTypesArr.push(currentTemplate);
+        }
+
+        $scope.templateTypes = templateTypesArr;
+
+        $scope.add = (shortTitle, href) => {
+            if (!shortTitle) {
+                alert.error('Fill page short title field');
+                return;
+            }
+
+            if (!href) {
+                alert.error('Fill page href field');
+                return;
+            }
+
+            if (!$scope.chosenTemplate) {
+                alert.error('Choose a template to add');
+                return;
+            }
+
+            let page = {};
+            page.shortTitle = shortTitle;
+            page.href = href;
+
+            page.template = $scope.chosenTemplate.type;
+            page.holders = $scope.chosenTemplate.holders;
+
+            appConfig.addNewPage(page);
+            $modalInstance.close();
+
+        };
+
+        $scope.chooseTemplate = (template) => {
+            $scope.chosenTemplate = template;
+        };
+
+        $scope.cancel = () => {
+            $modalInstance.dismiss();
         };
     });
 
