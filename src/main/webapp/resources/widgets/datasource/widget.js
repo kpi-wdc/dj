@@ -11,7 +11,7 @@ define([
         'app.widgets.data-util.json-stat-data-provider']);
 
         m.controller('DataSourceController',
-            function($scope, $http, $window,  EventEmitter, APIProvider,JSONstatDataProvider){
+            function($scope, $http, $window,  EventEmitter, APIProvider, JSONstatDataProvider){
 
                 var eventEmitter = new EventEmitter($scope);
                 $scope.url = $scope.widget.url;
@@ -37,13 +37,14 @@ define([
                 }
 
 
-                new APIProvider($scope)
-                    .config(function(){
+                var p = new APIProvider($scope)
+                    p.config(function(){
                         $scope.url = $scope.widget.url;
                         if (angular.isDefined($scope.url)) $scope.load();
                     })
                     .provide('appendListener', function (evt) {
-                        if(angular.isDefined($scope.provider))
+                        console.log('appendListener',evt, $scope.provider)
+                        //if(angular.isDefined($scope.provider))
                             eventEmitter.emit('loadDataSuccess',$scope.provider);
                     })
                     .provide('getDataProvider',function(evt){

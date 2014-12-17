@@ -378,7 +378,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                             this.scope.widget.decoration = this.decoration;
 
                             this.modal.close();
-                            (new APIUser).invokeAll(APIProvider.RECONFIG_SLOT);
+                            (new APIUser).invoke(this.scope.widget.instanceName,APIProvider.RECONFIG_SLOT);
                             //$scope.result = $scope.getData($scope.widget.data, $scope.provider);
                             break;
                     }

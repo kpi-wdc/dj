@@ -34,7 +34,7 @@ define(["angular","/widgets/data-util/keyset.js", "/widgets/data-util/table-adap
                 this.url= "";
                 this.provider= undefined;
                 this.dimensionList = [];
-                this.theader = [];
+
 
                 this.state = 0;
 
@@ -342,10 +342,10 @@ define(["angular","/widgets/data-util/keyset.js", "/widgets/data-util/table-adap
 
                             this.selection.series = tmpResult;
                             this.table = TableAdapter.getData(tmpResult);
-
-                            for(var i in this.table[0].values){
-                                this.theader.push(this.table[0].values[i].label)
-                            }
+                            if(!this.decoration.header)
+                                for(var i in this.table[0].values){
+                                    this.decoration.header.push(this.table[0].values[i].label)
+                                }
 
 
                             this.state = 4;

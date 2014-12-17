@@ -237,9 +237,9 @@
             </div>
             <h5>Table Header</h5>
             <div class="panel">
-                <label ng-repeat="t in dialog.theader track by $index">
+                <label ng-repeat="t in dialog.decoration.header track by $index">
 
-                    <input type="text" ng-model="dialog.theader[$index]">
+                    <input type="text" ng-model="dialog.decoration.header[$index]">
                 </label>
 
                 <div>
@@ -249,7 +249,7 @@
 
                        <thead>
                        <tr>
-                           <th  ng-repeat="t in dialog.theader track by $index">
+                           <th  ng-repeat="t in dialog.decoration.header track by $index">
                                {{dialog.theader[$index]}}
                            </th>
                        </tr>

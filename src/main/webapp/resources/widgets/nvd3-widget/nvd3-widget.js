@@ -100,10 +100,13 @@ define([
                         })
 
                         .provide('setDataProvider', function (evt, provider) {
-                            $scope.provider = provider;
-                            $scope.series = (params.serieAdapter.getSeries)?
-                                params.serieAdapter.getSeries(adapter.getData($scope.widget.data, $scope.provider)):
-                                adapter.getData($scope.widget.data, $scope.provider);
+                            //if($scope.provider != provider) {
+                            console.log('setDataProvider',$scope.widget.instanceName,evt, provider)
+                                $scope.provider = provider;
+                                $scope.series = (params.serieAdapter.getSeries) ?
+                                    params.serieAdapter.getSeries(adapter.getData($scope.widget.data, $scope.provider)) :
+                                    adapter.getData($scope.widget.data, $scope.provider);
+                            //}
 
                         });
             };
