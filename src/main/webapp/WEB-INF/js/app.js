@@ -454,10 +454,12 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         };
     });
 
-    app.controller('PageModalSettingsController', function ($scope, $modalInstance, alert,
+    app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
                                                             appConfig, templateTypes, appUrls) {
+        // array of all template types
         let templateTypesArr = [];
 
+        // create templateTypesArr out of templateTypes map
         for (let type in templateTypes.data) {
             let currentTemplate = {};
             currentTemplate.type = type;
@@ -468,23 +470,54 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
             templateTypesArr.push(currentTemplate);
         }
 
+        // check whether shortTitle is correct (isn't empty for now)
+        $scope.checkShortTitle = (shortTitle) => {
+            $scope.titleErr = { };
+            if (!shortTitle) {
+                $scope.titleErr.message = 'field mustn\'t be empty';
+                $scope.titleErr.class = 'red';
+            }
+        };
+
+        // check whether href is correct (isn't empty for now)
+        $scope.checkHref = (href) => {
+            $scope.hrefErr = { };
+            if (!href) {
+                $scope.hrefErr.message = 'field mustn\'t be empty';
+                $scope.hrefErr.class = 'red';
+            }
+        };
+
         $scope.templateTypes = templateTypesArr;
 
-        $scope.add = (shortTitle, href) => {
-            if (!shortTitle) {
-                alert.error('Fill page short title field');
-                return;
+        // add button action
+        $scope.add = (shortTitle, href, filteredTemplates) => {
+            let hasHrefAndTitle = href && shortTitle;
+
+            if (!hasHrefAndTitle) {
+                $scope.checkHref(href);
+                $scope.checkShortTitle(shortTitle);
             }
 
-            if (!href) {
-                alert.error('Fill page href field');
-                return;
+            // checks whether chosen template belongs to the current filter criteria
+            let inFilter = false;
+
+            for (let i = 0; i < filteredTemplates.length; i++) {
+                if (filteredTemplates[i] === $scope.chosenTemplate) {
+                    inFilter = true;
+                    break;
+                }
             }
 
-            if (!$scope.chosenTemplate) {
-                alert.error('Choose a template to add');
-                return;
+            // if chosen template isn't in the current filter then show an error
+            if (!inFilter) {
+                $scope.chosenTemplate = { };
+                $scope.templateErr = { };
+                $scope.templateErr.message = 'choose a template';
+                $scope.templateErr.class = 'red';
             }
+
+            if (!hasHrefAndTitle || !inFilter) return;
 
             let page = {};
             page.shortTitle = shortTitle;
@@ -494,16 +527,24 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
             page.holders = $scope.chosenTemplate.holders;
 
             appConfig.addNewPage(page);
-            $modalInstance.close();
 
+            // redirect to the new page
+            $state.go('page', {href: href});
+            $modalInstance.close();
         };
 
         $scope.chooseTemplate = (template) => {
             $scope.chosenTemplate = template;
+            // don't show any error message
+            $scope.templateErr = { };
         };
 
         $scope.cancel = () => {
             $modalInstance.dismiss();
+        };
+
+        $scope.isSelected = (template) => {
+            return $scope.chosenTemplate === template;
         };
     });
 
