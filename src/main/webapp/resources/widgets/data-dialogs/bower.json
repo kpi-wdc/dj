@@ -1,0 +1,8 @@
+{
+  "name": "data-dialogs",
+  "private": true,
+
+  "dependencies": {
+    "javascript-state-machine": "jakesgordon/javascript-state-machine"
+  }
+}
