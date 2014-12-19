@@ -2,7 +2,7 @@ require.config({
     paths: {
         'd3': '/components/d3/d3',
         'nv.d3': '/components/nvd3/nv.d3',
-        'nv.d3.ext':'/widgets/nvd3-widget/nv.d3.ext',
+        //'nv.d3.ext':'/widgets/nvd3-widget/nv.d3.ext',
         'angular-nvd3': '/components/angular-nvd3/dist/angular-nvd3'
     },
     shim: {
@@ -14,10 +14,10 @@ require.config({
             deps: ['d3']
         },
 
-        'nv.d3.ext': {
-
-            deps: ['nv.d3']
-        },
+        //'nv.d3.ext': {
+        //
+        //    deps: ['nv.d3']
+        //},
 
         'angular-nvd3': {
             deps: ['nv.d3']
@@ -28,7 +28,7 @@ require.config({
 define([
         'angular',
         'angular-oclazyload',
-        'nv.d3.ext',
+        //'nv.d3.ext',
         'angular-nvd3',
         '/widgets/data-dialogs/palettes.js',
         '/widgets/data-util/adapter.js'
@@ -101,12 +101,13 @@ define([
 
                         .provide('setDataProvider', function (evt, provider) {
                             //if($scope.provider != provider) {
-                            console.log('setDataProvider',$scope.widget.instanceName,evt, provider)
+                            console.log('setDataProvider',$scope.widget.instanceName,evt, provider,$scope.series)
                                 $scope.provider = provider;
                                 $scope.series = (params.serieAdapter.getSeries) ?
                                     params.serieAdapter.getSeries(adapter.getData($scope.widget.data, $scope.provider)) :
                                     adapter.getData($scope.widget.data, $scope.provider);
                             //}
+                            console.log('After setDataProvider',$scope.series)
 
                         });
             };

@@ -1,17 +1,65 @@
-define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widgets/data-dialogs/palettes1.js"],
+define(["angular",
+        "/widgets/data-util/keyset.js",
+        'angular-foundation',
+        "/widgets/data-dialogs/wizard-state-mashine/wizard-state-mashine.js"
+    ],
+
     function (angular) {
         var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', [
             'app.widgets.data-util.keyset',
+            'app.widgets.data-dialogs.wizard-state-machine',
             'mm.foundation',
             'app.widgetApi',
             'app.widgets.palettes1'
         ]);
 
-        m.factory("BarChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions','Palettes1',
+        m.factory("BarChartDialog", ['KeySet','WSM','$modal','APIUser','APIProvider','pageSubscriptions','Palettes1',
 
-            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions, Palettes1) {
+            function(KeySet, WSM, $modal, APIUser, APIProvider, pageSubscriptions, Palettes1) {
 
             var BarChartDialog = function(scope){
+
+                this.wsm = new WSM(this,{
+                   states:{
+                       "initial":{
+                           initial:true,
+                           onSetState: function(wsm){
+                               wsm.context = wsm.scope.scope.widget;
+                               wsm.setState("generalSettings");
+
+                           }
+                       },
+                       "generalSettings":{
+                           enabled: function(scope){return !scope.configuration.standalone},
+                           accept: function(wsm, signal, fromState){
+                               switch (signal){
+
+                                   case "setDataSource":
+                                       // Usage: ng-model="dialog...datasource" ng-blur="dialog.wsm.fire('setDatasource',datasource)"
+                                       //TODO get datasource from arguments
+                                       if( wsm.context.datasource != datasource){
+                                            //TODO getDataProvider if exist and replace subscriptions
+                                           wsm.scope.datasource = wsm.context.datasource = datasource ;
+                                           wsm.fire("SetDataProvider", wsm.context.dataProvider);
+                                           if(wsm.enableNext())wsm.next();
+                                       }
+                                       break;
+
+                                   case "setInstanceName":
+                                       //TODO replace subscriptions if exist
+                                       break;
+
+                                   case "next":
+                                       setState("datasetSettings");
+                                       break;
+                               }
+                           }
+                       }
+                   }
+                });
+
+
+
 
                 this.scope = scope;
                 this.storeDatasource = scope.widget.datasource;
@@ -55,13 +103,6 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                     "active":{
                         "background-color":"#008cba",
                         "border-radius":"20px"
-                    },
-                    "selected":{
-                        "background-color":"#008cba",
-                         "color":"#ffffff"
-                    },
-                    "normal":{
-
                     }
                 },
 
@@ -112,15 +153,6 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                     return this.styles[this.step[index].access];
                 },
 
-                getItemStyle:function(dim,cat){
-
-                    if( this.selection.dimensions[dim].contains(cat)){
-                        return this.styles["selected"]
-                    }else{
-                        return this.styles["normal"]
-                    }
-
-                },
 
 
                 restoreState: function (conf, provider) {
@@ -238,8 +270,7 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                         case 1: // set data provider
                             this.state = 1;
-                            this.provider = arguments[1];
-                            this.metadata = this.provider.getDatasets();
+                            this.provider = arguments[1]
                             this.url = this.provider.getDataURL();
                             this.datasetList = this.provider.getDatasetIdList();
                             this.selection.dataset = undefined;
@@ -260,9 +291,9 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                             if (arguments[1] && this.selection.dataset != arguments[1]) {
                                 this.selection.dataset = arguments[1];
                                 var dimensions = {};
-                                var dims = this.metadata[this.selection.dataset].dimensions;
+                                var dims = this.provider.getDimensionList(this.selection.dataset);
                                 angular.forEach(dims, function (dim) {
-                                    dimensions[dim.id] = new KeySet();
+                                    dimensions[dim] = new KeySet();
                                 });
                                 this.selection.dimensions = dimensions;
                             }
@@ -395,17 +426,18 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                             this.scope.widget.decoration = this.decoration;
 
                             this.modal.close();
-                            this.scope.APIUser.invoke(this.scope.widget.instanceName,APIProvider.RECONFIG_SLOT);
+                            (new APIUser).invoke(this.scope.widget.instanceName,APIProvider.RECONFIG_SLOT);
                             //$scope.result = $scope.getData($scope.widget.data, $scope.provider);
                             break;
                     }
                     //console.log("Dialog state ", this.state, this);
                 },
 
-                autoselect: function(dimension){
-                    if (dimension.length > 1) return false;
-                    if (dimension.length == 1) {
-                        this.selection.dimensions[dimension.id].add(dimension.categories[Object.keys(dimension.categories)[0]]);
+                autoselect: function(dataset, dimension){
+                    var ids = this.provider.getDimensionIdList(dataset, dimension);
+                    if (ids.length > 1) return false;
+                    if (ids.length == 1) {
+                        this.selection.dimensions[dimension].add(ids[0]);
                         return true;
                     }
                 },

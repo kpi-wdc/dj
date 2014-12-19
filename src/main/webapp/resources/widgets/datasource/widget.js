@@ -7,13 +7,14 @@ define([
     ],
     function (angular) {
 
-    var m = angular.module('app.widgets.datasource', [
+    var m = angular.module('app.widgets.datasource', ['app.widgetApi',
         'app.widgets.data-util.json-stat-data-provider']);
 
         m.controller('DataSourceController',
-            function($scope, $http, $window,  EventEmitter, APIProvider, JSONstatDataProvider){
+            function($scope, $http, $window,  APIUser, EventEmitter, APIProvider, JSONstatDataProvider){
 
                 var eventEmitter = new EventEmitter($scope);
+                var apiUser = new APIUser($scope);
                 $scope.url = $scope.widget.url;
 
 
@@ -38,15 +39,18 @@ define([
 
 
                 var p = new APIProvider($scope)
+
                     p.config(function(){
                         $scope.url = $scope.widget.url;
                         if (angular.isDefined($scope.url)) $scope.load();
                     })
+
                     .provide('appendListener', function (evt) {
                         console.log('appendListener',evt, $scope.provider)
                         //if(angular.isDefined($scope.provider))
-                            eventEmitter.emit('loadDataSuccess',$scope.provider);
+                        apiUser.invoke(evt.emitterName,'setDataProvider',$scope.provider);
                     })
+
                     .provide('getDataProvider',function(evt){
                         return $scope.provider;
                     });

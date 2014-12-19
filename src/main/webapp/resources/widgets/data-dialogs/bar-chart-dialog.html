@@ -30,12 +30,12 @@
             <div class="panel">
                 <h5>Select Dataset:</h5>
                 <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0">
-                    <div ng-click="dialog.setState(2,dataset)" ng-repeat="dataset in dialog.datasetList" style="cursor:pointer;" class="border column left  medium-3 container-top"  ng-style="dialog.getDatasetStyle(dataset)">
+                    <div ng-click="dialog.setState(2,dataset.id)" ng-repeat="dataset in dialog.metadata" style="cursor:pointer;" class="border column left  medium-3 container-top"  ng-style="dialog.getDatasetStyle(dataset)">
                         <label style="font-size:medium;font-weight: bold">
-                            {{dialog.provider.getDatasetLabel(dataset)}}
+                          {{dataset.label}}
                         </label>
-                        <label style="font-size:smaller"><b>Source:</b> {{dialog.provider.getDatasetSource(dataset)}}</label>
-                        <label style="font-size:smaller"><b>Updated:</b> {{dialog.provider.getDatasetUpdated(dataset)}}</label>
+                        <label style="font-size:smaller"><b>Source:</b> {{dataset.source}}</label>
+                        <label style="font-size:smaller"><b>Updated:</b> {{dataset.updated}}</label>
                     </div>
                 </div>
             </div>
@@ -49,41 +49,43 @@
     <tab heading="Select Data"  ng-click="dialog.tryGotoStep(2)" active="dialog.step[2].active" ng-style="dialog.getStyle(2)">
         <div class="panel">
             <label style="font-size:small;">
-                Dataset:&nbsp;{{dialog.provider.getDatasetLabel(dialog.selection.dataset)}}
+                Dataset:&nbsp;{{dialog.metadata[dialog.selection.dataset].label}}
             </label>
         </div>
         <div class="panel">
             <h5>Select Dimension's Items</h5>
-            <div class="panel" ng-repeat=" dim in dialog.provider.getDimensionList(dialog.selection.dataset)">
-                <div class="row" ng-if="!dialog.autoselect(dialog.selection.dataset, dim)">
+            <div class="panel" ng-repeat=" dim in dialog.metadata[dialog.selection.dataset].dimensions">
+                <div class="row" ng-if="!dialog.autoselect(dim)">
                     <div>
                         <label style="padding: 0 0 0.2rem 0; font-size: small; float:left;">
-                            Dimension: <b>{{dialog.provider.getDimensionLabel(dialog.selection.dataset,dim)}}&nbsp;[&nbsp;{{dim}}&nbsp;]&nbsp;</b>
-                            <span style="font-size:smaller">({{dialog.selection.dimensions[dim].length()}} form {{dialog.provider.getDimensionIdList(dialog.selection.dataset, dim).length}} items selected)</span>
+                            Dimension: <b>{{dim.label}}&nbsp;[&nbsp;{{dim.id}}&nbsp;]&nbsp;</b>
+                            <span style="font-size:smaller">({{dialog.selection.dimensions[dim.id].length()}} form {{dim.length}} items selected)</span>
                         </label>
                         <label class="right" style="padding: 0 0 0.2rem 0;">
-                            <button ng-click="dialog.selectAllCategories(dim)" class="button tiny radius" style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">Select All</button>
-                            <button ng-click="dialog.unselectAllCategories(dim)" class="button tiny radius" style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">Clear</button>
+                            <button ng-click="dialog.selectAllCategories(dim.id)" class="button tiny radius" style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">Select All</button>
+                            <button ng-click="dialog.unselectAllCategories(dim.id)" class="button tiny radius" style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">Clear</button>
                         </label>
                     </div>
 
 
-                    <div class="columns left  medium-3 container-top" style="font-size: smaller; vertical-align: middle;"  ng-repeat="m in dialog.provider.getDimensionIdList(dialog.selection.dataset, dim)">
-                        <input type="checkbox"  ng-click="dialog.selectCategory(dim,m)" ng-checked="dialog.selection.dimensions[dim].contains(m)" style="margin-bottom: 0">
-                        <a ng-click="dialog.selectCategory(dim,m)">&nbsp;{{dialog.provider.getCategoryLabel(dialog.selection.dataset,dim,m)}}&nbsp;[&nbsp;{{m}}&nbsp;]</a>
+                    <div class="columns left  medium-3 container-top" style="font-size: smaller; vertical-align: middle;"  ng-repeat="m in dim.categories">
+                       <!-- <input type="checkbox"  ng-click="dialog.selectCategory(dim,m)" ng-checked="dialog.selection.dimensions[dim].contains(m)" style="margin-bottom: 0">
+                        --> <a style="padding:0 0.5rem 0 0.5rem" ng-style="dialog.getItemStyle(dim.id,m)" ng-click="dialog.selectCategory(dim.id,m)">&nbsp;{{m.label}}&nbsp;[&nbsp;{{m}}&nbsp;]</a>
                     </div>
                 </div>
 
-                <div class="row" ng-if="dialog.autoselect(dialog.selection.dataset, dim)">
+
+                <div class="row" ng-if="dialog.autoselect(dim)">
                     <label style="padding: 0 0 0.2rem 0; font-size: small; float:left;">
-                        Dimension: <b>{{dialog.provider.getDimensionLabel(dialog.selection.dataset,dim)}}
-                            &nbsp;[&nbsp;{{dim}}&nbsp;]&nbsp;
-                            =&nbsp;{{dialog.provider.getCategoryLabel(dialog.selection.dataset,dim,dialog.selection.dimensions[dim].collection[0])}}
-                            &nbsp;[&nbsp;{{dialog.selection.dimensions[dim].collection[0]}}&nbsp;]&nbsp;</b>
+                        Dimension: <b>{{dim.label}}
+                            &nbsp;[&nbsp;{{dim.id}}&nbsp;]&nbsp;
+                            =&nbsp;{{dialog.selection.dimensions[dim.id][0].label}}
+                            &nbsp;[&nbsp;{{dialog.selection.dimensions[dim.id][0].id}}&nbsp;]&nbsp;</b>
                         <span style="font-size:smaller">(1 from 1 item autoselected)</span>
                     </label>
                 </div>
             </div>
+
 
             <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
                 <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>

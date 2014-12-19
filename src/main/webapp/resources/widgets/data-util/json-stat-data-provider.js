@@ -71,6 +71,71 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 return this.provider.id;
             },
 
+            getDatasetLabels: function(){
+                return this.provider.Dataset().label;
+            },
+
+
+            getDatasets: function(){
+                var id = this.provider.id;
+
+
+                var result = {};
+                for(var i in id){
+                    result[id[i]] = {
+                        "id" : id[i],
+                        "label": this.provider.Dataset(id[i]).label,
+                        "source" : this.provider.Dataset(id[i]).source,
+                        "updated" : this.provider.Dataset(id[i]).updated,
+                        "length" : this.provider.Dataset(id[i]).length
+                    };
+                    var dims = this.provider.Dataset(id[i]).id;
+                    var dimensions = {}
+                    for(var j in dims){
+                        dimensions[dims[j]]={
+                            "id"    :   dims[j],
+                            "label" :   this.provider.Dataset(id[i]).Dimension(dims[j]).label,
+                            "role"  :   this.provider.Dataset(id[i]).Dimension(dims[j]).role,
+                            "length":   this.provider.Dataset(id[i]).Dimension(dims[j]).length
+                        }
+                        var cats = this.provider.Dataset(id[i]).Dimension(dims[j]).id;
+                        var categories = {};
+                        for(var k in cats){
+                            categories[cats[k]] = {
+                              "id"      : cats[k],
+                              "label"   : this.provider.Dataset(id[i]).Dimension(dims[j]).Category(cats[k]).label
+                            };
+                        }
+                        dimensions[dims[j]].categories = categories;
+                    }
+                    result[id[i]].dimensions = dimensions;
+                }
+                console.log("getDatasets",result)
+                return result;
+            },
+
+            getDimensions: function(dataset){
+                var id = this.provider.Dataset(dataset).id;
+                var labels = this.provider.Dataset(dataset).Dimension().label;
+                var result = {};
+                for(var i in id){
+                    result[i] = {"id" : id[i], "label": labels[i]};
+                }
+                console.log("getDimensions",dataset,result)
+                return result;
+            },
+
+            getCategories: function(dataset,dimension){
+                var id =  this.provider.Dataset(dataset).Dimension(dimension).id;
+                var labels = this.provider.Dataset(dataset).Dimension(dimension).label;
+                var result = {};
+                for(var i in id){
+                    result[i] = {"id" : id[i], "label": labels[i]};
+                }
+                console.log("getCategories",dataset,result)
+                return result;
+            },
+
             getDatasetLabel: function(dataset){
                 return this.provider.Dataset(dataset).label;
             },
@@ -87,12 +152,20 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 return this.provider.Dataset(dataset).id
             },
 
+            getDimensionLabels: function(dataset){
+                return this.provider.Dataset(dataset).Dimension().label
+            },
+
             getDimensionLabel: function(dataset,dimension){
                 return this.provider.Dataset(dataset).Dimension(dimension).label
             },
 
             getDimensionIdList: function(dataset,dimension){
                 return this.provider.Dataset(dataset).Dimension(dimension).id
+            },
+
+            getCategoryLabels: function(dataset,dimension){
+                return this.provider.Dataset(dataset).Dimension(dimension).label
             },
 
             getCategoryLabel: function(dataset,dimension,category){
