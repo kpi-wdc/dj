@@ -1,20 +1,29 @@
 <h3>Add a new page</h3>
-<label>Short Title
-  <input type="text" ng-model="shortTitle" placeholder="Unique page title"/>
-</label>
-<label>Href
-  <input type="text" ng-model="href" placeholder="Unique href"/>
-</label>
-<div class="addPage">
-  <label>Template<input ng-model="searchText" placeholder="Search for template ..."></label>
-  <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
-    <li ng-repeat="template in templateTypes | filter:searchText" ng-click="chooseTemplate(template)"
-        class="th has-tip" title="{{template.description}}">
-      <img ng-src="{{template.icon}}"/>
-      <div>{{template.type}}</div>
-    </li>
-  </ul>
+<div class="row">
+  <div class="small-3 large-4 columns">
+    <label ng-class="titleErr.class">Short title
+      <span ng-bind="'  Error: ' + titleErr.message" ng-if="titleErr.message"></span>
+      <input type="text" ng-model="shortTitle" ng-change="checkShortTitle(shortTitle)" placeholder="Unique page title"/>
+    </label>
+    <label ng-class="hrefErr.class">Unique link
+      <span ng-bind="'  Error: ' + hrefErr.message" ng-if="hrefErr.message"></span>
+      <input type="text" ng-model="href" ng-change="checkHref(href)" placeholder="Unique link"/>
+    </label>
+  </div>
+  <div class="addPage small-6 large-40 columns">
+    <label>Template<input ng-model="filterCriteria" placeholder="Search for template ...">
+    <span ng-class="templateErr.class" ng-bind="'Error: ' + templateErr.message" ng-if="templateErr.message"></span>
+    </label>
+    <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
+      <li ng-repeat="template in filteredTemplates = (templateTypes | filter: filterCriteria)"
+          ng-click="chooseTemplate(template)"
+          class="has-tip"
+          title="{{template.type + ': ' + template.description}}">
+        <img class="th" ng-class="{selected: isSelected(filteredTemplates[$index])}" ng-src="{{template.icon}}"/>
+      </li>
+    </ul>
+  </div>
 </div>
-<button class="button" ng-click="add(shortTitle, href)" ng-bind="'Add ' + chosenTemplate.type"></button>
+<button class="button" ng-click="add(shortTitle, href, filteredTemplates)">Add</button>
 <button class="button alert" ng-click="cancel()">Cancel</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>
