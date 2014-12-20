@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sochka/wdc.png?label=ready&title=Ready)](https://waffle.io/sochka/wdc)
 # World Data Center
 
 [![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/sochka/wdc)
