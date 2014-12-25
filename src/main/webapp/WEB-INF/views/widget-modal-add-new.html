@@ -4,12 +4,14 @@
   <div class="addWidget">
     <ul class="small-block-grid-3 medium-block-grid-6 large-block-grid-8">
       <li ng-repeat="widget in filteredWidgets = (widgetTypes | filter: filterCriteria)"
-          ng-click="chooseWidget(widget)"
+          ng-click="add(widget)"
           class="has-tip" title="{{widget.type + ': ' + widget.description}}">
         <img class="th" ng-class="{selected: isSelected(filteredWidgets[$index])}" ng-src="{{widget.icon}}"/>
       </li>
     </ul>
   </div>
+
+<!--
 <button class="button" ng-click="add(filteredWidgets)">Add</button>
-<button class="button alert" ng-click="cancel()">Cancel</button>
+<button class="button alert" ng-click="cancel()">Cancel</button> -->
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

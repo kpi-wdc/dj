@@ -74,15 +74,17 @@ table tr th, table tr td {
     color: #222222;
     text-align: left;
     border-bottom: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+
 }
 
 table thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, table tbody tr td, table tr td {
     display: table-cell;
     line-height: 1.125rem;
-    font-size: 0.675rem;
+    font-size: 0.7rem;
 }
 
-
+/*
 select {
     -webkit-appearance: none !important;
     -webkit-border-radius: 0px;
@@ -101,6 +103,7 @@ select {
     border-radius: 0;
     height: 1.5rem;
 }
+*/
 
 button.disabled, button[disabled], .button.disabled, .button[disabled] {
     background-color: #ADB8BB;
@@ -111,6 +114,18 @@ button.disabled, button[disabled], .button.disabled, .button[disabled] {
     box-shadow: none;
 }
 
+button.toolbar {
+    padding:0.2rem;
+    font-size: 0.6875rem;
+    border: 1px solid #dadada
+}
+
+div .toolbar{
+    padding:0.2rem;
+    font-size: 0.6875rem;
+    /*background-color: transparent;*/
+    font-size:smaller;
+}
 .reveal-modal, dialog {
     visibility: hidden;
     display: none;
@@ -149,4 +164,16 @@ button.disabled, button[disabled], .button.disabled, .button[disabled] {
 .nvd3 .nv-groups .nv-point {
     stroke-opacity: 0.5 !important;
     stroke-width: 3px;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.center-align {
+    text-align: center;
 }

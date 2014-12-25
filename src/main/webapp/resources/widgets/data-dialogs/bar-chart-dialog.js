@@ -1,42 +1,76 @@
-define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widgets/data-dialogs/palettes1.js"],
+define(["angular",
+        "/widgets/data-util/keyset.js",
+        "/widgets/data-util/adapter.js",
+        'angular-foundation',
+        "/widgets/data-dialogs/palettes1.js"
+    ],
     function (angular) {
         var m = angular.module('app.widgets.data-dialogs.bar-chart-dialog', [
             'app.widgets.data-util.keyset',
+            'app.widgets.data-util.adapter',
             'mm.foundation',
             'app.widgetApi',
             'app.widgets.palettes1'
         ]);
 
-        m.factory("BarChartDialog", ['KeySet','$modal','APIUser','APIProvider','pageSubscriptions','Palettes1',
+        m.factory("BarChartDialog", ['KeySet','TableGenerator','BarSerieGenerator','$modal',
+            'APIUser','APIProvider','pageSubscriptions','pageWidgets',
+            'Palettes1',
 
-            function(KeySet,$modal,APIUser,APIProvider,pageSubscriptions, Palettes1) {
+            function(KeySet, TableGenerator, BarSerieGenerator, $modal,
+                     APIUser, APIProvider, pageSubscriptions, pageWidgets,
+                     Palettes1) {
 
             var BarChartDialog = function(scope){
 
                 this.scope = scope;
-                this.storeDatasource = scope.widget.datasource;
-                this.datasource = scope.widget.datasource;
-                this.instanceName = scope.widget.instanceName;
-                this.decoration = scope.widget.decoration || {};
+                this.conf = {}
+                this.dsList = pageWidgets()
+                    .filter(function(item){
+                        return item.type == "datasource"
+                     })
+                    .map(function(item){
+                        return item.instanceName
+                    });
+
+                this.conf.storeDatasource = scope.widget.datasource;
+                this.conf.datasource = scope.widget.datasource;
+                this.conf.instanceName = scope.widget.instanceName;
+                this.conf.decoration = scope.widget.decoration || {};
                 this.palettes = Palettes1;
-                this.step=[];
-                for(var i=0;i<7;i++) this.step.push({access:"enable",active:false});
-                this.currentStep= 0;
+                this.steps=[
+                    {
+                        title:"1.General Settings",
+                        disabled:false,
+                        active:true
+                    },
+                    {
+                        title:"2.Select Dataset",
+                        disabled:true,
+                        active:false
+                    },
+                    {
+                        title:"3.Select Data",
+                        disabled:true,
+                        active:false,
+                        wait:false
+                    },
+                    {
+                        title:"4.Show Data",
+                        disabled:true,
+                        active:false
+                    },
+                    {
+                        title:"5.Chart Settings",
+                        disabled:true,
+                        active:false
+                    }
+                ];
 
-                this.selection= {
-                    dataset: undefined,
-                        result: undefined,
-                        series: undefined,
-                        role: {},
-                    fields: {}
-                };
-
-                this.url= "";
+                this.currentStep= this.steps[0];
+                this.conf.url= "";
                 this.provider= undefined;
-                this.dimensionList = [];
-
                 this.state = 0;
-
                 this.restoreState(scope.widget.data,scope.provider)
             }
 
@@ -67,12 +101,12 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                 setColor: function(palette){
                   if(angular.isDefined(palette))
-                  this.decoration.color = (this.inverseColor)?this.inverse(palette):palette;
+                  this.conf.decoration.color = (this.inverseColor)?this.inverse(palette):palette;
                 },
 
                 inverseColor: function(palette){
                     if(angular.isDefined(palette))
-                        this.decoration.color = this.inverse(palette);
+                        this.conf.decoration.color = this.inverse(palette);
                 },
 
                 inverse : function(palette){
@@ -83,38 +117,37 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                     return result;
                 },
 
-                gotoStep: function(index){
-                    //for (var i in this.step)this.step=false;
-                    this.step[index].active = true;
-                    this.currentStep = index;
+                dataValue: function(arg){
+                    if(!arg) return " - ";
+                    if(angular.isString(arg)) return arg;
+                    if(angular.isNumber(arg)) return arg.toFixed(2);
                 },
 
-                tryGotoStep: function(index){
-                  if(this.step[index].access == "enable") {
-                      return;
-                  }
-                    this.gotoStep(this.currentStep);
+                isNumber: function(arg){
+                    return angular.isNumber(arg)
                 },
 
-                setEnable: function(steps){
+                gotoStep: function(step){
+                    this.currentStep.active = false;
+                    this.currentStep = step;
+                    this.currentStep.active = true;
+
+                },
+
+                setEnabled: function(steps){
                     for(var i in steps)
-                    this.step[steps[i]].access = "enable";
-                },
-                setDisable: function(steps){
-                    for(var i in steps)
-                    this.step[steps[i]].access = "disable";
+                    this.steps[i].disabled = false;
                 },
 
-                getStyle:function(index){
-                    if(this.step[index].active){
-                        return this.styles["active"];
-                    }
-                    return this.styles[this.step[index].access];
+                setDisabled: function(steps){
+                    for(var i in steps)
+                    this.steps[i].disable = true;
                 },
+
 
                 getItemStyle:function(dim,cat){
 
-                    if( this.selection.dimensions[dim].contains(cat)){
+                    if( dim.selection.contains(cat)){
                         return this.styles["selected"]
                     }else{
                         return this.styles["normal"]
@@ -122,58 +155,61 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                 },
 
+                getDatasetStyle: function (dataset) {
+                    if (this.conf.selectedDataset == dataset) {
+                        return {"background-color": "rgba(170, 200, 210, 0.43)"}
+                    } else {
+                        return {}
+                    }
+                },
+
 
                 restoreState: function (conf, provider) {
 
                     if(conf && conf.standalone){
-                        this.selection.series = conf.series;
-                        this.selection.standalone = true;
-                        this.setDisable([1,2,3,4]);
-                        this.gotoStep(6);
+                        this.series = conf.series;
+                        this.conf.standalone = true;
+                        this.setDisabled([
+                            this.steps[1],
+                            this.steps[2],
+                            this.steps[3]
+                        ]);
+
+                        this.gotoStep(this.steps[4]);
                         return;
                     }
 
 
-                    this.selection.standalone = false;
+                    this.conf.standalone = false;
 
                     if(angular.isUndefined(provider)){
                         this.setState(0);
                         return;
                     }
                     this.setState(1, provider);
+
                     if (!conf) return;
-                    if (!conf.dataset)return;
-                    this.setState(2, conf.dataset);
-                    if (!conf.dimensions)return;
-                    for (var i in conf.dimensions) {
-                        this.selection.dimensions[i].set(conf.dimensions[i].collection)
+                    if (!conf.selectedDataset)return;
+
+
+
+                    this.setState(2, this.conf.metadata[conf.selectedDataset]);
+
+                    for(var i in this.conf.selectedDataset.dimensions){
+                        this.conf.selectedDataset.dimensions[i].selection.role = conf.selection[i].role;
+                        for(var j in conf.selection[i].collection){
+                            this.selectCategory(this.conf.selectedDataset.dimensions[i],
+                                this.conf.selectedDataset.dimensions[i].categories[conf.selection[i].collection[j].id])
+                        }
+                        //this.conf.selectedDataset.dimensions[i].selection = new KeySet();
+                        //this.conf.selectedDataset.dimensions[i].selection.set(conf.selection[i].collection);
+
                     }
+
 
                     if (!this.readyForDataFetch()) return;
                     this.setState(3);
 
-                    this.selection.role = conf.role;
-
-                    for (var i in this.selection.fields) {
-                        this.selection.fields[i] = "Not Used";
-                    }
-                    if (angular.isDefined(this.selection.role["Serie"])) {
-                        this.selection.fields[this.selection.role["Serie"]] = "Serie";
-                    }
-                    if (angular.isDefined(this.selection.role["Label"])) {
-                        this.selection.fields[this.selection.role["Label"]] = "Label";
-                    }
-                    if (angular.isDefined(this.selection.role["Value"])) {
-                        this.selection.fields[this.selection.role["Value"]] = "Value";
-                    }
-                    this.selection.itemsOrder = conf.itemsOrder;
-                    this.selection.seriesOrder = conf.seriesOrder;
-
-                    if (!this.readyForSeriesGeneration) return;
-
-                    this.setState(4);
-
-                    this.selection.standalone = conf.standalone;
                 },
 
                 appendIfNotExist: function(subscription){
@@ -199,33 +235,33 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
 
                 },
 
+                str: function(arg){
+                    return (angular.isString(arg)) ? "'"+arg+"'" : arg;
+                },
+
                 setState: function () {
                     switch (arguments[0]) {
                         case 0://initial state
                             this.state = 0;
 
 
-                            this.url = "";
-                            this.dimensionList = [];
-                            this.selection = {
-                                dataset: undefined,
-                                result: undefined,
-                                queries: undefined,
-                                series: undefined,
-                                dimensions: undefined,
-                                role: {},
-                                fields: {}
-                            };
-                            this.setEnable([0]);
-                            this.setDisable([1,2,3,4,5,6]);
-                            this.gotoStep(0);
+                            this.conf.url = "";
+                            this.setEnabled([this.steps[0]]);
+                            this.setDisabled([
+                                this.steps[1],
+                                this.steps[2],
+                                this.steps[3],
+                                this.steps[4]
+                            ]);
+
+                            this.gotoStep(this.steps[0]);
 
 
-                            if(this.storedDatasource != this.datasource){
-                               var answer = new APIUser(this.scope).tryInvoke(this.datasource,'getDataProvider');
-                                console.log(answer);
+                            if(this.storedDatasource != this.conf.datasource){
+                               var answer = new APIUser(this.scope).tryInvoke(this.conf.datasource,'getDataProvider');
+                                //console.log(answer);
                                if(answer.success && answer.result){
-                                   this.storedDatasource = this.datasource;
+                                   this.storedDatasource = this.conf.datasource;
                                    this.setState(1,answer.result);
                                }else{
                                    this.storedDatasource = undefined;
@@ -239,160 +275,114 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                         case 1: // set data provider
                             this.state = 1;
                             this.provider = arguments[1];
-                            this.metadata = this.provider.getDatasets();
-                            this.url = this.provider.getDataURL();
-                            this.datasetList = this.provider.getDatasetIdList();
-                            this.selection.dataset = undefined;
-                            this.selection.result = undefined;
-                            this.selection.series = undefined;
-                            this.selection.queries = undefined;
-                            this.selection.role = undefined;
-                            this.selection.fields = undefined;
-                            this.selection.dimensions = undefined;
+                            this.conf.metadata = this.provider.getDatasets();
+                            this.conf.url = this.provider.getDataURL();
 
-                            this.setEnable([0,1]);
-                            this.setDisable([2,3,4,5,6]);
-                            this.gotoStep(1);
+                            this.setEnabled([
+                                this.steps[0],
+                                this.steps[1]
+                            ]);
+
+                            this.setDisabled([
+                                this.steps[2],
+                                this.steps[3],
+                                this.steps[4]
+                            ]);
+
+                            this.gotoStep(this.steps[1]);
 
                             break;
 
                         case 2: // select dataset , dimension items selection in process
-                            if (arguments[1] && this.selection.dataset != arguments[1]) {
-                                this.selection.dataset = arguments[1];
-                                var dimensions = {};
-                                var dims = this.metadata[this.selection.dataset].dimensions;
-                                angular.forEach(dims, function (dim) {
-                                    dimensions[dim.id] = new KeySet();
+                            if (arguments[1] && this.conf.selectedDataset != arguments[1]) {
+                                this.conf.selectedDataset = arguments[1];
+                                angular.forEach(this.conf.selectedDataset.dimensions, function (dim) {
+                                    dim.selection = new KeySet();
                                 });
-                                this.selection.dimensions = dimensions;
-                            }
-                            this.state = 2;
-                            this.selection.result = undefined;
-                            this.selection.series = undefined;
-                            this.selection.queries = undefined;
 
-                            this.setEnable([0,1,2]);
-                            this.setDisable([3,4,5,6]);
-                            this.gotoStep(2);
+                            }
+
+                            this.state = 2;
+
+
+                            this.setEnabled([
+                                this.steps[0],
+                                this.steps[1],
+                                this.steps[2]
+                            ]);
+
+                            this.setDisabled([
+                                this.steps[3],
+                                this.steps[4]
+                            ]);
+
+                            this.gotoStep(this.steps[2]);
                             break;
 
                         case 3: // get data from dataset provider, fields role selection in process
+
                             if (arguments[0] && this.state < arguments[0]) {
-                                this.selection.fields = {};
-                                this.selection.role = {
-                                    Serie: undefined,
-                                    Label: undefined,
-                                    Value: undefined
-                                };
-                                this.selection.result = this.provider.getData(this.selection.dataset, this.selection.dimensions);
-                                for (var i in this.selection.result.header) {
-                                    this.selection.fields[this.selection.result.header[i]] = "Not Used";
+                                this.conf.selection = {};
+                                for(var i in this.conf.selectedDataset.dimensions){
+                                    this.conf.selection[i] = this.conf.selectedDataset.dimensions[i].selection;
                                 }
+                                this.table = TableGenerator.getData(this.conf,this.provider);
+                                this.series = BarSerieGenerator.getData(this.table);
+                                //console.log("Series",this.series);
                             }
 
-                            this.selection.series = undefined;
-                            this.selection.queries = undefined;
                             this.state = 3;
 
-                            this.setEnable([0,1,2,3,4]);
-                            this.setDisable([5,6]);
-                            this.gotoStep(4);
+                            this.setEnabled([
+                                this.steps[0],
+                                this.steps[1],
+                                this.steps[2],
+                                this.steps[3],
+                                this.steps[4]
+                            ]);
+
+                            this.gotoStep(this.steps[3]);
 
                             break;
 
-                        case 4: // generate series
-                            this.selection.queries = [];
-                            var queryStr = "", itemsCriteria = "", order = "";
-                            var tmpResult = this.selection.result.data;
-
-                            switch (this.selection.itemsOrder) {
-                                case "Label (A-Z)":
-                                    itemsCriteria = this.selection.role.Label;
-                                    break;
-                                case "Label (Z-A)":
-                                    itemsCriteria = this.selection.role.Label;
-                                    order = "descending";
-                                    break;
-                                case "Value (A-Z)":
-                                    itemsCriteria = this.selection.role.Value;
-                                    break;
-                                case "Value (Z-A)":
-                                    itemsCriteria = this.selection.role.Value;
-                                    order = "descending";
-                                    break;
-                            }
-                            if (itemsCriteria != "") {
-                                queryStr = "from r in $0 orderby r." + itemsCriteria + " " + order + " select r";
-                                this.selection.queries.push(queryStr);
-                                var query = new jsinq.Query(queryStr);
-                                query.setValue(0, new jsinq.Enumerable(tmpResult));
-                                tmpResult = query.execute().toArray();
-                            }
-
-                            queryStr = "from r " +
-                            "in $0 " +
-                            "group " +
-                            "{label: r." + this.selection.role.Label + ", value: r." + this.selection.role.Value + "}" +
-                            " by r." + this.selection.role.Serie +
-                            " into d select {key:d.key, values:d.toArray()}";
-                            this.selection.queries.push(queryStr);
-                            var query = new jsinq.Query(queryStr);
-                            query.setValue(0, new jsinq.Enumerable(tmpResult));
-                            tmpResult = query.execute().toArray();
-
-                            if (this.selection.seriesOrder == "Z-A") {
-                                queryStr = "from r in $0 orderby r.key descending select r";
-                                this.selection.queries.push(queryStr);
-                                var query = new jsinq.Query(queryStr);
-                                query.setValue(0, new jsinq.Enumerable(tmpResult));
-                                tmpResult = query.execute().toArray();
-                            }
-
-                            this.selection.series = tmpResult;
-                            this.state = 4;
-
-                            this.setEnable([0,1,2,3,4,5,6]);
-                            //this.setDisable([5,6]);
-                            this.gotoStep(6);
-
+                        case 4:
                             break;
 
                         case 5: // Set widget data configuration
-                            if(!this.selection.standalone){
-                                this.scope.widget.datasource = this.datasource;
+                            if(!this.conf.standalone){
+                                this.scope.widget.datasource = this.conf.datasource;
                                 this.appendIfNotExist({
-                                    emitter: this.datasource,
-                                    receiver: this.instanceName,
+                                    emitter: this.conf.datasource,
+                                    receiver: this.conf.instanceName,
                                     signal: "loadDataSuccess",
                                     slot: "setDataProvider"
                                 });
                             }else{
                                 this.scope.widget.datasource = undefined;
                                 this.removeIfExist({
-                                    emitter: this.datasource,
-                                    receiver: this.instanceName,
+                                    emitter: this.conf.datasource,
+                                    receiver: this.conf.instanceName,
                                     signal: "loadDataSuccess",
                                     slot: "setDataProvider"
                                 });
                             }
 
-                            this.scope.s = pageSubscriptions();
+                            //this.scope.s = pageSubscriptions();
 
 
 
                             this.scope.widget.data = {
-                                "url": (this.selection.standalone) ? undefined : this.url,
-                                "dataset": (this.selection.standalone) ? undefined : this.selection.dataset,
-                                "dimensions": (this.selection.standalone) ? undefined : this.selection.dimensions,
-                                "role": (this.selection.standalone) ? undefined : this.selection.role,
-                                "queries": (this.selection.standalone) ? undefined : this.selection.queries,
-                                "series": (this.selection.standalone) ? this.selection.series : undefined,
-                                "itemsOrder": (this.selection.standalone) ? undefined : this.selection.itemsOrder,
-                                "seriesOrder": (this.selection.standalone) ? undefined : this.selection.seriesOrder,
-                                "standalone": this.selection.standalone
+                                "url": (this.conf.standalone) ? undefined : this.conf.url,
+                                "selectedDataset": (this.conf.standalone) ? undefined : this.conf.selectedDataset.id,
+                                "selection": (this.conf.standalone) ? undefined : this.conf.selection,
+                                "series": (this.conf.standalone) ? this.series : undefined,
+                                "standalone": this.conf.standalone
                             }
 
-                            this.scope.widget.decoration = this.decoration;
+                            this.scope.widget.decoration = this.conf.decoration;
+
+
+                            console.log("WIDGET CONF",this.scope.widget)
 
                             this.modal.close();
                             this.scope.APIUser.invoke(this.scope.widget.instanceName,APIProvider.RECONFIG_SLOT);
@@ -405,94 +395,109 @@ define(["angular","/widgets/data-util/keyset.js", 'angular-foundation', "/widget
                 autoselect: function(dimension){
                     if (dimension.length > 1) return false;
                     if (dimension.length == 1) {
-                        this.selection.dimensions[dimension.id].add(dimension.categories[Object.keys(dimension.categories)[0]]);
+                        dimension.selection.add(dimension.categories[Object.keys(dimension.categories)[0]]);
+                        dimension.selection.role = "Fix Value"
                         return true;
                     }
                 },
 
-                getDatasetStyle: function (dataset) {
-                    if (this.selection.dataset == dataset) {
-                        return {"background-color": "rgba(170, 200, 210, 0.43)"}
-                    } else {
-                        return {}
-                    }
-                },
 
-                getFieldStyle: function (field) {
-                    if (this.selection.fields[field] == "Not Used") {
-                        return {"font-weight": "normal"}
-                    } else {
-                        return {"font-weight": "bold", "background-color": "rgb(170, 200, 210)"}
-                    }
-                },
 
                 selectCategory: function (dimension, category) {
-                    if (!this.selection.dimensions[dimension].contains(category)) {
-                        this.selection.dimensions[dimension].add(category);
+                    if(dimension.selection.role == "Fix Value"){
+                        dimension.selection.set([]);
+                        dimension.selection.add(category);
+                        return
+                    }
+                    if (!dimension.selection.contains(category)) {
+                        dimension.selection.add(category);
                     } else {
-                        this.selection.dimensions[dimension].remove(category);
+                        dimension.selection.remove(category);
                     }
                     this.setState(2)
                 },
 
                 selectAllCategories: function (dimension) {
-                    var cats = this.provider.getDimensionIdList(this.selection.dataset, dimension);
-                    this.selection.dimensions[dimension].set(cats);
+                    for(var cat in dimension.categories){
+                        dimension.selection.add(dimension.categories[cat])
+                    }
+
                     this.setState(2)
                 },
 
                 unselectAllCategories: function (dimension) {
-                    this.selection.dimensions[dimension].set([]);
+                   dimension.selection.set([]);
                     this.setState(2)
                 },
 
                 readyForDataFetch: function () {
-                    for (var i in this.selection.dimensions)
-                        if (this.selection.dimensions[i].length() == 0){
-                            this.setDisable([3,4,5,6]);
-                            return false;
+                    var test = {
+                        rows:false,
+                        columns:false,
+                        allRole:true,
+                        allDimensionsSelected: true
+                    }
+
+                    if(this.conf.metadata && this.conf.selectedDataset) {
+
+                        var dims = this.conf.selectedDataset.dimensions;
+
+                        for (var i in dims) {
+                            test.rows |= dims[i].selection.role == "Rows";
+                            test.columns |= dims[i].selection.role == "Columns";
+                            test.allRole &= angular.isDefined(dims[i].selection.role);
+                            test.allDimensionsSelected &= dims[i].selection.length() > 0;
                         }
-                    return true;
+                    }
+
+                    return this.conf.metadata && this.conf.selectedDataset && test.rows && test.columns && test.allRole && test.allDimensionsSelected;
                 },
 
-                changeFieldRole: function (field) {
-                    this.setState(3);
 
-                    var newRole = this.selection.fields[field];
+                setDimensionRole: function (dimension,role){
+                  var dims = this.conf.selectedDataset.dimensions;
+                  switch (role){
+                      case "Fix Value":
+                          dimension.selection.role = "Fix Value";
+                          if(dimension.selection.length()>0) {
+                              var cat = dimension.selection.collection[0];
+                              dimension.selection.set([]);
+                              dimension.selection.add(cat);
+                          }
+                      break;
 
-                    for (var i in this.selection.fields) {
-                        this.selection.fields[i] = "Not Used";
-                    }
+                      case "Rows":
+                          for(var i in dims){
+                              if (dims[i].selection.role &&
+                                  dims[i].selection.role == role){
+                                  dims[i].selection.role = undefined
+                              }
+                          }
+                          dimension.selection.role = role
+                      break
 
-                    if (this.selection.role["Serie"] == field) this.selection.role["Serie"] = undefined;
-                    if (this.selection.role["Label"] == field) this.selection.role["Label"] = undefined;
-                    if (this.selection.role["Value"] == field) this.selection.role["Value"] = undefined;
+                      case "Columns":
+                          for(var i in dims){
+                              if (dims[i].selection.role &&
+                                  dims[i].selection.role == role){
+                                  dims[i].selection.role = undefined
+                              }
+                          }
+                          dimension.selection.role = role
+                      break
 
-                    if (newRole != "Not Used") {
-                        this.selection.role[newRole] = field;
-                    }
-
-                    if (angular.isDefined(this.selection.role["Serie"])) {
-                        this.selection.fields[this.selection.role["Serie"]] = "Serie";
-                    }
-                    if (angular.isDefined(this.selection.role["Label"])) {
-                        this.selection.fields[this.selection.role["Label"]] = "Label";
-                    }
-                    if (angular.isDefined(this.selection.role["Value"])) {
-                        this.selection.fields[this.selection.role["Value"]] = "Value";
-                    }
+                      case "Split Columns":
+                          for(var i in dims){
+                              if (dims[i].selection.role &&
+                                  dims[i].selection.role == role){
+                                  dims[i].selection.role = undefined
+                              }
+                          }
+                          dimension.selection.role = role
+                      break
+                  }
                 },
 
-                readyForSeriesGeneration: function () {
-                    if (angular.isDefined(this.selection.role["Serie"]) &&
-                        angular.isDefined(this.selection.role["Label"]) &&
-                        angular.isDefined(this.selection.role["Value"])) {
-                        return true
-                    } else {
-                        this.setDisable([5,6]);
-                        return false
-                    }
-                },
 
                 open: function(){
                     //this.restoreState(this.scope.widget.data,this.scope.provider)

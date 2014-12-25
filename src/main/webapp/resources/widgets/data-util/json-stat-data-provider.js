@@ -84,6 +84,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 for(var i in id){
                     result[id[i]] = {
                         "id" : id[i],
+                        "index":i,
                         "label": this.provider.Dataset(id[i]).label,
                         "source" : this.provider.Dataset(id[i]).source,
                         "updated" : this.provider.Dataset(id[i]).updated,
@@ -94,6 +95,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                     for(var j in dims){
                         dimensions[dims[j]]={
                             "id"    :   dims[j],
+                            "index" :   j,
                             "label" :   this.provider.Dataset(id[i]).Dimension(dims[j]).label,
                             "role"  :   this.provider.Dataset(id[i]).Dimension(dims[j]).role,
                             "length":   this.provider.Dataset(id[i]).Dimension(dims[j]).length
@@ -103,6 +105,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                         for(var k in cats){
                             categories[cats[k]] = {
                               "id"      : cats[k],
+                              "index"   : k,
                               "label"   : this.provider.Dataset(id[i]).Dimension(dims[j]).Category(cats[k]).label
                             };
                         }
@@ -176,15 +179,17 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 return this.provider.Dataset(dataset).Dimension(dimension).Category().label
             },
 
-            getData: function(dataset,dimensions){
+            getData: function(dataset){
+                //console.log("STAT Dataset",dataset)
+
                 var test = [];
-                for(var i in dimensions){
+                for(var i in dataset.dimensions){
                     var tmp = [];
-                    var cats = dimensions[i].collection;
+                    var cats = dataset.dimensions[i].selection.collection;
                     var dim = i;
                     for(var j in cats){
                         var item = "r."+dim + " == ";
-                        item = (angular.isString(cats[j]))?item+"'"+cats[j]+"'" : item+cats[j];
+                        item = (angular.isString(cats[j].id))?item+"'"+cats[j].id+"'" : item+cats[j].id;
                         tmp.push(item);
                     }
                     test.push("("+tmp.join("||")+")");
@@ -193,27 +198,34 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
 
                 var queryStr = "from r in $0 where "+test+" select r";
 
-                var data = this.provider.Dataset(dataset).toTable({type: "arrobj", content: "id"});
+                //console.log(queryStr)
+
+                var data = this.provider.Dataset(dataset.id).toTable({type: "arrobj", content: "id"});
+
+//                var data = this.provider.Dataset(dataset.id).toTable({vlabel:"Value",type:"object"});
+//console.log(data)
+
                 var query = new jsinq.Query(queryStr);
                 query.setValue(0,new jsinq.Enumerable(data));
                 data = query.execute().toArray();
 
-
-                var header = [];
-                var provider = this.provider;
-                angular.forEach(data,function(current){
-                    for(var key in current){
-                        if(key!="value"){
-                            current[key+"_Label"] = provider.Dataset(dataset).Dimension(key).Category(current[key]).label;
+                for(var i in data){
+                    for(var j in data[i]){
+                        if(j!="value") {
+                            data[i][j] = dataset.dimensions[j].categories[data[i][j]].label;
                         }
                     }
-                });
+                }
+
+
+                var header = [];
 
                 for(var key in data[0]){
                     header.push(key);
                 }
 
                 return {header:header,data:data};
+
             }
 
         }

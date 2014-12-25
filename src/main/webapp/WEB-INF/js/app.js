@@ -433,27 +433,29 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
             $scope.chosenWidget = widget;
             // no error as a widget was chosen
             $scope.widgetErr = { };
+            //console.log($scope.chosenWidget)
         };
 
-        $scope.add = (filteredWidgets) => {
+        $scope.add = (widget) => {
             // checks whether chosen template belongs to the current filter criteria
-            let inFilter = false;
-
-            for (let i = 0; i < filteredWidgets.length; i++) {
-                if (filteredWidgets[i] === $scope.chosenWidget) {
-                    inFilter = true;
-                    break;
-                }
-            }
-
-            // if chosen template isn't in the current filter then show an error
-            if (!inFilter) {
-                $scope.chosenWidget = { };
-                $scope.widgetErr = { };
-                $scope.widgetErr.message = 'choose a widget';
-                $scope.widgetErr.class = 'red';
-                return;
-            }
+            $scope.chosenWidget = widget;
+            //let inFilter = false;
+            //
+            //for (let i = 0; i < filteredWidgets.length; i++) {
+            //    if (filteredWidgets[i] === $scope.chosenWidget) {
+            //        inFilter = true;
+            //        break;
+            //    }
+            //}
+            //
+            //// if chosen template isn't in the current filter then show an error
+            //if (!inFilter) {
+            //    $scope.chosenWidget = { };
+            //    $scope.widgetErr = { };
+            //    $scope.widgetErr.message = 'choose a widget';
+            //    $scope.widgetErr.class = 'red';
+            //    return;
+            //}
 
             let instanceName = Math.random().toString(36).substring(2);
             widgetLoader.load($scope.chosenWidget.type)
