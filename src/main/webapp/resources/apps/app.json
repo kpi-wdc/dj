@@ -129,20 +129,215 @@
     "holders" : {
       "column" : {
         "widgets" : [ {
-          "type" : "title",
-          "title" : "2x2 template page",
-          "instanceName" : "title"
+          "url" : "http://localhost:8080/data/oecd-canada.json",
+          "type" : "datasource",
+          "instanceName" : "9qcypjgae154s4i"
+        }, {
+          "text" : "<pre style=\"color: rgb(0, 0, 0); font-family: 'Courier New'; background-color: rgb(255, 255, 255);\"><font size=\"2\"><br><br><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*margin-bottom: 1rem !important;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*margin-left: 0;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs dd, .tabs .tab-title {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*position: relative;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /* margin-bottom: 0 !important;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*list-style: none;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*float: left;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span></font><span style=\"font-size: 14pt;\"><br></span></pre>",
+          "type" : "htmlwidget",
+          "instanceName" : "kwxd5pesye8hyqfr"
         } ]
       },
       "topleft" : {
         "widgets" : [ {
-          "type" : "title",
-          "title" : "2x2 template page",
-          "instanceName" : "title"
+          "type" : "nvd3-bar",
+          "instanceName" : "rlpos8wq1lzbyb9",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "xAxisAngle" : -90,
+            "reduceXTicks" : false,
+            "staggerLabels" : false,
+            "color" : [ "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6" ]
+          },
+          "datasource" : "9qcypjgae154s4i",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "selectedDataset" : "oecd",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "UNR",
+                "index" : "0",
+                "label" : "Unemployment rate"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "AU",
+                "index" : "0",
+                "label" : "Australia"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2003",
+                "index" : "0",
+                "label" : "2003"
+              }, {
+                "id" : "2005",
+                "index" : "2",
+                "label" : "2005"
+              }, {
+                "id" : "2007",
+                "index" : "4",
+                "label" : "2007"
+              }, {
+                "id" : "2009",
+                "index" : "6",
+                "label" : "2009"
+              }, {
+                "id" : "2011",
+                "index" : "8",
+                "label" : "2011"
+              }, {
+                "id" : "2013",
+                "index" : "10",
+                "label" : "2013"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "text" : "<pre style=\"color: rgb(0, 0, 0); font-family: 'Courier New'; background-color: rgb(255, 255, 255);\"><font size=\"1\"><br><br><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*margin-bottom: 1rem !important;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*margin-left: 0;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs dd, .tabs .tab-title {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*position: relative;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /* margin-bottom: 0 !important;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*list-style: none;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*float: left;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs dd &gt; a, .tabs .tab-title &gt; a {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*outline: none;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*display: block;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*background: transparent;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*color: #222222;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*margin: 0.5rem 1rem 0.5rem 1rem;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*padding:0;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*font-family: \"Helvetica Neue\", Helvetica, Roboto, Arial, sans-serif;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*font-size: 0.675rem;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs dd &gt; a:hover, .tabs .tab-title &gt; a:hover {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*background: transparent;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*.tabs dd.active a, .tabs .tab-title.active a {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*background-color: #008cba;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*color: #ffffff;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\"><br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*input[type=\"file\"], input[type=\"checkbox\"], input[type=\"radio\"], select {*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">    /*margin: 0 0 0 0;*/<br></span><span style=\"color: rgb(128, 128, 128); font-style: italic;\">/*}*/<br></span></font><span style=\"font-size: 14pt;\"><br></span></pre>",
+          "type" : "htmlwidget",
+          "instanceName" : "yz0zjhiif8j2lnmi"
         } ]
       },
       "topright" : {
-        "widgets" : [ ]
+        "widgets" : [ {
+          "type" : "nvd3-bar",
+          "instanceName" : "z29c4meaq6si3sor",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "xAxisAngle" : -90,
+            "reduceXTicks" : false,
+            "staggerLabels" : false
+          },
+          "datasource" : "9qcypjgae154s4i",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "selectedDataset" : "canada",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "CA",
+                "index" : "0",
+                "label" : "Canada"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2012",
+                "index" : "0",
+                "label" : "2012"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "4",
+                "index" : "1",
+                "label" : "0 to 4"
+              }, {
+                "id" : "9",
+                "index" : "2",
+                "label" : "5 to 9"
+              }, {
+                "id" : "14",
+                "index" : "3",
+                "label" : "10 to 14"
+              }, {
+                "id" : "19",
+                "index" : "4",
+                "label" : "15 to 19"
+              }, {
+                "id" : "24",
+                "index" : "5",
+                "label" : "20 to 24"
+              }, {
+                "id" : "29",
+                "index" : "6",
+                "label" : "25 to 29"
+              }, {
+                "id" : "34",
+                "index" : "7",
+                "label" : "30 to 34"
+              }, {
+                "id" : "39",
+                "index" : "8",
+                "label" : "35 to 39"
+              }, {
+                "id" : "44",
+                "index" : "9",
+                "label" : "40 to 44"
+              }, {
+                "id" : "49",
+                "index" : "10",
+                "label" : "45 to 49"
+              }, {
+                "id" : "54",
+                "index" : "11",
+                "label" : "50 to 54"
+              }, {
+                "id" : "59",
+                "index" : "12",
+                "label" : "55 to 59"
+              }, {
+                "id" : "64",
+                "index" : "13",
+                "label" : "60 to 64"
+              }, {
+                "id" : "69",
+                "index" : "14",
+                "label" : "65 to 69"
+              }, {
+                "id" : "74",
+                "index" : "15",
+                "label" : "70 to 74"
+              }, {
+                "id" : "79",
+                "index" : "16",
+                "label" : "75 to 79"
+              }, {
+                "id" : "84",
+                "index" : "17",
+                "label" : "80 to 84"
+              }, {
+                "id" : "89",
+                "index" : "18",
+                "label" : "85 to 89"
+              }, {
+                "id" : "older",
+                "index" : "19",
+                "label" : "90 and older"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "PERCENT",
+                "index" : "1",
+                "label" : "% of total of each group"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "T",
+                "index" : "0",
+                "label" : "Total"
+              } ],
+              "role" : "Fix Value"
+            } ],
+            "standalone" : false
+          }
+        } ]
       },
       "bottomleft" : {
         "widgets" : [ ]
@@ -150,7 +345,18 @@
       "bottomright" : {
         "widgets" : [ ]
       }
-    }
+    },
+    "subscriptions" : [ {
+      "emitter" : "9qcypjgae154s4i",
+      "receiver" : "rlpos8wq1lzbyb9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "9qcypjgae154s4i",
+      "receiver" : "z29c4meaq6si3sor",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    } ]
   }, {
     "shortTitle" : "Page with 2 columns",
     "href" : "page-4",
@@ -207,10 +413,239 @@
           "url" : "http://localhost:8080/data/oecd-canada.json",
           "type" : "datasource",
           "instanceName" : "source"
+        }, {
+          "type" : "nvd3-bar",
+          "instanceName" : "bar",
+          "decoration" : {
+            "height" : 200,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "xAxisAngle" : 0,
+            "reduceXTicks" : true,
+            "staggerLabels" : true,
+            "color" : [ "#5e4fa2", "#3288bd", "#66c2a5", "#abdda4", "#e6f598", "#ffffbf", "#fee08b", "#fdae61", "#f46d43", "#d53e4f", "#9e0142" ]
+          },
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "selectedDataset" : "oecd",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "UNR",
+                "index" : "0",
+                "label" : "Unemployment rate"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "AU",
+                "index" : "0",
+                "label" : "Australia"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2003",
+                "index" : "0",
+                "label" : "2003"
+              }, {
+                "id" : "2004",
+                "index" : "1",
+                "label" : "2004"
+              }, {
+                "id" : "2005",
+                "index" : "2",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "3",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "4",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "5",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "6",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "7",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "8",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "9",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "10",
+                "label" : "2013"
+              }, {
+                "id" : "2014",
+                "index" : "11",
+                "label" : "2014"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-bar",
+          "instanceName" : "bar2",
+          "decoration" : {
+            "height" : 200,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "xAxisAngle" : 0,
+            "reduceXTicks" : false,
+            "staggerLabels" : false
+          },
+          "datasource" : "source",
+          "data" : {
+            "url" : "http://localhost:8080/data/oecd-canada.json",
+            "selectedDataset" : "canada",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "CA",
+                "index" : "0",
+                "label" : "Canada"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2012",
+                "index" : "0",
+                "label" : "2012"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "4",
+                "index" : "1",
+                "label" : "0 to 4"
+              }, {
+                "id" : "9",
+                "index" : "2",
+                "label" : "5 to 9"
+              }, {
+                "id" : "14",
+                "index" : "3",
+                "label" : "10 to 14"
+              }, {
+                "id" : "19",
+                "index" : "4",
+                "label" : "15 to 19"
+              }, {
+                "id" : "24",
+                "index" : "5",
+                "label" : "20 to 24"
+              }, {
+                "id" : "29",
+                "index" : "6",
+                "label" : "25 to 29"
+              }, {
+                "id" : "34",
+                "index" : "7",
+                "label" : "30 to 34"
+              }, {
+                "id" : "39",
+                "index" : "8",
+                "label" : "35 to 39"
+              }, {
+                "id" : "44",
+                "index" : "9",
+                "label" : "40 to 44"
+              }, {
+                "id" : "49",
+                "index" : "10",
+                "label" : "45 to 49"
+              }, {
+                "id" : "54",
+                "index" : "11",
+                "label" : "50 to 54"
+              }, {
+                "id" : "59",
+                "index" : "12",
+                "label" : "55 to 59"
+              }, {
+                "id" : "64",
+                "index" : "13",
+                "label" : "60 to 64"
+              }, {
+                "id" : "69",
+                "index" : "14",
+                "label" : "65 to 69"
+              }, {
+                "id" : "74",
+                "index" : "15",
+                "label" : "70 to 74"
+              }, {
+                "id" : "79",
+                "index" : "16",
+                "label" : "75 to 79"
+              }, {
+                "id" : "84",
+                "index" : "17",
+                "label" : "80 to 84"
+              }, {
+                "id" : "89",
+                "index" : "18",
+                "label" : "85 to 89"
+              }, {
+                "id" : "older",
+                "index" : "19",
+                "label" : "90 and older"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "POP",
+                "index" : "0",
+                "label" : "Persons (thousands)"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "M",
+                "index" : "1",
+                "label" : "Male"
+              }, {
+                "id" : "F",
+                "index" : "2",
+                "label" : "Female"
+              } ],
+              "role" : "Split Columns"
+            } ],
+            "standalone" : false
+          }
         } ]
       }
     },
-    "subscriptions" : [ ]
+    "subscriptions" : [ {
+      "emitter" : "source",
+      "receiver" : "bar",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "source",
+      "receiver" : "bar2",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    } ]
   }, {
     "shortTitle" : "aaaaaaaaaaaaaaaaaa",
     "href" : "aaaaaaaaaaa",

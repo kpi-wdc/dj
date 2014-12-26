@@ -24,6 +24,16 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
 
     m.factory('JSONstatDataProvider', ["$http", function($http){
 
+        //TODo define dualAccessible collection type getByIndex or [index], getById or (id) as jsonstat manier
+
+        //Array.prototype.id = function(_id){
+        //    return this.filter(function(item){
+        //        return item.id && item.id ==_id
+        //    })[0]
+        //}
+
+
+
         var JSONstatDataProvider = function(data,dataURL){
             if(JSONstatDataProvider.isCompatible(data)) {
                 this.data = data;
@@ -75,45 +85,64 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 return this.provider.Dataset().label;
             },
 
+            getById: function(collection, id) {
+                return collection.filter(function (item) {
+                    return item.id && item.id == id
+                })[0]
+            },
 
             getDatasets: function(){
                 var id = this.provider.id;
 
 
-                var result = {};
+                var result = [];
                 for(var i in id){
-                    result[id[i]] = {
+                    result.push( {
                         "id" : id[i],
                         "index":i,
                         "label": this.provider.Dataset(id[i]).label,
                         "source" : this.provider.Dataset(id[i]).source,
                         "updated" : this.provider.Dataset(id[i]).updated,
                         "length" : this.provider.Dataset(id[i]).length
-                    };
+                    });
                     var dims = this.provider.Dataset(id[i]).id;
-                    var dimensions = {}
+                    var dimensions = []
+
+                    //dimensions.id = function(_id) {
+                    //    return this.filter(function (item) {
+                    //        return item.id && item.id == _id
+                    //    })[0]
+                    //}
+
                     for(var j in dims){
-                        dimensions[dims[j]]={
+                        dimensions.push({
                             "id"    :   dims[j],
                             "index" :   j,
                             "label" :   this.provider.Dataset(id[i]).Dimension(dims[j]).label,
                             "role"  :   this.provider.Dataset(id[i]).Dimension(dims[j]).role,
                             "length":   this.provider.Dataset(id[i]).Dimension(dims[j]).length
-                        }
+                        })
                         var cats = this.provider.Dataset(id[i]).Dimension(dims[j]).id;
-                        var categories = {};
+
+                        var categories = [];
+                        //categories.id = function(_id) {
+                        //    return this.filter(function (item) {
+                        //        return item.id && item.id == _id
+                        //    })[0]
+                        //}
+
                         for(var k in cats){
-                            categories[cats[k]] = {
+                            categories.push({
                               "id"      : cats[k],
                               "index"   : k,
                               "label"   : this.provider.Dataset(id[i]).Dimension(dims[j]).Category(cats[k]).label
-                            };
+                            });
                         }
-                        dimensions[dims[j]].categories = categories;
+                        dimensions[j].categories = categories;
                     }
-                    result[id[i]].dimensions = dimensions;
+                    result[i].dimensions = dimensions;
                 }
-                console.log("getDatasets",result)
+                //console.log("getDatasets",result)
                 return result;
             },
 
@@ -124,7 +153,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 for(var i in id){
                     result[i] = {"id" : id[i], "label": labels[i]};
                 }
-                console.log("getDimensions",dataset,result)
+                //console.log("getDimensions",dataset,result)
                 return result;
             },
 
@@ -135,7 +164,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 for(var i in id){
                     result[i] = {"id" : id[i], "label": labels[i]};
                 }
-                console.log("getCategories",dataset,result)
+                //console.log("getCategories",dataset,result)
                 return result;
             },
 
@@ -186,7 +215,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 for(var i in dataset.dimensions){
                     var tmp = [];
                     var cats = dataset.dimensions[i].selection.collection;
-                    var dim = i;
+                    var dim = dataset.dimensions[i].id;
                     for(var j in cats){
                         var item = "r."+dim + " == ";
                         item = (angular.isString(cats[j].id))?item+"'"+cats[j].id+"'" : item+cats[j].id;
@@ -209,17 +238,18 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 query.setValue(0,new jsinq.Enumerable(data));
                 data = query.execute().toArray();
 
+
                 for(var i in data){
                     for(var j in data[i]){
                         if(j!="value") {
-                            data[i][j] = dataset.dimensions[j].categories[data[i][j]].label;
+                            data[i][j] = this.getById(this.getById(dataset.dimensions,j).categories,data[i][j]).label;
                         }
                     }
                 }
 
+                //console.log(data)
 
                 var header = [];
-
                 for(var key in data[0]){
                     header.push(key);
                 }

@@ -1,3 +1,4 @@
+
 <h4>Widget Settings Wizard</h4>
 
 <div class="border" style="padding: 0.2rem">
@@ -8,12 +9,13 @@
             class="button radius toolbar"
             ng-class="{ secondary:!step.active}"
             style="margin:0 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
-       {{step.title}}
+        {{step.title}}
     </button>
 </div>
 
+
 <div ng-if="dialog.steps[0].active">
-    <div class="panel" style="font-size:small;">
+    <div class="panel wizard" style="font-size:small;">
         <div class="row">
             <h5>Select Widget Name and Datasource</h5>
             <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
@@ -35,7 +37,8 @@
             </button>
             <button class="button tiny right"
                     style="margin:0 0 0 0.785rem"
-                    ng-click="dialog.setState(0)">
+                    ng-class="{secondary : (dialog.conf.datasource == undefined)}"
+                    ng-click="dialog.setState(0)" ng-disabled="dialog.conf.datasource == undefined">
                 Next
             </button>
         </div>
@@ -43,9 +46,9 @@
 </div>
 
 <div ng-if="dialog.steps[1].active">
-    <div class="panel" style="font-size:small;">
+    <div class="panel wizard" style="font-size:small;">
 
-        <div class="panel">
+        <div class="panel wizard">
             <label style="font-size:small;">
                 Datasource:&nbsp;
                 <a target="_blank" href="{{dialog.provider.dataURL}}"> {{dialog.provider.dataURL}}</a>
@@ -55,7 +58,7 @@
                 </a> )
             </label>
         </div>
-        <div class="panel">
+        <div class="panel wizard">
             <h5>Select Dataset:</h5>
             <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0">
                 <div ng-click="dialog.setState(2,dataset)"
@@ -83,14 +86,14 @@
 </div>
 
 <div ng-if="dialog.steps[2].active">
-    <div class="panel">
+    <div class="panel wizard">
         <label style="font-size:small;">
             Dataset:&nbsp;{{dialog.conf.selectedDataset.label}}
         </label>
     </div>
-    <div class="panel">
+    <div class="panel wizard">
         <h5>Select Dimension's Items</h5>
-        <div class="panel" ng-repeat=" dim in dialog.conf.selectedDataset.dimensions">
+        <div class="panel wizard" ng-repeat=" dim in dialog.conf.selectedDataset.dimensions">
             <div class="row" ng-if="!dialog.autoselect(dim)">
                 <div class="row">
                     <label style="padding: 0 0 0.2rem 0; font-size: small;">
@@ -188,7 +191,7 @@
 </div>
 
 <div ng-if="dialog.steps[3].active">
-    <div class="panel" style="overflow: auto">
+    <div class="panel wizard" style="overflow: auto">
         <h5>Series in Rows</h5>
         <table cellpadding="0px" cellspacing="0px" style="padding: 0px; margin: 0px;">
             <thead>
@@ -220,7 +223,7 @@
 </div>
 
 <div ng-if="dialog.steps[4].active">
-    <div class="panel">
+    <div class="panel wizard">
         <h5>Data Settings</h5>
         <div class="row border">
             <label class="left">Save Data in Widget Configuration (Standalone Mode): &nbsp;&nbsp; </label>
@@ -326,10 +329,12 @@
 
         </div>
 
+
         <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
             <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
             <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="dialog.setState(5)">Finish</button>
         </div>
     </div>
 </div>
+
 

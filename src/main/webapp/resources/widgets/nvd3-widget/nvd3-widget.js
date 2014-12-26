@@ -51,6 +51,7 @@ define([
                     $scope.removeSubscriptions = function(){
                         var subscriptions = pageSubscriptions();
                         for(var i in subscriptions){
+                            //console.log(subscriptions[i],$scope.widget.instanceName)
                             if( subscriptions[i].emitter == $scope.widget.instanceName
                                 || subscriptions[i].receiver == $scope.widget.instanceName
                             )   subscriptions.splice(i,1);
@@ -90,8 +91,10 @@ define([
 
                             return;
                             }
-                            if ($scope.widget.datasource)
+                            if ($scope.widget.datasource) {
+                                //console.log("Invoke appendListener",$scope.widget.datasource);
                                 $scope.APIUser.invoke($scope.widget.datasource, 'appendListener')
+                            }
                         }, true)
 
                         .removal(function(){
@@ -104,11 +107,14 @@ define([
                         })
 
                         .provide('setDataProvider', function (evt, provider) {
+                            if(!provider) return;
+                                //console.log('setDataProvider',evt,provider)
                                 $scope.provider = provider;
                                 $scope.series = (params.serieAdapter.getSeries) ?
                                     params.serieAdapter.getSeries(adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator)) :
                                     adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator);
                         });
+                    //console.log("NVD3 WIDGET",this)
             };
 
 

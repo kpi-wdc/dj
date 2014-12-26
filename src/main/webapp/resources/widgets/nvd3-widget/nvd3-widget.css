@@ -1,52 +1,52 @@
 
 
-.tabs {
-    margin-bottom: 1rem !important;
-    margin-left: 0;
-}
+/*.tabs {*/
+    /*margin-bottom: 1rem !important;*/
+    /*margin-left: 0;*/
+/*}*/
 
-.tabs dd, .tabs .tab-title {
-    position: relative;
+/*.tabs dd, .tabs .tab-title {*/
+    /*position: relative;*/
     /* margin-bottom: 0 !important;*/
-    list-style: none;
-    float: left;
-}
+    /*list-style: none;*/
+    /*float: left;*/
+/*}*/
 
 
-.tabs dd > a, .tabs .tab-title > a {
-    outline: none;
-    display: block;
-    background: transparent;
-    color: #222222;
-    margin: 0.5rem 1rem 0.5rem 1rem;
-    padding:0;
-    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-    font-size: 0.675rem;
-}
+/*.tabs dd > a, .tabs .tab-title > a {*/
+    /*outline: none;*/
+    /*display: block;*/
+    /*background: transparent;*/
+    /*color: #222222;*/
+    /*margin: 0.5rem 1rem 0.5rem 1rem;*/
+    /*padding:0;*/
+    /*font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;*/
+    /*font-size: 0.675rem;*/
+/*}*/
 
-.tabs dd > a:hover, .tabs .tab-title > a:hover {
-    background: transparent;
+/*.tabs dd > a:hover, .tabs .tab-title > a:hover {*/
+    /*background: transparent;*/
 
-}
+/*}*/
 
 
-.tabs dd.active a, .tabs .tab-title.active a {
-    background-color: #008cba;
-    color: #ffffff;
-}
+/*.tabs dd.active a, .tabs .tab-title.active a {*/
+    /*background-color: #008cba;*/
+    /*color: #ffffff;*/
+/*}*/
 
-input[type="file"], input[type="checkbox"], input[type="radio"], select {
-    margin: 0 0 0 0;
-}
+/*input[type="file"], input[type="checkbox"], input[type="radio"], select {*/
+    /*margin: 0 0 0 0;*/
+/*}*/
 
-.row {
-    width: auto;
-    margin-bottom: 0.5rem;
-    max-width: none;
-    font-size: small;
-    padding: 0 1rem 0 1rem;
-    border:0;
-}
+/*.row {*/
+    /*width: auto;*/
+    /*margin-bottom: 0.5rem;*/
+    /*max-width: none;*/
+    /*font-size: small;*/
+    /*padding: 0 1rem 0 1rem;*/
+    /*border:0;*/
+/*}*/
 
 .border {
     border: 1px solid #dfdfdf;
@@ -54,19 +54,16 @@ input[type="file"], input[type="checkbox"], input[type="radio"], select {
     margin:0.5rem;
 }
 
-.panel {
-    padding: 0.5rem;
+.panel.wizard {
     background: #ffffff;
-    color: #333333;
-    margin:0.75rem;
-}
+   }
 
-.tabs-content > .content {
-    display: none;
-    float: left;
-    padding: 0;
-    width: 100%;
-}
+/*.tabs-content > .content {*/
+    /*display: none;*/
+    /*float: left;*/
+    /*padding: 0;*/
+    /*width: 100%;*/
+/*}*/
 
 table tr th, table tr td {
     padding: 0.2rem 0.5rem;
@@ -105,14 +102,14 @@ select {
 }
 */
 
-button.disabled, button[disabled], .button.disabled, .button[disabled] {
-    background-color: #ADB8BB;
-    border-color: #007095;
-    color: white;
-    cursor: default;
-    opacity: 0.7;
-    box-shadow: none;
-}
+/*button.disabled, button[disabled], .button.disabled, .button[disabled] {*/
+    /*background-color: #ADB8BB;*/
+    /*border-color: #007095;*/
+    /*color: white;*/
+    /*cursor: default;*/
+    /*opacity: 0.7;*/
+    /*box-shadow: none;*/
+/*}*/
 
 button.toolbar {
     padding:0.2rem;

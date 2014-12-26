@@ -128,7 +128,8 @@ define(["angular",
                 },
 
                 gotoStep: function(step){
-                    this.currentStep.active = false;
+                    if(this.currentStep) this.currentStep.active = false;
+
                     this.currentStep = step;
                     this.currentStep.active = true;
 
@@ -136,14 +137,13 @@ define(["angular",
 
                 setEnabled: function(steps){
                     for(var i in steps)
-                    this.steps[i].disabled = false;
+                    steps[i].disabled = false;
                 },
 
                 setDisabled: function(steps){
                     for(var i in steps)
-                    this.steps[i].disable = true;
+                    steps[i].disabled = true;
                 },
-
 
                 getItemStyle:function(dim,cat){
 
@@ -169,12 +169,11 @@ define(["angular",
                     if(conf && conf.standalone){
                         this.series = conf.series;
                         this.conf.standalone = true;
-                        this.setDisabled([
-                            this.steps[1],
-                            this.steps[2],
-                            this.steps[3]
-                        ]);
-
+                        this.setDisabled(
+                            this.steps.filter(function(item,index) {
+                                return index > 0 && index < 4
+                            })
+                        );
                         this.gotoStep(this.steps[4]);
                         return;
                     }
@@ -191,21 +190,25 @@ define(["angular",
                     if (!conf) return;
                     if (!conf.selectedDataset)return;
 
-
-
-                    this.setState(2, this.conf.metadata[conf.selectedDataset]);
+                    this.setState(2, this.conf.metadata.find(
+                        function(item){
+                            return item.id == conf.selectedDataset
+                        }
+                    ));
 
                     for(var i in this.conf.selectedDataset.dimensions){
                         this.conf.selectedDataset.dimensions[i].selection.role = conf.selection[i].role;
                         for(var j in conf.selection[i].collection){
-                            this.selectCategory(this.conf.selectedDataset.dimensions[i],
-                                this.conf.selectedDataset.dimensions[i].categories[conf.selection[i].collection[j].id])
+                            this.selectCategory(
+                                this.conf.selectedDataset.dimensions[i],
+                                this.conf.selectedDataset.dimensions[i].categories.find(
+                                    function(item){
+                                        return item.id == conf.selection[i].collection[j].id
+                                    })
+                            )
                         }
-                        //this.conf.selectedDataset.dimensions[i].selection = new KeySet();
-                        //this.conf.selectedDataset.dimensions[i].selection.set(conf.selection[i].collection);
 
                     }
-
 
                     if (!this.readyForDataFetch()) return;
                     this.setState(3);
@@ -247,12 +250,10 @@ define(["angular",
 
                             this.conf.url = "";
                             this.setEnabled([this.steps[0]]);
-                            this.setDisabled([
-                                this.steps[1],
-                                this.steps[2],
-                                this.steps[3],
-                                this.steps[4]
-                            ]);
+                            this.setDisabled(
+                                this.steps.filter(function(item,index) {
+                                return index > 0
+                            }));
 
                             this.gotoStep(this.steps[0]);
 
@@ -278,22 +279,24 @@ define(["angular",
                             this.conf.metadata = this.provider.getDatasets();
                             this.conf.url = this.provider.getDataURL();
 
-                            this.setEnabled([
-                                this.steps[0],
-                                this.steps[1]
-                            ]);
+                            this.setEnabled(
+                                this.steps.filter(function(item,index) {
+                                    return index < 2
+                                })
+                            );
 
-                            this.setDisabled([
-                                this.steps[2],
-                                this.steps[3],
-                                this.steps[4]
-                            ]);
+                            this.setDisabled(
+                                this.steps.filter(function(item,index) {
+                                    return index > 1
+                                })
+                            );
 
                             this.gotoStep(this.steps[1]);
 
                             break;
 
                         case 2: // select dataset , dimension items selection in process
+
                             if (arguments[1] && this.conf.selectedDataset != arguments[1]) {
                                 this.conf.selectedDataset = arguments[1];
                                 angular.forEach(this.conf.selectedDataset.dimensions, function (dim) {
@@ -304,51 +307,59 @@ define(["angular",
 
                             this.state = 2;
 
+                            //console.log("CONFIG",arguments[1],this.conf)
+                            this.setEnabled(
+                                this.steps.filter(function(item,index) {
+                                    return index < 3
+                                })
+                            );
 
-                            this.setEnabled([
-                                this.steps[0],
-                                this.steps[1],
-                                this.steps[2]
-                            ]);
-
-                            this.setDisabled([
-                                this.steps[3],
-                                this.steps[4]
-                            ]);
-
+                            this.setDisabled(
+                                this.steps.filter(function(item,index) {
+                                    return index > 2
+                                })
+                            );
                             this.gotoStep(this.steps[2]);
                             break;
 
                         case 3: // get data from dataset provider, fields role selection in process
 
                             if (arguments[0] && this.state < arguments[0]) {
-                                this.conf.selection = {};
+                                this.conf.selection = [];
                                 for(var i in this.conf.selectedDataset.dimensions){
-                                    this.conf.selection[i] = this.conf.selectedDataset.dimensions[i].selection;
+                                    this.conf.selection.push(this.conf.selectedDataset.dimensions[i].selection);
                                 }
                                 this.table = TableGenerator.getData(this.conf,this.provider);
-                                this.series = BarSerieGenerator.getData(this.table);
+                                this.setState(4)
                                 //console.log("Series",this.series);
                             }
 
-                            this.state = 3;
 
-                            this.setEnabled([
-                                this.steps[0],
-                                this.steps[1],
-                                this.steps[2],
-                                this.steps[3],
-                                this.steps[4]
-                            ]);
+
+                            this.setEnabled(this.steps);
 
                             this.gotoStep(this.steps[3]);
 
                             break;
 
                         case 4:
+                            this.state = 4;
+                            this.series = BarSerieGenerator.getData(this.table);
                             break;
 
                         case 5: // Set widget data configuration
+
+
+                            if(this.scope.widget.instanceName != this.conf.instanceName){
+                                this.removeIfExist({
+                                    emitter: this.conf.datasource,
+                                    receiver: this.scope.widget.instanceName,
+                                    signal: "loadDataSuccess",
+                                    slot: "setDataProvider"
+                                });
+                                this.scope.widget.instanceName = this.conf.instanceName;
+                            }
+
                             if(!this.conf.standalone){
                                 this.scope.widget.datasource = this.conf.datasource;
                                 this.appendIfNotExist({
@@ -382,7 +393,7 @@ define(["angular",
                             this.scope.widget.decoration = this.conf.decoration;
 
 
-                            console.log("WIDGET CONF",this.scope.widget)
+                            //console.log("WIDGET CONF",this.scope.widget)
 
                             this.modal.close();
                             this.scope.APIUser.invoke(this.scope.widget.instanceName,APIProvider.RECONFIG_SLOT);
@@ -441,7 +452,7 @@ define(["angular",
                     if(this.conf.metadata && this.conf.selectedDataset) {
 
                         var dims = this.conf.selectedDataset.dimensions;
-
+                        //console.log(dims)
                         for (var i in dims) {
                             test.rows |= dims[i].selection.role == "Rows";
                             test.columns |= dims[i].selection.role == "Columns";
@@ -450,7 +461,12 @@ define(["angular",
                         }
                     }
 
-                    return this.conf.metadata && this.conf.selectedDataset && test.rows && test.columns && test.allRole && test.allDimensionsSelected;
+                    return this.conf.metadata
+                        && this.conf.selectedDataset
+                        && test.rows
+                        && test.columns
+                        && test.allRole
+                        && test.allDimensionsSelected;
                 },
 
 
@@ -496,6 +512,8 @@ define(["angular",
                           dimension.selection.role = role
                       break
                   }
+
+                  this.setState(2)
                 },
 
 

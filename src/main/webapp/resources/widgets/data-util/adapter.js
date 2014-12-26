@@ -63,8 +63,9 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
 
                     // get current row from this.result
                     var qr = "from r in $0 where r."+
-                       rowsDim +
+                        conf.selectedDataset.dimensions[rowsDim].id +
                         " == " + str(rowCollection[row].label)+ " select r";
+                    //console.log(qr)
                     var query = new jsinq.Query(qr);
                     query.setValue(0, new jsinq.Enumerable(result.data));
                     var rowData = query.execute().toArray();
@@ -75,27 +76,29 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                     for(var column in columnCollection ){
                         //    get current record for current column
                         var qc = "from r in $0 where r."+
-                           columnsDim +
+                            conf.selectedDataset.dimensions[columnsDim].id +
                             " == " + str(columnCollection[column].label) + " select r";
+                        //console.log(qc)
                         var query = new jsinq.Query(qc);
                         query.setValue(0, new jsinq.Enumerable(rowData));
                         var colData = query.execute().toArray();
                         if(!splitCollection){
                             for(var rr in colData){
-                                //current.values[columnCollection[column].label]=colData[rr].value;
-                                current.values[columnCollection[column].id]=colData[rr].value;
+                                current.values[columnCollection[column].label]=colData[rr].value;
+                                //current.values[columnCollection[column].id]=colData[rr].value;
                             }
                         }else{
                             for(var splitter in splitCollection){
                                 var q = "from r in $0 where r."+
-                                    splitDim + " == " +
+                                    conf.selectedDataset.dimensions[splitDim].id + " == " +
                                     str(splitCollection[splitter].label) + " select r";
+                                //console.log(q)
                                 var query = new jsinq.Query(q);
                                 query.setValue(0, new jsinq.Enumerable(colData));
                                 var splitData = query.execute().toArray();
                                 for(var rr in splitData){
-                                    //current.values[columnCollection[column].label+", "+splitCollection[splitter].label]=splitData[rr].value;
-                                    current.values[columnCollection[column].id+", "+splitCollection[splitter].id]=splitData[rr].value;
+                                    current.values[columnCollection[column].label+", "+splitCollection[splitter].label]=splitData[rr].value;
+                                    //current.values[columnCollection[column].id+", "+splitCollection[splitter].id]=splitData[rr].value;
                                 }
                             }
                         }
@@ -139,12 +142,22 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
             }
 
             if(angular.isDefined(provider)) {
+
+                //console.log("GET DATA ADAPTER",conf,provider,serieGenerator)
+
                 var cfg = {};
-                cfg.selectedDataset = provider.getDatasets()[conf.selectedDataset];
+                cfg.selectedDataset = provider.getDatasets().find(
+                    function(item){
+                        return item.id == conf.selectedDataset
+                    }
+                );
+
                 for(var i in cfg.selectedDataset.dimensions){
                     cfg.selectedDataset.dimensions[i].selection = conf.selection[i];
                 }
+
                 cfg.selection = conf.selection;
+                //console.log("CFG",cfg)
                 var table = TableGenerator.getData(cfg,provider);
                 //TODO add table header from conf if needed
                 return serieGenerator.getData(table);

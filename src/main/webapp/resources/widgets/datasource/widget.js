@@ -27,6 +27,7 @@ define([
                             $scope.data = data;
                             if(JSONstatDataProvider.isCompatible(data)) {
                                 $scope.provider = new JSONstatDataProvider($scope.data, $scope.url);
+                                $scope.info = $scope.provider.getDatasets();
                                 eventEmitter.emit('loadDataSuccess',$scope.provider);
                             }else{
                                 alert("Not supported data format")
@@ -46,8 +47,7 @@ define([
                     })
 
                     .provide('appendListener', function (evt) {
-                        console.log('appendListener',evt, $scope.provider)
-                        //if(angular.isDefined($scope.provider))
+                        if(angular.isDefined($scope.provider))
                         apiUser.invoke(evt.emitterName,'setDataProvider',$scope.provider);
                     })
 
