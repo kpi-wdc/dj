@@ -364,16 +364,258 @@
     "holders" : {
       "column" : {
         "widgets" : [ {
+          "title" : "Ukraine Profile",
           "type" : "title",
-          "title" : "2-column template page",
           "instanceName" : "title"
+        }, {
+          "url" : "http://localhost:8080/data/wdc.json",
+          "type" : "datasource",
+          "instanceName" : "k54s54r0usg7gb9"
         } ]
       },
       "left" : {
-        "widgets" : [ ]
+        "widgets" : [ {
+          "type" : "table",
+          "instanceName" : "xg1nyf7yayhz1tt9",
+          "datasource" : "k54s54r0usg7gb9",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                },
+                "Security of Life Component" : {
+                  "label" : "Security of Life Component",
+                  "title" : "Security of Life Component"
+                },
+                "Index of sustainable development" : {
+                  "label" : "Index of sustainable development",
+                  "title" : "Index of sustainable development"
+                }
+              }
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "88",
+                "index" : "86",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              }, {
+                "id" : "Csl",
+                "index" : "1",
+                "label" : "Security of Life Component"
+              }, {
+                "id" : "Isd",
+                "index" : "6",
+                "label" : "Index of sustainable development"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          },
+          "decoration" : {
+            "ranges" : {
+              "rows" : {
+                "2013" : {
+                  "max" : 1.02235571054965,
+                  "min" : 0.561965521527288
+                }
+              },
+              "columns" : {
+                "Quality of Life Component" : {
+                  "max" : 0.561965521527288,
+                  "min" : 0.561965521527288
+                },
+                "Security of Life Component" : {
+                  "max" : 1.02235571054965,
+                  "min" : 1.02235571054965
+                },
+                "Index of sustainable development" : {
+                  "max" : 0.784147376263906,
+                  "min" : 0.784147376263906
+                }
+              },
+              "all" : {
+                "max" : 1.02235571054965,
+                "min" : 0.561965521527288
+              }
+            }
+          }
+        }, {
+          "text" : "<div style=\"box-sizing: border-box; margin: 0px; padding: 0px; color: rgb(34, 34, 34); font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: small; line-height: 19.5px; background-color: rgb(255, 255, 255);\"><label class=\"left\" style=\"box-sizing: border-box; color: rgb(77, 77, 77); cursor: pointer; display: block; line-height: 1.5; margin-bottom: 0px; float: left !important;\"><b style=\"box-sizing: border-box; line-height: inherit;\">URL:</b>&nbsp;<a target=\"_blank\" href=\"http://localhost:8080/data/wdc.json\" class=\"ng-binding\" style=\"box-sizing: border-box; color: rgb(0, 140, 186); text-decoration: none; line-height: inherit; background-color: transparent;\">http://localhost:8080/data/wdc.json</a></label><label class=\"left\" style=\"box-sizing: border-box; color: rgb(77, 77, 77); cursor: pointer; display: block; line-height: 1.5; margin-bottom: 0px; float: left !important;\"><b style=\"box-sizing: border-box; line-height: inherit;\">&nbsp;Format:</b>&nbsp;<a target=\"_blank\" href=\"http://json-stat.org/\" class=\"ng-binding\" style=\"box-sizing: border-box; color: rgb(0, 140, 186); text-decoration: none; line-height: inherit; background-color: transparent;\">json-stat</a></label></div><p><br style=\"box-sizing: border-box; color: rgb(34, 34, 34); font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: small; line-height: 19.5px; background-color: rgb(255, 255, 255);\"></p><h5 style=\"box-sizing: border-box; margin-top: 0.2rem; margin-bottom: 0.5rem; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: normal; color: rgb(34, 34, 34); text-rendering: optimizelegibility; line-height: 1.4; font-size: 1.125rem; background-color: rgb(255, 255, 255);\">Datasets:</h5><div ng-repeat=\"dataset in info\" class=\"ng-scope\" style=\"box-sizing: border-box; margin: 0px; padding: 0px; color: rgb(34, 34, 34); font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: small; line-height: 19.5px; background-color: rgb(255, 255, 255);\"><b class=\"ng-binding\" style=\"box-sizing: border-box; line-height: inherit;\">data 2005-2013</b>&nbsp;<br style=\"box-sizing: border-box;\"><div style=\"box-sizing: border-box; margin: 0px; padding: 0px; font-size: smaller;\"><i class=\"ng-binding\" style=\"box-sizing: border-box; line-height: inherit;\">Source: Pysnograev Ivan Updated: 2014-12-15</i>&nbsp;<br style=\"box-sizing: border-box;\"><b style=\"box-sizing: border-box; line-height: inherit;\">Dimensions:</b><ul style=\"box-sizing: border-box; margin-right: 0px; margin-bottom: 1.25rem; margin-left: 1.1rem; padding-right: 0px; padding-left: 0px; font-size: inherit; line-height: 1.6; list-style-position: outside; font-family: inherit;\"><li ng-repeat=\"d in dataset.dimensions\" class=\"ng-binding ng-scope\" style=\"box-sizing: border-box; margin: 0px 0px 0px 1.5rem; padding: 0px;\"><b class=\"ng-binding\" style=\"box-sizing: border-box; line-height: inherit;\">all countries:</b>&nbsp;137 items</li><li ng-repeat=\"d in dataset.dimensions\" class=\"ng-binding ng-scope\" style=\"box-sizing: border-box; margin: 0px 0px 0px 1.5rem; padding: 0px;\"><b class=\"ng-binding\" style=\"box-sizing: border-box; line-height: inherit;\">2005 - 2013:</b>&nbsp;9 items</li><li ng-repeat=\"d in dataset.dimensions\" class=\"ng-binding ng-scope\" style=\"box-sizing: border-box; margin: 0px 0px 0px 1.5rem; padding: 0px;\"><b class=\"ng-binding\" style=\"box-sizing: border-box; line-height: inherit;\">Selected indicators:</b>&nbsp;7 items</li></ul></div></div>",
+          "type" : "htmlwidget",
+          "instanceName" : "na01f8o9wv0u23xr"
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "exoyuzkkrge6d2t9",
+          "decoration" : {
+            "height" : 250,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "isArea" : true
+          },
+          "datasource" : "k54s54r0usg7gb9",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                },
+                "Security of Life Component" : {
+                  "label" : "Security of Life Component",
+                  "title" : "Security of Life Component"
+                },
+                "Index of sustainable development" : {
+                  "label" : "Index of sustainable development",
+                  "title" : "Index of sustainable development"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "88",
+                "index" : "86",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              }, {
+                "id" : "Csl",
+                "index" : "1",
+                "label" : "Security of Life Component"
+              }, {
+                "id" : "Isd",
+                "index" : "6",
+                "label" : "Index of sustainable development"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        } ]
       },
       "right" : {
-        "widgets" : [ ]
+        "widgets" : [ {
+          "type" : "nvd3-pie",
+          "instanceName" : "66zklagxvdv7k3xr",
+          "decoration" : {
+            "height" : 300,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "donut" : true,
+            "donutRatio" : 0.2,
+            "labelsOutside" : true,
+            "valueAsLabel" : false,
+            "color" : [ "#2b83ba", "#abdda4", "#fdae61", "#d7191c" ]
+          },
+          "datasource" : "k54s54r0usg7gb9",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "88",
+                "index" : "86",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Ie",
+                "index" : "3",
+                "label" : "Index of environmental dimension"
+              }, {
+                "id" : "Iec",
+                "index" : "4",
+                "label" : "Index of economic dimension"
+              }, {
+                "id" : "Is",
+                "index" : "5",
+                "label" : "Index of social and institutional dimension"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        } ]
       }
     },
     "subscriptions" : [ {
@@ -384,6 +626,21 @@
     }, {
       "emitter" : "s",
       "receiver" : "iz2v512grtrfi529",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "k54s54r0usg7gb9",
+      "receiver" : "xg1nyf7yayhz1tt9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "k54s54r0usg7gb9",
+      "receiver" : "66zklagxvdv7k3xr",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "k54s54r0usg7gb9",
+      "receiver" : "exoyuzkkrge6d2t9",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]
@@ -428,77 +685,60 @@
             "staggerLabels" : true,
             "color" : [ "#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2" ]
           },
-          "datasource" : "source",
           "data" : {
-            "url" : "http://localhost:8080/data/oecd-canada.json",
-            "selectedDataset" : "oecd",
-            "selection" : [ {
-              "collection" : [ {
-                "id" : "UNR",
-                "index" : "0",
-                "label" : "Unemployment rate"
-              } ],
-              "role" : "Fix Value"
-            }, {
-              "collection" : [ {
-                "id" : "AU",
-                "index" : "0",
-                "label" : "Australia"
-              } ],
-              "role" : "Rows"
-            }, {
-              "collection" : [ {
-                "id" : "2003",
-                "index" : "0",
-                "label" : "2003"
+            "series" : [ {
+              "key" : "Australia",
+              "values" : [ {
+                "label" : "2003",
+                "value" : 5.943826289,
+                "series" : 0
               }, {
-                "id" : "2004",
-                "index" : "1",
-                "label" : "2004"
+                "label" : "2004",
+                "value" : 5.39663128,
+                "series" : 0
               }, {
-                "id" : "2005",
-                "index" : "2",
-                "label" : "2005"
+                "label" : "2005",
+                "value" : 5.044790587,
+                "series" : 0
               }, {
-                "id" : "2006",
-                "index" : "3",
-                "label" : "2006"
+                "label" : "2006",
+                "value" : 4.789362794,
+                "series" : 0
               }, {
-                "id" : "2007",
-                "index" : "4",
-                "label" : "2007"
+                "label" : "2007",
+                "value" : 4.379649386,
+                "series" : 0
               }, {
-                "id" : "2008",
-                "index" : "5",
-                "label" : "2008"
+                "label" : "2008",
+                "value" : 4.249093453,
+                "series" : 0
               }, {
-                "id" : "2009",
-                "index" : "6",
-                "label" : "2009"
+                "label" : "2009",
+                "value" : 5.592226603,
+                "series" : 0
               }, {
-                "id" : "2010",
-                "index" : "7",
-                "label" : "2010"
+                "label" : "2010",
+                "value" : 5.230660289,
+                "series" : 0
               }, {
-                "id" : "2011",
-                "index" : "8",
-                "label" : "2011"
+                "label" : "2011",
+                "value" : 5.099422942,
+                "series" : 0
               }, {
-                "id" : "2012",
-                "index" : "9",
-                "label" : "2012"
+                "label" : "2012",
+                "value" : 5.224336088,
+                "series" : 0
               }, {
-                "id" : "2013",
-                "index" : "10",
-                "label" : "2013"
+                "label" : "2013",
+                "value" : 5.50415003,
+                "series" : 0
               }, {
-                "id" : "2014",
-                "index" : "11",
-                "label" : "2014"
-              } ],
-              "role" : "Columns"
+                "label" : "2014",
+                "value" : 5.462866231,
+                "series" : 0
+              } ]
             } ],
-            "standalone" : false
+            "standalone" : true
           }
         }, {
           "type" : "nvd3-pie",
@@ -631,7 +871,7 @@
             "xAxisName" : "",
             "yAxisName" : "",
             "staggerLabels" : false,
-            "color" : [ "#b15928", "#ffff99", "#6a3d9a", "#cab2d6", "#ff7f00", "#fdbf6f", "#e31a1c", "#fb9a99", "#33a02c", "#b2df8a", "#1f78b4", "#a6cee3" ],
+            "color" : [ "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928" ],
             "isArea" : false
           },
           "data" : {
@@ -1630,11 +1870,6 @@
     },
     "subscriptions" : [ {
       "emitter" : "source",
-      "receiver" : "bar",
-      "signal" : "loadDataSuccess",
-      "slot" : "setDataProvider"
-    }, {
-      "emitter" : "source",
       "receiver" : "xu85oukrbt6v42t9",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
@@ -1687,6 +1922,995 @@
       },
       "bottomright" : {
         "widgets" : [ ]
+      }
+    },
+    "subscriptions" : [ ]
+  }, {
+    "shortTitle" : "Sustainability",
+    "href" : "sustainability",
+    "template" : "left-right-bottom",
+    "holders" : {
+      "column" : {
+        "widgets" : [ {
+          "title" : "Методика кількісного оцінювання сталого розвитку країн та регіонів світу",
+          "type" : "title",
+          "instanceName" : "n68g215rxv5i2j4i"
+        }, {
+          "text" : "<p class=\"osnov\"><span style=\"letter-spacing: 0.3pt;\"><font size=\"3\" face=\"Arial\">Кількісні показники (індекси,\nіндикатори, параметри або інші міри) країн з позицій концепції сталого розвитку\nвикористовуються з метою визначення цілей політики сталого розвитку,\nпрогнозування майбутніх ефектів від планованих заходів, моніторингу досягнення\nвстановлених цілей, оцінювання прогресу й ефективності, порівняльного аналізу\nкраїн, підвищення якості управлінських і адміністративних рішень і залучення\nгромадськості у процедури ухвалювання рішень в глобальному контексті. Профілі\nсталого розвитку країн являють собою сконцентровану наглядну форму подання\nінформації, призначеної для розв’язання зазначених вище завдань.<o:p></o:p></font></span></p><p class=\"osnov\"><span style=\"letter-spacing: 0.3pt;\"><font size=\"3\" face=\"Arial\">Візуалізована частина профілю окремої\nкраїни містить загальну інформацію (кількість населення &nbsp;та ВВП на душу населення), інфографіку для\nіндексу сталого розвитку та для компонент якості і безпеки життя людей. Для цих\nпоказників вказані чисельні значення та позиція у відповідному рейтингу.\nКомпоненти якості та безпеки життя людей розкриті до рівня індексів напрямків\nсталого розвитку та показників впливу глобальних загроз.<o:p></o:p></font></span></p><p>\n\n\n\n</p><p class=\"osnov\"><span style=\"letter-spacing: 0.3pt;\"><font size=\"3\"><font face=\"Arial\">Також профіль кожної країни\nмістить у вигляді діаграм порівняння країни за показниками напрямків сталого\nрозвитку і показниками впливу глобальних загроз з відповідними середніми\nзначеннями для групи порівняння, склад яких вказано в кінці профілю.&nbsp;</font></font><font face=\"PetersburgCTT, serif\"><o:p></o:p></font></span></p>",
+          "type" : "htmlwidget",
+          "instanceName" : "7xyg833p7obkpgb9"
+        } ]
+      },
+      "topleft" : {
+        "widgets" : [ {
+          "type" : "nvd3-line",
+          "instanceName" : "mqxkdh3gs1lcjtt9",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "reduceXTicks" : true,
+            "staggerLabels" : false,
+            "color" : [ "#ff7f00", "#fdbf6f", "#e31a1c", "#fb9a99", "#33a02c", "#b2df8a", "#1f78b4", "#a6cee3" ]
+          },
+          "data" : {
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                },
+                "Security of Life Component" : {
+                  "label" : "Security of Life Component",
+                  "title" : "Security of Life Component"
+                },
+                "Index of sustainable development" : {
+                  "label" : "Index of sustainable development",
+                  "title" : "Index of sustainable development"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "series" : [ {
+              "key" : "Quality of Life Component",
+              "values" : [ {
+                "label" : "2005",
+                "x" : 2005,
+                "y" : 1.13,
+                "series" : 0
+              }, {
+                "label" : "2006",
+                "x" : 2006,
+                "y" : 0.67,
+                "series" : 0
+              }, {
+                "label" : "2007",
+                "x" : 2007,
+                "y" : 0.51,
+                "series" : 0
+              }, {
+                "label" : "2008",
+                "x" : 2008,
+                "y" : 0.55,
+                "series" : 0
+              }, {
+                "label" : "2009",
+                "x" : 2009,
+                "y" : 1.42,
+                "series" : 0
+              }, {
+                "label" : "2010",
+                "x" : 2010,
+                "y" : 1.26,
+                "series" : 0
+              }, {
+                "label" : "2011",
+                "x" : 2011,
+                "y" : 0.43,
+                "series" : 0
+              }, {
+                "label" : "2012",
+                "x" : 2012,
+                "y" : 0.61,
+                "series" : 0
+              }, {
+                "label" : "2013",
+                "x" : 2013,
+                "y" : 0.56,
+                "series" : 0
+              } ]
+            }, {
+              "key" : "Security of Life Component",
+              "values" : [ {
+                "label" : "2005",
+                "x" : 2005,
+                "y" : 1.44,
+                "series" : 1
+              }, {
+                "label" : "2006",
+                "x" : 2006,
+                "y" : 1.24,
+                "series" : 1
+              }, {
+                "label" : "2007",
+                "x" : 2007,
+                "y" : 1.1,
+                "series" : 1
+              }, {
+                "label" : "2008",
+                "x" : 2008,
+                "y" : 1.02,
+                "series" : 1
+              }, {
+                "label" : "2009",
+                "x" : 2009,
+                "y" : 1.53,
+                "series" : 1
+              }, {
+                "label" : "2010",
+                "x" : 2010,
+                "y" : 1.32,
+                "series" : 1
+              }, {
+                "label" : "2011",
+                "x" : 2011,
+                "y" : 1.15,
+                "series" : 1
+              }, {
+                "label" : "2012",
+                "x" : 2012,
+                "y" : 0.81,
+                "series" : 1
+              }, {
+                "label" : "2013",
+                "x" : 2013,
+                "y" : 1.02,
+                "series" : 1
+              } ]
+            }, {
+              "key" : "Index of sustainable development",
+              "values" : [ {
+                "label" : "2005",
+                "x" : 2005,
+                "y" : 1.3,
+                "series" : 2
+              }, {
+                "label" : "2006",
+                "x" : 2006,
+                "y" : 0.94,
+                "series" : 2
+              }, {
+                "label" : "2007",
+                "x" : 2007,
+                "y" : 0.79,
+                "series" : 2
+              }, {
+                "label" : "2008",
+                "x" : 2008,
+                "y" : 0.78,
+                "series" : 2
+              }, {
+                "label" : "2009",
+                "x" : 2009,
+                "y" : 1.5,
+                "series" : 2
+              }, {
+                "label" : "2010",
+                "x" : 2010,
+                "y" : 1.32,
+                "series" : 2
+              }, {
+                "label" : "2011",
+                "x" : 2011,
+                "y" : 0.76,
+                "series" : 2
+              }, {
+                "label" : "2012",
+                "x" : 2012,
+                "y" : 0.71,
+                "series" : 2
+              }, {
+                "label" : "2013",
+                "x" : 2013,
+                "y" : 0.78,
+                "series" : 2
+              } ]
+            } ],
+            "standalone" : true
+          }
+        } ]
+      },
+      "topright" : {
+        "widgets" : [ {
+          "type" : "nvd3-pie",
+          "instanceName" : "ygcihz6cp2ai3sor",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "donut" : true,
+            "donutRatio" : 0.6,
+            "labelsOutside" : true,
+            "valueAsLabel" : true,
+            "color" : [ "#984ea3", "#4daf4a", "#377eb8", "#e41a1c" ]
+          },
+          "data" : {
+            "series" : [ {
+              "key" : "Ukraine",
+              "values" : [ {
+                "label" : "Index of environmental dimension",
+                "value" : 0.304131252382925
+              }, {
+                "label" : "Index of economic dimension",
+                "value" : 0.383130027837085
+              }, {
+                "label" : "Index of social and institutional dimension",
+                "value" : 0.432376136005766
+              } ]
+            } ],
+            "standalone" : true
+          }
+        } ]
+      },
+      "bottom" : {
+        "widgets" : [ {
+          "type" : "nvd3-stacked-area",
+          "instanceName" : "q6wi8u0nuu2l0udi",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : null,
+            "yAxisName" : null,
+            "staggerLabels" : false,
+            "color" : [ "#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00" ]
+          },
+          "data" : {
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Index of environmental dimension" : {
+                  "label" : "Index of environmental dimension",
+                  "title" : "Index of environmental dimension"
+                },
+                "Index of economic dimension" : {
+                  "label" : "Index of economic dimension",
+                  "title" : "Index of economic dimension"
+                },
+                "Index of social and institutional dimension" : {
+                  "label" : "Index of social and institutional dimension",
+                  "title" : "Index of social and institutional dimension"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "series" : [ {
+              "key" : "Index of environmental dimension",
+              "values" : [ {
+                "label" : "2005",
+                "x" : 2005,
+                "y" : 0.5,
+                "index" : 0,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.5,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2006",
+                "x" : 2006,
+                "y" : 0.57,
+                "index" : 1,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.57,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2007",
+                "x" : 2007,
+                "y" : 0.28,
+                "index" : 2,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.28,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2008",
+                "x" : 2008,
+                "y" : 0.33,
+                "index" : 3,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.33,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2009",
+                "x" : 2009,
+                "y" : 0.81,
+                "index" : 4,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.81,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2010",
+                "x" : 2010,
+                "y" : 0.69,
+                "index" : 5,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.69,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2011",
+                "x" : 2011,
+                "y" : 0.19,
+                "index" : 6,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.19,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2012",
+                "x" : 2012,
+                "y" : 0.3,
+                "index" : 7,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.3,
+                  "y0" : 0
+                },
+                "series" : 0
+              }, {
+                "label" : "2013",
+                "x" : 2013,
+                "y" : 0.3,
+                "index" : 8,
+                "seriesIndex" : 0,
+                "display" : {
+                  "y" : 0.3,
+                  "y0" : 0
+                },
+                "series" : 0
+              } ],
+              "seriesIndex" : 0
+            }, {
+              "key" : "Index of economic dimension",
+              "values" : [ {
+                "label" : "2005",
+                "x" : 2005,
+                "y" : 0.58,
+                "index" : 0,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.58,
+                  "y0" : 0.5
+                },
+                "series" : 1
+              }, {
+                "label" : "2006",
+                "x" : 2006,
+                "y" : 0.25,
+                "index" : 1,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.25,
+                  "y0" : 0.57
+                },
+                "series" : 1
+              }, {
+                "label" : "2007",
+                "x" : 2007,
+                "y" : 0.35,
+                "index" : 2,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.35,
+                  "y0" : 0.28
+                },
+                "series" : 1
+              }, {
+                "label" : "2008",
+                "x" : 2008,
+                "y" : 0.42,
+                "index" : 3,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.42,
+                  "y0" : 0.33
+                },
+                "series" : 1
+              }, {
+                "label" : "2009",
+                "x" : 2009,
+                "y" : 0.66,
+                "index" : 4,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.66,
+                  "y0" : 0.81
+                },
+                "series" : 1
+              }, {
+                "label" : "2010",
+                "x" : 2010,
+                "y" : 0.62,
+                "index" : 5,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.62,
+                  "y0" : 0.69
+                },
+                "series" : 1
+              }, {
+                "label" : "2011",
+                "x" : 2011,
+                "y" : 0.37,
+                "index" : 6,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.37,
+                  "y0" : 0.19
+                },
+                "series" : 1
+              }, {
+                "label" : "2012",
+                "x" : 2012,
+                "y" : 0.47,
+                "index" : 7,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.47,
+                  "y0" : 0.3
+                },
+                "series" : 1
+              }, {
+                "label" : "2013",
+                "x" : 2013,
+                "y" : 0.38,
+                "index" : 8,
+                "seriesIndex" : 1,
+                "display" : {
+                  "y" : 0.38,
+                  "y0" : 0.3
+                },
+                "series" : 1
+              } ],
+              "seriesIndex" : 1
+            }, {
+              "key" : "Index of social and institutional dimension",
+              "values" : [ {
+                "label" : "2005",
+                "x" : 2005,
+                "y" : 0.64,
+                "index" : 0,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.64,
+                  "y0" : 1.08
+                },
+                "series" : 2
+              }, {
+                "label" : "2006",
+                "x" : 2006,
+                "y" : 0.4,
+                "index" : 1,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.4,
+                  "y0" : 0.82
+                },
+                "series" : 2
+              }, {
+                "label" : "2007",
+                "x" : 2007,
+                "y" : 0.42,
+                "index" : 2,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.42,
+                  "y0" : 0.63
+                },
+                "series" : 2
+              }, {
+                "label" : "2008",
+                "x" : 2008,
+                "y" : 0.37,
+                "index" : 3,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.37,
+                  "y0" : 0.75
+                },
+                "series" : 2
+              }, {
+                "label" : "2009",
+                "x" : 2009,
+                "y" : 0.72,
+                "index" : 4,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.72,
+                  "y0" : 1.4700000000000002
+                },
+                "series" : 2
+              }, {
+                "label" : "2010",
+                "x" : 2010,
+                "y" : 0.65,
+                "index" : 5,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.65,
+                  "y0" : 1.31
+                },
+                "series" : 2
+              }, {
+                "label" : "2011",
+                "x" : 2011,
+                "y" : 0.38,
+                "index" : 6,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.38,
+                  "y0" : 0.56
+                },
+                "series" : 2
+              }, {
+                "label" : "2012",
+                "x" : 2012,
+                "y" : 0.37,
+                "index" : 7,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.37,
+                  "y0" : 0.77
+                },
+                "series" : 2
+              }, {
+                "label" : "2013",
+                "x" : 2013,
+                "y" : 0.43,
+                "index" : 8,
+                "seriesIndex" : 2,
+                "display" : {
+                  "y" : 0.43,
+                  "y0" : 0.6799999999999999
+                },
+                "series" : 2
+              } ],
+              "seriesIndex" : 2
+            } ],
+            "standalone" : true
+          }
+        }, {
+          "type" : "table",
+          "instanceName" : "hrspdka98mxfajor",
+          "data" : {
+            "table" : {
+              "header" : {
+                "label" : "all countries",
+                "body" : {
+                  "Quality of Life Component" : {
+                    "label" : "Quality of Life Component",
+                    "title" : "Quality of Life"
+                  },
+                  "Security of Life Component" : {
+                    "label" : "Security of Life Component",
+                    "title" : "Security of Life"
+                  },
+                  "Harmonization degree" : {
+                    "label" : "Harmonization degree",
+                    "title" : "Harmonization"
+                  },
+                  "Index of environmental dimension" : {
+                    "label" : "Index of environmental dimension",
+                    "title" : "environment"
+                  },
+                  "Index of economic dimension" : {
+                    "label" : "Index of economic dimension",
+                    "title" : "economic"
+                  },
+                  "Index of social and institutional dimension" : {
+                    "label" : "Index of social and institutional dimension",
+                    "title" : "social"
+                  },
+                  "Index of sustainable development" : {
+                    "label" : "Index of sustainable development",
+                    "title" : "sustainablity"
+                  }
+                }
+              },
+              "body" : [ {
+                "label" : "Ukraine",
+                "id" : "88",
+                "values" : {
+                  "Quality of Life Component" : 0.561965521527288,
+                  "Security of Life Component" : 1.02235571054965,
+                  "Harmonization degree" : 0.905696591984037,
+                  "Index of environmental dimension" : 0.304131252382925,
+                  "Index of economic dimension" : 0.383130027837085,
+                  "Index of social and institutional dimension" : 0.432376136005766,
+                  "Index of sustainable development" : 0.784147376263906
+                }
+              }, {
+                "label" : "Kazakhstan",
+                "id" : "48",
+                "values" : {
+                  "Quality of Life Component" : 0.775477851017901,
+                  "Security of Life Component" : 1.07815304171244,
+                  "Harmonization degree" : 0.891289585227069,
+                  "Index of environmental dimension" : 0.464807556070827,
+                  "Index of economic dimension" : 0.487429052680984,
+                  "Index of social and institutional dimension" : 0.438649103652505,
+                  "Index of sustainable development" : 0.932507729809803
+                }
+              }, {
+                "label" : "Latvia",
+                "id" : "52",
+                "values" : {
+                  "Quality of Life Component" : 0.790360677650463,
+                  "Security of Life Component" : 1.12584095866216,
+                  "Harmonization degree" : 0.807078373891834,
+                  "Index of environmental dimension" : 0.505601820927188,
+                  "Index of economic dimension" : 0.39666363720914,
+                  "Index of social and institutional dimension" : 0.506599001419239,
+                  "Index of sustainable development" : 0.962542934428752
+                }
+              }, {
+                "label" : "Russian Federation",
+                "id" : "74",
+                "values" : {
+                  "Quality of Life Component" : 0.461345854786273,
+                  "Security of Life Component" : 1.10612857610118,
+                  "Harmonization degree" : 0.798773136048689,
+                  "Index of environmental dimension" : 0.324390579306707,
+                  "Index of economic dimension" : 0.358357307523381,
+                  "Index of social and institutional dimension" : 0.324968061389989,
+                  "Index of sustainable development" : 0.763722577166066
+                }
+              }, {
+                "label" : "Spain",
+                "id" : "79",
+                "values" : {
+                  "Quality of Life Component" : 0.724524870221281,
+                  "Security of Life Component" : 1.01111820050307,
+                  "Harmonization degree" : 0.811400485978527,
+                  "Index of environmental dimension" : 0.500510292672621,
+                  "Index of economic dimension" : 0.452841079078642,
+                  "Index of social and institutional dimension" : 0.401290244451904,
+                  "Index of sustainable development" : 0.872948177506696
+                }
+              }, {
+                "label" : "Poland",
+                "id" : "71",
+                "values" : {
+                  "Quality of Life Component" : 0.673529402899962,
+                  "Security of Life Component" : 1.26398413085662,
+                  "Harmonization degree" : 0.531297634577175,
+                  "Index of environmental dimension" : 0.575371065197952,
+                  "Index of economic dimension" : 0.264255598983349,
+                  "Index of social and institutional dimension" : 0.405648628494368,
+                  "Index of sustainable development" : 0.957205658261925
+                }
+              }, {
+                "label" : "Lithuania",
+                "id" : "53",
+                "values" : {
+                  "Quality of Life Component" : 1.40139779896532,
+                  "Security of Life Component" : 1.58945993907934,
+                  "Harmonization degree" : 0.957543680635771,
+                  "Index of environmental dimension" : 0.822249976631483,
+                  "Index of economic dimension" : 0.641013322189423,
+                  "Index of social and institutional dimension" : 0.70554054782221,
+                  "Index of sustainable development" : 1.52378901885867
+                }
+              }, {
+                "label" : "Italy",
+                "id" : "44",
+                "values" : {
+                  "Quality of Life Component" : 0.427311084715146,
+                  "Security of Life Component" : 0.923824031318182,
+                  "Harmonization degree" : 0.635797892878243,
+                  "Index of environmental dimension" : 0.107296202233438,
+                  "Index of economic dimension" : 0.385591405671894,
+                  "Index of social and institutional dimension" : 0.38094869506516,
+                  "Index of sustainable development" : 0.662100391703842
+                }
+              }, {
+                "label" : "Greece",
+                "id" : "36",
+                "values" : {
+                  "Quality of Life Component" : 1.25157616659228,
+                  "Security of Life Component" : 1.34475342756298,
+                  "Harmonization degree" : 0.913145356600203,
+                  "Index of environmental dimension" : 0.642293454684295,
+                  "Index of economic dimension" : 0.666025066766925,
+                  "Index of social and institutional dimension" : 0.616948300576116,
+                  "Index of sustainable development" : 1.32725856781473
+                }
+              }, {
+                "label" : "Finland",
+                "id" : "32",
+                "values" : {
+                  "Quality of Life Component" : 0.759257973258055,
+                  "Security of Life Component" : 1.31891078075926,
+                  "Harmonization degree" : 0.903135437168547,
+                  "Index of environmental dimension" : 0.492942794510604,
+                  "Index of economic dimension" : 0.433877644794573,
+                  "Index of social and institutional dimension" : 0.46160519338219,
+                  "Index of sustainable development" : 1.03139852719752
+                }
+              }, {
+                "label" : "Georgia",
+                "id" : "34",
+                "values" : {
+                  "Quality of Life Component" : 1.44133806769944,
+                  "Security of Life Component" : 1.68939397034228,
+                  "Harmonization degree" : 0.971170732106915,
+                  "Index of environmental dimension" : 0.811114801691677,
+                  "Index of economic dimension" : 0.685140142281824,
+                  "Index of social and institutional dimension" : 0.729550881749624,
+                  "Index of sustainable development" : 1.59178331259862
+                }
+              }, {
+                "label" : "France",
+                "id" : "33",
+                "values" : {
+                  "Quality of Life Component" : 0.955986630362822,
+                  "Security of Life Component" : 1.34102510585795,
+                  "Harmonization degree" : 0.723158362901603,
+                  "Index of environmental dimension" : 0.629732049580785,
+                  "Index of economic dimension" : 0.392593739429787,
+                  "Index of social and institutional dimension" : 0.573138698687435,
+                  "Index of sustainable development" : 1.15492345085123
+                }
+              }, {
+                "label" : "Germany",
+                "id" : "35",
+                "values" : {
+                  "Quality of Life Component" : 0.603889683892857,
+                  "Security of Life Component" : 1.0632253858874,
+                  "Harmonization degree" : 0.94008795924663,
+                  "Index of environmental dimension" : 0.365741431936788,
+                  "Index of economic dimension" : 0.393156362373642,
+                  "Index of social and institutional dimension" : 0.427579516107177,
+                  "Index of sustainable development" : 0.826729119781917
+                }
+              } ]
+            },
+            "standalone" : true
+          },
+          "decoration" : {
+            "ranges" : {
+              "rows" : {
+                "Ukraine" : {
+                  "max" : 1.02235571054965,
+                  "min" : 0.304131252382925
+                },
+                "Kazakhstan" : {
+                  "max" : 1.07815304171244,
+                  "min" : 0.438649103652505
+                },
+                "Latvia" : {
+                  "max" : 1.12584095866216,
+                  "min" : 0.39666363720914
+                },
+                "Russian Federation" : {
+                  "max" : 1.10612857610118,
+                  "min" : 0.324390579306707
+                },
+                "Spain" : {
+                  "max" : 1.01111820050307,
+                  "min" : 0.401290244451904
+                },
+                "Poland" : {
+                  "max" : 1.26398413085662,
+                  "min" : 0.264255598983349
+                },
+                "Lithuania" : {
+                  "max" : 1.58945993907934,
+                  "min" : 0.641013322189423
+                },
+                "Italy" : {
+                  "max" : 0.923824031318182,
+                  "min" : 0.107296202233438
+                },
+                "Greece" : {
+                  "max" : 1.34475342756298,
+                  "min" : 0.616948300576116
+                },
+                "Finland" : {
+                  "max" : 1.31891078075926,
+                  "min" : 0.433877644794573
+                },
+                "Georgia" : {
+                  "max" : 1.68939397034228,
+                  "min" : 0.685140142281824
+                },
+                "France" : {
+                  "max" : 1.34102510585795,
+                  "min" : 0.392593739429787
+                },
+                "Germany" : {
+                  "max" : 1.0632253858874,
+                  "min" : 0.365741431936788
+                }
+              },
+              "columns" : {
+                "Quality of Life Component" : {
+                  "max" : 1.44133806769944,
+                  "min" : 0.427311084715146
+                },
+                "Security of Life Component" : {
+                  "max" : 1.68939397034228,
+                  "min" : 0.923824031318182
+                },
+                "Harmonization degree" : {
+                  "max" : 0.971170732106915,
+                  "min" : 0.531297634577175
+                },
+                "Index of environmental dimension" : {
+                  "max" : 0.822249976631483,
+                  "min" : 0.107296202233438
+                },
+                "Index of economic dimension" : {
+                  "max" : 0.685140142281824,
+                  "min" : 0.264255598983349
+                },
+                "Index of social and institutional dimension" : {
+                  "max" : 0.729550881749624,
+                  "min" : 0.324968061389989
+                },
+                "Index of sustainable development" : {
+                  "max" : 1.59178331259862,
+                  "min" : 0.662100391703842
+                }
+              },
+              "all" : {
+                "max" : 1.68939397034228,
+                "min" : 0.107296202233438
+              }
+            },
+            "colorize" : true,
+            "color" : [ "#005824", "#238b45", "#41ae76", "#66c2a4", "#99d8c9", "#ccece6", "#edf8fb" ],
+            "colorizeMode" : "Columns",
+            "opacity" : 0.3
+          }
+        }, {
+          "type" : "nvd3-bar",
+          "instanceName" : "0kh5bpoa6905p14i",
+          "decoration" : {
+            "height" : 250,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "xAxisAngle" : -15,
+            "reduceXTicks" : false,
+            "staggerLabels" : false,
+            "color" : [ "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928" ]
+          },
+          "data" : {
+            "series" : [ {
+              "key" : "Ukraine",
+              "values" : [ {
+                "label" : "Quality of Life Component",
+                "value" : 0.561965521527288,
+                "series" : 0
+              }, {
+                "label" : "Security of Life Component",
+                "value" : 1.02235571054965,
+                "series" : 0
+              }, {
+                "label" : "Harmonization degree",
+                "value" : 0.905696591984037,
+                "series" : 0
+              }, {
+                "label" : "Index of environmental dimension",
+                "value" : 0.304131252382925,
+                "series" : 0
+              }, {
+                "label" : "Index of economic dimension",
+                "value" : 0.383130027837085,
+                "series" : 0
+              }, {
+                "label" : "Index of social and institutional dimension",
+                "value" : 0.432376136005766,
+                "series" : 0
+              }, {
+                "label" : "Index of sustainable development",
+                "value" : 0.784147376263906,
+                "series" : 0
+              } ]
+            }, {
+              "key" : "Georgia",
+              "values" : [ {
+                "label" : "Quality of Life Component",
+                "value" : 1.44133806769944,
+                "series" : 1
+              }, {
+                "label" : "Security of Life Component",
+                "value" : 1.68939397034228,
+                "series" : 1
+              }, {
+                "label" : "Harmonization degree",
+                "value" : 0.971170732106915,
+                "series" : 1
+              }, {
+                "label" : "Index of environmental dimension",
+                "value" : 0.811114801691677,
+                "series" : 1
+              }, {
+                "label" : "Index of economic dimension",
+                "value" : 0.685140142281824,
+                "series" : 1
+              }, {
+                "label" : "Index of social and institutional dimension",
+                "value" : 0.729550881749624,
+                "series" : 1
+              }, {
+                "label" : "Index of sustainable development",
+                "value" : 1.59178331259862,
+                "series" : 1
+              } ]
+            }, {
+              "key" : "Greece",
+              "values" : [ {
+                "label" : "Quality of Life Component",
+                "value" : 1.25157616659228,
+                "series" : 2
+              }, {
+                "label" : "Security of Life Component",
+                "value" : 1.34475342756298,
+                "series" : 2
+              }, {
+                "label" : "Harmonization degree",
+                "value" : 0.913145356600203,
+                "series" : 2
+              }, {
+                "label" : "Index of environmental dimension",
+                "value" : 0.642293454684295,
+                "series" : 2
+              }, {
+                "label" : "Index of economic dimension",
+                "value" : 0.666025066766925,
+                "series" : 2
+              }, {
+                "label" : "Index of social and institutional dimension",
+                "value" : 0.616948300576116,
+                "series" : 2
+              }, {
+                "label" : "Index of sustainable development",
+                "value" : 1.32725856781473,
+                "series" : 2
+              } ]
+            } ],
+            "standalone" : true
+          }
+        } ]
       }
     },
     "subscriptions" : [ ]

@@ -644,7 +644,7 @@ define(["angular",
                         var s = this.scope;
                         $modal.open({
                             templateUrl: 'widgets/data-dialogs/line-chart-dialog.html',
-                            controller: 'BarChartConfigDialog',
+                            controller: 'LineChartConfigDialog',
                             backdrop: 'static',
                             resolve: {
                                 widgetScope: function () {
