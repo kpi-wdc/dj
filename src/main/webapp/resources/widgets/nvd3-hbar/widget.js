@@ -1,19 +1,21 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
+        '/widgets/data-util/adapter.js',
         '/widgets/data-dialogs/bar-chart-dialog.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.nvd3-hbar',[
             'app.widgets.nvd3-widget',
+            'app.widgets.data-util.adapter',
             'app.widgets.data-dialogs.bar-chart-dialog'
             ]);
 
         m.service('NVD3HBarAdapter', function () {
             this.applyDecoration = function (options, decoration) {
                 if(angular.isDefined(decoration)&&angular.isDefined(options)) {
-                    console.log(options)
+                    //console.log(options)
                     options.chart.height = decoration.height;
                     options.title.text = decoration.title;
                     options.subtitle.text = decoration.subtitle;
@@ -46,7 +48,7 @@ define([
             }
         })
 
-        m.controller('Nvd3HBarChartCtrl',function($scope,BarChartDialog,NVD3HBarAdapter,NVD3Widget){
+        m.controller('Nvd3HBarChartCtrl',function($scope,BarChartDialog,NVD3HBarAdapter,NVD3Widget, BarSerieGenerator){
             new NVD3Widget($scope,{
                 dialog: BarChartDialog,
                 decorationAdapter: NVD3HBarAdapter,
@@ -54,7 +56,8 @@ define([
                 serieAdapter:{
                     getX:function(d){return d.label},
                     getY:function(d){return d.value}
-                }
+                },
+                serieGenerator: BarSerieGenerator
             })
         });
     });

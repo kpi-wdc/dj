@@ -1,12 +1,14 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
+        '/widgets/data-util/adapter.js',
         '/widgets/data-dialogs/line-chart-dialog.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.nvd3-stacked-area',[
             'app.widgets.nvd3-widget',
+            'app.widgets.data-util.adapter',
             'app.widgets.data-dialogs.line-chart-dialog'
         ]);
 
@@ -47,7 +49,7 @@ define([
             }
         });
 
-        m.controller('Nvd3StackedAreaChartCtrl',function($scope,LineChartDialog,NVD3StackedAreaAdapter,NVD3Widget){
+        m.controller('Nvd3StackedAreaChartCtrl',function($scope,LineChartDialog,NVD3StackedAreaAdapter,NVD3Widget,  ScatterSerieGenerator){
             new NVD3Widget($scope,{
                 dialog: LineChartDialog,
                 decorationAdapter: NVD3StackedAreaAdapter,
@@ -55,7 +57,8 @@ define([
                 serieAdapter:{
                     getX:function(d){return d.x},
                     getY:function(d){return d.y}
-                }
+                },
+                serieGenerator: ScatterSerieGenerator
             })
         });
 

@@ -54,16 +54,18 @@
     margin:0.5rem;
 }
 
+.widget.border {
+    border: 1px solid #dfdfdf;
+    padding: 0.5rem;
+    margin: 0 0 0.5rem;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
 .panel.wizard {
     background: #ffffff;
    }
 
-/*.tabs-content > .content {*/
-    /*display: none;*/
-    /*float: left;*/
-    /*padding: 0;*/
-    /*width: 100%;*/
-/*}*/
 
 table tr th, table tr td {
     padding: 0.2rem 0.5rem;
@@ -79,8 +81,12 @@ table thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, tabl
     display: table-cell;
     line-height: 1.125rem;
     font-size: 0.7rem;
+    padding:0.2rem;
 }
 
+.rowid{
+    background:#f5f5f5;
+}
 /*
 select {
     -webkit-appearance: none !important;

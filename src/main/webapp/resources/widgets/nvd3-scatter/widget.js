@@ -1,12 +1,14 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
+        '/widgets/data-util/adapter.js',
         '/widgets/data-dialogs/line-chart-dialog.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.nvd3-scatter',
             ['app.widgets.nvd3-widget',
+                'app.widgets.data-util.adapter',
              'app.widgets.data-dialogs.line-chart-dialog'
             ]);
 
@@ -49,7 +51,7 @@ define([
             }
         });
 
-        m.controller('Nvd3ScatterChartCtrl',function($scope,LineChartDialog,NVD3ScatterAdapter,NVD3Widget){
+        m.controller('Nvd3ScatterChartCtrl',function($scope,LineChartDialog,NVD3ScatterAdapter,NVD3Widget,  ScatterSerieGenerator){
             new NVD3Widget($scope,{
                 dialog: LineChartDialog,
                 decorationAdapter: NVD3ScatterAdapter,
@@ -60,7 +62,8 @@ define([
                     tooltipContent: function(serie,x,y,s){
                         return "<b>"+serie + ": </b><i>" + s.point.label+"</i>"
                     }
-                }
+                },
+                serieGenerator: ScatterSerieGenerator
             })
         });
 

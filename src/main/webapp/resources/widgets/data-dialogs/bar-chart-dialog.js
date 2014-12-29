@@ -330,6 +330,7 @@ define(["angular",
                                     this.conf.selection.push(this.conf.selectedDataset.dimensions[i].selection);
                                 }
                                 this.table = TableGenerator.getData(this.conf,this.provider);
+                                this.series = BarSerieGenerator.getData(this.table);
                                 this.setState(4)
                                 //console.log("Series",this.series);
                             }
@@ -344,7 +345,7 @@ define(["angular",
 
                         case 4:
                             this.state = 4;
-                            this.series = BarSerieGenerator.getData(this.table);
+
                             break;
 
                         case 5: // Set widget data configuration

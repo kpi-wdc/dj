@@ -1,12 +1,14 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
+        '/widgets/data-util/adapter.js',
         '/widgets/data-dialogs/pie-chart-dialog.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.nvd3-pie', [
             'app.widgets.nvd3-widget',
+            'app.widgets.data-util.adapter',
             'app.widgets.data-dialogs.pie-chart-dialog'
         ]);
 
@@ -45,7 +47,7 @@ define([
         })
 
 
-        m.controller('Nvd3PieChartCtrl',function($scope,PieChartDialog,NVD3PieAdapter,NVD3Widget){
+        m.controller('Nvd3PieChartCtrl',function($scope,PieChartDialog,NVD3PieAdapter,NVD3Widget, BarSerieGenerator){
             new NVD3Widget($scope,{
                 dialog: PieChartDialog,
                 decorationAdapter: NVD3PieAdapter,
@@ -54,7 +56,8 @@ define([
                     getX:function(d){return d.label},
                     getY:function(d){return d.value},
                     getSeries:function(series){return series[0].values}
-                }
+                },
+                serieGenerator: BarSerieGenerator
             })
         });
 

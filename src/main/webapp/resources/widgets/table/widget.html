@@ -1,28 +1,45 @@
-<div class="border" ng-controller="TableCtrl" style="overflow:auto;" >
-    <div class="table caption">Table 1. Table Caption</div>
-    <div class="table title">Table Title</div>
-    <table cellpadding="0px" cellspacing="0px" width="100%" style="padding: 0px; margin: 0px; ">
+<div class="widget border" ng-controller="TableCtrl">
+    <div ng-if="tableExist()">
+        <div class="table caption">{{widget.decoration.caption}}</div>
+        <div class="table title">{{widget.decoration.title}}</div>
+        <div  style="overflow:auto; margin-left: auto;margin-right: auto; float: none;" >
+            <table class="data" cellpadding="0px" cellspacing="0px" align="center" style="margin-left: auto;margin-right: auto; float: none;">
+                <thead>
+                    <tr>
+                        <th class="center-align rowid" style="cursor: pointer"
+                            ng-click="setPredicate(byLabel())">
+                            {{table.header.label}}
+                            <i ng-if="(reverse==false) && (sortField==undefined)" class="glyphicon fi-arrow-down"/>
+                            <i ng-if="(reverse==true) && (sortField==undefined)" class="glyphicon fi-arrow-up"/>
+                        </th>
+                        <th  class="center-align rowid" style="cursor: pointer"
+                             ng-click="setPredicate(byField(h))"
+                             ng-repeat="h in table.header.body">
+                            {{h.title}}
+                            <i ng-if="(reverse==false) && (sortField==h)" class="glyphicon fi-arrow-down"/>
+                            <i ng-if="(reverse==true) && (sortField==h)" class="glyphicon fi-arrow-up"/>
+                        </th>
+                    </tr>
+                </thead>
 
-        <thead>
-            <tr>
-                <th  ng-repeat="cell in header">
-                    <a>{{cell}}</a>
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-        <tr ng-repeat="row in table">
-            <th>
-                {{row.key}}
-            </th>
-            <td ng-repeat="cell in row.values">
-                {{(cell.value) ? cell.value : ' - '}}
-            </td>
-        </tr>
-        </tbody>
-    </table>
-<div class="table subtitle">Table Subtitle</div>
-    <h1 ng-if="!table" style="color:#eeeeee; text-align: center;">Widget Not Configured</h1>
+                <tbody>
+                <tr ng-repeat="r in table.body | orderBy : predicate : reverse">
+                    <th class="left-align rowid">{{r.label}}</th>
+                    <td class="right-align"
+                        ng-repeat="f in r.values track by $index"
+                        style="background:{{getCellBackground(r,$index,f)}}">
+                        {{dataValue(f)}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table subtitle">{{widget.decoration.subtitle}}</div>
+    </div>
+    <h1 ng-if="configExist() && !tableExist()" style="color:#eeeeee; text-align: center;">
+        Loading...
+    </h1>
+    <h1 ng-if="!configExist()" style="color:#eeeeee; text-align: center;">
+        Widget Not Configured
+    </h1>
 </div>

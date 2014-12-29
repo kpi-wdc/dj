@@ -59,6 +59,14 @@ define([
                         }
                     }
 
+                    $scope.serieExist = function(){
+                        return angular.isDefined($scope.series)
+                    }
+
+                    $scope.configExist = function(){
+                        return angular.isDefined($scope.widget.data)
+                    }
+
 
                     $http.get(params.optionsURL).success(
                         function (data) {

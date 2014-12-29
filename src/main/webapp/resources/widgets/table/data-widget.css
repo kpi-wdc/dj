@@ -1,0 +1,62 @@
+.widget.border {
+    border: 1px solid #dfdfdf;
+    padding: 0.5rem;
+    margin: 0 0 0.5rem;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+
+table.data tr th, table tr td {
+    padding: 0.2rem 0.5rem;
+    /*  font-size: 0.875rem;*/
+    color: #222222;
+    text-align: left;
+    border-bottom: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+
+}
+
+table.data thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, table tbody tr td, table tr td {
+    display: table-cell;
+    line-height: 1.125rem;
+    font-size: 0.725rem;
+    padding: 0.35rem;
+}
+
+.rowid{
+    background:#f5f5f5;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.center-align {
+    text-align: center;
+}
+
+.table.title {
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table.subtitle {
+    font-size: smaller;
+    font-style: italic;
+    text-align: left;
+    padding-left:3rem;
+
+}
+
+.table.caption {
+    font-size: inherit;
+    font-style: normal;
+    text-align: right;
+    padding-right:3rem;
+}

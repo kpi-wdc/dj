@@ -71,6 +71,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                     var rowData = query.execute().toArray();
                     var current = {};
                     current.label = rowCollection[row].label;
+                    current.id = rowCollection[row].id;
                     current.values = {};
 
                     for(var column in columnCollection ){
@@ -111,10 +112,54 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                 for(var i in r[0].values){
                     header.body[i] = {};
                     header.body[i].label=i;
+                    header.body[i].title=i;
                 }
                  return {header:header, body:r};
             }
         }
+
+        this.sortTable =  function(table){
+            if(!table.header.coordX){
+                var item;
+                for(var i in table.header.body){
+                    if (table.header.body[i].coordX == true){
+                        item = table.header.body[i];
+                        break;
+                    }
+                }
+                if(item) {
+                    table.body.sort(function (a, b) {
+                        var result;
+                        if (angular.isNumber(a.values[item.label])) {
+                            result = a.values[item.label] - b.values[item.label]
+                        }
+                        if (angular.isString(a.label)) {
+                            result = (a.values[item.label] < b.values[item.label]) ? -1 : 1
+                        }
+                        if (item.order == "Z-A") {
+                            result = -result;
+                        }
+                        return result;
+                    })
+                }
+
+            }else{
+                table.body.sort(function(a,b){
+                    var result;
+                    if(angular.isNumber(a[table.header.coordX])){
+                        result = a[header.coordX]-b[header.coordX]
+                    }
+                    if(angular.isString(a[table.header.coordX])){
+                        result = (a[table.header.coordX] < b[table.header.coordX]) ? -1 : 1
+                    }
+                    if (table.header.order == "Z-A"){
+                        result = -result;
+                    }
+                    return result;
+                })
+            }
+        }
+
     })
 
     m.service('BarSerieGenerator',function() {
@@ -131,14 +176,80 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
         }
     })
 
+    m.service('ScatterSerieGenerator',function() {
+        this.getData = function (table) {
+
+            var xValues = [];
+            var labels = [];
+            if(table.header.coordX){
+                xValues = table.body.map(
+                    function(item,index){
+                      return (Number(item[table.header.coordX]).toString() == "NaN") ?
+                          index :
+                          Number(Number(item[table.header.coordX]).toFixed(2))
+                })
+            }else{
+                var coordX;
+                for(var i in table.header.body){
+                    if (table.header.body[i].coordX == true){
+                        coordX = i;
+                        break;
+                    }
+                }
+                if (coordX){
+                    xValues = table.body.map(
+                        function(item,index){
+                            return (Number(item.values[coordX]).toString() == "NaN") ?
+                                index :
+                                Number(Number(item.values[coordX]).toFixed(2))
+                        })
+                }
+            }
+
+            labels = table.body.map(
+                function(item){
+                    return item.label
+            })
+
+            //console.log(labels);
+            //console.log(xValues);
+            var result = [];
+            for(var i in table.header.body){
+                if(table.header.body[i].coordX != true){
+                    var yValues = table.body.map(
+                        function(item,index){
+                            return (Number(item.values[i]).toString() == "NaN") ?
+                                index :
+                                Number(Number(item.values[i]).toFixed(2))
+                        }
+                    )
+                    //console.log(yValues)
+                    var values = [];
+                    for(var j in labels){
+                        values.push({label:labels[j], x:xValues[j], y:yValues[j]})
+                    }
+                    result.push({key:table.header.body[i].label, values:values})
+                }
+            }
+            //console.log(result)
+            return result;
+        }
+    })
+
 
     m.service('adapter',['TableGenerator',function(TableGenerator){
+
+
         this.getData = function(conf,provider, serieGenerator) {
 
             if(angular.isUndefined(conf) &&  angular.isUndefined(provider)) return undefined;
 
             if(angular.isDefined(conf)) {
                 if (conf.standalone && conf.series) return conf.series;
+            }
+            //console.log(conf)
+            if(angular.isDefined(conf)) {
+                if (conf.standalone && conf.table) return conf.table;
             }
 
             if(angular.isDefined(provider)) {
@@ -159,7 +270,11 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                 cfg.selection = conf.selection;
                 //console.log("CFG",cfg)
                 var table = TableGenerator.getData(cfg,provider);
-                //TODO add table header from conf if needed
+                if(conf.header){
+                    table.header = conf.header;
+                    TableGenerator.sortTable(table);
+                }
+
                 return serieGenerator.getData(table);
             }
         }
