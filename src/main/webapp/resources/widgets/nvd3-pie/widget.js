@@ -54,7 +54,9 @@ define([
                 optionsURL: "/widgets/nvd3-pie/options.json",
                 serieAdapter:{
                     getX:function(d){return d.label},
-                    getY:function(d){return d.value},
+                    getY:function(d){
+                        return (isNaN(d.value)) ? d.value : Number(Number(d.value).toFixed(2))
+                    },
                     getSeries:function(series){return series[0].values}
                 },
                 serieGenerator: BarSerieGenerator

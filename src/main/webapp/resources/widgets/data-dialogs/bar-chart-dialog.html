@@ -292,6 +292,27 @@
             </label>
         </div>
 
+        <h5>Controls</h5>
+        <div class="row border">
+            <label class="left">Show Controls: &nbsp;&nbsp; </label>
+            <div class="switch tiny">
+                <input type="checkbox"
+                       id="showColtrolsCheckbox"
+                       ng-model="dialog.conf.decoration.showControls">
+                <label for="showColtrolsCheckbox"></label>
+            </div>
+        </div>
+
+        <div class="row border">
+            <label class="left">Bar Stacked: &nbsp;&nbsp; </label>
+            <div class="switch tiny">
+                <input type="checkbox"
+                       id="stackedCheckbox"
+                       ng-model="dialog.conf.decoration.stacked">
+                <label for="stackedCheckbox"></label>
+            </div>
+        </div>
+
         <h5>Axises</h5>
         <div class="row border">
             <label class="left">Stagger X Axis Labels: &nbsp;&nbsp; </label>

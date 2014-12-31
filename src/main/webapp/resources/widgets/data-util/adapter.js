@@ -37,7 +37,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
             if(angular.isDefined(provider)) {
 
                 var result = provider.getData(conf.selectedDataset);
-
+                //console.log(result)
 
                 var rowsDim,columnsDim,splitDim,rowCollection,columnCollection,splitCollection;
 
@@ -85,6 +85,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                         var colData = query.execute().toArray();
                         if(!splitCollection){
                             for(var rr in colData){
+                                //colData[rr].value = (colData[rr].value)?colData[rr].value : undefined;
                                 current.values[columnCollection[column].label]=colData[rr].value;
                                 //current.values[columnCollection[column].id]=colData[rr].value;
                             }
@@ -98,6 +99,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                                 query.setValue(0, new jsinq.Enumerable(colData));
                                 var splitData = query.execute().toArray();
                                 for(var rr in splitData){
+                                    //splitData[rr].value = (splitData[rr].value) ? splitData[rr].value : undefined;
                                     current.values[columnCollection[column].label+", "+splitCollection[splitter].label]=splitData[rr].value;
                                     //current.values[columnCollection[column].id+", "+splitCollection[splitter].id]=splitData[rr].value;
                                 }
@@ -114,7 +116,9 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                     header.body[i].label=i;
                     header.body[i].title=i;
                 }
+                //console.log(r)
                  return {header:header, body:r};
+
             }
         }
 
@@ -164,6 +168,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
 
     m.service('BarSerieGenerator',function() {
         this.getData = function (table) {
+            console.log("Table", table)
             var result = [];
             for(var i in table.body){
                 var v = [];
@@ -172,6 +177,7 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                 }
                 result.push({key:table.body[i].label, values:v})
             }
+            console.log("Result", result)
             return result;
         }
     })
@@ -181,12 +187,16 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
 
             var xValues = [];
             var labels = [];
+            var base;
             if(table.header.coordX){
+                base = table.header.coordX;
                 xValues = table.body.map(
                     function(item,index){
-                      return (Number(item[table.header.coordX]).toString() == "NaN") ?
-                          index :
-                          Number(Number(item[table.header.coordX]).toFixed(2))
+                      if (!item[table.header.coordX]) return undefined;
+
+                      return (isNaN(item[table.header.coordX])) ?
+                          undefined :
+                          Number(Number(item[table.header.coordX]).toFixed(4))
                 })
             }else{
                 var coordX;
@@ -197,11 +207,13 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                     }
                 }
                 if (coordX){
+                    base = table.header.body[coordX];
                     xValues = table.body.map(
                         function(item,index){
-                            return (Number(item.values[coordX]).toString() == "NaN") ?
-                                index :
-                                Number(Number(item.values[coordX]).toFixed(2))
+                            if(!item.values[coordX]) return undefined;
+                            return (isNaN(item.values[coordX])) ?
+                                undefined :
+                                Number(Number(item.values[coordX]).toFixed(4))
                         })
                 }
             }
@@ -218,9 +230,11 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                 if(table.header.body[i].coordX != true){
                     var yValues = table.body.map(
                         function(item,index){
-                            return (Number(item.values[i]).toString() == "NaN") ?
-                                index :
-                                Number(Number(item.values[i]).toFixed(2))
+                            //console.log(item)
+                            if(!item.values[i]) return undefined;
+                            return (isNaN(item.values[i])) ?
+                                undefined :
+                                Number(Number(item.values[i]).toFixed(4))
                         }
                     )
                     //console.log(yValues)
@@ -228,10 +242,19 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                     for(var j in labels){
                         values.push({label:labels[j], x:xValues[j], y:yValues[j]})
                     }
-                    result.push({key:table.header.body[i].label, values:values})
+                    result.push({key:table.header.body[i].label, base: base,values:values})
                 }
             }
             //console.log(result)
+            for(var i in result){
+                result[i].values = result[i].values.filter(
+                    function(item){
+                        return angular.isDefined(item.x) && angular.isDefined(item.y) &&
+                            !isNaN(item.x) && !isNaN(item.y)
+                    }
+                )
+            }
+            console.log(result)
             return result;
         }
     })
@@ -274,7 +297,6 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
                     table.header = conf.header;
                     TableGenerator.sortTable(table);
                 }
-
                 return serieGenerator.getData(table);
             }
         }

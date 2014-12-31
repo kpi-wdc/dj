@@ -26,6 +26,9 @@ define([
                     options.chart.xAxis.staggerLabels = decoration.staggerLabels;
                     options.chart.rotateLabels = decoration.xAxisAngle;
                     options.chart.reduceXTicks = decoration.reduceXTicks;
+                    options.chart.showControls = decoration.showControls;
+                    options.chart.stacked = decoration.stacked;
+
                     options.chart.color = (decoration.color) ? decoration.color : null;
                 }
                 return options;
@@ -43,6 +46,9 @@ define([
                     decoration.reduceXTicks = options.chart.reduceXTicks;
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
                     decoration.color = options.chart.color;
+                    decoration.showControls = options.chart.showControls;
+                    decoration.stacked = options.chart.stacked;
+
                     return decoration;
                 }
             }

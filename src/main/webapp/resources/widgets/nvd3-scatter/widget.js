@@ -60,7 +60,16 @@ define([
                     getX:function(d){return d.x},
                     getY:function(d){return d.y},
                     tooltipContent: function(serie,x,y,s){
-                        return "<b>"+serie + ": </b><i>" + s.point.label+"</i>"
+                        //console.log(serie,x,y,s)
+                        return "<b>"+s.point.label + "</b>"
+                    },
+                    tooltipXContent: function(serie,x,y,s){
+                        //console.log("X",serie,x,y,s)
+                        return "<b>"+s.series.base.title+": </b>"+x
+                    },
+                    tooltipYContent: function(serie,x,y,s){
+                        //console.log("X",serie,x,y,s)
+                        return "<b>"+serie+": </b>"+y
                     }
                 },
                 serieGenerator: ScatterSerieGenerator

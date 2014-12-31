@@ -41,22 +41,24 @@ table.data thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th,
 }
 
 .table.title {
-    font-size: large;
+    font-size: inherit;
     font-weight: bold;
     text-align: center;
+    line-height: 1rem;
+    padding: 0 3rem 0.5rem;
 }
 
 .table.subtitle {
     font-size: smaller;
     font-style: italic;
     text-align: left;
-    padding-left:3rem;
-
+    line-height: 1rem;
+    padding: 0 3rem;
 }
 
 .table.caption {
-    font-size: inherit;
+    font-size: smaller;
     font-style: normal;
     text-align: right;
-    padding-right:3rem;
+    padding: 0 3rem 0.5rem;
 }

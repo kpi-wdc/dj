@@ -150,7 +150,7 @@ div .toolbar{
     font-weight: bold;
     line-height: 1rem;
     text-align: center;
-    margin:0 0 0.5rem;
+    margin:0;
 }
 
 .chartSubTitle {
@@ -158,6 +158,7 @@ div .toolbar{
     font-style: italic;
     line-height: 0.85rem;
     text-align: center;
+    padding: 0.2rem 0 1.5rem 0;
 }
 
 .chartCaption {
@@ -168,10 +169,25 @@ div .toolbar{
     text-align: center;
 }
 
-
 .nvd3 .nv-groups .nv-point {
-    stroke-opacity: 0.5 !important;
-    stroke-width: 3px;
+    stroke-opacity: 0.7 !important;
+    stroke-width: 1px;
+}
+
+.nv-axis .tick text{
+    font: normal x-small Arial;
+}
+
+.nv-axisMaxMin text{
+    font: bold x-small Arial;
+}
+
+.nv-group text{
+    font: bold x-small Arial;
+}
+
+.nv-label text{
+    font: bold x-small Arial;
 }
 
 .left-align {
@@ -184,4 +200,40 @@ div .toolbar{
 
 .center-align {
     text-align: center;
+}
+
+div.xy-tooltip{
+   font-size:smaller;
+    /*background: rgba(255, 255, 191, 0.85);*/
+}
+
+.xy-tooltip table thead tr th{
+    font-size:smaller;
+}
+
+.xy-tooltip table tbody tr td{
+    font-size:smaller;
+}
+
+.nvtooltip .x-nvtooltip{
+    font-size:smaller;
+    padding:0.1rem 0.2rem 0.1rem 0.2rem;
+}
+
+.nvtooltip .y-nvtooltip{
+    font-size:smaller;
+    padding:0.1rem 0.2rem 0.1rem 0.2rem;
+}
+
+.xy-tooltip h3 {
+    font-size:smaller;
+    font-weight: bold;
+    line-height: 1rem;
+    padding:0.1rem 0.2rem 0.1rem 0.2rem;
+}
+
+.xy-tooltip p {
+    font-size:smaller;
+    line-height: 1rem;
+    padding:0.1rem 0.2rem 0.1rem 0.2rem;
 }

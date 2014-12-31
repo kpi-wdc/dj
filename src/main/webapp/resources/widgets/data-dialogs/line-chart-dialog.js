@@ -248,47 +248,47 @@ define(["angular",
                     },
 
                     sortTable: function(header, item){
-                      if(item){
-                          this.table.body.sort(function(a,b){
-                              var result;
-                              if(angular.isNumber(a.values[item.label])){
-                                  result = a.values[item.label]- b.values[item.label]
-                              }
-                              if(angular.isString(a.label)){
-                                  result = (a.values[item.label] < b.values[item.label])? -1: 1
-                              }
-                              if (item.order == "Z-A"){
-                                  result = -result;
-                              }
-                              return result;
-                          })
-
-                      }else{
-                          this.table.body.sort(function(a,b){
-                              var result;
-                              if(angular.isNumber(a[header.coordX])){
-                                  result = a[header.coordX]-b[header.coordX]
-                              }
-                              if(angular.isString(a[header.coordX])){
-                                  result = (a[header.coordX] < b[header.coordX]) ? -1 : 1
-                              }
-                              if (header.order == "Z-A"){
-                                  result = -result;
-                              }
-                              return result;
-                          })
-                      }
-
+                      //if(item){
+                    //      this.table.body.sort(function(a,b){
+                    //          var result;
+                    //          if(angular.isNumber(a.values[item.label])){
+                    //              result = a.values[item.label]- b.values[item.label]
+                    //          }
+                    //          if(angular.isString(a.label)){
+                    //              result = (a.values[item.label] < b.values[item.label])? -1: 1
+                    //          }
+                    //          if (item.order == "Z-A"){
+                    //              result = -result;
+                    //          }
+                    //          return result;
+                    //      })
+                    //
+                    //  }else{
+                    //      this.table.body.sort(function(a,b){
+                    //          var result;
+                    //          if(angular.isNumber(a[header.coordX])){
+                    //              result = a[header.coordX]-b[header.coordX]
+                    //          }
+                    //          if(angular.isString(a[header.coordX])){
+                    //              result = (a[header.coordX] < b[header.coordX]) ? -1 : 1
+                    //          }
+                    //          if (header.order == "Z-A"){
+                    //              result = -result;
+                    //          }
+                    //          return result;
+                    //      })
+                    //  }
+                    //
                     },
 
                     changeOrder: function(header,item){
-                        if(item){
-                            item.order = (item.order == "A-Z")? "Z-A" : "A-Z";
-                            TableGenerator.sortTable(this.table)
-                        }else{
-                            header.order = (header.order == "A-Z")? "Z-A" : "A-Z";
-                            TableGenerator.sortTable(this.table)
-                        }
+                        //if(item){
+                        //    item.order = (item.order == "A-Z")? "Z-A" : "A-Z";
+                        //    TableGenerator.sortTable(this.table)
+                        //}else{
+                        //    header.order = (header.order == "A-Z")? "Z-A" : "A-Z";
+                        //    TableGenerator.sortTable(this.table)
+                        //}
 
                     },
 
@@ -311,7 +311,7 @@ define(["angular",
                                 header.coordX = undefined;
                                 item.coordX = true;
                                 item.order = "A-Z";
-                                TableGenerator.sortTable(this.table)
+                                //TableGenerator.sortTable(this.table)
                                 this.setState(4);
                                 //console.log("H>F",header,item)
                                 return;
@@ -324,7 +324,7 @@ define(["angular",
                                 if(old) old.coordX = undefined;
                                 item.coordX = true;
                                 item.order = "A-Z";
-                                TableGenerator.sortTable(this.table)
+                                //TableGenerator.sortTable(this.table)
                                 this.setState(4);
                                 //console.log("F>F",header,item)
                                 return;
@@ -339,7 +339,7 @@ define(["angular",
                             if(old)old.coordX = undefined;
                             header.coordX = rowField;
                             header.order = "A-Z";
-                            TableGenerator.sortTable(this.table)
+                            //TableGenerator.sortTable(this.table)
                             this.setState(4);
                             //console.log("F>H",header,item)
                             return;
