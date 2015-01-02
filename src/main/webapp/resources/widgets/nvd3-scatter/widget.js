@@ -28,6 +28,7 @@ define([
                     options.chart.reduceXTicks = decoration.reduceXTicks;
                     options.chart.isArea = decoration.isArea;
                     options.chart.color = (decoration.color) ? decoration.color : null;
+                    options.chart.scatter.label = (decoration.showLabels) ? function(d){return d.label} : undefined;
                 }
                 return options;
             }
@@ -46,12 +47,14 @@ define([
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
                     decoration.isArea = options.chart.isArea;
                     decoration.color = options.chart.color;
+                    decoration.showLabels = angular.isDefined(options.chart.scatter.label);
                     return decoration;
                 }
             }
         });
 
         m.controller('Nvd3ScatterChartCtrl',function($scope,LineChartDialog,NVD3ScatterAdapter,NVD3Widget,  ScatterSerieGenerator){
+            console.log($scope)
             new NVD3Widget($scope,{
                 dialog: LineChartDialog,
                 decorationAdapter: NVD3ScatterAdapter,
@@ -59,6 +62,8 @@ define([
                 serieAdapter:{
                     getX:function(d){return d.x},
                     getY:function(d){return d.y},
+                    //getLabel:function(d){return d.label},
+
                     tooltipContent: function(serie,x,y,s){
                         //console.log(serie,x,y,s)
                         return "<b>"+s.point.label + "</b>"

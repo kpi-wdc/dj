@@ -744,15 +744,15 @@
           "type" : "nvd3-pie",
           "instanceName" : "xu85oukrbt6v42t9",
           "decoration" : {
-            "height" : 150,
+            "height" : 350,
             "title" : "Write Your Title",
             "subtitle" : "Write Your Subtitle",
             "caption" : "Figure 1. Write Your Caption text.",
             "donut" : true,
-            "donutRatio" : 0.2,
+            "donutRatio" : 0.7,
             "labelsOutside" : true,
             "valueAsLabel" : true,
-            "color" : [ "#081d58", "#253494", "#225ea8", "#1d91c0", "#41b6c4", "#7fcdbb", "#c7e9b4", "#edf8b1", "#ffffd9" ]
+            "color" : [ "#b15928", "#ffff99", "#6a3d9a", "#cab2d6", "#ff7f00", "#fdbf6f", "#e31a1c", "#fb9a99", "#33a02c", "#b2df8a", "#1f78b4", "#a6cee3" ]
           },
           "datasource" : "source",
           "data" : {
@@ -864,7 +864,7 @@
           "type" : "nvd3-line",
           "instanceName" : "zeql8iggk25oecdi",
           "decoration" : {
-            "height" : 150,
+            "height" : 550,
             "title" : "Write Your Title",
             "subtitle" : "Write Your Subtitle",
             "caption" : "Figure 1. Write Your Caption text.",
@@ -872,7 +872,8 @@
             "yAxisName" : "",
             "staggerLabels" : false,
             "color" : [ "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928" ],
-            "isArea" : false
+            "isArea" : false,
+            "showLabels" : true
           },
           "data" : {
             "url" : "http://localhost:8080/data/oecd-canada.json",
@@ -1080,14 +1081,15 @@
           "type" : "nvd3-stacked-area",
           "instanceName" : "cmbbtdx83gd86w29",
           "decoration" : {
-            "height" : 150,
+            "height" : 350,
             "title" : "Write Your Title",
             "subtitle" : "Write Your Subtitle",
             "caption" : "Figure 1. Write Your Caption text.",
             "xAxisName" : null,
             "yAxisName" : null,
             "staggerLabels" : false,
-            "color" : [ "#081d58", "#253494", "#225ea8", "#1d91c0", "#41b6c4", "#7fcdbb", "#c7e9b4", "#edf8b1", "#ffffd9" ]
+            "color" : [ "#081d58", "#253494", "#225ea8", "#1d91c0", "#41b6c4", "#7fcdbb", "#c7e9b4", "#edf8b1", "#ffffd9" ],
+            "showLabels" : true
           },
           "datasource" : "source",
           "data" : {
@@ -1203,7 +1205,8 @@
             "xAxisName" : "X Axis",
             "yAxisName" : "Y Axis",
             "staggerLabels" : false,
-            "color" : [ "#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2" ]
+            "color" : [ "#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2" ],
+            "showLabels" : true
           },
           "datasource" : "source",
           "data" : {
@@ -1931,6 +1934,110 @@
           "url" : "http://localhost:8080/data/wdc.json",
           "type" : "datasource",
           "instanceName" : "x8kgey22slbu766r"
+        }, {
+          "type" : "nvd3-scatter",
+          "instanceName" : "3hik2dkozjda38fr",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "X Axis",
+            "yAxisName" : "Y Axis",
+            "staggerLabels" : false,
+            "showLabels" : true
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "all countries",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                },
+                "Security of Life Component" : {
+                  "label" : "Security of Life Component",
+                  "title" : "Security of Life Component"
+                },
+                "Harmonization degree" : {
+                  "label" : "Harmonization degree",
+                  "title" : "Harmonization degree",
+                  "coordX" : true,
+                  "order" : "A-Z"
+                },
+                "Index of sustainable development" : {
+                  "label" : "Index of sustainable development",
+                  "title" : "Index of sustainable development"
+                }
+              }
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              }, {
+                "id" : "5",
+                "index" : "4",
+                "label" : "Australia"
+              }, {
+                "id" : "2",
+                "index" : "1",
+                "label" : "Algeria"
+              }, {
+                "id" : "6",
+                "index" : "5",
+                "label" : "Austria"
+              }, {
+                "id" : "3",
+                "index" : "2",
+                "label" : "Armenia"
+              }, {
+                "id" : "7",
+                "index" : "6",
+                "label" : "Azerbaijan"
+              }, {
+                "id" : "4",
+                "index" : "3",
+                "label" : "Argentina"
+              }, {
+                "id" : "8",
+                "index" : "7",
+                "label" : "Bangladesh"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              }, {
+                "id" : "Csl",
+                "index" : "1",
+                "label" : "Security of Life Component"
+              }, {
+                "id" : "G",
+                "index" : "2",
+                "label" : "Harmonization degree"
+              }, {
+                "id" : "Isd",
+                "index" : "6",
+                "label" : "Index of sustainable development"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
         } ]
       },
       "topleft" : {
@@ -1951,6 +2058,11 @@
     }, {
       "emitter" : "obkftpaumm6xbt9",
       "receiver" : "ti33cfvz6vj10pb9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "3hik2dkozjda38fr",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]

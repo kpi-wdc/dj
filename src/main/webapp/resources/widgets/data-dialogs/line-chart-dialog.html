@@ -327,12 +327,15 @@
                                 </a>
                             </li>
                         </ul>
-                        <button class="button tiny left" style="margin:0 0 0 0.785rem" ng-click="dialog.inverseColor(dialog.conf.decoration.color)">Inverse Palette</button>
+                        <button class="button toolbar radius left" style="margin:0 0 0 0.785rem; font-size:smaller;" ng-click="dialog.inverseColor(dialog.conf.decoration.color)">Inverse Palette</button>
 
                     </div>
                 </label>
             </div>
+        </div>
 
+        <h5>Point Options</h5>
+        <div class="row border">
             <div class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">
                 <label class="left">Show Line Area: &nbsp;&nbsp; </label>
                 <div class="switch tiny">
@@ -341,8 +344,17 @@
                            ng-model="dialog.conf.decoration.isArea">
                     <label for="showLineAreaCheckbox"></label>
                 </div>
+                <br/>
+                <label class="left">Show Point Labels: &nbsp;&nbsp; </label>
+                <div class="switch tiny">
+                    <input type="checkbox"
+                           id="showLabelsCheckbox"
+                           ng-model="dialog.conf.decoration.showLabels">
+                    <label for="showLabelsCheckbox"></label>
+                </div>
             </div>
         </div>
+
         <h5>Titles</h5>
         <div class="row border">
             <label>Title

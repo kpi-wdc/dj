@@ -170,8 +170,18 @@ div .toolbar{
 }
 
 .nvd3 .nv-groups .nv-point {
-    stroke-opacity: 0.7 !important;
+    stroke-opacity: 0.7;
     stroke-width: 1px;
+}
+
+.nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+
+.nvd3.nv-stackedarea .nv-groups .nv-point {
+    stroke-opacity: 1;
+    fill-opacity: 1;
 }
 
 .nv-axis .tick text{
@@ -183,11 +193,29 @@ div .toolbar{
 }
 
 .nv-group text{
+    fill-opacity: 1;
     font: bold x-small Arial;
+    stroke-opacity:0;
+}
+.nvd3 .nv-groups .nv-group text.nv-label{
+    fill-opacity: 1;
+    font: bold x-small Arial;
+    stroke-opacity:0;
+}
+
+.nv-point text{
+    font: bold small Arial;
 }
 
 .nv-label text{
+    fill-opacity: 1;
     font: bold x-small Arial;
+    stroke-opacity:0;
+}
+
+.nv-group-labels text {
+    font:bold x-small Arial;
+    color:#000000;
 }
 
 .left-align {

@@ -27,9 +27,13 @@ define([
                     options.chart.reduceXTicks = decoration.reduceXTicks;
                     options.chart.isArea = decoration.isArea;
                     options.chart.color = (decoration.color) ? decoration.color : null;
+
+                    options.chart.label = (decoration.showLabels) ? function(d){return d.y.toFixed(2)} : undefined;
+
                 }
                 return options;
             }
+
             this.getDecoration = function (options){
                 if(angular.isDefined(options)) {
                     var decoration = {}
@@ -44,6 +48,7 @@ define([
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
                     decoration.isArea = options.chart.isArea;
                     decoration.color = options.chart.color;
+                    decoration.showLabels = angular.isDefined(options.chart.label);
                     return decoration;
                 }
             }

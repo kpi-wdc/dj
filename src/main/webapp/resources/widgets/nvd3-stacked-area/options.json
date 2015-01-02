@@ -8,6 +8,8 @@
       "bottom": 60,
       "left": 40
     },
+
+    "stacked":{},
     "useVoronoi": false,
     "clipEdge": true,
     "transitionDuration": 500,

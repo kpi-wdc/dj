@@ -2,6 +2,7 @@ require.config({
     paths: {
         'd3': '/components/d3/d3',
         'nv.d3': '/components/nvd3/nv.d3',
+        'nv.d3.ext':'/widgets/nvd3-widget/nv.d3.ext',
         'angular-nvd3': '/components/angular-nvd3/dist/angular-nvd3'
     },
     shim: {
@@ -12,8 +13,12 @@ require.config({
             exports: 'nv',
             deps: ['d3']
         },
-    'angular-nvd3': {
+        'nv.d3.ext': {
+            exports: 'nv',
             deps: ['nv.d3']
+        },
+    'angular-nvd3': {
+            deps: ['nv.d3.ext']
         }
     }
 });
@@ -77,6 +82,19 @@ define([
 
                             $scope.options.chart.x = params.serieAdapter.getX;
                             $scope.options.chart.y = params.serieAdapter.getY;
+                            $scope.options.chart.label = params.serieAdapter.getLabel;
+
+                            if($scope.options.chart.scatter) {
+                                $scope.options.chart.scatter.label = params.serieAdapter.getLabel;
+                            }
+                            if($scope.options.chart.lines) {
+                                $scope.options.chart.lines.label = params.serieAdapter.getLabel;
+                            }
+                            if($scope.options.chart.stacked) {
+                                $scope.options.chart.stacked.label = params.serieAdapter.getLabel;
+                            }
+
+
                             //$scope.options.chart.tooltipContent = params.serieAdapter.tooltipContent;
 
                             if($scope.widget.decoration) {
