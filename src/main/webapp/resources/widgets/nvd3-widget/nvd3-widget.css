@@ -265,3 +265,15 @@ div.xy-tooltip{
     line-height: 1rem;
     padding:0.1rem 0.2rem 0.1rem 0.2rem;
 }
+
+
+
+.nvd3.nv-radar .nvd3.nv-scatter .nv-groups .nv-point {
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+
+.nvd3 .nv-groups path.nv-radar {
+    fill: none;
+    stroke-width: 1.5px;
+}

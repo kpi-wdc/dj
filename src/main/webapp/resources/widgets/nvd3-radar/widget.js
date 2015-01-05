@@ -49,20 +49,56 @@ define([
             $scope.options = {
                 "chart": {
                     "type": "radarChart",
-                    "height": 450
-                }}
+                    "height": 450,
+                    "isArea": true,
+                    "lines" :{
+                        "label": function(d,i){return d.value},
+                        "grid":true,
+                        "axisLabel":true,
+                        "tickLabel":true,
+                        "ticks":15
+                    },
+                    color:['#aa0000','#00aa00','#0000aa']
+                }
+            }
+
             $scope.series = [{
                 key:"First Serie",
-                values:[{label:"L1", value:20},{label:"L2", value:20},{label:"L3", value:20}]
-            },{
-                key:"Serie",
-                values:[{label:"L1", value:2},{label:"L2", value:50},{label:"L3", value:10}]
+                values:[
+                    {label:"Label 1", value:20},
+                    {label:"L2", value:20},
+                    {label:"L3", value:10},
+                    {label:"L4", value:20},
+                    {label:"Label 5", value:10},
+                    {label:"L6", value:20},
+                    {label:"L7", value:15}
+                ]
+            },
+                {
+                    key:"Serie 1",
+                    values:[
+                        {label:"Label 1", value:5},
+                        {label:"L2", value:8},
+                        {label:"L3", value:1},
+                        {label:"L4", value:15},
+                        {label:"Label 5", value:7},
+                        {label:"L6", value:10},
+                        {label:"L7", value:4}
+                    ]
+                },{
+                key:"Serie 2",
+                values:[
+                    {label:"Label 1", value:2},
+                    {label:"L2", value:3},
+                    {label:"L3", value:4},
+                    {label:"L4", value:5},
+                    {label:"Label 5", value:6},
+                    {label:"L6", value:7},
+                    {label:"L7", value:8}
+                ]
             }]
 
-
         });
-
-
 
 
             //,BarChartDialog,NVD3RadarAdapter,NVD3Widget){
