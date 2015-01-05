@@ -1462,7 +1462,8 @@
                 gEnter.append('g').attr('class', 'nv-scatterWrap');
                 gEnter.append('g').attr('class', 'nv-grid');
                 var mt = margin.top+20;
-                wrap.attr('transform', 'translate(' + margin.left + ',' + mt + ')');
+                var ml = availableWidth/2;
+                wrap.attr('transform', 'translate(' + ml + ',' + mt + ')');
 
                 //------------------------------------------------------------
 
@@ -1480,7 +1481,7 @@
                     .height(radius)
                     //.xScale(scales)
                     //.yScale(scales)
-                    .useVoronoi(false)
+                    //.useVoronoi(false)
 
                 var scatterWrap = wrap.select('.nv-scatterWrap');
                 //.datum(data); // Data automatically trickles down from the wrap
@@ -1523,7 +1524,8 @@
                 groups
                     .transition()
                     .style('stroke-opacity', 1)
-                    .style('fill-opacity', .5);
+                    .style('fill-opacity', .3);
+
 
 
 
@@ -1573,6 +1575,7 @@
 
                 linePaths
                     .transition()
+                    .style('stroke-width', '2px')
                     .attr('d',
                     d3.svg.line()
                         .interpolate("linear-closed")
@@ -1733,7 +1736,7 @@
                         .attr('dy', '-0.2em')
                         .classed('nv-label', true)
                         .text(function (d, i) {
-                            return d.value.toFixed(1)
+                            return d.value.toFixed(2)
                         });
 
                     gridLevels.style("stroke", "none")
@@ -1754,7 +1757,7 @@
                         })
                         .attr('dy', '-0.2em')
                         .text(function (d, i) {
-                            return d.value.toFixed(1)
+                            return d.value.toFixed(2)
                         });
                 }
 
@@ -2001,6 +2004,7 @@
             , dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState')
             , transitionDuration = 250
             , tickCount = 5
+            , tooltipShift = {x:0,y:0}
 
             ;
 
@@ -2020,16 +2024,19 @@
         //------------------------------------------------------------
 
         var showTooltip = function(e, offsetElement) {
+            //console.log("ShowTooltip", e,offsetElement.offsetLeft,offsetElement.offsetTop)
             var left = e.pos[0] + ( offsetElement.offsetLeft || 0 ),
                 top = e.pos[1] + ( offsetElement.offsetTop || 0),
+
                 x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
                 y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
                 content = tooltip(e.series.key, x, y, e, chart);
-
-            nv.tooltip.show([left, top], content, null, null, offsetElement);
+            console.log(e,left,offsetElement.offsetLeft,top,offsetElement.offsetTop, tooltipShift , margin);
+            nv.tooltip.show([left+tooltipShift.x/2-margin.left, top+tooltipShift.y-margin.top-50], content, null, null, offsetElement);
         };
 
         //============================================================
+
 
 
         function chart(selection) {
@@ -2182,6 +2189,8 @@
                 //console.log(availableWidth,availableHeight)
 
                 var radius = Math.min(availableWidth,availableHeight);
+                tooltipShift.x  = availableWidth/2;
+                tooltipShift.y  = availableHeight/2;
 
                 lines
                     //.width(availableWidth)
@@ -2296,7 +2305,11 @@
                 });
 
                 dispatch.on('tooltipShow', function(e) {
-                    if (tooltips) showTooltip(e, that.parentNode);
+                    if (tooltips) {
+                        //console.log(e,tooltipShift,margin);
+                        //e.pos = [e.pos[0] +  tooltipShift + margin.left, e.pos[1] + margin.top]
+                        showTooltip(e, that.parentNode);
+                    }
                 });
 
 
@@ -2342,6 +2355,9 @@
 
         lines.dispatch.on('elementMouseover.tooltip', function(e) {
             e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+            ////e.pos = [e.pos[0] +  tooltipShift - margin.left, e.pos[1] + margin.top];
+            ////console.log(margin,tooltipShift)
+            //e.pos = [e.pos[0], e.pos[1] - margin.top];
             dispatch.tooltipShow(e);
         });
 

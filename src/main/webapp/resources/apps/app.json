@@ -1935,40 +1935,112 @@
           "type" : "datasource",
           "instanceName" : "x8kgey22slbu766r"
         }, {
-          "type" : "nvd3-line",
-          "instanceName" : "sep3uv7vwezh0k9",
+          "type" : "nvd3-radar",
+          "instanceName" : "uldwh79oi3tedn29",
           "decoration" : {
             "height" : 450,
             "title" : "Write Your Title",
             "subtitle" : "Write Your Subtitle",
             "caption" : "Figure 1. Write Your Caption text.",
-            "xAxisName" : "",
-            "yAxisName" : "",
-            "staggerLabels" : false,
-            "showLabels" : false
+            "isArea" : true,
+            "color" : [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666" ],
+            "showLabels" : false,
+            "ticks" : 5,
+            "tickLabel" : true,
+            "grid" : true,
+            "axisLabel" : true
           },
           "datasource" : "x8kgey22slbu766r",
           "data" : {
             "url" : "http://localhost:8080/data/wdc.json",
-            "header" : {
-              "label" : "2005 - 2013",
-              "body" : {
-                "Albania" : {
-                  "label" : "Albania",
-                  "title" : "Albania"
-                }
-              },
-              "coordX" : "label",
-              "order" : "A-Z"
-            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "88",
+                "index" : "86",
+                "label" : "Ukraine"
+              }, {
+                "id" : "74",
+                "index" : "73",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "32",
+                "index" : "31",
+                "label" : "Finland"
+              }, {
+                "id" : "35",
+                "index" : "34",
+                "label" : "Germany"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              }, {
+                "id" : "Iec",
+                "index" : "4",
+                "label" : "Index of economic dimension"
+              }, {
+                "id" : "Is",
+                "index" : "5",
+                "label" : "Index of social and institutional dimension"
+              }, {
+                "id" : "Ie",
+                "index" : "3",
+                "label" : "Index of environmental dimension"
+              }, {
+                "id" : "Isd",
+                "index" : "6",
+                "label" : "Index of sustainable development"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-radar",
+          "instanceName" : "v3x9z5fnme9g4x6r",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "isArea" : true,
+            "showLabels" : false,
+            "ticks" : 5,
+            "tickLabel" : true,
+            "grid" : true,
+            "axisLabel" : true,
+            "color" : [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666" ]
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
             "selectedDataset" : "four",
             "selection" : [ {
               "collection" : [ {
                 "id" : "1",
                 "index" : "0",
                 "label" : "Albania"
+              }, {
+                "id" : "36",
+                "index" : "35",
+                "label" : "Greece"
+              }, {
+                "id" : "34",
+                "index" : "33",
+                "label" : "Georgia"
               } ],
-              "role" : "Columns"
+              "role" : "Rows"
             }, {
               "collection" : [ {
                 "id" : "2005",
@@ -2007,20 +2079,17 @@
                 "index" : "8",
                 "label" : "2013"
               } ],
-              "role" : "Rows"
+              "role" : "Columns"
             }, {
               "collection" : [ {
-                "id" : "Cql",
-                "index" : "0",
-                "label" : "Quality of Life Component"
+                "id" : "Iec",
+                "index" : "4",
+                "label" : "Index of economic dimension"
               } ],
               "role" : "Fix Value"
             } ],
             "standalone" : false
           }
-        }, {
-          "type" : "nvd3-radar",
-          "instanceName" : "uakxnt330yagiudi"
         } ]
       },
       "topleft" : {
@@ -2034,18 +2103,13 @@
       }
     },
     "subscriptions" : [ {
-      "emitter" : "obkftpaumm6xbt9",
-      "receiver" : "52eovkazvbgctyb9",
-      "signal" : "loadDataSuccess",
-      "slot" : "setDataProvider"
-    }, {
-      "emitter" : "obkftpaumm6xbt9",
-      "receiver" : "ti33cfvz6vj10pb9",
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "uldwh79oi3tedn29",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     }, {
       "emitter" : "x8kgey22slbu766r",
-      "receiver" : "sep3uv7vwezh0k9",
+      "receiver" : "v3x9z5fnme9g4x6r",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]

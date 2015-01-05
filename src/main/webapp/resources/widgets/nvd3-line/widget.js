@@ -31,6 +31,9 @@ define([
 
                     options.chart.lines.label = (decoration.showLabels) ? function(d){return d.y.toFixed(2)} : undefined;
 
+
+
+
                 }
                 return options;
             }

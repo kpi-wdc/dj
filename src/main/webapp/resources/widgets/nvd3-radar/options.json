@@ -2,102 +2,25 @@
   "chart": {
     "type": "radarChart",
     "height": 450,
-    "width":450,
+    "isArea":true,
     "margin": {
       "top": 20,
-      "right": 20,
-      "bottom": 60,
-      "left": 45
+      "right": 10,
+      "bottom": 40,
+      "left": 0
     },
-    "clipEdge": true,
-    "staggerLabels": false,
-    "transitionDuration": 500,
-    "stacked": false,
-    "xAxis": {
-      "axisLabel": "",
-      "showMaxMin": false,
-      "orient": "bottom",
-      "tickValues": null,
-      "tickSubdivide": 0,
-      "tickSize": 6,
-      "tickPadding": 7,
-      "domain": [
-        0,
-        1
-      ],
-      "range": [
-        0,
-        1
-      ],
-      "margin": {
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "width": 75,
-      "ticks": null,
-      "height": 60,
-      "highlightZero": true,
-      "rotateYLabel": true,
-      "rotateLabels": 0,
-      "staggerLabels": false,
-      "axisLabelDistance": 12
-    },
-    "yAxis": {
-      "axisLabel": "",
-      "axisLabelDistance": 40,
-      "orient": "left",
-      "tickValues": null,
-      "tickSubdivide": 0,
-      "tickSize": 6,
-      "tickPadding": 3,
-      "domain": [
-        0,
-        1
-      ],
-      "range": [
-        0,
-        1
-      ],
-      "margin": {
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "width": 75,
-      "ticks": null,
-      "height": 60,
-      "showMaxMin": true,
-      "highlightZero": true,
-      "rotateYLabel": true,
-      "rotateLabels": 0,
-      "staggerLabels": false
-    },
+    "useInteractiveGuideline": false,
     "dispatch": {},
-    "multibar": {
-      "dispatch": {},
-      "margin": {
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
+    "lines": {
+      "grid": true,
+      "axisLabel": true,
+      "tickLabel": true,
+      "ticks": 5,
+      "id": 4339,
+      "clipVoronoi": true,
+      "useVoronoi": true,
+      "interactive": true
       },
-      "width": 960,
-      "height": 500,
-      "forceY": [
-        0
-      ],
-      "stacked": false,
-      "stackOffset": "zero",
-      "clipEdge": true,
-      "barColor": null,
-      "id": 9113,
-      "hideable": false,
-      "delay": 1200,
-      "groupSpacing": 0.1
-    },
     "legend": {
       "dispatch": {},
       "margin": {
@@ -106,40 +29,38 @@
         "bottom": 5,
         "left": 0
       },
-      "width": 400,
-      "height": 20,
       "align": true,
       "rightAlign": true,
       "updateState": true,
       "radioButtonMode": false
     },
-    "forceY": [
-      0
-    ],
-    "id": 9113,
-    "stackOffset": "zero",
-    "delay": 1200,
-    "barColor": null,
-    "groupSpacing": 0.1,
-    "width": null,
-    "showControls": true,
+    "interactiveLayer": {
+      "dispatch": {},
+      "margin": {
+        "left": 55,
+        "top": 30
+      },
+      "width": null,
+      "height": null,
+      "showGuideLine": true,
+      "svgContainer": null
+    },
+    "clipVoronoi": true,
+    "useVoronoi": true,
+    "interactive": true,
+    "id": 4339,
     "showLegend": true,
-    "showXAxis": true,
-    "showYAxis": true,
-    "rightAlignYAxis": false,
-    "reduceXTicks": false,
-    "rotateLabels": 0,
     "tooltips": true,
     "state": {
-      "stacked": false,
       "disabled": [
-        false,
-        false,
+        true,
+        true,
         false
       ]
     },
     "defaultState": null,
-    "noData": "No Data Available."
+    "noData": "No Data Available.",
+    "transitionDuration": 250
   },
   "title": {
     "enable": true,
@@ -153,12 +74,12 @@
   "subtitle": {
     "enable": true,
     "text": "Write Your Subtitle",
-    "class":"chartSubTitle"
+    "class": "chartSubTitle"
   },
   "caption": {
     "enable": true,
     "text": "Figure 1. Write Your Caption text.",
-    "class":"chartCaption"
+    "class": "chartCaption"
   },
   "styles": {
     "classes": {

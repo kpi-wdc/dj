@@ -76,12 +76,20 @@ define([
                     $http.get(params.optionsURL).success(
                         function (data) {
                             $scope.options = data;
+
                             for(var i in params.serieAdapter ){
                                 $scope.options.chart[i] = params.serieAdapter[i];
                             }
 
-                            $scope.options.chart.x = params.serieAdapter.getX;
-                            $scope.options.chart.y = params.serieAdapter.getY;
+
+                            if(params.serieAdapter.getX) {
+                                $scope.options.chart.x = params.serieAdapter.getX;
+                            }
+
+                            if(params.serieAdapter.getY) {
+                                $scope.options.chart.y = params.serieAdapter.getY;
+                            }
+
                             $scope.options.chart.label = params.serieAdapter.getLabel;
 
                             if($scope.options.chart.scatter) {
