@@ -16,7 +16,7 @@
       "axisLabel": true,
       "tickLabel": true,
       "ticks": 5,
-      "id": 4339,
+
       "clipVoronoi": true,
       "useVoronoi": true,
       "interactive": true
@@ -48,7 +48,7 @@
     "clipVoronoi": true,
     "useVoronoi": true,
     "interactive": true,
-    "id": 4339,
+
     "showLegend": true,
     "tooltips": true,
     "state": {

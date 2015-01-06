@@ -473,7 +473,8 @@
             "xAxisName" : "",
             "yAxisName" : "",
             "staggerLabels" : false,
-            "isArea" : true
+            "isArea" : true,
+            "showLabels" : true
           },
           "datasource" : "k54s54r0usg7gb9",
           "data" : {
@@ -615,6 +616,69 @@
             } ],
             "standalone" : false
           }
+        }, {
+          "type" : "nvd3-radar",
+          "instanceName" : "k88yv1e5fb1hh0k9",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "isArea" : true,
+            "showLabels" : false,
+            "ticks" : 5,
+            "tickLabel" : true,
+            "grid" : true,
+            "axisLabel" : true
+          },
+          "datasource" : "k54s54r0usg7gb9",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "74",
+                "index" : "73",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "88",
+                "index" : "86",
+                "label" : "Ukraine"
+              }, {
+                "id" : "34",
+                "index" : "33",
+                "label" : "Georgia"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              }, {
+                "id" : "Csl",
+                "index" : "1",
+                "label" : "Security of Life Component"
+              }, {
+                "id" : "G",
+                "index" : "2",
+                "label" : "Harmonization degree"
+              }, {
+                "id" : "Isd",
+                "index" : "6",
+                "label" : "Index of sustainable development"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
         } ]
       }
     },
@@ -641,6 +705,11 @@
     }, {
       "emitter" : "k54s54r0usg7gb9",
       "receiver" : "exoyuzkkrge6d2t9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "k54s54r0usg7gb9",
+      "receiver" : "k88yv1e5fb1hh0k9",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]
@@ -1936,82 +2005,10 @@
           "instanceName" : "x8kgey22slbu766r"
         }, {
           "type" : "nvd3-radar",
-          "instanceName" : "uldwh79oi3tedn29",
-          "decoration" : {
-            "height" : 450,
-            "title" : "Write Your Title",
-            "subtitle" : "Write Your Subtitle",
-            "caption" : "Figure 1. Write Your Caption text.",
-            "isArea" : true,
-            "color" : [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666" ],
-            "showLabels" : false,
-            "ticks" : 5,
-            "tickLabel" : true,
-            "grid" : true,
-            "axisLabel" : true
-          },
-          "datasource" : "x8kgey22slbu766r",
-          "data" : {
-            "url" : "http://localhost:8080/data/wdc.json",
-            "selectedDataset" : "four",
-            "selection" : [ {
-              "collection" : [ {
-                "id" : "88",
-                "index" : "86",
-                "label" : "Ukraine"
-              }, {
-                "id" : "74",
-                "index" : "73",
-                "label" : "Russian Federation"
-              }, {
-                "id" : "32",
-                "index" : "31",
-                "label" : "Finland"
-              }, {
-                "id" : "35",
-                "index" : "34",
-                "label" : "Germany"
-              } ],
-              "role" : "Rows"
-            }, {
-              "collection" : [ {
-                "id" : "2013",
-                "index" : "8",
-                "label" : "2013"
-              } ],
-              "role" : "Fix Value"
-            }, {
-              "collection" : [ {
-                "id" : "Cql",
-                "index" : "0",
-                "label" : "Quality of Life Component"
-              }, {
-                "id" : "Iec",
-                "index" : "4",
-                "label" : "Index of economic dimension"
-              }, {
-                "id" : "Is",
-                "index" : "5",
-                "label" : "Index of social and institutional dimension"
-              }, {
-                "id" : "Ie",
-                "index" : "3",
-                "label" : "Index of environmental dimension"
-              }, {
-                "id" : "Isd",
-                "index" : "6",
-                "label" : "Index of sustainable development"
-              } ],
-              "role" : "Columns"
-            } ],
-            "standalone" : false
-          }
-        }, {
-          "type" : "nvd3-radar",
           "instanceName" : "v3x9z5fnme9g4x6r",
           "decoration" : {
-            "height" : 450,
-            "title" : "Write Your Title",
+            "height" : 400,
+            "title" : "Write Your Title gfdgfdb f gfgdfgds",
             "subtitle" : "Write Your Subtitle",
             "caption" : "Figure 1. Write Your Caption text.",
             "isArea" : true,
@@ -2032,13 +2029,37 @@
                 "index" : "0",
                 "label" : "Albania"
               }, {
-                "id" : "36",
-                "index" : "35",
-                "label" : "Greece"
+                "id" : "5",
+                "index" : "4",
+                "label" : "Australia"
               }, {
-                "id" : "34",
-                "index" : "33",
-                "label" : "Georgia"
+                "id" : "9",
+                "index" : "8",
+                "label" : "Belgium"
+              }, {
+                "id" : "13",
+                "index" : "12",
+                "label" : "Botswana"
+              }, {
+                "id" : "17",
+                "index" : "16",
+                "label" : "Cameroon"
+              }, {
+                "id" : "21",
+                "index" : "20",
+                "label" : "Colombia"
+              }, {
+                "id" : "25",
+                "index" : "24",
+                "label" : "Denmark"
+              }, {
+                "id" : "29",
+                "index" : "28",
+                "label" : "El Salvador"
+              }, {
+                "id" : "33",
+                "index" : "32",
+                "label" : "France"
               } ],
               "role" : "Rows"
             }, {
@@ -2103,11 +2124,6 @@
       }
     },
     "subscriptions" : [ {
-      "emitter" : "x8kgey22slbu766r",
-      "receiver" : "uldwh79oi3tedn29",
-      "signal" : "loadDataSuccess",
-      "slot" : "setDataProvider"
-    }, {
       "emitter" : "x8kgey22slbu766r",
       "receiver" : "v3x9z5fnme9g4x6r",
       "signal" : "loadDataSuccess",

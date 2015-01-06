@@ -1424,15 +1424,15 @@
 
                 var availableWidth = width - margin.left - margin.right,
                     availableHeight = height - margin.top - margin.bottom,
-                    radius = Math.min(availableWidth,availableHeight),
+                    //radius = Math.min(availableWidth,availableHeight),
                     container = d3.select(this);
-
+                    //console.log("RADAR",availableWidth,availableHeight,radius)
                 //------------------------------------------------------------
                 // Setup Scales
 
                 scales.domain([-1,1])
 
-                console.log("SCALES",radius,scales(-1),scales(1));
+                //console.log("SCALES",radius,scales(-1),scales(1));
 
                 scatter
                     .xDomain(([-1,1]))
@@ -1462,7 +1462,7 @@
                 gEnter.append('g').attr('class', 'nv-scatterWrap');
                 gEnter.append('g').attr('class', 'nv-grid');
                 var mt = margin.top+20;
-                var ml = availableWidth/2;
+                var ml = margin.left;
                 wrap.attr('transform', 'translate(' + ml + ',' + mt + ')');
 
                 //------------------------------------------------------------
@@ -1470,18 +1470,18 @@
 
 
 
-                //scatter
-                //    .width(availableWidth)
-                //    .height(availableHeight)
+                scatter
+                    .width(availableWidth)
+                    .height(availableHeight)
                 //    //.xScale(scatter.yScale())
                 //    .useVoronoi(false)
 
-                scatter
-                    .width(radius)
-                    .height(radius)
-                    //.xScale(scales)
-                    //.yScale(scales)
-                    //.useVoronoi(false)
+                //scatter
+                //    .width(radius)
+                //    .height(radius)
+                //    //.xScale(scales)
+                //    //.yScale(scales)
+                //    //.useVoronoi(false)
 
                 var scatterWrap = wrap.select('.nv-scatterWrap');
                 //.datum(data); // Data automatically trickles down from the wrap
@@ -2017,6 +2017,49 @@
         ;
 
         //============================================================
+        function getOffset(elem) {
+            if (elem.getBoundingClientRect) {
+                // "правильный" вариант
+                return getOffsetRect(elem)
+            } else {
+                // пусть работает хоть как-то
+                return getOffsetSum(elem)
+            }
+        }
+
+        function getOffsetSum(elem) {
+            var top=0, left=0
+            while(elem) {
+                top = top + parseInt(elem.offsetTop)
+                left = left + parseInt(elem.offsetLeft)
+                elem = elem.offsetParent
+            }
+
+            return {top: top, left: left}
+        }
+
+        function getOffsetRect(elem) {
+            // (1)
+            var box = elem.getBoundingClientRect()
+
+            // (2)
+            var body = document.body
+            var docElem = document.documentElement
+
+            // (3)
+            var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
+            var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
+
+            // (4)
+            var clientTop = docElem.clientTop || body.clientTop || 0
+            var clientLeft = docElem.clientLeft || body.clientLeft || 0
+
+            // (5)
+            var top  = box.top +  scrollTop - clientTop
+            var left = box.left + scrollLeft - clientLeft
+
+            return { top: Math.round(top), left: Math.round(left) }
+        }
 
 
         //============================================================
@@ -2025,25 +2068,26 @@
 
         var showTooltip = function(e, offsetElement) {
             //console.log("ShowTooltip", e,offsetElement.offsetLeft,offsetElement.offsetTop)
-            var left = e.pos[0] + ( offsetElement.offsetLeft || 0 ),
-                top = e.pos[1] + ( offsetElement.offsetTop || 0),
+            var left = e.pos[0]// + ( offsetElement.offsetLeft || 0 ),
+                ,top = e.pos[1]// + ( offsetElement.offsetTop || 0),
 
-                x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
+                ,x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
                 y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
                 content = tooltip(e.series.key, x, y, e, chart);
-            console.log(e,left,offsetElement.offsetLeft,top,offsetElement.offsetTop, tooltipShift , margin);
-            nv.tooltip.show([left+tooltipShift.x/2-margin.left, top+tooltipShift.y-margin.top-50], content, null, null, offsetElement);
+            console.log("POS",e.pos,"SHIFT",tooltipShift,"OFFSET", getOffset( offsetElement ))
+
+            //console.log("nv.tooltip.show",e,left,offsetElement.offsetLeft,top,offsetElement.offsetTop, tooltipShift , margin);
+            nv.tooltip.show([left+tooltipShift.x, top+tooltipShift.y], content, null, null, offsetElement);
         };
 
         //============================================================
-
 
 
         function chart(selection) {
             //console.log("Chart selection",selection)
             selection.each(function(data) {
 
-                console.log("Chart each selection",data)
+                //console.log("Chart each selection",data)
 
                 //var serieCount = data.length;
                 //var serieLength = data[0].values.length;
@@ -2068,7 +2112,7 @@
                         - margin.left - margin.right,
                     availableHeight = (height || parseInt(container.style('height')) || 400)
                         - margin.top - margin.bottom;
-
+                console.log("CHART",availableWidth,availableHeight)
 
 
                 chart.update = function() { container.transition().duration(transitionDuration).call(chart) };
@@ -2136,12 +2180,14 @@
                 gEnter.append('g').attr('class', 'nv-legendWrap');
                 gEnter.append('g').attr('class', 'nv-interactive');
 
-
+                //var radius = Math.min(availableWidth,availableHeight);
+                //availableWidth -=radius/2;
                 g.select("rect")
                     .attr("width",availableWidth)
                     .attr("height",(availableHeight > 0) ? availableHeight : 0);
                 //------------------------------------------------------------
                 // Legend
+
 
                 if (showLegend) {
                     legend.width(availableWidth);
@@ -2151,7 +2197,7 @@
                         .call(legend);
 
                     if ( margin.top != legend.height()) {
-                        margin.top = legend.height()*1.5;
+                        margin.top = legend.height()+5;
                         availableHeight = (height || parseInt(container.style('height')) || 400)
                         - margin.top - margin.bottom;
                     }
@@ -2162,7 +2208,12 @@
 
                 //------------------------------------------------------------
 
-                wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                //radius = Math.min(availableWidth,availableHeight);
+                //tooltipShift.x  = availableWidth/2;
+                //tooltipShift.y  = availableHeight/2;
+
+                var ml = margin.left;
+                wrap.attr('transform', 'translate(' + ml + ',' + margin.top + ')');
 
                 if (rightAlignYAxis) {
                     g.select(".nv-y.nv-axis")
@@ -2185,12 +2236,15 @@
                     wrap.select(".nv-interactive").call(interactiveLayer);
                 }
 
+                //console.log(getOffset(this),getOffset(this.parentNode),getOffset(g));
+                //console.log("OFFSET",this.offsetTop,this.parentNode.offsetTop);
 
-                //console.log(availableWidth,availableHeight)
 
-                var radius = Math.min(availableWidth,availableHeight);
-                tooltipShift.x  = availableWidth/2;
-                tooltipShift.y  = availableHeight/2;
+                 var radius = Math.min(availableWidth,availableHeight);
+                tooltipShift.x  = this.offsetLeft + availableWidth/2 - radius/2;
+                tooltipShift.y  = getOffset(this).top + margin.top + 10;
+
+
 
                 lines
                     //.width(availableWidth)
@@ -2206,6 +2260,11 @@
                     .datum(data.filter(function(d) { return !d.disabled }))
 
                 linesWrap.transition().call(lines);
+
+
+                var lws = availableWidth/2-radius/2 ;
+                linesWrap
+                    .attr("transform", "translate(" + lws + ",0)");
 
                 //------------------------------------------------------------
 
@@ -2306,9 +2365,10 @@
 
                 dispatch.on('tooltipShow', function(e) {
                     if (tooltips) {
-                        //console.log(e,tooltipShift,margin);
+                        console.log("tooltipShow",e,tooltipShift,margin);
                         //e.pos = [e.pos[0] +  tooltipShift + margin.left, e.pos[1] + margin.top]
                         showTooltip(e, that.parentNode);
+                        //showTooltip(e, that);
                     }
                 });
 
@@ -2354,7 +2414,9 @@
         //------------------------------------------------------------
 
         lines.dispatch.on('elementMouseover.tooltip', function(e) {
-            e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+            console.log("elementMouseover.tooltip",e,tooltipShift,margin);
+
+            //e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
             ////e.pos = [e.pos[0] +  tooltipShift - margin.left, e.pos[1] + margin.top];
             ////console.log(margin,tooltipShift)
             //e.pos = [e.pos[0], e.pos[1] - margin.top];
