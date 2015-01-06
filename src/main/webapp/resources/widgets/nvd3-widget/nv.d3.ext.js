@@ -19,7 +19,7 @@
             , x            = d3.scale.linear()
             , y            = d3.scale.linear()
             , z            = d3.scale.linear() //linear because d3.svg.shape.size is treated as area
-            , getX         = function(d) { console.log(d); return d.x } // accessor to get the x value
+            , getX         = function(d) { return d.x } // accessor to get the x value
             , getY         = function(d) { return d.y } // accessor to get the y value
             , getLabel     = undefined //function(d) {return (d.label) ? d.label : ''}
             , getSize      = function(d) { return d.size || 1} // accessor to get the point size
@@ -760,6 +760,7 @@
             , dispatch     = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState')
             , noData       = "No Data Available."
             , transitionDuration = 250
+            , tooltipShift = {x:0,y:0}
             ;
 
         scatter
@@ -792,15 +793,63 @@
 
         var x0, y0;
 
+
+
+
+        function getOffset(elem) {
+            if (elem.getBoundingClientRect) {
+                // "правильный" вариант
+                return getOffsetRect(elem)
+            } else {
+                // пусть работает хоть как-то
+                return getOffsetSum(elem)
+            }
+        }
+
+        function getOffsetSum(elem) {
+            var top=0, left=0
+            while(elem) {
+                top = top + parseInt(elem.offsetTop)
+                left = left + parseInt(elem.offsetLeft)
+                elem = elem.offsetParent
+            }
+
+            return {top: top, left: left}
+        }
+
+        function getOffsetRect(elem) {
+            // (1)
+            var box = elem.getBoundingClientRect()
+
+            // (2)
+            var body = document.body
+            var docElem = document.documentElement
+
+            // (3)
+            var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
+            var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
+
+            // (4)
+            var clientTop = docElem.clientTop || body.clientTop || 0
+            var clientLeft = docElem.clientLeft || body.clientLeft || 0
+
+            // (5)
+            var top  = box.top +  scrollTop - clientTop
+            var left = box.left + scrollLeft - clientLeft
+
+            return { top: Math.round(top), left: Math.round(left) }
+        }
+
+
         var showTooltip = function(e, offsetElement) {
             //TODO: make tooltip style an option between single or dual on axes (maybe on all charts with axes?)
 
-            var left = e.pos[0] + ( offsetElement.offsetLeft || 0 ),
-                top = e.pos[1] + ( offsetElement.offsetTop || 0),
-                leftX = e.pos[0] + ( offsetElement.offsetLeft || 0 ),
-                topX = y.range()[0] + margin.top + ( offsetElement.offsetTop || 0),
-                leftY = x.range()[0] + margin.left + ( offsetElement.offsetLeft || 0 ),
-                topY = e.pos[1] + ( offsetElement.offsetTop || 0),
+            var left = e.pos[0] + tooltipShift.x,   // ( offsetElement.offsetLeft || 0 ),
+                top = e.pos[1] + tooltipShift.y,    //( offsetElement.offsetTop || 0),
+                leftX = e.pos[0] + tooltipShift.x,  //( offsetElement.offsetLeft || 0 ),
+                topX = y.range()[0] + margin.top + tooltipShift.y,   //margin.top + ( offsetElement.offsetTop || 0),
+                leftY = x.range()[0] + margin.left + tooltipShift.x,    //( offsetElement.offsetLeft || 0 ),
+                topY = e.pos[1] + tooltipShift.y -margin.top,   //( offsetElement.offsetTop || 0),
                 xVal = xAxis.tickFormat()(scatter.x()(e.point, e.pointIndex)),
                 yVal = yAxis.tickFormat()(scatter.y()(e.point, e.pointIndex));
 
@@ -923,7 +972,8 @@
 
                 //------------------------------------------------------------
 
-
+                tooltipShift.x  = this.offsetLeft;
+                tooltipShift.y  = getOffset(this).top;
                 //------------------------------------------------------------
                 // Controls
 
@@ -1410,7 +1460,6 @@
             //console.log("Selection",selection)
 
             selection.each(function(data) {
-                console.log("Lines each selection",data)
                 serieCount = data.length;
                 serieLength = data[0].values.length;
                 max = data[0].values[0].value;
@@ -1543,6 +1592,7 @@
                             .y1(function(d,i) { return y0(0) }) //assuming 0 is within y domain.. may need to tweak this
                             .apply(this, [d.values])
                     });
+
                 groups.exit().selectAll('path.nv-area')
                     .remove();
 
@@ -1558,6 +1608,10 @@
                             .y1(function(d,i) { return y0(0) }) //assuming 0 is within y domain.. may need to tweak this
                             .apply(this, [d.values])
                     });
+
+
+
+
 
 
 
@@ -1607,7 +1661,8 @@
 
                     gridLevels.style("stroke", "#000000")
                         .style("fill", "none")
-                        .style("opacity", 0.3);
+                        .style("opacity", 0.3)
+                        .style("stroke-width", "0.6px");
 
                     gridLevels.transition()
                         .attr('d',
@@ -1643,7 +1698,8 @@
 
                     gridLevels.style("stroke", "#000")
                         .style("fill", "none")
-                        .style("opacity", 0.3);
+                        .style("opacity", 0.3)
+                        .style("stroke-width", "1px");
 
 
                     gridLevels.transition()
@@ -2067,16 +2123,11 @@
         //------------------------------------------------------------
 
         var showTooltip = function(e, offsetElement) {
-            //console.log("ShowTooltip", e,offsetElement.offsetLeft,offsetElement.offsetTop)
-            var left = e.pos[0]// + ( offsetElement.offsetLeft || 0 ),
-                ,top = e.pos[1]// + ( offsetElement.offsetTop || 0),
-
+            var left = e.pos[0]
+                ,top = e.pos[1]
                 ,x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
                 y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
                 content = tooltip(e.series.key, x, y, e, chart);
-            console.log("POS",e.pos,"SHIFT",tooltipShift,"OFFSET", getOffset( offsetElement ))
-
-            //console.log("nv.tooltip.show",e,left,offsetElement.offsetLeft,top,offsetElement.offsetTop, tooltipShift , margin);
             nv.tooltip.show([left+tooltipShift.x, top+tooltipShift.y], content, null, null, offsetElement);
         };
 
@@ -2084,26 +2135,7 @@
 
 
         function chart(selection) {
-            //console.log("Chart selection",selection)
             selection.each(function(data) {
-
-                //console.log("Chart each selection",data)
-
-                //var serieCount = data.length;
-                //var serieLength = data[0].values.length;
-                //var max = data[0].values[0].value;
-                //for(var i in data){
-                //    var m = data[i].values[0].value;
-                //    m = data[i].values.reduce(function(v,item){m = Math.max(m,item.value); return m});
-                //    max = Math.max(max,m);
-                //}
-                //max+=max*0.1;
-                //
-                //lines
-                //    .setMax(max)
-                //    .setSerieCount(serieCount)
-                //    .setSerieLength(serieLength)
-                //    .setGridData(getGridData(serieLength, max));
 
                 var container = d3.select(this),
                     that = this;
@@ -2112,7 +2144,6 @@
                         - margin.left - margin.right,
                     availableHeight = (height || parseInt(container.style('height')) || 400)
                         - margin.top - margin.bottom;
-                console.log("CHART",availableWidth,availableHeight)
 
 
                 chart.update = function() { container.transition().duration(transitionDuration).call(chart) };
@@ -2180,8 +2211,7 @@
                 gEnter.append('g').attr('class', 'nv-legendWrap');
                 gEnter.append('g').attr('class', 'nv-interactive');
 
-                //var radius = Math.min(availableWidth,availableHeight);
-                //availableWidth -=radius/2;
+
                 g.select("rect")
                     .attr("width",availableWidth)
                     .attr("height",(availableHeight > 0) ? availableHeight : 0);
@@ -2208,10 +2238,6 @@
 
                 //------------------------------------------------------------
 
-                //radius = Math.min(availableWidth,availableHeight);
-                //tooltipShift.x  = availableWidth/2;
-                //tooltipShift.y  = availableHeight/2;
-
                 var ml = margin.left;
                 wrap.attr('transform', 'translate(' + ml + ',' + margin.top + ')');
 
@@ -2236,19 +2262,14 @@
                     wrap.select(".nv-interactive").call(interactiveLayer);
                 }
 
-                //console.log(getOffset(this),getOffset(this.parentNode),getOffset(g));
-                //console.log("OFFSET",this.offsetTop,this.parentNode.offsetTop);
 
-
-                 var radius = Math.min(availableWidth,availableHeight);
+                var radius = Math.min(availableWidth,availableHeight);
                 tooltipShift.x  = this.offsetLeft + availableWidth/2 - radius/2;
                 tooltipShift.y  = getOffset(this).top + margin.top + 10;
 
 
 
                 lines
-                    //.width(availableWidth)
-                    //.height(availableHeight)
                     .width(radius)
                     .height(radius)
                     .color(data.map(function(d,i) {
@@ -2365,10 +2386,7 @@
 
                 dispatch.on('tooltipShow', function(e) {
                     if (tooltips) {
-                        console.log("tooltipShow",e,tooltipShift,margin);
-                        //e.pos = [e.pos[0] +  tooltipShift + margin.left, e.pos[1] + margin.top]
                         showTooltip(e, that.parentNode);
-                        //showTooltip(e, that);
                     }
                 });
 
@@ -2393,33 +2411,12 @@
             return chart;
         }
 
-        //function getGridData(serieLength, max){
-        //    var gridData = [];
-        //    for (var i=0; i < tickCount;i++){
-        //        var levelKey = max*(i+1)/tickCount;
-        //        var level = [];
-        //        level.key = (levelKey*100).toFixed(0)+"%"
-        //        //level.values = [];
-        //        for(var j=0; j < serieLength;j++){
-        //            level.push({value:levelKey})
-        //        }
-        //        gridData.push(level)
-        //    }
-        //    //console.log(gridData)
-        //    return gridData;
-        //}
 
         //============================================================
         // Event Handling/Dispatching (out of chart's scope)
         //------------------------------------------------------------
 
         lines.dispatch.on('elementMouseover.tooltip', function(e) {
-            console.log("elementMouseover.tooltip",e,tooltipShift,margin);
-
-            //e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
-            ////e.pos = [e.pos[0] +  tooltipShift - margin.left, e.pos[1] + margin.top];
-            ////console.log(margin,tooltipShift)
-            //e.pos = [e.pos[0], e.pos[1] - margin.top];
             dispatch.tooltipShow(e);
         });
 
@@ -2572,7 +2569,7 @@
             , width = 960
             , height = 500
             , color = nv.utils.defaultColor() // a function that returns a color
-            , getX = function(d,i) {console.log(d,i); return d.x } // accessor to get the x value from a data point
+            , getX = function(d,i) {return d.x } // accessor to get the x value from a data point
             , getY = function(d,i) { return d.y } // accessor to get the y value from a data point
             , getLabel = undefined //function(d) { return d.y }
             , defined = function(d,i) { return !isNaN(getY(d,i)) && getY(d,i) !== null } // allows a line to be not continuous when it is not defined

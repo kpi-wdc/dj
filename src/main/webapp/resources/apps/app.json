@@ -616,69 +616,6 @@
             } ],
             "standalone" : false
           }
-        }, {
-          "type" : "nvd3-radar",
-          "instanceName" : "k88yv1e5fb1hh0k9",
-          "decoration" : {
-            "height" : 450,
-            "title" : "Write Your Title",
-            "subtitle" : "Write Your Subtitle",
-            "caption" : "Figure 1. Write Your Caption text.",
-            "isArea" : true,
-            "showLabels" : false,
-            "ticks" : 5,
-            "tickLabel" : true,
-            "grid" : true,
-            "axisLabel" : true
-          },
-          "datasource" : "k54s54r0usg7gb9",
-          "data" : {
-            "url" : "http://localhost:8080/data/wdc.json",
-            "selectedDataset" : "four",
-            "selection" : [ {
-              "collection" : [ {
-                "id" : "74",
-                "index" : "73",
-                "label" : "Russian Federation"
-              }, {
-                "id" : "88",
-                "index" : "86",
-                "label" : "Ukraine"
-              }, {
-                "id" : "34",
-                "index" : "33",
-                "label" : "Georgia"
-              } ],
-              "role" : "Rows"
-            }, {
-              "collection" : [ {
-                "id" : "2013",
-                "index" : "8",
-                "label" : "2013"
-              } ],
-              "role" : "Fix Value"
-            }, {
-              "collection" : [ {
-                "id" : "Cql",
-                "index" : "0",
-                "label" : "Quality of Life Component"
-              }, {
-                "id" : "Csl",
-                "index" : "1",
-                "label" : "Security of Life Component"
-              }, {
-                "id" : "G",
-                "index" : "2",
-                "label" : "Harmonization degree"
-              }, {
-                "id" : "Isd",
-                "index" : "6",
-                "label" : "Index of sustainable development"
-              } ],
-              "role" : "Columns"
-            } ],
-            "standalone" : false
-          }
         } ]
       }
     },
@@ -705,11 +642,6 @@
     }, {
       "emitter" : "k54s54r0usg7gb9",
       "receiver" : "exoyuzkkrge6d2t9",
-      "signal" : "loadDataSuccess",
-      "slot" : "setDataProvider"
-    }, {
-      "emitter" : "k54s54r0usg7gb9",
-      "receiver" : "k88yv1e5fb1hh0k9",
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]
@@ -2007,13 +1939,13 @@
           "type" : "nvd3-radar",
           "instanceName" : "v3x9z5fnme9g4x6r",
           "decoration" : {
-            "height" : 400,
+            "height" : 600,
             "title" : "Write Your Title gfdgfdb f gfgdfgds",
             "subtitle" : "Write Your Subtitle",
             "caption" : "Figure 1. Write Your Caption text.",
             "isArea" : true,
             "showLabels" : false,
-            "ticks" : 5,
+            "ticks" : 10,
             "tickLabel" : true,
             "grid" : true,
             "axisLabel" : true,

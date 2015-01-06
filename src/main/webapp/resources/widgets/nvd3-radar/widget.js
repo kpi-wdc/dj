@@ -1,13 +1,13 @@
 define([
         'angular',
         '/widgets/nvd3-widget/nvd3-widget.js',
-        '/widgets/data-dialogs/bar-chart-dialog.js'
+        '/widgets/data-dialogs/radar-chart-dialog.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.nvd3-radar',[
             'app.widgets.nvd3-widget',
-            'app.widgets.data-dialogs.bar-chart-dialog'
+            'app.widgets.data-dialogs.radar-chart-dialog'
 
             ]);
 
@@ -21,7 +21,7 @@ define([
                     options.caption.text = decoration.caption;
                     options.chart.isArea = decoration.isArea;
                     options.chart.color = (decoration.color) ? decoration.color : null;
-                    options.chart.lines.label = (decoration.showLabels) ? function(d){return d.y.toFixed(2)} : undefined;
+                    options.chart.lines.label = (decoration.showLabels) ? function(d){return d.value.toFixed(2)} : undefined;
                     options.chart.lines.ticks = decoration.ticks;
                     options.chart.lines.tickLabel = decoration.tickLabel;
                     options.chart.lines.grid = decoration.grid;
@@ -50,9 +50,9 @@ define([
             }
         })
 
-        m.controller('Nvd3RadarChartCtrl',function($scope,BarChartDialog,NVD3RadarAdapter,NVD3Widget,BarSerieGenerator){
+        m.controller('Nvd3RadarChartCtrl',function($scope,RadarChartDialog,NVD3RadarAdapter,NVD3Widget,BarSerieGenerator){
             new NVD3Widget($scope,{
-                dialog: BarChartDialog,
+                dialog: RadarChartDialog,
                 decorationAdapter: NVD3RadarAdapter,
                 optionsURL: "/widgets/nvd3-radar/options.json",
                 serieAdapter:{
