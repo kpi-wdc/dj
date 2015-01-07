@@ -75,6 +75,7 @@ define([
                     };
 
                     $scope.getCellBackground = function(row,col,value){
+                        if(angular.isUndefined(value))return "transparent";
                         if ($scope.widget.decoration.colorize == false) return "transparent";
                         if (!$scope.widget.decoration.color) return "transparent";
                         var range;
@@ -99,6 +100,14 @@ define([
                         return $scope.RGBA($scope.widget.decoration.color[index],
                             (($scope.widget.decoration.opacity) ? $scope.widget.decoration.opacity : 0.5));
 
+                    }
+
+
+                    $scope.getCellStyle =  function(row,col,value){
+                        //console.log(arguments);
+                        if(arguments.length<3)
+                            return {"background":"transparent"};
+                        return {"background":$scope.getCellBackground(row,col,value)}
                     }
 
                     $scope.setPredicate = function(f){

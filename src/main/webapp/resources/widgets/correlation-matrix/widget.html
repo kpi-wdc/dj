@@ -1,4 +1,4 @@
-<div class="widget border" ng-controller="TableCtrl">
+<div class="widget border" ng-controller="CorrelationMatrixCtrl">
     <div ng-if="tableExist()">
         <div class="table caption">{{widget.decoration.caption}}</div>
         <div class="table title">{{widget.decoration.title}}</div>
@@ -6,24 +6,17 @@
             <table class="data" cellpadding="0px" cellspacing="0px" align="center" style="margin-left: auto;margin-right: auto; float: none;">
                 <thead>
                     <tr>
-                        <th class="center-align rowid" style="cursor: pointer"
-                            ng-click="setPredicate(byLabel())">
+                        <th class="center-align rowid">
                             {{table.header.label}}
-                            <i ng-if="(reverse==false) && (sortField==undefined)" class="glyphicon fi-arrow-down"/>
-                            <i ng-if="(reverse==true) && (sortField==undefined)" class="glyphicon fi-arrow-up"/>
                         </th>
-                        <th  class="center-align rowid" style="cursor: pointer"
-                             ng-click="setPredicate(byField(h))"
-                             ng-repeat="h in table.header.body">
+                        <th  class="center-align rowid" ng-repeat="h in table.header.body">
                             {{h.title}}
-                            <i ng-if="(reverse==false) && (sortField==h)" class="glyphicon fi-arrow-down"/>
-                            <i ng-if="(reverse==true) && (sortField==h)" class="glyphicon fi-arrow-up"/>
                         </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                <tr ng-repeat="r in table.body | orderBy : predicate : reverse">
+                <tr ng-repeat="r in table.body">
                     <th class="left-align rowid">{{r.label}}</th>
                     <td class="right-align"
                         ng-repeat="f in r.values track by $index"

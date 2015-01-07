@@ -6,7 +6,7 @@ define(["angular",
         "/widgets/data-dialogs/palettes1.js"
     ],
     function (angular) {
-        var m = angular.module('app.widgets.data-dialogs.data-table-dialog', [
+        var m = angular.module('app.widgets.data-dialogs.correlation-matrix-dialog', [
             'app.widgets.data-util.keyset',
             'app.widgets.data-util.adapter',
             'mm.foundation',
@@ -14,15 +14,15 @@ define(["angular",
             'app.widgets.palettes1'
         ]);
 
-        m.factory("DataTableDialog", ['KeySet','TableGenerator','ScatterSerieGenerator','$modal',
+        m.factory("CorrelationMatrixDialog", ['KeySet','TableGenerator','CorrelationTableGenerator','$modal',
             'APIUser','APIProvider','pageSubscriptions','pageWidgets',
             'Palettes1',
 
-            function(KeySet, TableGenerator, ScatterSerieGenerator, $modal,
+            function(KeySet, TableGenerator, CorrelationTableGenerator, $modal,
                      APIUser, APIProvider, pageSubscriptions, pageWidgets,
                      Palettes1) {
 
-                var DataTableDialog = function(scope){
+                var CorrelationMatrixDialog = function(scope){
 
                     this.scope = scope;
                     this.conf = {}
@@ -70,7 +70,7 @@ define(["angular",
                     this.restoreState(scope.widget.data,scope.provider)
                 }
 
-                DataTableDialog.prototype =  {
+                CorrelationMatrixDialog.prototype =  {
 
 
                     styles:{
@@ -120,7 +120,6 @@ define(["angular",
 
                     getCellBackground: function(row,col,value){
                         if(angular.isUndefined(value))return "transparent";
-
                         if (this.conf.decoration.colorize == false) return "transparent";
                         if (!this.conf.decoration.color) return "transparent";
                         var range;
@@ -147,12 +146,11 @@ define(["angular",
 
                     },
 
-                    getCellStyle:  function(row,col,value){
+                    getCellStyle: function(row,col,value){
                         if(arguments.length<3)
                             return {"background":"transparent"};
                         return {"background":this.getCellBackground(row,col,value)}
                     },
-
 
                     calculateRanges:function(){
                         var ranges = {};
@@ -338,51 +336,6 @@ define(["angular",
                         return (angular.isString(arg)) ? "'"+arg+"'" : arg;
                     },
 
-                    sortTable: function(header, item){
-                        if(item){
-                            this.table.body.sort(function(a,b){
-                                var result;
-                                if(angular.isNumber(a.values[item.label])){
-                                    result = a.values[item.label]- b.values[item.label]
-                                }
-                                if(angular.isString(a.label)){
-                                    result = (a.values[item.label] < b.values[item.label])? -1: 1
-                                }
-                                if (item.order == "Z-A"){
-                                    result = -result;
-                                }
-                                return result;
-                            })
-
-                        }else{
-                            this.table.body.sort(function(a,b){
-                                var result;
-                                if(angular.isNumber(a[header.coordX])){
-                                    result = a[header.coordX]-b[header.coordX]
-                                }
-                                if(angular.isString(a[header.coordX])){
-                                    result = (a[header.coordX] < b[header.coordX]) ? -1 : 1
-                                }
-                                if (header.order == "Z-A"){
-                                    result = -result;
-                                }
-                                return result;
-                            })
-                        }
-
-                    },
-
-                    changeOrder: function(header,item){
-                        if(item){
-                            item.order = (item.order == "A-Z")? "Z-A" : "A-Z";
-                            TableGenerator.sortTable(this.table)
-                        }else{
-                            header.order = (header.order == "A-Z")? "Z-A" : "A-Z";
-                            TableGenerator.sortTable(this.table)
-                        }
-
-                    },
-
                     readyForSerieGeneration: function(){
                         var result;
                         if(this.table.header.coordX) return true;
@@ -392,52 +345,7 @@ define(["angular",
                         return false;
                     },
 
-                    setCoordX: function(header, item, rowField){
-                        //console.log("SetCoordX",header,item)
 
-
-
-                        if(item){
-                            if(header.coordX){
-                                header.coordX = undefined;
-                                item.coordX = true;
-                                item.order = "A-Z";
-                                TableGenerator.sortTable(this.table)
-                                this.setState(4);
-                                //console.log("H>F",header,item)
-                                return;
-                            }else{
-                                var old;
-                                for(var i in header.body){
-                                    if(header.body[i].coordX) old = header.body[i]
-                                }
-
-                                if(old) old.coordX = undefined;
-                                item.coordX = true;
-                                item.order = "A-Z";
-                                TableGenerator.sortTable(this.table)
-                                this.setState(4);
-                                //console.log("F>F",header,item)
-                                return;
-                            }
-                        }else{
-
-                            var old;
-                            for(var i in header.body){
-                                if(header.body[i].coordX) old = header.body[i]
-                            }
-
-                            if(old)old.coordX = undefined;
-                            header.coordX = rowField;
-                            header.order = "A-Z";
-                            TableGenerator.sortTable(this.table)
-                            this.setState(4);
-                            //console.log("F>H",header,item)
-                            return;
-
-                        }
-                        this.setState(4);
-                    },
 
                     setState: function () {
                         switch (arguments[0]) {
@@ -527,6 +435,7 @@ define(["angular",
                                         this.conf.selection.push(this.conf.selectedDataset.dimensions[i].selection);
                                     }
                                     this.table = TableGenerator.getData(this.conf,this.provider);
+                                    this.table = CorrelationTableGenerator.getData(this.table);
                                     //console.log(this.table)
 
                                     this.setEnabled(this.steps);
@@ -728,8 +637,8 @@ define(["angular",
                         //this.restoreState(this.scope.widget.data,this.scope.provider)
                         var s = this.scope;
                         $modal.open({
-                            templateUrl: 'widgets/data-dialogs/data-table-dialog.html',
-                            controller: 'DataTableConfigDialog',
+                            templateUrl: 'widgets/data-dialogs/correlation-matrix-dialog.html',
+                            controller: 'CorrelationMatrixConfigDialog',
                             backdrop: 'static',
                             resolve: {
                                 widgetScope: function () {
@@ -741,11 +650,12 @@ define(["angular",
                     }
                 }
 
-                return DataTableDialog;
+                return CorrelationMatrixDialog;
 
             }]);
 
-        m.controller('DataTableConfigDialog', function ($scope, $modalInstance, widgetScope) {
+
+        m.controller('CorrelationMatrixConfigDialog', function ($scope, $modalInstance, widgetScope) {
             $scope.dialog = widgetScope.dialog;
             widgetScope.dialog.modal = $modalInstance;
 

@@ -356,7 +356,7 @@
                     <th class="left-align rowid">{{r.label}}</th>
                     <td ng-class="{'right-align':dialog.isNumber(f)}"
                         ng-repeat="f in r.values track by $index"
-                        style="background:{{dialog.getCellBackground(r,$index,f)}}">
+                        ng-style="dialog.getCellStyle(r,$index,f)">
                         {{dialog.dataValue(f)}}
                     </td>
                 </tr>

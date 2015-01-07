@@ -1936,112 +1936,197 @@
           "type" : "datasource",
           "instanceName" : "x8kgey22slbu766r"
         }, {
-          "type" : "nvd3-radar",
-          "instanceName" : "v3x9z5fnme9g4x6r",
-          "decoration" : {
-            "height" : 600,
-            "title" : "Write Your Title gfdgfdb f gfgdfgds",
-            "subtitle" : "Write Your Subtitle",
-            "caption" : "Figure 1. Write Your Caption text.",
-            "isArea" : true,
-            "showLabels" : false,
-            "ticks" : 10,
-            "tickLabel" : true,
-            "grid" : true,
-            "axisLabel" : true,
-            "color" : [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666" ]
-          },
-          "datasource" : "x8kgey22slbu766r",
+          "type" : "correlation-matrix",
+          "instanceName" : "i4bux547m2f0f6r",
           "data" : {
-            "url" : "http://localhost:8080/data/wdc.json",
-            "selectedDataset" : "four",
-            "selection" : [ {
-              "collection" : [ {
-                "id" : "1",
-                "index" : "0",
-                "label" : "Albania"
+            "table" : {
+              "body" : [ {
+                "label" : "Harmonization degree",
+                "values" : {
+                  "Quality of Life Component" : 0.5281746394791247,
+                  "Security of Life Component" : 0.34237028687914034,
+                  "Harmonization degree" : 1,
+                  "Index of environmental dimension" : 0.4503837731884204,
+                  "Index of economic dimension" : 0.6113307358642159,
+                  "Index of social and institutional dimension" : 0.5182614717829155,
+                  "Index of sustainable development" : 0.49511038505697863
+                }
               }, {
-                "id" : "5",
-                "index" : "4",
-                "label" : "Australia"
+                "label" : "Index of economic dimension",
+                "values" : {
+                  "Quality of Life Component" : 0.9011196213414546,
+                  "Security of Life Component" : 0.5546008300886465,
+                  "Harmonization degree" : 0.6113307358642159,
+                  "Index of environmental dimension" : 0.7307511769036628,
+                  "Index of economic dimension" : 1,
+                  "Index of social and institutional dimension" : 0.8321219359807237,
+                  "Index of sustainable development" : 0.8323915179414901
+                }
               }, {
-                "id" : "9",
-                "index" : "8",
-                "label" : "Belgium"
+                "label" : "Index of environmental dimension",
+                "values" : {
+                  "Quality of Life Component" : 0.9308978786303475,
+                  "Security of Life Component" : 0.6384746315633576,
+                  "Harmonization degree" : 0.4503837731884204,
+                  "Index of environmental dimension" : 1,
+                  "Index of economic dimension" : 0.7307511769036628,
+                  "Index of social and institutional dimension" : 0.858616523928544,
+                  "Index of sustainable development" : 0.8872498329297788
+                }
               }, {
-                "id" : "13",
-                "index" : "12",
-                "label" : "Botswana"
+                "label" : "Index of social and institutional dimension",
+                "values" : {
+                  "Quality of Life Component" : 0.9623122507241525,
+                  "Security of Life Component" : 0.7195028458560017,
+                  "Harmonization degree" : 0.5182614717829155,
+                  "Index of environmental dimension" : 0.858616523928544,
+                  "Index of economic dimension" : 0.8321219359807237,
+                  "Index of social and institutional dimension" : 1,
+                  "Index of sustainable development" : 0.9420118879210218
+                }
               }, {
-                "id" : "17",
-                "index" : "16",
-                "label" : "Cameroon"
+                "label" : "Index of sustainable development",
+                "values" : {
+                  "Quality of Life Component" : 0.9526362574629372,
+                  "Security of Life Component" : 0.8739344500505734,
+                  "Harmonization degree" : 0.49511038505697863,
+                  "Index of environmental dimension" : 0.8872498329297788,
+                  "Index of economic dimension" : 0.8323915179414901,
+                  "Index of social and institutional dimension" : 0.9420118879210218,
+                  "Index of sustainable development" : 1
+                }
               }, {
-                "id" : "21",
-                "index" : "20",
-                "label" : "Colombia"
+                "label" : "Quality of Life Component",
+                "values" : {
+                  "Quality of Life Component" : 1,
+                  "Security of Life Component" : 0.684729849298134,
+                  "Harmonization degree" : 0.5281746394791247,
+                  "Index of environmental dimension" : 0.9308978786303475,
+                  "Index of economic dimension" : 0.9011196213414546,
+                  "Index of social and institutional dimension" : 0.9623122507241525,
+                  "Index of sustainable development" : 0.9526362574629372
+                }
               }, {
-                "id" : "25",
-                "index" : "24",
-                "label" : "Denmark"
-              }, {
-                "id" : "29",
-                "index" : "28",
-                "label" : "El Salvador"
-              }, {
-                "id" : "33",
-                "index" : "32",
-                "label" : "France"
+                "label" : "Security of Life Component",
+                "values" : {
+                  "Quality of Life Component" : 0.684729849298134,
+                  "Security of Life Component" : 1,
+                  "Harmonization degree" : 0.34237028687914034,
+                  "Index of environmental dimension" : 0.6384746315633576,
+                  "Index of economic dimension" : 0.5546008300886465,
+                  "Index of social and institutional dimension" : 0.7195028458560017,
+                  "Index of sustainable development" : 0.8739344500505734
+                }
               } ],
-              "role" : "Rows"
-            }, {
-              "collection" : [ {
-                "id" : "2005",
-                "index" : "0",
-                "label" : "2005"
-              }, {
-                "id" : "2006",
-                "index" : "1",
-                "label" : "2006"
-              }, {
-                "id" : "2007",
-                "index" : "2",
-                "label" : "2007"
-              }, {
-                "id" : "2008",
-                "index" : "3",
-                "label" : "2008"
-              }, {
-                "id" : "2009",
-                "index" : "4",
-                "label" : "2009"
-              }, {
-                "id" : "2010",
-                "index" : "5",
-                "label" : "2010"
-              }, {
-                "id" : "2011",
-                "index" : "6",
-                "label" : "2011"
-              }, {
-                "id" : "2012",
-                "index" : "7",
-                "label" : "2012"
-              }, {
-                "id" : "2013",
-                "index" : "8",
-                "label" : "2013"
-              } ],
-              "role" : "Columns"
-            }, {
-              "collection" : [ {
-                "id" : "Iec",
-                "index" : "4",
-                "label" : "Index of economic dimension"
-              } ],
-              "role" : "Fix Value"
-            } ],
-            "standalone" : false
+              "header" : {
+                "body" : {
+                  "Quality of Life Component" : {
+                    "label" : "Quality of Life Component",
+                    "title" : "Quality of Life Component"
+                  },
+                  "Security of Life Component" : {
+                    "label" : "Security of Life Component",
+                    "title" : "Security of Life Component"
+                  },
+                  "Harmonization degree" : {
+                    "label" : "Harmonization degree",
+                    "title" : "Harmonization degree"
+                  },
+                  "Index of environmental dimension" : {
+                    "label" : "Index of environmental dimension",
+                    "title" : "Index of environmental dimension"
+                  },
+                  "Index of economic dimension" : {
+                    "label" : "Index of economic dimension",
+                    "title" : "Index of economic dimension"
+                  },
+                  "Index of social and institutional dimension" : {
+                    "label" : "Index of social and institutional dimension",
+                    "title" : "Index of social and institutional dimension"
+                  },
+                  "Index of sustainable development" : {
+                    "label" : "Index of sustainable development",
+                    "title" : "Index of sustainable development"
+                  }
+                }
+              }
+            },
+            "standalone" : true
+          },
+          "decoration" : {
+            "ranges" : {
+              "rows" : {
+                "Harmonization degree" : {
+                  "max" : 1,
+                  "min" : 0.34237028687914034
+                },
+                "Index of economic dimension" : {
+                  "max" : 1,
+                  "min" : 0.5546008300886465
+                },
+                "Index of environmental dimension" : {
+                  "max" : 1,
+                  "min" : 0.4503837731884204
+                },
+                "Index of social and institutional dimension" : {
+                  "max" : 1,
+                  "min" : 0.5182614717829155
+                },
+                "Index of sustainable development" : {
+                  "max" : 1,
+                  "min" : 0.49511038505697863
+                },
+                "Quality of Life Component" : {
+                  "max" : 1,
+                  "min" : 0.5281746394791247
+                },
+                "Security of Life Component" : {
+                  "max" : 1,
+                  "min" : 0.34237028687914034
+                }
+              },
+              "columns" : {
+                "Quality of Life Component" : {
+                  "max" : 1,
+                  "min" : 0.5281746394791247
+                },
+                "Security of Life Component" : {
+                  "max" : 1,
+                  "min" : 0.34237028687914034
+                },
+                "Harmonization degree" : {
+                  "max" : 1,
+                  "min" : 0.34237028687914034
+                },
+                "Index of environmental dimension" : {
+                  "max" : 1,
+                  "min" : 0.4503837731884204
+                },
+                "Index of economic dimension" : {
+                  "max" : 1,
+                  "min" : 0.5546008300886465
+                },
+                "Index of social and institutional dimension" : {
+                  "max" : 1,
+                  "min" : 0.5182614717829155
+                },
+                "Index of sustainable development" : {
+                  "max" : 1,
+                  "min" : 0.49511038505697863
+                }
+              },
+              "all" : {
+                "max" : 1,
+                "min" : 0.34237028687914034
+              }
+            },
+            "colorize" : true,
+            "colorizeMode" : "All Cells",
+            "color" : [ "#ffffe5", "#f7fcb9", "#d9f0a3", "#addd8e", "#78c679", "#41ab5d", "#238443", "#006837", "#004529" ],
+            "title" : "vcxvdcxvbdfs f fg",
+            "subtitle" : "fggfgfdg",
+            "caption" : "fgfgfdg",
+            "opacity" : 0.5
           }
         } ]
       },
@@ -2055,11 +2140,6 @@
         "widgets" : [ ]
       }
     },
-    "subscriptions" : [ {
-      "emitter" : "x8kgey22slbu766r",
-      "receiver" : "v3x9z5fnme9g4x6r",
-      "signal" : "loadDataSuccess",
-      "slot" : "setDataProvider"
-    } ]
+    "subscriptions" : [ ]
   } ]
 }

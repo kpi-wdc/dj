@@ -2,6 +2,7 @@ require.config({
     paths: {
         'jsinq': 'components/jsinq/source/jsinq',
         'jsinq-query': 'components/jsinq/source/jsinq-query',
+        "stat":'widgets/data-util/stat'
 
     },
     shim: {
@@ -15,9 +16,9 @@ require.config({
 });
 
 
-define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
+define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
 
-    var m = angular.module('app.widgets.data-util.adapter', []);
+    var m = angular.module('app.widgets.data-util.adapter', ['app.widgets.data-util.stat']);
 
 
     m.service('TableGenerator',function(){
@@ -181,6 +182,69 @@ define(['angular','jsinq','jsinq-query'], function (angular,jsinq) {
             return result;
         }
     })
+
+
+    m.service('CorrelationMatrixGenerator',['BarSerieGenerator','STAT', function(BarSerieGenerator,STAT){
+            this.getData = function(table){
+                var series = BarSerieGenerator.getData(table);
+                for(var i in series){
+                    series[i].values = series[i].values.map( function(item){return item.value});
+                }
+                //console.log("CORRELATION PREPARED SERIES",series);
+                var result = [];
+                for(var i=0; i<series.length; i++){
+                    var row = [];
+                    for (var j=0; j<series.length; j++){
+                        row.push({label:series[j].key,value:STAT.corr(series[i].values,series[j].values)});
+                    }
+                    result.push({key:series[i].key, values:row})
+                }
+                //console.log("CORRELATION MATRIX",result);
+                return result;
+            }
+        }
+    ]);
+
+
+    m.service('CorrelationTableGenerator',[ 'CorrelationMatrixGenerator',function(CorrelationMatrixGenerator){
+        this.getData = function (table){
+            var matrix = CorrelationMatrixGenerator.getData(table);
+            var result = {};
+
+
+            result.body = matrix.map(function(item){
+                var current = {};
+                for(i in item.values){
+                    current[item.values[i].label] = item.values[i].value;
+                }
+                return {label:item.key, values:current}
+            });
+
+            result.body.sort(function(a,b){return (a.label>b.label)? 1:-1})
+
+            //var keys = result.body.map(function(item){return item.label});
+            //for(var i=0; i<keys.length; i++){
+            //    for(var j=i; j<keys.length; j++){
+            //        result.body[i].values[keys[j]] = undefined;
+            //    }
+            //}
+
+
+            //console.log(result.body);
+
+
+            result.header = {};
+            result.header.label = table.label;
+            result.header.body = {};
+            for(var i in result.body[0].values){
+                result.header.body[i] = {};
+                result.header.body[i].label=i;
+                result.header.body[i].title=i;
+            }
+            //console.log("CORRELATION TABLE", result);
+            return result;
+        }
+    }]);
 
     m.service('ScatterSerieGenerator',function() {
         this.getData = function (table) {

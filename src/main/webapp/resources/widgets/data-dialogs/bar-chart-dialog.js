@@ -331,6 +331,9 @@ define(["angular",
                                 }
                                 this.table = TableGenerator.getData(this.conf,this.provider);
                                 this.series = BarSerieGenerator.getData(this.table);
+
+
+
                                 this.setState(4)
                                 //console.log("Series",this.series);
                             }
