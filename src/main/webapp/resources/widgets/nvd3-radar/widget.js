@@ -50,7 +50,9 @@ define([
             }
         })
 
-        m.controller('Nvd3RadarChartCtrl',function($scope,RadarChartDialog,NVD3RadarAdapter,NVD3Widget,BarSerieGenerator){
+        m.controller('Nvd3RadarChartCtrl',
+            function($scope,RadarChartDialog,NVD3RadarAdapter,NVD3Widget,BarSerieGenerator){
+
             new NVD3Widget($scope,{
                 dialog: RadarChartDialog,
                 decorationAdapter: NVD3RadarAdapter,
