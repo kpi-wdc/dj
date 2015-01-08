@@ -466,6 +466,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
                         instanceName: instanceName
                     });
                 }, (error) => {
+                    console.log("ERROR", error)
                     alert.error('Cannot add widget: ' + error);
                 });
             $modalInstance.close();

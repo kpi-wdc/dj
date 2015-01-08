@@ -3860,6 +3860,1010 @@
         return chart;
     }
 
+    nv.models.chord = function() {
+        "use strict";
+        //============================================================
+        // Public Variables with Default Settings
+        //------------------------------------------------------------
+
+        var margin = {top: 0, right: 0, bottom: 0, left: 0}
+            , width = 500
+            , height = 500
+            , getX = function(d) { return d.x }
+            , getY = function(d) { return d.y }
+            , getDescription = function(d) { return d.description }
+            , id = Math.floor(Math.random() * 10000) //Create semi-unique ID in case user doesn't select one
+            , color = nv.utils.defaultColor()
+            //, valueFormat = d3.format(',.2f')
+            //, labelFormat = d3.format('%')
+            //, showLabels = true
+            //, chordLabelsOutside = true
+            //, donutLabelsOutside = false
+            //, labelType = "key"
+            //, labelThreshold = .02 //if slice percentage is under this, don't show label
+            //, donut = false
+            //, labelSunbeamLayout = false
+            //, startAngle = false
+            //, endAngle = false
+            //, donutRatio = 0.5
+            , dispatch = d3.dispatch('chartClick', 'elementClick', 'elementDblClick', 'elementMouseover', 'elementMouseout')
+            ;
+
+        //============================================================
+
+
+        function chart(selection) {
+            selection.each(function(data) {
+
+                //console.log("Chord data",data)
+                var matrix = data[0];
+                // Prepare correlation matrix for chord layout
+                matrix = matrix.filter(function(series, i) {
+                    series.seriesIndex = i;
+                    return !series.disabled;
+                })
+                //console.log("MATRIX", matrix)
+                var indexes = matrix.map(function(serie){return serie.seriesIndex})
+                var labels = matrix.map(function(serie){return serie.key})
+                //console.log("Indexes", indexes)
+
+                matrix = matrix.map(function (serie,i){
+                    var values = [];
+                    indexes.forEach(function (index){
+                        values.push(serie.values[index].value)
+                    })
+
+                    return values;
+                })
+
+                var layoutMatrix = matrix.map(function(item, index){
+                    //item[index] = 0;
+                    item = item.map(function(value){
+                        return value*value;
+                    })
+                    return item;
+                })
+
+                //console.log(matrix)
+                //console.log(layoutMatrix)
+
+                var availableWidth = width - margin.left - margin.right,
+                    availableHeight = height - margin.top - margin.bottom,
+                    radius = Math.min(availableWidth, availableHeight) / 2,
+
+                    arcRadius = radius-(radius / 5),
+                    container = d3.select(this);
+
+
+                //------------------------------------------------------------
+                // Setup containers and skeleton of chart
+
+                //var wrap = container.selectAll('.nv-wrap.nv-pie').data([data]);
+                var wrap = container.selectAll('.nv-wrap.nv-chord').data(data);
+                var wrapEnter = wrap.enter().append('g').attr('class','nvd3 nv-wrap nv-chord nv-chart-' + id);
+                var gEnter = wrapEnter.append('g');
+                var g = wrap.select('g');
+
+                gEnter.append('g').attr('class', 'nv-chord');
+                //gEnter.append('g').attr('class', 'nv-pieLabels');
+
+                wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                g.select('.nv-chord').attr('transform', 'translate(' + availableWidth / 2 + ',' + availableHeight / 2 + ')');
+                //g.select('.nv-pieLabels').attr('transform', 'translate(' + availableWidth / 2 + ',' + availableHeight / 2 + ')');
+
+                //------------------------------------------------------------
+                var outerRadius = radius-margin.top - 10;
+                var innerRadius = outerRadius -0.07*radius;
+
+                var chordLayout = d3.layout.chord()
+                    .padding(.05)
+                    .sortSubgroups(d3.descending)
+                    .matrix(layoutMatrix);
+
+                var layoutGroups = chordLayout.groups();
+                layoutGroups = layoutGroups.map(function(group,i){
+                        group.key = labels[i];
+                        group.seriesIndex = indexes[i]
+                        return group;
+                    });
+
+                //console.log("GROUPS", layoutGroups );
+
+
+                function fade(select) {
+                    return function(g, i) {
+                        if (select){
+                            //console.log(g);
+                            wrap.select('.nv-chord').selectAll('path.nv-chord-group')
+                                .filter(function(d){ return d.index == i})
+                                .transition()
+                                .style("opacity", 1)
+                                .style("stroke-width","3px")
+                            ;
+
+                            var groups = wrap.select('.nv-chord').selectAll('path.nv-chord-group')
+                            .filter(function(d){ return d.index != i});
+
+                            groups
+                            .transition()
+                            .style("opacity", 0.1);
+
+                            var labels = wrap.select('.nv-chord').selectAll('text.nv-chord-group')
+                                .filter(function(d){ return d.index != i});
+
+                            labels
+                                .transition()
+                                .style("opacity", 0.1);
+
+                            wrap.select('.nv-chord').selectAll('path.nv-chord-dependency')
+                                .transition()
+                                .style("opacity", 0.01);
+
+                            var hords = wrap.select('.nv-chord').selectAll('path.nv-chord-dependency')
+                                .filter(function(d){ return d.source.index == i || d.target.index == i});
+
+                            hords
+                                .transition()
+                                .style("opacity", function(d){return d.determination;})
+                            ;
+
+                            var connectedGroups = [];
+
+                            //console.log(hords.data());
+
+
+                            hords.data().forEach( function(item){
+                                //console.log("HORDS ITEM", item)
+                              var index;
+                              var determination;
+                              if(item.source.index != i){
+                                  index = item.source.index;
+                                  determination = item.determination;
+                              }
+                              if(item.target.index != i){
+                                  index = item.target.index;
+                                  determination = item.determination;
+                              }
+                               connectedGroups.push({index:index,determination:determination});
+                            })
+
+                            groups
+                                .filter(function(item){
+                                    return connectedGroups.find(function(d){return d.index == item.index})
+                                })
+                                .data(connectedGroups)
+                                .transition()
+                                .style("opacity", function(d){return d.determination});
+
+                            labels
+                                .filter(function(item){
+                                    return connectedGroups.find(function(d){return d.index == item.index})
+                                })
+                                .data(connectedGroups)
+                                .transition()
+                                .style("opacity", function(d){return d.determination});
+
+
+                            //wrap.select('.nv-chord').selectAll('path.nv-chord-dependency')
+                            //    .filter(function(d){ return d.source.index != i && d.target.index != i })
+                            //    .transition()
+                            //    .style("opacity", 0.01)
+                            //;
+
+
+
+
+
+                        }else{
+                            wrap.select('.nv-chord').selectAll('path.nv-chord-group')
+                                .transition()
+                                .duration(250)
+                                .style("opacity", 0.5)
+                                .style("stroke-width","1px");
+
+                            wrap.select('.nv-chord').selectAll('text.nv-chord-group')
+                                .transition()
+                                .duration(250)
+                                .style("opacity", 0.9);
+
+                            wrap.select('.nv-chord').selectAll('path.nv-chord-dependency')
+                                .transition()
+                                .duration(250)
+                                .style("opacity", 0.3)
+                                .style("stroke-width","1px")
+                            ;
+                        }
+                    };
+                }
+
+
+
+
+
+                var groups = wrap.select('.nv-chord').selectAll('path.nv-chord-group')
+                    .data(layoutGroups);
+                groups.exit().remove();
+                groups.enter().append('path')
+                    .attr('class','nv-chord-group')
+                    .style("fill", function(d,i) { return color(d, d.seriesIndex); })
+                    .style("stroke", function(d,i) {return color(d, d.seriesIndex);})
+                    .style("opacity", 0.05)
+                    .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
+                    .on("mouseover", fade(true))
+                    .on("mouseout", fade(false));
+                    ;
+
+                groups.transition()
+                    .style("fill", function(d,i) {return color(d, d.seriesIndex); })
+                    .style("stroke", function(d,i) {return color(d, d.seriesIndex);})
+                    .style("opacity", 0.5)
+                    .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
+                ;
+
+                var labels = wrap.select('.nv-chord').selectAll('text.nv-chord-group')
+                    .data(layoutGroups);
+                labels.exit().remove();
+                labels.enter().append("text")
+                    .attr('class', 'nv-chord-group')
+                    .style('fill', function (d, i) {
+                        return "#000000"
+                    })
+                    .style('font', 'bold x-small Arial')
+                    .style('text-anchor', function (d, i) {
+                        return getTextAnchor(d, i)
+                    })
+                    .attr('x', function (d, i) {
+                        return (outerRadius+3)*Math.sin(Math.PI+(d.startAngle+d.endAngle)/-2)
+                    })
+                    .attr('y', function (d, i) {
+                        return (outerRadius+3)*Math.cos(Math.PI+(d.startAngle+d.endAngle)/-2)
+                    })
+                    .attr('dy', function (d, i) {
+                        return getDy(d, i)
+                    })
+                    .classed('nv-label', true)
+                    .text(function (d, i) {
+                        return d.key
+                    });
+
+                labels.style("stroke", "none")
+                    .style("opacity", 0.9);
+
+                labels.transition()
+                    .style('fill', function (d, i) {
+                        return "#000000"
+                    })
+                    .style('font', 'bold x-small Arial')
+                    .style('text-anchor', function (d, i) {
+                        return getTextAnchor(d, i)
+                    })
+                    .attr('x', function (d, i) {
+                        return (outerRadius+3)*Math.sin(Math.PI+(d.startAngle+d.endAngle)/-2)
+                    })
+                    .attr('y', function (d, i) {
+                        return (outerRadius+3)*Math.cos(Math.PI+(d.startAngle+d.endAngle)/-2)
+                    })
+                    .attr('dy', function (d, i) {
+                        return getDy(d, i)
+                    })
+                    .text(function (d, i) {
+                        return d.key
+                    });
+
+               var hordsData = chordLayout.chords();
+                hordsData = hordsData.map(function(item){
+                    item.correlation = matrix[item.source.index][item.target.index]
+                    item.determination = item.correlation*item.correlation;
+                    return item;
+                })
+                hordsData = hordsData.filter(function(item){
+                    return item.source.index != item.target.index;
+                })
+
+
+                var chords = wrap.select('.nv-chord').selectAll('path.nv-chord-dependency')
+                    .data(hordsData);
+
+                chords.exit().remove();
+
+                //console.log("CHORDS",chordLayout.chords());
+
+                chords.enter().append("path")
+                    .attr("class", "nv-chord-dependency")
+                    .attr("d", d3.svg.chord().radius(innerRadius))
+                    .style("fill", function(d) { return (d.correlation>0)?"#fb6a4a":"#6baed6"; })
+                    .style("stroke", function(d) { return (d.correlation>0)?"#fb6a4a":"#6baed6"; })
+                    .style("opacity", 0.1);
+
+                chords.transition()
+                    .attr("d", d3.svg.chord().radius(innerRadius))
+                    .style("fill", function(d) { return (d.correlation>0)?"#fb6a4a":"#6baed6"; })
+                    .style("stroke", function(d) { return (d.correlation>0)?"#fb6a4a":"#6baed6"; })
+                    .style("opacity", 0.3);
+
+
+                    //.data(chord.groups)
+                    //.enter().append("path")
+                    //.style("fill", function(d) { return "red"; })
+                    //.style("stroke", function(d) {console.log(d); return fill(d.index); })
+                    //.attr("d", d3.svg.arc().innerRadius(innerRadius+40).outerRadius(outerRadius+35))
+                    //.on("mouseover", fade(.1))
+                    //.on("mouseout", fade(1));
+                //var labels =
+
+                //container
+                //    .on('click', function(d,i) {
+                //        dispatch.chartClick({
+                //            data: d,
+                //            index: i,
+                //            pos: d3.event,
+                //            id: id
+                //        });
+                //    });
+
+
+                //var arc = d3.svg.arc()
+                //    .outerRadius(arcRadius);
+                //
+                //if (startAngle) arc.startAngle(startAngle)
+                //if (endAngle) arc.endAngle(endAngle);
+                //if (donut) arc.innerRadius(radius * donutRatio);
+
+                // Setup the Pie chart and choose the data element
+                //var pie = d3.layout.pie()
+                //    .sort(null)
+                //    .value(function(d) { return d.disabled ? 0 : getY(d) });
+                //
+                //var slices = wrap.select('.nv-pie').selectAll('.nv-slice')
+                //    .data(pie);
+                //
+                //var pieLabels = wrap.select('.nv-pieLabels').selectAll('.nv-label')
+                //    .data(pie);
+                //
+                //slices.exit().remove();
+                //pieLabels.exit().remove();
+                //
+                //var ae = slices.enter().append('g')
+                //    .attr('class', 'nv-slice')
+                //    .on('mouseover', function(d,i){
+                //        d3.select(this).classed('hover', true);
+                //        dispatch.elementMouseover({
+                //            label: getX(d.data),
+                //            value: getY(d.data),
+                //            point: d.data,
+                //            pointIndex: i,
+                //            pos: [d3.event.pageX, d3.event.pageY],
+                //            id: id
+                //        });
+                //    })
+                //    .on('mouseout', function(d,i){
+                //        d3.select(this).classed('hover', false);
+                //        dispatch.elementMouseout({
+                //            label: getX(d.data),
+                //            value: getY(d.data),
+                //            point: d.data,
+                //            index: i,
+                //            id: id
+                //        });
+                //    })
+                //    .on('click', function(d,i) {
+                //        dispatch.elementClick({
+                //            label: getX(d.data),
+                //            value: getY(d.data),
+                //            point: d.data,
+                //            index: i,
+                //            pos: d3.event,
+                //            id: id
+                //        });
+                //        d3.event.stopPropagation();
+                //    })
+                //    .on('dblclick', function(d,i) {
+                //        dispatch.elementDblClick({
+                //            label: getX(d.data),
+                //            value: getY(d.data),
+                //            point: d.data,
+                //            index: i,
+                //            pos: d3.event,
+                //            id: id
+                //        });
+                //        d3.event.stopPropagation();
+                //    });
+                //
+                //slices
+                //    .attr('fill', function(d,i) { return color(d, i); })
+                //    .attr('stroke', function(d,i) { return color(d, i); });
+                //
+                //var paths = ae.append('path')
+                //    .each(function(d) { this._current = d; });
+                ////.attr('d', arc);
+                //
+                //slices.select('path')
+                //    .transition()
+                //    .attr('d', arc)
+                //    .attrTween('d', arcTween);
+                //
+                //if (showLabels) {
+                //    // This does the normal label
+                //    var labelsArc = d3.svg.arc().innerRadius(0);
+                //
+                //    if (pieLabelsOutside){ labelsArc = arc; }
+                //
+                //    if (donutLabelsOutside) { labelsArc = d3.svg.arc().outerRadius(arc.outerRadius()); }
+                //
+                //    pieLabels.enter().append("g").classed("nv-label",true)
+                //        .each(function(d,i) {
+                //            var group = d3.select(this);
+                //
+                //            group
+                //                .attr('transform', function(d) {
+                //                    if (labelSunbeamLayout) {
+                //                        d.outerRadius = arcRadius + 10; // Set Outer Coordinate
+                //                        d.innerRadius = arcRadius + 15; // Set Inner Coordinate
+                //                        var rotateAngle = (d.startAngle + d.endAngle) / 2 * (180 / Math.PI);
+                //                        if ((d.startAngle+d.endAngle)/2 < Math.PI) {
+                //                            rotateAngle -= 90;
+                //                        } else {
+                //                            rotateAngle += 90;
+                //                        }
+                //                        return 'translate(' + labelsArc.centroid(d) + ') rotate(' + rotateAngle + ')';
+                //                    } else {
+                //                        d.outerRadius = radius + 10; // Set Outer Coordinate
+                //                        d.innerRadius = radius + 15; // Set Inner Coordinate
+                //                        return 'translate(' + labelsArc.centroid(d) + ')'
+                //                    }
+                //                });
+                //
+                //            group.append('rect')
+                //                .style('stroke', '#fff')
+                //                .style('fill', '#fff')
+                //                .attr("rx", 3)
+                //                .attr("ry", 3);
+                //
+                //            group.append('text')
+                //                .style('text-anchor', labelSunbeamLayout ? ((d.startAngle + d.endAngle) / 2 < Math.PI ? 'start' : 'end') : 'middle') //center the text on it's origin or begin/end if orthogonal aligned
+                //                .style('fill', '#000')
+                //
+                //        });
+                //
+                //    var labelLocationHash = {};
+                //    var avgHeight = 14;
+                //    var avgWidth = 140;
+                //    var createHashKey = function(coordinates) {
+                //
+                //        return Math.floor(coordinates[0]/avgWidth) * avgWidth + ',' + Math.floor(coordinates[1]/avgHeight) * avgHeight;
+                //    };
+                //    pieLabels.transition()
+                //        .attr('transform', function(d) {
+                //            if (labelSunbeamLayout) {
+                //                d.outerRadius = arcRadius + 10; // Set Outer Coordinate
+                //                d.innerRadius = arcRadius + 15; // Set Inner Coordinate
+                //                var rotateAngle = (d.startAngle + d.endAngle) / 2 * (180 / Math.PI);
+                //                if ((d.startAngle+d.endAngle)/2 < Math.PI) {
+                //                    rotateAngle -= 90;
+                //                } else {
+                //                    rotateAngle += 90;
+                //                }
+                //                return 'translate(' + labelsArc.centroid(d) + ') rotate(' + rotateAngle + ')';
+                //            } else {
+                //                d.outerRadius = radius + 10; // Set Outer Coordinate
+                //                d.innerRadius = radius + 15; // Set Inner Coordinate
+                //
+                //                /*
+                //                 Overlapping pie labels are not good. What this attempts to do is, prevent overlapping.
+                //                 Each label location is hashed, and if a hash collision occurs, we assume an overlap.
+                //                 Adjust the label's y-position to remove the overlap.
+                //                 */
+                //                var center = labelsArc.centroid(d);
+                //                if(d.value){
+                //                    var hashKey = createHashKey(center);
+                //                    if (labelLocationHash[hashKey]) {
+                //                        center[1] -= avgHeight;
+                //                    }
+                //                    labelLocationHash[createHashKey(center)] = true;
+                //                }
+                //                return 'translate(' + center + ')'
+                //            }
+                //        });
+                //    pieLabels.select(".nv-label text")
+                //        .style('text-anchor', labelSunbeamLayout ? ((d.startAngle + d.endAngle) / 2 < Math.PI ? 'start' : 'end') : 'middle') //center the text on it's origin or begin/end if orthogonal aligned
+                //        .text(function(d, i) {
+                //            var percent = (d.endAngle - d.startAngle) / (2 * Math.PI);
+                //            var labelTypes = {
+                //                "key" : getX(d.data),
+                //                "value": getY(d.data),
+                //                "percent": labelFormat(percent)
+                //            };
+                //            return (d.value && percent > labelThreshold) ? labelTypes[labelType] : '';
+                //        });
+                //}
+                //
+
+                // Computes the angle of an arc, converting from radians to degrees.
+                //function angle(d) {
+                //    var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+                //    return a > 90 ? a - 180 : a;
+                //}
+                //
+                //function arcTween(a) {
+                //    a.endAngle = isNaN(a.endAngle) ? 0 : a.endAngle;
+                //    a.startAngle = isNaN(a.startAngle) ? 0 : a.startAngle;
+                //    if (!donut) a.innerRadius = 0;
+                //    var i = d3.interpolate(this._current, a);
+                //    this._current = i(0);
+                //    return function(t) {
+                //        return arc(i(t));
+                //    };
+                //}
+                //
+                //function tweenPie(b) {
+                //    b.innerRadius = 0;
+                //    var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+                //    return function(t) {
+                //        return arc(i(t));
+                //    };
+                //}
+
+            });
+
+            return chart;
+        }
+
+
+        function getTextAnchor(d,i){
+            var angle = Math.PI+(d.startAngle+d.endAngle)/-2;
+            var x = Math.sin(angle);
+            if (Math.abs(x) < 0.1) return "middle"
+            if ( x > 0.1) return "start"
+            return "end"
+        }
+
+        function getDy(d,i){
+            var angle = Math.PI+(d.startAngle+d.endAngle)/-2
+            var y = Math.cos(angle);
+            if (Math.abs(y) < 0.1) return ".72em"
+            if (y > 0.1) return "1em"
+            return "-.3em"
+        }
+
+        //============================================================
+        // Expose Public Variables
+        //------------------------------------------------------------
+
+        chart.dispatch = dispatch;
+        chart.options = nv.utils.optionsFunc.bind(chart);
+
+        chart.margin = function(_) {
+            if (!arguments.length) return margin;
+            margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+            margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+            margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+            margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
+            return chart;
+        };
+
+        chart.width = function(_) {
+            if (!arguments.length) return width;
+            width = _;
+            return chart;
+        };
+
+        chart.height = function(_) {
+            if (!arguments.length) return height;
+            height = _;
+            return chart;
+        };
+
+        //chart.values = function(_) {
+        //    nv.log("chord.values() is no longer supported.");
+        //    return chart;
+        //};
+
+        chart.x = function(_) {
+            if (!arguments.length) return getX;
+            getX = _;
+            return chart;
+        };
+
+        chart.y = function(_) {
+            if (!arguments.length) return getY;
+            getY = d3.functor(_);
+            return chart;
+        };
+
+        //chart.description = function(_) {
+        //    if (!arguments.length) return getDescription;
+        //    getDescription = _;
+        //    return chart;
+        //};
+        //
+        //chart.showLabels = function(_) {
+        //    if (!arguments.length) return showLabels;
+        //    showLabels = _;
+        //    return chart;
+        //};
+        //
+        //chart.labelSunbeamLayout = function(_) {
+        //    if (!arguments.length) return labelSunbeamLayout;
+        //    labelSunbeamLayout = _;
+        //    return chart;
+        //};
+        //
+        //chart.donutLabelsOutside = function(_) {
+        //    if (!arguments.length) return donutLabelsOutside;
+        //    donutLabelsOutside = _;
+        //    return chart;
+        //};
+        //
+        //chart.chordLabelsOutside = function(_) {
+        //    if (!arguments.length) return chordLabelsOutside;
+        //    chordLabelsOutside = _;
+        //    return chart;
+        //};
+        //
+        //chart.labelType = function(_) {
+        //    if (!arguments.length) return labelType;
+        //    labelType = _;
+        //    labelType = labelType || "key";
+        //    return chart;
+        //};
+        //
+        //chart.donut = function(_) {
+        //    if (!arguments.length) return donut;
+        //    donut = _;
+        //    return chart;
+        //};
+        //
+        //chart.donutRatio = function(_) {
+        //    if (!arguments.length) return donutRatio;
+        //    donutRatio = _;
+        //    return chart;
+        //};
+        //
+        //chart.startAngle = function(_) {
+        //    if (!arguments.length) return startAngle;
+        //    startAngle = _;
+        //    return chart;
+        //};
+        //
+        //chart.endAngle = function(_) {
+        //    if (!arguments.length) return endAngle;
+        //    endAngle = _;
+        //    return chart;
+        //};
+
+        chart.id = function(_) {
+            if (!arguments.length) return id;
+            id = _;
+            return chart;
+        };
+
+        chart.color = function(_) {
+            if (!arguments.length) return color;
+            color = nv.utils.getColor(_);
+            return chart;
+        };
+
+        //chart.valueFormat = function(_) {
+        //    if (!arguments.length) return valueFormat;
+        //    valueFormat = _;
+        //    return chart;
+        //};
+        //
+        //chart.labelFormat = function(_) {
+        //    if (!arguments.length) return labelFormat;
+        //    labelFormat = _;
+        //    return chart;
+        //};
+        //
+        //chart.labelThreshold = function(_) {
+        //    if (!arguments.length) return labelThreshold;
+        //    labelThreshold = _;
+        //    return chart;
+        //};
+        //============================================================
+
+
+        return chart;
+    }
+
+
+    nv.models.chordChart = function() {
+        "use strict";
+        //============================================================
+        // Public Variables with Default Settings
+        //------------------------------------------------------------
+
+        var chord = nv.models.chord()
+            , legend = nv.models.legend()
+            ;
+
+        var margin = {top: 30, right: 20, bottom: 20, left: 20}
+            , width = null
+            , height = null
+            , showLegend = true
+            , color = nv.utils.defaultColor()
+            , tooltips = true
+            , tooltip = function(key, y, e, graph) {
+                return '<h3>' + key + '</h3>' +
+                    '<p>' +  y + '</p>'
+            }
+            , state = {}
+            , defaultState = null
+            , noData = "No Data Available."
+            , dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState')
+            ;
+
+        //============================================================
+
+
+        //============================================================
+        // Private Variables
+        //------------------------------------------------------------
+
+        var showTooltip = function(e, offsetElement) {
+            var tooltipLabel = chord.description()(e.point) || chord.x()(e.point)
+            var left = e.pos[0] + ( (offsetElement && offsetElement.offsetLeft) || 0 ),
+                top = e.pos[1] + ( (offsetElement && offsetElement.offsetTop) || 0),
+                y = chord.valueFormat()(chord.y()(e.point)),
+                content = tooltip(tooltipLabel, y, e, chart);
+
+            nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
+        };
+
+        //============================================================
+
+
+        function chart(selection) {
+            selection.each(function(data) {
+                //console.log("CHORD CHART", data)
+
+
+
+                var container = d3.select(this),
+                    that = this;
+
+                var availableWidth = (width || parseInt(container.style('width')) || 960)
+                        - margin.left - margin.right,
+                    availableHeight = (height || parseInt(container.style('height')) || 400)
+                        - margin.top - margin.bottom;
+
+                chart.update = function() { container.transition().call(chart); };
+                chart.container = this;
+
+                //set state.disabled
+                state.disabled = data.map(function(d) { return !!d.disabled });
+
+                if (!defaultState) {
+                    var key;
+                    defaultState = {};
+                    for (key in state) {
+                        if (state[key] instanceof Array)
+                            defaultState[key] = state[key].slice(0);
+                        else
+                            defaultState[key] = state[key];
+                    }
+                }
+
+                //------------------------------------------------------------
+                // Display No Data message if there's nothing to show.
+
+                if (!data || !data.length) {
+                    var noDataText = container.selectAll('.nv-noData').data([noData]);
+
+                    noDataText.enter().append('text')
+                        .attr('class', 'nvd3 nv-noData')
+                        .attr('dy', '-.7em')
+                        .style('text-anchor', 'middle');
+
+                    noDataText
+                        .attr('x', margin.left + availableWidth / 2)
+                        .attr('y', margin.top + availableHeight / 2)
+                        .text(function(d) { return d });
+
+                    return chart;
+                } else {
+                    container.selectAll('.nv-noData').remove();
+                }
+
+                //------------------------------------------------------------
+
+
+                //------------------------------------------------------------
+                // Setup containers and skeleton of chart
+
+                var wrap = container.selectAll('g.nv-wrap.nv-chordChart').data([data]);
+                var gEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-chordChart').append('g');
+                var g = wrap.select('g');
+
+                gEnter.append('g').attr('class', 'nv-chordWrap');
+                gEnter.append('g').attr('class', 'nv-legendWrap');
+
+                //------------------------------------------------------------
+
+
+                //------------------------------------------------------------
+                // Legend
+
+                if (showLegend) {
+                    legend
+                        .width( availableWidth )
+                        .key(function(d){return d.key;});
+
+                    wrap.select('.nv-legendWrap')
+                        .datum(data)
+                        .call(legend);
+
+                    if ( margin.top != legend.height()) {
+                        margin.top = legend.height();
+                        availableHeight = (height || parseInt(container.style('height')) || 400)
+                        - margin.top - margin.bottom;
+                    }
+
+                    wrap.select('.nv-legendWrap')
+                        .attr('transform', 'translate(0,' + (-margin.top) +')');
+                }
+
+                //------------------------------------------------------------
+
+
+                wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+
+                //------------------------------------------------------------
+                // Main Chart Component(s)
+
+                chord
+                    .width(availableWidth)
+                    .height(availableHeight);
+
+
+                var chordWrap = g.select('.nv-chordWrap')
+                    .datum([data]);
+
+                d3.transition(chordWrap).call(chord);
+
+                //------------------------------------------------------------
+
+
+                //============================================================
+                // Event Handling/Dispatching (in chart's scope)
+                //------------------------------------------------------------
+
+                legend.dispatch.on('stateChange', function(newState) {
+                    state = newState;
+                    dispatch.stateChange(state);
+                    chart.update();
+                });
+
+                //chord.dispatch.on('elementMouseout.tooltip', function(e) {
+                //    dispatch.tooltipHide(e);
+                //});
+
+                // Update chart from a state object passed to event handler
+                dispatch.on('changeState', function(e) {
+
+                    if (typeof e.disabled !== 'undefined') {
+                        data.forEach(function(series,i) {
+                            series.disabled = e.disabled[i];
+                        });
+
+                        state.disabled = e.disabled;
+                    }
+
+                    chart.update();
+                });
+
+                //============================================================
+
+
+            });
+
+            return chart;
+        }
+
+        //============================================================
+        // Event Handling/Dispatching (out of chart's scope)
+        //------------------------------------------------------------
+
+        //chord.dispatch.on('elementMouseover.tooltip', function(e) {
+        //    e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+        //    dispatch.tooltipShow(e);
+        //});
+
+        dispatch.on('tooltipShow', function(e) {
+            if (tooltips) showTooltip(e);
+        });
+
+        dispatch.on('tooltipHide', function() {
+            if (tooltips) nv.tooltip.cleanup();
+        });
+
+        //============================================================
+
+
+        //============================================================
+        // Expose Public Variables
+        //------------------------------------------------------------
+
+        // expose chart's sub-components
+        chart.legend = legend;
+        chart.dispatch = dispatch;
+        chart.chord = chord;
+
+        d3.rebind(chart, chord, 'valueFormat', 'labelFormat', 'values', 'x', 'y', 'description', 'id', 'showLabels', 'donutLabelsOutside', 'chordLabelsOutside', 'labelType', 'donut', 'donutRatio', 'labelThreshold');
+        chart.options = nv.utils.optionsFunc.bind(chart);
+
+        chart.margin = function(_) {
+            if (!arguments.length) return margin;
+            margin.top    = typeof _.top    != 'undefined' ? _.top    : margin.top;
+            margin.right  = typeof _.right  != 'undefined' ? _.right  : margin.right;
+            margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
+            margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
+            return chart;
+        };
+
+        chart.width = function(_) {
+            if (!arguments.length) return width;
+            width = _;
+            return chart;
+        };
+
+        chart.height = function(_) {
+            if (!arguments.length) return height;
+            height = _;
+            return chart;
+        };
+
+        chart.color = function(_) {
+            if (!arguments.length) return color;
+            color = nv.utils.getColor(_);
+            legend.color(color);
+            chord.color(color);
+            return chart;
+        };
+
+        chart.showLegend = function(_) {
+            if (!arguments.length) return showLegend;
+            showLegend = _;
+            return chart;
+        };
+
+        chart.tooltips = function(_) {
+            if (!arguments.length) return tooltips;
+            tooltips = _;
+            return chart;
+        };
+
+        chart.tooltipContent = function(_) {
+            if (!arguments.length) return tooltip;
+            tooltip = _;
+            return chart;
+        };
+
+        chart.state = function(_) {
+            if (!arguments.length) return state;
+            state = _;
+            return chart;
+        };
+
+        chart.defaultState = function(_) {
+            if (!arguments.length) return defaultState;
+            defaultState = _;
+            return chart;
+        };
+
+        chart.noData = function(_) {
+            if (!arguments.length) return noData;
+            noData = _;
+            return chart;
+        };
+
+        //============================================================
+
+
+        return chart;
+    }
+
 
     //console.log("FINISH", nv)
 })()
