@@ -78,7 +78,7 @@
     "lines": {
 
       "dispatch": {},
-      "id": 4339,
+
       "interactive": true,
       "xDomain": null,
       "yDomain": null,
@@ -141,7 +141,7 @@
     "clipEdge": false,
     "clipVoronoi": true,
     "useVoronoi": true,
-    "id": 4339,
+
     "interpolate": "linear",
     "width": null,
     "showLegend": true,

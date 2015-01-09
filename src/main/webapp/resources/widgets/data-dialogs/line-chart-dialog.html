@@ -234,33 +234,33 @@
                     </button>
                 </th>
             </tr>
-            <tr>
-                <th class="center-align rowid">
-                    <button  ng-click="dialog.changeOrder(dialog.table.header)"
-                             ng-if="dialog.table.header.coordX == 'id'"
-                             class="button radius success toolbar"
-                             style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-                        {{dialog.table.header.order}}
-                    </button>
-                </th>
-                <th class="center-align rowid">
-                    <button  ng-click="dialog.changeOrder(dialog.table.header)"
-                             ng-if="dialog.table.header.coordX == 'label'"
-                             ng-class="{warning : dim.selection.role == 'Rows'}"
-                             class="button radius success toolbar"
-                             style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-                        {{dialog.table.header.order}}
-                    </button>
-                </th>
-                <th  class="center-align rowid" ng-repeat="h in dialog.table.header.body">
-                    <button  ng-click="dialog.changeOrder(dialog.table.header,h)"
-                             ng-if="h.coordX != undefined"
-                             class="button radius success toolbar"
-                             style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-                        {{h.order}}
-                    </button>
-                </th>
-            </tr>
+            <!--<tr>-->
+                <!--<th class="center-align rowid">-->
+                    <!--<button  ng-click="dialog.changeOrder(dialog.table.header)"-->
+                             <!--ng-if="dialog.table.header.coordX == 'id'"-->
+                             <!--class="button radius success toolbar"-->
+                             <!--style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">-->
+                        <!--{{dialog.table.header.order}}-->
+                    <!--</button>-->
+                <!--</th>-->
+                <!--<th class="center-align rowid">-->
+                    <!--<button  ng-click="dialog.changeOrder(dialog.table.header)"-->
+                             <!--ng-if="dialog.table.header.coordX == 'label'"-->
+                             <!--ng-class="{warning : dim.selection.role == 'Rows'}"-->
+                             <!--class="button radius success toolbar"-->
+                             <!--style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">-->
+                        <!--{{dialog.table.header.order}}-->
+                    <!--</button>-->
+                <!--</th>-->
+                <!--<th  class="center-align rowid" ng-repeat="h in dialog.table.header.body">-->
+                    <!--<button  ng-click="dialog.changeOrder(dialog.table.header,h)"-->
+                             <!--ng-if="h.coordX != undefined"-->
+                             <!--class="button radius success toolbar"-->
+                             <!--style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">-->
+                        <!--{{h.order}}-->
+                    <!--</button>-->
+                <!--</th>-->
+            <!--</tr>-->
 
             </thead>
             <tbody>
@@ -309,6 +309,10 @@
                     <input type="number" ng-model="dialog.conf.decoration.height">
                 </label>
             </div>
+        </div>
+        <h5>Colors</h5>
+        <div class="row border">
+
             <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
                 <label>Palette
                     <div>
@@ -333,8 +337,23 @@
                 </label>
             </div>
         </div>
+        <h5>Interpolation</h5>
+        <div class="row border">
+            <div class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">
+                <select ng-model="dialog.conf.decoration.interpolation">
+                    <option>linear</option>
+                    <option>step</option>
+                    <option>step-before</option>
+                    <option>step-after</option>
+                    <option>basis</option>
+                    <option>bundle</option>
+                    <option>cardinal</option>
+                    <option>monotone</option>
+                </select>
+            </div>
+        </div>
 
-        <h5>Point Options</h5>
+        <h5>Points Options</h5>
         <div class="row border">
             <div class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">
                 <label class="left">Show Line Area: &nbsp;&nbsp; </label>

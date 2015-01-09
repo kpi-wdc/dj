@@ -27,7 +27,7 @@ define([
                     options.chart.reduceXTicks = decoration.reduceXTicks;
                     options.chart.isArea = decoration.isArea;
                     options.chart.color = (decoration.color) ? decoration.color : null;
-
+                    options.chart.interpolate = decoration.interpolation;
                     options.chart.label = (decoration.showLabels) ? function(d){return d.y.toFixed(2)} : undefined;
 
                 }
@@ -49,6 +49,7 @@ define([
                     decoration.isArea = options.chart.isArea;
                     decoration.color = options.chart.color;
                     decoration.showLabels = angular.isDefined(options.chart.label);
+                    decoration.interpolation = options.chart.interpolate;
                     return decoration;
                 }
             }

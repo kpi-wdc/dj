@@ -254,10 +254,66 @@ define(["angular",
                     },
 
 
+                    //restoreState: function (conf, provider) {
+                    //
+                    //    if(conf && conf.standalone){
+                    //        this.table = conf.table;
+                    //        this.conf.standalone = true;
+                    //        this.setDisabled(
+                    //            this.steps.filter(function(item,index) {
+                    //                return index > 0 && index < 4
+                    //            })
+                    //        );
+                    //        this.gotoStep(this.steps[3]);
+                    //        return;
+                    //    }
+                    //
+                    //
+                    //    this.conf.standalone = false;
+                    //
+                    //    if(angular.isUndefined(provider)){
+                    //        this.setState(0);
+                    //        return;
+                    //    }
+                    //    this.setState(1, provider);
+                    //
+                    //    if (!conf) return;
+                    //    if (!conf.selectedDataset)return;
+                    //
+                    //    this.setState(2, this.conf.metadata.find(
+                    //        function(item){
+                    //            return item.id == conf.selectedDataset
+                    //        }
+                    //    ));
+                    //
+                    //    for(var i in this.conf.selectedDataset.dimensions){
+                    //        this.conf.selectedDataset.dimensions[i].selection.role = conf.selection[i].role;
+                    //        for(var j in conf.selection[i].collection){
+                    //            this.selectCategory(
+                    //                this.conf.selectedDataset.dimensions[i],
+                    //                this.conf.selectedDataset.dimensions[i].categories.find(
+                    //                    function(item){
+                    //                        return item.id == conf.selection[i].collection[j].id
+                    //                    })
+                    //            )
+                    //        }
+                    //
+                    //    }
+                    //
+                    //    if (!this.readyForDataFetch()) return;
+                    //    this.setState(3);
+                    //    if(this.table){
+                    //        this.table.header = conf.header;
+                    //        this.setState(4);
+                    //        this.gotoStep(this.steps[3])
+                    //    }
+                    //
+                    //},
+
                     restoreState: function (conf, provider) {
 
                         if(conf && conf.standalone){
-                            this.table = conf.table;
+                            this.series = conf.series;
                             this.conf.standalone = true;
                             this.setDisabled(
                                 this.steps.filter(function(item,index) {
@@ -302,11 +358,6 @@ define(["angular",
 
                         if (!this.readyForDataFetch()) return;
                         this.setState(3);
-                        if(this.table){
-                            this.table.header = conf.header;
-                            this.setState(4);
-                            this.gotoStep(this.steps[3])
-                        }
 
                     },
 

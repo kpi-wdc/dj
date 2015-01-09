@@ -1935,6 +1935,524 @@
           "url" : "http://localhost:8080/data/wdc.json",
           "type" : "datasource",
           "instanceName" : "x8kgey22slbu766r"
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "u6gs00wj7yeng66r",
+          "decoration" : {
+            "height" : 100,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "interpolation" : "step",
+            "showLabels" : false
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "dlqo11zef622zkt9",
+          "decoration" : {
+            "height" : 150,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "interpolation" : "basis",
+            "showLabels" : false
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "q9ooo7dv4me1m7vi",
+          "decoration" : {
+            "height" : 150,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "interpolation" : "bundle",
+            "showLabels" : false
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "09wo3dim83oqd7vi",
+          "decoration" : {
+            "height" : 150,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "interpolation" : "cardinal",
+            "showLabels" : false
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "77la7823u21sv2t9",
+          "decoration" : {
+            "height" : 150,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "interpolation" : "monotone",
+            "showLabels" : false
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-stacked-area",
+          "instanceName" : "squm7icbd7a54s4i",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : null,
+            "yAxisName" : null,
+            "staggerLabels" : false,
+            "showLabels" : false,
+            "interpolation" : "cardinal"
+          },
+          "datasource" : "x8kgey22slbu766r",
+          "data" : {
+            "url" : "http://localhost:8080/data/wdc.json",
+            "header" : {
+              "label" : "2005 - 2013",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                },
+                "Security of Life Component" : {
+                  "label" : "Security of Life Component",
+                  "title" : "Security of Life Component"
+                }
+              },
+              "coordX" : "label",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "four",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "1",
+                "index" : "0",
+                "label" : "Albania"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : "2005"
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : "2006"
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : "2007"
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : "2008"
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : "2009"
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : "2010"
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : "2011"
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : "2012"
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : "2013"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "Cql",
+                "index" : "0",
+                "label" : "Quality of Life Component"
+              }, {
+                "id" : "Csl",
+                "index" : "1",
+                "label" : "Security of Life Component"
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          }
         } ]
       },
       "topleft" : {
@@ -1947,6 +2465,36 @@
         "widgets" : [ ]
       }
     },
-    "subscriptions" : [ ]
+    "subscriptions" : [ {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "u6gs00wj7yeng66r",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "dlqo11zef622zkt9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "q9ooo7dv4me1m7vi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "09wo3dim83oqd7vi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "77la7823u21sv2t9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "x8kgey22slbu766r",
+      "receiver" : "squm7icbd7a54s4i",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    } ]
   } ]
 }

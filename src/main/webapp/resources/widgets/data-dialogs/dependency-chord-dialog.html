@@ -221,78 +221,22 @@
                 <input type="text" ng-model="dialog.conf.decoration.caption">
             </label>
         </div>
-        <h5>Header</h5>
 
+        <h5>General Chart Settings</h5>
         <div class="row border">
-            <label>
-                <input type="text" ng-model="dialog.table.header.label">
-            </label>
-            <label ng-repeat="h in dialog.table.header.body">
-                <input type="text" ng-model="h.title">
-            </label>
-        </div>
-        <h5>Cells Decoration</h5>
-
-        <div class="row border">
-            <div class="columns left  medium-2 container-top" style="font-size: small; padding-bottom:1rem;">
-                <label class="left">Colorize: &nbsp;&nbsp; </label>
-
-                <div class="switch tiny">
-                    <input type="checkbox"
-                           id="colorizeCheckbox"
-                           ng-model="dialog.conf.decoration.colorize">
-                    <label for="colorizeCheckbox"></label>
-                </div>
-            </div>
-            <div class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">
-                <label>Mode:</label>
-                <select ng-model="dialog.conf.decoration.colorizeMode">
-                    <option>Columns</option>
-                    <option>Rows</option>
-                    <option>All Cells</option>
-                </select>
-            </div>
-            <div class="columns left  medium-3 container-top" style="font-size: small; padding-bottom:1rem;">
-                <label>Palette</label>
-
-                <a class="button dropdown tiny" dropdown-toggle="#dropdown-example-3" style="margin:0">
-                    <div class="toolbar left"
-                         ng-repeat="color in  dialog.conf.decoration.color"
-                         style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
-                        &nbsp;
-                    </div>
-                </a>
-                <ul id="dropdown-example-3" class="f-dropdown tiny" style="height:10rem; overflow: auto;">
-                    <li ng-repeat="palette in dialog.palettes">
-                        <a style="padding: 0; margin: 0;" ng-click="dialog.setColor(palette)">
-                        <span>
-                            <span ng-repeat="color in palette"
-                                  style="background-color: {{color}};width:10px;height:10px;display: inline-block; margin:0;padding:0;border:1px solid #afafaf;">
-                            </span>
-                        </span>
-                        </a>
-                    </li>
-                </ul>
-                <div style="float:none;"></div>
-                <button class="button toolbar" style="margin:0"
-                        ng-click="dialog.inverseColor(dialog.conf.decoration.color)">
-                    Reverse palette
-                </button>
-
-
-            </div>
-            <div class="columns left  medium-2 container-top" style="font-size: small; padding-bottom:1rem;">
-                <label>Opacity:
-                    <input type="number" min="0" max="1" step="0.1" ng-model="dialog.conf.decoration.opacity">
+            <div class="columns left  medium-3 container-top"
+                 style="font-size: small; padding-bottom:1rem;">
+                <label>Height
+                    <input type="number" ng-model="dialog.conf.decoration.height">
                 </label>
             </div>
         </div>
 
-        <h5>Table Preview</h5>
+
+        <h5>Correlation Matrix</h5>
 
         <div class="row border">
-            <div class="table caption">{{dialog.conf.decoration.caption}}</div>
-            <div class="table title">{{dialog.conf.decoration.title}}</div>
+
             <table cellpadding="0px" cellspacing="0px" style="margin-left: auto;margin-right: auto; float: none;">
                 <thead>
                 <tr>
@@ -315,7 +259,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="table subtitle">{{dialog.conf.decoration.subtitle}}</div>
+
         </div>
     </div>
     <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">

@@ -27,6 +27,9 @@ define([
                     options.chart.rotateLabels = decoration.xAxisAngle;
                     options.chart.reduceXTicks = decoration.reduceXTicks;
                     options.chart.isArea = decoration.isArea;
+
+                    options.chart.interpolate = decoration.interpolation;
+
                     options.chart.color = (decoration.color) ? decoration.color : null;
 
                     options.chart.lines.label = (decoration.showLabels) ? function(d){return d.y.toFixed(2)} : undefined;
@@ -53,6 +56,9 @@ define([
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
                     decoration.isArea = options.chart.isArea;
                     decoration.color = options.chart.color;
+                    decoration.interpolation = options.chart.interpolate;
+
+
                     decoration.showLabels = angular.isDefined(options.chart.lines.label);
                     return decoration;
                 }
