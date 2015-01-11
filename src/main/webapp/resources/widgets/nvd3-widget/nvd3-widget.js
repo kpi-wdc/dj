@@ -123,8 +123,8 @@ define([
                             }
                             if ($scope.widget.data && $scope.widget.data.standalone) {
                                 $scope.series = (params.serieAdapter.getSeries)?
-                                params.serieAdapter.getSeries(adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator)):
-                                adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator);
+                                params.serieAdapter.getSeries(adapter.getData($scope, params.serieGenerator)):
+                                adapter.getData($scope, params.serieGenerator);
 
                             return;
                             }
@@ -148,8 +148,8 @@ define([
                                 //console.log('setDataProvider',evt,provider)
                                 $scope.provider = provider;
                                 $scope.series = (params.serieAdapter.getSeries) ?
-                                    params.serieAdapter.getSeries(adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator)) :
-                                    adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator);
+                                    params.serieAdapter.getSeries(adapter.getData($scope, params.serieGenerator)) :
+                                    adapter.getData($scope, params.serieGenerator);
                         });
                     //console.log("NVD3 WIDGET",this)
             };

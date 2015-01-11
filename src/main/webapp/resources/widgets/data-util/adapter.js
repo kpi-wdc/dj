@@ -246,6 +246,67 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
         }
     }]);
 
+    m.service('DistributionSerieGenerator',['BarSerieGenerator',function(BarSerieGenerator) {
+        this.getData = function (table,scope) {
+            var series = BarSerieGenerator.getData(table);
+            var maxValue,minValue;
+
+            for(var i in series) {
+                series[i].values.sort(function (a, b) {
+                    return a.value - b.value
+                });
+                var max = series[i].values[series[i].values.length - 1];
+                var min = series[i].values[0]
+                if (scope.widget.decoration.normalize) {
+                    series[i].values = series[i].values.map(function (item) {
+                        //console.log(item, min, max,((item.value - min) / (max - min)))
+                        return {label: item.label, value: (item.value - min.value) / (max.value - min.value)}
+                    })
+                    //max = 1;
+                    //min = 0;
+                }
+                maxValue = (angular.isDefined(maxValue)) ? Math.max(maxValue, max.value) : max.value;
+                minValue = (angular.isDefined(minValue)) ? Math.min(minValue, min.value) : min.value;
+
+                //console.log(series[i].values);
+            }
+
+            if (scope.widget.decoration.normalize) {
+                maxValue = 1;
+                minValue = 0;
+            }
+                //console.log(minValue,maxValue)
+            var intervalCount = (scope.widget.decoration.intervalCount)?scope.widget.decoration.intervalCount : 10;
+
+            var result = [];
+            for(var i in series){
+                var values = [];
+                for(var j=0; j<intervalCount; j++){
+                    values.push({
+                        label:((j+0.5)*(maxValue-minValue)/intervalCount).toPrecision(3),
+                        x:((j+0.5)*(maxValue-minValue)/intervalCount).toPrecision(3),
+                        y:0
+                    })
+                }
+                for(var j in series[i].values){
+                    var index = Math.floor(((series[i].values[j].value-minValue)/(maxValue-minValue))*intervalCount);//((range.max-range.min)/this.conf.decoration.color.length);
+                    index = (index == intervalCount)? index-1 : index;
+                    values[index].y += 1/series[i].values.length;
+                }
+
+                if(scope.widget.decoration.cumulate){
+                    var s = 0;
+                    values.forEach(function(val){val.y = s += val.y})
+                }
+
+                values = values.map(function(val){return {label:val.label, x:val.x, y:val.y.toPrecision(3)}})
+                result.push({key:series[i].key, values:values})
+            }
+            return result;
+        }
+
+    }]);
+
     m.service('ScatterSerieGenerator',function() {
         this.getData = function (table) {
 
@@ -318,7 +379,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                     }
                 )
             }
-            console.log(result)
+            //console.log(result)
             return result;
         }
     })
@@ -327,7 +388,10 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
     m.service('adapter',['TableGenerator',function(TableGenerator){
 
 
-        this.getData = function(conf,provider, serieGenerator) {
+        this.getData = function(scope, serieGenerator) {
+
+            var conf = scope.widget.data;
+            var provider = scope.provider;
 
             if(angular.isUndefined(conf) &&  angular.isUndefined(provider)) return undefined;
 
@@ -361,7 +425,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                     table.header = conf.header;
                     TableGenerator.sortTable(table);
                 }
-                return serieGenerator.getData(table);
+                return serieGenerator.getData(table, scope);
             }
         }
 

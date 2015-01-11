@@ -160,7 +160,7 @@ define([
                             if(!provider) return;
 
                             $scope.provider = provider;
-                            $scope.table = adapter.getData($scope.widget.data, $scope.provider, params.serieGenerator);
+                            $scope.table = adapter.getData($scope, params.serieGenerator);
                         });
                 };
 
