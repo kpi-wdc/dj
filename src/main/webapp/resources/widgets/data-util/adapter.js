@@ -2,7 +2,8 @@ require.config({
     paths: {
         'jsinq': 'components/jsinq/source/jsinq',
         'jsinq-query': 'components/jsinq/source/jsinq-query',
-        "stat":'widgets/data-util/stat'
+        "stat":'widgets/data-util/stat',
+        "pca":'widgets/data-util/pca'
 
     },
     shim: {
@@ -16,9 +17,9 @@ require.config({
 });
 
 
-define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
+define(['angular','jsinq','jsinq-query','stat','pca'], function (angular, jsinq) {
 
-    var m = angular.module('app.widgets.data-util.adapter', ['app.widgets.data-util.stat']);
+    var m = angular.module('app.widgets.data-util.adapter', ['app.widgets.data-util.stat','app.widgets.data-util.pca']);
 
 
     m.service('TableGenerator',function(){
@@ -118,6 +119,14 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                     header.body[i].title=i;
                 }
                 //console.log(r)
+                //r = r.filter(function(item){
+                //    for(var i in item.values){
+                //        if (angular.isUndefined(item.values[i])
+                //            || isNaN(item.values[i]) || item.values[i] == null ) return false;
+                //    }
+                //    return true;
+                //})
+
                  return {header:header, body:r};
 
             }
@@ -178,7 +187,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                 }
                 result.push({key:table.body[i].label, values:v})
             }
-            console.log("Result", result)
+            //console.log("Result", result)
             return result;
         }
     })
@@ -307,8 +316,85 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
 
     }]);
 
-    m.service('ScatterSerieGenerator',function() {
-        this.getData = function (table) {
+    m.service('ScatterSerieGenerator',["PCA","STAT",function(PCA,STAT) {
+
+        this.getPcaData = function(table){
+
+
+            var data = PCA.getData(table);
+
+            var serie = {key:"Principle Component 2",values:[], base:{title:"Principle Component 1"}}
+            for(var i in table.body){
+                serie.values.push({
+                    label:table.body[i].label,
+                    x:Number(data.scores[i][0].toPrecision(2)),
+                    y:Number(data.scores[i][1].toPrecision(2))
+                })
+            }
+
+            var loadings = {key:"Loadings PC2",values:[{label:0,x:0,y:0}], base:{title:"Loadings PC1"}}
+            var keys = Object.keys(table.header.body)
+                .sort(function(a,b){
+                    return(a<b)?-1:1;
+                })
+            for(var i in keys){
+                loadings.values.push({
+                    label:table.header.body[keys[i]].label,
+                    x:Number(data.eigenVectors[i][0].toPrecision(2)),
+                    y:Number(data.eigenVectors[i][1].toPrecision(2))
+                })
+            }
+            return [serie,loadings]
+        }
+
+
+        this.getData = function (table,scope) {
+            //console.log(PCA.getData(table))
+          table.body = table.body.filter(function(item){
+                //console.log(item)
+                for(var i in item.values){
+                    if (angular.isUndefined(item.values[i])
+                        || isNaN(item.values[i]) || item.values[i] == null) return false;
+                }
+                return true;
+            })
+
+
+            if(scope.widget.decoration.pca) return this.getPcaData(table);
+
+            if(scope.widget.decoration.normalize){
+
+                var keys = Object.keys(table.header.body)
+                    .sort(function(a,b){
+                        return(a<b)?-1:1;
+                    })
+
+
+                for(var i in keys){
+                    var data = [];
+
+                    for(var j in table.body){
+                        data.push(table.body[j].values[keys[i]])
+                    }
+
+                    switch(scope.widget.decoration.normalizeMode){
+                        case "Range to [0,1]":
+                            data = STAT.normalize(data);
+                            break;
+                        case "Standartization":
+                            data = STAT.standardize(data);
+                            break;
+                        case "Logistic":
+                            data = STAT.logNormalize(data);
+                            break;
+                    }
+                    data = data.map(function(item){return Number(item.toPrecision(2))})
+                    for(var j in data){
+                            table.body[j].values[keys[i]] = data[j]
+                    }
+                }
+            }
+
 
             var xValues = [];
             var labels = [];
@@ -317,7 +403,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                 base = table.header.coordX;
                 xValues = table.body.map(
                     function(item,index){
-                      if (!item[table.header.coordX]) return undefined;
+                      if (angular.isUndefined(item[table.header.coordX])) return undefined;
 
                       return (isNaN(item[table.header.coordX])) ?
                           undefined :
@@ -335,7 +421,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                     base = table.header.body[coordX];
                     xValues = table.body.map(
                         function(item,index){
-                            if(!item.values[coordX]) return undefined;
+                            if(angular.isUndefined(item.values[coordX])) return undefined;
                             return (isNaN(item.values[coordX])) ?
                                 undefined :
                                 Number(Number(item.values[coordX]).toFixed(4))
@@ -356,7 +442,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
                     var yValues = table.body.map(
                         function(item,index){
                             //console.log(item)
-                            if(!item.values[i]) return undefined;
+                            if(angular.isUndefined(item.values[i])) return undefined;
                             return (isNaN(item.values[i])) ?
                                 undefined :
                                 Number(Number(item.values[i]).toFixed(4))
@@ -382,7 +468,7 @@ define(['angular','jsinq','jsinq-query','stat'], function (angular, jsinq) {
             //console.log(result)
             return result;
         }
-    })
+    }])
 
 
     m.service('adapter',['TableGenerator',function(TableGenerator){

@@ -250,6 +250,8 @@
                         pointPaths.exit().remove();
                         pointPaths
                             .attr('d', function(d) {
+                                if(!d) return 'M 0 0'
+                                //if(!d.data) return 'M 0 0'
                                 if (d.data.length === 0)
                                     return 'M 0 0'
                                 else
@@ -1013,6 +1015,7 @@
 
                 wrap.select('.nv-scatterWrap')
                     .datum(data.filter(function(d) { return !d.disabled }))
+                    .attr("transform", "translate(0,10)")
                     .call(scatter);
 
                 //Adjust for x and y padding

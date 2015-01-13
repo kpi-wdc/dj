@@ -237,7 +237,7 @@ define(['angular','jsinq','json-stat','jsinq-query'], function (angular,jsinc,JS
                 var query = new jsinq.Query(queryStr);
                 query.setValue(0,new jsinq.Enumerable(data));
                 data = query.execute().toArray();
-
+                //console.log(data)
 
                 for(var i in data){
                     for(var j in data[i]){

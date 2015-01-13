@@ -2152,5 +2152,751 @@
       "signal" : "loadDataSuccess",
       "slot" : "setDataProvider"
     } ]
+  }, {
+    "shortTitle" : "PCA",
+    "href" : "pca",
+    "template" : "1-col",
+    "holders" : {
+      "column" : {
+        "widgets" : [ {
+          "url" : "http://localhost:8080/data/wdc.json",
+          "type" : "datasource",
+          "instanceName" : "0k9urh4gbvyj5rk9"
+        }, {
+          "type" : "nvd3-scatter",
+          "instanceName" : "pq7ax4qauj8gds4i",
+          "decoration" : {
+            "height" : 650,
+            "title" : "Write Your Title",
+            "subtitle" : "Write Your Subtitle",
+            "caption" : "Figure 1. Write Your Caption text.",
+            "xAxisName" : "X Axis",
+            "yAxisName" : "Y Axis",
+            "staggerLabels" : false,
+            "color" : [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666" ],
+            "showLabels" : false,
+            "pca" : true,
+            "normalize" : false,
+            "normalizeMode" : "Standartization"
+          },
+          "data" : {
+            "header" : {
+              "label" : "all countries",
+              "body" : {
+                "Quality of Life Component" : {
+                  "label" : "Quality of Life Component",
+                  "title" : "Quality of Life Component"
+                },
+                "Security of Life Component" : {
+                  "label" : "Security of Life Component",
+                  "title" : "Security of Life Component"
+                },
+                "Index of environmental dimension" : {
+                  "label" : "Index of environmental dimension",
+                  "title" : "Index of environmental dimension",
+                  "coordX" : true,
+                  "order" : "A-Z"
+                }
+              }
+            },
+            "series" : [ {
+              "key" : "Principle Component 2",
+              "values" : [ {
+                "label" : "Albania",
+                "x" : -0.45,
+                "y" : -0.4,
+                "series" : 0
+              }, {
+                "label" : "Australia",
+                "x" : -1.5,
+                "y" : -0.3,
+                "series" : 0
+              }, {
+                "label" : "Belgium",
+                "x" : 1.3,
+                "y" : 0.17,
+                "series" : 0
+              }, {
+                "label" : "Botswana",
+                "x" : 1.3,
+                "y" : 0.75,
+                "series" : 0
+              }, {
+                "label" : "Cameroon",
+                "x" : 1.7,
+                "y" : 0.63,
+                "series" : 0
+              }, {
+                "label" : "Colombia",
+                "x" : -2.5,
+                "y" : 0.086,
+                "series" : 0
+              }, {
+                "label" : "Denmark",
+                "x" : 2.3,
+                "y" : -0.14,
+                "series" : 0
+              }, {
+                "label" : "China",
+                "x" : 1.3,
+                "y" : -0.58,
+                "series" : 0
+              }, {
+                "label" : "Algeria",
+                "x" : 1.1,
+                "y" : -0.081,
+                "series" : 0
+              }, {
+                "label" : "Armenia",
+                "x" : 0.54,
+                "y" : -0.22,
+                "series" : 0
+              }, {
+                "label" : "Argentina",
+                "x" : -1.7,
+                "y" : -0.44,
+                "series" : 0
+              }, {
+                "label" : "Austria",
+                "x" : 0.26,
+                "y" : 0.33,
+                "series" : 0
+              }, {
+                "label" : "Azerbaijan",
+                "x" : 0.3,
+                "y" : -0.19,
+                "series" : 0
+              }, {
+                "label" : "Bangladesh",
+                "x" : -2.6,
+                "y" : -0.057,
+                "series" : 0
+              }, {
+                "label" : "Benin",
+                "x" : 0.1,
+                "y" : -0.44,
+                "series" : 0
+              }, {
+                "label" : "Bolivia, Plurinational State of",
+                "x" : 1.5,
+                "y" : -0.052,
+                "series" : 0
+              }, {
+                "label" : "Bosnia and Herzegovina",
+                "x" : 1.1,
+                "y" : 0.66,
+                "series" : 0
+              }, {
+                "label" : "Brazil",
+                "x" : 2.2,
+                "y" : 0.33,
+                "series" : 0
+              }, {
+                "label" : "Bulgaria",
+                "x" : -0.98,
+                "y" : -0.34,
+                "series" : 0
+              }, {
+                "label" : "Cambodia",
+                "x" : -0.033,
+                "y" : 0.21,
+                "series" : 0
+              }, {
+                "label" : "Canada",
+                "x" : -1.9,
+                "y" : -0.12,
+                "series" : 0
+              }, {
+                "label" : "Chile",
+                "x" : 0.074,
+                "y" : -0.29,
+                "series" : 0
+              }, {
+                "label" : "Costa Rica",
+                "x" : -0.67,
+                "y" : -0.18,
+                "series" : 0
+              }, {
+                "label" : "Croatia",
+                "x" : 0.67,
+                "y" : -0.36,
+                "series" : 0
+              }, {
+                "label" : "Czech Republic",
+                "x" : 0.26,
+                "y" : 0.28,
+                "series" : 0
+              }, {
+                "label" : "Dominican Republic",
+                "x" : -0.0061,
+                "y" : 0.031,
+                "series" : 0
+              }, {
+                "label" : "Ecuador",
+                "x" : 0.26,
+                "y" : 0.95,
+                "series" : 0
+              }, {
+                "label" : "Egypt",
+                "x" : 0.69,
+                "y" : 0.35,
+                "series" : 0
+              }, {
+                "label" : "El Salvador",
+                "x" : 1.5,
+                "y" : 0.5,
+                "series" : 0
+              }, {
+                "label" : "Estonia",
+                "x" : -0.2,
+                "y" : 0.73,
+                "series" : 0
+              }, {
+                "label" : "Ethiopia",
+                "x" : 2.3,
+                "y" : 0.33,
+                "series" : 0
+              }, {
+                "label" : "Finland",
+                "x" : 2.4,
+                "y" : 0.46,
+                "series" : 0
+              }, {
+                "label" : "France",
+                "x" : 2,
+                "y" : -0.14,
+                "series" : 0
+              }, {
+                "label" : "Georgia",
+                "x" : 0.44,
+                "y" : -0.17,
+                "series" : 0
+              }, {
+                "label" : "Germany",
+                "x" : -3,
+                "y" : 0.29,
+                "series" : 0
+              }, {
+                "label" : "Greece",
+                "x" : -2,
+                "y" : -0.24,
+                "series" : 0
+              }, {
+                "label" : "Guatemala",
+                "x" : -1.1,
+                "y" : 0.062,
+                "series" : 0
+              }, {
+                "label" : "Honduras",
+                "x" : -2.8,
+                "y" : 0.17,
+                "series" : 0
+              }, {
+                "label" : "Hungary",
+                "x" : -1.2,
+                "y" : -0.36,
+                "series" : 0
+              }, {
+                "label" : "India",
+                "x" : -3.2,
+                "y" : 0.67,
+                "series" : 0
+              }, {
+                "label" : "Indonesia",
+                "x" : -2.3,
+                "y" : 0.23,
+                "series" : 0
+              }, {
+                "label" : "Ireland",
+                "x" : 1.7,
+                "y" : -0.07,
+                "series" : 0
+              }, {
+                "label" : "Israel",
+                "x" : 0.25,
+                "y" : 0.36,
+                "series" : 0
+              }, {
+                "label" : "Italy",
+                "x" : 1.7,
+                "y" : 0.075,
+                "series" : 0
+              }, {
+                "label" : "Jamaica",
+                "x" : -0.42,
+                "y" : 0.75,
+                "series" : 0
+              }, {
+                "label" : "Japan",
+                "x" : 2.3,
+                "y" : -0.91,
+                "series" : 0
+              }, {
+                "label" : "Jordan",
+                "x" : -2.8,
+                "y" : 0.17,
+                "series" : 0
+              }, {
+                "label" : "Kazakhstan",
+                "x" : -1.2,
+                "y" : 0.17,
+                "series" : 0
+              }, {
+                "label" : "Kenya",
+                "x" : -2.2,
+                "y" : -0.55,
+                "series" : 0
+              }, {
+                "label" : "Korea, Republic of",
+                "x" : -2.1,
+                "y" : -0.025,
+                "series" : 0
+              }, {
+                "label" : "Kyrgyzstan",
+                "x" : -2.7,
+                "y" : 0.09,
+                "series" : 0
+              }, {
+                "label" : "Latvia",
+                "x" : 1.2,
+                "y" : -0.051,
+                "series" : 0
+              }, {
+                "label" : "Lithuania",
+                "x" : 0.97,
+                "y" : 0.31,
+                "series" : 0
+              }, {
+                "label" : "Luxembourg",
+                "x" : 0.91,
+                "y" : -0.24,
+                "series" : 0
+              }, {
+                "label" : "Malaysia",
+                "x" : 0.88,
+                "y" : -1,
+                "series" : 0
+              }, {
+                "label" : "Mexico",
+                "x" : 0.35,
+                "y" : 0.42,
+                "series" : 0
+              }, {
+                "label" : "Moldova, Republic of",
+                "x" : 1.9,
+                "y" : 0.62,
+                "series" : 0
+              }, {
+                "label" : "Morocco",
+                "x" : -0.66,
+                "y" : -0.16,
+                "series" : 0
+              }, {
+                "label" : "Mozambique",
+                "x" : 1.6,
+                "y" : 0.51,
+                "series" : 0
+              }, {
+                "label" : "Namibia",
+                "x" : -1.7,
+                "y" : 0.036,
+                "series" : 0
+              }, {
+                "label" : "Nepal",
+                "x" : 2.7,
+                "y" : 0.35,
+                "series" : 0
+              }, {
+                "label" : "Netherlands",
+                "x" : 2.4E-4,
+                "y" : 0.82,
+                "series" : 0
+              }, {
+                "label" : "New Zealand",
+                "x" : 0.33,
+                "y" : -0.15,
+                "series" : 0
+              }, {
+                "label" : "Nicaragua",
+                "x" : -0.59,
+                "y" : -0.23,
+                "series" : 0
+              }, {
+                "label" : "Niger",
+                "x" : 2.2,
+                "y" : -0.28,
+                "series" : 0
+              }, {
+                "label" : "Norway",
+                "x" : 1.7,
+                "y" : 0.51,
+                "series" : 0
+              }, {
+                "label" : "Pakistan",
+                "x" : 2.6,
+                "y" : -1.1,
+                "series" : 0
+              }, {
+                "label" : "Panama",
+                "x" : 0.73,
+                "y" : -0.34,
+                "series" : 0
+              }, {
+                "label" : "Philippines",
+                "x" : -1.9,
+                "y" : -0.3,
+                "series" : 0
+              }, {
+                "label" : "Poland",
+                "x" : -0.43,
+                "y" : 0.16,
+                "series" : 0
+              }, {
+                "label" : "Portugal",
+                "x" : -2.7,
+                "y" : 0.049,
+                "series" : 0
+              }, {
+                "label" : "Romania",
+                "x" : 2.6,
+                "y" : 0.061,
+                "series" : 0
+              }, {
+                "label" : "Russian Federation",
+                "x" : 2,
+                "y" : -0.32,
+                "series" : 0
+              }, {
+                "label" : "Senegal",
+                "x" : 0.58,
+                "y" : -0.3,
+                "series" : 0
+              }, {
+                "label" : "Slovakia",
+                "x" : -0.52,
+                "y" : 0.17,
+                "series" : 0
+              }, {
+                "label" : "Slovenia",
+                "x" : 0.96,
+                "y" : -0.49,
+                "series" : 0
+              }, {
+                "label" : "South Africa",
+                "x" : 0.71,
+                "y" : 0.07,
+                "series" : 0
+              }, {
+                "label" : "Spain",
+                "x" : 0.67,
+                "y" : 0.49,
+                "series" : 0
+              }, {
+                "label" : "Sweden",
+                "x" : 0.54,
+                "y" : 0.19,
+                "series" : 0
+              }, {
+                "label" : "Switzerland",
+                "x" : 1.2,
+                "y" : -0.43,
+                "series" : 0
+              }, {
+                "label" : "Tajikistan",
+                "x" : -0.23,
+                "y" : -0.26,
+                "series" : 0
+              }, {
+                "label" : "Thailand",
+                "x" : 2.7,
+                "y" : -0.16,
+                "series" : 0
+              }, {
+                "label" : "Tunisia",
+                "x" : -0.023,
+                "y" : 0.6,
+                "series" : 0
+              }, {
+                "label" : "Turkey",
+                "x" : 1.9,
+                "y" : -0.16,
+                "series" : 0
+              }, {
+                "label" : "Ukraine",
+                "x" : 1.6,
+                "y" : 0.28,
+                "series" : 0
+              }, {
+                "label" : "United Kingdom",
+                "x" : 0.63,
+                "y" : -0.17,
+                "series" : 0
+              }, {
+                "label" : "United States",
+                "x" : 1.6,
+                "y" : 0.15,
+                "series" : 0
+              }, {
+                "label" : "Uruguay",
+                "x" : 0.28,
+                "y" : 0.22,
+                "series" : 0
+              }, {
+                "label" : "Venezuela, Bolivarian Republic of",
+                "x" : 2.1,
+                "y" : -0.51,
+                "series" : 0
+              }, {
+                "label" : "Viet Nam",
+                "x" : 2.3,
+                "y" : 0.34,
+                "series" : 0
+              }, {
+                "label" : "Zambia",
+                "x" : -1.9,
+                "y" : 0.1,
+                "series" : 0
+              }, {
+                "label" : "Iceland",
+                "x" : -2.9,
+                "y" : 0.68,
+                "series" : 0
+              }, {
+                "label" : "Cyprus",
+                "x" : 0.56,
+                "y" : -0.82,
+                "series" : 0
+              }, {
+                "label" : "Gambia",
+                "x" : -1.3,
+                "y" : -0.57,
+                "series" : 0
+              }, {
+                "label" : "Uganda",
+                "x" : -0.16,
+                "y" : -0.29,
+                "series" : 0
+              }, {
+                "label" : "Malawi",
+                "x" : -2.8,
+                "y" : -0.11,
+                "series" : 0
+              }, {
+                "label" : "Madagascar",
+                "x" : -2.8,
+                "y" : 0.22,
+                "series" : 0
+              }, {
+                "label" : "Mongolia",
+                "x" : -2.1,
+                "y" : -0.14,
+                "series" : 0
+              }, {
+                "label" : "Sri Lanka",
+                "x" : -3,
+                "y" : -0.35,
+                "series" : 0
+              }, {
+                "label" : "Paraguay",
+                "x" : -1.2,
+                "y" : 0.79,
+                "series" : 0
+              }, {
+                "label" : "Angola",
+                "x" : 2,
+                "y" : 0.45,
+                "series" : 0
+              }, {
+                "label" : "Barbados",
+                "x" : 1.5,
+                "y" : 0.059,
+                "series" : 0
+              }, {
+                "label" : "Belarus",
+                "x" : 0.51,
+                "y" : 0.39,
+                "series" : 0
+              }, {
+                "label" : "Burkina faso",
+                "x" : 0.53,
+                "y" : -0.47,
+                "series" : 0
+              }, {
+                "label" : "Cape verde",
+                "x" : 2.1,
+                "y" : -0.29,
+                "series" : 0
+              }, {
+                "label" : "Central african republic",
+                "x" : -2.6,
+                "y" : -0.15,
+                "series" : 0
+              }, {
+                "label" : "Congo, Republic of the",
+                "x" : 0.29,
+                "y" : 0.063,
+                "series" : 0
+              }, {
+                "label" : "Cote d`Ivoire",
+                "x" : -1,
+                "y" : -0.76,
+                "series" : 0
+              }, {
+                "label" : "Fiji",
+                "x" : -1.2,
+                "y" : 0.0057,
+                "series" : 0
+              }, {
+                "label" : "Ghana",
+                "x" : 1.8,
+                "y" : 0.26,
+                "series" : 0
+              }, {
+                "label" : "Guinea",
+                "x" : 1.6,
+                "y" : -0.46,
+                "series" : 0
+              }, {
+                "label" : "Guyana",
+                "x" : -2.4,
+                "y" : -0.27,
+                "series" : 0
+              }, {
+                "label" : "Iran",
+                "x" : -2.4,
+                "y" : -0.44,
+                "series" : 0
+              }, {
+                "label" : "Laos",
+                "x" : 2.2,
+                "y" : -0.84,
+                "series" : 0
+              }, {
+                "label" : "Lebanon",
+                "x" : 0.33,
+                "y" : 0.2,
+                "series" : 0
+              }, {
+                "label" : "Lesotho",
+                "x" : 2.5,
+                "y" : 0.3,
+                "series" : 0
+              }, {
+                "label" : "Macedonia, the former Yugoslav Republic of",
+                "x" : -1.1,
+                "y" : 0.13,
+                "series" : 0
+              }, {
+                "label" : "Mali",
+                "x" : -2.5,
+                "y" : -0.53,
+                "series" : 0
+              }, {
+                "label" : "Malta",
+                "x" : -3.2,
+                "y" : 0.35,
+                "series" : 0
+              }, {
+                "label" : "Mauritius",
+                "x" : -0.21,
+                "y" : 0.63,
+                "series" : 0
+              }, {
+                "label" : "Montenegro",
+                "x" : -0.92,
+                "y" : -0.026,
+                "series" : 0
+              }, {
+                "label" : "Nigeria",
+                "x" : -2.5,
+                "y" : -0.012,
+                "series" : 0
+              }, {
+                "label" : "Oman",
+                "x" : 1.1,
+                "y" : -0.069,
+                "series" : 0
+              }, {
+                "label" : "Rwanda",
+                "x" : -1.4,
+                "y" : -0.31,
+                "series" : 0
+              }, {
+                "label" : "Saudi arabia",
+                "x" : 2.7,
+                "y" : -0.28,
+                "series" : 0
+              }, {
+                "label" : "Serbia",
+                "x" : 0.042,
+                "y" : -0.37,
+                "series" : 0
+              }, {
+                "label" : "Seychelles",
+                "x" : -2,
+                "y" : -0.25,
+                "series" : 0
+              }, {
+                "label" : "Sierra leone",
+                "x" : 0.1,
+                "y" : -0.35,
+                "series" : 0
+              }, {
+                "label" : "Singapore",
+                "x" : -1.4,
+                "y" : -0.37,
+                "series" : 0
+              }, {
+                "label" : "Swaziland",
+                "x" : -0.57,
+                "y" : 0.86,
+                "series" : 0
+              }, {
+                "label" : "Syria",
+                "x" : 0.36,
+                "y" : -0.19,
+                "series" : 0
+              }, {
+                "label" : "Yemen",
+                "x" : -0.35,
+                "y" : 0.31,
+                "series" : 0
+              } ],
+              "base" : {
+                "title" : "Principle Component 1"
+              }
+            }, {
+              "key" : "Loadings PC2",
+              "values" : [ {
+                "label" : 0,
+                "x" : 0,
+                "y" : 0,
+                "series" : 1
+              }, {
+                "label" : "Index of environmental dimension",
+                "x" : -0.59,
+                "y" : -0.28,
+                "series" : 1
+              }, {
+                "label" : "Quality of Life Component",
+                "x" : -0.57,
+                "y" : 0.81,
+                "series" : 1
+              }, {
+                "label" : "Security of Life Component",
+                "x" : -0.58,
+                "y" : -0.51,
+                "series" : 1
+              } ],
+              "base" : {
+                "title" : "Loadings PC1"
+              }
+            } ],
+            "standalone" : true
+          }
+        } ]
+      }
+    },
+    "subscriptions" : [ ]
   } ]
 }
