@@ -3,7 +3,8 @@ require.config({
         'jsinq': 'components/jsinq/source/jsinq',
         'jsinq-query': 'components/jsinq/source/jsinq-query',
         "stat":'widgets/data-util/stat',
-        "pca":'widgets/data-util/pca'
+        "pca":'widgets/data-util/pca',
+        "cluster":'widgets/data-util/cluster'
 
     },
     shim: {
@@ -17,9 +18,13 @@ require.config({
 });
 
 
-define(['angular','jsinq','jsinq-query','stat','pca'], function (angular, jsinq) {
+define(['angular','jsinq','jsinq-query','stat','pca','cluster'], function (angular, jsinq) {
 
-    var m = angular.module('app.widgets.data-util.adapter', ['app.widgets.data-util.stat','app.widgets.data-util.pca']);
+    var m = angular.module('app.widgets.data-util.adapter', [
+        'app.widgets.data-util.stat',
+        'app.widgets.data-util.pca',
+        'app.widgets.data-util.cluster'
+    ]);
 
 
     m.service('TableGenerator',function(){
@@ -178,7 +183,7 @@ define(['angular','jsinq','jsinq-query','stat','pca'], function (angular, jsinq)
 
     m.service('BarSerieGenerator',function() {
         this.getData = function (table) {
-            console.log("Table", table)
+            //console.log("Table", table)
             var result = [];
             for(var i in table.body){
                 var v = [];
@@ -316,9 +321,127 @@ define(['angular','jsinq','jsinq-query','stat','pca'], function (angular, jsinq)
 
     }]);
 
-    m.service('ScatterSerieGenerator',["PCA","STAT",function(PCA,STAT) {
+    m.service('Normalizer',["STAT",function(STAT){
+        this.getData = function(table,scope){
+            var normalizeMode = scope.widget.decoration.normalizeMode || "Range to [0,1]";
+            var normalizeArea = scope.widget.decoration.normalizeArea || "Columns";
 
-        this.getPcaData = function(table){
+            var keys = Object.keys(table.header.body)
+                .sort(function(a,b){
+                    return(a<b)?-1:1;
+                })
+
+
+            if (normalizeArea == "Columns") {
+                for (var i in keys) {
+                    var data = [];
+
+                    for (var j in table.body) {
+                        data.push(table.body[j].values[keys[i]])
+                    }
+
+                    switch (normalizeMode) {
+                        case "Range to [0,1]":
+                            data = STAT.normalize(data);
+                            break;
+                        case "Standartization":
+                            data = STAT.standardize(data);
+                            break;
+                        case "Logistic":
+                            data = STAT.logNormalize(data);
+                            break;
+                    }
+                    data = data.map(function (item) {
+                        return Number(item.toPrecision(2))
+                    })
+                    for (var j in data) {
+                        table.body[j].values[keys[i]] = data[j]
+                    }
+                }
+            }else {
+                for (var i in table.body) {
+                    var data = [];
+
+                    for (var j in keys) {
+                        data.push(table.body[i].values[keys[j]])
+                    }
+
+                    switch (normalizeMode) {
+                        case "Range to [0,1]":
+                            data = STAT.normalize(data);
+                            break;
+                        case "Standartization":
+                            data = STAT.standardize(data);
+                            break;
+                        case "Logistic":
+                            data = STAT.logNormalize(data);
+                            break;
+                    }
+                    data = data.map(function (item) {
+                        return Number(item.toPrecision(2))
+                    })
+                    for (var j in keys) {
+                        table.body[i].values[keys[j]] = data[j]
+                    }
+                }
+            }
+            return table;
+        }
+    }]);
+
+
+    m.service('ScatterSerieGenerator',["PCA","STAT","CLUSTER","Normalizer",
+        function(PCA,STAT,CLUSTER,Normalizer) {
+
+        this.getClusterData = function(serie, scope){
+            var clsInputData = serie.values.map(function(item){
+                return [item.x,item.y]
+            });
+            var clusterCount = scope.widget.decoration.clusterCount
+            var clusters = CLUSTER.kmeans(clusterCount, clsInputData);
+            //console.log(clusters);
+            serie.radiusVector = true;
+            serie.values.forEach(function(item,index){
+                //console.log(index,item);
+                item.cluster = clusters.assignments[index];
+                item.ox = clusters.centroids[clusters.assignments[index]][0];
+                item.oy = clusters.centroids[clusters.assignments[index]][1];
+            })
+            //console.log(serie);
+
+            var result = [];
+            for(var i=0; i<clusterCount; i++){
+               result.push({
+                   key:(serie.key+" "+"Cls "+i),
+                   radiusVector : true,
+                   values:serie.values.filter(function(item){return item.cluster == i;}),
+                   base:{title:"Loadings PC1"}
+               })
+            }
+
+            result.push(
+                {
+                    key:("Centroids "),
+                    values:clusters.centroids.map(function(item,index){
+                        return {
+                            label:("Centroid "+index),
+                            x:Number(item[0].toPrecision(2)),
+                            y:Number(item[1].toPrecision(2))
+                        }
+                    }),
+                    base:{title:"Loadings PC1"}
+                }
+            )
+
+
+
+            return result;
+
+        }
+
+
+
+        this.getPcaData = function(table,scope){
 
 
             var data = PCA.getData(table);
@@ -332,17 +455,34 @@ define(['angular','jsinq','jsinq-query','stat','pca'], function (angular, jsinq)
                 })
             }
 
-            var loadings = {key:"Loadings PC2",values:[{label:0,x:0,y:0}], base:{title:"Loadings PC1"}}
-            var keys = Object.keys(table.header.body)
-                .sort(function(a,b){
+            var loadings = {
+                key:"Loadings PC2",
+                radiusVector:true,
+                values:[
+                {label:"0,0",x:0,y:0},
+                {label:"",x:-1,y:-1},
+                {label:"",x:1,y:1}
+                ],
+                base:{title:"Loadings PC1"}}
+
+            var keys = Object.keys(table.header.body);
+            keys.sort(function(a,b){
                     return(a<b)?-1:1;
                 })
             for(var i in keys){
                 loadings.values.push({
                     label:table.header.body[keys[i]].label,
+                    ox:0,
+                    oy:0,
                     x:Number(data.eigenVectors[i][0].toPrecision(2)),
                     y:Number(data.eigenVectors[i][1].toPrecision(2))
                 })
+            }
+
+            if(scope.widget.decoration.kmeans){
+                var result= this.getClusterData(serie,scope);
+                result.push(loadings);
+                return result
             }
             return [serie,loadings]
         }
@@ -360,39 +500,39 @@ define(['angular','jsinq','jsinq-query','stat','pca'], function (angular, jsinq)
             })
 
 
-            if(scope.widget.decoration.pca) return this.getPcaData(table);
+            if(scope.widget.decoration.pca) return this.getPcaData(table,scope);
 
             if(scope.widget.decoration.normalize){
-
-                var keys = Object.keys(table.header.body)
-                    .sort(function(a,b){
-                        return(a<b)?-1:1;
-                    })
-
-
-                for(var i in keys){
-                    var data = [];
-
-                    for(var j in table.body){
-                        data.push(table.body[j].values[keys[i]])
-                    }
-
-                    switch(scope.widget.decoration.normalizeMode){
-                        case "Range to [0,1]":
-                            data = STAT.normalize(data);
-                            break;
-                        case "Standartization":
-                            data = STAT.standardize(data);
-                            break;
-                        case "Logistic":
-                            data = STAT.logNormalize(data);
-                            break;
-                    }
-                    data = data.map(function(item){return Number(item.toPrecision(2))})
-                    for(var j in data){
-                            table.body[j].values[keys[i]] = data[j]
-                    }
-                }
+                table = Normalizer.getData(table,scope)
+                //var keys = Object.keys(table.header.body)
+                //    .sort(function(a,b){
+                //        return(a<b)?-1:1;
+                //    })
+                //
+                //
+                //for(var i in keys){
+                //    var data = [];
+                //
+                //    for(var j in table.body){
+                //        data.push(table.body[j].values[keys[i]])
+                //    }
+                //
+                //    switch(scope.widget.decoration.normalizeMode){
+                //        case "Range to [0,1]":
+                //            data = STAT.normalize(data);
+                //            break;
+                //        case "Standartization":
+                //            data = STAT.standardize(data);
+                //            break;
+                //        case "Logistic":
+                //            data = STAT.logNormalize(data);
+                //            break;
+                //    }
+                //    data = data.map(function(item){return Number(item.toPrecision(2))})
+                //    for(var j in data){
+                //            table.body[j].values[keys[i]] = data[j]
+                //    }
+                //}
             }
 
 

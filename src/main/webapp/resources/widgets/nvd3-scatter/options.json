@@ -30,7 +30,7 @@
       "clipEdge": false,
       "clipVoronoi": true,
       "useVoronoi": true,
-      "id": 42020,
+
       "singlePoint": false
     },
     "showDistX": false,
@@ -149,7 +149,7 @@
       "width": 400,
       "size": 8
     },
-    "id": 42020,
+
     "interactive": true,
     "xDomain": null,
     "yDomain": null,

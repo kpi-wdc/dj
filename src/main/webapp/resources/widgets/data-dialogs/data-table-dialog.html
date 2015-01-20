@@ -225,6 +225,32 @@
                 <input type="text" ng-model="h.title">
             </label>
         </div>
+        <h5>Data Post Processing</h5>
+        <div class="row border">
+            <label class="left">Normalize Data: &nbsp;&nbsp; </label>
+            <div class="switch tiny">
+                <input type="checkbox"
+                       id="normCheckbox"
+                       ng-model="dialog.conf.decoration.normalize" ng-click="dialog.setState(4)">
+                <label for="normCheckbox"></label>
+            </div>
+            <br/>
+            <div class="columns left  medium-2 container-top" style="font-size: small; padding-bottom:1rem;">
+            <label class="left"> Mode:</label>
+            <select ng-model="dialog.conf.decoration.normalizeMode" ng-change="dialog.setState(4)">
+                <option>Range to [0,1]</option>
+                <option>Standartization</option>
+                <option>Logistic</option>
+            </select>
+            </div>
+            <div class="columns left  medium-2 container-top" style="font-size: small; padding-bottom:1rem;">
+                <label class="left"> Normalize Data in:</label>
+                <select ng-model="dialog.conf.decoration.normalizeArea" ng-change="dialog.setState(4)">
+                    <option>Columns</option>
+                    <option>Rows</option>
+                </select>
+            </div>
+        </div>
         <h5>Cells Decoration</h5>
         <div class="row border">
             <div class="columns left  medium-2 container-top" style="font-size: small; padding-bottom:1rem;">

@@ -12,15 +12,16 @@ require.config({
 define(['angular',"statkit"], function (angular,statkit) {
 
     var m = angular.module('app.widgets.data-util.stat', []);
-
+    //console.log(statkit);
     m.factory('STAT', function() {
-
+        //console.log(statkit);
         statkit.normalize = function(data){
             var min = statkit.min(data);
             var max = statkit.max(data);
             var result =  data.map(function (item){return (item-min)/(max-min)})
             return result
         }
+
 
         statkit.standardize = function(data){
             var mean = statkit.mean(data);

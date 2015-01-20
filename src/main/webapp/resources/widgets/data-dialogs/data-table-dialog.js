@@ -16,11 +16,11 @@ define(["angular",
 
         m.factory("DataTableDialog", ['KeySet','TableGenerator','ScatterSerieGenerator','$modal',
             'APIUser','APIProvider','pageSubscriptions','pageWidgets',
-            'Palettes1',
+            'Palettes1', 'Normalizer',
 
             function(KeySet, TableGenerator, ScatterSerieGenerator, $modal,
                      APIUser, APIProvider, pageSubscriptions, pageWidgets,
-                     Palettes1) {
+                     Palettes1, Normalizer) {
 
                 var DataTableDialog = function(scope){
 
@@ -101,6 +101,7 @@ define(["angular",
                     },
 
                     RGBA : function(hex,opacity){
+                        if (angular.isUndefined(hex)) return "rgba("+256+","+256+","+256+","+1.0+")"
                         var color = parseInt(hex.slice(1), 16);
                         var r,g,b;
                         if (hex.length === 4) {
@@ -209,9 +210,9 @@ define(["angular",
                     },
 
                     dataValue: function(arg){
-                        if(!arg) return " - ";
                         if(angular.isString(arg)) return arg;
                         if(angular.isNumber(arg)) return arg.toFixed(2);
+                        return " - "
                     },
 
                     isNumber: function(arg){
@@ -526,9 +527,12 @@ define(["angular",
                                     for(var i in this.conf.selectedDataset.dimensions){
                                         this.conf.selection.push(this.conf.selectedDataset.dimensions[i].selection);
                                     }
-                                    this.table = TableGenerator.getData(this.conf,this.provider);
-                                    //console.log(this.table)
 
+                                    //if(this.scope.widget.decoration.normalize){
+                                    //    this.table = Normalizer.getData(this.table, this.scope)
+                                    //}
+                                    //console.log(this.table)
+                                    this.table = TableGenerator.getData(this.conf,this.provider);
                                     this.setEnabled(this.steps);
                                     this.setState(4)
                                     this.gotoStep(this.steps[3]);
@@ -542,12 +546,22 @@ define(["angular",
                             case 4:
 
                                 this.state = 4;
+                                this.table = TableGenerator.getData(this.conf,this.provider);
+                                //console.log(this.scope.widget.decoration)
+                                if(this.scope.widget.decoration && this.scope.widget.decoration.normalize){
+                                    this.table = Normalizer.getData(this.table, this.scope)
+                                }
                                 this.conf.decoration.ranges = this.calculateRanges();
                                 break;
 
 
                             case 5: // Set widget data configuration
                                 //this.series = ScatterSerieGenerator.getData(this.table);
+
+                                //if(this.scope.widget.decoration.normalize){
+                                //    this.table = Normalizer.getData(this.table, this.scope)
+                                //}
+                                //this.conf.decoration.ranges = this.calculateRanges();
 
                                 if(this.scope.widget.instanceName != this.conf.instanceName){
                                     this.removeIfExist({

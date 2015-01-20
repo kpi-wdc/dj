@@ -51,7 +51,7 @@ define([
                 }
             }
         })
-console.log("Nvd3ChordChartCtrl");
+//console.log("Nvd3ChordChartCtrl");
         m.controller('Nvd3ChordChartCtrl',
             function($scope,DependencyChordDialog,NVD3ChordAdapter,NVD3Widget,CorrelationMatrixGenerator){
 
@@ -70,5 +70,5 @@ console.log("Nvd3ChordChartCtrl");
                 serieGenerator: CorrelationMatrixGenerator
             })
         });
-console.log("Loaded")
+//console.log("Loaded")
     });

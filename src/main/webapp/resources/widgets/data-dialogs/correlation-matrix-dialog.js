@@ -155,39 +155,23 @@ define(["angular",
                     calculateRanges:function(){
                         var ranges = {};
                         ranges.rows = {};
+
                         for(var i in this.table.body){
-                            var values = [];
-                            for(var j in this.table.body[i].values){
-                                values.push(this.table.body[i].values[j])
-                            }
-                            values.sort(function(a,b){return a-b});
                             ranges.rows[this.table.body[i].label] = {
-                                max : values[values.length-1],
-                                min: values[0]}
+                                max : 1,
+                                min: -1}
                         }
                         ranges.columns = {};
                         for(var i in this.table.header.body){
-                            var t = this.table;
-                            var values = this.table.body.map(
-                                function(item){
-                                    return item.values[t.header.body[i].label]
-                                });
-                            values.sort(function(a,b){return a-b});
                             ranges.columns[this.table.header.body[i].label] = {
-                                max : values[values.length-1],
-                                min: values[0]}
+                                max : 1,
+                                min: -1}
                         }
 
-                        var allValues = [];
-                        for(var i in ranges.rows) {
-                            allValues.push(ranges.rows[i].max);
-                            allValues.push(ranges.rows[i].min);
-                        }
-
-                        allValues.sort(function(a,b){return a-b});
                         ranges.all = {
-                            max : allValues[allValues.length-1],
-                            min: allValues[0]}
+                            max : 1,
+                            min: -1
+                        }
 
                         return ranges;
 

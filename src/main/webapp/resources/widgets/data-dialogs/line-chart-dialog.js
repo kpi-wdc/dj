@@ -462,7 +462,7 @@ define(["angular",
 
 
                             case 5: // Set widget data configuration
-                                this.series = ScatterSerieGenerator.getData(this.table);
+                                this.series = ScatterSerieGenerator.getData(this.table,this.scope);
 
                                 if(this.scope.widget.instanceName != this.conf.instanceName){
                                     this.removeIfExist({
@@ -473,6 +473,7 @@ define(["angular",
                                     });
                                     this.scope.widget.instanceName = this.conf.instanceName;
                                 }
+
 
 
 

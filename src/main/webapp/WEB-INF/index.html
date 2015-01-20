@@ -15,18 +15,13 @@
 
   <body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
   <header class="row">
-    <div class="medium-3 columns">
-      <h1><img src="/img/logo.gif"></h1>
-    </div>
-    <div class="medium-9 columns">
-      <ul class="inline-list right">
-        <li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>
-      </ul>
-    </div>
-  </header>
-
-  <div class="row">
-    <div class="medium-9 push-3 columns" id="page-view">
+    <!--<div class="medium-3 columns">-->
+      <!--&lt;!&ndash;<h1><img src="/img/logo.png"></h1>&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="medium-9 columns">-->
+      <!--<ul class="inline-list right">-->
+        <!--<li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>-->
+      <!--</ul>-->
       <div ng-if="globalConfig.designMode" id="page-design-panel">
         <h3>Design mode panel</h3>
         <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
@@ -48,40 +43,68 @@
         </button>
         <hr>
       </div>
+
+    <!--</div>-->
+  </header>
+
+  <div class="row">
+    <div class="medium-10 push-2 columns" id="page-view">
+      <!--<div ng-if="globalConfig.designMode" id="page-design-panel">-->
+        <!--<h3>Design mode panel</h3>-->
+        <!--<button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"-->
+                <!--id="submitChangesToServerBtn"-->
+                <!--disabled-->
+                <!--ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">-->
+          <!--Submit changes to server-->
+        <!--</button>-->
+        <!--<button class="button tiny radius" ng-click="appConfig.addNewPageInModal()"-->
+                <!--id="addNewPageBtn">-->
+          <!--<i class="fi-plus black"></i> Add new page-->
+        <!--</button>-->
+        <!--<button class="button alert radius tiny"-->
+                <!--id="deletePageBtn"-->
+                <!--ng-disabled="appConfig.isHomePageOpened() || appConfig.is404PageOpened()"-->
+                <!--disabled-->
+                <!--ng-click="appConfig.deletePage(appConfig.currentPageIndex())">-->
+          <!--Delete page-->
+        <!--</button>-->
+        <!--<hr>-->
+      <!--</div>-->
       <div ui-view>
         Loading...
       </div>
     </div>
 
-    <nav class="medium-3 pull-9 columns">
+    <nav class="medium-2 pull-10 columns">
+      <h1><img src="/img/logo.png" style="width:90%;"></h1>
       <ul class="side-nav">
         <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/{{page.href}}" ng-bind="page.shortTitle"></a></li>
       </ul>
 
-      <div ng-if="globalConfig.loggedIn">
-        <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
-        <div class="switch tiny">
-          <input type="checkbox"
-                 id="designModeCheckbox"
-                 ng-model="globalConfig.designMode">
-          <label for="designModeCheckbox"></label>
-        </div>
-        <br>
-        <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
-        <div class="switch tiny">
-          <input type="checkbox"
-                 id="debugModeCheckbox"
-                 ng-model="globalConfig.debugMode"
-                 ng-disabled="globalConfig.designMode">
-          <label for="debugModeCheckbox"></label>
-        </div>
-        <br>
-        <button class="button tiny alert left" ng-click="logOut()">Log out</button>
-      </div>
-      <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
-        <button class="button tiny" id="logInButton">Log in</button>
-      </div>
-      <p><img src="/img/ad.gif"></p>
+      <!--<div ng-if="globalConfig.loggedIn">-->
+        <!--<h6 class="left">Design mode: &nbsp;&nbsp; </h6>-->
+        <!--<div class="switch tiny">-->
+          <!--<input type="checkbox"-->
+                 <!--id="designModeCheckbox"-->
+                 <!--ng-model="globalConfig.designMode">-->
+          <!--<label for="designModeCheckbox"></label>-->
+        <!--</div>-->
+        <!--<br>-->
+        <!--<h6 class="left">Debug mode:&nbsp;&nbsp; </h6>-->
+        <!--<div class="switch tiny">-->
+          <!--<input type="checkbox"-->
+                 <!--id="debugModeCheckbox"-->
+                 <!--ng-model="globalConfig.debugMode"-->
+                 <!--ng-disabled="globalConfig.designMode">-->
+          <!--<label for="debugModeCheckbox"></label>-->
+        <!--</div>-->
+        <!--<br>-->
+        <!--<button class="button tiny alert left" ng-click="logOut()">Log out</button>-->
+      <!--</div>-->
+      <!--<div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>-->
+        <!--<button class="button tiny" id="logInButton">Log in</button>-->
+      <!--</div>-->
+      <!--<p><img src="/img/ad.gif"></p>-->
     </nav>
   </div>
 
@@ -92,14 +115,41 @@
         <div class="medium-6 columns">
           <p>&copy; Copyright</p>
         </div>
-        <div class="medium-6 columns">
-          <ul class="inline-list right">
-            <li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>
-          </ul>
-        </div>
+
+
+        <!--<div class="medium-6 columns">-->
+          <!--<ul class="inline-list right">-->
+            <!--<li ng-repeat="section in appConfig.config.sections"><a href="/404" ng-bind="section"></a></li>-->
+          <!--</ul>-->
+        <!--</div>-->
       </div>
     </div>
   </footer>
+  <div class="row">
+  <div ng-if="globalConfig.loggedIn">
+    <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+    <div class="switch tiny">
+      <input type="checkbox"
+             id="designModeCheckbox"
+             ng-model="globalConfig.designMode">
+      <label for="designModeCheckbox"></label>
+    </div>
+    <br>
+    <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
+    <div class="switch tiny">
+      <input type="checkbox"
+             id="debugModeCheckbox"
+             ng-model="globalConfig.debugMode"
+             ng-disabled="globalConfig.designMode">
+      <label for="debugModeCheckbox"></label>
+    </div>
+    <!--<br>-->
+    <button class="button tiny alert right" ng-click="logOut()">Log out</button>
+  </div>
+  <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
+    <button class="button tiny" id="logInButton">Log in</button>
+  </div>
+  </div>
   <!-- ES6 polyfill. Load before everything else -->
   <script inline src="js/es6-polyfill.js"></script>
   <!-- Don't inline js/main as in compiled form it might contain closing </script> tags in code -->

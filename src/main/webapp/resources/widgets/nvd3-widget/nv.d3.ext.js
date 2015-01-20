@@ -21,6 +21,9 @@
             , z            = d3.scale.linear() //linear because d3.svg.shape.size is treated as area
             , getX         = function(d) { return d.x } // accessor to get the x value
             , getY         = function(d) { return d.y } // accessor to get the y value
+            , getOX        = function(d) {return d.ox }
+            , getOY        = function(d) {return d.oy }
+            , getRadiusVectorWeight = function(d) {return d.weight }
             , getLabel     = undefined //function(d) {return (d.label) ? d.label : ''}
             , getSize      = function(d) { return d.size || 1} // accessor to get the point size
             , getShape     = function(d) { return d.shape || 'circle' } // accessor to get point shape
@@ -45,6 +48,7 @@
             , singlePoint  = false
             , dispatch     = d3.dispatch('elementClick', 'elementMouseover', 'elementMouseout')
             , useVoronoi   = true
+            , showRadiusVector   = true
             ;
 
         //============================================================
@@ -73,9 +77,11 @@
                 data.forEach(function(series, i) {
                     series.values.forEach(function(point) {
                         point.series = i;
+                        if(series.radiusVector && point.ox!==undefined && point.oy!==undefined)
+                        point.radiusVector = true;
                     });
                 });
-
+                 //console.log("data",data)
                 //------------------------------------------------------------
                 // Setup Scales
 
@@ -372,6 +378,41 @@
                         .data(function(d) { return d.values }, pointKey);
                     var labels = groups.selectAll('text.nv-label')
                         .data(function(d) { return d.values }, pointKey);
+                    if(showRadiusVector){
+                        groups.selectAll('line.nv-radius-vector')
+                            .data(function(d) {return d.values}, pointKey)
+                            .exit()
+                            .remove();
+
+                        var rVectors = groups.selectAll('line.nv-radius-vector')
+                            .data(function(d) {
+                                return d.values.filter(function(item){return item.radiusVector})
+                            }, pointKey);
+
+
+                        //console.log("rVectors",rVectors)
+                        rVectors.exit().remove();
+
+                        rVectors.enter().append("svg:line")
+                            .attr('class', 'nv-radius-vector')
+                            .attr('x1', function (d, i) {
+                                return nv.utils.NaNtoZero(x0(getOX(d, i)))
+                            })
+                            .attr('y1', function (d, i) {
+                                return nv.utils.NaNtoZero(y0(getOY(d, i)))
+                            })
+                            .attr('x2', function (d, i) {
+                                return nv.utils.NaNtoZero(x0(getX(d, i)))
+                            })
+                            .attr('y2', function (d, i) {
+                                return nv.utils.NaNtoZero(y0(getY(d, i)))
+                            })
+                            .style("stroke", function (d,i) { return d.color })
+                            .style("stroke-width", "1px")
+                            .style("opacity", 0.3);
+
+
+                    }
 
                     points.enter().append('circle')
                         .style('fill', function (d,i) { return d.color })
@@ -413,6 +454,23 @@
                     labels.transition()
                         .attr('x', function(d,i) { return nv.utils.NaNtoZero(x(getX(d,i))) })
                         .attr('y', function(d,i) { return nv.utils.NaNtoZero(y(getY(d,i))) });
+                    if(showRadiusVector){
+                        rVectors.transition()
+                            .attr('class', 'nv-radius-vector')
+                            .attr('x1', function (d, i) {
+                                return nv.utils.NaNtoZero(x(getOX(d, i)))
+                            })
+                            .attr('y1', function (d, i) {
+                                return nv.utils.NaNtoZero(y(getOY(d, i)))
+                            })
+                            .attr('x2', function (d, i) {
+                                return nv.utils.NaNtoZero(x(getX(d, i)))
+                            })
+                            .attr('y2', function (d, i) {
+                                return nv.utils.NaNtoZero(y(getY(d, i)))
+                            })
+                            .style("opacity", 0.8);
+                    }
 
                 } else {
 
@@ -521,6 +579,23 @@
         chart.y = function(_) {
             if (!arguments.length) return getY;
             getY = d3.functor(_);
+            return chart;
+        };
+
+
+        chart.ox = function(_) {
+            if (!arguments.length) return getOX;
+            //console.log("set accessor",_ )
+
+            getOX = d3.functor(_);
+            return chart;
+        };
+
+        chart.oy = function(_) {
+            if (!arguments.length) return getOY;
+            //console.log("set accessor",_ )
+
+            getOY = d3.functor(_);
             return chart;
         };
 
@@ -674,6 +749,12 @@
             return chart;
         };
 
+        chart.showRadiusVector= function(_) {
+            if (!arguments.length) return showRadiusVector;
+            showRadiusVector = _;
+            return chart;
+        };
+
         chart.clipRadius = function(_) {
             if (!arguments.length) return clipRadius;
             clipRadius = _;
@@ -763,6 +844,7 @@
             , noData       = "No Data Available."
             , transitionDuration = 250
             , tooltipShift = {x:0,y:0}
+            , showRadiusVector = true
             ;
 
         scatter
@@ -1277,6 +1359,12 @@
             return chart;
         };
 
+        chart.showRadiusVector = function(_) {
+            showRadiusVector = _;
+            scatter.showRadiusVector(_);
+            return chart;
+        };
+
         chart.color = function(_) {
             if (!arguments.length) return color;
             color = nv.utils.getColor(_);
@@ -1315,6 +1403,8 @@
             showXAxis = _;
             return chart;
         };
+
+
 
         chart.showYAxis = function(_) {
             if (!arguments.length) return showYAxis;

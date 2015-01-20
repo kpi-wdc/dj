@@ -29,9 +29,11 @@ define([
                     options.chart.isArea = decoration.isArea;
                     options.chart.color = (decoration.color) ? decoration.color : null;
                     options.chart.scatter.label = (decoration.showLabels) ? function(d){return d.label} : undefined;
+                    options.chart.showRadiusVector = decoration.radiusVector;
                 }
                 return options;
             }
+
 
             this.getDecoration = function (options){
                 if(angular.isDefined(options)) {
@@ -47,6 +49,7 @@ define([
                     decoration.staggerLabels = options.chart.xAxis.staggerLabels;
                     decoration.isArea = options.chart.isArea;
                     decoration.color = options.chart.color;
+                    decoration.radiusVector = options.chart.showRadiusVector;
                     decoration.showLabels = angular.isDefined(options.chart.scatter.label);
                     return decoration;
                 }
@@ -55,7 +58,7 @@ define([
 
 
         m.controller('Nvd3ScatterChartCtrl',function($scope,ScatterChartDialog,NVD3ScatterAdapter,NVD3Widget,  ScatterSerieGenerator){
-            console.log($scope)
+            //console.log($scope)
             new NVD3Widget($scope,{
                 dialog: ScatterChartDialog,
                 decorationAdapter: NVD3ScatterAdapter,

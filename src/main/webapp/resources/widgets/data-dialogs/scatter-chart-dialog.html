@@ -380,6 +380,26 @@
                     <label for="pcaCheckbox"></label>
                 </div>
                 <br/>
+                <label class="left">K-means: &nbsp;&nbsp; </label>
+                <div class="switch tiny">
+                    <input type="checkbox"
+                           id="kmeansCheckbox"
+                           ng-model="dialog.conf.decoration.kmeans">
+                    <label for="kmeansCheckbox"></label>
+                </div>
+                <br/>
+                <label>Clusters
+                    <input type="number"  min="2"  max="10" ng-model="dialog.conf.decoration.clusterCount">
+                </label>
+                <br/>
+                <label class="left">Show Radius Vector: &nbsp;&nbsp; </label>
+                <div class="switch tiny">
+                    <input type="checkbox"
+                           id="radiusVectorCheckbox"
+                           ng-model="dialog.conf.decoration.radiusVector">
+                    <label for="radiusVectorCheckbox"></label>
+                </div>
+
                 <label class="left">Show Point Labels: &nbsp;&nbsp; </label>
                 <div class="switch tiny">
                     <input type="checkbox"

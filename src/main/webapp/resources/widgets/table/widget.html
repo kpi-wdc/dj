@@ -11,6 +11,7 @@
                             {{table.header.label}}
                             <i ng-if="(reverse==false) && (sortField==undefined)" class="glyphicon fi-arrow-down"/>
                             <i ng-if="(reverse==true) && (sortField==undefined)" class="glyphicon fi-arrow-up"/>
+                            <i ng-if="sortField!=undefined" class="glyphicon fi-asterisk"/>
                         </th>
                         <th  class="center-align rowid" style="cursor: pointer"
                              ng-click="setPredicate(byField(h))"
@@ -18,6 +19,7 @@
                             {{h.title}}
                             <i ng-if="(reverse==false) && (sortField==h)" class="glyphicon fi-arrow-down"/>
                             <i ng-if="(reverse==true) && (sortField==h)" class="glyphicon fi-arrow-up"/>
+                            <i ng-if="sortField!=h" class="glyphicon fi-asterisk"/>
                         </th>
                     </tr>
                 </thead>

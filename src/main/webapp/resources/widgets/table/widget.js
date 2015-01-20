@@ -1,14 +1,17 @@
 define([
         'angular',
         '/widgets/table/data-widget.js',
-        '/widgets/data-dialogs/data-table-dialog.js'
+        '/widgets/data-dialogs/data-table-dialog.js',
+        '/widgets/data-util/adapter.js'
     ],
     function (angular) {
 
         var m = angular.module('app.widgets.table',[
             'app.widgets.data-widget',
-            'app.widgets.data-dialogs.data-table-dialog'
-            ]);
+            'app.widgets.data-dialogs.data-table-dialog',
+            'app.widgets.data-util.adapter'
+
+        ]);
 
         //
         //m.service('DataTableDecorationAdapter', function () {
@@ -34,11 +37,13 @@ define([
         //    }
         //})
 
-        m.controller('TableCtrl',function($scope,DataTableDialog,DataWidget){
+        m.controller('TableCtrl',function($scope,DataTableDialog,DataWidget, Normalizer){
             new DataWidget($scope,{
                     dialog: DataTableDialog,
                     //decorationAdapter:DataTableDecorationAdapter,
-                    serieGenerator: {getData:function(table){return table}}
+                    serieGenerator: {getData:function(table,scope){
+                        return (scope.widget.decoration.normalize)? Normalizer.getData(table,$scope) : table}
+                    }
                 })
             });
     });

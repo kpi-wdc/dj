@@ -42,9 +42,9 @@ define([
                     }
 
                     $scope.dataValue =  function(arg){
-                        if(!arg) return " - ";
                         if(angular.isString(arg)) return arg;
                         if(angular.isNumber(arg)) return arg.toFixed(2);
+                        return " - ";
                     };
 
                     $scope.tableExist = function(){
@@ -57,6 +57,8 @@ define([
 
 
                     $scope.RGBA = function(hex,opacity){
+                        if (angular.isUndefined(hex)) return "rgba("+256+","+256+","+256+","+1.0+")"
+
                         var color = parseInt(hex.slice(1), 16);
                         var r,g,b;
                         if (hex.length === 4) {

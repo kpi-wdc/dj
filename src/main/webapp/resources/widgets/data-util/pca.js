@@ -397,9 +397,14 @@ define(['angular',"d3"], function (angular,d3) {
                 var X = table.body.map(function(row){
                     //console.log(row)
                     var res = [];
-                    for(var i in row.values) res.push(row.values[i]);
+                    var keys = Object.keys(row.values);
+                    keys.sort(function(a,b){
+                        return(a<b)?-1:1;
+                    })
+                    for(var i in keys) res.push(row.values[keys[i]]);
                     return res
                 });
+
 
 
                 //console.log(X);
@@ -417,7 +422,7 @@ define(['angular',"d3"], function (angular,d3) {
                 var prod = trunc(sub(pcXV,pcUdS), 1e-12);
                 var zero = zeros(prod.length, prod[0].length);
                 //console.assert(same(prod,zero), 'svd and eig ways must be the same.');
-
+                //console.log("eigenValues",S);
                 return {eigenValues: S, eigenVectors: V, scores:pcUdS};
             }
         //};
