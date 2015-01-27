@@ -43,7 +43,8 @@ var isEnvEnabled = function (name) {
 };
 
 
-var production = isEnvEnabled('PRODUCTION');
+var production = false; //isEnvEnabled('PRODUCTION');
+
 var minifyCode = production || isEnvEnabled('MINIFY_CODE');
 var mergeJS = production || isEnvEnabled('MERGE_JS');
 var inlineJSandCSS = mergeJS && minifyCode;
