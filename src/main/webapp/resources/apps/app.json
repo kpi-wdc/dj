@@ -11498,5 +11498,1426 @@
       }
     },
     "subscriptions" : [ ]
+  }, {
+    "shortTitle" : "Глобальні загрози",
+    "href" : "threats",
+    "template" : "left-right-bottom",
+    "holders" : {
+      "column" : {
+        "widgets" : [ {
+          "url" : "./data/GLTRN20052013.json",
+          "type" : "datasource",
+          "instanceName" : "mvcks09xmir1wcdi"
+        }, {
+          "type" : "nvd3-radar",
+          "instanceName" : "xrzkb6btw855ewmi",
+          "decoration" : {
+            "height" : 350,
+            "title" : "ГЛОБАЛЬНІ ЗАГРОЗИ ДЛЯ УКРАЇНИ",
+            "subtitle" : "2005-2013 рр.",
+            "caption" : "",
+            "isArea" : true,
+            "color" : [ "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928" ],
+            "showLabels" : false,
+            "ticks" : 5,
+            "tickLabel" : true,
+            "grid" : true,
+            "axisLabel" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "BBP",
+                "index" : "0",
+                "label" : "Biological balance"
+              }, {
+                "id" : "CI",
+                "index" : "1",
+                "label" : "Conflicts intencity"
+              }, {
+                "id" : "CM5",
+                "index" : "2",
+                "label" : "Mortality rate, under-5"
+              }, {
+                "id" : "CP",
+                "index" : "3",
+                "label" : "Corruption perception"
+              }, {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              }, {
+                "id" : "GDI",
+                "index" : "5",
+                "label" : "Global diseases"
+              }, {
+                "id" : "GWK",
+                "index" : "6",
+                "label" : "CO2 emissions "
+              }, {
+                "id" : "NDI",
+                "index" : "7",
+                "label" : "Natural disasters"
+              }, {
+                "id" : "PWA",
+                "index" : "8",
+                "label" : "Access to potable water"
+              }, {
+                "id" : "WBGINI",
+                "index" : "9",
+                "label" : "Gini coefficient"
+              }, {
+                "id" : "WBSF",
+                "index" : "10",
+                "label" : "State fragility"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Rows"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "table",
+          "instanceName" : "8j3u8ss5jrxm9529",
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "header" : {
+              "label" : "Threats",
+              "body" : {
+                "2005" : {
+                  "label" : "2005",
+                  "title" : "2005"
+                },
+                "2006" : {
+                  "label" : "2006",
+                  "title" : "2006"
+                },
+                "2007" : {
+                  "label" : "2007",
+                  "title" : "2007"
+                },
+                "2008" : {
+                  "label" : "2008",
+                  "title" : "2008"
+                },
+                "2009" : {
+                  "label" : "2009",
+                  "title" : "2009"
+                },
+                "2010" : {
+                  "label" : "2010",
+                  "title" : "2010"
+                },
+                "2011" : {
+                  "label" : "2011",
+                  "title" : "2011"
+                },
+                "2012" : {
+                  "label" : "2012",
+                  "title" : "2012"
+                },
+                "2013" : {
+                  "label" : "2013",
+                  "title" : "2013"
+                }
+              }
+            },
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "BBP",
+                "index" : "0",
+                "label" : "Biological balance"
+              }, {
+                "id" : "CI",
+                "index" : "1",
+                "label" : "Conflicts intencity"
+              }, {
+                "id" : "CM5",
+                "index" : "2",
+                "label" : "Mortality rate, under-5"
+              }, {
+                "id" : "CP",
+                "index" : "3",
+                "label" : "Corruption perception"
+              }, {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              }, {
+                "id" : "GDI",
+                "index" : "5",
+                "label" : "Global diseases"
+              }, {
+                "id" : "GWK",
+                "index" : "6",
+                "label" : "CO2 emissions "
+              }, {
+                "id" : "NDI",
+                "index" : "7",
+                "label" : "Natural disasters"
+              }, {
+                "id" : "PWA",
+                "index" : "8",
+                "label" : "Access to potable water"
+              }, {
+                "id" : "WBGINI",
+                "index" : "9",
+                "label" : "Gini coefficient"
+              }, {
+                "id" : "WBSF",
+                "index" : "10",
+                "label" : "State fragility"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          },
+          "decoration" : {
+            "ranges" : {
+              "rows" : {
+                "Biological balance" : {
+                  "max" : 0.5799265927056791,
+                  "min" : 0.5200052351730928
+                },
+                "Conflicts intencity" : {
+                  "max" : 0.5,
+                  "min" : 0.01798620996209156
+                },
+                "Mortality rate, under-5" : {
+                  "max" : 0.36808058664344534,
+                  "min" : 0.3432358157957937
+                },
+                "Corruption perception" : {
+                  "max" : 0.7313892256391521,
+                  "min" : 0.6715952625270551
+                },
+                "Energy security" : {
+                  "max" : 0.5378284728208828,
+                  "min" : 0.3182104786939177
+                },
+                "Global diseases" : {
+                  "max" : 0.5445841840321917,
+                  "min" : 0.5029659029501056
+                },
+                "CO2 emissions " : {
+                  "max" : 0.5363315627359115,
+                  "min" : 0.5144858282007532
+                },
+                "Natural disasters" : {
+                  "max" : 0.36759357735844667,
+                  "min" : 0.35196098335850046
+                },
+                "Access to potable water" : {
+                  "max" : 0.3464754100777119,
+                  "min" : 0.3387118816925896
+                },
+                "Gini coefficient" : {
+                  "max" : 0.2285802041843152,
+                  "min" : 0.15905206108106118
+                },
+                "State fragility" : {
+                  "max" : 0.7098934129526088,
+                  "min" : 0.47467156033155683
+                }
+              },
+              "columns" : {
+                "2005" : {
+                  "max" : 0.7098934129526088,
+                  "min" : 0.11920292202211755
+                },
+                "2006" : {
+                  "max" : 0.6715952625270551,
+                  "min" : 0.11920292202211755
+                },
+                "2007" : {
+                  "max" : 0.682031014868814,
+                  "min" : 0.11920292202211755
+                },
+                "2008" : {
+                  "max" : 0.7023567246699913,
+                  "min" : 0.11920292202211755
+                },
+                "2009" : {
+                  "max" : 0.7313892256391521,
+                  "min" : 0.11920292202211755
+                },
+                "2010" : {
+                  "max" : 0.7122338118757985,
+                  "min" : 0.11920292202211755
+                },
+                "2011" : {
+                  "max" : 0.7219129078740387,
+                  "min" : 0.01798620996209156
+                },
+                "2012" : {
+                  "max" : 0.692287090625379,
+                  "min" : 0.01798620996209156
+                },
+                "2013" : {
+                  "max" : 0.7023567246699913,
+                  "min" : 0.15905206108106118
+                }
+              },
+              "all" : {
+                "max" : 0.7313892256391521,
+                "min" : 0.01798620996209156
+              }
+            },
+            "colorize" : true,
+            "colorizeMode" : "Rows",
+            "color" : [ "#1a9850", "#91cf60", "#d9ef8b", "#ffffbf", "#fee08b", "#fc8d59", "#d73027" ],
+            "opacity" : 0.4,
+            "title" : "Динаміка глобальних загроз для України",
+            "subtitle" : "Кольорова схема по рядках"
+          }
+        }, {
+          "type" : "table",
+          "instanceName" : "wgkrj2322ihpvi",
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "header" : {
+              "label" : "Threats",
+              "body" : {
+                "2005" : {
+                  "label" : "2005",
+                  "title" : "2005"
+                },
+                "2006" : {
+                  "label" : "2006",
+                  "title" : "2006"
+                },
+                "2007" : {
+                  "label" : "2007",
+                  "title" : "2007"
+                },
+                "2008" : {
+                  "label" : "2008",
+                  "title" : "2008"
+                },
+                "2009" : {
+                  "label" : "2009",
+                  "title" : "2009"
+                },
+                "2010" : {
+                  "label" : "2010",
+                  "title" : "2010"
+                },
+                "2011" : {
+                  "label" : "2011",
+                  "title" : "2011"
+                },
+                "2012" : {
+                  "label" : "2012",
+                  "title" : "2012"
+                },
+                "2013" : {
+                  "label" : "2013",
+                  "title" : "2013"
+                }
+              }
+            },
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "BBP",
+                "index" : "0",
+                "label" : "Biological balance"
+              }, {
+                "id" : "CI",
+                "index" : "1",
+                "label" : "Conflicts intencity"
+              }, {
+                "id" : "CM5",
+                "index" : "2",
+                "label" : "Mortality rate, under-5"
+              }, {
+                "id" : "CP",
+                "index" : "3",
+                "label" : "Corruption perception"
+              }, {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              }, {
+                "id" : "GDI",
+                "index" : "5",
+                "label" : "Global diseases"
+              }, {
+                "id" : "GWK",
+                "index" : "6",
+                "label" : "CO2 emissions "
+              }, {
+                "id" : "NDI",
+                "index" : "7",
+                "label" : "Natural disasters"
+              }, {
+                "id" : "PWA",
+                "index" : "8",
+                "label" : "Access to potable water"
+              }, {
+                "id" : "WBGINI",
+                "index" : "9",
+                "label" : "Gini coefficient"
+              }, {
+                "id" : "WBSF",
+                "index" : "10",
+                "label" : "State fragility"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Columns"
+            } ],
+            "standalone" : false
+          },
+          "decoration" : {
+            "ranges" : {
+              "rows" : {
+                "Biological balance" : {
+                  "max" : 0.5799265927056791,
+                  "min" : 0.5200052351730928
+                },
+                "Conflicts intencity" : {
+                  "max" : 0.5,
+                  "min" : 0.01798620996209156
+                },
+                "Mortality rate, under-5" : {
+                  "max" : 0.36808058664344534,
+                  "min" : 0.3432358157957937
+                },
+                "Corruption perception" : {
+                  "max" : 0.7313892256391521,
+                  "min" : 0.6715952625270551
+                },
+                "Energy security" : {
+                  "max" : 0.5378284728208828,
+                  "min" : 0.3182104786939177
+                },
+                "Global diseases" : {
+                  "max" : 0.5445841840321917,
+                  "min" : 0.5029659029501056
+                },
+                "CO2 emissions " : {
+                  "max" : 0.5363315627359115,
+                  "min" : 0.5144858282007532
+                },
+                "Natural disasters" : {
+                  "max" : 0.36759357735844667,
+                  "min" : 0.35196098335850046
+                },
+                "Access to potable water" : {
+                  "max" : 0.3464754100777119,
+                  "min" : 0.3387118816925896
+                },
+                "Gini coefficient" : {
+                  "max" : 0.2285802041843152,
+                  "min" : 0.15905206108106118
+                },
+                "State fragility" : {
+                  "max" : 0.7098934129526088,
+                  "min" : 0.47467156033155683
+                }
+              },
+              "columns" : {
+                "2005" : {
+                  "max" : 0.7098934129526088,
+                  "min" : 0.11920292202211755
+                },
+                "2006" : {
+                  "max" : 0.6715952625270551,
+                  "min" : 0.11920292202211755
+                },
+                "2007" : {
+                  "max" : 0.682031014868814,
+                  "min" : 0.11920292202211755
+                },
+                "2008" : {
+                  "max" : 0.7023567246699913,
+                  "min" : 0.11920292202211755
+                },
+                "2009" : {
+                  "max" : 0.7313892256391521,
+                  "min" : 0.11920292202211755
+                },
+                "2010" : {
+                  "max" : 0.7122338118757985,
+                  "min" : 0.11920292202211755
+                },
+                "2011" : {
+                  "max" : 0.7219129078740387,
+                  "min" : 0.01798620996209156
+                },
+                "2012" : {
+                  "max" : 0.692287090625379,
+                  "min" : 0.01798620996209156
+                },
+                "2013" : {
+                  "max" : 0.7023567246699913,
+                  "min" : 0.15905206108106118
+                }
+              },
+              "all" : {
+                "max" : 0.7313892256391521,
+                "min" : 0.01798620996209156
+              }
+            },
+            "colorize" : true,
+            "colorizeMode" : "Columns",
+            "color" : [ "#276419", "#4d9221", "#7fbc41", "#b8e186", "#e6f5d0", "#f7f7f7", "#fde0ef", "#f1b6da", "#de77ae", "#c51b7d", "#8e0152" ],
+            "opacity" : 0.6,
+            "title" : "Динаміка глобальних загроз для України",
+            "subtitle" : "Кольорова схема по стовпцях"
+          }
+        } ]
+      },
+      "topleft" : {
+        "widgets" : [ {
+          "type" : "nvd3-radar",
+          "instanceName" : "g23as9orolsrlik9",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Глобальні загрози 2005р.",
+            "subtitle" : "",
+            "caption" : "",
+            "isArea" : true,
+            "color" : [ "#666666", "#a6761d", "#e6ab02", "#66a61e", "#e7298a", "#7570b3", "#d95f02", "#1b9e77" ],
+            "showLabels" : true,
+            "ticks" : 5,
+            "tickLabel" : false,
+            "grid" : true,
+            "axisLabel" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "BBP",
+                "index" : "0",
+                "label" : "Biological balance"
+              }, {
+                "id" : "CI",
+                "index" : "1",
+                "label" : "Conflicts intencity"
+              }, {
+                "id" : "CM5",
+                "index" : "2",
+                "label" : "Mortality rate, under-5"
+              }, {
+                "id" : "CP",
+                "index" : "3",
+                "label" : "Corruption perception"
+              }, {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              }, {
+                "id" : "GDI",
+                "index" : "5",
+                "label" : "Global diseases"
+              }, {
+                "id" : "GWK",
+                "index" : "6",
+                "label" : "CO2 emissions "
+              }, {
+                "id" : "NDI",
+                "index" : "7",
+                "label" : "Natural disasters"
+              }, {
+                "id" : "PWA",
+                "index" : "8",
+                "label" : "Access to potable water"
+              }, {
+                "id" : "WBGINI",
+                "index" : "9",
+                "label" : "Gini coefficient"
+              }, {
+                "id" : "WBSF",
+                "index" : "10",
+                "label" : "State fragility"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "DEU",
+                "index" : "0",
+                "label" : "Germany"
+              }, {
+                "id" : "FRA",
+                "index" : "1",
+                "label" : "France"
+              }, {
+                "id" : "POL",
+                "index" : "2",
+                "label" : "Poland"
+              }, {
+                "id" : "ROU",
+                "index" : "3",
+                "label" : "Romania"
+              }, {
+                "id" : "RUS",
+                "index" : "4",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "TUR",
+                "index" : "5",
+                "label" : "Turkey"
+              }, {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              } ],
+              "role" : "Fix Value"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "z6j1xfr5d0mxtj4i",
+          "decoration" : {
+            "height" : 250,
+            "title" : "Динаміка загрози \"Енергетична небезпека\" для України, Турції, Польщі та Румунії",
+            "subtitle" : "2005-2013 рр.",
+            "caption" : "",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "isArea" : false,
+            "color" : [ "#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33" ],
+            "interpolation" : "cardinal",
+            "showLabels" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "header" : {
+              "label" : "Year",
+              "body" : {
+                "Turkey" : {
+                  "label" : "Turkey",
+                  "title" : "Turkey"
+                },
+                "Ukraine" : {
+                  "label" : "Ukraine",
+                  "title" : "Ukraine"
+                },
+                "Poland" : {
+                  "label" : "Poland",
+                  "title" : "Poland"
+                },
+                "Romania" : {
+                  "label" : "Romania",
+                  "title" : "Romania"
+                }
+              },
+              "coordX" : "id",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "TUR",
+                "index" : "5",
+                "label" : "Turkey"
+              }, {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              }, {
+                "id" : "POL",
+                "index" : "2",
+                "label" : "Poland"
+              }, {
+                "id" : "ROU",
+                "index" : "3",
+                "label" : "Romania"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Rows"
+            } ],
+            "standalone" : false
+          }
+        } ]
+      },
+      "topright" : {
+        "widgets" : [ {
+          "type" : "nvd3-radar",
+          "instanceName" : "rko09k7z5pcik9",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Глобальні загрози 2013 р.",
+            "subtitle" : "",
+            "caption" : "",
+            "isArea" : true,
+            "color" : [ "#666666", "#a6761d", "#e6ab02", "#66a61e", "#e7298a", "#7570b3", "#d95f02", "#1b9e77" ],
+            "showLabels" : true,
+            "ticks" : 5,
+            "tickLabel" : false,
+            "grid" : true,
+            "axisLabel" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "BBP",
+                "index" : "0",
+                "label" : "Biological balance"
+              }, {
+                "id" : "CI",
+                "index" : "1",
+                "label" : "Conflicts intencity"
+              }, {
+                "id" : "CM5",
+                "index" : "2",
+                "label" : "Mortality rate, under-5"
+              }, {
+                "id" : "CP",
+                "index" : "3",
+                "label" : "Corruption perception"
+              }, {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              }, {
+                "id" : "GDI",
+                "index" : "5",
+                "label" : "Global diseases"
+              }, {
+                "id" : "GWK",
+                "index" : "6",
+                "label" : "CO2 emissions "
+              }, {
+                "id" : "NDI",
+                "index" : "7",
+                "label" : "Natural disasters"
+              }, {
+                "id" : "PWA",
+                "index" : "8",
+                "label" : "Access to potable water"
+              }, {
+                "id" : "WBGINI",
+                "index" : "9",
+                "label" : "Gini coefficient"
+              }, {
+                "id" : "WBSF",
+                "index" : "10",
+                "label" : "State fragility"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "DEU",
+                "index" : "0",
+                "label" : "Germany"
+              }, {
+                "id" : "FRA",
+                "index" : "1",
+                "label" : "France"
+              }, {
+                "id" : "POL",
+                "index" : "2",
+                "label" : "Poland"
+              }, {
+                "id" : "ROU",
+                "index" : "3",
+                "label" : "Romania"
+              }, {
+                "id" : "RUS",
+                "index" : "4",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "TUR",
+                "index" : "5",
+                "label" : "Turkey"
+              }, {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Fix Value"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "5uufehy78yy9o1or",
+          "decoration" : {
+            "height" : 250,
+            "title" : "Динаміка загрози \"Енергетична небезпека\" для Німеччини, Росії та Франції",
+            "subtitle" : "2005-2013 рр.",
+            "caption" : "",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "color" : [ "#66a61e", "#e7298a", "#7570b3", "#d95f02", "#1b9e77" ],
+            "interpolation" : "cardinal",
+            "showLabels" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "header" : {
+              "label" : "Year",
+              "body" : {
+                "Germany" : {
+                  "label" : "Germany",
+                  "title" : "Germany"
+                },
+                "France" : {
+                  "label" : "France",
+                  "title" : "France"
+                },
+                "Russian Federation" : {
+                  "label" : "Russian Federation",
+                  "title" : "Russian Federation"
+                }
+              },
+              "coordX" : "id",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "DEU",
+                "index" : "0",
+                "label" : "Germany"
+              }, {
+                "id" : "FRA",
+                "index" : "1",
+                "label" : "France"
+              }, {
+                "id" : "RUS",
+                "index" : "4",
+                "label" : "Russian Federation"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Rows"
+            } ],
+            "standalone" : false
+          }
+        } ]
+      },
+      "bottom" : {
+        "widgets" : [ {
+          "type" : "nvd3-chord",
+          "instanceName" : "hlgm5x04yc1h5mi",
+          "decoration" : {
+            "height" : 450,
+            "title" : "Результати кореляційного аналізу динаміки загрози \"\"Енергетична небезпека\" для деяких країн Європи",
+            "subtitle" : "відображується коефіцієнт детермінації з урахуванням знаку коефіцієнта кореляції",
+            "caption" : "",
+            "isArea" : true,
+            "showLabels" : false,
+            "ticks" : 5,
+            "tickLabel" : true,
+            "grid" : true,
+            "axisLabel" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "DEU",
+                "index" : "0",
+                "label" : "Germany"
+              }, {
+                "id" : "FRA",
+                "index" : "1",
+                "label" : "France"
+              }, {
+                "id" : "POL",
+                "index" : "2",
+                "label" : "Poland"
+              }, {
+                "id" : "ROU",
+                "index" : "3",
+                "label" : "Romania"
+              }, {
+                "id" : "RUS",
+                "index" : "4",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "TUR",
+                "index" : "5",
+                "label" : "Turkey"
+              }, {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Split Columns"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-line",
+          "instanceName" : "hjykrczl6oquayvi",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Динаміка загрози \"Сприйняття корупції\"",
+            "subtitle" : "2005-2013 рр.",
+            "caption" : "",
+            "xAxisName" : "",
+            "yAxisName" : "",
+            "staggerLabels" : false,
+            "color" : [ "#666666", "#a6761d", "#e6ab02", "#66a61e", "#e7298a", "#7570b3", "#d95f02", "#1b9e77" ],
+            "interpolation" : "monotone",
+            "showLabels" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "header" : {
+              "label" : "Year",
+              "body" : {
+                "Germany" : {
+                  "label" : "Germany",
+                  "title" : "Germany"
+                },
+                "France" : {
+                  "label" : "France",
+                  "title" : "France"
+                },
+                "Poland" : {
+                  "label" : "Poland",
+                  "title" : "Poland"
+                },
+                "Romania" : {
+                  "label" : "Romania",
+                  "title" : "Romania"
+                },
+                "Russian Federation" : {
+                  "label" : "Russian Federation",
+                  "title" : "Russian Federation"
+                },
+                "Turkey" : {
+                  "label" : "Turkey",
+                  "title" : "Turkey"
+                },
+                "Ukraine" : {
+                  "label" : "Ukraine",
+                  "title" : "Ukraine"
+                }
+              },
+              "coordX" : "id",
+              "order" : "A-Z"
+            },
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "CP",
+                "index" : "3",
+                "label" : "Corruption perception"
+              } ],
+              "role" : "Fix Value"
+            }, {
+              "collection" : [ {
+                "id" : "DEU",
+                "index" : "0",
+                "label" : "Germany"
+              }, {
+                "id" : "FRA",
+                "index" : "1",
+                "label" : "France"
+              }, {
+                "id" : "POL",
+                "index" : "2",
+                "label" : "Poland"
+              }, {
+                "id" : "ROU",
+                "index" : "3",
+                "label" : "Romania"
+              }, {
+                "id" : "RUS",
+                "index" : "4",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "TUR",
+                "index" : "5",
+                "label" : "Turkey"
+              }, {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "2005",
+                "index" : "0",
+                "label" : 2005
+              }, {
+                "id" : "2006",
+                "index" : "1",
+                "label" : 2006
+              }, {
+                "id" : "2007",
+                "index" : "2",
+                "label" : 2007
+              }, {
+                "id" : "2008",
+                "index" : "3",
+                "label" : 2008
+              }, {
+                "id" : "2009",
+                "index" : "4",
+                "label" : 2009
+              }, {
+                "id" : "2010",
+                "index" : "5",
+                "label" : 2010
+              }, {
+                "id" : "2011",
+                "index" : "6",
+                "label" : 2011
+              }, {
+                "id" : "2012",
+                "index" : "7",
+                "label" : 2012
+              }, {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Rows"
+            } ],
+            "standalone" : false
+          }
+        }, {
+          "type" : "nvd3-scatter",
+          "instanceName" : "0tu0n27j8noh6w29",
+          "decoration" : {
+            "height" : 350,
+            "title" : "Розташування країн в просторі загроз \"Енергетична небезпека\" та \"Глобальне потепління\"",
+            "subtitle" : "2013 р.",
+            "caption" : "",
+            "xAxisName" : "Енергетична небезпека",
+            "yAxisName" : "Глобальне потепління",
+            "staggerLabels" : false,
+            "color" : [ "#004529", "#006837", "#238443", "#41ab5d", "#78c679", "#addd8e", "#d9f0a3", "#f7fcb9", "#ffffe5" ],
+            "showLabels" : true
+          },
+          "datasource" : "mvcks09xmir1wcdi",
+          "data" : {
+            "url" : "./data/GLTRN20052013.json",
+            "header" : {
+              "label" : "Country",
+              "body" : {
+                "Energy security" : {
+                  "label" : "Energy security",
+                  "title" : "Energy security",
+                  "coordX" : true,
+                  "order" : "A-Z"
+                },
+                "CO2 emissions " : {
+                  "label" : "CO2 emissions ",
+                  "title" : "CO2 emissions ",
+                  "order" : "A-Z"
+                }
+              }
+            },
+            "selectedDataset" : "GlTrCompare",
+            "selection" : [ {
+              "collection" : [ {
+                "id" : "ESB",
+                "index" : "4",
+                "label" : "Energy security"
+              }, {
+                "id" : "GWK",
+                "index" : "6",
+                "label" : "CO2 emissions "
+              } ],
+              "role" : "Columns"
+            }, {
+              "collection" : [ {
+                "id" : "DEU",
+                "index" : "0",
+                "label" : "Germany"
+              }, {
+                "id" : "FRA",
+                "index" : "1",
+                "label" : "France"
+              }, {
+                "id" : "POL",
+                "index" : "2",
+                "label" : "Poland"
+              }, {
+                "id" : "ROU",
+                "index" : "3",
+                "label" : "Romania"
+              }, {
+                "id" : "RUS",
+                "index" : "4",
+                "label" : "Russian Federation"
+              }, {
+                "id" : "TUR",
+                "index" : "5",
+                "label" : "Turkey"
+              }, {
+                "id" : "UKR",
+                "index" : "6",
+                "label" : "Ukraine"
+              } ],
+              "role" : "Rows"
+            }, {
+              "collection" : [ {
+                "id" : "2013",
+                "index" : "8",
+                "label" : 2013
+              } ],
+              "role" : "Fix Value"
+            } ],
+            "standalone" : false
+          }
+        } ]
+      }
+    },
+    "subscriptions" : [ {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "xrzkb6btw855ewmi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "g23as9orolsrlik9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "rko09k7z5pcik9",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "hlgm5x04yc1h5mi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "z6j1xfr5d0mxtj4i",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "5uufehy78yy9o1or",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "8j3u8ss5jrxm9529",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "hjykrczl6oquayvi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "0tu0n27j8noh6w29",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    }, {
+      "emitter" : "mvcks09xmir1wcdi",
+      "receiver" : "wgkrj2322ihpvi",
+      "signal" : "loadDataSuccess",
+      "slot" : "setDataProvider"
+    } ]
   } ]
 }
