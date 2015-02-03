@@ -46,7 +46,7 @@ var isEnvEnabled = function (name) {
 var production = isEnvEnabled('PRODUCTION');
 
 var minifyCode = production || isEnvEnabled('MINIFY_CODE');
-var mergeJS = false || isEnvEnabled('MERGE_JS');
+var mergeJS = false && isEnvEnabled('MERGE_JS');
 var inlineJSandCSS = mergeJS && minifyCode;
 
 var showFilesLog = false;
