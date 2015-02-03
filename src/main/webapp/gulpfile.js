@@ -43,10 +43,10 @@ var isEnvEnabled = function (name) {
 };
 
 
-var production = false; //isEnvEnabled('PRODUCTION');
+var production = isEnvEnabled('PRODUCTION');
 
 var minifyCode = production || isEnvEnabled('MINIFY_CODE');
-var mergeJS = production || isEnvEnabled('MERGE_JS');
+var mergeJS = false || isEnvEnabled('MERGE_JS');
 var inlineJSandCSS = mergeJS && minifyCode;
 
 var showFilesLog = false;
