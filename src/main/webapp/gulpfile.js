@@ -166,7 +166,7 @@ gulp.task('build-template-cache', function () {
 });
 
 gulp.task('copy-es6-polyfill', function () {
-    return gulp.src('node_modules/gulp-6to5/node_modules/6to5/browser-polyfill.js')
+    return gulp.src('node_modules/gulp-6to5/node_modules/6to5-core/browser-polyfill.js')
         .pipe(cached('copy-es6-polyfill'))
         .pipe(rename('es6-polyfill.js'))
         .pipe(gulp.dest('build/js'));
