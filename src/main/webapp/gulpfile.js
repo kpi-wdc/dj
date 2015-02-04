@@ -49,6 +49,11 @@ var minifyCode = production || isEnvEnabled('MINIFY_CODE');
 var mergeJS = false && isEnvEnabled('MERGE_JS');
 var inlineJSandCSS = mergeJS && minifyCode;
 
+console.log('Production mode: ' + production);
+console.log('Minifying code: ' + minifyCode);
+console.log('Merging files: ' + mergeJS);
+console.log('Inlining JS and CSS: ' + inlineJSandCSS);
+
 var showFilesLog = false;
 
 function handleError(err) {
