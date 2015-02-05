@@ -118,15 +118,15 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     });
 
     app.factory('widgetTypesPromise', function ($http, appUrls) {
-        return $http.get(appUrls.widgetTypes);
+        return $http.get(appUrls.widgetTypes, {cache: true});
     });
 
     app.factory('templateTypesPromise', function ($http, appUrls) {
-       return $http.get(appUrls.templateTypes);
+       return $http.get(appUrls.templateTypes, {cache: true});
     });
 
     app.factory('appConfigPromise', function ($http, appUrls) {
-        return $http.get(appUrls.appConfig);
+        return $http.get(appUrls.appConfig, {cache: true});
     });
 
     app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
