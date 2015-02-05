@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/sochka/wdc.png?label=ready&title=Ready)](https://waffle.io/sochka/wdc)
 # World Data Center
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sochka/wdc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -6,6 +5,9 @@
 [![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/sochka/wdc)
 [![Build Status](https://travis-ci.org/sochka/wdc.svg?branch=master)](https://travis-ci.org/sochka/wdc)
 [![Coverage Status](https://img.shields.io/coveralls/sochka/wdc.svg)](https://coveralls.io/r/sochka/wdc)
+[![Issue Stats](http://issuestats.com/github/sochka/wdc/badge/issue)](http://issuestats.com/github/sochka/wdc)
+[![Issue Stats](http://issuestats.com/github/sochka/wdc/badge/pr)](http://issuestats.com/github/sochka/wdc)
+[![Stories in Ready](https://badge.waffle.io/sochka/wdc.png?label=ready&title=Ready)](https://waffle.io/sochka/wdc)
 
 #### Prerequisites
 - maven is installed and available in `PATH`
