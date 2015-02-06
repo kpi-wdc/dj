@@ -8,6 +8,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var less = require('gulp-less-sourcemap');
 var glob = require('glob');
 var cached = require('gulp-cached');
+var changed = require('gulp-changed');
 var minifyCSS = require('gulp-minify-css');
 var del = require('del');
 var bower = require('gulp-bower');
@@ -195,7 +196,7 @@ gulp.task('compile-js', function () {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-components', 'compile-js'], function () {
+gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-components', 'compile-js'], function () {
     return gulp.src(['build/**/*.js', '!build/components/**/*'])
         .pipe(cached('annotate-js'))
         .pipe(ngAnnotate())
@@ -204,14 +205,14 @@ gulp.task('annotate-js', ['build-template-cache', 'build-widgets', 'build-compon
 });
 
 gulp.task('move-widgets', function () {
-    return gulp.src('resources/widgets/**')
-        .pipe(cached('move-widgets'))
+    return gulp.src(['resources/widgets/**','!resources/widgets/**/*.js'])
+        .pipe(changed('build/widgets'))
         .pipe(gulp.dest('build/widgets'));
 });
 
-gulp.task('build-widgets-js', ['move-widgets'], function () {
-    return gulp.src('build/widgets/**/*.js')
-        .pipe(cached('build-widgets-js'))
+gulp.task('build-widgets-js', function () {
+    return gulp.src('resources/widgets/**/*.js')
+        .pipe(changed('build/widgets'))
         .pipe(sourcemaps.init())
         .pipe(to5())
         .pipe(sourcemaps.write('.'))
