@@ -1,38 +1,23 @@
-language: java
-cache: # only for private repos
-  apt: true
+language: node_js
+# use container-based environment
+# which results in faster start-ups and allow caching
+sudo: false
+cache:
   directories:
-  - $HOME/.m2
+  - $HOME/.npm
 before_script:
 # start virtual X frame-buffer for end-to-end testing with real browser
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-- psql -c 'create database wdc2;' -U postgres
-- psql -d wdc2 -f schema_wdc2.sql -U postgres
-- psql -d wdc2 -f data_wdc2.sql -U postgres
 script:
-- ./run-tomcat-and-tests
-env:
-  matrix:
-  - PRODUCTION=true
-  - MERGE_JS=true
-  - MINIFY_CODE=true
-  - SEND_COVERAGE=true
-  global:
-  # SAUCE_USERNAME
-  - secure: XQXmNe9FkpcNxWvmr+8qvvMFj6E/GAE6d7KFDAVw/LYfquSImZkqMcRqlRkDmVHh9B8N6eALFMbS7biO2cRPfRKhN5YVegrX2PUbjszWvnrLiCO1/u14d2bdGWLtP/j+wvwtNCCAtwprlNbTDDXQib9IlRSGs9ofQEvM8n6Tn5M=
-  # SAUCE_ACCESS_KEY
-  - secure: Y0u9BWagQ3uUAY8KjmJlLKHYPJBubKmapF5hNLYbKWZxQ62ylFn5SqOHplRxRbmEUeVWE4PcRhWJAG+AofNHg2ZpIuUOQnTxXDr+FDL35zHYscATGRd+UHXqKeApDTt6oqZPIQbQjqZ9CCI5n4KdFeKvI5ovil+wkMT57XMP1iA=
-# addons: # should be disabled if sauce-connect-launcher is used
-#  sauce_connect: true
-os:
-- linux
-- osx # temporary not available on travis
-deploy:
-  provider: heroku
-  api_key:
-    secure: ZZa7bwqqwgk/9OzXr3GH6xjQwTydFxvAeNSvkWM8SRQUm7JiXKNaTgjuUoG3sYrjURI5oWNkDUgj+QIUk8UztA1yX2JRhntp+Co2w6fbDdaDONhVgTi69zYiMFT8pgrYrduFl/p/OY6drOz/Jh8IBZzUK5egidv+qmjEIGa3DpY=
-  app: wdc-app
-  on:
-    repo: sochka/wdc
-    condition: "$PRODUCTION = true"
+- ./run-and-test
+services:
+- mongodb
+matrix:
+  include:
+    - node_js: "0.11"
+      env: PRODUCTION=true
+    - node_js: "0.11"
+      env: SEND_COVERAGE=true
+    - node_js: "0.10"
+    - node_js: iojs

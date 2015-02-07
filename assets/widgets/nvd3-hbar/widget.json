@@ -1,0 +1,13 @@
+{
+  "description": "nvD3 Horizontal Bar Chart",
+  "schema": {
+    "type": "object",
+    "title": "Chart Settings",
+    "properties": {
+      "datasource": {
+        "title": "Datasource name",
+        "type": "string"
+      }
+    }
+  }
+}

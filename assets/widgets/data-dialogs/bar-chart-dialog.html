@@ -1,0 +1,375 @@
+<h4>Widget Settings Wizard</h4>
+
+<div class="border" style="padding: 0.2rem">
+  <div class="toolbar left">Steps:</div>
+  <button ng-repeat="step in dialog.steps"
+          ng-disabled="step.disabled"
+          ng-click="dialog.gotoStep(step)"
+          class="button radius toolbar"
+          ng-class="{ secondary:!step.active}"
+          style="margin:0 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+    {{step.title}}
+  </button>
+</div>
+
+
+<div ng-if="dialog.steps[0].active">
+  <div class="panel wizard" style="font-size:small;">
+    <div class="row">
+      <h5>Select Widget Name and Datasource</h5>
+
+      <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label>Widget name:<input type="text" ng-model="dialog.conf.instanceName"></label>
+      </div>
+      <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label>Datasource:
+          <select ng-model="dialog.conf.datasource">
+            <option ng-repeat="w in dialog.dsList">{{w}}</option>
+          </select>
+        </label>
+      </div>
+
+    </div>
+    <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+      <button class="button tiny alert right" style="margin:0 0 0 0.3rem"
+              ng-click="cancel()">
+        Cancel
+      </button>
+      <button class="button tiny right"
+              style="margin:0 0 0 0.785rem"
+              ng-class="{secondary : (dialog.conf.datasource == undefined)}"
+              ng-click="dialog.setState(0)" ng-disabled="dialog.conf.datasource == undefined">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<div ng-if="dialog.steps[1].active">
+  <div class="panel wizard" style="font-size:small;">
+
+    <div class="panel wizard">
+      <label style="font-size:small;">
+        Datasource:&nbsp;
+        <a target="_blank" href="{{dialog.provider.dataURL}}"> {{dialog.provider.dataURL}}</a>
+        ( format:
+        <a target="_blank" href="{{dialog.provider.dataFormatRef}}">
+          {{dialog.provider.dataFormat}}
+        </a> )
+      </label>
+    </div>
+    <div class="panel wizard">
+      <h5>Select Dataset:</h5>
+
+      <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0">
+        <div ng-click="dialog.setState(2,dataset)"
+             ng-repeat="dataset in dialog.conf.metadata"
+             style="cursor:pointer;"
+             class="border column left  medium-3 container-top"
+             ng-style="dialog.getDatasetStyle(dataset)">
+          <label style="font-size:medium;font-weight: bold">
+            {{dataset.label}}
+          </label>
+          <label style="font-size:smaller"><b>Source:</b> {{dataset.source}}</label>
+          <label style="font-size:smaller"><b>Updated:</b> {{dataset.updated}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+      <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
+      <button class="button tiny right"
+              style="margin:0 0 0 0.785rem"
+              ng-click="dialog.gotoStep(dialog.steps(2))">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<div ng-if="dialog.steps[2].active">
+  <div class="panel wizard">
+    <label style="font-size:small;">
+      Dataset:&nbsp;{{dialog.conf.selectedDataset.label}}
+    </label>
+  </div>
+  <div class="panel wizard">
+    <h5>Select Dimension's Items</h5>
+
+    <div class="panel wizard" ng-repeat=" dim in dialog.conf.selectedDataset.dimensions">
+      <div class="row" ng-if="!dialog.autoselect(dim)">
+        <div class="row">
+          <label style="padding: 0 0 0.2rem 0; font-size: small;">
+            Dimension: <b>{{dim.label}}</b>&nbsp;(ID:{{dim.id}}
+            <span ng-if="dim.role">,&nbsp;ROLE:{{dim.role}}</span>)&nbsp;
+
+            <span ng-if="dim.selection.role != 'Fix Value'" style="font-size:smaller">({{dim.selection.length()}} form {{dim.length}} items selected)</span>
+            <span ng-if="dim.selection.role == 'Fix Value'" style="font-size:smaller">Fixed Value: {{dim.selection.collection[0].label}}</span>
+
+          </label>
+
+          <label class="left border" style="padding: 0.2rem">
+            <div class="toolbar left">
+              Role:
+            </div>
+            <button ng-click="dialog.setDimensionRole(dim,'Fix Value')"
+                    ng-class="{warning : dim.selection.role == 'Fix Value'}"
+                    class="button radius secondary toolbar"
+                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Fix Value
+            </button>
+            <button ng-click="dialog.setDimensionRole(dim,'Rows')"
+                    ng-class="{warning : dim.selection.role == 'Rows'}"
+                    class="button radius secondary toolbar"
+                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Rows
+            </button>
+            <button ng-click="dialog.setDimensionRole(dim,'Columns')"
+                    ng-class="{warning : dim.selection.role == 'Columns'}"
+                    class="button radius secondary toolbar"
+                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Columns
+            </button>
+            <button ng-click="dialog.setDimensionRole(dim,'Split Columns')"
+                    ng-class="{warning : dim.selection.role == 'Split Columns'}"
+                    class="button radius secondary toolbar"
+                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Split Columns
+            </button>
+
+          </label>
+          <label class="left border"
+                 ng-if="dim.selection.role != 'Fix Value'"
+                 style="padding:0.2rem">
+            <div class="toolbar left">
+              Selection:
+            </div>
+            <button ng-click="dialog.selectAllCategories(dim)"
+                    class="button radius toolbar"
+                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Select All
+            </button>
+            <button ng-click="dialog.unselectAllCategories(dim)"
+                    class="button  radius toolbar"
+                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Clear
+            </button>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="columns left  small-3 container-top"
+               style="font-size: smaller; "
+               ng-repeat="m in dim.categories">
+            <a style="padding:0 0.5rem 0 0.5rem"
+               ng-style="dialog.getItemStyle(dim,m)"
+               ng-click="dialog.selectCategory(dim,m)">
+              {{m.label}}
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row" ng-if="dialog.autoselect(dim)">
+        <label style="padding: 0 0 0.2rem 0; font-size: small; float:left;">
+          Dimension: <b>{{dim.label}}</b>&nbsp;(ID:{{dim.id}}<span ng-if="dim.role">,&nbsp;ROLE:{{dim.role}}</span>)&nbsp;
+          autoselect &nbsp;{{dim.selection.collection[0].label}}
+        </label>
+      </div>
+    </div>
+
+
+    <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+      <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
+      <button class="button tiny right" ng-class="{secondary : !dialog.readyForDataFetch()}"
+              style="margin:0 0 0 0.785rem"
+              ng-disabled="!dialog.readyForDataFetch()"
+              ng-click="dialog.setState(3)">
+        Next
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div ng-if="dialog.steps[3].active">
+  <div class="panel wizard" style="overflow: auto">
+    <h5>Series in Rows</h5>
+    <table cellpadding="0px" cellspacing="0px" style="padding: 0px; margin: 0px;">
+      <thead>
+      <tr>
+        <th class="center-align">
+          {{dialog.table.header.label}}
+        </th>
+        <th class="center-align" ng-repeat="h in dialog.table.header.body">
+          {{h.label}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="r in dialog.table.body">
+        <th class="left-align">{{r.label}}</th>
+        <td ng-class="{'right-align':dialog.isNumber(f)}" ng-repeat="f in r.values">
+          {{dialog.dataValue(f)}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+    <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
+    <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="dialog.gotoStep(dialog.steps[4])">Next
+    </button>
+  </div>
+</div>
+
+</div>
+
+<div ng-if="dialog.steps[4].active">
+  <div class="panel wizard">
+    <h5>Data Settings</h5>
+
+    <div class="row border">
+      <label class="left">Save Data in Widget Configuration (Standalone Mode): &nbsp;&nbsp; </label>
+
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="standaloneCheckbox"
+               ng-model="dialog.conf.standalone">
+        <label for="standaloneCheckbox"></label>
+      </div>
+    </div>
+    <h5>General Chart Settings</h5>
+
+    <div class="row border">
+      <div class="columns left  medium-3 container-top"
+           style="font-size: small; padding-bottom:1rem;">
+        <label>Height
+          <input type="number" ng-model="dialog.conf.decoration.height">
+        </label>
+      </div>
+      <div class="columns left  medium-5 container-top"
+           style="font-size: small; padding-bottom:1rem;">
+        <label>Palette
+          <div>
+            <a class="button dropdown tiny left"
+               dropdown-toggle="#dropdown-example-3">
+              <div class="button tiny left"
+                   ng-repeat="color in  dialog.conf.decoration.color"
+                   style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
+                &nbsp;
+              </div>
+            </a>
+            <ul id="dropdown-example-3"
+                class="f-dropdown tiny"
+                style="height:10rem; overflow: auto;">
+              <li ng-repeat="palette in dialog.palettes">
+                <a style="padding: 0; margin: 0;" ng-click="dialog.setColor(palette)">
+                                      <span>
+                                          <span ng-repeat="color in palette"
+                                                style="background-color: {{color}};width:10px;height:10px;display: inline-block; margin:0;padding:0;border:1px solid #afafaf;">
+                                          </span>
+                                      </span>
+                </a>
+              </li>
+            </ul>
+            <button class="button tiny left"
+                    style="margin:0 0 0 0.785rem"
+                    ng-click="dialog.inverseColor(dialog.conf.decoration.color)">
+              Reverse Palette
+            </button>
+
+          </div>
+        </label>
+      </div>
+
+    </div>
+
+
+    <h5>Titles</h5>
+
+    <div class="row border">
+      <label>Title
+        <input type="text" ng-model="dialog.conf.decoration.title">
+      </label>
+      <label>Subtitle
+        <input type="text" ng-model="dialog.conf.decoration.subtitle">
+      </label>
+      <label>Caption
+        <input type="text" ng-model="dialog.conf.decoration.caption">
+      </label>
+    </div>
+
+    <h5>Controls</h5>
+
+    <div class="row border">
+      <label class="left">Show Controls: &nbsp;&nbsp; </label>
+
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="showColtrolsCheckbox"
+               ng-model="dialog.conf.decoration.showControls">
+        <label for="showColtrolsCheckbox"></label>
+      </div>
+    </div>
+
+    <div class="row border">
+      <label class="left">Bar Stacked: &nbsp;&nbsp; </label>
+
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="stackedCheckbox"
+               ng-model="dialog.conf.decoration.stacked">
+        <label for="stackedCheckbox"></label>
+      </div>
+    </div>
+
+    <h5>Axises</h5>
+
+    <div class="row border">
+      <label class="left">Stagger X Axis Labels: &nbsp;&nbsp; </label>
+
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="xStaggerLabelsCheckbox"
+               ng-model="dialog.conf.decoration.staggerLabels">
+        <label for="xStaggerLabelsCheckbox"></label>
+      </div>
+      <br>
+      <label class="left">Reduce X Axis Labels: &nbsp;&nbsp; </label>
+
+      <div class="switch tiny">
+        <input type="checkbox"
+               id="reduceCheckbox"
+               ng-model="dialog.conf.decoration.reduceXTicks">
+        <label for="reduceCheckbox"></label>
+      </div>
+      <br>
+
+      <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label> X Axis Title
+          <input type="text" ng-model="dialog.conf.decoration.xAxisName">
+        </label>
+      </div>
+      <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label> X Axis Label Rotation Angle
+          <input type="number" ng-model="dialog.conf.decoration.xAxisAngle">
+        </label>
+      </div>
+      <div class="columns left  medium-5 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label> Y Axis Title
+          <input type="text" ng-model="dialog.conf.decoration.yAxisName">
+        </label>
+      </div>
+
+    </div>
+
+
+    <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+      <button class="button tiny alert right" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
+      <button class="button tiny right" style="margin:0 0 0 0.785rem" ng-click="dialog.setState(5)">Finish</button>
+    </div>
+  </div>
+</div>
+
+

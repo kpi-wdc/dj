@@ -1,0 +1,185 @@
+{
+  "chart": {
+    "type": "lineChart",
+    "height": 450,
+    "margin": {
+      "top": 20,
+      "right": 20,
+      "bottom": 40,
+      "left": 55
+    },
+    "isArea": true,
+    "useInteractiveGuideline": true,
+    "dispatch": {},
+    "xAxis": {
+      "axisLabel": "",
+      "orient": "bottom",
+      "tickValues": null,
+      "tickSubdivide": 0,
+      "tickSize": 6,
+      "tickPadding": 7,
+      "domain": [
+        0,
+        1
+      ],
+      "range": [
+        0,
+        1
+      ],
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "width": 75,
+      "ticks": null,
+      "height": 60,
+      "showMaxMin": true,
+      "highlightZero": true,
+      "rotateYLabel": true,
+      "rotateLabels": 0,
+      "staggerLabels": false,
+      "axisLabelDistance": 12
+    },
+    "yAxis": {
+      "axisLabel": "",
+      "axisLabelDistance": 30,
+      "orient": "left",
+      "tickValues": null,
+      "tickSubdivide": 0,
+      "tickSize": 6,
+      "tickPadding": 3,
+      "domain": [
+        0,
+        1
+      ],
+      "range": [
+        0,
+        1
+      ],
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "width": 75,
+      "ticks": null,
+      "height": 60,
+      "showMaxMin": true,
+      "highlightZero": true,
+      "rotateYLabel": true,
+      "rotateLabels": 0,
+      "staggerLabels": false
+    },
+    "lines": {
+      "dispatch": {},
+      "interactive": true,
+      "xDomain": null,
+      "yDomain": null,
+      "xRange": null,
+      "yRange": null,
+      "sizeDomain": [
+        16,
+        256
+      ],
+      "forceX": [],
+      "forceY": [],
+      "forceSize": [],
+      "clipVoronoi": true,
+      "useVoronoi": true,
+      "padData": false,
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "width": 960,
+      "height": 500,
+      "clipEdge": false,
+      "interpolate": "linear"
+    },
+    "legend": {
+      "dispatch": {},
+      "margin": {
+        "top": 5,
+        "right": 0,
+        "bottom": 5,
+        "left": 0
+      },
+      "width": 400,
+      "height": 20,
+      "align": true,
+      "rightAlign": true,
+      "updateState": true,
+      "radioButtonMode": false
+    },
+    "interactiveLayer": {
+      "dispatch": {},
+      "margin": {
+        "left": 55,
+        "top": 30
+      },
+      "width": null,
+      "height": null,
+      "showGuideLine": true,
+      "svgContainer": null
+    },
+    "xDomain": null,
+    "yDomain": null,
+    "xRange": null,
+    "yRange": null,
+    "forceX": [],
+    "forceY": [],
+    "interactive": true,
+    "clipEdge": false,
+    "clipVoronoi": true,
+    "useVoronoi": true,
+    "interpolate": "step",
+    "width": null,
+    "showLegend": true,
+    "showXAxis": true,
+    "showYAxis": true,
+    "rightAlignYAxis": false,
+    "tooltips": true,
+    "state": {
+      "disabled": [
+        true,
+        true,
+        false
+      ]
+    },
+    "defaultState": null,
+    "noData": "No Data Available.",
+    "transitionDuration": 250
+  },
+  "title": {
+    "enable": true,
+    "text": "Write Your Title",
+    "class": "chartTitle",
+    "css": {
+      "width": "nullpx",
+      "textAlign": "center"
+    }
+  },
+  "subtitle": {
+    "enable": true,
+    "text": "Write Your Subtitle",
+    "class": "chartSubTitle"
+  },
+  "caption": {
+    "enable": true,
+    "text": "Figure 1. Write Your Caption text.",
+    "class": "chartCaption"
+  },
+  "styles": {
+    "classes": {
+      "with-3d-shadow": true,
+      "with-transitions": true,
+      "gallery": false
+    },
+    "css": {}
+  }
+}

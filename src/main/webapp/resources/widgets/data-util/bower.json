@@ -1,9 +1,0 @@
-{
-  "name": "data-util",
-  "private": true,
-  "dependencies": {
-    "jsinq": "hoehrmann/jsinq",
-    "jsonstat":"badosa/JSON-stat"
-    }
-
-}

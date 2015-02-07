@@ -1,0 +1,8 @@
+#!/bin/bash
+npm start &
+server_pid=$!
+sleep 60
+npm test
+ret_code=$?
+kill ${server_pid}
+exit ${ret_code}

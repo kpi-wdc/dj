@@ -10,20 +10,22 @@
 [![Stories in Ready](https://badge.waffle.io/sochka/wdc.png?label=ready&title=Ready)](https://waffle.io/sochka/wdc)
 
 #### Prerequisites
-- maven is installed and available in `PATH`
-- git is installed and available in `PATH`
 
-For developers:
+Required software:
 
-- node.js is installed
+- node.js is installed (better 0.11.x or 0.12.x versions)
+Install latest node.js using `npm install -g n; n latest` as root/admin user
 - npm is installed (1.2 doesn't work, 1.4 works fine, check with `npm --version`.
-Install new npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
+Upgrade newer npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
+
+Highly recommended:
 - bower is installed (run `npm install -g bower` as admin)
 - gulp is installed (run `npm install -g gulp` as admin)
+
+Optional:
 - karma is installed (run `npm install -g karma` as admin)
 - protractor is installed (run `npm install -g protractor` as admin)
 - chrome and firefox (optional) are installed
-
 
 ## Build
 To run this project from terminal run the following command:
@@ -35,7 +37,7 @@ Intellij idea project has preconfigured maven run configuration.
 ## API docs
 To generate API documentation run `gulp docs`
 
-Open `src/main/webapp/build/docs/index.html` to access it in the browser.
+<!-- FIXME --> Open `build/docs/index.html` to access it in the browser.
 
 ## Debugging:
 
@@ -49,13 +51,12 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
   - Make sensible variable names
   - Don't use `git pull`, use `git pull --rebase` instead. Merge commits are evil. You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
   - Use commit names in format `[SUBPROJECT] explanation` or `[FEATURE] explanation` or `[FILE] explanation`. Examples:
-      -  [build] Change gulp task
-      -  [front-end] added new feature
-      -  [hotfix] fixed mistake in previous commit
-      -  [test] added new tests
-      -  [hibernate] changed configs
-      -  [travis] removed module
-      -  [heroku] changed env variables
+      - [build] Change gulp task
+      - [front-end] added new feature
+      - [hotfix] fixed mistake in previous commit
+      - [test] added new tests
+      - [travis] removed module
+      - [heroku] changed env variables
   - Use branches:
      - `master` branch for stable code synced from `develop` and bugfixes.
      - `develop` branch for code in development. Should be regularly merged into `master`
@@ -65,45 +66,38 @@ Open `src/main/webapp/build/docs/index.html` to access it in the browser.
 ## Used technologies
 
   - git (version control)
-  - maven (back-end task-runner & dependency management system)
-  - javascript (ES6)
-  - java/spring (back-end)
-  - databases (back-end)
-  - hibernate (back-end)
+  - ES6 JavaScript
+  - Sails.JS (node.js MVC framework)
   - npm (front-end dev. dependencies)
   - bower (front-end dependencies)
   - gulp (front-end task-runner)
-  - karma (JS unit-test runner)
-  - protractor (JS end-to-end test runner)
-  - jasmine (JS test framework)
-  - angularjs (front-end, MVVM framework)
-  - requirejs (front-end, runtime dependency management)
-  - less (front-end, css replacement)
-  - jsdoc (JavaScript documentation engine)
-  - REST (back-end + front-end)
-  - travis (continuous integration)
-  - heroku (PaaS, used for app deployment)
+  - karma (front-end unit-test runner)
+  - protractor (end-to-end test runner)
+  - jasmine (test framework)
+  - angularjs (MVVM front-end framework)
+  - requirejs (AMD loader)
+  - LESS (CSS replacement)
+  - jsdoc (JS documentation engine)
+  - travis (Continuous Integration)
+  - heroku (PaaS)
 
 ## Intellij Idea
 
 The following steps will make your work with Intellij Idea more productive
 
-1. Set Java version >= 7
-2. Set JavaScript version - EcmaScript 6
-3. Install TypeScript community stubs for front-end javascript dependencies.
+1. Set JavaScript version - EcmaScript 6
+2. Install TypeScript community stubs for front-end javascript dependencies.
 
 ### Suggested intellij idea plugins:
 
-  - maven
-  - spring
   - NodeJS
   - gulp
   - karma
-  - hibernate
   - LESS
   - gitignore (for syntax highlight)
   - angularjs
   - markdown
+  - EditorConfig
 
 ## Suggested Chrome extensions:
 

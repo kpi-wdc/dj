@@ -1,12 +1,21 @@
-# Maven output
-target
+# Local Configuration
+config/local.js
 
-# JetBrains IDEs
-*.iml
-.idea/*
-src/*/.idea
-!.idea/runConfigurations
+# Dependencies
+node_modules
+bower_components
 
-# Other
+# Sails.js / Waterline / Grunt
+.tmp
+dump.rdb
+
+# Node.js / NPM
+lib-cov
+*.seed
 *.log
-*.swp # vim
+*.out
+*.pid
+npm-debug.log
+
+# Intellij IDEA
+.idea/
