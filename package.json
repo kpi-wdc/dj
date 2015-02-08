@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "postinstall": "gulp build",
-    "start": "node app.js --harmony",
-    "debug": "node debug app.js --harmony",
+    "start": "node --harmony ./node_modules/sails/bin/sails lift",
+    "debug": "node --harmony debug ./node_modules/sails/bin/sails lift",
     "test": "gulp test"
   },
   "repository": {
