@@ -332,7 +332,7 @@ if (!npmProduction) {
 
   // Rerun the task when a file changes
   gulp.task('watch', function () {
-    return gulp.watch(['assets/**', 'test/**',
+    return gulp.watch(['assets/**', 'config/**', 'api/**', 'test/**',
       'bower.json', '!assets/apps/**'], ['build']);
   });
 
