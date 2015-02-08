@@ -17,8 +17,14 @@ lib-cov
 *.pid
 npm-debug.log
 
-# Intellij IDEA
-.idea/
+# Intellij IDEA - ignore everything except
+# not-too-often changed files with basic IDE config
+.idea/*
+!.idea/.name
+!.idea/runConfigurations
+!.idea/libraries
+!.idea/modules.xml
+!.idea/vcs.xml
 
 # Documentation
 /docs
