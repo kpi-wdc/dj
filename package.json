@@ -4,7 +4,7 @@
   "description": "Widget & statistical presentation platform",
   "private": true,
   "scripts": {
-    "prepublish": "gulp build",
+    "postinstall": "gulp build",
     "start": "node app.js --harmony",
     "debug": "node debug app.js --harmony",
     "test": "gulp test"
