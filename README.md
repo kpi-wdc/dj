@@ -38,12 +38,12 @@ Intellij idea project has preconfigured maven run configuration.
 ## API docs
 To generate API documentation run `gulp docs`
 
-<!-- FIXME --> Open `build/docs/index.html` to access it in the browser.
+Open `docs/index.html` to view documentation in the browser.
 
 ## Debugging:
 
-  If you want to debug javascript code - set your breakpoints in `src/main/webapp/build`,
-  not in `src/main/webapp/resources` or `src/main/webapp/WEB-INF/`.
+  If you want to debug javascript code in Intellij Idea - set your breakpoints in `.tmp/public`,
+  not in `assets/`.
   Otherwise it won't work for you.
 
 ## Project style guides:

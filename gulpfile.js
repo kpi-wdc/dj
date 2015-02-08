@@ -316,7 +316,7 @@ if (!npmProduction) {
       ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
       ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
       ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
-      ' -d ' + path.join(buildDir, 'docs') + // output directory
+      ' -d ' + path.join('docs') + // output directory
       ' -r ' + path.join('assets', 'js') + // source code directory
       ' README.md'
     ])().on('error', handleError)
