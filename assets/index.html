@@ -15,7 +15,7 @@
 
   <body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
   <header class="row">
-      <div ng-if="globalConfig.designMode" id="page-design-panel">
+      <div ng-if="globalConfig.designMode" id="page-design-panel" ng-cloak>
         <h3>Design mode panel</h3>
         <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
                 id="submitChangesToServerBtn"
