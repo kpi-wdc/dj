@@ -5,6 +5,7 @@ sudo: false
 cache:
   directories:
   - $HOME/.npm
+  - .tmp/bower_components
 before_script:
 # start virtual X frame-buffer for end-to-end testing with real browser
 - export DISPLAY=:99.0
