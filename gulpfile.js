@@ -311,14 +311,14 @@ if (!npmProduction) {
   });
 
   gulp.task('docs', function () {
-    return shell.task([
-      path.join('node', 'node') +
+    return plugins.shell.task([
+      'node' +
       ' ' + path.join('node_modules', 'angular-jsdoc', 'node_modules', 'jsdoc', 'jsdoc.js') +
       ' -c ' + path.join('node_modules', 'angular-jsdoc', 'conf.json') + // config file
       ' -t ' + path.join('node_modules', 'angular-jsdoc', 'template') + // template file
-      ' -d ' + path.join(buildPublicDir, 'docs') + // output directory
+      ' -d ' + path.join(buildDir, 'docs') + // output directory
       ' -r ' + path.join('assets', 'js') + // source code directory
-      ' ' + path.resolve('..', '..', '..', 'README.md') // index.html text
+      ' README.md'
     ])().on('error', handleError)
   });
 
