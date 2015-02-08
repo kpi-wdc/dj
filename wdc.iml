@@ -8,7 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/assets" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/views" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/config" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <sourceFolder url="file://$MODULE_DIR$/.tmp/public/components" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/.tmp/public" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/.tmp/bower_components" />
       <excludeFolder url="file://$MODULE_DIR$/docs" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
