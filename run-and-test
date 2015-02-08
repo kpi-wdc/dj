@@ -1,8 +1,12 @@
 #!/bin/bash
+function finish() {
+  echo Killing server, pid = $(lsof -i:8080 -t)
+  kill $(lsof -i:8080 -t)
+}
+
 npm start &
 server_pid=$!
-sleep 60
+trap finish EXIT
 npm test
 ret_code=$?
-kill ${server_pid}
 exit ${ret_code}
