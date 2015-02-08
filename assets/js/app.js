@@ -457,14 +457,15 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       //    return;
       //}
 
-      let instanceName = Math.random().toString(36).substring(2);
+      let realWidget = {
+        type: $scope.chosenWidget.type,
+        instanceName: Math.random().toString(36).substring(2)
+      };
       widgetLoader.load($scope.chosenWidget.type)
         .then(() => {
           holder.widgets = holder.widgets || [];
-          holder.widgets.push({
-            type: $scope.chosenWidget.type,
-            instanceName: instanceName
-          });
+          holder.widgets.push(realWidget);
+          $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
         }, (error) => {
           console.log('ERROR', error);
           alert.error('Cannot add widget: ' + error);
