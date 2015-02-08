@@ -17,6 +17,7 @@ Required software:
 Install latest node.js using `npm install -g n; n latest` as root/admin user
 - npm is installed (1.2 doesn't work, 1.4 works fine, check with `npm --version`.
 Upgrade newer npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
+- mongodb is installed
 
 Highly recommended:
 - bower is installed (run `npm install -g bower` as admin)
