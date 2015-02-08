@@ -6,8 +6,8 @@
  */
 exports.config = {
   // USE configs from env variables
-  app_name : ['My Application'],
-  license_key : 'license key here',
+  app_name : ['wdc-app'],
+  license_key : process.env.NEW_RELIC_LICENSE_KEY,
 
   logging : {
     /**
