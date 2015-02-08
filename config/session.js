@@ -72,6 +72,7 @@ module.exports.session = {
   port: 27017,
   db: 'sails',
   collection: 'sessions',
+  url: process.env.MONGOLAB_URI,
 
   /***************************************************************************
   *                                                                          *
