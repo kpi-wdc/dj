@@ -36,5 +36,11 @@ module.exports.routes = {
   'put /appconfig/:appName': {
     controller: 'AppConfigController',
     action: 'update'
+  },
+
+  'get /*': {
+    controller: 'AppController',
+    action: 'get',
+    skipAssets: true
   }
 };
