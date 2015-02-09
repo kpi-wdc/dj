@@ -2,7 +2,6 @@ define(['js/app', 'angular-mocks'], () => {
   beforeEach(module('app'));
 
   let emptyAppJson = {
-    "sections": [],
     "pages": []
   };
 
@@ -12,7 +11,7 @@ define(['js/app', 'angular-mocks'], () => {
 
   beforeEach(inject((_$httpBackend_) => {
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET('/apps/app.json')
+    $httpBackend.whenGET(/^\/appconfig\/.*$/)
       .respond(JSON.stringify(emptyAppJson));
     $httpBackend.whenGET('/widgets/widgets.json')
       .respond(JSON.stringify(noWidgetsJson));
