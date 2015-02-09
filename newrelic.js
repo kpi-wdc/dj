@@ -7,7 +7,7 @@
 exports.config = {
   // USE configs from env variables
   app_name : ['wdc-app'],
-  license_key : process.env.NEW_RELIC_LICENSE_KEY,
+  license_key : '<license key is ovveriden with env variable>',
 
   logging : {
     /**
