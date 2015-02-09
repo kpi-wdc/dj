@@ -552,7 +552,12 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       page.href = href;
 
       page.template = $scope.chosenTemplate.type;
-      page.holders = $scope.chosenTemplate.holders;
+      page.holders = {};
+      for (let holderName of $scope.chosenTemplate.holders) {
+        page.holders[holderName] = {
+          widgets: []
+        };
+      }
 
       appConfig.addNewPage(page);
 

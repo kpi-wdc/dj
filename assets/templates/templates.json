@@ -1,61 +1,35 @@
 {
   "1-col": {
     "description": "Description of template \"1-col\"",
-    "holders" : {
-      "column" : {
-        "widgets" : [ ]
-      }
-    }
+    "holders" : [
+      "column"
+    ]
   },
   "2-cols": {
     "description": "Description of template \"2-cols\"",
-    "holders" : {
-      "column" : {
-        "widgets" : [ ]
-      },
-      "left" : {
-        "widgets" : [ ]
-      },
-      "right" : {
-        "widgets" : [ ]
-      }
-    }
+    "holders" : [
+      "column",
+      "left",
+      "right"
+    ]
   },
   "2x2": {
     "description": "Description of template \"2x2\"",
-    "holders" : {
-      "column" : {
-        "widgets" : [ ]
-      },
-      "topleft" : {
-        "widgets" : [ ]
-      },
-      "topright" : {
-        "widgets" : [ ]
-      },
-      "bottomleft" : {
-        "widgets" : [ ]
-      },
-      "bottomright" : {
-        "widgets" : [ ]
-      }
-    }
+    "holders" : [
+      "column",
+      "topleft",
+      "topright",
+      "bottomleft",
+      "bottomright"
+    ]
   },
   "left-right-bottom": {
     "description": "Description of template \"left-right-bottom\"",
-    "holders" : {
-      "column" : {
-        "widgets" : [ ]
-      },
-      "topleft" : {
-        "widgets" : [ ]
-      },
-      "topright" : {
-        "widgets" : [ ]
-      },
-      "bottom" : {
-        "widgets" : [ ]
-      }
-    }
+    "holders" : [
+      "column",
+      "topleft",
+      "topright",
+      "bottom"
+    ]
   }
 }
