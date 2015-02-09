@@ -239,9 +239,9 @@ gulp.task('build-template-images', function () {
 gulp.task('copy-static-files', function () {
   return gulp.src([
     'assets/img/**', 'assets/data/**',
-    'assets/apps/**', 'assets/index.html',
+    'assets/index.html',
     'assets/favicon.ico'], {base: 'assets'})
-    .pipe(gulp.dest(buildPublicDir))
+    .pipe(gulp.dest(buildPublicDir));
 });
 
 if (!npmProduction) {
@@ -332,8 +332,8 @@ if (!npmProduction) {
 
   // Rerun the task when a file changes
   gulp.task('watch', function () {
-    return gulp.watch(['assets/**', 'config/**', 'api/**', 'test/**',
-      'bower.json', '!assets/apps/**'], ['build']);
+    return gulp.watch(['assets/**', 'test/**',
+      'bower.json'], ['build']);
   });
 
   // Rerun the task when a file changes
