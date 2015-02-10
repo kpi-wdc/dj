@@ -1,4 +1,4 @@
-require('newrelic');
+var newrelic = require('newrelic');
 /**
  * app.js
  *
