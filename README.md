@@ -1,15 +1,15 @@
 # World Data Center
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sochka/wdc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kpi-wdc/wdc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/sochka/wdc)
-[![GitHub version](https://badge.fury.io/gh/sochka%2Fwdc.svg)](http://badge.fury.io/gh/sochka%2Fwdc)
-[![Build Status](https://travis-ci.org/sochka/wdc.svg?branch=master)](https://travis-ci.org/sochka/wdc)
-[![Dependencies](https://david-dm.org/sochka/wdc.svg)](https://david-dm.org/sochka/wdc)
-[![Coverage Status](https://img.shields.io/coveralls/sochka/wdc.svg)](https://coveralls.io/r/sochka/wdc)
-[![Issue Stats](http://issuestats.com/github/sochka/wdc/badge/issue)](http://issuestats.com/github/sochka/wdc)
-[![Issue Stats](http://issuestats.com/github/sochka/wdc/badge/pr)](http://issuestats.com/github/sochka/wdc)
-[![Stories in Ready](https://badge.waffle.io/sochka/wdc.png?label=ready&title=Ready)](https://waffle.io/sochka/wdc)
+[![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/kpi-wdc/wdc)
+[![GitHub version](https://badge.fury.io/gh/kpi-wdc%2Fwdc.svg)](http://badge.fury.io/gh/kpi-wdc%2Fwdc)
+[![Build Status](https://travis-ci.org/kpi-wdc/wdc.svg?branch=master)](https://travis-ci.org/kpi-wdc/wdc)
+[![Dependencies](https://david-dm.org/kpi-wdc/wdc.svg)](https://david-dm.org/kpi-wdc/wdc)
+[![Coverage Status](https://img.shields.io/coveralls/kpi-wdc/wdc.svg)](https://coveralls.io/r/kpi-wdc/wdc)
+[![Issue Stats](http://issuestats.com/github/kpi-wdc/wdc/badge/issue)](http://issuestats.com/github/kpi-wdc/wdc)
+[![Issue Stats](http://issuestats.com/github/kpi-wdc/wdc/badge/pr)](http://issuestats.com/github/kpi-wdc/wdc)
+[![Stories in Ready](https://badge.waffle.io/kpi-wdc/wdc.png?label=ready&title=Ready)](https://waffle.io/kpi-wdc/wdc)
 
 #### Prerequisites
 
