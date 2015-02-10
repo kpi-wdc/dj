@@ -6,7 +6,7 @@
 [![GitHub version](https://badge.fury.io/gh/kpi-wdc%2Fwdc.svg)](http://badge.fury.io/gh/kpi-wdc%2Fwdc)
 [![Build Status](https://travis-ci.org/kpi-wdc/wdc.svg?branch=master)](https://travis-ci.org/kpi-wdc/wdc)
 [![Dependencies](https://david-dm.org/kpi-wdc/wdc.svg)](https://david-dm.org/kpi-wdc/wdc)
-[![Coverage Status](https://img.shields.io/coveralls/kpi-wdc/wdc.svg)](https://coveralls.io/r/kpi-wdc/wdc)
+[![Coverage Status](https://coveralls.io/repos/kpi-wdc/wdc/badge.svg?branch=master)](https://coveralls.io/r/kpi-wdc/wdc?branch=master)
 [![Issue Stats](http://issuestats.com/github/kpi-wdc/wdc/badge/issue)](http://issuestats.com/github/kpi-wdc/wdc)
 [![Issue Stats](http://issuestats.com/github/kpi-wdc/wdc/badge/pr)](http://issuestats.com/github/kpi-wdc/wdc)
 [![Stories in Ready](https://badge.waffle.io/kpi-wdc/wdc.png?label=ready&title=Ready)](https://waffle.io/kpi-wdc/wdc)
