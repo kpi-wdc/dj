@@ -68,6 +68,6 @@
   },
   "main": "app.js",
   "engines": {
-    "node": "0.11.x"
+    "node": "0.12.x"
   }
 }
