@@ -1,6 +1,6 @@
 # World Data Center
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kpi-wdc/wdc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kpi-wdc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/kpi-wdc/wdc)
 [![GitHub version](https://badge.fury.io/gh/kpi-wdc%2Fwdc.svg)](http://badge.fury.io/gh/kpi-wdc%2Fwdc)
