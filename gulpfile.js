@@ -27,7 +27,6 @@ var buildPublicDir = '.tmp/public';
 // BUILD SETTINGS
 var production = isEnvEnabled('PRODUCTION');
 var minifyCode = production || isEnvEnabled('MINIFY_CODE');
-var inlineJSandCSS = production;
 var npmProduction = isEnvEnabled('NPM_CONFIG_PRODUCTION');
 
 var showFilesLog = true;
@@ -35,7 +34,6 @@ var showFilesLog = true;
 // LOG SETTINGS
 console.log('Production mode: ' + production);
 console.log('Minifying code: ' + minifyCode);
-console.log('Inlining JS and CSS: ' + inlineJSandCSS);
 console.log('NPM in production mode: ' + npmProduction);
 
 // Get gulp plugins
@@ -46,7 +44,7 @@ var plugins = require('gulp-load-plugins')(conf);
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-html', 'build-css', 'build-js', 'merge-widget-configs',
+gulp.task('build', ['build-css', 'build-js', 'merge-widget-configs',
   'copy-templates-json', 'build-template-images', 'copy-static-files']);
 
 gulp.task('bower-install', ['generate-bower-json'], function () {
@@ -119,17 +117,6 @@ gulp.task('build-less', function () {
     .on('error', handleError)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'LESS -> CSS'})))
     .pipe(gulp.dest(buildPublicDir + '/css'));
-});
-
-gulp.task('build-html', ['build-js', 'build-css'], function () {
-  return gulp.src('assets/index.html')
-    .pipe(plugins.if(inlineJSandCSS, plugins.inlineSource({
-      rootpath: buildPublicDir
-    })))
-    .pipe(plugins.if(minifyCode, plugins.minifyHtml({empty: true})))
-    .on('error', handleError)
-    .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'HTML'})))
-    .pipe(gulp.dest(buildPublicDir));
 });
 
 gulp.task('build-template-cache', function () {

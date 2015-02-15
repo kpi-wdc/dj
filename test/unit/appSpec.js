@@ -9,12 +9,15 @@ define(['js/app', 'angular-mocks'], () => {
 
   let $httpBackend;
 
-  beforeEach(inject((_$httpBackend_) => {
+  beforeEach(inject((_$httpBackend_, $window) => {
     $httpBackend = _$httpBackend_;
     $httpBackend.whenGET(/^\/appconfig\/.*$/)
       .respond(JSON.stringify(emptyAppJson));
     $httpBackend.whenGET('/widgets/widgets.json')
       .respond(JSON.stringify(noWidgetsJson));
+
+    $window.appName = 'default';
+    $window.appConfig = emptyAppJson;
   }));
 
   describe("Testing controllers", () => {

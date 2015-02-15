@@ -26,7 +26,8 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       `/widgets/${widgetName}/icon.png`
   });
 
-  app.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
+  app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
+                       $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
 
     $ocLazyLoadProvider.config({
       loadedModules: ['app'],
@@ -55,12 +56,14 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     let pageConfigPromise;
     $locationProvider.html5Mode(true);
 
+    $urlMatcherFactoryProvider.strictMode(false);
+
     $urlRouterProvider
-      .otherwise('/404');
+      .otherwise(`/app/${window.appName}/404`);
 
     $stateProvider
       .state('page', {
-        url: '/:href',
+        url: `/app/${window.appName}/:href`,
         resolve: {
           pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
             return pageConfigPromise = appConfigPromise
@@ -125,8 +128,10 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     return $http.get(appUrls.templateTypes, {cache: true});
   });
 
-  app.factory('appConfigPromise', function ($http, appUrls) {
-    return $http.get(appUrls.appConfig, {cache: true});
+  app.factory('appConfigPromise', function ($q, $window) {
+    return $q((resolve) => {
+      resolve(window.appConfig);
+    });
   });
 
   app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
@@ -226,7 +231,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       });
     };
 
-    appConfigPromise.success((data) => {
+    appConfigPromise.then((data) => {
       this.isAvailable = true;
       this.config = data;
     });

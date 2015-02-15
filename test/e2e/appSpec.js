@@ -1,6 +1,6 @@
 describe("Webapp", function () {
   beforeEach(function (cb) {
-    browser.driver.get(browser.baseUrl + '/');
+    browser.driver.get(browser.baseUrl + '/app/default/');
     browser.driver.wait(function () {
       return browser.driver.executeScript(function () {
         return window.angular !== undefined &&
@@ -34,9 +34,9 @@ describe("Webapp", function () {
     expect($('.page-title').getText()).toBeDefined();
   });
 
-  it('should route to 404 page correctly', function () {
-    $('[href="/data-representation"]').click();
-    expect(browser.getLocationAbsUrl()).toBe('/data-representation');
+  it('should route to pages correctly', function () {
+    $('[href="/app/default/data-representation"]').click();
+    expect(browser.getLocationAbsUrl()).toBe('/app/default/data-representation');
   });
 
   describe("delete button", function () {
@@ -50,7 +50,7 @@ describe("Webapp", function () {
     });
 
     it('should have clickable delete button on other pages', function () {
-      browser.setLocation('dev-page');
+      browser.setLocation('/app/default/data-representation');
       expect($('#deletePageBtn').isEnabled()).toBeTruthy();
     });
   });

@@ -27,20 +27,9 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
-  'get /appconfig/:appName': {
-    controller: 'AppConfigController',
-    action: 'get'
-  },
-
-  'put /appconfig/:appName': {
-    controller: 'AppConfigController',
-    action: 'update'
-  },
-
-  'get /*': {
-    controller: 'AppController',
-    action: 'get',
-    skipAssets: true
-  }
+  'get /': 'AppListPageController.getView',
+  'get /app/:appName': 'AppController.get',
+  'get /app/:appName/*': 'AppController.get',
+  'get /appconfig/:appName': 'AppConfigController.get',
+  'put /appconfig/:appName': 'AppConfigController.update'
 };

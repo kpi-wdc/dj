@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Main page</title>
+</head>
+<body>
+  List of apps:
+  <ul>
+    <% _.each(apps, function (app) { %>
+    <li><a href="/app/<%= app.appName %>/"><%= app.appName %></a></li>
+    <% }) %>
+
+    <form>
+      Add new app: <input name="appName">
+      <input type="submit">
+    </form>
+  </ul>
+</body>
+</html>

@@ -9,10 +9,18 @@ module.exports = {
   _config: { actions: true, rest: false, shortcuts: false },
 
   get: function (req, res) {
-    var fs = require('fs');
-    fs.readFile('.tmp/public/index.html', function (err, contents) {
-      res.set('Content-Type', 'text/html');
-      res.send(contents);
+    AppConfig.findOne({
+      appName: req.params.appName
+    }, function (err, found) {
+      if (!err) {
+        if (found) {
+          res.view('app', found);
+        } else {
+          res.view('404', {error: "app not found"});
+        }
+      } else {
+        res.serverError();
+      }
     });
   }
 };
