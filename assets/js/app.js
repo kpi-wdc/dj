@@ -56,7 +56,12 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     let pageConfigPromise;
     $locationProvider.html5Mode(true);
 
+    // this doesn't seem to work, that's why the next snippet does the same
     $urlMatcherFactoryProvider.strictMode(false);
+
+    $urlRouterProvider.when(`/app/${window.appName}`, function ($state) {
+      $state.go('page', {href: ''});
+    });
 
     $urlRouterProvider
       .otherwise(`/app/${window.appName}/404`);
