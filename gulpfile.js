@@ -96,6 +96,7 @@ gulp.task('build-components', ['bower-install'], function () {
   ]);
 
   return gulp.src('.tmp/bower_components/**/*')
+    .pipe(plugins.cached('build-components'))
     .pipe(plugins.changed(buildPublicDir + '/components', {hasChanged: plugins.changed.compareSha1Digest}))
     .pipe(removeFilter)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'components'})))
@@ -105,6 +106,7 @@ gulp.task('build-components', ['bower-install'], function () {
 
 gulp.task('build-css', ['build-less', 'build-components'], function () {
   return gulp.src(buildPublicDir + '/**/*.css')
+    .pipe(plugins.cached('build-css'))
     .pipe(plugins.if(minifyCode, plugins.minifyCss()))
     .on('error', handleError)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'CSS'})))
@@ -113,6 +115,7 @@ gulp.task('build-css', ['build-less', 'build-components'], function () {
 
 gulp.task('build-less', function () {
   return gulp.src('assets/css/**/*.less')
+    .pipe(plugins.cached('build-less'))
     .pipe(gulp.dest(buildPublicDir + '/css'))
     .pipe(plugins.lessSourcemap())
     .on('error', handleError)
@@ -142,6 +145,7 @@ gulp.task('copy-es6-polyfill', function () {
 gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
   'compile-js', 'annotate-js', 'copy-es6-polyfill'], function () {
   return gulp.src([buildPublicDir + '/**/*.js'])
+    .pipe(plugins.cached('build-js'))
     .pipe(plugins.plumber())
     .pipe(plugins.if(minifyCode, plugins.uglify()))
     .on('error', handleError)
@@ -151,6 +155,7 @@ gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-component
 
 gulp.task('compile-js', function () {
   return gulp.src('assets/js/**/*.js')
+    .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins['6to5']())
@@ -161,6 +166,7 @@ gulp.task('compile-js', function () {
 
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-components', 'compile-js'], function () {
   return gulp.src([buildPublicDir + '/**/*.js', '!' + buildPublicDir + '/components/**/*'])
+    .pipe(plugins.cached('annotate-js'))
     .pipe(plugins.changed('annotate-js', {hasChanged: plugins.changed.compareSha1Digest}))
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
@@ -170,12 +176,14 @@ gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-com
 gulp.task('move-widgets', function () {
   // Move everything except JS-code which is handled separately in build-widgets-js
   return gulp.src(['assets/widgets/**', '!assets/widgets/**/*.js'])
+    .pipe(plugins.cached('move-widgets'))
     .pipe(plugins.changed(buildPublicDir + '/widgets'))
     .pipe(gulp.dest(buildPublicDir + '/widgets'));
 });
 
 gulp.task('build-widgets-js', ['move-widgets'], function () {
   return gulp.src('assets/widgets/**/*.js')
+    .pipe(plugins.cached('build-widgets-js'))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins['6to5']())
     .pipe(plugins.sourcemaps.write('.'))
@@ -202,19 +210,21 @@ gulp.task('merge-widget-configs', function () {
 
 gulp.task('copy-templates-json', function () {
   return gulp.src('assets/templates/templates.json')
+    .pipe(plugins.cached('copy-templates-json'))
     .pipe(gulp.dest(buildPublicDir + '/templates'));
 });
 
 gulp.task('build-template-images', function () {
   return gulp.src('assets/templates/**/icon.png')
+    .pipe(plugins.cached('build-template-images'))
     .pipe(gulp.dest(buildPublicDir + '/templates'));
 });
 
 gulp.task('copy-static-files', function () {
   return gulp.src([
     'assets/img/**', 'assets/data/**',
-    'assets/index.html',
     'assets/favicon.ico'], {base: 'assets'})
+    .pipe(plugins.cached('copy-static-files'))
     .pipe(gulp.dest(buildPublicDir));
 });
 
