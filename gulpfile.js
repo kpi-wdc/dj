@@ -44,21 +44,7 @@ var conf = npmProduction ? {
 } : undefined; //
 var plugins = require('gulp-load-plugins')(conf);
 
-gulp.task('default', function (cb) {
-  // Important: don't put build tasks as dependencies here!
-  // sails lift automatically calls gulp default; this takes more then a minute on heroku
-  // even after the app has already been built. Build your project manually using
-  // `npm install` or `gulp build`
-  console.log('gulp default is not implemented and is not intended to be');
-  cb();
-});
-
-// alias prod to default
-gulp.task('prod', ['default'], function (cb) {
-  // see explanation for `default` task above
-  console.log('gulp prod is not implemented and is not intended to be');
-  cb();
-});
+gulp.task('default', ['build']);
 
 gulp.task('build', ['build-html', 'build-css', 'build-js', 'merge-widget-configs',
   'copy-templates-json', 'build-template-images', 'copy-static-files']);
