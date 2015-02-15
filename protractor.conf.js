@@ -1,6 +1,6 @@
 exports.config = {
   baseUrl: 'http://localhost:8080',
-  specs: ['build/test/e2e/**/*Spec.js'],
+  specs: ['.tmp/test/e2e/**/*Spec.js'],
   allScriptsTimeout: 10000,
 
   capabilities: {
