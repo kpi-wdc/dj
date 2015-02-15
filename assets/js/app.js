@@ -71,6 +71,10 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
                 let pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
 
                 let deferredResult = $q.defer();
+                if (!pageConfig || !pageConfig.holders) {
+                  deferredResult.resolve(pageConfig);
+                  return deferredResult.promise;
+                }
 
                 let widgetTypes = [];
                 for (let holderName in pageConfig.holders) {
@@ -98,6 +102,10 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         },
         templateProvider: function ($http, appUrls, $templateCache) {
           return pageConfigPromise.then((pageConfig) => {
+            if (!pageConfig || !pageConfig.template) {
+              return "Page not found!";
+            }
+
             let url = appUrls.templateHTML(pageConfig.template);
             return $http.get(url, {cache: $templateCache})
               .then((result) => result.data);
