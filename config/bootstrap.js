@@ -24,11 +24,9 @@ var addDefaultAppConfigs = function () {
               AppConfig.findOrCreate({appName: appName}, {
                 appName: appName,
                 config: data
-              }, function (err, created) {
+              }, function (err) {
                 if (err) {
                   sails.log.warn('Error in AppConfig.findOrCreate app config during sails bootstrap');
-                } else {
-                  sails.log.debug(created);
                 }
               });
             } else {
