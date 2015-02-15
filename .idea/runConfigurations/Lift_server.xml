@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="/usr/local/bin/sails" application-parameters="lift" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="Lift server" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="/usr/local/bin/sails" application-parameters="lift" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="wdc" />
     </envs>
