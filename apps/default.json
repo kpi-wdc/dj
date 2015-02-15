@@ -22,9 +22,13 @@
     "holders" : {
       "column" : {
         "widgets" : [ {
-          "url" : "./data/GTRUAPL20052013.json",
-          "type" : "datasource",
-          "instanceName" : "osbe1a1i780yhkt9"
+          "title" : "Page not found",
+          "type" : "title",
+          "instanceName" : "oasdfasdfsdfasdf"
+        }, {
+          "text" : "Page with this url is not found. Sorry!",
+          "type" : "htmlwidget",
+          "instanceName" : "oasdfasdfsdfasdf"
         } ]
       }
     }
