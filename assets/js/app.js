@@ -4,7 +4,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     'angular-json-editor', 'templates', 'app.widgetApi']);
 
   app.constant('appUrls', {
-    appConfig: '/appconfig/default',
+    appConfig: '/api/appconfig/default',
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
     widgetHolderHTML: '/partials/widget-holder.html',

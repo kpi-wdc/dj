@@ -30,6 +30,6 @@ module.exports.routes = {
   'get /': 'AppListPageController.getView',
   'get /app/:appName': 'AppController.get',
   'get /app/:appName/*': 'AppController.get',
-  'get /appconfig/:appName': 'AppConfigController.get',
-  'put /appconfig/:appName': 'AppConfigController.update'
+  'get /api/appconfig/:appName': 'AppConfigController.get',
+  'put /api/appconfig/:appName': 'AppConfigController.update'
 };
