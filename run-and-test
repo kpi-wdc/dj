@@ -20,7 +20,6 @@ fi
 node --harmony ./node_modules/sails/bin/sails lift ${env_settings} &
 server_pid=$!
 trap finish EXIT
-sleep 30 # allow some time to init the database
 npm test
 ret_code=$?
 exit ${ret_code}
