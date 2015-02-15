@@ -75,7 +75,7 @@ gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
     }))
     .pipe(plugins.extend('bower.json'))
     .on('error', handleError)
-    .pipe(gulp.dest('.tmp'))
+    .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('build-components', ['bower-install'], function () {
@@ -108,7 +108,7 @@ gulp.task('build-css', ['build-less', 'build-components'], function () {
     .pipe(plugins.if(minifyCode, plugins.minifyCss()))
     .on('error', handleError)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'CSS'})))
-    .pipe(gulp.dest(buildPublicDir))
+    .pipe(gulp.dest(buildPublicDir));
 });
 
 gulp.task('build-less', function () {
@@ -197,17 +197,17 @@ gulp.task('merge-widget-configs', function () {
     }))
     .pipe(plugins.extend('widgets.json'))
     .on('error', handleError)
-    .pipe(gulp.dest(buildPublicDir + '/widgets'))
+    .pipe(gulp.dest(buildPublicDir + '/widgets'));
 });
 
 gulp.task('copy-templates-json', function () {
   return gulp.src('assets/templates/templates.json')
-    .pipe(gulp.dest(buildPublicDir + '/templates'))
+    .pipe(gulp.dest(buildPublicDir + '/templates'));
 });
 
 gulp.task('build-template-images', function () {
   return gulp.src('assets/templates/**/icon.png')
-    .pipe(gulp.dest(buildPublicDir + '/templates'))
+    .pipe(gulp.dest(buildPublicDir + '/templates'));
 });
 
 gulp.task('copy-static-files', function () {
@@ -301,7 +301,7 @@ if (!npmProduction) {
       ' -d ' + path.join('docs') + // output directory
       ' -r ' + path.join('assets', 'js') + // source code directory
       ' README.md'
-    ])().on('error', handleError)
+    ])().on('error', handleError);
   });
 
   var bump = function (importance) {
