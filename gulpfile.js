@@ -303,6 +303,34 @@ if (!npmProduction) {
     ])().on('error', handleError)
   });
 
+  var bump = function (importance) {
+    // get all the files to bump version in
+    return gulp.src(['./package.json', './bower.json'])
+      // bump the version number in those files
+      .pipe(plugins.bump({type: importance}))
+      // save it back to filesystem
+      .pipe(gulp.dest('./'))
+      // commit the changed version number
+      .pipe(plugins.git.commit('Bumps package version'))
+
+      // read only one file to get the version number
+      .pipe(plugins.filter('package.json'))
+      // **tag it in the repository**
+      .pipe(plugins.tagVersion());
+  };
+
+  gulp.task('patch', function () {
+    return bump('patch');
+  });
+
+  gulp.task('feature', function () {
+    return bump('minor');
+  });
+
+  gulp.task('release', function () {
+    return bump('major');
+  });
+
   // Rerun the task when a file changes
   gulp.task('watch', function () {
     return gulp.watch(['assets/**', 'test/**',
