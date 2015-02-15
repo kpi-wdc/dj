@@ -66,7 +66,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         url: `/app/${window.appName}/:href`,
         resolve: {
           pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
-            return pageConfigPromise = appConfigPromise
+            pageConfigPromise = appConfigPromise
               .then(() => {
                 let pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
 
@@ -93,6 +93,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
                 alert.error(`Error loading app configuration: ${data.statusText} (${data.status})`);
                 return $q.reject(data.status);
               });
+            return pageConfigPromise;
           }
         },
         templateProvider: function ($http, appUrls, $templateCache) {
@@ -198,7 +199,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       $rootScope.$watch(() => {
         return widget.instanceName;
       }, (newName, oldName) => {
-        if (newName !== oldName && newName != undefined) {
+        if (newName !== oldName && newName !== undefined) {
           let subscriptions = this.pageConfig().subscriptions;
           for (let i = 0; i < (subscriptions ? subscriptions.length : 0); i++) {
             let subscription = subscriptions[i];
@@ -256,7 +257,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         }
         return $ocLazyLoad.load(widgetControllers);
       });
-    }
+    };
   });
 
   app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, prompt) {
@@ -267,7 +268,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     };
 
     this.openWidgetConfigurationDialog = (widget) => {
-      let invocation = (new APIUser).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
+      let invocation = (new APIUser()).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
       if (!invocation.success) {
         this.openDefaultWidgetConfigurationDialog(widget);
       }
@@ -280,7 +281,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         backdrop: 'static',
         resolve: {
           widgetScope: () => {
-            return (new APIUser).getScopeByInstanceName(widget.instanceName);
+            return (new APIUser()).getScopeByInstanceName(widget.instanceName);
           },
           widgetConfig: () => {
             return widget;
@@ -376,7 +377,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
         scope.widgetTemplateUrl = appUrls.widgetHTML;
       }
-    }
+    };
   });
 
   app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
@@ -399,7 +400,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       // Use $timeout as a fix for android
       // On mobile devices (at least android) `data` is updated AFTER `ng-click` event happens if
       // submit button is pressed while input fields are still focused.
-      // this is probably related to touch vs mouse behaviour and underlying json-editor behaviour.
+      // this is probably related to touch vs mouse behaviour and underlying json-editor implementation.
       $timeout(() => {
         $modalInstance.close(angular.extend(data, $scope.basicProperties));
       }, 100);
@@ -438,29 +439,11 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       $scope.chosenWidget = widget;
       // no error as a widget was chosen
       $scope.widgetErr = {};
-      //console.log($scope.chosenWidget)
     };
 
     $scope.add = (widget) => {
       // checks whether chosen template belongs to the current filter criteria
       $scope.chosenWidget = widget;
-      //let inFilter = false;
-      //
-      //for (let i = 0; i < filteredWidgets.length; i++) {
-      //    if (filteredWidgets[i] === $scope.chosenWidget) {
-      //        inFilter = true;
-      //        break;
-      //    }
-      //}
-      //
-      //// if chosen template isn't in the current filter then show an error
-      //if (!inFilter) {
-      //    $scope.chosenWidget = { };
-      //    $scope.widgetErr = { };
-      //    $scope.widgetErr.message = 'choose a widget';
-      //    $scope.widgetErr.class = 'red';
-      //    return;
-      //}
 
       let realWidget = {
         type: $scope.chosenWidget.type,
@@ -550,7 +533,9 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         $scope.templateErr.class = 'red';
       }
 
-      if (!hasHrefAndTitle || !inFilter) return;
+      if (!hasHrefAndTitle || !inFilter) {
+        return;
+      }
 
       let page = {};
       page.shortTitle = shortTitle;

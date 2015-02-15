@@ -65,6 +65,6 @@ require.config({
       baseUrl: '/base',
       deps: tests,
       callback: window.__karma__.start
-    })
+    });
   }
 })();
