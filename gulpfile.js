@@ -245,7 +245,7 @@ if (!npmProduction) {
       .pipe(plugins['6to5']())
       .pipe(plugins.sourcemaps.write('.'))
       .on('error', handleError)
-      .pipe(gulp.dest(buildPublicDir + '/test/unit'));
+      .pipe(gulp.dest(buildDir + '/test/unit'));
   });
 
   gulp.task('coveralls', function () {

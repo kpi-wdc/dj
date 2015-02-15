@@ -15,7 +15,7 @@ module.exports = function (config) {
       {pattern: 'js/*.js', included: false},
       {pattern: 'widgets/**/*.js', included: false},
       {pattern: 'components/**/*.js', included: false},
-      {pattern: 'test/unit/**/*Spec.js', included: false}
+      {pattern: '../test/unit/**/*Spec.js', included: false}
     ],
 
     autoWatch: true,
