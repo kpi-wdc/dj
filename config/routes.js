@@ -28,6 +28,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   'get /': 'AppListPageController.getView',
+  'post /': 'AppListPageController.createApp',
   'get /app/:appName': 'AppController.get',
   'get /app/:appName/*': 'AppController.get',
   'get /api/appconfig/:appName': 'AppConfigController.get',
