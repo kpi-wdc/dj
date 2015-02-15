@@ -34,6 +34,7 @@ var showFilesLog = true;
 // LOG SETTINGS
 console.log('Production mode: ' + production);
 console.log('Minifying code: ' + minifyCode);
+// The following means devDependencies are not installed
 console.log('NPM in production mode: ' + npmProduction);
 
 // Get gulp plugins
