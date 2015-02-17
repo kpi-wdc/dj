@@ -33,7 +33,8 @@ Optional:
 ## Build
 To run this project from terminal run the following command:
 
-     mvn compile tomcat7:run
+     npm install
+     npm run
 
 Intellij idea project has preconfigured maven run configuration.
 
@@ -101,6 +102,7 @@ The following steps will make your work with Intellij Idea more productive
   - angularjs
   - markdown
   - EditorConfig
+  - EJS
 
 ## Suggested Chrome extensions:
 
