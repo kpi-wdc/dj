@@ -56,5 +56,41 @@ module.exports = {
       }
     });
   },
+
+  rename: function (req, res) {
+    AppConfig.update({
+      appName: req.params.appName
+    }, {
+      appName: req.params.newAppName
+    }, function (err, updatedArr) {
+      if (err) {
+        sails.log.error('Error while renaming app: ' + err);
+        res.serverError();
+      } else if (updatedArr.length === 0) {
+        res.forbidden();
+      } else {
+        AppConfig.find().then(function (apps) {
+          res.send(_.map(apps, 'appName'));
+        })
+      }
+    });
+  },
+
+  delete: function (req, res) {
+    AppConfig.remove({
+      appName: req.params.appName
+    }, function (err, updatedArr) {
+      if (err) {
+        sails.log.error('Error while renaming app: ' + err);
+        res.serverError();
+      } else if (updatedArr.length === 0) {
+        res.forbidden();
+      } else {
+        AppConfig.find().then(function (apps) {
+          res.send(_.map(apps, 'appName'));
+        })
+      }
+    });
+  },
 };
 

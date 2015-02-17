@@ -33,4 +33,6 @@ module.exports.routes = {
   'get /app/:appName/*': 'AppController.getAppView',
   'get /api/app/config/:appName': 'AppController.getConfig',
   'put /api/app/config/:appName': 'AppController.update',
+  'get /api/app/rename/:appName/:newAppName': 'AppController.rename',
+  'get /api/app/delete/:appName/:newAppName': 'AppController.delete'
 };
