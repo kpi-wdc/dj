@@ -1,23 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="appList">
 <head>
   <title>Main page</title>
-  <style>
-    .delete-btn {
-      color: red;
-    }
-  </style>
+  <base href="/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/components/foundation/css/normalize.css">
+  <link rel="stylesheet" href="/components/foundation/css/foundation.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
-<body>
+<body ng-controller="AppListController" ng-cloak>
   List of apps:
   <ul>
-    <% _.each(apps, function (app) { %>
-    <li><a href="/app/<%= app.appName %>/"><%= app.appName %></a> <span class="delete-btn">[x]</span></li>
-    <% }) %>
+    <li ng-repeat="appName in apps">
+      <a href="/app/{{appName}}/" ng-bind="appName"></a>
+      <input type="button" value="Rename" ng-click="renameApp(appName)">
+      <span class="red">[x]</span>
+    </li>
   </ul>
   <form method="post">
     <label>Add new app: <input name="appName" placeholder="App name in url"> </label>
     <input type="submit">
   </form>
+  <script src="/components/angular/angular.js"></script>
+  <script>
+    angular.module('appList.list', [])
+      .constant('appList',
+        <%- JSON.stringify(_.each(_.map(apps, 'appName'))) %>
+        );
+  </script>
+  <script src="/js/appList.js"></script>
 </body>
 </html>
