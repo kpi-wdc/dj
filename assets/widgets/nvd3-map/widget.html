@@ -1,0 +1,10 @@
+<div class="widget border" ng-controller="Nvd3MapCtrl" style="overflow:auto;">
+  <div nvd3 options="options" data="series"></div>
+  <h1 ng-if="configExist() && !serieExist()" style="color:#eeeeee; text-align: center;">
+    Loading...
+  </h1>
+
+  <h1 ng-if="!configExist()" style="color:#eeeeee; text-align: center;">
+    Widget Not Configured
+  </h1>
+</div>
