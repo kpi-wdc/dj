@@ -68,7 +68,7 @@
     "run-sequence": "1.0.2",
     "sails": "0.11.0",
     "sails-hook-dev": "0.2.2",
-    "sails-mongo": "^0.10.5",
+    "sails-mongo": "0.10.5",
     "yargs": "3.0.4"
   },
   "main": "app.js",
