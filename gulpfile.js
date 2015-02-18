@@ -173,7 +173,6 @@ gulp.task('compile-js', function () {
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-components', 'compile-js'], function () {
   return gulp.src([buildPublicDir + '/**/*.js', '!' + buildPublicDir + '/components/**/*'])
     .pipe(plugins.cached('annotate-js'))
-    .pipe(plugins.changed(buildPublicDir))
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
     .pipe(gulp.dest(buildPublicDir));
@@ -190,7 +189,6 @@ gulp.task('move-widgets', function () {
 gulp.task('build-widgets-js', ['move-widgets'], function () {
   return gulp.src('assets/widgets/**/*.js')
     .pipe(plugins.cached('build-widgets-js'))
-    .pipe(plugins.changed(buildPublicDir + '/widgets'))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel())
     .pipe(plugins.sourcemaps.write('.'))
