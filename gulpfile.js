@@ -104,9 +104,12 @@ gulp.task('build-components', ['bower-install'], function () {
 });
 
 gulp.task('build-css', ['build-less', 'build-components'], function () {
+  if (!minifyCode) {
+    return;
+  }
+
   return gulp.src(buildPublicDir + '/**/*.css')
     .pipe(plugins.cached('build-css'))
-    .pipe(plugins.if(minifyCode, plugins.minifyCss()))
     .on('error', handleError)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'CSS'})))
     .pipe(gulp.dest(buildPublicDir));
@@ -143,7 +146,11 @@ gulp.task('copy-es6-polyfill', function () {
 
 gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
   'compile-js', 'annotate-js', 'copy-es6-polyfill'], function () {
-  return gulp.src([buildPublicDir + '/**/*.js'])
+  if (!minifyCode) {
+    return;
+  }
+
+  return gulp.src(buildPublicDir + '/**/*.js')
     .pipe(plugins.cached('build-js'))
     .pipe(plugins.plumber())
     .pipe(plugins.if(minifyCode, plugins.uglify()))
