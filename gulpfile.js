@@ -327,7 +327,7 @@ if (!npmProduction) {
       // save it back to filesystem
       .pipe(gulp.dest('./'))
       // commit the changed version number
-      .pipe(plugins.git.commit('[ci skip] Bumps package version')) // [ci skip] makes travis not rebuild on simple version bump"
+      .pipe(plugins.git.commit('Bumps package version'))
 
       // read only one file to get the version number
       .pipe(plugins.filter('package.json'))
