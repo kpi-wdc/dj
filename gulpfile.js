@@ -136,7 +136,7 @@ gulp.task('build-template-cache', function () {
 });
 
 gulp.task('copy-es6-polyfill', function () {
-  return gulp.src('node_modules/gulp-6to5/node_modules/6to5-core/browser-polyfill.js')
+  return gulp.src('node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js')
     .pipe(plugins.rename('es6-polyfill.js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
@@ -158,7 +158,7 @@ gulp.task('compile-js', function () {
     .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins['6to5']())
+    .pipe(plugins.babel())
     .pipe(plugins.sourcemaps.write('.'))
     .on('error', handleError)
     .pipe(gulp.dest(buildPublicDir + '/js'));
@@ -185,7 +185,7 @@ gulp.task('build-widgets-js', ['move-widgets'], function () {
   return gulp.src('assets/widgets/**/*.js')
     .pipe(plugins.cached('build-widgets-js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins['6to5']())
+    .pipe(plugins.babel())
     .pipe(plugins.sourcemaps.write('.'))
     .on('error', handleError)
     .pipe(gulp.dest(buildPublicDir + '/widgets'));
@@ -252,7 +252,7 @@ if (!npmProduction) {
     return gulp.src('test/unit/**/*.js')
       .pipe(plugins.changed(buildPublicDir + '/test/unit'))
       .pipe(plugins.sourcemaps.init())
-      .pipe(plugins['6to5']())
+      .pipe(plugins.babel())
       .pipe(plugins.sourcemaps.write('.'))
       .on('error', handleError)
       .pipe(gulp.dest(buildDir + '/test/unit'));
@@ -298,7 +298,7 @@ if (!npmProduction) {
   gulp.task('build-e2e-test', function () {
     return gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(buildDir + '/test/e2e'))
-      .pipe(plugins['6to5']())
+      .pipe(plugins.babel())
       .pipe(gulp.dest(buildDir + '/test/e2e'));
   });
 
