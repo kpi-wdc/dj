@@ -1,7 +1,7 @@
 exports.config = {
   baseUrl: 'http://localhost:8080',
   specs: ['.tmp/test/e2e/**/*Spec.js'],
-  allScriptsTimeout: 10000,
+  allScriptsTimeout: 20000,
 
   capabilities: {
     'browserName': 'firefox'
