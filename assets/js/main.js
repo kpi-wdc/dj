@@ -4,19 +4,19 @@ require.config({
   // IMPORTANT NOTE: don't add slash before components
   // (use components instead of /components)
   paths: {
-    'jquery': 'components/jquery/dist/jquery',
-    'angular': 'components/angular/angular',
+    'jquery': 'components/jquery/dist/jquery.min',
+    'angular': 'components/angular/angular.min',
     'angular-mocks': 'components/angular-mocks/angular-mocks',
     'template-cached-pages': 'js/templates',
-    'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
-    'ngstorage': 'components/ngstorage/ngStorage',
-    'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad',
-    'angular-foundation': 'components/angular-foundation/mm-foundation-tpls',
-    'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor',
-    'json-editor': 'components/json-editor/dist/jsoneditor',
-    'leaflet': 'components/leaflet/dist/leaflet',
-    'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
-    'sceditor': 'components/SCEditor/src/jquery.sceditor'
+    'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router.min',
+    'ngstorage': 'components/ngstorage/ngStorage.min',
+    'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad.min',
+    'angular-foundation': 'components/angular-foundation/mm-foundation-tpls.min',
+    'angular-json-editor': 'components/angular-json-editor/dist/angular-json-editor.min',
+    'json-editor': 'components/json-editor/dist/jsoneditor.min',
+    'leaflet': 'components/leaflet/dist/leaflet.min',
+    'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive.min',
+    'sceditor': 'components/SCEditor/minified/jquery.sceditor.min'
   },
 
   // Add angular modules that does not support AMD out of the box, put it in a shim
