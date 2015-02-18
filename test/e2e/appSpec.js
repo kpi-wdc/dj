@@ -8,7 +8,7 @@ describe("Webapp", function () {
           window.$ &&
           window.$.isReady;
       });
-    }, 3000).then(function () {
+    }, 10000).then(function () {
       browser.ignoreSynchronization = false;
       $('#logInButton').click();
       $('#designModeCheckbox').click();
