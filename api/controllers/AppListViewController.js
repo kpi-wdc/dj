@@ -18,23 +18,6 @@ module.exports = {
     }).catch(function () {
       res.serverError();
     });
-  },
-
-  /**
-   * `AppListPageController.createApp()`
-   */
-  createApp: function (req, res) {
-    AppConfig.create({
-      appName: req.body.appName,
-      config: { "pages" : []}
-    }, function (err) {
-      if (err) {
-        sails.log.error('Error while creating app: ' + err);
-        res.serverError();
-      } else {
-        res.redirect('/app/' + req.body.appName);
-      }
-    });
   }
 };
 

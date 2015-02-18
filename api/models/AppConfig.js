@@ -11,7 +11,8 @@ module.exports = {
     appName: {
       type: 'string',
       required: true,
-      unique: true
+      unique: true,
+      notEmpty: true
     },
     config: {
       type: 'json',
