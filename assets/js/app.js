@@ -427,7 +427,8 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
   });
 
   app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
-                                                          widgetLoader, holder, appUrls) {
+                                                          widgetLoader, holder, appUrls,
+                                                          $timeout, widgetManager) {
     // create array instead of map (easy filtering)
     let widgetTypesArr = [];
     let currentWidget;
