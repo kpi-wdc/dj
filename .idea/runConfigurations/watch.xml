@@ -8,7 +8,9 @@
     <pass-parent-envs>true</pass-parent-envs>
     <envs />
     <RunnerSettings RunnerId="Js.BuildTools.Gulp" />
+    <RunnerSettings RunnerId="node-js.debug.program.runner" />
     <ConfigurationWrapper RunnerId="Js.BuildTools.Gulp" />
+    <ConfigurationWrapper RunnerId="node-js.debug.program.runner" />
     <method />
   </configuration>
 </component>

@@ -4,6 +4,110 @@
   //console.log("LOAD nv.d3.ext")
 
 
+  nv.tooltip.show = function(pos, content, gravity, dist, parentContainer, classes) {
+
+    //Create new tooltip div if it doesn't exist on DOM.
+    var   container = document.createElement('div');
+    container.className = 'nvtooltip ' + (classes ? classes : 'xy-tooltip');
+
+    var body = parentContainer;
+    if ( !parentContainer || parentContainer.tagName.match(/g|svg/i)) {
+      //If the parent element is an SVG element, place tooltip in the <body> element.
+      body = document.getElementsByTagName('body')[0];
+    }
+
+    container.style.left = 0;
+    container.style.top = 0;
+    //container.style.opacity = 0;
+    container.innerHTML = content;
+    body.appendChild(container);
+
+    //If the parent container is an overflow <div> with scrollbars, subtract the scroll offsets.
+    if (parentContainer) {
+      pos[0] = pos[0] - parentContainer.scrollLeft;
+      pos[1] = pos[1] - parentContainer.scrollTop;
+    }
+    nv.tooltip.calcTooltipPosition(pos, gravity, dist, container);
+  };
+
+  nv.tooltip.calcTooltipPosition = function(pos, gravity, dist, container) {
+
+    var height = parseInt(container.offsetHeight),
+      width = parseInt(container.offsetWidth),
+      windowWidth = nv.utils.windowSize().width,
+      windowHeight = nv.utils.windowSize().height,
+      scrollTop = window.pageYOffset,
+      scrollLeft = window.pageXOffset,
+      left, top;
+
+    windowHeight = window.innerWidth >= document.body.scrollWidth ? windowHeight : windowHeight - 16;
+    windowWidth = window.innerHeight >= document.body.scrollHeight ? windowWidth : windowWidth - 16;
+
+    gravity = gravity || 's';
+    dist = dist || 20;
+
+    var tooltipTop = function ( Elem ) {
+      return nv.tooltip.findTotalOffsetTop(Elem, top);
+    };
+
+    var tooltipLeft = function ( Elem ) {
+      return nv.tooltip.findTotalOffsetLeft(Elem,left);
+    };
+
+    switch (gravity) {
+      case 'e':
+        left = pos[0] - width - dist;
+        top = pos[1] - (height / 2);
+        var tLeft = tooltipLeft(container);
+        var tTop = tooltipTop(container);
+        if (tLeft < scrollLeft) left = pos[0] + dist > scrollLeft ? pos[0] + dist : scrollLeft - tLeft + left;
+        if (tTop < scrollTop) top = scrollTop - tTop + top;
+        if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
+        break;
+      case 'w':
+        left = pos[0] + dist;
+        top = pos[1] - (height / 2);
+        var tLeft = tooltipLeft(container);
+        var tTop = tooltipTop(container);
+        if (tLeft + width > windowWidth) left = pos[0] - width - dist;
+        if (tTop < scrollTop) top = scrollTop + 5;
+        if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
+        break;
+      case 'n':
+        left = pos[0] - (width / 2) - 5;
+        top = pos[1] + dist;
+        var tLeft = tooltipLeft(container);
+        var tTop = tooltipTop(container);
+        if (tLeft < scrollLeft) left = scrollLeft + 5;
+        if (tLeft + width > windowWidth) left = left - width/2 + 5;
+        if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
+        break;
+      case 's':
+        left = pos[0] - (width / 2);
+        top = pos[1] - height - dist;
+        var tLeft = tooltipLeft(container);
+        var tTop = tooltipTop(container);
+        if (tLeft < scrollLeft) left = scrollLeft + 5;
+        if (tLeft + width > windowWidth) left = left - width/2 + 5;
+        if (scrollTop > tTop) top = scrollTop;
+        break;
+      case 'none':
+        left = pos[0];
+        top = pos[1] - dist;
+        var tLeft = tooltipLeft(container);
+        var tTop = tooltipTop(container);
+        break;
+    }
+
+
+    container.style.left = left+'px';
+    container.style.top = top+'px';
+    //container.style.opacity = 1;
+    container.style.position = 'absolute';
+
+    return container;
+  };
+
   //
   // SCATTER Model
   //
@@ -297,7 +401,6 @@
             }).on("mouseout", function (d, i) {
               mouseEventCallback(d, dispatch.elementMouseout);
             });
-
           } else {
             /*
              // bring data in form needed for click handlers
@@ -409,7 +512,6 @@
             }).style("stroke", function (d, i) {
               return d.color;
             }).style("stroke-width", "1px").style("opacity", 0.3);
-
           }
 
           points.enter().append("circle").style("fill", function (d, i) {
@@ -900,16 +1002,22 @@
       //TODO: make tooltip style an option between single or dual on axes (maybe on all charts with axes?)
 
       var left = e.pos[0] + tooltipShift.x,
+
       // ( offsetElement.offsetLeft || 0 ),
         top = e.pos[1] + tooltipShift.y,
+
       //( offsetElement.offsetTop || 0),
         leftX = e.pos[0] + tooltipShift.x,
+
       //( offsetElement.offsetLeft || 0 ),
         topX = y.range()[0] + margin.top + tooltipShift.y,
+
       //margin.top + ( offsetElement.offsetTop || 0),
         leftY = x.range()[0] + margin.left + tooltipShift.x,
+
       //( offsetElement.offsetLeft || 0 ),
         topY = e.pos[1] + tooltipShift.y - margin.top,
+
       //( offsetElement.offsetTop || 0),
         xVal = xAxis.tickFormat()(scatter.x()(e.point, e.pointIndex)),
         yVal = yAxis.tickFormat()(scatter.y()(e.point, e.pointIndex));
@@ -1224,7 +1332,6 @@
         //store old scales for use in transitions on update
         x0 = x.copy();
         y0 = y.copy();
-
       });
 
       return chart;
@@ -1512,6 +1619,7 @@
         var availableWidth = width - margin.left - margin.right,
           availableHeight = height - margin.top - margin.bottom,
 
+
         //radius = Math.min(availableWidth,availableHeight),
           container = d3.select(this);
         //console.log("RADAR",availableWidth,availableHeight,radius)
@@ -1763,7 +1871,6 @@
         //store old scales for use in transitions on update
         x0 = x.copy();
         y0 = y.copy();
-
       });
 
       return chart;
@@ -3349,8 +3456,10 @@
         //Special offset functions
         chart.d3_stackedOffset_stackPercent = function (stackData) {
           var n = stackData.length,
+
           //How many series
             m = stackData[0].length,
+
           //how many points per series
             k = 1 / n,
             i,
@@ -4316,7 +4425,6 @@
                 //console.log(d)
                 return d.correlation > 0 ? "#7f0000" : "#081d58";
               });
-
             } else {
               wrap.select(".nv-chord").selectAll("path.nv-chord-group").transition().duration(250).style("opacity", 0.5).style("stroke-width", "1px");
 
@@ -4338,10 +4446,7 @@
           return "#238443";
         }).style("stroke", function (d, i) {
           return "#238443";
-        }).style("opacity", 0.05).attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
-          .on("mouseover", fade(true))
-          .on("mouseout", fade(false))
-          .on("click", lock());
+        }).style("opacity", 0.05).attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius)).on("mouseover", fade(true)).on("mouseout", fade(false)).on("click", lock());
         ;
 
         groups.transition()
@@ -4449,7 +4554,6 @@
         }).text(function (d, i) {
           return "0.00";
         });
-
       });
 
       return chart;
@@ -4803,7 +4907,6 @@
         });
 
         //============================================================
-
       });
 
       return chart;
@@ -5193,7 +5296,7 @@
 
     chart.radioButtonMode = function (_) {
       if (!arguments.length) return radioButtonMode;
-      console.log("set radio mode", _);
+      //console.log("set radio mode", _);
       radioButtonMode = _;
       return chart;
     };
@@ -5235,8 +5338,16 @@
         var data1 = data.filter(function (item) {
           return !item.disabled != undefined && item.disabled == false;
         })[0];
-        data1 = data1 ? data1.boundaries : data[0].boundaries;
-        console.log("colorScheme", data1);
+        var key;
+        if(data1){
+          key = data1.key;
+          data1 = data1.boundaries;
+        }else{
+          key = data[0].key;
+          data1 = data[0].boundaries;
+        }
+        //data1 = data1 ? data1.boundaries : data[0].boundaries;
+        //console.log("colorScheme", data1);
         //
         var availableWidth = width - margin.left - margin.right,
           container = d3.select(this);
@@ -5262,25 +5373,52 @@
         //for(var i=0;i<data1.length-1;i++) rects.push(i);
         //
         var bg = g.selectAll(".nv-color-bg").data([0]);
+        var title = g.selectAll(".nv-color-title").data([0]);
 
         var colors = g.selectAll(".nv-color").data(data1);
         var rectWidth = availableWidth / 2 / data1.length;
-        console.log("rectWidth", rectWidth, availableWidth);
+        //console.log("rectWidth", rectWidth, availableWidth);
         //var seriesEnter = series.enter().append('g').attr('class', 'nv-series');
         var colorsEnter = colors.enter().append("g").attr("class", "nv-color");
 
         bg.exit().remove();
+        title.exit().remove();
 
         colors.exit().remove();
 
-        colorsEnter.append("rect").style("stroke-width", 1).style("stroke-opacity", 0).style("fill-opacity", 0.5).style("fill", "#ffffff").attr("class", "nv-color-bg").attr("transform", "translate(-10,-25)");
+        colorsEnter.append("rect")
+          .style("stroke-width", 1)
+          .style("stroke-opacity", 0)
+          .style("fill-opacity", 0.5)
+          .style("fill", "#ffffff")
+          .attr("class", "nv-color-bg")
+          .attr("transform", "translate(-10,-25)");
+
+        colorsEnter.append("text")
+          .attr("class", "nv-color-title")
+          .attr("text-anchor", "start")
+          .style("stroke-opacity", 0)
+          .style("font", "bold 0.75rem Arial")
+          .style("fill", "#777")
+          .attr("transform", "translate(-7,-15)")
 
 
-        colorsEnter.append("rect").style("stroke-width", 1).style("stroke", "#a0a0a0")
+
+        colorsEnter
+          .append("rect")
+          .style("stroke-width", 1)
+          .style("stroke", "#a0a0a0")
           //.attr('class', 'nv-color')
           .attr("width", rectWidth).attr("height", 5);
 
-        colorsEnter.append("text").attr("text-anchor", "start").attr("class", "nv-legend-text").attr("dy", "-.7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "normal 0.5rem Arial").style("fill", "#777");
+        colorsEnter.append("text")
+          .attr("text-anchor", "start")
+          .attr("class", "nv-legend-text")
+          .attr("dy", "-.7em")
+          .style("text-anchor", "middle")
+          .style("stroke-opacity", 0)
+          .style("font", "normal 0.5rem Arial")
+          .style("fill", "#777");
 
         //seriesEnter.append('text')
         //  .attr('text-anchor', 'start')
@@ -5306,17 +5444,21 @@
           //})
           //.style('stroke',  "#a0a0a0")
           .attr("transform", function (d, i) {
-            console.log(d, i, rectWidth);
+            //console.log(d, i, rectWidth);
             var x = rectWidth * i + 10;
             return "translate(" + x + "," + 0 + ")";
           });
 
-        colors.select("text").transition().text(function (d) {
+        colors.select("text.nv-legend-text").transition().text(function (d) {
           return d;
         });
 
         wrap.select("rect.nv-color-bg") //.select('rect')
           .transition().attr("width", availableWidth / 2 + 25).attr("height", 40);
+
+        wrap.select("text.nv-color-title") //.select('rect')
+          .transition()
+          .text(key)
 
 
         //position legend as far right as possible within the total width
@@ -5777,7 +5919,10 @@
       },
       id = Math.floor(Math.random() * 10000) //Create semi-unique ID in case user doesn't select one
       ,
-      color = nv.utils.defaultColor()
+      color = nv.utils.defaultColor(),
+      projection = d3.geo.mercator(),
+      path = d3.geo.path().projection(projection),
+      zoom = d3.behavior.zoom()
     //, valueFormat = d3.format(',.2f')
     //, labelFormat = d3.format('%')
     //, showLabels = true
@@ -5791,7 +5936,7 @@
     //, endAngle = false
     //, donutRatio = 0.5
       ,
-      dispatch = d3.dispatch("chartClick", "elementClick", "elementDblClick", "elementMouseover", "elementMouseout", "zoom");
+      dispatch = d3.dispatch("tooltipShow", "tooltipHide", "chartClick", "elementClick", "elementDblClick", "mapMouseover", "mapMouseout", "zoom");
 
     //============================================================
     var worldTopo = {
@@ -7056,7 +7201,57 @@
     };
 
     //============================================================
+    var sc = width / height >= 1.7 ? height * 1.7 : width;
+    //var projection = d3.geo.mercator() //orthographic()//mercator()
+    projection.scale(sc / 2 / Math.PI).translate([width / 2, height / 1.3]);
 
+    zoom.scale(projection.scale() * 2 * Math.PI)
+      //.scaleExtent([1 << 9, 1 << 16])
+      .translate([0, 0]);
+    //.on("zoom", zoomed);
+
+
+    var complementedColor = function (hex) {
+      var color = parseInt(hex.slice(1), 16);
+      var r, g, b;
+      if (hex.length === 4) {
+        r = (color & 3840) >> 4;
+        r = r >> 4 | r;
+        g = color & 240;
+        g = g >> 4 | g;
+        b = color & 15;
+        b = b << 4 | b;
+      } else if (hex.length === 7) {
+        r = (color & 16711680) >> 16;
+        g = (color & 65280) >> 8;
+        b = color & 255;
+      }
+      //console.log(hex,r,g,b);
+      //var v = Math.floor((r + g + b) / 3);
+      //v = v < 120 ? v + 180 : v - 120;
+      return "rgba(" + (255 - r) + "," + (255 - g) + "," + (255 - b) + ",1)";
+    };
+
+    var approximateLength = function (text, fontSize) {
+      return text.length * fontSize * 0.5;
+    };
+
+    var getFontSize = function (element, data) {
+      var bounds = path.bounds(data);
+      var textWidth = element.clientWidth;
+      var textHeight = element.clientHeight;
+      var h1 = (bounds[1][1] - bounds[0][1]) * 0.1;
+      var h2 = (bounds[1][0] - bounds[0][0]) * 0.1;
+      h1 = h1 > h2 ? h2 : h1;
+      h1 = h1 < 12 ? 12 : h1;
+      h1 = h1 > 16 ? 16 : h1;
+
+      return h1;
+    };
+
+    //var approximateLength = function(text,fontSize){
+    //  return text.length * fontSize * 0.5;
+    //}
 
     function chart(selection) {
       selection.each(function (data) {
@@ -7078,6 +7273,10 @@
           availableHeight = height - margin.top - margin.bottom,
           container = d3.select(this);
 
+        var tr = zoom.translate();
+        if (tr[0] == 0 && tr[1] == 0) {
+          zoom.translate([availableWidth / 2, availableHeight / 1.3]);
+        }
 
         //------------------------------------------------------------
         // Setup containers and skeleton of chart
@@ -7103,7 +7302,9 @@
           })[0];
           item.properties.category = d && d.category != null ? d.category : null;
           item.properties.value = d && d.value != null ? d.value.toPrecision(3) : null;
+          item.properties.key = data1.key;
         });
+
 
 
         var geo = g.select(".nv-map").selectAll("path.map-subunit").data(geoData);
@@ -7113,169 +7314,159 @@
         labels.exit().remove();
         values.exit().remove();
 
-        var sc = availableWidth / availableHeight >= 1.7 ? availableHeight * 1.7 : availableWidth;
-        var projection = d3.geo.mercator() //orthographic()//mercator()
-          .scale(sc / 2 / Math.PI).translate([availableWidth / 2, availableHeight / 1.3]);
 
-        var path = d3.geo.path().projection(projection);
-
-        var zoom = d3.behavior.zoom();
-
-        //geo
-        //  .exit()
-        //  .remove();
-
-        var fade =  function (select) {
-          return function (g1, i) {
-            if (select) {
-              pathContainer.selectAll("path.map-subunit")
-                .filter(function (d) {
-                  return d.index == i;
-                })
-                .transition()
-                .style("fill-opacity", "1")
-                .style("stroke-width", "2");
-            } else {
-              pathContainer.selectAll("path.map-subunit")
-                .filter(function (d) {
-                  return d.index == i;
-                })
-                .transition()
-                .style("fill-opacity", "0.75")
-                .style("stroke-width", "1");
-            }
-          }
-        }
+        geo.enter().append("path").on("mouseover", function (d, i) {
+          d3.select(this).transition().style("stroke", function (d) {
+            return d.properties.category == null ? "#909090" : complementedColor(color(d, d.properties.category));
+          }).style("stroke-opacity", "0.75").style("stroke-width", "3");
+          dispatch.mapMouseover({
+            point: d,
+            series: d.key,
+            pos: [d3.event.pageX, d3.event.pageY] //,
+            //seriesIndex: d.seriesIndex
+          });
+        }).on("mouseout", function (d, i) {
+          d3.select(this).transition().style("stroke", "#909090").style("stroke-opacity", "1").style("stroke-width", "1");
+          dispatch.mapMouseout({
+            point: d,
+            series: d.key,
+            pos: [d3.event.pageX, d3.event.pageY] //,
+            //seriesIndex: d.seriesIndex
+          });
+        });
 
 
-        geo.enter()
-          .append("path")
-          .on("mouseover", fade(true))
-          .on("mouseout", fade(false));
+        geo.transition().attr("class", function (d, i) {
+          return "map-subunit subunit-id-" + i;
+        }).style("fill", function (d) {
+          return d.properties.category == null ? "#f0f0f0" : color(d, d.properties.category);
+        }).style("fill-opacity", "0.6").style("stroke-width", "1px").style("stroke", "#909090");
+
+        var highlightSubunit = function (d, i) {
+          g.select(".nv-map").selectAll("path.subunit-id-" + i).transition().style("stroke", function (d) {
+            return d.properties.category == null ? "#909090" : complementedColor(color(d, d.properties.category));
+          }).style("stroke-opacity", "0.75").style("stroke-width", "3");
+        };
+        var clearSubunit = function (d, i) {
+          g.select(".nv-map").selectAll("path.subunit-id-" + i).transition().style("stroke", "#909090").style("stroke-opacity", "1").style("stroke-width", "1");
+        };
 
         labels.enter().append("text").text(function (d) {
           return d.properties.name;
         }).attr("text-anchor", "middle").attr("class", "nv-map-label").attr("dy", "-.5em").style("text-anchor", "middle")
-          //.style ('stroke-opacity',0)
-          .style("font", "bold 0.75rem Arial")
-          //.style ('fill', '#555')
-          .style("opacity", 0)
-        ;
+          //.style("font", "bold 0.75rem Arial")
+          .style("opacity", 0).style("fill", function (d) {
+            return "#000";
+          }).style("stroke", "#ffffff").style("stroke-opacity", 0.25).style("stroke-width", 3).on("mouseover", function (d, i) {
+            highlightSubunit(d, i);
+
+            dispatch.mapMouseover({
+              point: d,
+              series: d.key,
+              pos: [d3.event.pageX, d3.event.pageY] //,
+            });
+          }).on("mouseout", function (d, i) {
+            clearSubunit(d, i);
+            dispatch.mapMouseout({
+              point: d,
+              series: d.key,
+              pos: [d3.event.pageX, d3.event.pageY] //,
+            });
+          });
 
         values.enter().append("text").text(function (d) {
           return d.properties.value;
-        }).attr("text-anchor", "middle").attr("class", "nv-map-label").attr("dy", ".7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "normal 0.5rem Arial")
-          //.style ('fill', '#555')
-          .style("opacity", 0);
+        }).attr("text-anchor", "middle").attr("class", "nv-map-value").attr("dy", ".7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "bold Arial").style("fill", function (d) {
+          return "#000";
+        }).style("stroke", "#ffffff").style("stroke-opacity", 0.15).style("stroke-width", 3).style("opacity", 0).on("mouseover", function (d, i) {
+          highlightSubunit(d, i);
+          dispatch.mapMouseover({
+            point: d,
+            series: d.key,
+            pos: [d3.event.pageX, d3.event.pageY] //,
+          });
+        }).on("mouseout", function (d, i) {
+          clearSubunit(d, i);
+          dispatch.mapMouseout({
+            point: d,
+            series: d.key,
+            pos: [d3.event.pageX, d3.event.pageY] //,
+          });
+        });
 
-        var complementedColor = function (hex) {
-          var color = parseInt(hex.slice(1), 16);
-          var r, g, b;
-          if (hex.length === 4) {
-            r = (color & 3840) >> 4;
-            r = r >> 4 | r;
-            g = color & 240;
-            g = g >> 4 | g;
-            b = color & 15;
-            b = b << 4 | b;
-          } else if (hex.length === 7) {
-            r = (color & 16711680) >> 16;
-            g = (color & 65280) >> 8;
-            b = color & 255;
-          }
-          //console.log(hex,r,g,b);
-          var v = Math.floor((r + g + b) / 3);
-          v = v < 120 ? v + 180 : v - 120;
-          return "rgba(" + v + "," + v + "," + v + ",1)";
+
+
+
+        var beforeZoom = function () {
+          geo.transition().style("fill-opacity", 0);
+          labels.transition().text("");
+          values.transition().text("");
         };
-
-        var getFontSize = function (element,data){
-          var bounds = path.bounds(data);
-          var textWidth = element.clientWidth;
-          var textHeight = element.clientHeight;
-          var h1 = (bounds[1][1]-bounds[0][1])*0.1;
-          return (h1<14)?h1:14;
-        }
-
 
         var zoomed = function () {
-          //console.log("zoomed",zoom.scale());
           projection.scale(zoom.scale() / 2 / Math.PI).translate(zoom.translate());
-          path = d3.geo.path().projection(projection);
-
-
-          geo.attr("d", path).attr("class", function (d) {
-            return "map-subunit" // + d.id;
-              ;
-          });
-
-          geo.transition()
-            //.duration(250)
-            .style("fill", function (d) {
-              return d.properties.category == null ? "#f0f0f0" : color(d, d.properties.category);
-            })
-            .style("fill-opacity", "0.75")
-            .style("stroke-width", "1px")
-            .style("stroke", "#909090");
-
-          labels.transition()
-            .text(function(d,i){
-              return d.properties.name;
-              //return d.id
-            })
-            .style("font-size",function(d,i){return getFontSize(labels[0][i],d)+"px"})
-            .attr("transform", function (d) {
-              var position = path.centroid(d);
-              //console.log(d.properties,position, path.bounds(d))
-              return "translate(" + position[0] + "," + position[1] + ")";
-            })
-            .style("opacity", function (d, i) {
-              var bounds = path.bounds(d);
-              var opct = (labels[0][i].clientWidth * 1.5 > bounds[1][0] - bounds[0][0]) ? 0 : 1;
-              opct = (getFontSize(labels[0][i],d) < 4) ? 0 : opct;
-              return opct;
-            })
-            .style("fill", function (d) {
-              return "#000"
-              //var c = d.properties.category == null ? "#f0f0f0" : color(d, d.properties.category);
-              //c = complementedColor(c);
-              //return c;
-            })
-            .style("stroke","#ffffff")
-            .style("stroke-opacity", 0.15)
-            .style("stroke-width",3);
-
-
-          values.transition()
-            .text(function (d) {
-              return d.properties.value;
-            })
-            //.style("font-size",function(d,i){return (getFontSize(labels[0][i],d)-5)+"px"})
-            //.attr("dy", function(d,i){return (getFontSize(labels[0][i],d)-2)+"px"})
-            .attr("transform", function (d) {
-              var position = path.centroid(d);
-              //console.log(d.properties,position, path.bounds(d))
-              return "translate(" + position[0] + "," + position[1] + ")";
-            })
-            .style("opacity", function (d, i) {
-              var bounds = path.bounds(d);
-              var opct = (labels[0][i].clientWidth * 1.5 > bounds[1][0] - bounds[0][0]) ? 0 : 1;
-              opct = (getFontSize(labels[0][i],d) < 4) ? 0 : opct;
-              return opct;
-            })
-            .style("fill", function (d) {
-              return "#000"
-            })
-            .style("stroke","#ffffff")
-            .style("stroke-opacity", 0.15)
-            .style("stroke-width",3);
-          ;
+          geo.transition().attr("d", path);
         };
 
-        zoom.scale(projection.scale() * 2 * Math.PI).scaleExtent([1 << 9, 1 << 16]).translate([availableWidth / 2, availableHeight / 1.3]).on("zoom", zoomed);
-        g.select(".nv-map").call(zoom);
-        zoomed();
+        var afterZoom = function () {
+          projection.scale(zoom.scale() / 2 / Math.PI).translate(zoom.translate());
 
+          geo.transition().attr("d", path).style("fill-opacity", "0.6").style("stroke-width", 1).style("fill", function (d) {
+            return d.properties.category == null ? "#f0f0f0" : color(d, d.properties.category);
+          });
+
+          labels.transition().attr("transform", function (d) {
+            var position = path.centroid(d);
+            return "translate(" + position[0] + "," + position[1] + ")";
+          }).text(function (d, i) {
+            var fontSize = getFontSize(labels[0][i], d);
+            //fontSize = (fontSize > 10) ? fontSize : 10;
+            var w = approximateLength(d.properties.name, fontSize);
+            var bounds = path.bounds(d);
+            if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
+              return d.id;
+            } else {
+              return d.properties.name;
+            }
+          }).style("font-size", function (d, i) {
+            var fontSize = getFontSize(labels[0][i], d);
+            //fontSize = (fontSize > 8) ? fontSize : 8;
+            //var w = approximateLength(d.properties.name, fontSize);
+            //var bounds = path.bounds(d);
+            //if(w * 1.5 > bounds[1][0] - bounds[0][0]) {
+            //  return 2*fontSize+"px"
+            //}
+            return fontSize + "px";
+          }).style("opacity", function (d, i) {
+            var bounds = path.bounds(d);
+            var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+            opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
+            return opct;
+          });
+
+          values.transition().text(function (d) {
+            return d.properties.value;
+          }).style("font-size", function (d, i) {
+            return getFontSize(labels[0][i], d) + "px";
+          }).attr("transform", function (d) {
+            var position = path.centroid(d);
+            return "translate(" + position[0] + "," + position[1] + ")";
+          }).style("opacity", function (d, i) {
+            var bounds = path.bounds(d);
+            var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+            opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
+            return opct;
+          });
+        };
+
+        zoom
+          //.scale(projection.scale() * 2 * Math.PI)
+          //.scaleExtent([1 << 9, 1 << 16])
+          //.translate([availableWidth / 2, availableHeight / 1.3])
+          .on("zoomstart", beforeZoom).on("zoom", zoomed).on("zoomend", afterZoom);
+        console.log(zoom.translate());
+        g.select(".nv-map").call(zoom);
+        afterZoom();
 
       });
 
@@ -7283,37 +7474,6 @@
     }
 
 
-    //function getTextAnchor(d, i) {
-    //  var angle = Math.PI + (d.startAngle + d.endAngle) / -2;
-    //  var x = Math.sin(angle);
-    //  if (Math.abs(x) < 0.1) return "middle"
-    //  if (x > 0.1) return "start"
-    //  return "end"
-    //}
-    //
-    //function getDy(d, i) {
-    //  var angle = Math.PI + (d.startAngle + d.endAngle) / -2
-    //  var y = Math.cos(angle);
-    //  if (Math.abs(y) < 0.1) return ".72em"
-    //  if (y > 0.1) return "1em"
-    //  return "-.3em"
-    //}
-    //
-    //function getValueAnchor(d, i) {
-    //  var angle = Math.PI + (d.startAngle + d.endAngle) / -2;
-    //  var x = Math.sin(angle);
-    //  if (Math.abs(x) < 0.1) return "middle"
-    //  if (x > 0.1) return "end"
-    //  return "start"
-    //}
-    //
-    //function getValueDy(d, i) {
-    //  var angle = Math.PI + (d.startAngle + d.endAngle) / -2
-    //  var y = Math.cos(angle);
-    //  if (Math.abs(y) < 0.1) return ".72em"
-    //  if (y > 0.1) return "-.3em"
-    //  return "1em"
-    //}
 
     //============================================================
     // Expose Public Variables
@@ -7583,11 +7743,12 @@
     //------------------------------------------------------------
 
     var showTooltip = function (e, offsetElement) {
-      var tooltipLabel = map.description()(e.point) || map.x()(e.point);
+      var tooltipLabel = e.point; //map.description()(e.point) || map.x()(e.point);
       var left = e.pos[0] + (offsetElement && offsetElement.offsetLeft || 0),
         top = e.pos[1] + (offsetElement && offsetElement.offsetTop || 0),
-        y = map.valueFormat()(map.y()(e.point)),
-        content = tooltip(tooltipLabel, y, e, chart);
+
+      //y = map.valueFormat()(map.y()(e.point)),
+        content = tooltip(tooltipLabel, " !!!!", e, chart);
 
       nv.tooltip.show([left, top], content, e.value < 0 ? "n" : "s", null, offsetElement);
     };
@@ -7699,7 +7860,7 @@
         //  - margin.top - margin.bottom;
         //}
 
-        wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + availableHeight + ")");
+        wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (availableHeight+margin.top) + ")");
         //}
 
         //------------------------------------------------------------
@@ -7757,7 +7918,6 @@
         });
 
         //============================================================
-
       });
 
       return chart;
@@ -7766,13 +7926,19 @@
     //============================================================
     // Event Handling/Dispatching (out of chart's scope)
     //------------------------------------------------------------
+    //console.log("MAP DISPATCH",map.dispatch.on)
+    map.dispatch.on("mapMouseover", function (e) {
+      e.pos = [e.pos[0] + margin.left, e.pos[1] + margin.top];
+      dispatch.tooltipShow(e);
+    });
 
-    //chord.dispatch.on('elementMouseover.tooltip', function(e) {
-    //    e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
-    //    dispatch.tooltipShow(e);
-    //});
+    map.dispatch.on("mapMouseout", function (e) {
+      //e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+      dispatch.tooltipHide(e);
+    });
 
     dispatch.on("tooltipShow", function (e) {
+      console.log("tooltipShow", e);
       if (tooltips) showTooltip(e);
     });
 
@@ -7870,3 +8036,4 @@
     //console.log("FINISH", nv)
   ;
 })();
+
