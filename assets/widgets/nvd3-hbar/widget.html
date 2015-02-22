@@ -1,5 +1,5 @@
 <div class="widget border" ng-controller="Nvd3HBarChartCtrl" style="overflow:auto;">
-  <div nvd3 options="options" data="series" ng-if="serieExist()"></div>
+  <div nvd3 settings="settings" ng-if="serieExist()"></div>
   <h1 ng-if="configExist() && !serieExist()" style="color:#eeeeee; text-align: center;">
     Loading...
   </h1>

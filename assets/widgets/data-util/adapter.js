@@ -111,9 +111,13 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
           header.body[i] = {};
           header.body[i].label = i;
           header.body[i].title = i;
-          header.body[i].id = columnCollection.filter(function (item) {
+          var fcol = columnCollection.filter(function (item) {
             return item.label == i;
-          })[0].id;
+          })[0];
+
+          if (fcol) {
+            header.body[i].id = fcol.id;
+          }
         }
         //console.log(r)
         //r = r.filter(function(item){
@@ -674,3 +678,4 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
     };
   }]);
 });
+
