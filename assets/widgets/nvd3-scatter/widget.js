@@ -76,8 +76,11 @@ define([
 
           tooltipContent: function (serie, x, y, s) {
             //console.log(serie,x,y,s)
-            return "<b>" + s.point.label + "</b>"
+            return "<b><center>" + s.point.label + "</center></b>"
+              +'<div style="font-size:smaller;padding: 0 0.5em;"> '+ s.series.base.title + ": " + x + "</div>"
+              + '<div style="font-size:smaller;padding: 0 0.5em;"> '+ serie + ": " + y + "</div>";
           },
+
           tooltipXContent: function (serie, x, y, s) {
             //console.log("X",serie,x,y,s)
             return "<b>" + s.series.base.title + ": </b>" + x

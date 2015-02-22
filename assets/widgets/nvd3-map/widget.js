@@ -53,9 +53,9 @@ define(["angular", "/widgets/nvd3-widget/nvd3-widget.js", "/widgets/data-util/ad
         //getX:function(d){return d.label},
         //getY:function(d){return d.value}
         tooltipContent: function (serie, x, y, s) {
-          var result = "<center><b>" + serie.properties.name + "</b>";
-          if(serie.properties.value != null){
-            result += "<br/>" + serie.properties.key + " : " + serie.properties.value + "</center>";
+          var result = "<center><b>" + serie.properties.name + "</center></b>";
+          if (serie.properties.value != null) {
+            result += '<div style="font-size:smaller;padding: 0 0.5em;"> ' + serie.properties.key + " : " + serie.properties.value + "</div>";
           }
           return result;
         }

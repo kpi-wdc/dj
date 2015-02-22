@@ -4,16 +4,15 @@
   //console.log("LOAD nv.d3.ext")
 
 
-  nv.tooltip.show = function(pos, content, gravity, dist, parentContainer, classes) {
-
+  nv.tooltip.show = function (pos, content, gravity, dist, parentContainer, classes) {
     //Create new tooltip div if it doesn't exist on DOM.
-    var   container = document.createElement('div');
-    container.className = 'nvtooltip ' + (classes ? classes : 'xy-tooltip');
+    var container = document.createElement("div");
+    container.className = "nvtooltip " + (classes ? classes : "xy-tooltip");
 
     var body = parentContainer;
-    if ( !parentContainer || parentContainer.tagName.match(/g|svg/i)) {
+    if (!parentContainer || parentContainer.tagName.match(/g|svg/i)) {
       //If the parent element is an SVG element, place tooltip in the <body> element.
-      body = document.getElementsByTagName('body')[0];
+      body = document.getElementsByTagName("body")[0];
     }
 
     container.style.left = 0;
@@ -30,68 +29,68 @@
     nv.tooltip.calcTooltipPosition(pos, gravity, dist, container);
   };
 
-  nv.tooltip.calcTooltipPosition = function(pos, gravity, dist, container) {
-
+  nv.tooltip.calcTooltipPosition = function (pos, gravity, dist, container) {
     var height = parseInt(container.offsetHeight),
       width = parseInt(container.offsetWidth),
       windowWidth = nv.utils.windowSize().width,
       windowHeight = nv.utils.windowSize().height,
       scrollTop = window.pageYOffset,
       scrollLeft = window.pageXOffset,
-      left, top;
+      left,
+      top;
 
     windowHeight = window.innerWidth >= document.body.scrollWidth ? windowHeight : windowHeight - 16;
     windowWidth = window.innerHeight >= document.body.scrollHeight ? windowWidth : windowWidth - 16;
 
-    gravity = gravity || 's';
+    gravity = gravity || "s";
     dist = dist || 20;
 
-    var tooltipTop = function ( Elem ) {
+    var tooltipTop = function (Elem) {
       return nv.tooltip.findTotalOffsetTop(Elem, top);
     };
 
-    var tooltipLeft = function ( Elem ) {
-      return nv.tooltip.findTotalOffsetLeft(Elem,left);
+    var tooltipLeft = function (Elem) {
+      return nv.tooltip.findTotalOffsetLeft(Elem, left);
     };
 
     switch (gravity) {
-      case 'e':
+      case "e":
         left = pos[0] - width - dist;
-        top = pos[1] - (height / 2);
+        top = pos[1] - height / 2;
         var tLeft = tooltipLeft(container);
         var tTop = tooltipTop(container);
         if (tLeft < scrollLeft) left = pos[0] + dist > scrollLeft ? pos[0] + dist : scrollLeft - tLeft + left;
         if (tTop < scrollTop) top = scrollTop - tTop + top;
         if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
         break;
-      case 'w':
+      case "w":
         left = pos[0] + dist;
-        top = pos[1] - (height / 2);
+        top = pos[1] - height / 2;
         var tLeft = tooltipLeft(container);
         var tTop = tooltipTop(container);
         if (tLeft + width > windowWidth) left = pos[0] - width - dist;
         if (tTop < scrollTop) top = scrollTop + 5;
         if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
         break;
-      case 'n':
-        left = pos[0] - (width / 2) - 5;
+      case "n":
+        left = pos[0] - width / 2 - 5;
         top = pos[1] + dist;
         var tLeft = tooltipLeft(container);
         var tTop = tooltipTop(container);
         if (tLeft < scrollLeft) left = scrollLeft + 5;
-        if (tLeft + width > windowWidth) left = left - width/2 + 5;
+        if (tLeft + width > windowWidth) left = left - width / 2 + 5;
         if (tTop + height > scrollTop + windowHeight) top = scrollTop + windowHeight - tTop + top - height;
         break;
-      case 's':
-        left = pos[0] - (width / 2);
+      case "s":
+        left = pos[0] - width / 2;
         top = pos[1] - height - dist;
         var tLeft = tooltipLeft(container);
         var tTop = tooltipTop(container);
         if (tLeft < scrollLeft) left = scrollLeft + 5;
-        if (tLeft + width > windowWidth) left = left - width/2 + 5;
+        if (tLeft + width > windowWidth) left = left - width / 2 + 5;
         if (scrollTop > tTop) top = scrollTop;
         break;
-      case 'none':
+      case "none":
         left = pos[0];
         top = pos[1] - dist;
         var tLeft = tooltipLeft(container);
@@ -100,10 +99,10 @@
     }
 
 
-    container.style.left = left+'px';
-    container.style.top = top+'px';
-    //container.style.opacity = 1;
-    container.style.position = 'absolute';
+    container.style.left = left + "px";
+    container.style.top = top + "px";
+    container.style.opacity = 1;
+    container.style.position = "absolute";
 
     return container;
   };
@@ -378,7 +377,7 @@
               if (d.data.length === 0) return "M 0 0";else return "M" + d.data.join("L") + "Z";
             });
 
-            var mouseEventCallback = function (d, mDispatch) {
+            var mouseEventCallback = function (d, mDispatch, event) {
               if (needsUpdate) return 0;
               var series = data[d.series];
               if (typeof series === "undefined") return;
@@ -386,6 +385,7 @@
               var point = series.values[d.point];
 
               mDispatch({
+                event: event,
                 point: point,
                 series: series,
                 pos: [x(getX(point, d.point)) + margin.left, y(getY(point, d.point)) + margin.top],
@@ -397,9 +397,9 @@
             pointPaths.on("click", function (d) {
               mouseEventCallback(d, dispatch.elementClick);
             }).on("mouseover", function (d) {
-              mouseEventCallback(d, dispatch.elementMouseover);
+              mouseEventCallback(d, dispatch.elementMouseover, d3.event);
             }).on("mouseout", function (d, i) {
-              mouseEventCallback(d, dispatch.elementMouseout);
+              mouseEventCallback(d, dispatch.elementMouseout, d3.event);
             });
           } else {
             /*
@@ -1003,28 +1003,41 @@
 
       var left = e.pos[0] + tooltipShift.x,
 
+
+
       // ( offsetElement.offsetLeft || 0 ),
         top = e.pos[1] + tooltipShift.y,
+
+
 
       //( offsetElement.offsetTop || 0),
         leftX = e.pos[0] + tooltipShift.x,
 
+
+
       //( offsetElement.offsetLeft || 0 ),
         topX = y.range()[0] + margin.top + tooltipShift.y,
+
+
 
       //margin.top + ( offsetElement.offsetTop || 0),
         leftY = x.range()[0] + margin.left + tooltipShift.x,
 
+
+
       //( offsetElement.offsetLeft || 0 ),
         topY = e.pos[1] + tooltipShift.y - margin.top,
+
+
 
       //( offsetElement.offsetTop || 0),
         xVal = xAxis.tickFormat()(scatter.x()(e.point, e.pointIndex)),
         yVal = yAxis.tickFormat()(scatter.y()(e.point, e.pointIndex));
 
-      if (tooltipX != null) nv.tooltip.show([leftX, topX], tooltipX(e.series.key, xVal, yVal, e, chart), "n", 1, offsetElement, "x-nvtooltip");
-      if (tooltipY != null) nv.tooltip.show([leftY, topY], tooltipY(e.series.key, xVal, yVal, e, chart), "e", 1, offsetElement, "y-nvtooltip");
-      if (tooltip != null) nv.tooltip.show([left, top], tooltip(e.series.key, xVal, yVal, e, chart), e.value < 0 ? "n" : "s", null, offsetElement);
+      //if (tooltipX != null) nv.tooltip.show([leftX, topX], tooltipX(e.series.key, xVal, yVal, e, chart), "n", 1, offsetElement, "x-nvtooltip");
+      //if (tooltipY != null) nv.tooltip.show([leftY, topY], tooltipY(e.series.key, xVal, yVal, e, chart), "e", 1, offsetElement, "y-nvtooltip");
+      //if (tooltip != null) nv.tooltip.show([left, top], tooltip(e.series.key, xVal, yVal, e, chart), e.value < 0 ? "n" : "s", null, offsetElement);
+      if (tooltip != null) nv.tooltip.show([e.event.pageX, e.event.pageY], tooltip(e.series.key, xVal, yVal, e, chart), e.value < 0 ? "n" : "s", null, null, "xy-tooltip with-3d-shadow with-transitions");
     };
 
     var controlsData = [{ key: "Magnify", disabled: true }];
@@ -1620,6 +1633,8 @@
           availableHeight = height - margin.top - margin.bottom,
 
 
+
+
         //radius = Math.min(availableWidth,availableHeight),
           container = d3.select(this);
         //console.log("RADAR",availableWidth,availableHeight,radius)
@@ -2156,12 +2171,16 @@
     //------------------------------------------------------------
 
     var showTooltip = function (e, offsetElement) {
-      var left = e.pos[0],
-        top = e.pos[1],
+      console.log(e);
+      var left = e.event.pageX,
+      //pos[0],
+        top = e.event.pageY,
+      //pos[1],
         x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
         y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
         content = tooltip(e.series.key, x, y, e, chart);
-      nv.tooltip.show([left + tooltipShift.x, top + tooltipShift.y], content, null, null, offsetElement);
+      console.log(left, top, tooltipShift);
+      nv.tooltip.show([left /* + tooltipShift.x*/, top /*+ tooltipShift.y*/], content, null, null, offsetElement, "xy-tooltip with-3d-shadow with-transitions");
     };
 
     //============================================================
@@ -2384,7 +2403,7 @@
 
         dispatch.on("tooltipShow", function (e) {
           if (tooltips) {
-            showTooltip(e, that.parentNode);
+            showTooltip(e);
           }
         });
 
@@ -3457,8 +3476,12 @@
         chart.d3_stackedOffset_stackPercent = function (stackData) {
           var n = stackData.length,
 
+
+
           //How many series
             m = stackData[0].length,
+
+
 
           //how many points per series
             k = 1 / n,
@@ -5339,10 +5362,10 @@
           return !item.disabled != undefined && item.disabled == false;
         })[0];
         var key;
-        if(data1){
+        if (data1) {
           key = data1.key;
           data1 = data1.boundaries;
-        }else{
+        } else {
           key = data[0].key;
           data1 = data[0].boundaries;
         }
@@ -5386,39 +5409,17 @@
 
         colors.exit().remove();
 
-        colorsEnter.append("rect")
-          .style("stroke-width", 1)
-          .style("stroke-opacity", 0)
-          .style("fill-opacity", 0.5)
-          .style("fill", "#ffffff")
-          .attr("class", "nv-color-bg")
-          .attr("transform", "translate(-10,-25)");
+        colorsEnter.append("rect").style("stroke-width", 1).style("stroke-opacity", 0).style("fill-opacity", 0.5).style("fill", "#ffffff").attr("class", "nv-color-bg").attr("transform", "translate(-10,-25)");
 
-        colorsEnter.append("text")
-          .attr("class", "nv-color-title")
-          .attr("text-anchor", "start")
-          .style("stroke-opacity", 0)
-          .style("font", "bold 0.75rem Arial")
-          .style("fill", "#777")
-          .attr("transform", "translate(-7,-15)")
+        colorsEnter.append("text").attr("class", "nv-color-title").attr("text-anchor", "start").style("stroke-opacity", 0).style("font", "bold 0.75rem Arial").style("fill", "#777").attr("transform", "translate(-7,-15)");
 
 
 
-        colorsEnter
-          .append("rect")
-          .style("stroke-width", 1)
-          .style("stroke", "#a0a0a0")
+        colorsEnter.append("rect").style("stroke-width", 1).style("stroke", "#a0a0a0")
           //.attr('class', 'nv-color')
           .attr("width", rectWidth).attr("height", 5);
 
-        colorsEnter.append("text")
-          .attr("text-anchor", "start")
-          .attr("class", "nv-legend-text")
-          .attr("dy", "-.7em")
-          .style("text-anchor", "middle")
-          .style("stroke-opacity", 0)
-          .style("font", "normal 0.5rem Arial")
-          .style("fill", "#777");
+        colorsEnter.append("text").attr("text-anchor", "start").attr("class", "nv-legend-text").attr("dy", "-.7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "normal 0.5rem Arial").style("fill", "#777");
 
         //seriesEnter.append('text')
         //  .attr('text-anchor', 'start')
@@ -5457,8 +5458,7 @@
           .transition().attr("width", availableWidth / 2 + 25).attr("height", 40);
 
         wrap.select("text.nv-color-title") //.select('rect')
-          .transition()
-          .text(key)
+          .transition().text(key);
 
 
         //position legend as far right as possible within the total width
@@ -5936,7 +5936,7 @@
     //, endAngle = false
     //, donutRatio = 0.5
       ,
-      dispatch = d3.dispatch("tooltipShow", "tooltipHide", "chartClick", "elementClick", "elementDblClick", "mapMouseover", "mapMouseout", "zoom");
+      dispatch = d3.dispatch( /*"tooltipShow", "tooltipHide", "chartClick",  "elementClick", "elementDblClick",*/"mapMouseover", "mapMouseout" /*, "zoom"*/);
 
     //============================================================
     var worldTopo = {
@@ -7319,10 +7319,13 @@
           d3.select(this).transition().style("stroke", function (d) {
             return d.properties.category == null ? "#909090" : complementedColor(color(d, d.properties.category));
           }).style("stroke-opacity", "0.75").style("stroke-width", "3");
+          console.log("D3 event", d3.event);
           dispatch.mapMouseover({
             point: d,
             series: d.key,
             pos: [d3.event.pageX, d3.event.pageY] //,
+
+            //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY] //,
             //seriesIndex: d.seriesIndex
           });
         }).on("mouseout", function (d, i) {
@@ -7330,6 +7333,7 @@
           dispatch.mapMouseout({
             point: d,
             series: d.key,
+            //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
             pos: [d3.event.pageX, d3.event.pageY] //,
             //seriesIndex: d.seriesIndex
           });
@@ -7353,16 +7357,22 @@
 
         labels.enter().append("text").text(function (d) {
           return d.properties.name;
-        }).attr("text-anchor", "middle").attr("class", "nv-map-label").attr("dy", "-.5em").style("text-anchor", "middle")
-          //.style("font", "bold 0.75rem Arial")
-          .style("opacity", 0).style("fill", function (d) {
-            return "#000";
-          }).style("stroke", "#ffffff").style("stroke-opacity", 0.25).style("stroke-width", 3).on("mouseover", function (d, i) {
+        }).attr("text-anchor", "middle")
+          .attr("class", "nv-map-label")
+          .attr("dy", "-.5em").style("text-anchor", "middle")
+          .style("font-weight", "bold")
+          .style("opacity", 0)
+          .style("fill", "#000")
+          .style("stroke", "#ffffff")
+          .style("stroke-opacity", 0.25)
+          .style("stroke-width", 3)
+          .on("mouseover", function (d, i) {
             highlightSubunit(d, i);
 
             dispatch.mapMouseover({
               point: d,
               series: d.key,
+              //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
               pos: [d3.event.pageX, d3.event.pageY] //,
             });
           }).on("mouseout", function (d, i) {
@@ -7383,6 +7393,7 @@
           dispatch.mapMouseover({
             point: d,
             series: d.key,
+            //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
             pos: [d3.event.pageX, d3.event.pageY] //,
           });
         }).on("mouseout", function (d, i) {
@@ -7440,9 +7451,10 @@
           }).style("opacity", function (d, i) {
             var bounds = path.bounds(d);
             var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
-            opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
+            opct = getFontSize(labels[0][i], d) < 10 ? 0 : opct;
             return opct;
-          });
+          })
+
 
           values.transition().text(function (d) {
             return d.properties.value;
@@ -7467,7 +7479,6 @@
         console.log(zoom.translate());
         g.select(".nv-map").call(zoom);
         afterZoom();
-
       });
 
       return chart;
@@ -7743,14 +7754,20 @@
     //------------------------------------------------------------
 
     var showTooltip = function (e, offsetElement) {
+      //console.log("showTooltip",e,offsetElement.offsetLeft,offsetElement.offsetTop)
       var tooltipLabel = e.point; //map.description()(e.point) || map.x()(e.point);
-      var left = e.pos[0] + (offsetElement && offsetElement.offsetLeft || 0),
-        top = e.pos[1] + (offsetElement && offsetElement.offsetTop || 0),
+      var left = e.pos[0],
+      //+ (offsetElement && offsetElement.offsetLeft || 0),
+        top = e.pos[1] - 30,
+      //+ (offsetElement && offsetElement.offsetTop || 0),
+
+      //var left = (offsetElement && offsetElement.offsetLeft || 0),
+      //  top = (offsetElement && offsetElement.offsetTop || 0),
 
       //y = map.valueFormat()(map.y()(e.point)),
         content = tooltip(tooltipLabel, " !!!!", e, chart);
 
-      nv.tooltip.show([left, top], content, e.value < 0 ? "n" : "s", null, offsetElement);
+      nv.tooltip.show([left, top], content, e.value < 0 ? "n" : "s", null, offsetElement, "xy-tooltip with-3d-shadow with-transitions");
     };
 
     //============================================================
@@ -7815,6 +7832,7 @@
         var mapWrap = gEnter.append("g").attr("class", "nv-mapWrap");
         gEnter.append("g").attr("class", "nv-legendWrap");
         gEnter.append("g").attr("class", "nv-colorsWrap");
+        gEnter.append("g").attr("class", "nv-infoWrap");
         //------------------------------------------------------------
 
 
@@ -7860,7 +7878,7 @@
         //  - margin.top - margin.bottom;
         //}
 
-        wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (availableHeight+margin.top) + ")");
+        wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (availableHeight + margin.top) + ")");
         //}
 
         //------------------------------------------------------------
@@ -7917,6 +7935,11 @@
           chart.update();
         });
 
+        dispatch.on("tooltipShow", function (e) {
+          console.log("tooltipShow", e);
+
+          if (tooltips) showTooltip(e);
+        });
         //============================================================
       });
 
@@ -7928,6 +7951,7 @@
     //------------------------------------------------------------
     //console.log("MAP DISPATCH",map.dispatch.on)
     map.dispatch.on("mapMouseover", function (e) {
+      console.log("mapMouseover", e);
       e.pos = [e.pos[0] + margin.left, e.pos[1] + margin.top];
       dispatch.tooltipShow(e);
     });
@@ -7937,10 +7961,7 @@
       dispatch.tooltipHide(e);
     });
 
-    dispatch.on("tooltipShow", function (e) {
-      console.log("tooltipShow", e);
-      if (tooltips) showTooltip(e);
-    });
+
 
     dispatch.on("tooltipHide", function () {
       if (tooltips) nv.tooltip.cleanup();
