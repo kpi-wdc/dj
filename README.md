@@ -34,7 +34,7 @@ Optional:
 To run this project from terminal run the following command:
 
      npm install
-     npm run
+     npm start
 
 Intellij idea project has preconfigured maven run configuration.
 
