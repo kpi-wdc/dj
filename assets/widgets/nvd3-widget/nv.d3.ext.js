@@ -3,6 +3,59 @@
 (function () {
   //console.log("LOAD nv.d3.ext")
 
+d3.geo.tile = function () {
+  var size = [960, 500],
+      scale = 256,
+      translate = [size[0] / 2, size[1] / 2],
+      zoomDelta = 0;
+
+  function tile() {
+    var z = Math.max(Math.log(scale) / Math.LN2 - 8, 0),
+        z0 = Math.round(z + zoomDelta),
+        k = Math.pow(2, z - z0 + 8),
+        origin = [(translate[0] - scale / 2) / k, (translate[1] - scale / 2) / k],
+        tiles = [],
+        cols = d3.range(Math.max(0, Math.floor(-origin[0])), Math.max(0, Math.ceil(size[0] / k - origin[0]))),
+        rows = d3.range(Math.max(0, Math.floor(-origin[1])), Math.max(0, Math.ceil(size[1] / k - origin[1])));
+
+    rows.forEach(function (y) {
+      cols.forEach(function (x) {
+        tiles.push([x, y, z0]);
+      });
+    });
+
+    tiles.translate = origin;
+    tiles.scale = k;
+
+    return tiles;
+  }
+
+  tile.size = function (_) {
+    if (!arguments.length) return size;
+    size = _;
+    return tile;
+  };
+
+  tile.scale = function (_) {
+    if (!arguments.length) return scale;
+    scale = _;
+    return tile;
+  };
+
+  tile.translate = function (_) {
+    if (!arguments.length) return translate;
+    translate = _;
+    return tile;
+  };
+
+  tile.zoomDelta = function (_) {
+    if (!arguments.length) return zoomDelta;
+    zoomDelta = +_;
+    return tile;
+  };
+
+  return tile;
+};
 
   nv.tooltip.show = function (pos, content, gravity, dist, parentContainer, classes) {
     //Create new tooltip div if it doesn't exist on DOM.
@@ -5933,7 +5986,8 @@
         color = nv.utils.defaultColor(),
         projection = d3.geo.mercator(),
         path = d3.geo.path().projection(projection),
-        zoom = d3.behavior.zoom()
+        zoom = d3.behavior.zoom(),
+        tile = d3.geo.tile()
     //, valueFormat = d3.format(',.2f')
     //, labelFormat = d3.format('%')
     //, showLabels = true
@@ -7216,7 +7270,7 @@
     // projection.scale(sc / 2 / Math.PI).translate([width / 2, height / 1.3]);
 
     zoom.translate([0, 0]);
-   
+               
 
     var complementedColor = function (hex) {
       var color = parseInt(hex.slice(1), 16);
@@ -7275,6 +7329,36 @@
     //  return text.length * fontSize * 0.5;
     //}
 
+
+    var updateTiles = function (container,zoom,width,height){
+        
+        tile.size([width, height]);
+        
+        var tiles = tile
+               .scale(zoom.scale())
+               .translate(zoom.translate())
+             ();  
+        
+        var image = container
+               .attr("transform", "scale(" + tiles.scale + ")translate(" + tiles.translate + ")")
+               .selectAll("image")
+               .data(tiles, function(d) { console.log(d); return d; });
+  
+         image.exit()
+           .remove();
+  
+         image.enter().append("image")
+           .attr("xlink:href", function(d) { 
+              return "http://" + ["a", "b", "c", "d"][Math.random() * 4 | 0] 
+              + ".tiles.mapbox.com/v3/examples.map-i86nkdio/" + d[2] + "/" + d[0] + "/" + d[1] 
+              + ".png"; 
+            })
+           .attr("width", 1)
+           .attr("height", 1)
+           .attr("x", function(d) { return d[0]; })
+           .attr("y", function(d) { return d[1]; });
+      }     
+
     function chart(selection) {
       selection.each(function (data) {
               var data1 = data[0].filter(function (item) {
@@ -7298,8 +7382,12 @@
         var wrapEnter = wrap.enter().append("g").attr("class", "nvd3 nv-wrap nv-map nv-chart-" + id);
 
         var gEnter = wrapEnter.append("g");
+       
+        
         var g = wrap.select("g");
 
+         var tileLayer = g.append("g")
+                          .attr ("class", "tileLayer");
         var pathContainer = gEnter.append("g");
         pathContainer.attr("class", "nv-map");
 
@@ -7504,10 +7592,14 @@
             opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
             return opct;
           });
+          console.log(g.select("g.tileLayer"));  
+          updateTiles(g.select("g.tileLayer"),zoom,width,height);
         };
 
         zoom
-          .on("zoomstart", beforeZoom).on("zoom", zoomed).on("zoomend", afterZoom);
+          .on("zoomstart", beforeZoom)
+          .on("zoom", zoomed)
+          .on("zoomend", afterZoom);
         
         g.select(".nv-map").call(zoom);
         afterZoom();
