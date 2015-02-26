@@ -5414,6 +5414,9 @@ d3.geo.tile = function () {
     //, radioButtonMode = false   //If true, clicking legend items will cause it to behave like a radio button. (only one can be selected at a time)
     //, dispatch = d3.dispatch('legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange')
     //, minEnabledSeries
+    
+
+
     ;
 
     //============================================================
@@ -5987,7 +5990,17 @@ d3.geo.tile = function () {
         projection = d3.geo.mercator(),
         path = d3.geo.path().projection(projection),
         zoom = d3.behavior.zoom(),
-        tile = d3.geo.tile()
+        tile = d3.geo.tile(),
+        mapId = {
+        "mapbox.streets" : "mapbox.streets",
+        "mapbox.light"   : "mapbox.light",
+        "mapbox.dark"    : "mapbox.dark",
+        "mapbox.satellite" : "mapbox.satellite",
+        "mapbox.streets-satellite" : "mapbox.streets-satellite",
+        "mapbox.outdoors" : "mapbox.outdoors"
+      },
+
+      tileAccessToken = "pk.eyJ1IjoiYm9sZGFrIiwiYSI6InZrSEF6RXMifQ.c8WIV6zoinhXwXXY2cFurg",
     //, valueFormat = d3.format(',.2f')
     //, labelFormat = d3.format('%')
     //, showLabels = true
@@ -6000,7 +6013,7 @@ d3.geo.tile = function () {
     //, startAngle = false
     //, endAngle = false
     //, donutRatio = 0.5
-    ,
+    // ,
         dispatch = d3.dispatch( /*"tooltipShow", "tooltipHide", "chartClick",  "elementClick", "elementDblClick",*/"mapMouseover", "mapMouseout" /*, "zoom"*/);
 
     //============================================================
@@ -7273,6 +7286,7 @@ d3.geo.tile = function () {
                
 
     var complementedColor = function (hex) {
+      if (hex == undefined || hex== null || isNaN(hex)) return "#f0f0f0"
       var color = parseInt(hex.slice(1), 16);
       var r, g, b;
       if (hex.length === 4) {
@@ -7342,22 +7356,35 @@ d3.geo.tile = function () {
         var image = container
                .attr("transform", "scale(" + tiles.scale + ")translate(" + tiles.translate + ")")
                .selectAll("image")
-               .data(tiles, function(d) { console.log(d); return d; });
+               .data(tiles, function(d) {return d; });
   
          image.exit()
            .remove();
   
          image.enter().append("image")
            .attr("xlink:href", function(d) { 
-              return "http://" + ["a", "b", "c", "d"][Math.random() * 4 | 0] 
-              + ".tiles.mapbox.com/v3/examples.map-i86nkdio/" + d[2] + "/" + d[0] + "/" + d[1] 
-              + ".png"; 
+              return "http://api.tiles.mapbox.com/v4/"
+              + mapId["mapbox.outdoors"] + "/"
+              + d[2] + "/" + d[0] + "/" + d[1] + ".png"
+              + "?access_token=" + tileAccessToken;
+
+              // return "http://" + ["a", "b", "c", "d"][Math.random() * 4 | 0] 
+              // + ".tiles.mapbox.com/v3/examples.map-i86nkdio/" + d[2] + "/" + d[0] + "/" + d[1] 
+              // + ".png"; 
             })
            .attr("width", 1)
            .attr("height", 1)
            .attr("x", function(d) { return d[0]; })
            .attr("y", function(d) { return d[1]; });
-      }     
+      }
+
+      var clearTiles =  function (container){ 
+        container
+          .selectAll("image")
+          .data([])
+          .exit()
+          .remove();
+      }   
 
     function chart(selection) {
       selection.each(function (data) {
@@ -7528,6 +7555,7 @@ d3.geo.tile = function () {
           geo.transition().style("fill-opacity", 0);
           labels.transition().text("");
           values.transition().text("");
+          clearTiles(g.select("g.tileLayer"));
         };
 
         var zoomed = function () {
@@ -7592,7 +7620,7 @@ d3.geo.tile = function () {
             opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
             return opct;
           });
-          console.log(g.select("g.tileLayer"));  
+         
           updateTiles(g.select("g.tileLayer"),zoom,width,height);
         };
 
