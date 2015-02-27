@@ -7764,6 +7764,7 @@ d3.geo.tile = function () {
     //------------------------------------------------------------
 
     chart.dispatch = dispatch;
+    
     chart.options = nv.utils.optionsFunc.bind(chart);
 
     chart.margin = function (_) {
@@ -7787,10 +7788,71 @@ d3.geo.tile = function () {
       return chart;
     };
 
-    //chart.values = function(_) {
-    //    nv.log("chord.values() is no longer supported.");
-    //    return chart;
-    //};
+    chart.showLabels = function (_) {
+      if (!arguments.length) return showLabels;
+      showLabels = _;
+      return chart;
+    };
+
+    chart.showValues = function (_) {
+      if (!arguments.length) return showValues;
+      showValues = _;
+      return chart;
+    };
+
+    chart.showTiles = function (_) {
+      if (!arguments.length) return showTiles;
+      showTiles = _;
+      return chart;
+    };
+
+    chart.selectedTiles = function (_) {
+      if (!arguments.length) return mapId[selectedTiles];
+      selectedTiles = mapId[_];
+      return chart;
+    };
+
+    chart.interactive = function (_) {
+      if (!arguments.length) return interactive;
+      interactive = _;
+      return chart;
+    };
+
+    chart.defaultFill = function (_) {
+      if (!arguments.length) return defaultFill;
+      defaultFill = _;
+      return chart;
+    };
+    
+    chart.defaultFillOpacity = function (_) {
+      if (!arguments.length) return defaultFillOpacity;
+      defaultFillOpacity = _;
+      return chart;
+    };
+
+    chart.defaultStrokeWidth = function (_) {
+      if (!arguments.length) return defaultStrokeWidth;
+      defaultStrokeWidth = _;
+      return chart;
+    };
+
+    chart.defaultStrokeOpacity = function (_) {
+      if (!arguments.length) return defaultStrokeOpacity;
+      defaultStrokeOpacity = _;
+      return chart;
+    };
+
+    chart.selectedFillOpacity = function (_) {
+      if (!arguments.length) return selectedFillOpacity;
+      selectedFillOpacity = _;
+      return chart;
+    };
+
+    chart.selectedStrokeWidth = function (_) {
+      if (!arguments.length) return selectedStrokeWidth;
+      selectedStrokeWidth = _;
+      return chart;
+    };
 
     chart.x = function (_) {
       if (!arguments.length) return getX;
@@ -7804,67 +7866,6 @@ d3.geo.tile = function () {
       return chart;
     };
 
-    //chart.description = function(_) {
-    //    if (!arguments.length) return getDescription;
-    //    getDescription = _;
-    //    return chart;
-    //};
-    //
-    //chart.showLabels = function(_) {
-    //    if (!arguments.length) return showLabels;
-    //    showLabels = _;
-    //    return chart;
-    //};
-    //
-    //chart.labelSunbeamLayout = function(_) {
-    //    if (!arguments.length) return labelSunbeamLayout;
-    //    labelSunbeamLayout = _;
-    //    return chart;
-    //};
-    //
-    //chart.donutLabelsOutside = function(_) {
-    //    if (!arguments.length) return donutLabelsOutside;
-    //    donutLabelsOutside = _;
-    //    return chart;
-    //};
-    //
-    //chart.chordLabelsOutside = function(_) {
-    //    if (!arguments.length) return chordLabelsOutside;
-    //    chordLabelsOutside = _;
-    //    return chart;
-    //};
-    //
-    //chart.labelType = function(_) {
-    //    if (!arguments.length) return labelType;
-    //    labelType = _;
-    //    labelType = labelType || "key";
-    //    return chart;
-    //};
-    //
-    //chart.donut = function(_) {
-    //    if (!arguments.length) return donut;
-    //    donut = _;
-    //    return chart;
-    //};
-    //
-    //chart.donutRatio = function(_) {
-    //    if (!arguments.length) return donutRatio;
-    //    donutRatio = _;
-    //    return chart;
-    //};
-    //
-    //chart.startAngle = function(_) {
-    //    if (!arguments.length) return startAngle;
-    //    startAngle = _;
-    //    return chart;
-    //};
-    //
-    //chart.endAngle = function(_) {
-    //    if (!arguments.length) return endAngle;
-    //    endAngle = _;
-    //    return chart;
-    //};
-
     chart.id = function (_) {
       if (!arguments.length) return id;
       id = _;
@@ -7877,23 +7878,7 @@ d3.geo.tile = function () {
       return chart;
     };
 
-    //chart.valueFormat = function(_) {
-    //    if (!arguments.length) return valueFormat;
-    //    valueFormat = _;
-    //    return chart;
-    //};
-    //
-    //chart.labelFormat = function(_) {
-    //    if (!arguments.length) return labelFormat;
-    //    labelFormat = _;
-    //    return chart;
-    //};
-    //
-    //chart.labelThreshold = function(_) {
-    //    if (!arguments.length) return labelThreshold;
-    //    labelThreshold = _;
-    //    return chart;
-    //};
+  
     //============================================================
 
     //console.log(topojson);
