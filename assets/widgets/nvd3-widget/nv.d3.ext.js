@@ -7419,7 +7419,7 @@ d3.geo.tile = function () {
          image.enter().append("image")
            .attr("xlink:href", function(d) { 
               return "http://api.tiles.mapbox.com/v4/"
-              + mapId["mapbox.outdoors"] + "/"
+              + selectedTiles + "/"
               + d[2] + "/" + d[0] + "/" + d[1] + ".png"
               + "?access_token=" + tileAccessToken;
 
@@ -7764,7 +7764,7 @@ d3.geo.tile = function () {
     //------------------------------------------------------------
 
     chart.dispatch = dispatch;
-    
+
     chart.options = nv.utils.optionsFunc.bind(chart);
 
     chart.margin = function (_) {
@@ -7807,6 +7807,7 @@ d3.geo.tile = function () {
     };
 
     chart.selectedTiles = function (_) {
+      console.log("selectedTiles map", _ , mapId[_])
       if (!arguments.length) return mapId[selectedTiles];
       selectedTiles = mapId[_];
       return chart;
@@ -7825,6 +7826,7 @@ d3.geo.tile = function () {
     };
     
     chart.defaultFillOpacity = function (_) {
+      console.log("defaultFillOpacity map",_)
       if (!arguments.length) return defaultFillOpacity;
       defaultFillOpacity = _;
       return chart;
@@ -8307,6 +8309,75 @@ d3.geo.tile = function () {
       noData = _;
       return chart;
     };
+
+
+     chart.showLabels = function (_) {
+      if (!arguments.length) return map.showLabels();
+      map.showLabels(_);
+      return chart;
+    };
+
+    chart.showValues = function (_) {
+      if (!arguments.length) return map.showValues();
+      map.showValues(_);
+      return chart;
+    };
+
+    chart.showTiles = function (_) {
+      if (!arguments.length) return map.showTiles();
+      map.showTiles(_);
+      return chart;
+    };
+
+    chart.selectedTiles = function (_) {
+      if (!arguments.length) return map.selectedTiles();
+      map.selectedTiles(_);
+      return chart;
+    };
+
+    chart.interactive = function (_) {
+      if (!arguments.length) return map.interactive();
+      map.interactive(_)
+      return chart;
+    };
+
+    chart.defaultFill = function (_) {
+      if (!arguments.length) return map.defaultFill();
+      map.defaultFill(_)
+      return chart;
+    };
+    
+    chart.defaultFillOpacity = function (_) {
+      console.log("defaultFillOpacity chart", _)
+      if (!arguments.length) return map.defaultFillOpacity();
+      map.defaultFillOpacity(_)
+      return chart;
+    };
+
+    chart.defaultStrokeWidth = function (_) {
+      if (!arguments.length) return map.defaultStrokeWidth();
+      map.defaultStrokeWidth(_)
+      return chart;
+    };
+
+    chart.defaultStrokeOpacity = function (_) {
+      if (!arguments.length) return map.defaultStrokeOpacity();
+      map.defaultStrokeOpacity(_)
+      return chart;
+    };
+
+    chart.selectedFillOpacity = function (_) {
+      if (!arguments.length) return map.selectedFillOpacity();
+      map.selectedFillOpacity(_)
+      return chart;
+    };
+
+    chart.selectedStrokeWidth = function (_) {
+      if (!arguments.length) return map.selectedStrokeWidth();
+      map.selectedStrokeWidth(_)
+      return chart;
+    };
+
 
     //============================================================
 
