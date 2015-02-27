@@ -15,8 +15,8 @@ d3.geo.tile = function () {
         k = Math.pow(2, z - z0 + 8),
         origin = [(translate[0] - scale / 2) / k, (translate[1] - scale / 2) / k],
         tiles = [],
-        cols = d3.range(Math.max(0, Math.floor(-origin[0])), Math.max(0, Math.ceil(size[0] / k - origin[0]))),
-        rows = d3.range(Math.max(0, Math.floor(-origin[1])), Math.max(0, Math.ceil(size[1] / k - origin[1])));
+        cols = d3.range(Math.max(0, Math.floor(-origin[0])), 1+Math.max(0, Math.ceil(size[0] / k - origin[0]))),
+        rows = d3.range(Math.max(0, Math.floor(-origin[1])), 1+Math.max(0, Math.ceil(size[1] / k - origin[1])));
 
     rows.forEach(function (y) {
       cols.forEach(function (x) {
@@ -5991,6 +5991,7 @@ d3.geo.tile = function () {
         path = d3.geo.path().projection(projection),
         zoom = d3.behavior.zoom(),
         tile = d3.geo.tile(),
+        tileServerConnection = false,
         mapId = {
         "mapbox.streets" : "mapbox.streets",
         "mapbox.light"   : "mapbox.light",
@@ -7322,6 +7323,19 @@ d3.geo.tile = function () {
     };
 
 
+    var tryingToConnectTileServer = function(){
+      d3.html("http://api.tiles.mapbox.com/v4/"
+              + mapId["mapbox.outdoors"] + "/"
+              +  "0/0/0.png"
+              + "?access_token=" + tileAccessToken, function(error){
+                if(error){
+                  tileServerConnection = false;
+                  return;
+                }
+                tileServerConnection = true;
+              })
+    }
+
     var mergeBounds = function (bounds1,bounds2){
       if (bounds1 == undefined || bounds1 == null){
         return bounds2
@@ -7560,7 +7574,7 @@ d3.geo.tile = function () {
 
         var zoomed = function () {
           projection.scale(zoom.scale() / 2 / Math.PI).translate(zoom.translate());
-          geo.transition().attr("d", path);
+          if (tileServerConnection) geo.transition().attr("d", path);
         };
 
         var afterZoom = function () {
@@ -7620,8 +7634,8 @@ d3.geo.tile = function () {
             opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
             return opct;
           });
-         
-          updateTiles(g.select("g.tileLayer"),zoom,width,height);
+          console.log(tileServerConnection)
+          if (tileServerConnection) updateTiles(g.select("g.tileLayer"),zoom,width,height);
         };
 
         zoom
