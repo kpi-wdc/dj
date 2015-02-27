@@ -2,6 +2,18 @@
 
 (function () {
   //console.log("LOAD nv.d3.ext")
+d3.geo.tileServerEnable = false;
+
+d3.html(
+  "http://api.tiles.mapbox.com/v4/"
+            + "mapbox.outdoors" + "/"
+            + "0" + "/" + "0" + "/" + "0" + ".png"
+            + "?access_token=" +"pk.eyJ1IjoiYm9sZGFrIiwiYSI6InZrSEF6RXMifQ.c8WIV6zoinhXwXXY2cFurg",
+            function(error,doc){
+              console.log(error)
+              if(error == null || error == undefined) d3.geo.tileServerEnable = true;
+            }
+);
 
 d3.geo.tile = function () {
   var size = [960, 500],
@@ -6002,6 +6014,27 @@ d3.geo.tile = function () {
       },
 
       tileAccessToken = "pk.eyJ1IjoiYm9sZGFrIiwiYSI6InZrSEF6RXMifQ.c8WIV6zoinhXwXXY2cFurg",
+
+      lockHighLight = false,
+
+
+      showLabels = false,
+      showValues = false,
+      showTiles = true,
+      selectedTiles = mapId["mapbox.outdoors"],
+      interactive = true,
+      defaultFill = "#f0f0f0",
+      defaultFillOpacity = 0,
+      defaultStroke = '#909095',
+      defaultStrokeWidth = 1,
+      defaultStrokeOpacity = 0.75,
+      selectedFillOpacity = 0.5,
+      selectedStrokeWidth = 3,
+
+
+      
+
+
     //, valueFormat = d3.format(',.2f')
     //, labelFormat = d3.format('%')
     //, showLabels = true
@@ -7287,8 +7320,15 @@ d3.geo.tile = function () {
                
 
     var complementedColor = function (hex) {
-      if (hex == undefined || hex== null || isNaN(hex)) return "#f0f0f0"
-      var color = parseInt(hex.slice(1), 16);
+      // console.log(hex)
+      if (hex == undefined || hex== null) return defaultStroke;
+      var color = hex.slice(1);
+      // if(isNaN(color)) return defaultStroke;
+      try{
+        color = parseInt(color, 16);
+      } catch(e) {
+        return defaultStroke;
+      }  
       var r, g, b;
       if (hex.length === 4) {
         r = (color & 3840) >> 4;
@@ -7302,6 +7342,7 @@ d3.geo.tile = function () {
         g = (color & 65280) >> 8;
         b = color & 255;
       }
+      // console.log("rgba(" + (255 - r) + "," + (255 - g) + "," + (255 - b) + ",1)")
        return "rgba(" + (255 - r) + "," + (255 - g) + "," + (255 - b) + ",1)";
     };
 
@@ -7325,7 +7366,7 @@ d3.geo.tile = function () {
 
     var tryingToConnectTileServer = function(){
       d3.html("http://api.tiles.mapbox.com/v4/"
-              + mapId["mapbox.outdoors"] + "/"
+              + selectedTiles + "/"
               +  "0/0/0.png"
               + "?access_token=" + tileAccessToken, function(error){
                 if(error){
@@ -7478,15 +7519,18 @@ d3.geo.tile = function () {
         labels.exit().remove();
         values.exit().remove();
 
-
         geo
           .enter()
           .append("path")
           .on("mouseover", function (d, i) {
-              d3.select(this).transition().style("stroke", function (d) {
-              return d.properties.category == null ? "#909090" : complementedColor(color(d, d.properties.category));
+              if (lockHighLight) return;
+              d3.select(this)
+              .transition()
+              .style("stroke", function (d) {
+              return d.properties.category == null ? defaultStroke : complementedColor(color(d, d.properties.category));
             })
-          .style("stroke-opacity", "0.75").style("stroke-width", "3");
+          .style("stroke-opacity", defaultStrokeOpacity)
+          .style("stroke-width", selectedStrokeWidth);
             dispatch.mapMouseover({
               point: d,
               series: d.key,
@@ -7494,10 +7538,11 @@ d3.geo.tile = function () {
             });
           })
           .on("mouseout", function (d, i) {
+            if (lockHighLight) return;
             d3.select(this).transition()
-            .style("stroke", "#909090")
-            .style("stroke-opacity", "1")
-            .style("stroke-width", "1");
+            .style("stroke", defaultStroke)
+            .style("stroke-opacity", defaultStrokeOpacity)
+            .style("stroke-width", defaultStrokeWidth);
             dispatch.mapMouseout({
               point: d,
               series: d.key,
@@ -7505,137 +7550,199 @@ d3.geo.tile = function () {
             });
           });
 
-
-        geo.transition().attr("class", function (d, i) {
+     
+        geo.transition()
+        .attr("class", function (d, i) {
           return "map-subunit subunit-id-" + i;
-        }).style("fill", function (d) {
-          return d.properties.category == null ? "#f0f0f0" : color(d, d.properties.category);
-        }).style("fill-opacity", "0.6").style("stroke-width", "1px").style("stroke", "#909090");
+        })
+        .style("fill", function (d) {
+          return d.properties.category == null ? defaultFill : color(d, d.properties.category);
+        })
+        .style("fill-opacity", function (d) {
+          return d.properties.category == null ? defaultFillOpacity : selectedFillOpacity;
+        })
+        .style("stroke-width", defaultStrokeWidth)
+        .style("stroke", defaultStroke);
 
         var highlightSubunit = function (d, i) {
-          g.select(".nv-map").selectAll("path.subunit-id-" + i).transition().style("stroke", function (d) {
-            return d.properties.category == null ? "#909090" : complementedColor(color(d, d.properties.category));
-          }).style("stroke-opacity", "0.75").style("stroke-width", "3");
+          g.select(".nv-map").selectAll("path.subunit-id-" + i)
+          .transition()
+          .style("stroke", function (d) {
+            return d.properties.category == null ? defaultStroke : complementedColor(color(d, d.properties.category));
+          })
+          .style("stroke-opacity", defaultStrokeOpacity)
+          .style("stroke-width", selectedStrokeWidth);
         };
+
         var clearSubunit = function (d, i) {
-          g.select(".nv-map").selectAll("path.subunit-id-" + i).transition().style("stroke", "#909090").style("stroke-opacity", "1").style("stroke-width", "1");
+          g.select(".nv-map").selectAll("path.subunit-id-" + i)
+          .transition()
+          .style("stroke", defaultStroke)
+          .style("stroke-opacity", defaultStrokeOpacity)
+          .style("stroke-width", defaultStrokeWidth);
         };
 
-        labels.enter().append("text").text(function (d) {
-          return d.properties.name;
-        }).attr("text-anchor", "middle").attr("class", "nv-map-label").attr("dy", "-.5em").style("text-anchor", "middle").style("font-weight", "bold").style("opacity", 0).style("fill", "#000").style("stroke", "#ffffff").style("stroke-opacity", 0.25).style("stroke-width", 3).on("mouseover", function (d, i) {
-          highlightSubunit(d, i);
 
-          dispatch.mapMouseover({
-            point: d,
-            series: d.key,
-            //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
-            pos: [d3.event.pageX, d3.event.pageY] //,
-          });
-        }).on("mouseout", function (d, i) {
-          clearSubunit(d, i);
-          dispatch.mapMouseout({
-            point: d,
-            series: d.key,
-            pos: [d3.event.pageX, d3.event.pageY] //,
-          });
-        });
+        if(showLabels){  
+          labels.enter()
+            .append("text")
+            .text(function (d) {
+              return d.properties.name;
+            })
+            .attr("text-anchor", "middle")
+            .attr("class", "nv-map-label")
+            .attr("dy", "-.5em")
+            .style("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("opacity", 0)
+            .style("fill", "#000")
+            .style("stroke", "#ffffff")
+            .style("stroke-opacity", 0.25)
+            .style("stroke-width", 3)
+            .on("mouseover", function (d, i) {
+              if (lockHighLight) return;
+              highlightSubunit(d, i);
 
-        values.enter().append("text").text(function (d) {
-          return d.properties.value;
-        }).attr("text-anchor", "middle").attr("class", "nv-map-value").attr("dy", ".7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "bold Arial").style("fill", function (d) {
-          return "#000";
-        }).style("stroke", "#ffffff").style("stroke-opacity", 0.15).style("stroke-width", 3).style("opacity", 0).on("mouseover", function (d, i) {
-          highlightSubunit(d, i);
-          dispatch.mapMouseover({
-            point: d,
-            series: d.key,
-            //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
-            pos: [d3.event.pageX, d3.event.pageY] //,
-          });
-        }).on("mouseout", function (d, i) {
-          clearSubunit(d, i);
-          dispatch.mapMouseout({
-            point: d,
-            series: d.key,
-            pos: [d3.event.pageX, d3.event.pageY] //,
-          });
-        });
-
+              dispatch.mapMouseover({
+                point: d,
+                series: d.key,
+                //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
+                pos: [d3.event.pageX, d3.event.pageY] //,
+              });
+            })
+            .on("mouseout", function (d, i) {
+              if (lockHighLight) return;
+              clearSubunit(d, i);
+              dispatch.mapMouseout({
+                point: d,
+                series: d.key,
+                pos: [d3.event.pageX, d3.event.pageY] //,
+              });
+            });
+        }
+        
+        if (showValues){    
+          values
+            .enter()
+            .append("text")
+            .text(function (d) {
+              return d.properties.value;
+            })
+            .attr("text-anchor", "middle")
+            .attr("class", "nv-map-value")
+            .attr("dy", ".7em")
+            .style("text-anchor", "middle")
+            .style("stroke-opacity", 0)
+            .style("font", "bold Arial")
+            .style("fill", function (d) {
+              return "#000";
+            })
+            .style("stroke", "#ffffff")
+            .style("stroke-opacity", 0.15)
+            .style("stroke-width", 3)
+            .style("opacity", 0)
+            .on("mouseover", function (d, i) {
+              if (lockHighLight) return;
+              highlightSubunit(d, i);
+              dispatch.mapMouseover({
+                point: d,
+                series: d.key,
+                //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
+                pos: [d3.event.pageX, d3.event.pageY] //,
+              });
+            })
+            .on("mouseout", function (d, i) {
+              if (lockHighLight) return;
+              clearSubunit(d, i);
+              dispatch.mapMouseout({
+                point: d,
+                series: d.key,
+                pos: [d3.event.pageX, d3.event.pageY] //,
+              });
+            });
+        }    
 
 
 
         var beforeZoom = function () {
+          lockHighLight = true;
           geo.transition().style("fill-opacity", 0);
-          labels.transition().text("");
-          values.transition().text("");
-          clearTiles(g.select("g.tileLayer"));
+          if ( showLabels ) labels.transition().text("");
+          if ( showValues ) values.transition().text("");
+          if ( d3.geo.tileServerEnable && showTiles ) clearTiles(g.select("g.tileLayer"));
         };
 
         var zoomed = function () {
           projection.scale(zoom.scale() / 2 / Math.PI).translate(zoom.translate());
-          if (tileServerConnection) geo.transition().attr("d", path);
+          geo.transition().attr("d", path);
         };
 
         var afterZoom = function () {
          projection.scale(zoom.scale() / 2 / Math.PI).translate(zoom.translate());
-
+ 
           geo
             .transition()
             .attr("d", path)
-            .style("fill-opacity", "0.5")
-            .style("stroke-width", 1)
+            .style("fill-opacity", function (d) {
+              return d.properties.category == null ? defaultFillOpacity : selectedFillOpacity;
+            })
+            .style("stroke-width", defaultStrokeWidth)
             .style("fill", function (d) {
-              if (d.properties.category == null || d.properties.category == undefined) return "#f0f0f0";
+              if (d.properties.category == null || d.properties.category == undefined) return defaultFill;
               if (isNaN(d.properties.category)) return color(d, 0)
               return color(d, d.properties.category);
             });
 
-          labels.transition().attr("transform", function (d) {
-            var position = path.centroid(d);
-            return "translate(" + position[0] + "," + position[1] + ")";
-          }).text(function (d, i) {
-            var fontSize = getFontSize(labels[0][i], d);
-            //fontSize = (fontSize > 10) ? fontSize : 10;
-            var w = approximateLength(d.properties.name, fontSize);
-            var bounds = path.bounds(d);
-            if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
-              return d.id;
-            } else {
-              return d.properties.name;
-            }
-          }).style("font-size", function (d, i) {
-            var fontSize = getFontSize(labels[0][i], d);
-            //fontSize = (fontSize > 8) ? fontSize : 8;
-            //var w = approximateLength(d.properties.name, fontSize);
-            //var bounds = path.bounds(d);
-            //if(w * 1.5 > bounds[1][0] - bounds[0][0]) {
-            //  return 2*fontSize+"px"
-            //}
-            return fontSize + "px";
-          }).style("opacity", function (d, i) {
-            var bounds = path.bounds(d);
-            var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
-            opct = getFontSize(labels[0][i], d) < 10 ? 0 : opct;
-            return opct;
-          });
+          if ( showLabels ) { 
+            labels.transition().attr("transform", function (d) {
+              var position = path.centroid(d);
+              return "translate(" + position[0] + "," + position[1] + ")";
+            }).text(function (d, i) {
+              var fontSize = getFontSize(labels[0][i], d);
+              //fontSize = (fontSize > 10) ? fontSize : 10;
+              var w = approximateLength(d.properties.name, fontSize);
+              var bounds = path.bounds(d);
+              if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
+                return d.id;
+              } else {
+                return d.properties.name;
+              }
+            }).style("font-size", function (d, i) {
+              var fontSize = getFontSize(labels[0][i], d);
+              //fontSize = (fontSize > 8) ? fontSize : 8;
+              //var w = approximateLength(d.properties.name, fontSize);
+              //var bounds = path.bounds(d);
+              //if(w * 1.5 > bounds[1][0] - bounds[0][0]) {
+              //  return 2*fontSize+"px"
+              //}
+              return fontSize + "px";
+            }).style("opacity", function (d, i) {
+              var bounds = path.bounds(d);
+              var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+              opct = getFontSize(labels[0][i], d) < 10 ? 0 : opct;
+              return opct;
+            });
+          }  
 
-
-          values.transition().text(function (d) {
-            return d.properties.value;
-          }).style("font-size", function (d, i) {
-            return getFontSize(labels[0][i], d) + "px";
-          }).attr("transform", function (d) {
-            var position = path.centroid(d);
-            return "translate(" + position[0] + "," + position[1] + ")";
-          }).style("opacity", function (d, i) {
-            var bounds = path.bounds(d);
-            var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
-            opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
-            return opct;
-          });
-          console.log(tileServerConnection)
-          if (tileServerConnection) updateTiles(g.select("g.tileLayer"),zoom,width,height);
+          if ( showValues ){
+            values.transition().text(function (d) {
+              return d.properties.value;
+            }).style("font-size", function (d, i) {
+              return getFontSize(labels[0][i], d) + "px";
+            }).attr("transform", function (d) {
+              var position = path.centroid(d);
+              return "translate(" + position[0] + "," + position[1] + ")";
+            }).style("opacity", function (d, i) {
+              var bounds = path.bounds(d);
+              var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+              opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
+              return opct;
+            });
+          }
+            
+          // console.log(tileServerConnection)
+          if ( d3.geo.tileServerEnable && showTiles ) updateTiles(g.select("g.tileLayer"),zoom,width,height);
+          lockHighLight = false;
         };
 
         zoom
