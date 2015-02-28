@@ -22,9 +22,14 @@ module.exports = {
   // },
 
   /***************************************************************************
-   * Set the port in the production environment to 80                        *
+   * Setup proxy settings (for e.g. heroku server) for OAuth callbacks       *
    ***************************************************************************/
   proxyHost: process.env.APP_HOST,
+  proxyPort: 80,
+
+  /***************************************************************************
+   * Set the port in the production environment to 80                        *
+   ***************************************************************************/
 
   port: process.env.PORT || 80,
 
