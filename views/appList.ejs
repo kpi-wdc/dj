@@ -14,24 +14,27 @@
   <fieldset>
     <h4>List of apps:</h4>
     <div ng-repeat="appName in apps" class="row">
-      <span class="column medium-2"><b>{{appName}}</b></span>
-      <a href="/app/{{appName}}/" class="button tiny success column large-offset-4 medium-2">Go to</a>
+      <span class="column medium-6"><b>{{appName}} ({{owner.appName}})</b></span>
+      <a href="/app/{{appName}}/" class="button tiny success column medium-2">Go to</a>
       <input type="button" class="button tiny column medium-2"
-        value="Rename" ng-click="renameApp(appName)">
+        value="Edit" ng-click="renameApp(appName)">
       <input type="button" class="button alert tiny column medium-2"
         value="Delete" ng-click="deleteApp(appName)">
     </div>
-  </fieldset>
-  <fieldset>
-    <label>Add new app
-      <input placeholder="App name" name="appName" ng-model="model.newAppName" autocomplete="off">
-    </label>
-    <input type="button" value="Submit" class="button success tiny" ng-disabled="!model.newAppName" ng-click="createApp()">
   </fieldset>
 
   <% if (!user)  {%>
   <a href="/auth/google">Login with Google</a>
   <% } else { %>
+
+  <fieldset>
+    <label>Add new app
+      <input placeholder="App name" name="appName" ng-model="model.newAppName" autocomplete="off">
+    </label><br>
+    <input type="button" value="Submit" class="button success tiny"
+           disabled ng-disabled="!model.newAppName" ng-click="createApp()">
+  </fieldset>
+
   Logged in as <%=user.email%><br>
   <a href="/logout">Log out</a>
   <% } %>
