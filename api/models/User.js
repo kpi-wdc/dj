@@ -4,7 +4,7 @@ var User = {
 
   attributes: {
     username  : { type: 'string', unique: true },
-    email     : { type: 'email',  unique: true },
+    email     : { type: 'email',  unique: true, required: true },
     passports : { collection: 'Passport', via: 'user' }
   }
 };

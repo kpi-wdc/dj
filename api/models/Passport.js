@@ -3,7 +3,7 @@ var bcrypt = require('bcryptjs');
 /**
  * Hash a passport password.
  *
- * @param {Object}   password
+ * @param {Object}   passport
  * @param {Function} next
  */
 function hashPassword (passport, next) {

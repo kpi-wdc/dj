@@ -56,7 +56,7 @@ module.exports.passport = {
     options: {
       clientID: '960870298438-lfqlduvqbrm00of086eehokrbe4m6doi.apps.googleusercontent.com',
       clientSecret: process.env.GOOGLE_OAUTH_SECRET || 'dR75FkBz43la12g5xJi_hw3d',
-      scope: "openid email"
+      scope: "openid profile email"
     }
   }
 };

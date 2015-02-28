@@ -24,6 +24,7 @@ module.exports = {
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
+  proxyHost: process.env.APP_HOST,
 
   port: process.env.PORT || 80,
 
