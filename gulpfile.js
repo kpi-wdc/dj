@@ -165,8 +165,8 @@ gulp.task('compile-js', function () {
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel())
-    .pipe(plugins.sourcemaps.write('.'))
     .on('error', handleError)
+    .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
 });
 
