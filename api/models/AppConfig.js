@@ -11,7 +11,7 @@ module.exports = {
 
   attributes: {
     appName: {
-      type: 'string',
+      type: 'alphanumericdashed',
       required: true,
       unique: true,
       notEmpty: true
