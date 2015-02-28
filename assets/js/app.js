@@ -144,7 +144,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
   app.factory('appConfigPromise', function ($q, $window) {
     return $q((resolve) => {
-      resolve(window.appConfig);
+      resolve($window.appConfig);
     });
   });
 
