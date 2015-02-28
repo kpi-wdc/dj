@@ -41,6 +41,7 @@ var addDefaultAppConfigs = function () {
 };
 
 module.exports.bootstrap = function (cb) {
+  sails.services.passport.loadStrategies();
   addDefaultAppConfigs(); // allow running async, even after bootstrap is finished
 
   // It's very important to trigger this callback method when you are finished
