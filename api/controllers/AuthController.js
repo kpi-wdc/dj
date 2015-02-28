@@ -79,7 +79,7 @@ var AuthController = {
           res.redirect('back');
           break;
         default:
-          res.redirect('/login');
+          res.redirect('/');
       }
     }
 
