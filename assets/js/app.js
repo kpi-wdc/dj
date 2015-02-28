@@ -1,7 +1,7 @@
-define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
+define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
   'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular) {
   let app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
-    'angular-json-editor', 'templates', 'app.widgetApi']);
+    'angular-json-editor', 'templates', 'app.widgetApi', 'info']);
 
   app.constant('appUrls', {
     appConfig: `/api/app/config/${window.appName}`,
@@ -118,20 +118,6 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         },
         controller: 'PageCtrl'
       });
-  });
-
-  app.service('alert', function ($modal, $log) {
-    this.error = (msg) => {
-      $log.error(msg);
-      $modal.open({
-        template: msg,
-        windowClass: 'error-message'
-      });
-    };
-  });
-
-  app.factory('prompt', function ($window) {
-    return $window.prompt;
   });
 
   app.factory('widgetTypesPromise', function ($http, appUrls) {
