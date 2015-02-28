@@ -5,10 +5,14 @@ angular.module('appList', ['appList.list'])
     $scope.createApp = function () {
       let appName = $scope.model.newAppName;
 
-      $scope.apps.push(appName);
-      $http.get(`/api/app/create/${appName}`).success(function (appNames) {
-        $scope.apps = appNames;
-      }).error(function (error) {
+      $scope.apps.push({
+        appName: appName,
+        owner: {
+          name: 'You',
+          email: 'your-email@gmail.com'
+        }
+      });
+      $http.get(`/api/app/create/${appName}`).error(error => {
         console.log(`Error while creating the app: ${error}`);
       });
     };
@@ -18,10 +22,8 @@ angular.module('appList', ['appList.list'])
       if (!newAppName) {
         return;
       }
-      $scope.apps[$scope.apps.indexOf(appName)] = newAppName;
-      $http.get(`/api/app/rename/${appName}/${newAppName}/`).success(function (appNames) {
-        $scope.apps = appNames;
-      }).error(function (error) {
+      $scope.apps[$scope.apps.findIndex(app => appName === app.appName)].appName = newAppName;
+      $http.get(`/api/app/rename/${appName}/${newAppName}/`).error(error => {
         console.log(`Error while renaming the app: ${error}`);
       });
     };
@@ -32,10 +34,8 @@ angular.module('appList', ['appList.list'])
         return;
       }
 
-      $scope.apps.splice($scope.apps.indexOf(appName), 1);
-      $http.get(`/api/app/delete/${appName}`).success(function (appNames) {
-        $scope.apps = appNames;
-      }).error(function (error) {
+      $scope.apps.splice($scope.apps.findIndex(app => appName === app.appName), 1);
+      $http.get(`/api/app/delete/${appName}`).error(error => {
         console.log(`Error while deleting the app: ${error}`);
       });
     };

@@ -19,6 +19,9 @@ module.exports = {
     config: {
       type: 'json',
       required: true
+    },
+    owner: {
+      model: 'User'
     }
   }
 };
