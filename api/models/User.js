@@ -3,7 +3,7 @@ var User = {
   schema: true,
 
   attributes: {
-    username  : { type: 'string', unique: true },
+    // username  : { type: 'string', unique: true }, // Do we need username?
     email     : { type: 'email',  unique: true, required: true },
     passports : { collection: 'Passport', via: 'user' }
   }

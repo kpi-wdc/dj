@@ -15,7 +15,7 @@ var validator = require('validator');
 /**
  * Register a new user
  *
- * This method creates a new user from a specified email, username and password
+ * This method creates a new user from a specified email and password
  * and assign the newly created user a local Passport.
  *
  * @param {Object}   req
@@ -24,17 +24,11 @@ var validator = require('validator');
  */
 exports.register = function (req, res, next) {
   var email    = req.param('email')
-    , username = req.param('username')
     , password = req.param('password');
 
   if (!email) {
     req.flash('error', 'Error.Passport.Email.Missing');
     return next(new Error('No email was entered.'));
-  }
-
-  if (!username) {
-    req.flash('error', 'Error.Passport.Username.Missing');
-    return next(new Error('No username was entered.'));
   }
 
   if (!password) {
@@ -43,8 +37,7 @@ exports.register = function (req, res, next) {
   }
 
   User.create({
-    username : username
-  , email    : email
+    email: email
   }, function (err, user) {
     if (err) {
       if (err.code === 'E_VALIDATION') {
@@ -119,25 +112,17 @@ exports.connect = function (req, res, next) {
 /**
  * Validate a login request
  *
- * Looks up a user using the supplied identifier (email or username) and then
+ * Looks up a user using the supplied identifier (email) and then
  * attempts to find a local Passport associated with the user. If a Passport is
  * found, its password is checked against the password supplied in the form.
  *
  * @param {Object}   req
- * @param {string}   identifier
+ * @param {string}   email
  * @param {string}   password
  * @param {Function} next
  */
-exports.login = function (req, identifier, password, next) {
-  var isEmail = validator.isEmail(identifier)
-    , query   = {};
-
-  if (isEmail) {
-    query.email = identifier;
-  }
-  else {
-    query.username = identifier;
-  }
+exports.login = function (req, email, password, next) {
+  query.email = email;
 
   User.findOne(query, function (err, user) {
     if (err) {
@@ -145,12 +130,7 @@ exports.login = function (req, identifier, password, next) {
     }
 
     if (!user) {
-      if (isEmail) {
-        req.flash('error', 'Error.Passport.Email.NotFound');
-      } else {
-        req.flash('error', 'Error.Passport.Username.NotFound');
-      }
-
+      req.flash('error', 'Error.Passport.Email.NotFound');
       return next(null, false);
     }
 
