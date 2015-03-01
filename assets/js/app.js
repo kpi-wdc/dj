@@ -324,7 +324,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 
 
   app.controller('MainCtrl', function ($scope, $location, $cookies,
                                        alert, appConfig) {
-    let cnf = $scope.globalConfig;
+    let cnf = $scope.globalConfig = {};
 
     $scope.appConfig = appConfig;
 
