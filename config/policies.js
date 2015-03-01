@@ -22,6 +22,7 @@ module.exports.policies = {
   '*': [ 'passport' ],
 
   AppController: {
+    create: ['passport', 'sessionAuth'],
     update: ['passport', 'isAppOwner'],
     rename: ['passport', 'isAppOwner'],
     delete: ['passport', 'isAppOwner']
