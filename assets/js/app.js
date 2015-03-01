@@ -63,8 +63,11 @@ define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 
       $state.go('page', {href: ''});
     });
 
+    // If url is not in this app URL scope - reload the whole page.
     $urlRouterProvider
-      .otherwise(`/app/${window.appName}/404`);
+      .otherwise(($injector, $location) => {
+        $injector.get('$window').location.href = $location.url();
+      });
 
     $stateProvider
       .state('page', {
