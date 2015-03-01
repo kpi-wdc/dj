@@ -235,7 +235,7 @@ gulp.task('copy-static-files', function () {
 
 if (!npmProduction) {
   gulp.task('test', (isFlagPositive(argv.skipTests) ? [] :
-    ['unit-test', 'e2e-test']), function (cb) {
+    ['unit-test']), function (cb) {
     if (isEnvEnabled('SEND_COVERAGE')) {
       runSequence('coveralls', cb);
     } else {
