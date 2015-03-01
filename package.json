@@ -1,6 +1,6 @@
 {
   "name": "wdc",
-  "version": "0.5.3",
+  "version": "0.7.0",
   "description": "Widget & statistical presentation platform",
   "private": true,
   "scripts": {
