@@ -249,7 +249,7 @@ if (!npmProduction) {
       configFile: __dirname + '/karma.conf.js',
       singleRun: true
     };
-    conf.browsers = ['PhantomJS'].concat(isEnvEnabled('CI') ? 'Firefox' : []);
+    conf.browsers = ['PhantomJS'];
     karma.start(conf, done);
   });
 

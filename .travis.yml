@@ -6,10 +6,6 @@ cache:
   directories:
   - $HOME/.npm
   - .tmp/bower_components
--before_script:
-# start virtual X frame-buffer for testing on firefox
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
 services:
 - mongodb
 matrix:
