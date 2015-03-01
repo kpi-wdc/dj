@@ -32,6 +32,7 @@ function hashPassword (passport, next) {
  * the user, but not the authentication data, to and from the session.
  */
 var Passport = {
+  migrate: 'safe', // don't drop on app restart in development mode
   attributes: {
     // Required field: Protocol
     //
