@@ -62,28 +62,31 @@
   </div>
 </footer>
 <div class="row">
-  <div ng-if="globalConfig.loggedIn">
+  <% if (user)  {%>
+  <div>
     <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
     <div class="switch tiny">
-      <input type="checkbox"
-             id="designModeCheckbox"
+      <input type="checkbox" id="designModeCheckbox"
              ng-model="globalConfig.designMode">
       <label for="designModeCheckbox"></label>
     </div>
     <br>
     <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
     <div class="switch tiny">
-      <input type="checkbox"
-             id="debugModeCheckbox"
+      <input type="checkbox" id="debugModeCheckbox"
              ng-model="globalConfig.debugMode"
-             ng-disabled="globalConfig.designMode">
+             disabled ng-disabled="globalConfig.designMode">
       <label for="debugModeCheckbox"></label>
     </div>
+  </div>
+  <div>
     <button class="button tiny alert right" ng-click="logOut()">Log out</button>
   </div>
-  <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
-    <button class="button tiny" id="logInButton">Log in</button>
+  <% } else { %>
+  <div>
+    <button class="button tiny primary right" ng-click="logIn()" id="logInButton">Login with Google</button>
   </div>
+  <% }%>
 </div>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="js/es6-polyfill.js"></script>

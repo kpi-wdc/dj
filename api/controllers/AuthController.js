@@ -22,7 +22,14 @@ var AuthController = {
    */
   logout: function (req, res) {
     req.logout();
-    res.redirect('/');
+
+    if (req.cookies.redirectToUrl) {
+      var redirectUrl = req.cookies.redirectToUrl;
+      res.clearCookie('redirectToUrl');
+      res.redirect(redirectUrl);
+    } else {
+      res.redirect('/');
+    }
   },
 
   /**
@@ -95,7 +102,13 @@ var AuthController = {
 
         // Upon successful login, send the user to the homepage were req.user
         // will available.
-        res.redirect('/');
+        if (req.cookies.redirectToUrl) {
+          var redirectUrl = req.cookies.redirectToUrl;
+          res.clearCookie('redirectToUrl');
+          res.redirect(redirectUrl);
+        } else {
+          res.redirect('/');
+        }
       });
     });
   },
