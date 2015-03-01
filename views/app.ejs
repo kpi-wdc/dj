@@ -48,7 +48,9 @@
   <nav class="medium-2 pull-10 columns">
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
-      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/app/<%=appName%>/{{page.href}}" ng-bind="page.shortTitle"></a></li>
+      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle">
+        <a href="/app/<%=app.appName%>/{{page.href}}" ng-bind="page.shortTitle"></a>
+      </li>
     </ul>
   </nav>
 </div>
@@ -64,7 +66,7 @@
   </div>
 </footer>
 <div class="row">
-  <% if (user)  {%>
+  <% if (isAppOwner)  {%>
   <div>
     <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
     <div class="switch tiny">
@@ -81,6 +83,8 @@
       <label for="debugModeCheckbox"></label>
     </div>
   </div>
+  <% } %>
+  <% if (user) {%>
   <div>
     <button class="button tiny alert right" ng-click="logOut()">Log out</button>
   </div>
@@ -93,8 +97,8 @@
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="js/es6-polyfill.js"></script>
 <script>
-  window.appName = "<%= appName %>";
-  window.appConfig = <%- JSON.stringify(config) %>;
+  window.appName = "<%= app.appName %>";
+  window.appConfig = <%- JSON.stringify(app.config) %>;
 </script>
 <script data-main="js/main" src="/components/requirejs/require.js"></script>
 </body>
