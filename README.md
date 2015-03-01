@@ -15,10 +15,10 @@
 
 Required software:
 
-- node.js is installed (better 0.11.x or 0.12.x versions)
+- node.js is installed (better 0.11.x or newer)
 Install latest node.js using `npm install -g n; n latest` as root/admin user
-- npm is installed (1.2 doesn't work, 1.4 works fine, check with `npm --version`.
-Upgrade newer npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
+- npm is installed (1.2 doesn't work, 1.4 and newer is OK, check with `npm --version`.
+Upgrade to newer npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
 - mongodb is installed
 
 Highly recommended:
@@ -47,14 +47,15 @@ Open `docs/index.html` to view documentation in the browser.
 
   If you want to debug javascript code in Intellij Idea - set your breakpoints in `.tmp/public`,
   not in `assets/`.
-  Otherwise it won't work for you.
+  Otherwise the debugger won't stop at your breakpoints
 
 ## Project style guides:
 
   - MOST IMPORTANT: follow the existing code style
   - Make sensible variable names
-  - Don't use `git pull`, use `git pull --rebase` instead. Merge commits are evil. You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
-  - Use commit names in format `[SUBPROJECT] explanation` or `[FEATURE] explanation` or `[FILE] explanation`. Examples:
+  - Don't use `git pull`, use `git pull --rebase` or `git up` (git plugin) instead.
+    You can run `git config branch.master.rebase true` to make `git pull` behave like `git pull --rebase` on project basis.
+  - Use commit names in format `[SCOPE] explanation` where `SCOPE` is a feature, subproject or component. Examples:
       - [build] Change gulp task
       - [front-end] added new feature
       - [hotfix] fixed mistake in previous commit
@@ -108,5 +109,3 @@ The following steps will make your work with Intellij Idea more productive
 
   - angularjs batarang
   - JetBrains IDE support
-
-Also look into [src/main/webapp/README.md](src/main/webapp/README.md) for front-end documentation.
