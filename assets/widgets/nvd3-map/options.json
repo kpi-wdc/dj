@@ -9,6 +9,22 @@
       "bottom": 40,
       "left": 0
     },
+    
+    "showLabels" : false,
+    "showValues" : false,
+    "showTiles" : true,
+    "selectedTiles" : "mapbox.outdoors",
+    "interactive" : true,
+    "defaultFill" : "#f0f0f0",
+    "defaultFillOpacity" : 0,
+    "defaultStroke" : "#909095",
+    "defaultStrokeWidth" : 1,
+    "defaultStrokeOpacity" : 0.75,
+    "selectedFillOpacity" : 0.5,
+    "selectedStrokeWidth" : 3,
+       
+    
+
     "useInteractiveGuideline": false,
     "dispatch": {},
     "lines": {

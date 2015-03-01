@@ -4,6 +4,7 @@ require.config({
   paths: {
     d3: "/components/d3/d3",
     topojson: "/widgets/nvd3-widget/topojson",
+  
     "nv.d3": "/components/nvd3/nv.d3",
     "nv.d3.ext": "/widgets/nvd3-widget/nv.d3.ext",
     "angular-nvd3": "/widgets/nvd3-widget/angular-nvd3-ext"
@@ -43,7 +44,9 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "/widgets/data-util/ada
     var NVD3Widget = function ($scope, params) {
       $scope.APIProvider = new APIProvider($scope);
       $scope.APIUser = new APIUser($scope);
+      $scope.decorationAdapter = params.decorationAdapter;
       $scope.settings = {};
+      $scope.options;
 
       $scope.removeSubscriptions = function () {
         var subscriptions = pageSubscriptions();
@@ -106,6 +109,7 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "/widgets/data-util/ada
         if ($scope.widget.decoration) {
           $scope.options = params.decorationAdapter.applyDecoration($scope.options, $scope.widget.decoration);
         } else {
+          if($scope.options)
           $scope.widget.decoration = params.decorationAdapter.getDecoration($scope.options);
         }
         if ($scope.widget.data && $scope.widget.data.standalone) {
@@ -136,4 +140,3 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "/widgets/data-util/ada
     return NVD3Widget;
   }]);
 });
-
