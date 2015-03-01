@@ -12,7 +12,7 @@ module.exports = {
       .then(function (app) {
         res.view('app', {
           app: app,
-          isAppOwner: !app.owner || (req.user && req.user.id === req.app.owner.id)
+          isAppOwner: !app.owner || (req.user && req.user.id === app.owner.id)
         });
       }).catch(function (err) {
         sails.log.silly(err);
