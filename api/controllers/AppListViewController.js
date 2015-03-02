@@ -15,7 +15,7 @@ module.exports = {
       .find({sort: 'appName'})
       .populate('owner')
       .then(function (apps) {
-        res.view('appList', {
+        res.view('app-list', {
           apps: apps.map(function (app) {
             return {
               id: app.id,
