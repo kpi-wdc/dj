@@ -8,7 +8,7 @@ import angular from 'angular';
  * Services from this module are a public API for all the widget developers.
  * They are documented and are allowed to use.
  */
-let widgetApi = angular.module('app.widgetApi', []);
+const widgetApi = angular.module('app.widgetApi', []);
 
 /**
  * @ngdoc object
@@ -273,22 +273,21 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
         if (!this.emitterName() || typeof this.emitterName() !== 'string') {
           $log.info('Not emitting event because widget\'s instanceName is not set');
         }
-        let wires = eventWires[this.emitterName()];
+        const wires = eventWires[this.emitterName()];
         if (!wires) {
           return;
         }
-        for (let i = 0; i < wires.length; i++) {
-          let wire = wires[i];
+        for (let wire of wires) {
           if (wire && wire.signalName === signalName) {
 
-            let slots = widgetSlots[wire.providerName];
+            const slots = widgetSlots[wire.providerName];
             if (!slots) {
               continue;
             }
 
-            for (let j = 0; j < slots.length; j++) {
-              if (!slots[j] || slots[j].slotName !== wire.slotName) continue;
-              slots[j].fn.apply(undefined, [{
+            for (let slot of slots) {
+              if (!slot || slot.slotName !== wire.slotName) continue;
+              slot.fn.apply(undefined, [{
                 emitterName: this.emitterName(),
                 signalName: signalName
               }].concat(args));
@@ -331,7 +330,7 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
   }
 
   $rootScope.$watch(() => {
-    let pageConf = appConfig.pageConfig();
+    const pageConf = appConfig.pageConfig();
     return pageConf && pageConf.subscriptions;
   }, (newSubscriptions) => {
     EventPublisher.replacePageSubscriptions(newSubscriptions);
@@ -361,7 +360,7 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
  */
 widgetApi.factory('pageSubscriptions', function (appConfig) {
   return () => {
-    let pageConf = appConfig.pageConfig();
+    const pageConf = appConfig.pageConfig();
     pageConf.subscriptions = pageConf.subscriptions || [];
     return pageConf.subscriptions;
   };
@@ -382,7 +381,7 @@ widgetApi.factory('pageSubscriptions', function (appConfig) {
  */
 widgetApi.factory('pageWidgets', function (appConfig) {
   return () => {
-    let holders = appConfig.pageConfig().holders;
+    const holders = appConfig.pageConfig().holders;
     let widgets = [];
     for (let holderName in holders) {
       if (holders.hasOwnProperty(holderName)) {
