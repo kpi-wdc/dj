@@ -10,7 +10,7 @@ d3.html(
             + "0" + "/" + "0" + "/" + "0" + ".png"
             + "?access_token=" +"pk.eyJ1IjoiYm9sZGFrIiwiYSI6InZrSEF6RXMifQ.c8WIV6zoinhXwXXY2cFurg",
             function(error,doc){
-              console.log(error)
+              // console.log(error)
               if(error == null || error == undefined) d3.geo.tileServerEnable = true;
             }
 );
@@ -2243,7 +2243,7 @@ d3.geo.tile = function () {
     //------------------------------------------------------------
 
     var showTooltip = function (e, offsetElement) {
-      console.log(e);
+      // console.log(e);
       var left = e.event.pageX,
 
       //pos[0],
@@ -2253,7 +2253,7 @@ d3.geo.tile = function () {
       x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
           y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
           content = tooltip(e.series.key, x, y, e, chart);
-      console.log(left, top, tooltipShift);
+      // console.log(left, top, tooltipShift);
       nv.tooltip.show([left /* + tooltipShift.x*/, top /*+ tooltipShift.y*/], content, null, null, offsetElement, "xy-tooltip with-3d-shadow with-transitions");
     };
 
@@ -4346,7 +4346,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-        console.log("Chord data", data);
+        // console.log("Chord data", data);
         var matrix = data[0];
         // Prepare correlation matrix for chord layout
         matrix = matrix.filter(function (series, i) {
@@ -5174,7 +5174,7 @@ d3.geo.tile = function () {
           dispatch.legendClick(d, i);
           if (updateState) {
             if (radioButtonMode) {
-              console.log("RADIO MODE select", d);
+              // console.log("RADIO MODE select", d);
               //Radio button mode: set every series to disabled,
               //  and enable the clicked series.
               data.forEach(function (series) {
@@ -7807,7 +7807,7 @@ d3.geo.tile = function () {
     };
 
     chart.selectedTiles = function (_) {
-      console.log("selectedTiles map", _ , mapId[_])
+      // console.log("selectedTiles map", _ , mapId[_])
       if (!arguments.length) return mapId[selectedTiles];
       selectedTiles = mapId[_];
       return chart;
@@ -7826,7 +7826,7 @@ d3.geo.tile = function () {
     };
     
     chart.defaultFillOpacity = function (_) {
-      console.log("defaultFillOpacity map",_)
+      // console.log("defaultFillOpacity map",_)
       if (!arguments.length) return defaultFillOpacity;
       defaultFillOpacity = _;
       return chart;
@@ -8348,7 +8348,7 @@ d3.geo.tile = function () {
     };
     
     chart.defaultFillOpacity = function (_) {
-      console.log("defaultFillOpacity chart", _)
+      // console.log("defaultFillOpacity chart", _)
       if (!arguments.length) return map.defaultFillOpacity();
       map.defaultFillOpacity(_)
       return chart;

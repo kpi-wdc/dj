@@ -206,7 +206,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
     };
 
     this.getData = function (table, scope) {
-      console.log("SCOPE", scope.widget.decoration);
+      // console.log("SCOPE", scope.widget.decoration);
       var result = [];
       for (var i in table.body) {
         var v = [];

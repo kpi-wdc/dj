@@ -35,7 +35,7 @@ define(["angular",
     };
 
     this.getDecoration = function (options) {
-      console.log(options)
+      // console.log(options)
       if (angular.isDefined(options)) {
         var decoration = {};
         decoration.height = options.chart.height;

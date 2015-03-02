@@ -22,7 +22,7 @@ define(["angular",
                 Palettes1) {
 
         var MapChartDialog = function (scope) {
-          console.log("!!!!",scope)
+          // console.log("!!!!",scope)
 
           this.scope = scope;
           // this.conf = {}
