@@ -498,10 +498,10 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
     // check whether href is correct (isn't empty for now)
     $scope.checkHref = (href) => {
       $scope.hrefErr = {};
-      if (!href) {
-        $scope.hrefErr.message = 'field mustn\'t be empty';
-        $scope.hrefErr.class = 'red';
-      }
+      //if (!href) {
+      //  $scope.hrefErr.message = 'field mustn\'t be empty';
+      //  $scope.hrefErr.class = 'red';
+      //}
     };
 
     $scope.templateTypes = templateTypesArr;

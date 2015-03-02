@@ -5,7 +5,7 @@
       <span ng-bind="'  Error: ' + titleErr.message" ng-if="titleErr.message"></span>
       <input type="text" ng-model="shortTitle" ng-change="checkShortTitle(shortTitle)" placeholder="Unique page title"/>
     </label>
-    <label ng-class="hrefErr.class">Unique link
+    <label ng-class="hrefErr.class">Unique link (leave empty for home page)
       <span ng-bind="'  Error: ' + hrefErr.message" ng-if="hrefErr.message"></span>
       <input type="text" ng-model="href" ng-change="checkHref(href)" placeholder="Unique link"/>
     </label>
