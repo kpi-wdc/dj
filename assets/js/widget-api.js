@@ -67,15 +67,12 @@ define(['angular'], function (angular) {
        * @param {Function} slot Slot function
        * @returns {APIProvider}
        */
-      provide(slotName, slot) {
-        if (typeof slot !== 'function') {
-          throw `Second argument should be a function, ${typeof slot} passed instead`;
+      provide(slotName, fn) {
+        if (typeof fn !== 'function') {
+          throw `Second argument should be a function, ${typeof fn} passed instead`;
         }
         widgetSlots[this.providerName] = widgetSlots[this.providerName] || [];
-        widgetSlots[this.providerName].push({
-          slotName: slotName,
-          fn: slot
-        });
+        widgetSlots[this.providerName].push({slotName, fn});
         return this;
       }
 
@@ -158,7 +155,6 @@ define(['angular'], function (angular) {
         }
       }
 
-    ;
 
       /**
        * Invokes widget's slot
@@ -167,17 +163,16 @@ define(['angular'], function (angular) {
        * @throws if widget doesn't provide this slot
        * @returns {*}
        */
-      invoke(providerName, slotName) {
+      invoke(providerName, slotName, ...args) {
         if (!widgetSlots[providerName]) {
           throw `Provider ${providerName} doesn't exist`;
         }
-        for (let i = 0; i < widgetSlots[providerName].length; i++) {
-          let slot = widgetSlots[providerName][i];
+        for (let slot of widgetSlots[providerName]) {
           if (slot.slotName === slotName) {
             return slot.fn.apply(undefined, [{
               emitterName: this.userName(),
               signalName: undefined
-            }].concat(Array.prototype.slice.call(arguments, 2)));
+            }].concat(args));
           }
         }
         throw `Provider ${providerName} doesn't have slot called ${slotName}`;
@@ -196,13 +191,13 @@ define(['angular'], function (angular) {
           return {
             success: true,
             result: this.invoke(providerName, slotName) // might throw
-          }
+          };
         } catch (e) {
           if (typeof(e) === 'string' && e.indexOf('Provider') > -1) {
             return {
               success: false,
               result: undefined
-            }
+            };
           } else {
             throw e;
           }
@@ -213,7 +208,7 @@ define(['angular'], function (angular) {
        * Invokes slot on all widgets
        * @param slotName Name of the slot
        */
-      invokeAll(slotName) {
+      invokeAll(slotName, ...args) {
         let called = false;
         for (let providerName in widgetSlots) {
           if (widgetSlots.hasOwnProperty(providerName)) {
@@ -223,7 +218,7 @@ define(['angular'], function (angular) {
                 slot.fn.apply(undefined, [{
                   emitterName: this.userName(),
                   signalName: undefined
-                }].concat(Array.prototype.slice.call(arguments, 2)));
+                }].concat(args));
               }
             }
           }
@@ -272,8 +267,7 @@ define(['angular'], function (angular) {
        * This automatically calls slots on all subscribed providers
        * @param signalName Name of the signal
        */
-      emit(signalName) {
-        let args = Array.prototype.slice.call(arguments, 1);
+      emit(signalName, ...args) {
         $rootScope.$evalAsync(() => {
           if (!this.emitterName() || typeof this.emitterName() !== 'string') {
             $log.info('Not emitting event because widget\'s instanceName is not set');
@@ -310,13 +304,9 @@ define(['angular'], function (angular) {
        * @param provideName
        * @param slotName
        */
-      static wireSignalWithSlot(emitterName, signalName, provideName, slotName) {
+      static wireSignalWithSlot(emitterName, signalName, providerName, slotName) {
         eventWires[emitterName] = eventWires[emitterName] || [];
-        eventWires[emitterName].push({
-          signalName: signalName,
-          providerName: provideName,
-          slotName: slotName
-        });
+        eventWires[emitterName].push({signalName, providerName, slotName});
       }
 
       /**

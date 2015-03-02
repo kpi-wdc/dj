@@ -2,7 +2,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
   'angular-ui-router', 'ngstorage', 'angular-oclazyload',
   'angular-foundation', 'angular-json-editor', 'angular-cookies',
   'template-cached-pages', 'sceditor'], function (angular) {
-  let app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
+  const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
     'ngCookies', 'angular-json-editor', 'templates',
     'app.widgetApi', 'app.config', 'info']);
 
@@ -79,18 +79,18 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
       .state('page', {
         url: `/app/${appName}/:href`,
         resolve: {
-          pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
+          pageConfig($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
             pageConfigPromise = appConfigPromise
               .then(() => {
-                let pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
+                const pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
 
-                let deferredResult = $q.defer();
+                const deferredResult = $q.defer();
                 if (!pageConfig || !pageConfig.holders) {
                   deferredResult.resolve(pageConfig);
                   return deferredResult.promise;
                 }
 
-                let widgetTypes = [];
+                const widgetTypes = [];
                 for (let holderName in pageConfig.holders) {
                   if (pageConfig.holders.hasOwnProperty(holderName)) {
                     for (let widget of pageConfig.holders[holderName].widgets) {
@@ -114,13 +114,13 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
             return pageConfigPromise;
           }
         },
-        templateProvider: function ($http, appUrls, $templateCache) {
+        templateProvider($http, appUrls, $templateCache) {
           return pageConfigPromise.then((pageConfig) => {
             if (!pageConfig || !pageConfig.template) {
               return "Page not found!";
             }
 
-            let url = appUrls.templateHTML(pageConfig.template);
+            const url = appUrls.templateHTML(pageConfig.template);
             return $http.get(url, {cache: $templateCache})
               .then((result) => result.data);
           });
@@ -209,9 +209,9 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         return widget.instanceName;
       }, (newName, oldName) => {
         if (newName !== oldName && newName !== undefined) {
-          let subscriptions = this.pageConfig().subscriptions;
+          const subscriptions = this.pageConfig().subscriptions;
           for (let i = 0; i < (subscriptions ? subscriptions.length : 0); i++) {
-            let subscription = subscriptions[i];
+            const subscription = subscriptions[i];
             if (subscription.emitter === oldName) {
               subscription.emitter = newName;
             }
@@ -235,7 +235,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         controller: 'PageModalSettingsController',
         backdrop: 'static',
         resolve: {
-          templateTypes: function (templateTypesPromise) {
+          templateTypes(templateTypesPromise) {
             return templateTypesPromise;
           }
         }
@@ -252,15 +252,15 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
     this.load = (widgets) => {
       widgets = angular.isArray(widgets) ? widgets : [widgets];
       return widgetTypesPromise.then((widgetTypesHTTP) => {
-        let widgetControllers = [];
+        const widgetControllers = [];
         for (let widget of widgets) {
-          let widgetType = widgetTypesHTTP.data[widget];
+          const widgetType = widgetTypesHTTP.data[widget];
           if (angular.isUndefined(widgetType)) {
             return $q.reject(`Widget "${widget}" doesn't exist!`);
           }
           if (!widgetType.nojs) {
             widgetControllers.push({
-              name: 'app.widgets.' + widget,
+              name: `app.widgets.${widget}`,
               files: [appUrls.widgetJSModule(widget)]
             });
           }
@@ -272,13 +272,13 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
 
   app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, prompt) {
     this.deleteIthWidgetFromHolder = (holder, index) => {
-      let removedWidget = holder.widgets.splice(index, 1)[0];
-      let user = new APIUser();
+      const removedWidget = holder.widgets.splice(index, 1)[0];
+      const user = new APIUser();
       user.tryInvoke(removedWidget.instanceName, APIProvider.REMOVAL_SLOT);
     };
 
     this.openWidgetConfigurationDialog = (widget) => {
-      let invocation = (new APIUser()).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
+      const invocation = (new APIUser()).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
       if (!invocation.success) {
         this.openDefaultWidgetConfigurationDialog(widget);
       }
@@ -290,13 +290,13 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         controller: 'WidgetModalSettingsController',
         backdrop: 'static',
         resolve: {
-          widgetScope: () => {
+          widgetScope() {
             return (new APIUser()).getScopeByInstanceName(widget.instanceName);
           },
-          widgetConfig: () => {
+          widgetConfig() {
             return widget;
           },
-          widgetType: (widgetTypesPromise) => {
+          widgetType(widgetTypesPromise) {
             return widgetTypesPromise.then((widgetTypesHTTP) =>
                 widgetTypesHTTP.data[widget.type]
             );
@@ -304,7 +304,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         }
       }).result.then((newWidgetConfig) => {
           angular.copy(newWidgetConfig, widget);
-          let user = new APIUser();
+          const user = new APIUser();
           user.invokeAll(APIProvider.RECONFIG_SLOT);
         });
     };
@@ -315,13 +315,13 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         controller: 'WidgetModalAddNewController',
         backdrop: 'static',
         resolve: {
-          widgetTypes: function (widgetTypesPromise) {
+          widgetTypes(widgetTypesPromise) {
             return widgetTypesPromise;
           },
-          widgetLoader: function () {
+          widgetLoader() {
             return widgetLoader;
           },
-          holder: function () {
+          holder() {
             return holder;
           }
         }
@@ -350,8 +350,8 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
     });
 
     $scope.alertAppConfigSubmissionFailed = (data) => {
-      alert.error('Error submitting application configuration!<br>' +
-      `HTTP error ${data.status}: ${data.statusText}`);
+      alert.error(`Error submitting application configuration!<br>
+        HTTP error ${data.status}: ${data.statusText}`);
     };
   });
 
@@ -368,7 +368,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
       templateUrl: appUrls.widgetHolderHTML,
       transclude: true,
       scope: true,
-      link: (scope, element, attrs) => {
+      link(scope, element, attrs) {
         scope.$watchCollection('scope.config.holders', () => {
           if (scope.config.holders) {
             scope.holder = scope.config.holders[attrs.name] || {};
@@ -446,7 +446,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
       // checks whether chosen template belongs to the current filter criteria
       $scope.chosenWidget = widget;
 
-      let realWidget = {
+      const realWidget = {
         type: $scope.chosenWidget.type,
         instanceName: Math.random().toString(36).substring(2)
       };
@@ -457,7 +457,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
           $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
         }, (error) => {
           console.log('ERROR', error);
-          alert.error('Cannot add widget: ' + error);
+          alert.error('Cannot add widget: ${error}');
         });
       $modalInstance.close();
     };
@@ -476,15 +476,16 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
     $scope.href = "";
 
     // array of all template types
-    let templateTypesArr = [];
+    const templateTypesArr = [];
 
     // create templateTypesArr out of templateTypes map
     for (let type in templateTypes.data) {
-      let currentTemplate = {};
-      currentTemplate.type = type;
-      currentTemplate.description = templateTypes.data[type].description;
-      currentTemplate.holders = templateTypes.data[type].holders;
-      currentTemplate.icon = appUrls.templateIcon(currentTemplate.type);
+      const currentTemplate = {
+        type: type,
+        description: templateTypes.data[type].description,
+        holders: templateTypes.data[type].holders,
+        icon: appUrls.templateIcon(currentTemplate.type)
+      };
 
       templateTypesArr.push(currentTemplate);
     }
@@ -533,7 +534,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         return;
       }
 
-      let page = {
+      const page = {
         shortTitle: shortTitle,
         href,
         template: $scope.chosenTemplate.type,

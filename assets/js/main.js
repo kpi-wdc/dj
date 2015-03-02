@@ -50,9 +50,9 @@ require.config({
 
 (function () {
   // are we unit-testing now?
-  let isUnitTesting = window.__karma__ !== undefined;
+  const isUnitTesting = window.__karma__ !== undefined;
   if (isUnitTesting) {
-    let tests = [];
+    const tests = [];
     for (let file in window.__karma__.files) {
       if (window.__karma__.files.hasOwnProperty(file)) {
         if (/Spec\.js$/.test(file)) {
