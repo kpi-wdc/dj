@@ -164,8 +164,12 @@ gulp.task('compile-js', function () {
     .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel())
-    .on('error', handleError)
+    .pipe(plugins.if(function (file) {
+        return file.relative !== 'main.js';
+      },
+      plugins.babel({modules: 'amd'}),
+      plugins.babel())
+     ).on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
 });
@@ -303,7 +307,7 @@ if (!npmProduction) {
   gulp.task('build-e2e-test', function () {
     return gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(buildDir + '/test/e2e'))
-      .pipe(plugins.babel())
+      .pipe(plugins.babel({modules: 'amd'}))
       .pipe(gulp.dest(buildDir + '/test/e2e'));
   });
 
