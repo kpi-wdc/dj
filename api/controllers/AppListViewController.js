@@ -11,13 +11,14 @@ module.exports = {
    * `AppListPageController.getView()`
    */
   getView: function (req, res) {
-    AppConfig.find().then(function (apps) {
-      res.view('appList', {
-        apps: apps
+    AppConfig
+      .find({sort: 'appName'}, {appName: 1, owner: 1})
+      .populate('owner') // fixme: all fields from owner are exposed
+      .then(function (apps) {
+        res.view('appList', {apps: apps});
+      }).catch(function () {
+        res.serverError();
       });
-    }).catch(function () {
-      res.serverError();
-    });
   }
 };
 

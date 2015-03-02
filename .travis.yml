@@ -1,17 +1,11 @@
 language: node_js
 # use container-based environment
-# which results in faster start-ups and allow caching
+# which results in faster start-ups and allows caching
 sudo: false
 cache:
   directories:
   - $HOME/.npm
   - .tmp/bower_components
-before_script:
-# start virtual X frame-buffer for end-to-end testing with real browser
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
-script:
-- ./run-and-test
 services:
 - mongodb
 matrix:

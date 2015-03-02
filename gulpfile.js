@@ -97,7 +97,6 @@ gulp.task('build-components', ['bower-install'], function () {
 
   return gulp.src('.tmp/bower_components/**/*')
     .pipe(plugins.cached('build-components'))
-    .pipe(plugins.changed(buildPublicDir + '/components', {hasChanged: plugins.changed.compareSha1Digest}))
     .pipe(removeFilter)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'components'})))
     .on('error', handleError)
@@ -105,9 +104,12 @@ gulp.task('build-components', ['bower-install'], function () {
 });
 
 gulp.task('build-css', ['build-less', 'build-components'], function () {
+  if (!minifyCode) {
+    return;
+  }
+
   return gulp.src(buildPublicDir + '/**/*.css')
     .pipe(plugins.cached('build-css'))
-    .pipe(plugins.if(minifyCode, plugins.minifyCss()))
     .on('error', handleError)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'CSS'})))
     .pipe(gulp.dest(buildPublicDir));
@@ -136,7 +138,7 @@ gulp.task('build-template-cache', function () {
 });
 
 gulp.task('copy-es6-polyfill', function () {
-  return gulp.src('node_modules/gulp-6to5/node_modules/6to5-core/browser-polyfill.js')
+  return gulp.src('node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js')
     .pipe(plugins.rename('es6-polyfill.js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
@@ -144,7 +146,11 @@ gulp.task('copy-es6-polyfill', function () {
 
 gulp.task('build-js', ['build-template-cache', 'build-widgets', 'build-components',
   'compile-js', 'annotate-js', 'copy-es6-polyfill'], function () {
-  return gulp.src([buildPublicDir + '/**/*.js'])
+  if (!minifyCode) {
+    return;
+  }
+
+  return gulp.src(buildPublicDir + '/**/*.js')
     .pipe(plugins.cached('build-js'))
     .pipe(plugins.plumber())
     .pipe(plugins.if(minifyCode, plugins.uglify()))
@@ -158,16 +164,15 @@ gulp.task('compile-js', function () {
     .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins['6to5']())
-    .pipe(plugins.sourcemaps.write('.'))
+    .pipe(plugins.babel())
     .on('error', handleError)
+    .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
 });
 
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-components', 'compile-js'], function () {
   return gulp.src([buildPublicDir + '/**/*.js', '!' + buildPublicDir + '/components/**/*'])
     .pipe(plugins.cached('annotate-js'))
-    .pipe(plugins.changed('annotate-js', {hasChanged: plugins.changed.compareSha1Digest}))
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
     .pipe(gulp.dest(buildPublicDir));
@@ -185,7 +190,7 @@ gulp.task('build-widgets-js', ['move-widgets'], function () {
   return gulp.src('assets/widgets/**/*.js')
     .pipe(plugins.cached('build-widgets-js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins['6to5']())
+    .pipe(plugins.babel())
     .pipe(plugins.sourcemaps.write('.'))
     .on('error', handleError)
     .pipe(gulp.dest(buildPublicDir + '/widgets'));
@@ -230,7 +235,7 @@ gulp.task('copy-static-files', function () {
 
 if (!npmProduction) {
   gulp.task('test', (isFlagPositive(argv.skipTests) ? [] :
-    ['unit-test', 'e2e-test']), function (cb) {
+    ['unit-test']), function (cb) {
     if (isEnvEnabled('SEND_COVERAGE')) {
       runSequence('coveralls', cb);
     } else {
@@ -244,7 +249,7 @@ if (!npmProduction) {
       configFile: __dirname + '/karma.conf.js',
       singleRun: true
     };
-    conf.browsers = ['PhantomJS'].concat(isEnvEnabled('CI') ? 'Firefox' : []);
+    conf.browsers = ['PhantomJS'];
     karma.start(conf, done);
   });
 
@@ -252,7 +257,7 @@ if (!npmProduction) {
     return gulp.src('test/unit/**/*.js')
       .pipe(plugins.changed(buildPublicDir + '/test/unit'))
       .pipe(plugins.sourcemaps.init())
-      .pipe(plugins['6to5']())
+      .pipe(plugins.babel())
       .pipe(plugins.sourcemaps.write('.'))
       .on('error', handleError)
       .pipe(gulp.dest(buildDir + '/test/unit'));
@@ -298,7 +303,7 @@ if (!npmProduction) {
   gulp.task('build-e2e-test', function () {
     return gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(buildDir + '/test/e2e'))
-      .pipe(plugins['6to5']())
+      .pipe(plugins.babel())
       .pipe(gulp.dest(buildDir + '/test/e2e'));
   });
 

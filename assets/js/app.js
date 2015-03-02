@@ -1,7 +1,8 @@
-define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
-  'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular) {
+define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
+  'angular-foundation', 'angular-json-editor', 'angular-cookies',
+  'template-cached-pages', 'sceditor'], function (angular) {
   let app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
-    'angular-json-editor', 'templates', 'app.widgetApi']);
+    'ngCookies', 'angular-json-editor', 'templates', 'app.widgetApi', 'info']);
 
   app.constant('appUrls', {
     appConfig: `/api/app/config/${window.appName}`,
@@ -63,8 +64,11 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       $state.go('page', {href: ''});
     });
 
+    // If url is not in this app URL scope - reload the whole page.
     $urlRouterProvider
-      .otherwise(`/app/${window.appName}/404`);
+      .otherwise(($injector, $location) => {
+        $injector.get('$window').location.href = $location.url();
+      });
 
     $stateProvider
       .state('page', {
@@ -120,20 +124,6 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       });
   });
 
-  app.service('alert', function ($modal, $log) {
-    this.error = (msg) => {
-      $log.error(msg);
-      $modal.open({
-        template: msg,
-        windowClass: 'error-message'
-      });
-    };
-  });
-
-  app.factory('prompt', function ($window) {
-    return $window.prompt;
-  });
-
   app.factory('widgetTypesPromise', function ($http, appUrls) {
     return $http.get(appUrls.widgetTypes, {cache: true});
   });
@@ -144,7 +134,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
 
   app.factory('appConfigPromise', function ($q, $window) {
     return $q((resolve) => {
-      resolve(window.appConfig);
+      resolve($window.appConfig);
     });
   });
 
@@ -332,34 +322,24 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     };
   });
 
-  app.controller('MainCtrl', function ($scope, $localStorage, alert, appConfig) {
-    if ($localStorage.localStorageInitialized === undefined) {
-      $localStorage.globalConfig = {
-        debugMode: false,
-        designMode: false,
-        loggedIn: false
-      };
-      $localStorage.localStorageInitialized = true;
-    }
-    let cnf = $scope.globalConfig = $localStorage.globalConfig;
+  app.controller('MainCtrl', function ($scope, $location, $cookies,
+                                       alert, appConfig) {
+    let cnf = $scope.globalConfig = {};
 
     $scope.appConfig = appConfig;
 
     $scope.logIn = () => {
-      cnf.loggedIn = true;
+      $cookies.redirectToUrl = $location.url();
+      $location.url('/auth/google');
     };
 
     $scope.logOut = () => {
-      cnf.loggedIn = false;
+      $cookies.redirectToUrl = $location.url();
+      $location.url('/logout');
     };
 
     $scope.$watch('globalConfig.designMode', () => {
       cnf.debugMode = cnf.debugMode && !cnf.designMode;
-    });
-
-    $scope.$watch('globalConfig.loggedIn', () => {
-      cnf.debugMode = cnf.debugMode && cnf.loggedIn;
-      cnf.designMode = cnf.designMode && cnf.loggedIn;
     });
 
     $scope.alertAppConfigSubmissionFailed = (data) => {

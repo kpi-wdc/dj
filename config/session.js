@@ -70,7 +70,7 @@ module.exports.session = {
   adapter: 'mongo',
   host: 'localhost',
   port: 27017,
-  db: 'sails',
+  db: 'wdc-session',
   collection: 'sessions',
   url: process.env.MONGOLAB_URI,
 

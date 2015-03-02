@@ -9,31 +9,45 @@
   <link rel="stylesheet" href="/components/foundation/css/foundation.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/applist.css">
+  <% include ga.ejs %>
 </head>
 <body ng-controller="AppListController" ng-cloak>
   <fieldset>
     <h4>List of apps:</h4>
-    <div ng-repeat="appName in apps" class="row">
-      <span class="column medium-2"><b>{{appName}}</b></span>
-      <a href="/app/{{appName}}/" class="button tiny success column large-offset-4 medium-2">Go to</a>
-      <input type="button" class="button tiny column medium-2"
-        value="Rename" ng-click="renameApp(appName)">
-      <input type="button" class="button alert tiny column medium-2"
-        value="Delete" ng-click="deleteApp(appName)">
+    <div ng-repeat="app in apps" class="row">
+      <span class="column small-6">
+        <b ng-bind="app.appName"></b>
+        <span ng-if="app.owner.name">({{app.owner.name}})</span>
+      </span>
+      <a href="/app/{{app.appName}}/" class="button tiny success column small-2">View</a>
+      <input type="button" class="button tiny column small-2"
+        value="Rename" ng-click="renameApp(app.appName)">
+      <input type="button" class="button alert tiny column small-2"
+        value="Delete" ng-click="deleteApp(app.appName)">
     </div>
   </fieldset>
+
+  <% if (!user)  {%>
+  <a href="/auth/google">Login with Google</a>
+  <% } else { %>
+
   <fieldset>
     <label>Add new app
       <input placeholder="App name" name="appName" ng-model="model.newAppName" autocomplete="off">
-    </label>
-    <input type="button" value="Submit" class="button success tiny" ng-disabled="!model.newAppName" ng-click="createApp()">
+    </label><br>
+    <input type="button" value="Submit" class="button success tiny"
+           disabled ng-disabled="!model.newAppName" ng-click="createApp()">
   </fieldset>
+
+  Logged in as <%=user.name %>(<%=user.email%>)<br>
+  <a href="/logout">Log out</a>
+  <% } %>
+
+  <script src="js/es6-polyfill.js"></script>
   <script src="/components/angular/angular.js"></script>
   <script>
     angular.module('appList.list', [])
-      .constant('appList',
-        <%- JSON.stringify(_.each(_.map(apps, 'appName'))) %>
-        );
+      .constant('appList', <%- JSON.stringify(apps) %>);
   </script>
   <script src="/js/appList.js"></script>
 </body>

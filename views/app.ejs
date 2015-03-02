@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
   <link rel="stylesheet" href="/css/main.css">
   <title>World Data Center</title>
+  <% /* The following should be inside <head> tag! */ %>
+  <% include ga.ejs %>
 </head>
 <body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
@@ -46,7 +48,9 @@
   <nav class="medium-2 pull-10 columns">
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
-      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/app/<%=appName%>/{{page.href}}" ng-bind="page.shortTitle"></a></li>
+      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle">
+        <a href="/app/<%=app.appName%>/{{page.href}}" ng-bind="page.shortTitle"></a>
+      </li>
     </ul>
   </nav>
 </div>
@@ -62,34 +66,39 @@
   </div>
 </footer>
 <div class="row">
-  <div ng-if="globalConfig.loggedIn">
+  <% if (isAppOwner)  {%>
+  <div>
     <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
     <div class="switch tiny">
-      <input type="checkbox"
-             id="designModeCheckbox"
+      <input type="checkbox" id="designModeCheckbox"
              ng-model="globalConfig.designMode">
       <label for="designModeCheckbox"></label>
     </div>
     <br>
     <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
     <div class="switch tiny">
-      <input type="checkbox"
-             id="debugModeCheckbox"
+      <input type="checkbox" id="debugModeCheckbox"
              ng-model="globalConfig.debugMode"
-             ng-disabled="globalConfig.designMode">
+             disabled ng-disabled="globalConfig.designMode">
       <label for="debugModeCheckbox"></label>
     </div>
+  </div>
+  <% } %>
+  <% if (user) {%>
+  <div>
     <button class="button tiny alert right" ng-click="logOut()">Log out</button>
   </div>
-  <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
-    <button class="button tiny" id="logInButton">Log in</button>
+  <% } else { %>
+  <div>
+    <button class="button tiny primary right" ng-click="logIn()" id="logInButton">Login with Google</button>
   </div>
+  <% }%>
 </div>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="js/es6-polyfill.js"></script>
 <script>
-  window.appName = "<%= appName %>";
-  window.appConfig = <%- JSON.stringify(config) %>;
+  window.appName = "<%= app.appName %>";
+  window.appConfig = <%- JSON.stringify(app.config) %>;
 </script>
 <script data-main="js/main" src="/components/requirejs/require.js"></script>
 </body>

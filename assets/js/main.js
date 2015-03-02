@@ -16,6 +16,7 @@ require.config({
     'json-editor': 'components/json-editor/dist/jsoneditor',
     'leaflet': 'components/leaflet/dist/leaflet',
     'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
+    'angular-cookies': 'components/angular-cookies/angular-cookies',
     'sceditor': 'components/SCEditor/src/jquery.sceditor'
   },
 
@@ -42,7 +43,8 @@ require.config({
     'ngstorage': ['angular'],
     'angular-oclazyload': ['angular'],
     'angular-foundation': ['angular'],
-    'angular-json-editor': ['angular', 'json-editor']
+    'angular-json-editor': ['angular', 'json-editor'],
+    'angular-cookies': ['angular']
   },
 
   // kick start application

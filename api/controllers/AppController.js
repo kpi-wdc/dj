@@ -27,15 +27,14 @@ module.exports = {
   create: function (req, res) {
     AppConfig.create({
       appName: req.params.appName,
-      config: { "pages" : []}
+      config: { "pages" : []},
+      owner: req.user.id
     }, function (err) {
       if (err) {
         sails.log.error('Error while creating app: ' + err);
         res.serverError();
       } else {
-        AppConfig.find().then(function (apps) {
-          res.send(_.map(apps, 'appName'));
-        });
+        res.ok();
       }
     });
   },
@@ -69,9 +68,7 @@ module.exports = {
       } else if (updatedArr.length === 0) {
         res.forbidden();
       } else {
-        AppConfig.find().then(function (apps) {
-          res.send(_.map(apps, 'appName'));
-        });
+        res.ok();
       }
     });
   },
@@ -86,9 +83,7 @@ module.exports = {
       } else if (updatedArr.length === 0) {
         res.forbidden();
       } else {
-        AppConfig.find().then(function (apps) {
-          res.send(_.map(apps, 'appName'));
-        });
+        res.ok();
       }
     });
   }

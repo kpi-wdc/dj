@@ -13,8 +13,7 @@ var fs = require('fs');
 var addDefaultAppConfigs = function () {
   fs.readdir('apps', function (err, files) {
     if (!err) {
-      for (var i = 0; i < files.length; i++) {
-        var filename = files[i];
+      files.forEach(function (filename) {
         var match = /^(.*)\.json$/i.exec(filename);
         if (match) {
           var appName = match[1];
@@ -26,15 +25,15 @@ var addDefaultAppConfigs = function () {
                 config: data
               }, function (err) {
                 if (err) {
-                  sails.log.warn('Error in AppConfig.findOrCreate app config during sails bootstrap');
+                  sails.log.warn('Error in AppConfig.findOrCreate app config during sails bootstrap: ' + err);
                 }
               });
             } else {
-              sails.log.warn('Error loading file: apps/' + filename);
+              sails.log.warn('Error loading file: apps/' + filename + ', error: ' + err);
             }
           });
         }
-      }
+      });
     } else {
       sails.log.warn('Error reading apps directory!');
     }
@@ -42,6 +41,7 @@ var addDefaultAppConfigs = function () {
 };
 
 module.exports.bootstrap = function (cb) {
+  sails.services.passport.loadStrategies();
   addDefaultAppConfigs(); // allow running async, even after bootstrap is finished
 
   // It's very important to trigger this callback method when you are finished

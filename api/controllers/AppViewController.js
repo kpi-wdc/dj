@@ -7,19 +7,17 @@
 
 module.exports = {
   getView: function (req, res) {
-    AppConfig.findOne({
-      appName: req.params.appName
-    }, function (err, found) {
-      if (!err) {
-        if (found) {
-          res.view('app', found);
-        } else {
-          res.view('404', {error: "app not found"});
-        }
-      } else {
-        res.serverError();
-      }
-    });
+    AppConfig.findOne({ appName: req.params.appName})
+      .populate('owner')
+      .then(function (app) {
+        res.view('app', {
+          app: app,
+          isAppOwner: !app.owner || (req.user && req.user.id === app.owner.id)
+        });
+      }).catch(function (err) {
+        sails.log.silly(err);
+        res.notFound();
+      });
   }
 };
 

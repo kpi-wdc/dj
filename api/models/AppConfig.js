@@ -6,10 +6,12 @@
 */
 
 module.exports = {
+  // Enforce model schema in the case of schemaless databases
+  schema: true,
 
   attributes: {
     appName: {
-      type: 'string',
+      type: 'alphanumericdashed',
       required: true,
       unique: true,
       notEmpty: true
@@ -17,6 +19,9 @@ module.exports = {
     config: {
       type: 'json',
       required: true
+    },
+    owner: {
+      model: 'User'
     }
   }
 };
