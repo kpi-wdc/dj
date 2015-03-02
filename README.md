@@ -5,6 +5,7 @@
 [![Project name](http://img.shields.io/badge/wdc-widgets-blue.svg)](https://github.com/kpi-wdc/wdc)
 [![GitHub version](https://badge.fury.io/gh/kpi-wdc%2Fwdc.svg)](http://badge.fury.io/gh/kpi-wdc%2Fwdc)
 [![Build Status](https://travis-ci.org/kpi-wdc/wdc.svg?branch=master)](https://travis-ci.org/kpi-wdc/wdc)
+[![Windows build Status](https://ci.appveyor.com/api/projects/status/9apanpaad61al9b0/branch/master?svg=true)](https://ci.appveyor.com/project/sochka/wdc/)
 [![Dependencies](https://david-dm.org/kpi-wdc/wdc.svg)](https://david-dm.org/kpi-wdc/wdc)
 [![Coverage Status](https://coveralls.io/repos/kpi-wdc/wdc/badge.svg?branch=master)](https://coveralls.io/r/kpi-wdc/wdc?branch=master)
 [![Issue Stats](http://issuestats.com/github/kpi-wdc/wdc/badge/issue)](http://issuestats.com/github/kpi-wdc/wdc)
