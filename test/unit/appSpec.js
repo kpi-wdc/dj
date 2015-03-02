@@ -1,9 +1,12 @@
+// This is needed because app-config module is generated inline in app view by back-end.
+define('app-config', ['angular'], function (angular) {
+  angular.module('app.config', [])
+    .constant('appName', "test")
+    .constant('initialConfig', {"pages": []});
+});
+
 define(['js/app', 'angular-mocks'], () => {
   beforeEach(module('app'));
-
-  let emptyAppJson = {
-    "pages": []
-  };
 
   let noWidgetsJson = {};
 
@@ -11,13 +14,8 @@ define(['js/app', 'angular-mocks'], () => {
 
   beforeEach(inject((_$httpBackend_, $window) => {
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET(/^\/appconfig\/.*$/)
-      .respond(JSON.stringify(emptyAppJson));
     $httpBackend.whenGET('/widgets/widgets.json')
       .respond(JSON.stringify(noWidgetsJson));
-
-    $window.appName = 'default';
-    $window.appConfig = emptyAppJson;
   }));
 
   describe("Testing controllers", () => {

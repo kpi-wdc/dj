@@ -1,5 +1,7 @@
-angular.module('appList', ['appList.list'])
-  .controller('AppListController', function ($scope, $http, $window, appList) {
+define(['angular', 'appList.list'], function (angular) {
+  var appList = angular.module('appList', ['appList.list']);
+
+  appList.controller('AppListController', function ($scope, $http, $window, appList) {
     $scope.apps = appList;
 
     $scope.createApp = function () {
@@ -40,3 +42,6 @@ angular.module('appList', ['appList.list'])
       });
     };
   });
+
+  angular.bootstrap(document, ['appList']);
+});

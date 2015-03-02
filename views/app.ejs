@@ -96,10 +96,16 @@
 </div>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="js/es6-polyfill.js"></script>
+<script src="/components/requirejs/require.js"></script>
+<script src="/js/main.js"></script>
 <script>
-  window.appName = "<%= app.appName %>";
-  window.appConfig = <%- JSON.stringify(app.config) %>;
+  define('app-config', ['angular'], function (angular) {
+    angular.module('app.config', [])
+      .constant('appName', "<%= app.appName %>")
+      .constant('initialConfig', <%- JSON.stringify(app.config) %>);
+  });
+
+  require(['js/app']); // Kick-start the app!
 </script>
-<script data-main="js/main" src="/components/requirejs/require.js"></script>
 </body>
 </html>

@@ -45,10 +45,7 @@ require.config({
     'angular-foundation': ['angular'],
     'angular-json-editor': ['angular', 'json-editor'],
     'angular-cookies': ['angular']
-  },
-
-  // kick start application
-  deps: ['js/app']
+  }
 });
 
 (function () {

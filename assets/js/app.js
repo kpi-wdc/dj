@@ -1,34 +1,39 @@
-define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
+define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
+  'angular-ui-router', 'ngstorage', 'angular-oclazyload',
   'angular-foundation', 'angular-json-editor', 'angular-cookies',
   'template-cached-pages', 'sceditor'], function (angular) {
   let app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
-    'ngCookies', 'angular-json-editor', 'templates', 'app.widgetApi', 'info']);
+    'ngCookies', 'angular-json-editor', 'templates',
+    'app.widgetApi', 'app.config', 'info']);
 
-  app.constant('appUrls', {
-    appConfig: `/api/app/config/${window.appName}`,
-    templateTypes: '/templates/templates.json',
-    widgetTypes: '/widgets/widgets.json',
-    widgetHolderHTML: '/partials/widget-holder.html',
-    widgetModalConfigHTML: '/partials/widget-modal-config.html',
-    pageModalConfigHTML: '/partials/page-modal-config.html',
-    widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
-    defaultWidgetIcon: '/widgets/default_widgets_icon.png',
-    templateHTML: templateName =>
-      `/templates/${templateName}/template.html`,
-    templateIcon: templateName =>
-      `/templates/${templateName}/icon.png`,
-    widgetJS: widgetName =>
-      `/widgets/${widgetName}/widget.js`,
-    widgetJSModule: widgetName =>
-      `widgets/${widgetName}/widget.js`,
-    widgetHTML: widgetName =>
-      `/widgets/${widgetName}/widget.html`,
-    widgetIcon: widgetName =>
-      `/widgets/${widgetName}/icon.png`
+  app.factory('appUrls', function (appName) {
+    return {
+      appConfig: `/api/app/config/${appName}`,
+      templateTypes: '/templates/templates.json',
+      widgetTypes: '/widgets/widgets.json',
+      widgetHolderHTML: '/partials/widget-holder.html',
+      widgetModalConfigHTML: '/partials/widget-modal-config.html',
+      pageModalConfigHTML: '/partials/page-modal-config.html',
+      widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
+      defaultWidgetIcon: '/widgets/default_widgets_icon.png',
+      templateHTML: templateName =>
+        `/templates/${templateName}/template.html`,
+      templateIcon: templateName =>
+        `/templates/${templateName}/icon.png`,
+      widgetJS: widgetName =>
+        `/widgets/${widgetName}/widget.js`,
+      widgetJSModule: widgetName =>
+        `widgets/${widgetName}/widget.js`,
+      widgetHTML: widgetName =>
+        `/widgets/${widgetName}/widget.html`,
+      widgetIcon: widgetName =>
+        `/widgets/${widgetName}/icon.png`
+    };
   });
 
   app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
-                       $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
+                       $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
+                       appName) {
 
     $ocLazyLoadProvider.config({
       loadedModules: ['app'],
@@ -60,7 +65,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 
     // this doesn't seem to work, that's why the next snippet does the same
     $urlMatcherFactoryProvider.strictMode(false);
 
-    $urlRouterProvider.when(`/app/${window.appName}`, function ($state) {
+    $urlRouterProvider.when(`/app/${appName}`, function ($state) {
       $state.go('page', {href: ''});
     });
 
@@ -72,7 +77,7 @@ define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 
 
     $stateProvider
       .state('page', {
-        url: `/app/${window.appName}/:href`,
+        url: `/app/${appName}/:href`,
         resolve: {
           pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
             pageConfigPromise = appConfigPromise
@@ -132,9 +137,10 @@ define(['angular', 'js/shims', 'js/widget-api', 'js/info', 'angular-ui-router', 
     return $http.get(appUrls.templateTypes, {cache: true});
   });
 
-  app.factory('appConfigPromise', function ($q, $window) {
+  app.factory('appConfigPromise', function ($q, initialConfig) {
+    // fixme: remove this useless factory
     return $q((resolve) => {
-      resolve($window.appConfig);
+      resolve(initialConfig);
     });
   });
 

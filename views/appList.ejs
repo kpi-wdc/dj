@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="appList">
+<html>
 <head>
   <title>Main page</title>
   <base href="/">
@@ -47,11 +47,15 @@
   <% } %>
 
   <script src="js/es6-polyfill.js"></script>
-  <script src="/components/angular/angular.js"></script>
+  <script src="/components/requirejs/require.js"></script>
+  <script src="/js/main.js"></script>
   <script>
-    angular.module('appList.list', [])
-      .constant('appList', <%- JSON.stringify(apps) %>);
+    define('appList.list', ['angular'], function (angular) {
+      angular.module('appList.list', [])
+        .constant('appList', <%- JSON.stringify(apps) %>);
+    });
+
+    require(['js/appList']); // Kick-start the app!
   </script>
-  <script src="/js/appList.js"></script>
 </body>
 </html>
