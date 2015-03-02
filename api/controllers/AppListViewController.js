@@ -12,10 +12,21 @@ module.exports = {
    */
   getView: function (req, res) {
     AppConfig
-      .find({sort: 'appName'}, {appName: 1, owner: 1})
-      .populate('owner') // fixme: all fields from owner are exposed
+      .find({sort: 'appName'})
+      .populate('owner')
       .then(function (apps) {
-        res.view('appList', {apps: apps});
+        res.view('appList', {
+          apps: apps.map(function (app) {
+            return {
+              id: app.id,
+              appName: app.appName,
+              owner: app.owner && {
+                name: app.owner.name,
+                email: app.owner.email
+              }
+            };
+          })
+        });
       }).catch(function () {
         res.serverError();
       });
