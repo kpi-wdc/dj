@@ -225,6 +225,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
     };
 
     this.addNewPage = (page) => {
+      page.holders = page.holders || {};
       this.config.pages.push(page);
     };
 
@@ -472,6 +473,8 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
 
   app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
                                                           appConfig, templateTypes, appUrls) {
+    $scope.href = "";
+
     // array of all template types
     let templateTypesArr = [];
 
@@ -508,18 +511,14 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
 
     // add button action
     $scope.add = (shortTitle, href, filteredTemplates) => {
-      let hasHrefAndTitle = href && shortTitle;
-
-      if (!hasHrefAndTitle) {
-        $scope.checkHref(href);
-        $scope.checkShortTitle(shortTitle);
-      }
+      $scope.checkHref(href);
+      $scope.checkShortTitle(shortTitle);
 
       // checks whether chosen template belongs to the current filter criteria
       let inFilter = false;
 
-      for (let i = 0; i < filteredTemplates.length; i++) {
-        if (filteredTemplates[i] === $scope.chosenTemplate) {
+      for (let template of filteredTemplates) {
+        if (template === $scope.chosenTemplate) {
           inFilter = true;
           break;
         }
@@ -531,18 +530,16 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
         $scope.templateErr = {};
         $scope.templateErr.message = 'choose a template';
         $scope.templateErr.class = 'red';
-      }
-
-      if (!hasHrefAndTitle || !inFilter) {
         return;
       }
 
-      let page = {};
-      page.shortTitle = shortTitle;
-      page.href = href;
+      let page = {
+        shortTitle: shortTitle,
+        href,
+        template: $scope.chosenTemplate.type,
+        holders: {}
+      };
 
-      page.template = $scope.chosenTemplate.type;
-      page.holders = {};
       for (let holderName of $scope.chosenTemplate.holders) {
         page.holders[holderName] = {
           widgets: []
@@ -552,7 +549,7 @@ define(['angular', 'app-config', 'js/shims', 'js/widget-api', 'js/info',
       appConfig.addNewPage(page);
 
       // redirect to the new page
-      $state.go('page', {href: href});
+      $state.go('page', {href}, {reload: true});
       $modalInstance.close();
     };
 
