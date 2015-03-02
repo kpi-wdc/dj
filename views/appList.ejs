@@ -9,9 +9,18 @@
   <link rel="stylesheet" href="/components/foundation/css/foundation.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/applist.css">
+  <% /* The following should be inside <head> tag! */ %>
   <% include ga.ejs %>
 </head>
 <body ng-controller="AppListController" ng-cloak>
+  <div id="logInLogOutSection">
+    <% if (!user)  {%>
+    <a href="/auth/google" class="button tiny">Login with Google</a>
+    <% } else { %>
+    Logged in as <%=user.name %>(<%=user.email%>)<br>
+    <a href="/logout" class="button alert tiny">Log out</a>
+    <% } %>
+  </div>
   <fieldset>
     <h4>List of apps:</h4>
     <div ng-repeat="app in apps" class="row">
@@ -27,10 +36,7 @@
     </div>
   </fieldset>
 
-  <% if (!user)  {%>
-  <a href="/auth/google">Login with Google</a>
-  <% } else { %>
-
+  <% if (user) { %>
   <fieldset>
     <label>Add new app
       <input placeholder="App name" name="appName" ng-model="model.newAppName" autocomplete="off">
@@ -38,9 +44,6 @@
     <input type="button" value="Submit" class="button success tiny"
            disabled ng-disabled="!model.newAppName" ng-click="createApp()">
   </fieldset>
-
-  Logged in as <%=user.name %>(<%=user.email%>)<br>
-  <a href="/logout">Log out</a>
   <% } %>
 
   <script src="js/es6-polyfill.js"></script>
