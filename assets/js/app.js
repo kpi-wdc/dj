@@ -78,7 +78,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
   // this doesn't seem to work, that's why the next snippet does the same
   $urlMatcherFactoryProvider.strictMode(false);
 
-  $urlRouterProvider.when(`/app/${appName}`, function ($state) {
+  $urlRouterProvider.when(`/app/${appName}`, ($state) => {
     $state.go('page', {href: ''});
   });
 
@@ -434,9 +434,8 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
 
   $scope.cancel = $modalInstance.dismiss.bind($modalInstance);
 
-  $scope.updateData = (value) => {
+  $scope.updateData = (value) =>
     data = value;
-  };
 });
 
 app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
@@ -482,19 +481,16 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
         holder.widgets.push(realWidget);
         $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
       }, (error) => {
-        console.log('ERROR', error);
         alert.error('Cannot add widget: ${error}');
       });
     $modalInstance.close();
   };
 
-  $scope.isSelected = (widget) => {
-    return $scope.chosenWidget === widget;
-  };
+  $scope.isSelected = (widget) =>
+    $scope.chosenWidget === widget;
 
-  $scope.cancel = () => {
+  $scope.cancel = () =>
     $modalInstance.dismiss();
-  };
 });
 
 app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
@@ -507,7 +503,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
   // create templateTypesArr out of templateTypes map
   for (let type in templateTypes.data) {
     const currentTemplate = {
-      type: type,
+      type,
       description: templateTypes.data[type].description,
       holders: templateTypes.data[type].holders,
       icon: appUrls.templateIcon(currentTemplate.type)
@@ -586,13 +582,11 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     $scope.templateErr = {};
   };
 
-  $scope.cancel = () => {
+  $scope.cancel = () =>
     $modalInstance.dismiss();
-  };
 
-  $scope.isSelected = (template) => {
-    return $scope.chosenTemplate === template;
-  };
+  $scope.isSelected = (template) =>
+    $scope.chosenTemplate === template;
 });
 
 angular.bootstrap(document, ['app'], {
