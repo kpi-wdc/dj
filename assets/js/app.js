@@ -1,5 +1,6 @@
 import angular from 'angular';
 import 'user';
+import 'author';
 import 'app-config';
 import 'js/shims';
 import 'js/widget-api';
@@ -16,7 +17,7 @@ import 'sceditor';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
-  'app.widgetApi', 'app.config', 'app.user', 'app.info']);
+  'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
 
 app.factory('appUrls', function (appName) {
   return {
@@ -339,6 +340,18 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
       }
     });
   };
+});
+
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfigPromise, appConfig, author) {
+  $scope.appName = appName + window.Math.random();
+
+  $rootScope.$on('$stateChangeSuccess', () =>
+    $scope.pageName = appConfig.pageConfig().shortTitle
+  );
+
+  $scope.author = author.name;
+  $scope.keywords = 'App keywords';  // TODO
+  $scope.description = 'App description';  // TODO
 });
 
 app.controller('MainController', function ($scope, $location, $cookies,

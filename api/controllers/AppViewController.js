@@ -12,6 +12,10 @@ module.exports = {
       .then(function (app) {
         res.view('app', {
           app: app,
+          ownerInfo: !app.owner ? {} : {
+            name: app.owner.name,
+            email: app.owner.email
+          },
           isAppOwner: !app.owner || (req.user && req.user.id === app.owner.id)
         });
       }).catch(function (err) {
