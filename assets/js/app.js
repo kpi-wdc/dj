@@ -137,7 +137,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
             .then((result) => result.data);
         });
       },
-      controller: 'PageCtrl'
+      controller: 'PageController'
     });
 });
 
@@ -341,8 +341,8 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
   };
 });
 
-app.controller('MainCtrl', function ($scope, $location, $cookies,
-                                     alert, appConfig) {
+app.controller('MainController', function ($scope, $location, $cookies,
+                                           alert, appConfig) {
   let cnf = $scope.globalConfig = {};
 
   $scope.appConfig = appConfig;
@@ -367,7 +367,7 @@ app.controller('MainCtrl', function ($scope, $location, $cookies,
   };
 });
 
-app.controller('PageCtrl', function ($scope, pageConfig, widgetManager) {
+app.controller('PageController', function ($scope, pageConfig, widgetManager) {
   $scope.config = pageConfig;
   $scope.deleteIthWidgetFromHolder = widgetManager.deleteIthWidgetFromHolder.bind(widgetManager);
   $scope.openWidgetConfigurationDialog = widgetManager.openWidgetConfigurationDialog.bind(widgetManager);

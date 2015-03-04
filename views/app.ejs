@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css">
   <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
   <link rel="stylesheet" href="/css/main.css">
-  <title>World Data Center</title>
+  <title>{{pageName}} - {{appName}}</title>
   <% /* The following should be inside <head> tag! */ %>
   <% include ga.ejs %>
 </head>
-<body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
+<body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
   <div ng-if="globalConfig.designMode" id="page-design-panel" ng-cloak>
     <h3>Design mode panel</h3>
