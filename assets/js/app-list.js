@@ -11,14 +11,26 @@ appList.controller('AppListController', function ($scope, $http, $window,
   $scope.user = user;
   $scope.apps = appList;
 
+  $scope.oldApps = $scope.apps;
+
+  $scope.saveApps = () => {
+    $scope.oldApps = angular.copy($scope.apps);
+  }
+
+  $scope.restoreApps = () => {
+    $scope.apps = $scope.oldApps;
+  }
+
   $scope.createApp = function () {
     const appName = $scope.model.newAppName;
 
+    $scope.saveApps();
     $scope.apps.push({
       appName: appName,
       owner: user
     });
     $http.get(`/api/app/create/${appName}`).error((data, error) => {
+      $scope.restoreApps();
       alert.error(`Error while creating the app (${error}): ${data}`);
     });
   };
@@ -28,8 +40,11 @@ appList.controller('AppListController', function ($scope, $http, $window,
     if (!newAppName) {
       return;
     }
+
+    $scope.saveApps();
     $scope.apps[$scope.apps.findIndex(app => appName === app.appName)].appName = newAppName;
     $http.get(`/api/app/rename/${appName}/${newAppName}/`).error((data, error) => {
+      $scope.restoreApps();
       alert.error(`Error while renaming the app (${error}): ${data}`);
     });
   };
@@ -40,8 +55,10 @@ appList.controller('AppListController', function ($scope, $http, $window,
       return;
     }
 
+    $scope.saveApps();
     $scope.apps.splice($scope.apps.findIndex(app => appName === app.appName), 1);
     $http.get(`/api/app/delete/${appName}`).error((data, error) => {
+      $scope.restoreApps();
       alert.error(`Error while deleting the app (${error}): ${data}`);
     });
   };
