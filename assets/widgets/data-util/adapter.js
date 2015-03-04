@@ -2,20 +2,9 @@
 
 require.config({
   paths: {
-    jsinq: "components/jsinq/source/jsinq",
-    "jsinq-query": "components/jsinq/source/jsinq-query",
     stat: "widgets/data-util/stat",
     pca: "widgets/data-util/pca",
     cluster: "widgets/data-util/cluster"
-
-  },
-  shim: {
-    jsinq: {
-      exports: "jsinq"
-    },
-    "jsinq-query": {
-      deps: ["jsinq"]
-    }
   }
 });
 

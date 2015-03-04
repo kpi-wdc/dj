@@ -1,20 +1,3 @@
-require.config({
-  paths: {
-    'jsinq': 'components/jsinq/source/jsinq',
-    'jsinq-query': 'components/jsinq/source/jsinq-query',
-
-  },
-  shim: {
-    'jsinq': {
-      exports: 'jsinq'
-    },
-    'jsinq-query': {
-      deps: ['jsinq']
-    }
-  }
-});
-
-
 define(['angular', 'jsinq', 'jsinq-query'], function (angular, jsinq) {
 
   var m = angular.module('app.widgets.data-util.table-adapter', []);

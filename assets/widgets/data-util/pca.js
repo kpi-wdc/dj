@@ -1,15 +1,3 @@
-require.config({
-  paths: {
-    'd3': '/components/d3/d3'
-  },
-  shim: {
-    'd3': {
-      exports: 'd3'
-    }
-  }
-});
-
-
 define(['angular', "d3"], function (angular, d3) {
 
   var m = angular.module('app.widgets.data-util.pca', []);

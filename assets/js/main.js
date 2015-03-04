@@ -14,10 +14,17 @@ require.config({
     'angular-foundation': 'components/angular-foundation/mm-foundation-tpls',
     'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor',
     'json-editor': 'components/json-editor/dist/jsoneditor',
+    'angular-cookies': 'components/angular-cookies/angular-cookies',
+
+    // Standard libs for widgets:
+    'sceditor': 'components/SCEditor/src/jquery.sceditor',
     'leaflet': 'components/leaflet/dist/leaflet',
     'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
-    'angular-cookies': 'components/angular-cookies/angular-cookies',
-    'sceditor': 'components/SCEditor/src/jquery.sceditor'
+    'd3': 'components/d3/d3',
+    'jsinq': "components/jsinq/source/jsinq",
+    'jsinq-query': "components/jsinq/source/jsinq-query",
+    'json-stat': 'components/jsonstat/json-stat.max',
+    'nv.d3': 'components/nvd3/nv.d3'
   },
 
   // Add angular modules that does not support AMD out of the box, put it in a shim
@@ -26,9 +33,6 @@ require.config({
       deps: ['jquery'],
       exports: 'angular'
     },
-    'leaflet': {
-      exports: 'L'
-    },
     'jquery': {
       exports: '$'
     },
@@ -36,15 +40,37 @@ require.config({
       deps: ['sceditor'],
       exports: 'JSONEditor'
     },
-    'sceditor': ['jquery'],
     'angular-mocks': ['angular'],
-    'angular-leaflet': ['angular', 'leaflet'],
     'angular-ui-router': ['angular'],
     'ngstorage': ['angular'],
     'angular-oclazyload': ['angular'],
     'angular-foundation': ['angular'],
     'angular-json-editor': ['angular', 'json-editor'],
-    'angular-cookies': ['angular']
+    'angular-cookies': ['angular'],
+
+    // Non-required by core (widgets):
+
+    'sceditor': ['jquery'],
+    'leaflet': {
+      exports: 'L'
+    },
+    'angular-leaflet': ['angular', 'leaflet'],
+    'd3': {
+      exports: 'd3'
+    },
+    'jsinq': {
+      exports: 'jsinq'
+    },
+    'jsinq-query': {
+      deps: ['jsinq']
+    },
+    'json-stat': {
+      exports: 'JSONstat'
+    },
+    'nv.d3': {
+      exports: 'nv',
+      deps: ['d3']
+    }
   }
 });
 

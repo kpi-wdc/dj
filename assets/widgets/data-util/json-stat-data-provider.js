@@ -1,24 +1,3 @@
-require.config({
-  paths: {
-    'jsinq': 'components/jsinq/source/jsinq',
-    'jsinq-query': 'components/jsinq/source/jsinq-query',
-    'json-stat': 'components/jsonstat/json-stat.max'
-
-  },
-  shim: {
-    'jsinq': {
-      exports: 'jsinq'
-    },
-    'jsinq-query': {
-      deps: ['jsinq']
-    },
-    'json-stat': {
-      exports: 'JSONstat'
-    }
-  }
-});
-
-
 define(['angular', 'jsinq', 'json-stat', 'jsinq-query'], function (angular, jsinc, JSONstat) {
   var m = angular.module('app.widgets.data-util.json-stat-data-provider', []);
 

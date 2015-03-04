@@ -2,30 +2,20 @@
 
 require.config({
   paths: {
-    d3: "/components/d3/d3",
-    topojson: "/widgets/nvd3-widget/topojson",
-  
-    "nv.d3": "/components/nvd3/nv.d3",
-    "nv.d3.ext": "/widgets/nvd3-widget/nv.d3.ext",
-    "angular-nvd3": "/widgets/nvd3-widget/angular-nvd3-ext"
+    'topojson': 'widgets/nvd3-widget/topojson',
+    'nv.d3.ext': 'widgets/nvd3-widget/nv.d3.ext',
+    'angular-nvd3': 'widgets/nvd3-widget/angular-nvd3-ext'
   },
   shim: {
-    d3: {
-      exports: "d3"
+    'topojson': {
+      exports: 'topojson'
     },
-    "nv.d3": {
-      exports: "nv",
-      deps: ["d3"]
+    'nv.d3.ext': {
+      exports: 'nv',
+      deps: ['nv.d3', 'topojson']
     },
-    topojson: {
-      exports: "topojson"
-    },
-    "nv.d3.ext": {
-      exports: "nv",
-      deps: ["nv.d3", "topojson"]
-    },
-    "angular-nvd3": {
-      deps: ["nv.d3.ext"]
+    'angular-nvd3': {
+      deps: ['nv.d3.ext']
     }
   }
 });
