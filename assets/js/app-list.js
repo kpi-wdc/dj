@@ -3,7 +3,7 @@ import 'js/info'
 import 'appList.list';
 import 'user'
 
-const appList = angular.module('appList', ['app.user', 'appList.list', 'info']);
+const appList = angular.module('appList', ['app.user', 'appList.list', 'app.info']);
 
 appList.controller('AppListController', function ($scope, $http, $window,
                                                   appList, prompt, alert,

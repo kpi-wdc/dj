@@ -16,7 +16,7 @@ import 'sceditor';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
-  'app.widgetApi', 'app.config', 'app.user', 'info']);
+  'app.widgetApi', 'app.config', 'app.user', 'app.info']);
 
 app.factory('appUrls', function (appName) {
   return {

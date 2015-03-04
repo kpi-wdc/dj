@@ -1,7 +1,7 @@
 import angular from 'angular';
 import 'angular-foundation';
 
-const info = angular.module('info', ['mm.foundation']);
+const info = angular.module('app.info', ['mm.foundation']);
 
 info.service('alert', function ($modal, $log) {
   this.error = (msg) => {
