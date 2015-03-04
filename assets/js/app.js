@@ -343,11 +343,12 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
 });
 
 app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfigPromise, appConfig, author) {
-  $scope.appName = appName + window.Math.random();
+  $scope.title = appName;
 
-  $rootScope.$on('$stateChangeSuccess', () =>
-    $scope.pageName = appConfig.pageConfig().shortTitle
-  );
+  $rootScope.$on('$stateChangeSuccess', () => {
+    const pageName = appConfig.pageConfig().shortTitle;
+    $scope.title = pageName + ' - ' + appName;
+  });
 
   $scope.author = author.name;
   $scope.keywords = 'App keywords';  // TODO
