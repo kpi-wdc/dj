@@ -104,7 +104,7 @@
 <script>
   define('user', ['angular'], function (angular) {
     angular.module('app.user', [])
-      .constant('user', <%- JSON.stringify(user) %>);
+      .constant('user', <%- JSON.stringify(user || {}) %>);
   });
 
   define('author', ['angular'], function (angular) {

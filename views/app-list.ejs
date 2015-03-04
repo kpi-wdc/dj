@@ -59,7 +59,7 @@
 
     define('user', ['angular'], function (angular) {
       angular.module('app.user', [])
-        .constant('user', <%- JSON.stringify(user) %>);
+        .constant('user', <%- JSON.stringify(user || {}) %>);
     });
 
     require(['js/app-list']); // Kick-start the app!
