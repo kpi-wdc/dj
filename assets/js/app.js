@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'user';
 import 'app-config';
 import 'js/shims';
 import 'js/widget-api';
@@ -15,7 +16,7 @@ import 'sceditor';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
-  'app.widgetApi', 'app.config', 'info']);
+  'app.widgetApi', 'app.config', 'app.user', 'info']);
 
 app.factory('appUrls', function (appName) {
   return {

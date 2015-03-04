@@ -99,6 +99,11 @@
 <script src="/components/requirejs/require.js"></script>
 <script src="/js/main.js"></script>
 <script>
+  define('user', ['angular'], function (angular) {
+    angular.module('app.user', [])
+      .constant('user', <%- JSON.stringify(user) %>);
+  });
+
   define('app-config', ['angular'], function (angular) {
     angular.module('app.config', [])
       .constant('appName', "<%= app.appName %>")

@@ -1,10 +1,14 @@
 import angular from 'angular';
 import 'js/info'
 import 'appList.list';
+import 'user'
 
-const appList = angular.module('appList', ['appList.list', 'info']);
+const appList = angular.module('appList', ['app.user', 'appList.list', 'info']);
 
-appList.controller('AppListController', function ($scope, $http, $window, appList, prompt, alert) {
+appList.controller('AppListController', function ($scope, $http, $window,
+                                                  appList, prompt, alert,
+                                                  user) {
+  $scope.user = user;
   $scope.apps = appList;
 
   $scope.createApp = function () {
@@ -12,10 +16,7 @@ appList.controller('AppListController', function ($scope, $http, $window, appLis
 
     $scope.apps.push({
       appName: appName,
-      owner: {
-        name: 'You',
-        email: 'your-email@gmail.com'
-      }
+      owner: user
     });
     $http.get(`/api/app/create/${appName}`).error((data, error) => {
       alert.error(`Error while creating the app (${error}): ${data}`);
