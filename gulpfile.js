@@ -195,8 +195,8 @@ gulp.task('build-widgets-js', ['move-widgets'], function () {
     .pipe(plugins.cached('build-widgets-js'))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel())
-    .pipe(plugins.sourcemaps.write('.'))
     .on('error', handleError)
+    .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/widgets'));
 });
 
