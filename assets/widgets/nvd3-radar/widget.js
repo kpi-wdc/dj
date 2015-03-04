@@ -1,7 +1,7 @@
 define([
     'angular',
-    '/widgets/nvd3-widget/nvd3-widget.js',
-    '/widgets/data-dialogs/radar-chart-dialog.js'
+    'widgets/nvd3-widget/nvd3-widget.js',
+    'widgets/data-dialogs/radar-chart-dialog.js'
   ],
   function (angular) {
 

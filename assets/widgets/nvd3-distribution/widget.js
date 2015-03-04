@@ -1,8 +1,8 @@
 define([
     'angular',
-    '/widgets/nvd3-widget/nvd3-widget.js',
-    '/widgets/data-util/adapter.js',
-    '/widgets/data-dialogs/distribution-dialog.js'
+    'widgets/nvd3-widget/nvd3-widget.js',
+    'widgets/data-util/adapter.js',
+    'widgets/data-dialogs/distribution-dialog.js'
   ],
   function (angular) {
 

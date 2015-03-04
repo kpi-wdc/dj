@@ -1,8 +1,8 @@
 define([
     'angular',
-    '/widgets/nvd3-widget/nvd3-widget.js',
-    '/widgets/data-util/adapter.js',
-    '/widgets/data-dialogs/dependency-chord-dialog.js'
+    'widgets/nvd3-widget/nvd3-widget.js',
+    'widgets/data-util/adapter.js',
+    'widgets/data-dialogs/dependency-chord-dialog.js'
   ],
   function (angular) {
 
