@@ -8,8 +8,6 @@ module.exports = function (config) {
       // HACK: manually inject RequireJS framework
       // otherwise it's impossible to load polyfills before other code
       // Note: RequireJS is not listed in `frameworks` property
-      'components/requirejs/require.js',
-      '../../node_modules/karma-requirejs/lib/adapter.js',
       // END OF HACK
       'js/main.js',
       {pattern: 'js/*.js', included: false},
@@ -20,9 +18,9 @@ module.exports = function (config) {
 
     autoWatch: true,
 
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'systemjs'],
 
-    browsers: ['PhantomJS'],
+    browsers: ['Firefox'],
 
     singleRun: true,
 
@@ -50,7 +48,7 @@ module.exports = function (config) {
       'karma-firefox-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-requirejs',
+      'karma-systemjs',
       'karma-coverage',
       'karma-junit-reporter'
     ]

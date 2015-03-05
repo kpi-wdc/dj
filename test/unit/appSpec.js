@@ -14,7 +14,7 @@ define('author', ['angular'], function (angular) {
   angular.module('app.author', []).constant('author', {});
 });
 
-define(['js/app', 'angular-mocks'], () => {
+define(['app', 'angular-mocks'], () => {
   beforeEach(module('app'));
 
   let noWidgetsJson = {};

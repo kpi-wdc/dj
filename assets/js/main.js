@@ -102,18 +102,21 @@ System.config({
   // are we unit-testing now?
   const isUnitTesting = window.__karma__ !== undefined;
   if (isUnitTesting) {
-    const tests = [];
-    for (let file in window.__karma__.files) {
-      if (window.__karma__.files.hasOwnProperty(file)) {
-        if (/Spec\.js$/.test(file)) {
-          tests.push(file);
+    const testPaths = {};
+    for (let path in window.__karma__.files) {
+      if (window.__karma__.files.hasOwnProperty(path)) {
+        const match = path.match(/[\\\/]([^\\\/]*)Spec\.js$/);
+        if (match) {
+          testPaths[match[1]] = path;
         }
       }
     }
-    require.config({
-      baseUrl: '/base',
-      deps: tests,
-      callback: window.__karma__.start
+
+    System.config({
+      baseURL: '/base'
     });
+
+    System.register('tests', Object.keys(testPaths));
+    System.import('tests').then(window.__karma__.start);
   }
 })();
