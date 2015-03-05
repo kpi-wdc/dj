@@ -50,7 +50,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 
   $ocLazyLoadProvider.config({
     loadedModules: ['app'],
-    asyncLoader: require
+    asyncLoader: System.amdRequire.bind(System)
   });
 
   JSONEditorProvider.configure({
