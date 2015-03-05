@@ -1,16 +1,19 @@
 System.config({
-  baseUrl: '/',
+  baseURL: '/',
   // alias libraries paths.
   // IMPORTANT NOTE: don't add slash before components
   // (use components instead of /components)
   paths: {
     'app': '/js/app.js',
+    'app-list': '/js/app-list.js',
     'info': '/js/info.js',
+    'shims': '/js/shims.js',
+    'widget-api': '/js/widget-api.js',
+    'template-cached-pages': '/js/templates.js',
 
     'jquery': '/components/jquery/dist/jquery.js',
     'angular': '/components/angular/angular.js',
     'angular-mocks': '/components/angular-mocks/angular-mocks.js',
-    'template-cached-pages': 'js/templates.js',
     'angular-ui-router': '/components/angular-ui-router/release/angular-ui-router.js',
     'ngstorage': '/components/ngstorage/ngStorage.js',
     'angular-oclazyload': '/components/oclazyload/dist/ocLazyLoad.js',
@@ -43,21 +46,39 @@ System.config({
       deps: ['sceditor'],
       exports: 'JSONEditor'
     },
-    'angular-mocks': ['angular'],
-    'angular-ui-router': ['angular'],
-    'ngstorage': ['angular'],
-    'angular-oclazyload': ['angular'],
-    'angular-foundation': ['angular'],
-    'angular-json-editor': ['angular', 'json-editor'],
-    'angular-cookies': ['angular'],
+    'angular-mocks': {
+      deps: ['angular']
+    },
+    'angular-ui-router': {
+      deps: ['angular']
+    },
+    'ngstorage': {
+      deps: ['angular']
+    },
+    'angular-oclazyload': {
+      deps: ['angular']
+    },
+    'angular-foundation': {
+      deps: ['angular']
+    },
+    'angular-json-editor': {
+      deps: ['angular', 'json-editor']
+    },
+    'angular-cookies': {
+      deps: ['angular']
+    },
 
     // Non-required by core (widgets):
 
-    'sceditor': ['jquery'],
+    'sceditor': {
+      deps: ['jquery']
+    },
     'leaflet': {
       exports: 'L'
     },
-    'angular-leaflet': ['angular', 'leaflet'],
+    'angular-leaflet': {
+      deps: ['angular', 'leaflet']
+    },
     'd3': {
       exports: 'd3'
     },
