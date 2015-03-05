@@ -1,34 +1,37 @@
-require.config({
+System.config({
   baseUrl: '/',
   // alias libraries paths.
   // IMPORTANT NOTE: don't add slash before components
   // (use components instead of /components)
   paths: {
-    'jquery': 'components/jquery/dist/jquery',
-    'angular': 'components/angular/angular',
-    'angular-mocks': 'components/angular-mocks/angular-mocks',
-    'template-cached-pages': 'js/templates',
-    'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
-    'ngstorage': 'components/ngstorage/ngStorage',
-    'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad',
-    'angular-foundation': 'components/angular-foundation/mm-foundation-tpls',
-    'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor',
-    'json-editor': 'components/json-editor/dist/jsoneditor',
-    'angular-cookies': 'components/angular-cookies/angular-cookies',
+    'app': '/js/app.js',
+    'info': '/js/info.js',
 
-    // Standard libs for widgets:
-    'sceditor': 'components/SCEditor/src/jquery.sceditor',
-    'leaflet': 'components/leaflet/dist/leaflet',
-    'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
-    'd3': 'components/d3/d3',
-    'jsinq': "components/jsinq/source/jsinq",
-    'jsinq-query': "components/jsinq/source/jsinq-query",
-    'json-stat': 'components/jsonstat/json-stat.max',
-    'nv.d3': 'components/nvd3/nv.d3'
+    'jquery': '/components/jquery/dist/jquery.js',
+    'angular': '/components/angular/angular.js',
+    'angular-mocks': '/components/angular-mocks/angular-mocks.js',
+    'template-cached-pages': 'js/templates.js',
+    'angular-ui-router': '/components/angular-ui-router/release/angular-ui-router.js',
+    'ngstorage': '/components/ngstorage/ngStorage.js',
+    'angular-oclazyload': '/components/oclazyload/dist/ocLazyLoad.js',
+    'angular-foundation': '/components/angular-foundation/mm-foundation-tpls.js',
+    'angular-json-editor': '/components/angular-json-editor/src/angular-json-editor.js',
+    'json-editor': '/components/json-editor/dist/jsoneditor.js',
+    'angular-cookies': '/components/angular-cookies/angular-cookies.js',
+
+    // Standard libs for widget.jss:
+    'sceditor': '/components/SCEditor/src/jquery.sceditor.js',
+    'leaflet': '/components/leaflet/dist/leaflet.js',
+    'angular-leaflet': '/components/angular-leaflet/dist/angular-leaflet-directive.js',
+    'd3': '/components/d3/d3.js',
+    'jsinq': "/components/jsinq/source/jsinq.js",
+    'jsinq-query': "/components/jsinq/source/jsinq-query.js",
+    'json-stat': '/components/jsonstat/json-stat.max.js',
+    'nv.d3': '/components/nvd3/nv.d3'
   },
 
   // Add angular modules that does not support AMD out of the box, put it in a shim
-  shim: {
+  meta: {
     'angular': {
       deps: ['jquery'],
       exports: 'angular'

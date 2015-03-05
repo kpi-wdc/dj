@@ -49,7 +49,12 @@
   <% } %>
 
   <script src="/js/es6-polyfill.js"></script>
-  <script src="/components/requirejs/require.js"></script>
+  <script src="/components/es6-module-loader/dist/es6-module-loader.js"></script>
+  <script src="/components/system.js/dist/system.js"></script>
+  <script>
+    window.define = System.amdDefine;
+    window.require = window.requirejs = System.amdRequire;
+  </script>
   <script src="/js/main.js"></script>
   <script>
     define('appList.list', ['angular'], function (angular) {
@@ -62,7 +67,7 @@
         .constant('user', <%- JSON.stringify(user || {}) %>);
     });
 
-    require(['js/app-list']); // Kick-start the app!
+    System.import('js/app-list'); // Kick-start the app!
   </script>
 </body>
 </html>

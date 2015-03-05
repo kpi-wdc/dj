@@ -167,7 +167,7 @@ gulp.task('compile-js', function () {
     .pipe(plugins.if(function (file) {
         return file.relative !== 'main.js';
       },
-      plugins.babel({modules: 'amd'}),
+      plugins.babel({modules: 'system'}),
       plugins.babel())
      ).on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
