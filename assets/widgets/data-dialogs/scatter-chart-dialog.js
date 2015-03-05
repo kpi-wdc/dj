@@ -1,8 +1,8 @@
 define(["angular",
-    "/widgets/data-util/keyset.js",
-    "/widgets/data-util/adapter.js",
+    "widgets/data-util/keyset",
+    "widgets/data-util/adapter",
     'angular-foundation',
-    "/widgets/data-dialogs/palettes1.js"
+    "widgets/data-dialogs/palettes1"
   ],
   function (angular) {
     var m = angular.module('app.widgets.data-dialogs.scatter-chart-dialog', [

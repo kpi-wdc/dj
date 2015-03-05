@@ -1,8 +1,8 @@
 define([
     'angular',
-    "/widgets/data-util/json-stat-data-provider.js",
-    "/widgets/data-dialogs/bar-chart-dialog.js",
-    "/widgets/data-util/adapter.js"
+    "widgets/data-util/json-stat-data-provider",
+    "widgets/data-dialogs/bar-chart-dialog",
+    "widgets/data-util/adapter"
 
   ],
   function (angular) {

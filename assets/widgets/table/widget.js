@@ -1,8 +1,8 @@
 define([
     'angular',
-    'widgets/table/data-widget.js',
-    'widgets/data-dialogs/data-table-dialog.js',
-    'widgets/data-util/adapter.js'
+    'widgets/table/data-widget',
+    'widgets/data-dialogs/data-table-dialog',
+    'widgets/data-util/adapter'
   ],
   function (angular) {
 

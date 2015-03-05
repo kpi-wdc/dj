@@ -1,8 +1,8 @@
 "use strict";
 
-define(["angular", 
-  "/widgets/nvd3-widget/nvd3-widget.js", "/widgets/data-util/adapter.js", 
-  "/widgets/data-dialogs/map-chart-dialog.js"], 
+define(["angular",
+  "widgets/nvd3-widget/nvd3-widget.js", "widgets/data-util/adapter.js",
+  "widgets/data-dialogs/map-chart-dialog.js"],
   function (angular) {
   var m = angular.module("app.widgets.nvd3-map", 
     ["app.widgets.nvd3-widget", "app.widgets.data-util.adapter", "app.widgets.data-dialogs.map-chart-dialog"]);

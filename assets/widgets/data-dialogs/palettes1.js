@@ -1,8 +1,8 @@
-require.config({
+System.config({
   paths: {
-    'colors': 'widgets/data-dialogs/colorbrewer'
+    'colors': 'widgets/data-dialogs/colorbrewer.js'
   },
-  shim: {
+  meta: {
     'colors': {
       exports: 'colorbrewer'
     }
