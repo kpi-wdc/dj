@@ -235,7 +235,7 @@ gulp.task('copy-static-files', function () {
 
 if (!npmProduction) {
   gulp.task('test', (isFlagPositive(argv.skipTests) ? [] :
-    []), function (cb) {
+    ['unit-test']), function (cb) {
     if (isEnvEnabled('SEND_COVERAGE')) {
       runSequence('coveralls', cb);
     } else {
@@ -243,7 +243,9 @@ if (!npmProduction) {
     }
   });
 
-  gulp.task('unit-test', ['build', 'build-unit-test'], function (done) {
+  gulp.task('unit-test', ['copy-es6-polyfill',
+    'build-template-cache',
+    'build-components'], function (done) {
     var karma = require('karma').server;
     var conf = {
       configFile: __dirname + '/karma.conf.js',
@@ -253,19 +255,8 @@ if (!npmProduction) {
     karma.start(conf, done);
   });
 
-  gulp.task('build-unit-test', function () {
-    return gulp.src('test/unit/**/*.js')
-      .pipe(plugins.changed(buildPublicDir + '/test/unit'))
-      .pipe(plugins.sourcemaps.init())
-      .pipe(plugins.babel())
-      .pipe(plugins.sourcemaps.write('.'))
-      .on('error', handleError)
-      .pipe(gulp.dest(buildDir + '/test/unit'));
-  });
-
   gulp.task('coveralls', function () {
-    return gulp.src(buildDir + '/coverage/**/lcov.info')
-      .pipe(plugins.replace(/SF:\./g, 'SF:./' + buildPublicDir))
+    return gulp.src(buildDir + '/coverage/**/lcov.info', {base: buildDir + '/..'})
       .pipe(plugins.coveralls());
   });
 
