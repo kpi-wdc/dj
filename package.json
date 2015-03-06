@@ -4,7 +4,7 @@
   "description": "Widget & statistical presentation platform",
   "private": true,
   "scripts": {
-    "postinstall": "gulp build",
+    "postinstall": "jspm install && gulp build",
     "start": "node --harmony ./node_modules/sails/bin/sails lift",
     "debug": "node --harmony debug ./node_modules/sails/bin/sails lift",
     "test": "gulp test"
