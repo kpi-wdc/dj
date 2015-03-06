@@ -256,8 +256,7 @@ if (!npmProduction) {
   });
 
   gulp.task('coveralls', function () {
-    return gulp.src(buildDir + '/coverage/**/lcov.info')
-      .pipe(plugins.replace(/SF:\./g, 'SF:./' + buildPublicDir))
+    return gulp.src(buildDir + '/coverage/**/lcov.info', {base: buildDir + '/..'})
       .pipe(plugins.coveralls());
   });
 
