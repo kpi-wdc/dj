@@ -8,9 +8,10 @@ cache:
   - .tmp/bower_components
 matrix:
   include:
-    - node_js: "0.12"
-      env: PRODUCTION=true
-    - node_js: "0.12"
-      env: SEND_COVERAGE=true
-    - node_js: "0.10"
-    - node_js: iojs
+  - node_js: '0.12'
+    env: PRODUCTION=true
+  - node_js: '0.12'
+    env: SEND_COVERAGE=true
+  - node_js: '0.10'
+  - node_js: iojs
+
