@@ -11,8 +11,7 @@ System.config({
 
 
 define(['angular', 'colors'], function (angular, colorbrewer) {
-
-  var result = [];
+  const result = [];
   for (var i in colorbrewer) {
     for (var j in colorbrewer[i]) {
       result.push(colorbrewer[i][j]);
