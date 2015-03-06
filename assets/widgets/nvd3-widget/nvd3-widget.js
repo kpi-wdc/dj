@@ -1,12 +1,12 @@
 "use strict";
 
-require.config({
+System.config({
   paths: {
-    'topojson': 'widgets/nvd3-widget/topojson',
-    'nv.d3.ext': 'widgets/nvd3-widget/nv.d3.ext',
-    'angular-nvd3': 'widgets/nvd3-widget/angular-nvd3-ext'
+    'topojson': 'widgets/nvd3-widget/topojson.js',
+    'nv.d3.ext': 'widgets/nvd3-widget/nv.d3.ext.js',
+    'angular-nvd3': 'widgets/nvd3-widget/angular-nvd3-ext.js'
   },
-  shim: {
+  meta: {
     'topojson': {
       exports: 'topojson'
     },
@@ -20,7 +20,7 @@ require.config({
   }
 });
 
-define(["angular", "angular-oclazyload", "angular-nvd3", "/widgets/data-util/adapter.js"], function (angular) {
+define(["angular", "angular-oclazyload", "angular-nvd3", "widgets/data-util/adapter"], function (angular) {
 
 
   var m = angular.module("app.widgets.nvd3-widget", ["oc.lazyLoad", "nvd3", "app.widgets.data-util.adapter"]);

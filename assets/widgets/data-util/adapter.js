@@ -1,10 +1,10 @@
 "use strict";
 
-require.config({
+System.config({
   paths: {
-    stat: "widgets/data-util/stat",
-    pca: "widgets/data-util/pca",
-    cluster: "widgets/data-util/cluster"
+    stat: "widgets/data-util/stat.js",
+    pca: "widgets/data-util/pca.js",
+    cluster: "widgets/data-util/cluster.js"
   }
 });
 

@@ -1,34 +1,40 @@
-require.config({
-  baseUrl: '/',
+System.config({
+  baseURL: '/',
   // alias libraries paths.
   // IMPORTANT NOTE: don't add slash before components
   // (use components instead of /components)
   paths: {
-    'jquery': 'components/jquery/dist/jquery',
-    'angular': 'components/angular/angular',
-    'angular-mocks': 'components/angular-mocks/angular-mocks',
-    'template-cached-pages': 'js/templates',
-    'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router',
-    'ngstorage': 'components/ngstorage/ngStorage',
-    'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad',
-    'angular-foundation': 'components/angular-foundation/mm-foundation-tpls',
-    'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor',
-    'json-editor': 'components/json-editor/dist/jsoneditor',
-    'angular-cookies': 'components/angular-cookies/angular-cookies',
+    'app': 'js/app.js',
+    'app-list': 'js/app-list.js',
+    'info': 'js/info.js',
+    'shims': 'js/shims.js',
+    'widget-api': 'js/widget-api.js',
+    'template-cached-pages': 'js/templates.js',
 
-    // Standard libs for widgets:
-    'sceditor': 'components/SCEditor/src/jquery.sceditor',
-    'leaflet': 'components/leaflet/dist/leaflet',
-    'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive',
-    'd3': 'components/d3/d3',
-    'jsinq': "components/jsinq/source/jsinq",
-    'jsinq-query': "components/jsinq/source/jsinq-query",
-    'json-stat': 'components/jsonstat/json-stat.max',
-    'nv.d3': 'components/nvd3/nv.d3'
+    'jquery': 'components/jquery/dist/jquery.js',
+    'angular': 'components/angular/angular.js',
+    'angular-mocks': 'components/angular-mocks/angular-mocks.js',
+    'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router.js',
+    'ngstorage': 'components/ngstorage/ngStorage.js',
+    'angular-oclazyload': 'components/oclazyload/dist/ocLazyLoad.js',
+    'angular-foundation': 'components/angular-foundation/mm-foundation-tpls.js',
+    'angular-json-editor': 'components/angular-json-editor/src/angular-json-editor.js',
+    'json-editor': 'components/json-editor/dist/jsoneditor.js',
+    'angular-cookies': 'components/angular-cookies/angular-cookies.js',
+
+    // Standard libs for widget.jss:
+    'sceditor': 'components/SCEditor/src/jquery.sceditor.js',
+    'leaflet': 'components/leaflet/dist/leaflet.js',
+    'angular-leaflet': 'components/angular-leaflet/dist/angular-leaflet-directive.js',
+    'd3': 'components/d3/d3.js',
+    'jsinq': 'components/jsinq/source/jsinq.js',
+    'jsinq-query': 'components/jsinq/source/jsinq-query.js',
+    'json-stat': 'components/jsonstat/json-stat.max.js',
+    'nv.d3': 'components/nvd3/nv.d3.js'
   },
 
   // Add angular modules that does not support AMD out of the box, put it in a shim
-  shim: {
+  meta: {
     'angular': {
       deps: ['jquery'],
       exports: 'angular'
@@ -40,21 +46,39 @@ require.config({
       deps: ['sceditor'],
       exports: 'JSONEditor'
     },
-    'angular-mocks': ['angular'],
-    'angular-ui-router': ['angular'],
-    'ngstorage': ['angular'],
-    'angular-oclazyload': ['angular'],
-    'angular-foundation': ['angular'],
-    'angular-json-editor': ['angular', 'json-editor'],
-    'angular-cookies': ['angular'],
+    'angular-mocks': {
+      deps: ['angular']
+    },
+    'angular-ui-router': {
+      deps: ['angular']
+    },
+    'ngstorage': {
+      deps: ['angular']
+    },
+    'angular-oclazyload': {
+      deps: ['angular']
+    },
+    'angular-foundation': {
+      deps: ['angular']
+    },
+    'angular-json-editor': {
+      deps: ['angular', 'json-editor']
+    },
+    'angular-cookies': {
+      deps: ['angular']
+    },
 
     // Non-required by core (widgets):
 
-    'sceditor': ['jquery'],
+    'sceditor': {
+      deps: ['jquery']
+    },
     'leaflet': {
       exports: 'L'
     },
-    'angular-leaflet': ['angular', 'leaflet'],
+    'angular-leaflet': {
+      deps: ['angular', 'leaflet']
+    },
     'd3': {
       exports: 'd3'
     },
@@ -78,18 +102,21 @@ require.config({
   // are we unit-testing now?
   const isUnitTesting = window.__karma__ !== undefined;
   if (isUnitTesting) {
-    const tests = [];
-    for (let file in window.__karma__.files) {
-      if (window.__karma__.files.hasOwnProperty(file)) {
-        if (/Spec\.js$/.test(file)) {
-          tests.push(file);
+    const testPaths = {};
+    for (let path in window.__karma__.files) {
+      if (window.__karma__.files.hasOwnProperty(path)) {
+        const match = path.match(/[\\\/]([^\\\/]*)Spec\.js$/);
+        if (match) {
+          testPaths[match[1]] = path;
         }
       }
     }
-    require.config({
-      baseUrl: '/base',
-      deps: tests,
-      callback: window.__karma__.start
+
+    System.config({
+      baseURL: '/base'
     });
+
+    System.register('tests', Object.keys(testPaths));
+    System.import('tests').then(window.__karma__.start);
   }
 })();

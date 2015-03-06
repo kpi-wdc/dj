@@ -2,9 +2,9 @@ import angular from 'angular';
 import 'user';
 import 'author';
 import 'app-config';
-import 'js/shims';
-import 'js/widget-api';
-import 'js/info';
+import 'shims';
+import 'widget-api';
+import 'info';
 import 'angular-ui-router';
 import 'ngstorage';
 import 'angular-oclazyload';
@@ -36,7 +36,7 @@ app.factory('appUrls', function (appName) {
     widgetJS: widgetName =>
       `/widgets/${widgetName}/widget.js`,
     widgetJSModule: widgetName =>
-      `widgets/${widgetName}/widget.js`,
+      `widgets/${widgetName}/widget`,
     widgetHTML: widgetName =>
       `/widgets/${widgetName}/widget.html`,
     widgetIcon: widgetName =>
@@ -50,7 +50,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 
   $ocLazyLoadProvider.config({
     loadedModules: ['app'],
-    asyncLoader: require
+    asyncLoader: System.amdRequire.bind(System)
   });
 
   JSONEditorProvider.configure({

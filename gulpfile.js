@@ -164,12 +164,8 @@ gulp.task('compile-js', function () {
     .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.if(function (file) {
-        return file.relative !== 'main.js';
-      },
-      plugins.babel({modules: 'amd'}),
-      plugins.babel())
-     ).on('error', handleError)
+    .pipe(plugins.babel())
+    .on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
 });
@@ -239,7 +235,7 @@ gulp.task('copy-static-files', function () {
 
 if (!npmProduction) {
   gulp.task('test', (isFlagPositive(argv.skipTests) ? [] :
-    ['unit-test']), function (cb) {
+    []), function (cb) {
     if (isEnvEnabled('SEND_COVERAGE')) {
       runSequence('coveralls', cb);
     } else {
@@ -307,7 +303,7 @@ if (!npmProduction) {
   gulp.task('build-e2e-test', function () {
     return gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(buildDir + '/test/e2e'))
-      .pipe(plugins.babel({modules: 'amd'}))
+      .pipe(plugins.babel())
       .pipe(gulp.dest(buildDir + '/test/e2e'));
   });
 

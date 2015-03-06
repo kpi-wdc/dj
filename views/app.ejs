@@ -99,7 +99,12 @@
 </div>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="/js/es6-polyfill.js"></script>
-<script src="/components/requirejs/require.js"></script>
+<script src="/components/es6-module-loader/dist/es6-module-loader.src.js"></script>
+<script src="/components/system.js/dist/system.src.js"></script>
+<script>
+  window.define = System.amdDefine.bind(System);
+  window.require = window.requirejs = System.amdRequire.bind(System);
+</script>
 <script src="/js/main.js"></script>
 <script>
   define('user', ['angular'], function (angular) {
@@ -118,7 +123,7 @@
       .constant('initialConfig', <%- JSON.stringify(app.config) %>);
   });
 
-  require(['js/app']); // Kick-start the app!
+  System.import('app'); // Kick-start the app!
 </script>
 </body>
 </html>
