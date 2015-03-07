@@ -7,8 +7,6 @@ System.config({
     "shims": "js/shims.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
-    "jquery": "components/jquery/dist/jquery.js",
-    "angular": "components/angular/angular.js",
     "angular-mocks": "components/angular-mocks/angular-mocks.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
@@ -32,15 +30,6 @@ System.config({
 
 System.config({
   "meta": {
-    "angular": {
-      "deps": [
-        "jquery"
-      ],
-      "exports": "angular"
-    },
-    "jquery": {
-      "exports": "$"
-    },
     "json-editor": {
       "deps": [
         "sceditor"
@@ -122,7 +111,8 @@ System.config({
 
 System.config({
   "map": {
-    "text": "github:systemjs/plugin-text@0.0.2"
+    "angular": "github:angular/bower-angular@1.3.14",
+    "jquery": "github:components/jquery@2.1.3"
   }
 });
 
