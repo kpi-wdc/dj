@@ -20,7 +20,7 @@
     "jsonstat": "badosa/JSON-stat",
     "ngstorage": "0.3.0",
     "oclazyload": "0.5.2",
-    "SCEditor": "1.4.6",
+    "SCEditor": "1.4.4",
     "system.js": "0.15.0",
     "topojson": "1.6.18"
   },
