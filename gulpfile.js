@@ -171,7 +171,11 @@ gulp.task('compile-js', function () {
 });
 
 gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-components', 'compile-js'], function () {
-  return gulp.src([buildPublicDir + '/**/*.js', '!' + buildPublicDir + '/components/**/*'])
+  return gulp.src([
+      buildPublicDir + '/**/*.js',
+      '!' + buildPublicDir + '/components/**/*', ,
+      '!' + buildPublicDir + '/jspm_packages/**/*'
+    ])
     .pipe(plugins.cached('annotate-js'))
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
@@ -360,6 +364,6 @@ if (!npmProduction) {
 
 gulp.task('clean', function (cb) {
   return del([
-    buildDir
+    buildDir, '!' + buildPublicDir + '/jspm_packages'
   ], cb);
 });

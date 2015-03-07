@@ -34,7 +34,7 @@ module.exports = function (config) {
       '/base/js/templates.js': '/base/.tmp/public/js/templates.js',
       '/base/js': '/base/assets/js',
       '/base/components': '/base/.tmp/public/components',
-      '/jspm_packages': '/base/jspm_packages'
+      '/base/jspm_packages': '/base/.tmp/public/jspm_packages'
     },
 
     // level of logging
