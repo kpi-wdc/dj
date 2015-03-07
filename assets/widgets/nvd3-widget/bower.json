@@ -2,12 +2,6 @@
   "name": "nvd3-widget",
   "private": true,
   "dependencies": {
-    "angular-nvd3": "~0.0.9",
-    "topojson": "~1.5.2",
     "d3-tile": "https://raw.githubusercontent.com/d3/d3-plugins/master/geo/tile/tile.js"
-  },
-  "resolutions": {
-    "angular": "1.3.x",
-    "d3": "~3.4"
   }
 }
