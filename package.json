@@ -89,7 +89,7 @@
       "lib": "assets",
       "packages": "jspm_packages"
     },
-    "configFile": "assets/js/main.js",
+    "configFile": "assets/js/config.js",
     "dependencies": {
       "text": "github:systemjs/plugin-text@0.0.2"
     }

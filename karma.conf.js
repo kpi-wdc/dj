@@ -19,7 +19,7 @@ module.exports = function (config) {
 
     jspm: {
       // Edit this to your needs
-      config: 'assets/js/main.js',
+      config: 'assets/js/config.js',
       loadFiles: [
         'test/unit/*.js'
       ],
