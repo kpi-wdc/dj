@@ -17,7 +17,7 @@ System.config({
     "angular-json-editor": "components/angular-json-editor/src/angular-json-editor.js",
     "json-editor": "components/json-editor/dist/jsoneditor.js",
     "angular-cookies": "components/angular-cookies/angular-cookies.js",
-    "sceditor": "components/SCEditor/src/jquery.sceditor.js",
+    "sceditor": "components/SCEditor/minified/jquery.sceditor.min.js",
     "leaflet": "components/leaflet/dist/leaflet.js",
     "angular-leaflet": "components/angular-leaflet/dist/angular-leaflet-directive.js",
     "d3": "components/d3/d3.js",
