@@ -68,6 +68,7 @@
     "gulp-uglify": "1.1.0",
     "gulp-uglifyjs": "0.6.0",
     "jspm": "0.14.0",
+    "jspm-bower-endpoint": "0.2.0",
     "newrelic": "1.16.2",
     "oauth": "0.9.12",
     "passport": "0.2.1",
