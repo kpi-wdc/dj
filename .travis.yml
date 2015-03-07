@@ -5,6 +5,7 @@ sudo: false
 cache:
   directories:
   - node_modules
+  - jspm_packages
   - .tmp/bower_components
 before_install:
 - npm install jspm
