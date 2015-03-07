@@ -57,7 +57,7 @@
   </script>
   <script src="/js/main.js"></script>
   <script>
-    define('appList.list', ['angular'], function (angular) {
+    define('app-list/list', ['angular'], function (angular) {
       angular.module('appList.list', [])
         .constant('appList', <%- JSON.stringify(apps) %>);
     });

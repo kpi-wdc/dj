@@ -1,6 +1,6 @@
 import angular from 'angular';
-import 'js/info'
-import 'appList.list';
+import 'app-list/list';
+import 'info'
 import 'user'
 
 const appList = angular.module('appList', ['app.user', 'appList.list', 'app.info']);
