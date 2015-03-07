@@ -12,7 +12,7 @@ import 'angular-foundation';
 import 'angular-json-editor';
 import 'angular-cookies';
 import 'template-cached-pages';
-import 'sceditor';
+import 'SCEditor';
 
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',

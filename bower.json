@@ -3,26 +3,11 @@
   "private": true,
   "version": "0.7.3",
   "dependencies": {
-    "angular": "1.3.14",
-    "angular-cookies": "1.3.14",
-    "angular-foundation": "0.5.1",
-    "angular-json-editor": "0.1.8",
-    "angular-leaflet": "0.7.11",
-    "angular-mocks": "1.3.14",
-    "angular-nvd3": "0.1.1",
-    "angular-ui-router": "0.2.13",
-    "es6-module-loader": "0.15.0",
     "foundation": "5.5.1",
     "foundation-icon-fonts": "zurb/foundation-icon-fonts",
     "javascript-state-machine": "jakesgordon/javascript-state-machine",
-    "jquery": "2.1.3",
     "jsinq": "hoehrmann/jsinq",
-    "jsonstat": "badosa/JSON-stat",
-    "ngstorage": "0.3.0",
-    "oclazyload": "0.5.2",
-    "SCEditor": "1.4.4",
-    "system.js": "0.15.0",
-    "topojson": "1.6.18"
+    "jsonstat": "badosa/JSON-stat"
   },
   "resolutions": {
     "angular": "1.3.14",

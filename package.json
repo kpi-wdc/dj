@@ -91,8 +91,22 @@
     },
     "configFile": "assets/js/main.js",
     "dependencies": {
-      "angular": "github:angular/bower-angular@^1.3.14",
-      "jquery": "github:components/jquery@^2.1.3"
+      "SCEditor": "bower:SCEditor@1.4.4",
+      "angular": "bower:angular@^1.3.14",
+      "angular-cookies": "bower:angular-cookies@^1.3.14",
+      "angular-foundation": "bower:angular-foundation@^0.5.1",
+      "angular-json-editor": "bower:angular-json-editor@^0.1.8",
+      "angular-leaflet": "bower:angular-leaflet@^0.7.11",
+      "angular-mocks": "bower:angular-mocks@^1.3.14",
+      "angular-nvd3": "bower:angular-nvd3@^0.1.1",
+      "angular-oclazyload": "bower:oclazyload@0.5.2",
+      "angular-ui-router": "bower:angular-ui-router@^0.2.13",
+      "d3": "bower:d3@^3.5.5",
+      "foundation": "bower:foundation@^5.5.1",
+      "jquery": "github:components/jquery@^2.1.3",
+      "ngstorage": "bower:ngstorage@^0.3.0",
+      "oclazyload": "bower:oclazyload@0.5.2",
+      "topojson": "bower:topojson@^1.6.18"
     }
   },
   "main": "app.js",
