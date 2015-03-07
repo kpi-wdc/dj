@@ -73,8 +73,8 @@ gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
       }
       return json;
     }))
-    .pipe(plugins.extend('bower.json'))
     .on('error', handleError)
+    .pipe(plugins.extend('bower.json'))
     .pipe(gulp.dest('.tmp'));
 });
 
