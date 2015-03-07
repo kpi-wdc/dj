@@ -3,6 +3,7 @@ config/local.js
 
 # Dependencies
 node_modules
+jspm_packages
 bower_components
 
 # Sails.js / Waterline / Grunt

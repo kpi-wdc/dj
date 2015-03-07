@@ -86,7 +86,8 @@
   "jspm": {
     "directories": {
       "baseURL": ".tmp/public",
-      "lib": "assets"
+      "lib": "assets",
+      "packages": "jspm_packages"
     },
     "configFile": "assets/js/main.js",
     "dependencies": {
