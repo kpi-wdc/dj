@@ -25,11 +25,24 @@ System.config({
     "nv.d3": "components/nvd3/nv.d3.js",
     "*": "*.js",
     "github:*": "jspm_packages/github/*.js"
+  },
   }
 });
 
 System.config({
   "meta": {
+    "app-config": {
+      "build": false
+    },
+    "author": {
+      "build": false
+    },
+    "user": {
+      "build": false
+    },
+    "app-list/list": {
+      "build": false
+    },
     "json-editor": {
       "deps": [
         "sceditor"
