@@ -26,8 +26,7 @@ System.config({
     "json-stat": "components/jsonstat/json-stat.max.js",
     "nv.d3": "components/nvd3/nv.d3.js",
     "*": "*.js",
-    "github:*": "jspm_packages/github/*.js",
-    "npm:*": "jspm_packages/npm/*.js"
+    "github:*": "../../jspm_packages/github/*.js"
   }
 });
 
@@ -118,6 +117,12 @@ System.config({
         "d3"
       ]
     }
+  }
+});
+
+System.config({
+  "map": {
+    "text": "github:systemjs/plugin-text@0.0.2"
   }
 });
 
