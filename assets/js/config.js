@@ -3,6 +3,7 @@ System.config({
   "paths": {
     "app": "js/app.js",
     "app-list": "js/app-list.js",
+    "data-sources": "js/data-sources.js",
     "info": "js/info.js",
     "shims": "js/shims.js",
     "widget-api": "js/widget-api.js",
