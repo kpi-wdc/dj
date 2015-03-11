@@ -16,7 +16,7 @@ module.exports = {
             name: app.owner.name,
             email: app.owner.email
           },
-          isAppOwner: !app.owner || (req.user && req.user.id === app.owner.id)
+          isAppOwner: req.user && (!app.owner || req.user.id === app.owner.id)
         });
       }).catch(function (err) {
         sails.log.silly(err);
