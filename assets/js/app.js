@@ -506,7 +506,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
       type,
       description: templateTypes.data[type].description,
       holders: templateTypes.data[type].holders,
-      icon: appUrls.templateIcon(currentTemplate.type)
+      icon: appUrls.templateIcon(type)
     };
 
     templateTypesArr.push(currentTemplate);
