@@ -7,7 +7,6 @@
     "node": "0.12.x"
   },
   "dependencies": {
-    "crypto": "0.0.3",
     "node-linq": "0.0.5",
     "node-xlsx": "0.5.1"
   }
