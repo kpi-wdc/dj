@@ -83,7 +83,7 @@
     "systemjs": "0.11.3",
     "traceur": "0.0.86",
     "validator": "3.32.0",
-    "xlsx2json": "./proc/xlsx2json",
+    "xlsx-json-parser": "file:proc/xlsx2json",
     "yargs": "3.0.4"
   },
   "jspm": {
