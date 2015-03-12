@@ -1,13 +1,12 @@
 var fs = require('fs');
 var LINQ = require('node-linq').LINQ;
 var XLSX = require('node-xlsx');
-var crypto = require('crypto');
 
 exports.get = function(filename) {
     var dimensionMap = [];
     var obj = XLSX.parse(filename);
     var result = {};
-    
+
     var metadata = new LINQ(obj)
         .Where(function(sheet){
             return sheet.name === "metadata";
@@ -87,7 +86,7 @@ exports.get = function(filename) {
     }
     forEachIndexes(0,result[datasetName].dimension.size ,[]);
     var json = JSON.stringify(result);
-    return [json, crypto.createHash('md5').update(json).digest('hex')];
+    return json;
 }
 
 function getMetadataValue(metadata,key){
@@ -100,7 +99,7 @@ function getMetadataValue(metadata,key){
             })
             .ToArray()[0];
     }
-    
+
 function getMetadataArray(metadata,key){
     var result = new LINQ(metadata)
         .Where(function(item){
