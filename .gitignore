@@ -3,7 +3,6 @@ config/local.js
 
 # Dependencies
 node_modules/
-!proc/**
 jspm_packages
 bower_components
 
