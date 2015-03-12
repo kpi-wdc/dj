@@ -14,7 +14,7 @@ module.exports = {
       type: 'json',
       required: true
     },
-    hash: {
+    dataSourceId: {
       type: 'string',
       unique: true,
       required: true

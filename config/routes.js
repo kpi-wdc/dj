@@ -39,8 +39,8 @@ module.exports.routes = {
   'get /api/app/delete/:appName': 'AppController.delete',
 
   // DataSource manipulation URLs
-  'post /data/api/dataSources' : 'DataSourceController.add',
-  'get /data/api/dataSource/:dataSourceId' : 'DataSourceController.getById',
+  'post /data/api/dataSource' : 'DataSourceController.add',
+  'get /data/api/dataSource/:dataSourceId' : 'DataSourceController.getByDataSourceId',
   'get /data/api/dataSources/' : 'DataSourceController.list',
 
   // DataSource view URLs

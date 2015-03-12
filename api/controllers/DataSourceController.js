@@ -23,31 +23,41 @@ module.exports = {
           return res.badRequest('No file was uploaded');
         }
 
-        var exec = require('child_process').exec;
-        var child = exec('node ./proc/xlsx2json/run.js ' + uploadedFiles[0].fd);
-        child.stdout.on('data', function(data) {
-          var jsonAndHash = data.split("|");
-          DataSource.create({
-            body: jsonAndHash[0],
-            hash: jsonAndHash[1]
-          }, function (err) {
-            if (err) {
-              sails.log.error('Error while adding new data source: ' + err);
-              res.serverError();
+        var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+        filecrypto.getMd5(uploadedFileAbsolutePath, function(md5) {
+          DataSource.findOne({hash : md5}).then(function (json) {
+            // json, corresponding to md5 hash already exists in a database,
+            // so there is no need to process xls again
+            if (json) {
+              return res.badRequest('This xls configuration has already been processed');
             } else {
-              res.ok();
+              var exec = require('child_process').exec;
+              var child = exec('node ./proc/xlsx2json/run.js ' + uploadedFileAbsolutePath);
+              child.stdout.on('data', function(json) {
+                DataSource.create({
+                  body: json,
+                  dataSourceId: md5
+                }, function (err) {
+                  if (err) {
+                    sails.log.error('Error while adding new data source: ' + err);
+                    return res.serverError();
+                  } else {
+                    return res.ok();
+                  }
+                });
+              });
+              child.stderr.on('data', function(err) {
+                sails.log.error('Error while adding new data source: ' + err);
+                return res.serverError();
+              });
+              child.on('close', function(code) {
+                if (code != 0) {
+                  sails.log.error('Error while adding new data source: ' + err);
+                  return res.serverError();
+                }
+              });
             }
           });
-        });
-        child.stderr.on('data', function(err) {
-          sails.log.error('Error while adding new data source: ' + err);
-          res.serverError();
-        });
-        child.on('close', function(code) {
-          if (code != 0) {
-            sails.log.error('Error while adding new data source: ' + err);
-            res.serverError();
-          }
         });
     });
   },
@@ -57,9 +67,9 @@ module.exports = {
    * `DataSourceController.getById()`
    *  Gets a data source by its id
    */
-  getById: function (req, res) {
+  getByDataSourceId: function (req, res) {
     DataSource.findOne({
-      id: req.params.dataSourceId
+      dataSourceId: req.params.dataSourceId
     }, function (err, found) {
       if (!err) {
         if (found) {
