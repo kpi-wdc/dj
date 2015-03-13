@@ -16,6 +16,5 @@ matrix:
     env: PRODUCTION=true
   - node_js: '0.12'
     env: SEND_COVERAGE=true
-  - node_js: '0.10'
   - node_js: iojs
 
