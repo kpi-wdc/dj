@@ -30,6 +30,10 @@ npm-debug.log
 # Documentation
 /docs
 
+
 # Testing xlsx files
 xlsx
+
+# Other
+*.swp # vim
 
