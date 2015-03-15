@@ -17,13 +17,11 @@ module.exports = {
         newApp.name = req.params.appName
         newApp.owner = req.user.id;
 
-        AppConfig.create(newApp, function (err) {
-          if (err) {
-            sails.log.error('Error while creating app: ' + err);
-            res.serverError();
-          } else {
-            res.ok();
-          }
+        AppConfig.create(newApp).then(function (created) {
+          res.ok();
+        }).catch(function (err) {
+          sails.log.error('Error while creating app: ' + err);
+          res.serverError();
         });
       })
       .catch(function (error) {
@@ -37,14 +35,15 @@ module.exports = {
       id: req.params.appId
     }, {
       pages: req.body.pages
-    }, function (err, updatedArr) {
-      if (err) {
-        res.serverError();
-      } else if (updatedArr.length === 0) {
+    }).then(function (updatedArr) {
+      if (updatedArr.length === 0) {
         res.forbidden();
       } else {
         res.ok();
       }
+    }).catch(function (err) {
+      sails.log.warn('AppController.update error: ' + err);
+      res.serverError();
     });
   },
 
@@ -53,30 +52,30 @@ module.exports = {
       id: req.params.appId
     }, {
       name: req.params.newAppName
-    }, function (err, updatedArr) {
-      if (err) {
-        sails.log.error('Error while renaming app: ' + err);
-        res.serverError();
-      } else if (updatedArr.length === 0) {
+    }).then(function (updatedArr) {
+      if (updatedArr.length === 0) {
         res.forbidden();
       } else {
         res.ok();
       }
+    }).catch(function (err) {
+      sails.log.error('Error while renaming app: ' + err);
+      res.serverError();
     });
   },
 
   delete: function (req, res) {
     AppConfig.destroy({
       id: req.params.appId
-    }, function (err, updatedArr) {
-      if (err) {
-        sails.log.error('Error while renaming app: ' + err);
-        res.serverError();
-      } else if (updatedArr.length === 0) {
+    }).then(function (updatedArr) {
+      if (updatedArr.length === 0) {
         res.forbidden();
       } else {
         res.ok();
       }
+    }).catch(function (err) {
+      sails.log.error('Error while deleting app: ' + err);
+      res.serverError();
     });
   }
 };
