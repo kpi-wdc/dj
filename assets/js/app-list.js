@@ -22,17 +22,23 @@ appList.controller('AppListController', function ($scope, $http, $window,
   }
 
   $scope.createApp = function () {
-    const appName = $scope.model.newAppName;
-
     $scope.saveApps();
-    $scope.apps.push({
-      name: appName,
+
+    const app = {
+      name: $scope.model.newAppName,
       owner: user
-    });
-    $http.get(`/api/app/create/${appName}`).error((data, error) => {
-      $scope.restoreApps();
-      alert.error(`Error while creating the app (${error}): ${data}`);
-    });
+    };
+
+    $scope.apps.push(app);
+
+    $http.get(`/api/app/create/${app.name}`)
+      .success(function (data) {
+        app.id = data.id;
+      })
+      .error((data, error) => {
+        $scope.restoreApps();
+        alert.error(`Error while creating the app (${error}): ${data}`);
+      });
   };
 
   $scope.renameApp = function (appId) {

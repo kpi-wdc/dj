@@ -18,7 +18,9 @@ module.exports = {
         newApp.owner = req.user.id;
 
         AppConfig.create(newApp).then(function (created) {
-          res.ok();
+          res.ok({
+            id: created.id
+          });
         }).catch(function (err) {
           sails.log.error('Error while creating app: ' + err);
           res.serverError();
