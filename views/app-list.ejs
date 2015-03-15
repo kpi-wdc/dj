@@ -31,10 +31,10 @@
       <a href="/app/{{app.appName}}/" class="button tiny success column small-2">View</a>
       <input type="button" class="button tiny column small-2"
           <% if (!user) { %> disabled <% } %>
-          value="Rename" ng-click="renameApp(app.appName)">
+          value="Rename" ng-click="renameApp(app.id)">
       <input type="button" class="button alert tiny column small-2"
           <% if (!user) { %> disabled <% } %>
-          value="Delete" ng-click="deleteApp(app.appName)">
+          value="Delete" ng-click="deleteApp(app.id, app.appName)">
     </div>
   </fieldset>
 

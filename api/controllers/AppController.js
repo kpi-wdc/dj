@@ -28,7 +28,7 @@ module.exports = {
 
   update: function (req, res) {
     AppConfig.update({
-      appName: req.params.appName
+      id: req.params.appId
     }, {
       pages: req.body.pages
     }, function (err, updatedArr) {
@@ -44,7 +44,7 @@ module.exports = {
 
   rename: function (req, res) {
     AppConfig.update({
-      appName: req.params.appName
+      id: req.params.appId
     }, {
       appName: req.params.newAppName
     }, function (err, updatedArr) {
@@ -61,7 +61,7 @@ module.exports = {
 
   delete: function (req, res) {
     AppConfig.destroy({
-      appName: req.params.appName
+      id: req.params.appId
     }, function (err, updatedArr) {
       if (err) {
         sails.log.error('Error while renaming app: ' + err);
