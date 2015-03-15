@@ -1,0 +1,36 @@
+{
+  "name": "default",
+  "pages": [{
+    "shortTitle": "Home",
+    "href": "",
+    "template": "1-col",
+    "holders": {
+      "column": {
+        "widgets": [{
+          "type": "title",
+          "title": "Home page",
+          "instanceName": "title-widget"
+        }, {
+          "type": "htmlwidget",
+          "instanceName": "main-page-html-widget",
+          "text": "<h3>Home page</h3> Empty home page. You can switch to design mode to edit this contents or add new widgets"
+        }]
+      }
+    }
+  }, {
+    "href": "404",
+    "template": "1-col",
+    "holders": {
+      "column": {
+        "widgets": [{
+          "type": "title",
+          "title": "404 error",
+          "instanceName": "title"
+        }, {"type": "htmlwidget", "text": "Page not found", "instanceName": "error-message"}]
+      }
+    }
+  }],
+  "title": "Title",
+  "description": "Description",
+  "isPublished": true
+}
