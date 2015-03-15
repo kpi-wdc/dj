@@ -23,7 +23,7 @@
   </div>
   <fieldset>
     <h4>List of apps:</h4>
-    <div ng-repeat="app in apps" class="row">
+    <div ng-repeat="app in apps | orderBy: 'name'" class="row">
       <span class="column small-6">
         <b ng-bind="app.name"></b>
         <span ng-if="app.owner.name">({{app.owner.name}})</span>
