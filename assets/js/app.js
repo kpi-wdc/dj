@@ -24,6 +24,7 @@ app.factory('appUrls', function (appName) {
     appConfig: `/api/app/config/${appName}`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
+    appSettingsHTML: '/partials/app-settings.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
     pageModalConfigHTML: '/partials/page-modal-config.html',
@@ -252,6 +253,14 @@ app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise
           return templateTypesPromise;
         }
       }
+    });
+  };
+
+  this.openAppSettingsDialog = () => {
+    $modal.open({
+      templateUrl: appUrls.appSettingsHTML,
+      controller: 'AppSettingsModalController',
+      backdrop: 'static'
     });
   };
 
@@ -587,6 +596,25 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
 
   $scope.isSelected = (template) =>
     $scope.chosenTemplate === template;
+});
+
+app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName) {
+  angular.extend($scope, {
+    settings: {
+      isPublished: true,
+      name: appName,
+      keywords: "",
+      title: ""
+    },
+
+    ok() {
+      $modalInstance.close();
+    },
+
+    cancel() {
+      $modalInstance.dismiss();
+    }
+  });
 });
 
 angular.bootstrap(document, ['app'], {

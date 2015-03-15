@@ -18,13 +18,16 @@
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
-  <div ng-if="globalConfig.designMode" id="page-design-panel" ng-cloak>
+  <div ng-if="true || globalConfig.designMode" id="page-design-panel" ng-cloak>
     <h3>Design mode panel</h3>
     <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
             disabled
             ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
       Submit changes to server
+    </button>
+    <button class="button tiny radius" ng-click="appConfig.openAppSettingsDialog()" id="appSettingsBtn">
+      App settings
     </button>
     <button class="button tiny radius" ng-click="appConfig.addNewPageInModal()"
             id="addNewPageBtn">
