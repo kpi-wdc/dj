@@ -92,10 +92,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     .state('page', {
       url: `/app/${appName}/:href`,
       resolve: {
-        pageConfig($stateParams, $q, alert, appConfig, widgetLoader) {
+        pageConfig($stateParams, $q, alert, app, config, widgetLoader) {
           // no idea why, but this doesn't work without wrapping in $q
           return $q(function (resolve, reject) {
-            const pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
+            const pageConfig = config.pages[app.pageIndexByHref($stateParams.href)];
 
             if (!pageConfig || !pageConfig.holders) {
               resolve(pageConfig);
@@ -107,7 +107,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
               if (pageConfig.holders.hasOwnProperty(holderName)) {
                 for (let widget of pageConfig.holders[holderName].widgets) {
                   widgetTypes.push(widget.type);
-                  appConfig.updateEventsOnNameChange(widget);
+                  app.updateEventsOnNameChange(widget);
                 }
               }
             }
@@ -120,8 +120,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
           });
         }
       },
-      templateProvider($http, $templateCache, appUrls, appConfig) {
-        const pageConfig = appConfig.pageConfig();
+      templateProvider($http, $templateCache, appUrls, app) {
+        const pageConfig = app.pageConfig();
         if (!pageConfig || !pageConfig.template) {
           return "Page not found!";
         }
@@ -142,9 +142,12 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.templateTypes, {cache: true});
 });
 
-app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
+app.factory('config', function (initialConfig) {
+  return angular.copy(initialConfig);
+});
+
+app.service('app', function ($http, $state, $stateParams, config,
                                    appUrls, $rootScope, $modal) {
-  this.config = initialConfig;
   this.sendingToServer = false;
 
   this.isHomePageOpened = () => {
@@ -158,11 +161,11 @@ app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
   this.pageIndexByHref = (href) => {
     let result;
 
-    for (let index = 0; index < this.config.pages.length; index++) {
-      if (this.config.pages[index].href === href) {
+    for (let index = 0; index < config.pages.length; index++) {
+      if (config.pages[index].href === href) {
         return index;
       }
-      if (this.config.pages[index].href === '404') {
+      if (config.pages[index].href === '404') {
         result = index;
       }
     }
@@ -173,24 +176,24 @@ app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
     this.pageIndexByHref($stateParams.href);
 
   this.pageConfig = () => {
-    if (!this.config.pages) {
+    if (!config.pages) {
       return undefined;
     }
-    return this.config.pages[this.currentPageIndex()];
+    return config.pages[this.currentPageIndex()];
   };
 
   this.wasModified = true; // TODO: implement changing this state
 
   this.deletePage = (index) => {
-    if (angular.isDefined(this.config.pages) && angular.isDefined(this.config.pages[index])) {
-      this.config.pages.splice(index, 1);
+    if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
+      config.pages.splice(index, 1);
     }
     $state.go('page', {href: ''});
   };
 
   this.submitToServer = (callback) => {
     this.sendingToServer = true;
-    return $http.put(appUrls.appConfig, this.config)
+    return $http.put(appUrls.appConfig, config)
       .then(() => {
         this.sendingToServer = false;
       }, (data) => {
@@ -223,7 +226,7 @@ app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
 
   this.addNewPage = (page) => {
     page.holders = page.holders || {};
-    this.config.pages.push(page);
+    config.pages.push(page);
   };
 
   this.addNewPageInModal = () => {
@@ -329,11 +332,11 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
   };
 });
 
-app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfig, author) {
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, app, author) {
   $scope.title = appName;
 
   $rootScope.$on('$stateChangeSuccess', () => {
-    const pageName = appConfig.pageConfig().shortTitle;
+    const pageName = app.pageConfig().shortTitle;
     $scope.title = pageName + ' - ' + appName;
   });
 
@@ -343,10 +346,11 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, appC
 });
 
 app.controller('MainController', function ($scope, $location, $cookies,
-                                           alert, appConfig) {
+                                           alert, app, config) {
   let cnf = $scope.globalConfig = {};
 
-  $scope.appConfig = appConfig;
+  $scope.app = app;
+  $scope.config = config;
 
   $scope.logIn = () => {
     $cookies.redirectToUrl = $location.url();
@@ -481,7 +485,7 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
 });
 
 app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
-                                                        appConfig, templateTypes, appUrls) {
+                                                        app, templateTypes, appUrls) {
   $scope.href = "";
 
   // array of all template types
@@ -556,7 +560,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
       };
     }
 
-    appConfig.addNewPage(page);
+    app.addNewPage(page);
 
     // redirect to the new page
     $state.go('page', {href}, {reload: true});
@@ -576,7 +580,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     $scope.chosenTemplate === template;
 });
 
-app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName) {
+app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName, app) {
   angular.extend($scope, {
     settings: {
       isPublished: true,

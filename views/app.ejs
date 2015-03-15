@@ -21,24 +21,24 @@
   <div id="page-design-panel">
     <h3>Design panel</h3>
 
-    <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
+    <button class="button tiny radius" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
             disabled
-            ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
+            ng-disabled="app.sendingToServer || !app.wasModified">
       Submit changes to server
     </button>
-    <button class="button tiny radius" ng-click="appConfig.openAppSettingsDialog()" id="appSettingsBtn">
+    <button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn">
       App settings
     </button>
-    <button class="button tiny radius" ng-click="appConfig.addNewPageInModal()"
+    <button class="button tiny radius" ng-click="app.addNewPageInModal()"
             id="addNewPageBtn">
       <i class="fi-plus black"></i> Add new page
     </button>
     <button class="button alert radius tiny"
             id="deletePageBtn"
-            ng-disabled="appConfig.isHomePageOpened() || appConfig.is404PageOpened()"
+            ng-disabled="app.isHomePageOpened() || app.is404PageOpened()"
             disabled
-            ng-click="appConfig.deletePage(appConfig.currentPageIndex())">
+            ng-click="app.deletePage(app.currentPageIndex())">
       Delete page
     </button>
 
@@ -77,7 +77,7 @@
   <nav class="medium-2 pull-10 columns">
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
-      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle">
+      <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
         <a href="/app/<%=name%>/{{page.href}}" ng-bind="page.shortTitle"></a>
       </li>
     </ul>
