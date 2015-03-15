@@ -93,33 +93,38 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     .state('page', {
       url: `/app/${appName}/:href`,
       resolve: {
-        pageConfig($stateParams, $q, alert, appConfig, widgetLoader) {
-          const deferredResult = $q.defer();
-          pageConfigPromise = deferredResult.promise;
+        pageConfig($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
+          pageConfigPromise = appConfigPromise
+            .then(() => {
+              const pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
 
-          const pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
-
-          if (!pageConfig || !pageConfig.holders) {
-            deferredResult.resolve(pageConfig);
-            return pageConfigPromise;
-          }
-
-          const widgetTypes = [];
-          for (let holderName in pageConfig.holders) {
-            if (pageConfig.holders.hasOwnProperty(holderName)) {
-              for (let widget of pageConfig.holders[holderName].widgets) {
-                widgetTypes.push(widget.type);
-                appConfig.updateEventsOnNameChange(widget);
+              const deferredResult = $q.defer();
+              if (!pageConfig || !pageConfig.holders) {
+                deferredResult.resolve(pageConfig);
+                return deferredResult.promise;
               }
-            }
-          }
-          widgetLoader.load(widgetTypes).then(() => {
-            deferredResult.resolve(pageConfig);
-          }, (err) => {
-            alert.error(`Error loading widget controllers. <br><br> ${err}`);
-            deferredResult.reject(err);
-          });
 
+              const widgetTypes = [];
+              for (let holderName in pageConfig.holders) {
+                if (pageConfig.holders.hasOwnProperty(holderName)) {
+                  for (let widget of pageConfig.holders[holderName].widgets) {
+                    widgetTypes.push(widget.type);
+                    appConfig.updateEventsOnNameChange(widget);
+                  }
+                }
+              }
+              widgetLoader.load(widgetTypes).then(() => {
+                deferredResult.resolve(pageConfig);
+              }, (err) => {
+                alert.error(`Error loading widget controllers. <br><br> ${err}`);
+                deferredResult.reject(err);
+              });
+
+              return deferredResult.promise;
+            }, (data) => {
+              alert.error(`Error loading app configuration: ${data.statusText} (${data.status})`);
+              return $q.reject(data.status);
+            });
           return pageConfigPromise;
         }
       },
@@ -146,9 +151,17 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.templateTypes, {cache: true});
 });
 
-app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
+app.factory('appConfigPromise', function ($q, initialConfig) {
+  // fixme: remove this useless factory
+  return $q((resolve) => {
+    resolve(initialConfig);
+  });
+});
+
+app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
                                    appUrls, $rootScope, $modal) {
-  this.config = initialConfig;
+  this.config = {};
+  this.isAvailable = false;
   this.sendingToServer = false;
 
   this.isHomePageOpened = () => {
@@ -250,6 +263,11 @@ app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
       backdrop: 'static'
     });
   };
+
+  appConfigPromise.then((data) => {
+    this.isAvailable = true;
+    this.config = data;
+  });
 });
 
 app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
@@ -333,7 +351,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
   };
 });
 
-app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfig, author) {
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfigPromise, appConfig, author) {
   $scope.title = appName;
 
   $rootScope.$on('$stateChangeSuccess', () => {
