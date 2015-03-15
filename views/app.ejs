@@ -18,8 +18,9 @@
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
-  <div ng-if="globalConfig.designMode" id="page-design-panel" ng-cloak>
-    <h3>Design mode panel</h3>
+  <div ng-if="true || globalConfig.designMode" id="page-design-panel" ng-cloak>
+    <h3>Editor panel</h3>
+
     <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
             disabled
@@ -40,6 +41,28 @@
             ng-click="appConfig.deletePage(appConfig.currentPageIndex())">
       Delete page
     </button>
+
+    <% if (isAppOwner)  {%>
+    <div>
+      <div class="left">
+        <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+        <div class="switch tiny left">
+          <input type="checkbox" id="designModeCheckbox"
+                 ng-model="globalConfig.designMode">
+          <label for="designModeCheckbox"></label>
+        </div>
+      </div>
+      <div class="left">
+        <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;Debug mode:&nbsp;&nbsp; </h6>
+        <div class="switch tiny left">
+          <input type="checkbox" id="debugModeCheckbox"
+                 ng-model="globalConfig.debugMode"
+                 disabled ng-disabled="globalConfig.designMode">
+          <label for="debugModeCheckbox"></label>
+        </div>
+      </div>
+    </div>
+    <% } %>
     <hr>
   </div>
 </header>
@@ -72,24 +95,6 @@
   </div>
 </footer>
 <div class="row">
-  <% if (isAppOwner)  {%>
-  <div>
-    <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
-    <div class="switch tiny">
-      <input type="checkbox" id="designModeCheckbox"
-             ng-model="globalConfig.designMode">
-      <label for="designModeCheckbox"></label>
-    </div>
-    <br>
-    <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
-    <div class="switch tiny">
-      <input type="checkbox" id="debugModeCheckbox"
-             ng-model="globalConfig.debugMode"
-             disabled ng-disabled="globalConfig.designMode">
-      <label for="debugModeCheckbox"></label>
-    </div>
-  </div>
-  <% } %>
   <% if (user) {%>
   <div>
     <button class="button tiny alert right" ng-click="logOut()">Log out</button>
