@@ -18,8 +18,8 @@
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
-  <div ng-if="true || globalConfig.designMode" id="page-design-panel" ng-cloak>
-    <h3>Editor panel</h3>
+  <div id="page-design-panel">
+    <h3>Design panel</h3>
 
     <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
