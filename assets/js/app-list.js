@@ -26,7 +26,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
 
     $scope.saveApps();
     $scope.apps.push({
-      appName,
+      name: appName,
       owner: user
     });
     $http.get(`/api/app/create/${appName}`).error((data, error) => {
@@ -42,7 +42,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
     }
 
     $scope.saveApps();
-    $scope.apps[$scope.apps.findIndex(app => appId === app.id)].appName = newAppName;
+    $scope.apps[$scope.apps.findIndex(app => appId === app.id)].name = newAppName;
     $http.get(`/api/app/rename/${appId}/${newAppName}/`).error((data, error) => {
       $scope.restoreApps();
       alert.error(`Error while renaming the app (${error}): ${data}`);

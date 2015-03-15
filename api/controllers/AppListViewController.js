@@ -12,14 +12,14 @@ module.exports = {
    */
   getView: function (req, res) {
     AppConfig
-      .find({sort: 'appName'})
+      .find({sort: 'name'})
       .populate('owner')
       .then(function (apps) {
         res.view('app-list', {
           apps: apps.map(function (app) {
             return {
               id: app.id,
-              appName: app.appName,
+              name: app.name,
               owner: app.owner && {
                 name: app.owner.name,
                 email: app.owner.email

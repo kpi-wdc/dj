@@ -21,8 +21,8 @@ var addDefaultAppConfigs = function () {
             if (!err) {
               sails.log.info('Preexisting app configuration found: apps/' + filename);
               var app = JSON.parse(data);
-              app.appName = appName;
-              AppConfig.findOrCreate({appName: appName}, app, function (err) {
+              app.name = appName;
+              AppConfig.findOrCreate({name: appName}, app, function (err) {
                 if (err) {
                   sails.log.warn('Error in AppConfig.findOrCreate app config during sails bootstrap: ' + err);
                 }

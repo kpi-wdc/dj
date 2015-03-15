@@ -15,7 +15,7 @@ module.exports = function (req, res, next) {
     if (req.params.appId) {
       query = {id: req.params.appId};
     } else if(req.params.appName) {
-      query = {appName: req.params.appName};
+      query = {name: req.params.appName};
     } else {
       return res.forbidden('No appId or appName were passed!');
     }

@@ -7,12 +7,12 @@
 
 module.exports = {
   getView: function (req, res) {
-    AppConfig.findOne({ appName: req.params.appName})
+    AppConfig.findOne({ name: req.params.appName})
       .populate('owner')
       .then(function (app) {
         res.view('app', {
           id: app.id,
-          appName: app.appName,
+          name: app.name,
           pages: app.pages,
           description: app.description,
           ownerInfo: !app.owner ? {} : {

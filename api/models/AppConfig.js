@@ -10,7 +10,7 @@ module.exports = {
   schema: true,
 
   attributes: {
-    appName: {
+    name: {
       type: 'alphanumericdashed',
       required: true,
       unique: true,

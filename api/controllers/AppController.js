@@ -10,7 +10,7 @@ module.exports = {
 
   create: function (req, res) {
     AppConfig.create({
-      appName: req.params.appName,
+      name: req.params.appName,
       pages: [ { "shortTitle" : "Home", "href": "", "template" : "1-col", "holders" : { "column": { "widgets": [ { "type": "title", "title": "Home page", "instanceName": "title-widget"}, { "type": "htmlwidget", "instanceName": "main-page-html-widget", "text": "<h3>Page Title <small>Page subtitle</small></h3>Bacon ipsum dolor sit amet salami ham."}]}}}, { "href": "404", "template" : "1-col", "holders" : { "column": { "widgets": [ { "type": "title", "title": "404 error", "instanceName": "title"}, { "type": "htmlwidget", "text": "Page not found", "instanceName": "error-message"}]}}}],
       title: "Title",
       description: "Description",
@@ -46,7 +46,7 @@ module.exports = {
     AppConfig.update({
       id: req.params.appId
     }, {
-      appName: req.params.newAppName
+      name: req.params.newAppName
     }, function (err, updatedArr) {
       if (err) {
         sails.log.error('Error while renaming app: ' + err);
