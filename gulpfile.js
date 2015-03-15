@@ -55,21 +55,23 @@ gulp.task('bower-install', ['generate-bower-json'], function () {
 });
 
 // collect all bower-dependencies in collectedBowerDeps object
-var collectedBowerDeps = {};
-gulp.task('collect-bower-dependencies', function () {
+var widgetsWithDeps = []
+var widgetBowerPackagePrefix = "widget-";
+gulp.task('collect-widgets-with-deps', function () {
   return gulp.src('assets/widgets/*/bower.json')
     .pipe(plugins.jsonEditor(function (json) {
-      collectedBowerDeps[json.name] = "../assets/widgets/" + json.name + "/";
+      widgetsWithDeps.push(json.name);
       return json;
     }))
     .on('error', handleError);
 });
 
-gulp.task('generate-bower-json', ['collect-bower-dependencies'], function () {
+gulp.task('generate-bower-json', ['collect-widgets-with-deps'], function () {
   return gulp.src('bower.json')
     .pipe(plugins.jsonEditor(function (json) {
-      for (var dep in collectedBowerDeps) {
-        json.dependencies[dep] = collectedBowerDeps[dep];
+      for (var dep in widgetsWithDeps) {
+        var widgetName = widgetsWithDeps[dep];
+        json.dependencies[widgetBowerPackagePrefix + widgetName] = "../assets/widgets/" + widgetName + "/";
       }
       return json;
     }))
@@ -95,7 +97,10 @@ gulp.task('build-components', ['bower-install'], function () {
     '!**/bower.json'
   ]);
 
-  return gulp.src('.tmp/bower_components/**/*')
+  return gulp.src([
+    '.tmp/bower_components/**/*',
+    '!.tmp/bower_components/' + widgetBowerPackagePrefix + '*/**'
+  ])
     .pipe(plugins.cached('build-components'))
     .pipe(removeFilter)
     .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'components'})))
