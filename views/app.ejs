@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css">
   <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
   <link rel="stylesheet" href="/css/main.css">
-  <title ng-bind="title"><%=app.appName%></title>
+  <title ng-bind="title"><%=appName%></title>
   <meta name="description" content="{{description}}">
   <meta name="keywords" content="{{keywords}}">
   <meta name="author" content="{{author}}">
@@ -55,7 +55,7 @@
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
       <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle">
-        <a href="/app/<%=app.appName%>/{{page.href}}" ng-bind="page.shortTitle"></a>
+        <a href="/app/<%=appName%>/{{page.href}}" ng-bind="page.shortTitle"></a>
       </li>
     </ul>
   </nav>
@@ -122,8 +122,13 @@
 
   define('app-config', ['angular'], function (angular) {
     angular.module('app.config', [])
-      .constant('appName', "<%= app.appName %>")
-      .constant('initialConfig', <%- JSON.stringify(app.config) %>);
+      .constant('appName', "<%= appName %>")
+      .constant('initialConfig', {
+        pages: <%- JSON.stringify(pages) %>,
+        title: "<%= title %>",
+        description: "<%= description %>",
+        isPublished: <%= isPublished %>
+      });
   });
 
   System.import('app'); // Kick-start the app!

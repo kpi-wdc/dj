@@ -16,8 +16,20 @@ module.exports = {
       unique: true,
       notEmpty: true
     },
-    config: {
-      type: 'json',
+    pages: {
+      type: 'array',
+      required: true
+    },
+    title: {
+      type: 'string',
+      required: true
+    },
+    description: {
+      type: 'string',
+      required: true
+    },
+    isPublished: {
+      type: 'boolean',
       required: true
     },
     owner: {

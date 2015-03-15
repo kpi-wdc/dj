@@ -8,26 +8,13 @@
 module.exports = {
   _config: { actions: true, rest: false, shortcuts: false },
 
-  getConfig: function (req, res) {
-    AppConfig.findOne({
-      appName: req.params.appName
-    }, function (err, found) {
-      if (!err) {
-        if (found) {
-          res.send(found.config);
-        } else {
-          res.forbidden();
-        }
-      } else {
-        res.serverError();
-      }
-    });
-  },
-
   create: function (req, res) {
     AppConfig.create({
       appName: req.params.appName,
-      config: { "pages" : []},
+      pages: [ { "shortTitle" : "Home", "href": "", "template" : "1-col", "holders" : { "column": { "widgets": [ { "type": "title", "title": "Home page", "instanceName": "title-widget"}, { "type": "htmlwidget", "instanceName": "main-page-html-widget", "text": "<h3>Page Title <small>Page subtitle</small></h3>Bacon ipsum dolor sit amet salami ham."}]}}}, { "href": "404", "template" : "1-col", "holders" : { "column": { "widgets": [ { "type": "title", "title": "404 error", "instanceName": "title"}, { "type": "htmlwidget", "text": "Page not found", "instanceName": "error-message"}]}}}],
+      title: "Title",
+      description: "Description",
+      isPublished: true,
       owner: req.user.id
     }, function (err) {
       if (err) {
@@ -39,12 +26,11 @@ module.exports = {
     });
   },
 
-  // TODO: add policy enables this action only for logged users
   update: function (req, res) {
     AppConfig.update({
       appName: req.params.appName
     }, {
-      config: req.body
+      pages: req.body.pages
     }, function (err, updatedArr) {
       if (err) {
         res.serverError();

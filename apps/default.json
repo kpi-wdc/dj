@@ -1,4 +1,7 @@
 {
+  "title": "Default app",
+  "description": "Default WDCDeX application",
+  "isPublished": true,
   "pages" : [ {
     "shortTitle" : "Концепція сталого розвитку",
     "href" : "",
