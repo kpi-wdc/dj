@@ -73,7 +73,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     }
   });
 
-  let pageConfigPromise;
   $locationProvider.html5Mode(true);
 
   // this doesn't seem to work, that's why the next snippet does the same
@@ -94,7 +93,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
       url: `/app/${appName}/:href`,
       resolve: {
         pageConfig($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
-          pageConfigPromise = appConfigPromise
+          return appConfigPromise
             .then(() => {
               const pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
 
@@ -125,19 +124,17 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
               alert.error(`Error loading app configuration: ${data.statusText} (${data.status})`);
               return $q.reject(data.status);
             });
-          return pageConfigPromise;
         }
       },
-      templateProvider($http, appUrls, $templateCache) {
-        return pageConfigPromise.then((pageConfig) => {
-          if (!pageConfig || !pageConfig.template) {
-            return "Page not found!";
-          }
+      templateProvider($http, $templateCache, appUrls, appConfig) {
+        const pageConfig = appConfig.pageConfig();
+        if (!pageConfig || !pageConfig.template) {
+          return "Page not found!";
+        }
 
-          const url = appUrls.templateHTML(pageConfig.template);
-          return $http.get(url, {cache: $templateCache})
-            .then((result) => result.data);
-        });
+        const url = appUrls.templateHTML(pageConfig.template);
+        return $http.get(url, {cache: $templateCache})
+          .then((result) => result.data);
       },
       controller: 'PageController'
     });
@@ -158,10 +155,9 @@ app.factory('appConfigPromise', function ($q, initialConfig) {
   });
 });
 
-app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
+app.service('appConfig', function ($http, $state, $stateParams, initialConfig,
                                    appUrls, $rootScope, $modal) {
-  this.config = {};
-  this.isAvailable = false;
+  this.config = initialConfig;
   this.sendingToServer = false;
 
   this.isHomePageOpened = () => {
@@ -263,11 +259,6 @@ app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise
       backdrop: 'static'
     });
   };
-
-  appConfigPromise.then((data) => {
-    this.isAvailable = true;
-    this.config = data;
-  });
 });
 
 app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
@@ -351,7 +342,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
   };
 });
 
-app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfigPromise, appConfig, author) {
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfig, author) {
   $scope.title = appName;
 
   $rootScope.$on('$stateChangeSuccess', () => {
