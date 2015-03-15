@@ -5,7 +5,7 @@
   "pages": [
     {
       "shortTitle": "Home",
-      "href": "home",
+      "href": "",
       "template": "left-right-bottom",
       "holders": {
         "column": {
