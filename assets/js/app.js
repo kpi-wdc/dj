@@ -19,9 +19,9 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.
   'ngCookies', 'angular-json-editor', 'templates',
   'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
 
-app.factory('appUrls', function (appName) {
+app.factory('appUrls', function (appId) {
   return {
-    appConfig: `/api/app/config/${appName}`,
+    appConfig: `/api/app/config/${appId}`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
     appSettingsHTML: '/partials/app-settings.html',

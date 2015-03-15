@@ -127,8 +127,10 @@
 
   define('app-config', ['angular'], function (angular) {
     angular.module('app.config', [])
+      .constant('appId', "<%= id %>")
       .constant('appName', "<%= name %>")
       .constant('initialConfig', {
+        id: "<%=id%>",
         name: "<%=name%>",
         pages: <%- JSON.stringify(pages) %>,
         title: "<%= title %>",
