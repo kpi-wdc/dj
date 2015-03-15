@@ -24,8 +24,8 @@ module.exports = {
         }
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
-        filecrypto.getMd5(uploadedFileAbsolutePath, function(md5) {
-          DataSource.findOne({hash : md5}).then(function (json) {
+        datacrypto.getFileMd5(uploadedFileAbsolutePath, function(md5) {
+          DataSource.findOne({dataSourceId : md5}).then(function (json) {
             // json, corresponding to md5 hash already exists in a database,
             // so there is no need to process xls again
             if (json) {
@@ -57,6 +57,8 @@ module.exports = {
                 }
               });
             }
+          }).catch(function (err) {
+            sails.log.error("Error while processing xlsx data", err);
           });
         });
     });

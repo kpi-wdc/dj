@@ -40,9 +40,22 @@ var addDefaultAppConfigs = function () {
   });
 };
 
+var setTTLtimeForCachedDataModel = function (ttlSec) {
+
+  CachedData.native(function (err, collection) {
+    // define index properties
+    collection.ensureIndex( { "createdAt": 1 }, { expireAfterSeconds: ttlSec }, function(err, result) {
+      if (err) {
+        sails.log.error(err);
+      }
+    });
+  });
+};
+
 module.exports.bootstrap = function (cb) {
   sails.services.passport.loadStrategies();
   addDefaultAppConfigs(); // allow running async, even after bootstrap is finished
+  setTTLtimeForCachedDataModel(3600);
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)

@@ -13,7 +13,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
   var m = angular.module("app.widgets.data-util.adapter", ["app.widgets.data-util.stat", "app.widgets.data-util.pca", "app.widgets.data-util.cluster"]);
 
 
-  m.service("TableGenerator", function () {
+  m.service("TableGenerator", ["$http", "$q", function ($http, $q) {
     var str = function (arg) {
       return angular.isString(arg) ? "'" + arg + "'" : arg;
     };
@@ -26,99 +26,121 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
       }
 
       if (angular.isDefined(provider)) {
-        var result = provider.getData(conf.selectedDataset);
-        //console.log(result)
+        return $q(function(resolve, reject) {
+          $http.post('/data/api/cachedData/', {conf : conf}).
+            success(function(data, status, headers, config) {
+              if (!data.cachedDataId) resolve(getDataHelper(conf, provider));
 
-        var rowsDim, columnsDim, splitDim, rowCollection, columnCollection, splitCollection;
+              // get data and persist it
+              var processed = getDataHelper(conf, provider);
+              $http.put('/data/api/cachedData/' + data.cachedDataId, {processed : processed}).
+                success(function(data, status, headers, config) {
+                  resolve(processed);
+                }).
+                error(function(data, status, headers, config) {
+                  resolve(processed);
+                });
+            }).
+            error(function(data, status, headers, config) {
+              // called asynchronously if an error occurs
+              resolve(getDataHelper(conf, provider));
+            });
+        });
+      }
+    };
 
+    var getDataHelper = function(conf, provider) {
+      var result = provider.getData(conf.selectedDataset);
+      //console.log(result)
 
-        for (var i in conf.selection) {
-          if (conf.selection[i].role == "Rows") {
-            rowsDim = i;
-            rowCollection = conf.selection[i].collection;
-          }
-          if (conf.selection[i].role == "Columns") {
-            columnCollection = conf.selection[i].collection;
-            columnsDim = i;
-          }
-          if (conf.selection[i].role == "Split Columns") {
-            splitDim = i;
-            splitCollection = conf.selection[i].collection;
-          }
+      var rowsDim, columnsDim, splitDim, rowCollection, columnCollection, splitCollection;
+
+      for (var i in conf.selection) {
+        if (conf.selection[i].role == "Rows") {
+          rowsDim = i;
+          rowCollection = conf.selection[i].collection;
         }
+        if (conf.selection[i].role == "Columns") {
+          columnCollection = conf.selection[i].collection;
+          columnsDim = i;
+        }
+        if (conf.selection[i].role == "Split Columns") {
+          splitDim = i;
+          splitCollection = conf.selection[i].collection;
+        }
+      }
 
-        var r = [];
+      var r = [];
 
-        for (var row in rowCollection) {
-          // get current row from this.result
-          var qr = "from r in $0 where r." + conf.selectedDataset.dimensions[rowsDim].id + " == " + str(rowCollection[row].label) + " select r";
-          //console.log(qr)
-          var query = new jsinq.Query(qr);
-          query.setValue(0, new jsinq.Enumerable(result.data));
-          var rowData = query.execute().toArray();
-          var current = {};
-          current.label = rowCollection[row].label;
-          current.id = rowCollection[row].id;
-          current.values = {};
+      for (var row in rowCollection) {
+        // get current row from this.result
+        var qr = "from r in $0 where r." + conf.selectedDataset.dimensions[rowsDim].id + " == " + str(rowCollection[row].label) + " select r";
+        //console.log(qr)
+        var query = new jsinq.Query(qr);
+        query.setValue(0, new jsinq.Enumerable(result.data));
+        var rowData = query.execute().toArray();
+        var current = {};
+        current.label = rowCollection[row].label;
+        current.id = rowCollection[row].id;
+        current.values = {};
 
-          for (var column in columnCollection) {
-            //    get current record for current column
-            var qc = "from r in $0 where r." + conf.selectedDataset.dimensions[columnsDim].id + " == " + str(columnCollection[column].label) + " select r";
-            //console.log(qc)
-            var query = new jsinq.Query(qc);
-            query.setValue(0, new jsinq.Enumerable(rowData));
-            var colData = query.execute().toArray();
-            //console.log("Coldata", colData);
-            if (!splitCollection) {
-              for (var rr in colData) {
-                //colData[rr].value = (colData[rr].value)?colData[rr].value : undefined;
-                current.values[columnCollection[column].label] = colData[rr].value;
-                //current.values[columnCollection[column].id]=colData[rr].value;
-              }
-            } else {
-              for (var splitter in splitCollection) {
-                var q = "from r in $0 where r." + conf.selectedDataset.dimensions[splitDim].id + " == " + str(splitCollection[splitter].label) + " select r";
-                //console.log(q)
-                var query = new jsinq.Query(q);
-                query.setValue(0, new jsinq.Enumerable(colData));
-                var splitData = query.execute().toArray();
-                for (var rr in splitData) {
-                  //splitData[rr].value = (splitData[rr].value) ? splitData[rr].value : undefined;
-                  current.values[columnCollection[column].label + ", " + splitCollection[splitter].label] = splitData[rr].value;
-                  //current.values[columnCollection[column].id+", "+splitCollection[splitter].id]=splitData[rr].value;
-                }
+        for (var column in columnCollection) {
+          //    get current record for current column
+          var qc = "from r in $0 where r." + conf.selectedDataset.dimensions[columnsDim].id + " == " + str(columnCollection[column].label) + " select r";
+          //console.log(qc)
+          var query = new jsinq.Query(qc);
+          query.setValue(0, new jsinq.Enumerable(rowData));
+          var colData = query.execute().toArray();
+          //console.log("Coldata", colData);
+          if (!splitCollection) {
+            for (var rr in colData) {
+              //colData[rr].value = (colData[rr].value)?colData[rr].value : undefined;
+              current.values[columnCollection[column].label] = colData[rr].value;
+              //current.values[columnCollection[column].id]=colData[rr].value;
+            }
+          } else {
+            for (var splitter in splitCollection) {
+              var q = "from r in $0 where r." + conf.selectedDataset.dimensions[splitDim].id + " == " + str(splitCollection[splitter].label) + " select r";
+              //console.log(q)
+              var query = new jsinq.Query(q);
+              query.setValue(0, new jsinq.Enumerable(colData));
+              var splitData = query.execute().toArray();
+              for (var rr in splitData) {
+                //splitData[rr].value = (splitData[rr].value) ? splitData[rr].value : undefined;
+                current.values[columnCollection[column].label + ", " + splitCollection[splitter].label] = splitData[rr].value;
+                //current.values[columnCollection[column].id+", "+splitCollection[splitter].id]=splitData[rr].value;
               }
             }
           }
-          r.push(current);
         }
-        var header = {};
-        header.label = conf.selectedDataset.dimensions[rowsDim].label;
-        header.body = {};
-        //console.log("ColumnsCollection",columnCollection)
-        for (var i in r[0].values) {
-          header.body[i] = {};
-          header.body[i].label = i;
-          header.body[i].title = i;
-          var fcol = columnCollection.filter(function (item) {
-            return item.label == i;
-          })[0];
-
-          if (fcol) {
-            header.body[i].id = fcol.id;
-          }
-        }
-        //console.log(r)
-        //r = r.filter(function(item){
-        //    for(var i in item.values){
-        //        if (angular.isUndefined(item.values[i])
-        //            || isNaN(item.values[i]) || item.values[i] == null ) return false;
-        //    }
-        //    return true;
-        //})
-
-        return { header: header, body: r };
+        r.push(current);
       }
+      var header = {};
+      header.label = conf.selectedDataset.dimensions[rowsDim].label;
+      header.body = {};
+      //console.log("ColumnsCollection",columnCollection)
+      for (var i in r[0].values) {
+        header.body[i] = {};
+        header.body[i].label = i;
+        header.body[i].title = i;
+        var fcol = columnCollection.filter(function (item) {
+          return item.label == i;
+        })[0];
+
+        if (fcol) {
+          header.body[i].id = fcol.id;
+        }
+      }
+      //console.log(r)
+      //r = r.filter(function(item){
+      //    for(var i in item.values){
+      //        if (angular.isUndefined(item.values[i])
+      //            || isNaN(item.values[i]) || item.values[i] == null ) return false;
+      //    }
+      //    return true;
+      //})
+
+      return { header: header, body: r };
     };
 
     this.sortTable = function (table) {
@@ -161,7 +183,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
         });
       }
     };
-  });
+  }]);
 
   m.service("BarSerieGenerator", function () {
     this.getData = function (table) {
@@ -657,12 +679,14 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
 
         cfg.selection = conf.selection;
         //console.log("CFG",cfg)
-        var table = TableGenerator.getData(cfg, provider);
-        if (conf.header) {
-          table.header = conf.header;
-          TableGenerator.sortTable(table);
-        }
-        return serieGenerator.getData(table, scope);
+        return TableGenerator.getData(cfg, provider).then(function(result) {
+          var table = result;
+          if (conf.header) {
+            table.header = conf.header;
+            TableGenerator.sortTable(table);
+          }
+          return serieGenerator.getData(table, scope);
+        });
       }
     };
   }]);

@@ -1,5 +1,6 @@
 var crypto   = require('crypto')
-  , fs       = require('fs');
+  , fs       = require('fs')
+  , hash     = require('object-hash');
 
 /**
  * filecrypto Service
@@ -8,7 +9,7 @@ var crypto   = require('crypto')
  */
 
 module.exports = {
-  getMd5: function (filename, onReady) {
+  getFileMd5: function (filename, onReady) {
     var md5Algo = 'md5';
 
     var shasum = crypto.createHash(md5Algo);
@@ -20,6 +21,10 @@ module.exports = {
     s.on('end', function() {
       onReady(shasum.digest('hex'));
     });
+  },
+
+  getObjectMd5: function (object) {
+    return hash.MD5(object);
   }
 };
 

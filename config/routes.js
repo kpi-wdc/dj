@@ -44,5 +44,9 @@ module.exports.routes = {
   'get /data/api/dataSources/' : 'DataSourceController.list',
 
   // DataSource view URLs
-  'get /data/app/dataSources': 'DataSourceViewController.getView'
+  'get /data/app/dataSources': 'DataSourceViewController.getView',
+
+  // CachedData manipulation URLS
+  'post /data/api/cachedData/' : 'DataCachingController.cache',
+  'put /data/api/cachedData/:cachedDataId' : 'DataCachingController.save'
 };
