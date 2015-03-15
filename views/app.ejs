@@ -124,6 +124,7 @@
     angular.module('app.config', [])
       .constant('appName', "<%= name %>")
       .constant('initialConfig', {
+        name: "<%=name%>",
         pages: <%- JSON.stringify(pages) %>,
         title: "<%= title %>",
         description: "<%= description %>",
