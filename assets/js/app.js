@@ -158,7 +158,7 @@ app.service('app', function ($http, $state, $stateParams, config,
   };
 
   this.is404PageOpened = () => {
-    return $stateParams.href === '404';
+    return config.pages.indexOf($stateParams.href) === -1;
   };
 
   this.pageIndexByHref = (href) => {
