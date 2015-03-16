@@ -40,6 +40,7 @@
     "del": "1.1.1",
     "ejs": "2.2.4",
     "es6-module-loader": "0.11.2",
+    "express": "3.20.1",
     "gulp": "3.8.11",
     "gulp-angular-templatecache": "1.5.0",
     "gulp-babel": "4.0.0",
