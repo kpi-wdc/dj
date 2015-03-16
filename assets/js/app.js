@@ -176,7 +176,7 @@ app.service('app', function ($http, $state, $stateParams, config,
   };
 
   this.currentPageIndex = () =>
-    this.pageIndexByHref($stateParams.href);
+    this.pageIndexByHref($stateParams.href || '');
 
   this.pageConfig = () => {
     if (!config.pages) {
