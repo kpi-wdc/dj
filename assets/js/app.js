@@ -92,10 +92,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     .state('page', {
       url: `/app/${appName}/:href`,
       resolve: {
-        pageConfig($stateParams, $q, alert, app, config, widgetLoader) {
+        pageConfig($stateParams, $q, alert, app, widgetLoader) {
           // no idea why, but this doesn't work without wrapping in $q
           return $q(function (resolve, reject) {
-            const pageConfig = config.pages[app.pageIndexByHref($stateParams.href)];
+            const pageConfig = app.pageConfig();
 
             if (!pageConfig || !pageConfig.holders) {
               resolve(pageConfig);
@@ -175,15 +175,18 @@ app.service('app', function ($http, $state, $stateParams, config,
     return result;
   };
 
-  this.currentPageIndex = () =>
-    this.pageIndexByHref($stateParams.href || '');
+  let conf = config.pages[this.pageIndexByHref($stateParams.href || '')];
 
-  this.pageConfig = () => {
-    if (!config.pages) {
-      return undefined;
+  $rootScope.$on('$stateChangeStart', (evt, toState, toParams) => {
+    if (toState.name === 'page') {
+      conf = config.pages[this.pageIndexByHref(toParams.href)];
+    } else {
+      console.log('No config available - non-page routing...');
+      conf = undefined;
     }
-    return config.pages[this.currentPageIndex()];
-  };
+  });
+
+  this.pageConfig = () => conf;
 
   this.wasModified = true; // TODO: implement changing this state
 
