@@ -7,7 +7,8 @@
 
 module.exports = {
   getView: function (req, res) {
-    AppConfig.findOne({ appName: req.params.appName})
+    // fixme: do case-insensitive search here!
+    AppConfig.findOne({ name: req.params.appName})
       .populate('owner')
       .then(function (app) {
         res.view('app', {

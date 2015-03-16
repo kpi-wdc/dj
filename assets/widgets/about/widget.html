@@ -1,0 +1,8 @@
+<div ng-controller="AboutAuthorsController">
+  <div ng-if="author.name">
+    Application author: {{author.name}} &lt;{{author.email}}&gt;
+  </div>
+  <div ng-if="!author.name">
+    This app doesn't have author - everybody can modify it.
+  </div>
+</div>

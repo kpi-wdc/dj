@@ -19,11 +19,12 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.
   'ngCookies', 'angular-json-editor', 'templates',
   'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
 
-app.factory('appUrls', function (appName) {
+app.factory('appUrls', function (appId) {
   return {
-    appConfig: `/api/app/config/${appName}`,
+    appConfig: `/api/app/config/${appId}`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
+    appSettingsHTML: '/partials/app-settings.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
     pageModalConfigHTML: '/partials/page-modal-config.html',
@@ -72,7 +73,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     }
   });
 
-  let pageConfigPromise;
   $locationProvider.html5Mode(true);
 
   // this doesn't seem to work, that's why the next snippet does the same
@@ -92,51 +92,43 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     .state('page', {
       url: `/app/${appName}/:href`,
       resolve: {
-        pageConfig($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
-          pageConfigPromise = appConfigPromise
-            .then(() => {
-              const pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
+        pageConfig($stateParams, $q, alert, app, config, widgetLoader) {
+          // no idea why, but this doesn't work without wrapping in $q
+          return $q(function (resolve, reject) {
+            const pageConfig = config.pages[app.pageIndexByHref($stateParams.href)];
 
-              const deferredResult = $q.defer();
-              if (!pageConfig || !pageConfig.holders) {
-                deferredResult.resolve(pageConfig);
-                return deferredResult.promise;
-              }
+            if (!pageConfig || !pageConfig.holders) {
+              resolve(pageConfig);
+              return;
+            }
 
-              const widgetTypes = [];
-              for (let holderName in pageConfig.holders) {
-                if (pageConfig.holders.hasOwnProperty(holderName)) {
-                  for (let widget of pageConfig.holders[holderName].widgets) {
-                    widgetTypes.push(widget.type);
-                    appConfig.updateEventsOnNameChange(widget);
-                  }
+            const widgetTypes = [];
+            for (let holderName in pageConfig.holders) {
+              if (pageConfig.holders.hasOwnProperty(holderName)) {
+                for (let widget of pageConfig.holders[holderName].widgets) {
+                  widgetTypes.push(widget.type);
+                  app.updateEventsOnNameChange(widget);
                 }
               }
-              widgetLoader.load(widgetTypes).then(() => {
-                deferredResult.resolve(pageConfig);
-              }, (err) => {
-                alert.error(`Error loading widget controllers. <br><br> ${err}`);
-                deferredResult.reject(err);
-              });
-
-              return deferredResult.promise;
-            }, (data) => {
-              alert.error(`Error loading app configuration: ${data.statusText} (${data.status})`);
-              return $q.reject(data.status);
+            }
+            widgetLoader.load(widgetTypes).then(() => {
+              resolve(pageConfig);
+            }, (err) => {
+              alert.error(`Error loading widget controllers. <br><br> ${err}`);
+              reject(err);
             });
-          return pageConfigPromise;
+          });
         }
       },
-      templateProvider($http, appUrls, $templateCache) {
-        return pageConfigPromise.then((pageConfig) => {
-          if (!pageConfig || !pageConfig.template) {
-            return "Page not found!";
-          }
+      templateProvider($http, $templateCache, appUrls, app) {
+        const pageConfig = app.pageConfig();
+        if (!pageConfig || !pageConfig.template) {
+          return "Page not found!";
+        }
 
-          const url = appUrls.templateHTML(pageConfig.template);
-          return $http.get(url, {cache: $templateCache})
-            .then((result) => result.data);
-        });
+        const url = appUrls.templateHTML(pageConfig.template);
+        return $http.get(url, {cache: $templateCache})
+          .then((result) => result.data);
       },
       controller: 'PageController'
     });
@@ -150,17 +142,15 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.templateTypes, {cache: true});
 });
 
-app.factory('appConfigPromise', function ($q, initialConfig) {
-  // fixme: remove this useless factory
-  return $q((resolve) => {
-    resolve(initialConfig);
-  });
+app.factory('config', function (initialConfig) {
+  if (initialConfig.pages.length <= 1) {
+    console.log('When there is no 404 page you might have problems with page routing!');
+  }
+  return angular.copy(initialConfig);
 });
 
-app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
+app.service('app', function ($http, $state, $stateParams, config,
                                    appUrls, $rootScope, $modal) {
-  this.config = {};
-  this.isAvailable = false;
   this.sendingToServer = false;
 
   this.isHomePageOpened = () => {
@@ -168,17 +158,17 @@ app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise
   };
 
   this.is404PageOpened = () => {
-    return $stateParams.href === '404';
+    return config.pages.indexOf($stateParams.href) === -1;
   };
 
   this.pageIndexByHref = (href) => {
     let result;
 
-    for (let index = 0; index < this.config.pages.length; index++) {
-      if (this.config.pages[index].href === href) {
+    for (let index = 0; index < config.pages.length; index++) {
+      if (config.pages[index].href === href) {
         return index;
       }
-      if (this.config.pages[index].href === '404') {
+      if (config.pages[index].href === '404') {
         result = index;
       }
     }
@@ -189,24 +179,24 @@ app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise
     this.pageIndexByHref($stateParams.href);
 
   this.pageConfig = () => {
-    if (!this.config.pages) {
+    if (!config.pages) {
       return undefined;
     }
-    return this.config.pages[this.currentPageIndex()];
+    return config.pages[this.currentPageIndex()];
   };
 
   this.wasModified = true; // TODO: implement changing this state
 
   this.deletePage = (index) => {
-    if (angular.isDefined(this.config.pages) && angular.isDefined(this.config.pages[index])) {
-      this.config.pages.splice(index, 1);
+    if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
+      config.pages.splice(index, 1);
     }
     $state.go('page', {href: ''});
   };
 
   this.submitToServer = (callback) => {
     this.sendingToServer = true;
-    return $http.put(appUrls.appConfig, this.config)
+    return $http.put(appUrls.appConfig, config)
       .then(() => {
         this.sendingToServer = false;
       }, (data) => {
@@ -239,7 +229,7 @@ app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise
 
   this.addNewPage = (page) => {
     page.holders = page.holders || {};
-    this.config.pages.push(page);
+    config.pages.push(page);
   };
 
   this.addNewPageInModal = () => {
@@ -255,10 +245,15 @@ app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise
     });
   };
 
-  appConfigPromise.then((data) => {
-    this.isAvailable = true;
-    this.config = data;
-  });
+  this.openAppSettingsDialog = () => {
+    $modal.open({
+      templateUrl: appUrls.appSettingsHTML,
+      controller: 'AppSettingsModalController',
+      backdrop: 'static'
+    }).result.then((newSettings) => {
+      angular.extend(config, newSettings);
+    });
+  };
 });
 
 app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
@@ -342,24 +337,24 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
   };
 });
 
-app.controller('MetaInfoController', function ($scope, $rootScope, appName, appConfigPromise, appConfig, author) {
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, app, config, author) {
   $scope.title = appName;
 
   $rootScope.$on('$stateChangeSuccess', () => {
-    const pageName = appConfig.pageConfig().shortTitle;
-    $scope.title = pageName + ' - ' + appName;
+    const pageName = app.pageConfig().shortTitle;
+    $scope.title = `${pageName} - ${config.title}`;
   });
 
   $scope.author = author.name;
-  $scope.keywords = 'App keywords';  // TODO
-  $scope.description = 'App description';  // TODO
+  $scope.config = config;
 });
 
 app.controller('MainController', function ($scope, $location, $cookies,
-                                           alert, appConfig) {
+                                           alert, app, config) {
   let cnf = $scope.globalConfig = {};
 
-  $scope.appConfig = appConfig;
+  $scope.app = app;
+  $scope.config = config;
 
   $scope.logIn = () => {
     $cookies.redirectToUrl = $location.url();
@@ -494,7 +489,7 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
 });
 
 app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
-                                                        appConfig, templateTypes, appUrls) {
+                                                        app, templateTypes, appUrls) {
   $scope.href = "";
 
   // array of all template types
@@ -569,7 +564,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
       };
     }
 
-    appConfig.addNewPage(page);
+    app.addNewPage(page);
 
     // redirect to the new page
     $state.go('page', {href}, {reload: true});
@@ -587,6 +582,26 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
 
   $scope.isSelected = (template) =>
     $scope.chosenTemplate === template;
+});
+
+app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName, config) {
+  angular.extend($scope, {
+    settings: {
+      isPublished: config.isPublished,
+      name: config.name,
+      keywords: config.keywords,
+      title: config.title,
+      description: config.description
+    },
+
+    ok() {
+      $modalInstance.close(this.settings);
+    },
+
+    cancel() {
+      $modalInstance.dismiss();
+    }
+  });
 });
 
 angular.bootstrap(document, ['app'], {

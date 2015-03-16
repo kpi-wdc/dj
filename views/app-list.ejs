@@ -23,18 +23,18 @@
   </div>
   <fieldset>
     <h4>List of apps:</h4>
-    <div ng-repeat="app in apps" class="row">
+    <div ng-repeat="app in apps | orderBy: 'name'" class="row">
       <span class="column small-6">
-        <b ng-bind="app.appName"></b>
+        <b ng-bind="app.name"></b>
         <span ng-if="app.owner.name">({{app.owner.name}})</span>
       </span>
-      <a href="/app/{{app.appName}}/" class="button tiny success column small-2">View</a>
+      <a href="/app/{{app.name}}/" class="button tiny success column small-2">View</a>
       <input type="button" class="button tiny column small-2"
           <% if (!user) { %> disabled <% } %>
-          value="Rename" ng-click="renameApp(app.appName)">
+          value="Rename" ng-click="renameApp(app.id)">
       <input type="button" class="button alert tiny column small-2"
           <% if (!user) { %> disabled <% } %>
-          value="Delete" ng-click="deleteApp(app.appName)">
+          value="Delete" ng-click="deleteApp(app.id, app.name)">
     </div>
   </fieldset>
 

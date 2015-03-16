@@ -8,83 +8,74 @@
 module.exports = {
   _config: { actions: true, rest: false, shortcuts: false },
 
-  getConfig: function (req, res) {
-    AppConfig.findOne({
-      appName: req.params.appName
-    }, function (err, found) {
-      if (!err) {
-        if (found) {
-          res.send(found.config);
-        } else {
-          res.forbidden();
-        }
-      } else {
-        res.serverError();
-      }
-    });
-  },
-
   create: function (req, res) {
-    AppConfig.create({
-      appName: req.params.appName,
-      config: { "pages" : []},
-      owner: req.user.id
-    }, function (err) {
-      if (err) {
-        sails.log.error('Error while creating app: ' + err);
+    // Clone default application
+    AppConfig.findOne({name: 'default'})
+      .then(function (newApp) {
+        delete newApp.id;
+        newApp.isPublished = true;
+        newApp.name = req.params.appName
+        newApp.owner = req.user.id;
+
+        AppConfig.create(newApp).then(function (created) {
+          res.ok({
+            id: created.id
+          });
+        }).catch(function (err) {
+          sails.log.error('Error while creating app: ' + err);
+          res.serverError();
+        });
+      })
+      .catch(function (error) {
+        sails.log.warn('Error in AppController.create: ' + error);
         res.serverError();
-      } else {
-        res.ok();
-      }
-    });
+      });
   },
 
-  // TODO: add policy enables this action only for logged users
   update: function (req, res) {
     AppConfig.update({
-      appName: req.params.appName
-    }, {
-      config: req.body
-    }, function (err, updatedArr) {
-      if (err) {
-        res.serverError();
-      } else if (updatedArr.length === 0) {
+      id: req.params.appId
+    }, req.body).then(function (updatedArr) {
+      if (updatedArr.length === 0) {
         res.forbidden();
       } else {
         res.ok();
       }
+    }).catch(function (err) {
+      sails.log.warn('AppController.update error: ' + err);
+      res.serverError();
     });
   },
 
   rename: function (req, res) {
     AppConfig.update({
-      appName: req.params.appName
+      id: req.params.appId
     }, {
-      appName: req.params.newAppName
-    }, function (err, updatedArr) {
-      if (err) {
-        sails.log.error('Error while renaming app: ' + err);
-        res.serverError();
-      } else if (updatedArr.length === 0) {
+      name: req.params.newAppName
+    }).then(function (updatedArr) {
+      if (updatedArr.length === 0) {
         res.forbidden();
       } else {
         res.ok();
       }
+    }).catch(function (err) {
+      sails.log.error('Error while renaming app: ' + err);
+      res.serverError();
     });
   },
 
   delete: function (req, res) {
     AppConfig.destroy({
-      appName: req.params.appName
-    }, function (err, updatedArr) {
-      if (err) {
-        sails.log.error('Error while renaming app: ' + err);
-        res.serverError();
-      } else if (updatedArr.length === 0) {
+      id: req.params.appId
+    }).then(function (updatedArr) {
+      if (updatedArr.length === 0) {
         res.forbidden();
       } else {
         res.ok();
       }
+    }).catch(function (err) {
+      sails.log.error('Error while deleting app: ' + err);
+      res.serverError();
     });
   }
 };

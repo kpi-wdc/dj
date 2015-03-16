@@ -10,14 +10,28 @@ module.exports = {
   schema: true,
 
   attributes: {
-    appName: {
+    name: {
       type: 'alphanumericdashed',
       required: true,
       unique: true,
       notEmpty: true
     },
-    config: {
-      type: 'json',
+    pages: {
+      type: 'array',
+      required: true
+    },
+    title: {
+      type: 'string',
+      required: true
+    },
+    description: {
+      type: 'string'
+    },
+    keywords: {
+      type: 'array'
+    },
+    isPublished: {
+      type: 'boolean',
       required: true
     },
     owner: {

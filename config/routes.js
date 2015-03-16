@@ -33,6 +33,7 @@ module.exports.routes = {
   'get /api/app/create/:appName': 'AppController.create',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
+
   'get /api/app/config/:appName': 'AppController.getConfig',
   'put /api/app/config/:appName': 'AppController.update',
   'get /api/app/rename/:appName/:newAppName': 'AppController.rename',
@@ -49,4 +50,5 @@ module.exports.routes = {
   // CachedData manipulation URLS
   'post /data/api/cachedData/' : 'DataCachingController.cache',
   'put /data/api/cachedData/:cachedDataId' : 'DataCachingController.save'
+
 };

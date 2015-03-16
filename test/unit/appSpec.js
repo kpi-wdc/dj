@@ -3,6 +3,7 @@
 define('app-config', ['angular'], function (angular) {
   angular.module('app.config', [])
     .constant('appName', "test")
+    .constant('appId', "507f1f77bcf86cd799439011") // random 12 byte number
     .constant('initialConfig', {"pages": []});
 });
 

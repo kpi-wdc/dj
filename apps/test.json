@@ -1,4 +1,8 @@
 {
+  "title": "Testing app",
+  "description": "App for unit-testing WDCDeX and showcasing API features",
+  "keywords": ["test"],
+  "isPublished": true,
   "pages" : [ {
     "shortTitle" : "Home",
     "href" : "",

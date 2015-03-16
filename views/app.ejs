@@ -9,34 +9,60 @@
   <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css">
   <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
   <link rel="stylesheet" href="/css/main.css">
-  <title ng-bind="title"><%=app.appName%></title>
-  <meta name="description" content="{{description}}">
-  <meta name="keywords" content="{{keywords}}">
-  <meta name="author" content="{{author}}">
+  <title ng-bind="title"><%= app.name %></title>
+  <meta name="description" content="<%= app.description %>">
+  <meta name="keywords" content="<%= app.keywords ? app.keywords.join(', ') : "" %>">
+  <meta name="author" content="<%= ownerInfo.name %>">
   <% /* The following should be inside <head> tag! */ %>
   <% include ga.ejs %>
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
-  <div ng-if="globalConfig.designMode" id="page-design-panel" ng-cloak>
-    <h3>Design mode panel</h3>
-    <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
+  <div id="page-design-panel">
+    <h3>Design panel</h3>
+
+    <button class="button tiny radius" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
             disabled
-            ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
+            ng-disabled="app.sendingToServer || !app.wasModified">
       Submit changes to server
     </button>
-    <button class="button tiny radius" ng-click="appConfig.addNewPageInModal()"
+    <button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn">
+      App settings
+    </button>
+    <button class="button tiny radius" ng-click="app.addNewPageInModal()"
             id="addNewPageBtn">
       <i class="fi-plus black"></i> Add new page
     </button>
     <button class="button alert radius tiny"
             id="deletePageBtn"
-            ng-disabled="appConfig.isHomePageOpened() || appConfig.is404PageOpened()"
+            ng-disabled="app.isHomePageOpened() || app.is404PageOpened()"
             disabled
-            ng-click="appConfig.deletePage(appConfig.currentPageIndex())">
+            ng-click="app.deletePage(app.currentPageIndex())">
       Delete page
     </button>
+
+    <% if (isAppOwner)  {%>
+    <div>
+      <div class="left">
+        <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+        <div class="switch tiny left">
+          <input type="checkbox" id="designModeCheckbox"
+                 ng-model="globalConfig.designMode">
+          <label for="designModeCheckbox"></label>
+        </div>
+      </div>
+      <div class="left">
+        <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;Debug mode:&nbsp;&nbsp; </h6>
+        <div class="switch tiny left">
+          <input type="checkbox" id="debugModeCheckbox"
+                 ng-model="globalConfig.debugMode"
+                 disabled ng-disabled="globalConfig.designMode">
+          <label for="debugModeCheckbox"></label>
+        </div>
+      </div>
+    </div>
+    <% } %>
     <hr>
   </div>
 </header>
@@ -51,8 +77,8 @@
   <nav class="medium-2 pull-10 columns">
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
-      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle">
-        <a href="/app/<%=app.appName%>/{{page.href}}" ng-bind="page.shortTitle"></a>
+      <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
+        <a href="/app/<%= app.name %>/{{page.href}}" ng-bind="page.shortTitle"></a>
       </li>
     </ul>
   </nav>
@@ -69,24 +95,6 @@
   </div>
 </footer>
 <div class="row">
-  <% if (isAppOwner)  {%>
-  <div>
-    <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
-    <div class="switch tiny">
-      <input type="checkbox" id="designModeCheckbox"
-             ng-model="globalConfig.designMode">
-      <label for="designModeCheckbox"></label>
-    </div>
-    <br>
-    <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
-    <div class="switch tiny">
-      <input type="checkbox" id="debugModeCheckbox"
-             ng-model="globalConfig.debugMode"
-             disabled ng-disabled="globalConfig.designMode">
-      <label for="debugModeCheckbox"></label>
-    </div>
-  </div>
-  <% } %>
   <% if (user) {%>
   <div>
     <button class="button tiny alert right" ng-click="logOut()">Log out</button>
@@ -119,8 +127,17 @@
 
   define('app-config', ['angular'], function (angular) {
     angular.module('app.config', [])
-      .constant('appName', "<%= app.appName %>")
-      .constant('initialConfig', <%- JSON.stringify(app.config) %>);
+      .constant('appId', "<%= app.id %>")
+      .constant('appName', "<%= app.name %>")
+      .constant('initialConfig', {
+        id: "<%= app.id %>",
+        name: "<%= app.name %>",
+        pages: <%- JSON.stringify(app.pages) %>,
+        title: "<%= app.title %>",
+        description: "<%= app.description %>",
+        keywords: "<%= app.keywords %>",
+        isPublished: <%= app.isPublished %>
+      });
   });
 
   System.import('app'); // Kick-start the app!
