@@ -169,7 +169,7 @@ gulp.task('compile-js', function () {
     .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(buildPublicDir + '/js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel())
+    .pipe(plugins.babel({experimental: true}))
     .on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/js'));
@@ -195,7 +195,7 @@ gulp.task('build-widgets-js', ['move-widgets'], function () {
   return gulp.src('assets/widgets/**/*.js')
     .pipe(plugins.cached('build-widgets-js'))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel())
+    .pipe(plugins.babel({experimental: true}))
     .on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(buildPublicDir + '/widgets'));
@@ -299,7 +299,7 @@ if (!npmProduction) {
   gulp.task('build-e2e-test', function () {
     return gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(buildDir + '/test/e2e'))
-      .pipe(plugins.babel())
+      .pipe(plugins.babel({experimental: true}))
       .pipe(gulp.dest(buildDir + '/test/e2e'));
   });
 

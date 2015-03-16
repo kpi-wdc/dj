@@ -93,7 +93,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
       url: `/app/${appName}/:href`,
       resolve: {
         pageConfig($stateParams, $q, alert, app, widgetLoader) {
-          return $q(function (resolve, reject) {
+          return $q(async (resolve, reject) => {
             const pageConfig = app.pageConfig();
 
             if (!pageConfig || !pageConfig.holders) {
@@ -110,24 +110,25 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
                 }
               }
             }
-            widgetLoader.load(widgetTypes).then(() => {
+            try {
+              await widgetLoader.load(widgetTypes);
               resolve(pageConfig);
-            }, (err) => {
+            } catch (err) {
               alert.error(`Error loading widget controllers. <br><br> ${err}`);
               reject(err);
-            });
+            }
           });
         }
       },
-      templateProvider($http, $templateCache, appUrls, app) {
+      templateProvider: async ($http, $templateCache, appUrls, app) => {
         const pageConfig = app.pageConfig();
         if (!pageConfig || !pageConfig.template) {
           return "Page not found!";
         }
 
         const url = appUrls.templateHTML(pageConfig.template);
-        return $http.get(url, {cache: $templateCache})
-          .then((result) => result.data);
+        const result = await $http.get(url, {cache: $templateCache});
+        return result.data;
       },
       controller: 'PageController'
     });
@@ -176,7 +177,6 @@ app.service('app', function ($http, $state, $stateParams, config,
       }
 
       console.log("app.pageIndexByHref can't find page!");
-      return;
     },
     pageConfig() {
       return pageConf;
@@ -189,17 +189,17 @@ app.service('app', function ($http, $state, $stateParams, config,
       $state.go('page', {href: ''});
     },
 
-    submitToServer(callback) {
+    submitToServer: async (cb) => {
       this.sendingToServer = true;
-      return $http.put(appUrls.appConfig, config)
-        .then(() => {
-          this.sendingToServer = false;
-        }, (data) => {
-          this.sendingToServer = false;
-          if (callback) {
-            callback(data);
-          }
-        });
+      try {
+        await $http.put(appUrls.appConfig, config);
+        this.sendingToServer = false;
+      } catch (data) {
+        this.sendingToServer = false;
+        if (cb) {
+          cb(data);
+        }
+      }
     },
 
     updateEventsOnNameChange(widget) {
@@ -240,14 +240,14 @@ app.service('app', function ($http, $state, $stateParams, config,
       });
     },
 
-    openAppSettingsDialog() {
-      $modal.open({
+    openAppSettingsDialog: async () => {
+      const newSettings = await $modal.open({
         templateUrl: appUrls.appSettingsHTML,
         controller: 'AppSettingsModalController',
         backdrop: 'static'
-      }).result.then((newSettings) => {
-        angular.extend(config, newSettings);
-      });
+      }).result;
+
+      angular.extend(config, newSettings);
     },
 
     onStateChangeStart(evt, toState, toParams) {
@@ -266,24 +266,23 @@ app.service('app', function ($http, $state, $stateParams, config,
 });
 
 app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
-  this.load = (widgets) => {
+  this.load = async (widgets) => {
     widgets = angular.isArray(widgets) ? widgets : [widgets];
-    return widgetTypesPromise.then((widgetTypesHTTP) => {
-      const widgetControllers = [];
-      for (let widget of widgets) {
-        const widgetType = widgetTypesHTTP.data[widget];
-        if (angular.isUndefined(widgetType)) {
-          return $q.reject(`Widget "${widget}" doesn't exist!`);
-        }
-        if (!widgetType.nojs) {
-          widgetControllers.push({
-            name: `app.widgets.${widget}`,
-            files: [appUrls.widgetJSModule(widget)]
-          });
-        }
+    const widgetTypesHTTP = await widgetTypesPromise;
+    const widgetControllers = [];
+    for (let widget of widgets) {
+      const widgetType = widgetTypesHTTP.data[widget];
+      if (angular.isUndefined(widgetType)) {
+        return $q.reject(`Widget "${widget}" doesn't exist!`);
       }
-      return $ocLazyLoad.load(widgetControllers);
-    });
+      if (!widgetType.nojs) {
+        widgetControllers.push({
+          name: `app.widgets.${widget}`,
+          files: [appUrls.widgetJSModule(widget)]
+        });
+      }
+    }
+    return $ocLazyLoad.load(widgetControllers);
   };
 });
 
@@ -302,8 +301,8 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
       }
     },
 
-    openDefaultWidgetConfigurationDialog(widget) {
-      $modal.open({
+    openDefaultWidgetConfigurationDialog: async (widget) => {
+      const newWidgetConfig = await $modal.open({
         templateUrl: appUrls.widgetModalConfigHTML,
         controller: 'WidgetModalSettingsController',
         backdrop: 'static',
@@ -314,17 +313,16 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
           widgetConfig() {
             return widget;
           },
-          widgetType(widgetTypesPromise) {
-            return widgetTypesPromise.then((widgetTypesHTTP) =>
-                widgetTypesHTTP.data[widget.type]
-            );
+          widgetType: async (widgetTypesPromise) => {
+            const widgetTypesHTTP = widgetTypesPromise;
+            return widgetTypesHTTP.data[widget.type];
           }
         }
-      }).result.then((newWidgetConfig) => {
-          angular.copy(newWidgetConfig, widget);
-          const user = new APIUser();
-          user.invokeAll(APIProvider.RECONFIG_SLOT);
-        });
+      }).result;
+
+      angular.copy(newWidgetConfig, widget);
+      const user = new APIUser();
+      user.invokeAll(APIProvider.RECONFIG_SLOT);
     },
 
     addNewWidgetToHolder(holder) {
@@ -485,7 +483,7 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
       $scope.widgetErr = {};
     },
 
-    add(widget) {
+    add: async (widget) => {
       // checks whether chosen template belongs to the current filter criteria
       $scope.chosenWidget = widget;
 
@@ -493,15 +491,17 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
         type: $scope.chosenWidget.type,
         instanceName: Math.random().toString(36).substring(2)
       };
-      widgetLoader.load($scope.chosenWidget.type)
-        .then(() => {
-          holder.widgets = holder.widgets || [];
-          holder.widgets.push(realWidget);
-          $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
-        }, (error) => {
-          alert.error('Cannot add widget: ${error}');
-        });
+
       $modalInstance.close();
+
+      try {
+        await widgetLoader.load($scope.chosenWidget.type)
+        holder.widgets = holder.widgets || [];
+        holder.widgets.push(realWidget);
+        $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
+      } catch (error) {
+        alert.error('Cannot add widget: ${error}');
+      }
     },
 
     isSelected(widget) {

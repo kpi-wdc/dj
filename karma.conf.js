@@ -48,6 +48,12 @@ module.exports = function (config) {
       'assets/js/*.js': ['babel', 'coverage']
     },
 
+    babelPreprocessor: {
+      options: {
+        experimental: true
+      }
+    },
+
     coverageReporter: {
       type: 'lcov',
       dir: '.tmp/coverage/'
