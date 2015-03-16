@@ -143,6 +143,9 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
 });
 
 app.factory('config', function (initialConfig) {
+  if (initialConfig.pages.length <= 1) {
+    console.log('When there is no 404 page you might have problems with page routing!');
+  }
   return angular.copy(initialConfig);
 });
 

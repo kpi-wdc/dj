@@ -1275,6 +1275,18 @@
           "slot": "setDataProvider"
         }
       ]
+    }, {
+      "href": "404",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [{
+            "type": "title",
+            "title": "404 error",
+            "instanceName": "title"
+          }, {"type": "htmlwidget", "text": "Page not found", "instanceName": "error-message"}]
+        }
+      }
     }
   ]
 }
