@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <title ng-bind="title"><%= app.name %></title>
   <meta name="description" content="<%= app.description %>">
-  <meta name="keywords" content="<%= app.keywords.join(', ') %>">
+  <meta name="keywords" content="<%= app.keywords ? app.keywords.join(', ') : "" %>">
   <meta name="author" content="<%= ownerInfo.name %>">
   <% /* The following should be inside <head> tag! */ %>
   <% include ga.ejs %>
