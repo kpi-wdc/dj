@@ -1,5 +1,8 @@
 {
-  "name": "default",
+  "title": "Title",
+  "description": "Description",
+  "keywords": [],
+  "isPublished": true,
   "pages": [{
     "shortTitle": "Home",
     "href": "",
@@ -29,8 +32,5 @@
         }, {"type": "htmlwidget", "text": "Page not found", "instanceName": "error-message"}]
       }
     }
-  }],
-  "title": "Title",
-  "description": "Description",
-  "isPublished": true
+  }]
 }

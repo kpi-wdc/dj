@@ -35,9 +35,7 @@ module.exports = {
   update: function (req, res) {
     AppConfig.update({
       id: req.params.appId
-    }, {
-      pages: req.body.pages
-    }).then(function (updatedArr) {
+    }, req.body).then(function (updatedArr) {
       if (updatedArr.length === 0) {
         res.forbidden();
       } else {

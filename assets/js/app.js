@@ -247,6 +247,8 @@ app.service('app', function ($http, $state, $stateParams, config,
       templateUrl: appUrls.appSettingsHTML,
       controller: 'AppSettingsModalController',
       backdrop: 'static'
+    }).result.then((newSettings) => {
+      angular.extend(config, newSettings);
     });
   };
 });
@@ -332,17 +334,16 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
   };
 });
 
-app.controller('MetaInfoController', function ($scope, $rootScope, appName, app, author) {
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, app, config, author) {
   $scope.title = appName;
 
   $rootScope.$on('$stateChangeSuccess', () => {
     const pageName = app.pageConfig().shortTitle;
-    $scope.title = pageName + ' - ' + appName;
+    $scope.title = `${pageName} - ${config.title}`;
   });
 
   $scope.author = author.name;
-  $scope.keywords = 'App keywords';  // TODO
-  $scope.description = 'App description';  // TODO
+  $scope.config = config;
 });
 
 app.controller('MainController', function ($scope, $location, $cookies,
@@ -580,17 +581,18 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     $scope.chosenTemplate === template;
 });
 
-app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName, app) {
+app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName, config) {
   angular.extend($scope, {
     settings: {
-      isPublished: true,
-      name: appName,
-      keywords: "",
-      title: ""
+      isPublished: config.isPublished,
+      name: config.name,
+      keywords: config.keywords,
+      title: config.title,
+      description: config.description
     },
 
     ok() {
-      $modalInstance.close();
+      $modalInstance.close(this.settings);
     },
 
     cancel() {

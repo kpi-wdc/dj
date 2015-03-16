@@ -25,8 +25,10 @@ module.exports = {
       required: true
     },
     description: {
-      type: 'string',
-      required: true
+      type: 'string'
+    },
+    keywords: {
+      type: 'array'
     },
     isPublished: {
       type: 'boolean',

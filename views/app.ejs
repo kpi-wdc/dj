@@ -9,10 +9,10 @@
   <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css">
   <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
   <link rel="stylesheet" href="/css/main.css">
-  <title ng-bind="title"><%=name%></title>
-  <meta name="description" content="{{description}}">
-  <meta name="keywords" content="{{keywords}}">
-  <meta name="author" content="{{author}}">
+  <title ng-bind="title"><%= app.name %></title>
+  <meta name="description" content="<%= app.description %>">
+  <meta name="keywords" content="<%= app.keywords.join(', ') %>">
+  <meta name="author" content="<%= ownerInfo.name %>">
   <% /* The following should be inside <head> tag! */ %>
   <% include ga.ejs %>
 </head>
@@ -78,7 +78,7 @@
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
       <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
-        <a href="/app/<%=name%>/{{page.href}}" ng-bind="page.shortTitle"></a>
+        <a href="/app/<%= app.name %>/{{page.href}}" ng-bind="page.shortTitle"></a>
       </li>
     </ul>
   </nav>
@@ -127,15 +127,16 @@
 
   define('app-config', ['angular'], function (angular) {
     angular.module('app.config', [])
-      .constant('appId', "<%= id %>")
-      .constant('appName', "<%= name %>")
+      .constant('appId', "<%= app.id %>")
+      .constant('appName', "<%= app.name %>")
       .constant('initialConfig', {
-        id: "<%=id%>",
-        name: "<%=name%>",
-        pages: <%- JSON.stringify(pages) %>,
-        title: "<%= title %>",
-        description: "<%= description %>",
-        isPublished: <%= isPublished %>
+        id: "<%= app.id %>",
+        name: "<%= app.name %>",
+        pages: <%- JSON.stringify(app.pages) %>,
+        title: "<%= app.title %>",
+        description: "<%= app.description %>",
+        keywords: "<%= app.keywords %>",
+        isPublished: <%= app.isPublished %>
       });
   });
 
