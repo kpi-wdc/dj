@@ -4,7 +4,6 @@ System.config({
     "app": "js/app.js",
     "app-list": "js/app-list.js",
     "info": "js/info.js",
-    "shims": "js/shims.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
     "jquery": "components/jquery/dist/jquery.js",

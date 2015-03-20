@@ -2,7 +2,6 @@ import angular from 'angular';
 import 'user';
 import 'author';
 import 'app-config';
-import 'shims';
 import 'widget-api';
 import 'info';
 import 'angular-ui-router';
