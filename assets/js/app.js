@@ -93,7 +93,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
       url: `/app/${appName}/:href`,
       resolve: {
         pageConfig($stateParams, $q, alert, app, widgetLoader) {
-          return $q(function (resolve, reject) {
+          return $q((resolve, reject) => {
             const pageConfig = app.pageConfig();
 
             if (!pageConfig || !pageConfig.holders) {
@@ -180,7 +180,6 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
       }
 
       console.log("app.pageIndexByHref can't find page!");
-      return;
     },
     pageConfig() {
       return pageConf;
@@ -624,7 +623,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
   });
 });
 
-app.controller('AppSettingsModalController', function ($scope, $injector, $modalInstance, appName, config) {
+app.controller('AppSettingsModalController', function ($scope, $modalInstance, appName, config) {
   angular.extend($scope, {
     settings: {
       isPublished: config.isPublished,
