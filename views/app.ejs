@@ -18,6 +18,8 @@
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
+
+  <% if (isAppOwner)  {%>
   <div id="page-design-panel">
     <h3>Design panel</h3>
 
@@ -41,8 +43,6 @@
             ng-click="app.deletePage(app.currentPageIndex())">
       Delete page
     </button>
-
-    <% if (isAppOwner)  {%>
     <div>
       <div class="left">
         <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
@@ -62,9 +62,9 @@
         </div>
       </div>
     </div>
-    <% } %>
     <hr>
   </div>
+  <% } %>
 </header>
 
 <div class="row">
