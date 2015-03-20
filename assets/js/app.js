@@ -20,6 +20,7 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.
 
 app.factory('appUrls', function (appId) {
   return {
+    app: (appName, page) => `/app/${appName}/${page || ''}`,
     appConfig: `/api/app/config/${appId}`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
@@ -132,6 +133,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     });
 });
 
+app.factory('fullReload', function ($window) {
+  return (url) => $window.location.href = url;
+})
+
 app.factory('widgetTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.widgetTypes, {cache: true});
 });
@@ -147,8 +152,8 @@ app.factory('config', function (initialConfig) {
   return angular.copy(initialConfig);
 });
 
-app.service('app', function ($http, $state, $stateParams, config,
-                                   appUrls, $rootScope, $modal) {
+app.service('app', function ($http, $state, $stateParams, config, $rootScope, $modal,
+                             appUrls, appName, fullReload) {
 
   let pageConf;
 
@@ -193,6 +198,10 @@ app.service('app', function ($http, $state, $stateParams, config,
       return $http.put(appUrls.appConfig, config)
         .then(() => {
           this.sendingToServer = false;
+
+          if (config.name !== appName) {
+            fullReload(appUrls.app(config.name, $stateParams.href));
+          }
         }, (data) => {
           this.sendingToServer = false;
           if (callback) {
