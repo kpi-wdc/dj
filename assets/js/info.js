@@ -13,5 +13,33 @@ info.service('alert', function ($modal, $log) {
   };
 });
 
-info.factory('prompt', ($window) => $window.prompt);
+info.factory('prompt', function ($modal) {
+  return (text, value) => {
+    return $modal.open({
+      templateUrl: '/partials/prompt.html',
+      controller: 'PromptController',
+      resolve: {
+        text: () => text,
+        value: () => value
+      }
+    }).result;
+  };
+});
 
+info.controller('PromptController', function ($scope, $modalInstance, text, value) {
+  $scope.form = {
+    text,
+    value,
+    dismissed: false,
+
+    close() {
+      if (!$scope.form.dismissed) {
+        $modalInstance.close($scope.form.value);
+      }
+    },
+    dismiss() {
+      $scope.form.dismissed = true;
+      $modalInstance.dismiss();
+    }
+  };
+});

@@ -39,32 +39,30 @@ appList.controller('AppListController', function ($scope, $http, $window,
     },
 
     renameApp(appId) {
-      const newAppName = prompt('New name:');
-      if (!newAppName) {
-        return;
-      }
-
-      this.saveApps();
-      this.apps[this.apps.findIndex(app => appId === app.id)].name = newAppName;
-      $http.get(`/api/app/rename/${appId}/${newAppName}/`)
-        .error((data, error) => {
-          this.restoreApps();
-          alert.error(`Error while renaming the app (${error}): ${data}`);
-        });
+      prompt('New name:').then((newAppName) => {
+        this.saveApps();
+        this.apps[this.apps.findIndex(app => appId === app.id)].name = newAppName;
+        $http.get(`/api/app/rename/${appId}/${newAppName}/`)
+          .error((data, error) => {
+            this.restoreApps();
+            alert.error(`Error while renaming the app (${error}): ${data}`);
+          });
+      });
     },
 
     deleteApp(appId, appName) {
-      const confirmName = prompt('Type again name of the app to confirm deletion: ')
-      if (confirmName &&  confirmName !== appName) {
-        alert.error('Wrong name, app is not deleted!');
-        return;
-      }
+      prompt('Type again name of the app to confirm deletion: ').then((confirmName) => {
+        if (confirmName !== appName) {
+          alert.error('Wrong name, app is not deleted!');
+          return;
+        }
 
-      this.saveApps();
-      this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
-      $http.get(`/api/app/delete/${appId}`).error((data, error) => {
-        this.restoreApps();
-        alert.error(`Error while deleting the app (${error}): ${data}`);
+        this.saveApps();
+        this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
+        $http.get(`/api/app/delete/${appId}`).error((data, error) => {
+          this.restoreApps();
+          alert.error(`Error while deleting the app (${error}): ${data}`);
+        });
       });
     }
   });
