@@ -1,5 +1,6 @@
 var path     = require('path')
   , url      = require('url')
+  , gravatar      = require('gravatar')
   , passport = require('passport');
 
 /**
@@ -83,7 +84,11 @@ passport.connect = function (req, query, profile, next) {
   // add it to the user.
   if (profile.hasOwnProperty('emails')) {
     user.email = profile.emails[0].value;
+
+    // Gravatar photo
+    user.photo = gravatar.url(user.email, {s: 200, r: 'pg'});
   }
+
 
   // If the profile object contains displayable name, add it to the user.
   if (profile.hasOwnProperty('displayName')) {

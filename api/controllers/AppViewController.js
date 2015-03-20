@@ -18,7 +18,8 @@ module.exports = {
             app: app,
             ownerInfo: !app.owner ? {} : {
               name: app.owner.name,
-              email: app.owner.email
+              email: app.owner.email,
+              photo: app.owner.photo
             },
             isAppOwner: isAppOwner
           });
