@@ -10,14 +10,22 @@ module.exports = {
   schema: true,
 
   attributes: {
-    body: {
+    name: {
+      type: 'string',
+      required: false
+    },
+    metadata: {
       type: 'json',
       required: true
     },
-    dataSourceId: {
-      type: 'string',
-      unique: true,
+    value: {
+      type: 'json',
       required: true
+    },
+    hash: {
+      type: 'string',
+      required: true,
+      unique: true
     }
   }
 };

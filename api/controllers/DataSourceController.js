@@ -27,35 +27,43 @@ module.exports = {
         filecrypto.getMd5(uploadedFileAbsolutePath, function(md5) {
           DataSource.findOne({hash : md5}).then(function (json) {
             // json, corresponding to md5 hash already exists in a database,
-            // so there is no need to process xls again
+            // so there is no need to process xls again, just send back its id
             if (json) {
-              return res.badRequest('This xls configuration has already been processed');
+              return res.send(json.id);
             } else {
-              var exec = require('child_process').exec;
-              var child = exec('node ./proc/xlsx2json/run.js ' + uploadedFileAbsolutePath);
-              child.stdout.on('data', function(json) {
+
+              var child = launcher.instance(sails.config.executables.converter, [uploadedFileAbsolutePath]);
+              // listen to a message with processed json
+              child.onMessage(function(json) {
                 DataSource.create({
-                  body: json,
-                  dataSourceId: md5
-                }, function (err) {
+                  name: json.name,
+                  metadata: json.metadata,
+                  value: json.value,
+                  hash: md5
+                }, function (err, obj) {
                   if (err) {
                     sails.log.error('Error while adding new data source: ' + err);
                     return res.serverError();
                   } else {
-                    return res.ok();
+                    // send back newly created object's id
+                    return res.send(obj.id);
                   }
                 });
               });
-              child.stderr.on('data', function(err) {
+
+              child.onStdErr(function(err) {
                 sails.log.error('Error while adding new data source: ' + err);
                 return res.serverError();
               });
-              child.on('close', function(code) {
+
+              // listen on process termination to get termination code (0 indicated success)
+              child.onTerminate(function(code) {
                 if (code != 0) {
-                  sails.log.error('Error while adding new data source: ' + err);
+                  sails.log.error('Error while adding new data source, return code ' + code);
                   return res.serverError();
                 }
               });
+
             }
           });
         });
@@ -69,10 +77,11 @@ module.exports = {
    */
   getByDataSourceId: function (req, res) {
     DataSource.findOne({
-      dataSourceId: req.params.dataSourceId
+      id: req.params.dataSourceId
     }, function (err, found) {
       if (!err) {
         if (found) {
+          delete found.hash;
           res.send(found);
         } else {
           res.forbidden();
@@ -86,13 +95,17 @@ module.exports = {
 
   /**
    * `DataSourceController.list()`
-   *  Lists all available data sources
+   *  Lists all available data sources without value field
    */
   list: function (req, res) {
     DataSource.find({},
       function (err, found) {
       if (!err) {
         if (found) {
+          for (var i = 0; i < found.length; i++) {
+            delete found[i].hash;
+            delete found[i].value;
+          }
           res.send(found);
         } else {
           res.forbidden();
