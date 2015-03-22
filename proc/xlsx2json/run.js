@@ -10,7 +10,6 @@ for (dataSourceName in json) {
         break;
     }
 }
-console.log(dataSourceName);
 
 var result = {};
 result.name = dataSourceName;
@@ -23,4 +22,4 @@ for(var prop in json[dataSourceName]) {
     }
 }
 
-process.stdout.write(JSON.stringify(result));
+process.send(result);
