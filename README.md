@@ -71,16 +71,17 @@ Open `docs/index.html` to view documentation in the browser.
 ## Used technologies
 
   - git (version control)
-  - ES6 JavaScript
+  - ES6/7 JavaScript (modules, async/await, classes, arrow functions etc...)
   - Sails.JS (node.js MVC framework)
   - npm (front-end dev. dependencies)
   - bower (front-end dependencies)
+  - jspm (front-end dependencies)
   - gulp (front-end task-runner)
   - karma (front-end unit-test runner)
   - protractor (end-to-end test runner)
   - jasmine (test framework)
   - angularjs (MVVM front-end framework)
-  - requirejs (AMD loader)
+  - SystemJS (universal dependency loader)
   - LESS (CSS replacement)
   - jsdoc (JS documentation engine)
   - travis (Continuous Integration)

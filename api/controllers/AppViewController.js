@@ -7,17 +7,26 @@
 
 module.exports = {
   getView: function (req, res) {
-    AppConfig.findOne({ appName: req.params.appName})
+    // fixme: do case-insensitive search here!
+    AppConfig.findOne({ name: req.params.appName})
       .populate('owner')
       .then(function (app) {
-        res.view('app', {
-          app: app,
-          ownerInfo: !app.owner ? {} : {
-            name: app.owner.name,
-            email: app.owner.email
-          },
-          isAppOwner: req.user && (!app.owner || req.user.id === app.owner.id)
-        });
+        var isAppOwner = req.user && (!app.owner || req.user.id === app.owner.id);
+
+        if (isAppOwner || app.isPublished) {
+          res.view('app', {
+            app: app,
+            ownerInfo: !app.owner ? {} : {
+              name: app.owner.name,
+              email: app.owner.email,
+              photo: app.owner.photo
+            },
+            isAppOwner: isAppOwner
+          });
+        } else {
+          sails.log.silly('App is not published or user is not an owner');
+          res.forbidden();
+        }
       }).catch(function (err) {
         sails.log.silly(err);
         res.notFound();
