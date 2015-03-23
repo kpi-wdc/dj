@@ -25,7 +25,7 @@ System.config({
     "json-stat": "components/jsonstat/json-stat.max.js",
     "nv.d3": "components/nvd3/nv.d3.js",
     "*": "*.js",
-    "github:*": "../../jspm_packages/github/*.js"
+    "github:*": "..\\..\\jspm_packages/github/*.js"
   }
 });
 
