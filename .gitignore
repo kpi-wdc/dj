@@ -2,7 +2,7 @@
 config/local.js
 
 # Dependencies
-node_modules
+node_modules/
 jspm_packages
 bower_components
 
@@ -29,6 +29,10 @@ npm-debug.log
 
 # Documentation
 /docs
+
+
+# Testing xlsx files
+xlsx
 
 # Other
 *.swp # vim

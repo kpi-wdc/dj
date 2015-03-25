@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <title>Main page</title>
+  <base href="/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/components/foundation/css/normalize.css">
+  <link rel="stylesheet" href="/components/foundation/css/foundation.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body ng-controller="DataSourcesController">
+  <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+
+  <!-- ES6 polyfill. Load before every other JS file -->
+  <script src="/js/es6-polyfill.js"></script>
+  <script src="/components/es6-module-loader/dist/es6-module-loader.src.js"></script>
+  <script src="/components/system.js/dist/system.src.js"></script>
+  <script>
+    window.define = System.amdDefine.bind(System);
+    window.require = window.requirejs = System.amdRequire.bind(System);
+  </script>
+  <script src="/js/config.js"></script>
+  <script>
+    System.import('js/data-sources'); // Kick-start the app!
+  </script>
+</body>
+</html>

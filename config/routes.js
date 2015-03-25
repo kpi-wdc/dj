@@ -33,7 +33,16 @@ module.exports.routes = {
   'get /api/app/create/:appName': 'AppController.create',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
+  'get /api/app/config/:appName': 'AppController.getConfig',
   'put /api/app/config/:appId': 'AppController.update',
   'get /api/app/rename/:appId/:newAppName': 'AppController.rename',
-  'get /api/app/delete/:appId': 'AppController.delete'
+  'get /api/app/delete/:appId': 'AppController.delete',
+
+  // DataSource manipulation URLs
+  'post /api/data/dataSource' : 'DataSourceController.add',
+  'get /api/data/dataSource/:dataSourceId' : 'DataSourceController.getByDataSourceId',
+  'get /api/data/dataSources/' : 'DataSourceController.list',
+
+  // DataSource view URLs
+  'get /data/dataSources': 'DataSourceViewController.getView'
 };
