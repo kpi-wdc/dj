@@ -16,7 +16,10 @@
     </div>
 
     <div ng-repeat="collaboration in collaborations" class="row row-no-left-padding">
-      <div class="column medium-7">{{collaboration.user.name}}</div>
+      <div class="column medium-7">
+        {{author.name}}
+        <i>({{author.email}})</i>
+      </div>
       <div class="column medium-3">
         <select>
           <option selected>Can edit</option>
