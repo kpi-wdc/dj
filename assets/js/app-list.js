@@ -12,6 +12,24 @@ appList.controller('AppListController', function ($scope, $http, $window,
     user,
     apps: appList,
     oldApps: appList,
+    isOwner(app) {
+      if (!user.id) {
+        return false;
+      }
+      if (!app.owner) {
+        return true;
+      }
+      return app.owner.id === user.id;
+    },
+    isCollaborator(app) {
+      if (!user.id) {
+        return false;
+      }
+      if (!app.collaborations) {
+        return false;
+      }
+      return angular.isUndefined(app.collaborations.find(c => c.user.id === user.id));
+    },
     saveApps() {
       this.oldApps = angular.copy(this.apps);
     },
