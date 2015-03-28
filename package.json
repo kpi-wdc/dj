@@ -1,6 +1,6 @@
 {
   "name": "wdc",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "Widget & statistical presentation platform",
   "private": true,
   "scripts": {
@@ -96,8 +96,7 @@
       "packages": "jspm_packages"
     },
     "configFile": "assets/js/config.js",
-    "dependencies": {
-    }
+    "dependencies": {}
   },
   "main": "app.js",
   "engines": {

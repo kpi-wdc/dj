@@ -32,7 +32,7 @@ module.exports.routes = {
   'get /': 'AppListViewController.getView',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
-  'get /data/dataSources': 'DataSourceViewController.getView'
+  'get /data/dataSources': 'DataSourceViewController.getView',
 
   /*** APIs ***/
   // Apps
@@ -42,7 +42,7 @@ module.exports.routes = {
   'get /api/app/delete/:appId': 'AppController.delete',
 
   // Users
-  'get /api/users/list': 'UserController.getList'
+  'get /api/users/list': 'UserController.getList',
 
   // DataSource manipulation URLs
   'post /api/data/dataSource' : 'DataSourceController.add',
