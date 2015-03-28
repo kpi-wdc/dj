@@ -22,9 +22,9 @@ module.exports.policies = {
   '*': [ 'passport' ],
 
   AppController: {
-    create: ['passport', 'sessionAuth'],
+    create: ['passport', 'isAuthenticated'],
     update: ['passport', 'isOwnerOrCollaborator'],
     rename: ['passport', 'isOwnerOrCollaborator'],
-    delete: ['passport', 'isAppOwner']
+    delete: ['passport', 'isOwner']
   }
 };

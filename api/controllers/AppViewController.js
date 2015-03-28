@@ -11,9 +11,9 @@ module.exports = {
     AppConfig.findOne({ name: req.params.appName})
       .populate('owner')
       .then(function (app) {
-        var isAppOwner = req.user && (!app.owner || req.user.id === app.owner.id);
+        var isOwner = AppConfig.isOwner(app, req.user);
         var isCollaborator = AppConfig.isCollaborator(app, req.user);
-        if (isAppOwner || isCollaborator || app.isPublished) {
+        if (isOwner || isCollaborator || app.isPublished) {
           res.view('app', {
             app: app,
             ownerInfo: !app.owner ? {

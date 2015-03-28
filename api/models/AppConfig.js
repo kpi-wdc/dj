@@ -46,6 +46,14 @@ module.exports = {
     return !_.isUndefined(_.find(app.collaborations,
       function (c) { return c.user.id === user.id; }
     ));
+  },
+
+  isOwner: function () {
+    if (!found.owner) {
+      // No owner means everybody is an owner
+      return true;
+    }
+    return found.owner.id === req.user.id;
   }
 };
 

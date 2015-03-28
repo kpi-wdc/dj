@@ -21,20 +21,11 @@ module.exports = function (req, res, next) {
     }
     AppConfig.findOne(query)
       .populate('owner')
-      .then(function (found) {
-        if (!found) {
-          // App not found - let controller handle this
+      .then(function (app) {
+        if (AppConfig.isOwner(app, req.user)) {
           return next();
         }
-        if (!found.owner) {
-          // Allow modifying apps without owner
-          return next();
-        }
-        if (found.owner.id === req.user.id) {
-          // User is the owner therefore is permitted
-          return next();
-        }
-        if (AppConfig.isCollaborator(found, req.user)) {
+        if (AppConfig.isCollaborator(app, req.user)) {
           return next();
         }
         return res.forbidden();
