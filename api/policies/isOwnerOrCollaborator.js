@@ -1,5 +1,5 @@
 /**
- * isAppOwner
+ * isOwnerOrCollaborator
  *
  * @module      :: Policy
  * @description :: Simple policy to allow only application owners
@@ -34,9 +34,12 @@ module.exports = function (req, res, next) {
           // User is the owner therefore is permitted
           return next();
         }
+        if (AppConfig.isCollaborator(found, req.user)) {
+          return next();
+        }
         return res.forbidden();
       }).catch(function (err) {
-        sails.log.info('isAppOwner policy: ' + err);
+        sails.log.info('isOwnerOrCollaborator policy: ' + err);
         res.forbidden();
       });
   } else {

@@ -12,16 +12,21 @@ module.exports = {
       .populate('owner')
       .then(function (app) {
         var isAppOwner = req.user && (!app.owner || req.user.id === app.owner.id);
-
-        if (isAppOwner || app.isPublished) {
+        var isCollaborator = AppConfig.isCollaborator(app, req.user);
+        if (isAppOwner || isCollaborator || app.isPublished) {
           res.view('app', {
             app: app,
-            ownerInfo: !app.owner ? {} : {
+            ownerInfo: !app.owner ? {
+              exists: false
+            } : {
+              id: app.owner.id,
               name: app.owner.name,
               email: app.owner.email,
-              photo: app.owner.photo
+              photo: app.owner.photo,
+              exists: true
             },
-            isAppOwner: isAppOwner
+            isAppOwner: isAppOwner,
+            isCollaborator: isCollaborator
           });
         } else {
           sails.log.silly('App is not published or user is not an owner');

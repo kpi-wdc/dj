@@ -2,6 +2,7 @@
   "title": "Testing app",
   "description": "App for unit-testing WDCDeX and showcasing API features",
   "keywords": ["test"],
+  "collaborations": [],
   "isPublished": true,
   "pages" : [ {
     "shortTitle" : "Home",

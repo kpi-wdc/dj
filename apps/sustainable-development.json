@@ -2,6 +2,7 @@
   "title": "Default app",
   "description": "Default WDCDeX application",
   "keywords": ["sustainable development", "science"],
+  "collaborations": [],
   "isPublished": true,
   "pages" : [ {
     "shortTitle" : "Концепція сталого розвитку",

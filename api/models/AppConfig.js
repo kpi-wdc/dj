@@ -30,6 +30,9 @@ module.exports = {
     keywords: {
       type: 'array'
     },
+    collaborations: {
+      type: 'array'
+    },
     isPublished: {
       type: 'boolean',
       required: true
@@ -37,6 +40,12 @@ module.exports = {
     owner: {
       model: 'User'
     }
+  },
+
+  isCollaborator: function (app, user) {
+    return !_.isUndefined(_.find(app.collaborations,
+      function (c) { return c.user.id === user.id; }
+    ));
   }
 };
 

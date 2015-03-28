@@ -21,19 +21,23 @@
  */
 
 module.exports.routes = {
-  // Login URLs
+  // Auth URLs
   'get /logout': 'AuthController.logout',
 
   'get /auth/:provider': 'AuthController.provider',
   'get /auth/:provider/callback': 'AuthController.callback',
   'get /auth/:provider/:action': 'AuthController.callback',
 
-  // Main urls
+  // Views
   'get /': 'AppListViewController.getView',
-  'get /api/app/create/:appName': 'AppController.create',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
+
+  // APIs
+  'get /api/app/create/:appName': 'AppController.create',
   'put /api/app/config/:appId': 'AppController.update',
   'get /api/app/rename/:appId/:newAppName': 'AppController.rename',
-  'get /api/app/delete/:appId': 'AppController.delete'
+  'get /api/app/delete/:appId': 'AppController.delete',
+
+  'get /api/users/list': 'UserController.getList'
 };
