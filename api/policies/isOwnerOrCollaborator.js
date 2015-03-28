@@ -1,5 +1,5 @@
 /**
- * isAppOwner
+ * isOwnerOrCollaborator
  *
  * @module      :: Policy
  * @description :: Simple policy to allow only application owners
@@ -21,15 +21,16 @@ module.exports = function (req, res, next) {
     }
     AppConfig.findOne(query)
       .populate('owner')
-      .then(function (found) {
-        // Allow modifying apps owned by this user AND apps without owner
-        if (!found || !found.owner || found.owner.id === req.user.id) {
-          next();
-        } else {
-          res.forbidden();
+      .then(function (app) {
+        if (AppConfig.isOwner(app, req.user)) {
+          return next();
         }
+        if (AppConfig.isCollaborator(app, req.user)) {
+          return next();
+        }
+        return res.forbidden();
       }).catch(function (err) {
-        sails.log.info('isAppOwner policy: ' + err);
+        sails.log.info('isOwnerOrCollaborator policy: ' + err);
         res.forbidden();
       });
   } else {

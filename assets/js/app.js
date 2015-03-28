@@ -22,8 +22,10 @@ app.factory('appUrls', function (appId) {
   return {
     app: (appName, page) => `/app/${appName}/${page || ''}`,
     appConfig: `/api/app/config/${appId}`,
+    usersList: `/api/users/list`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
+    shareSettingsHTML: '/partials/share-settings.html',
     appSettingsHTML: '/partials/app-settings.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
@@ -247,6 +249,17 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
       });
     },
 
+    openShareSettings() {
+      $modal.open({
+        templateUrl: appUrls.shareSettingsHTML,
+        controller: 'ShareSettingsModalController',
+        windowClass: 'share-settings-modal',
+        backdrop: 'static'
+      }).result.then((collaborations) => {
+        config.collaborations = collaborations;
+      });
+    },
+
     openAppSettingsDialog() {
       $modal.open({
         templateUrl: appUrls.appSettingsHTML,
@@ -454,7 +467,7 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
     },
 
     cancel() {
-      $modalInstance.dismiss.bind($modalInstance);
+      $modalInstance.dismiss();
     },
 
     updateData(value) {
@@ -619,6 +632,47 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
 
     isSelected(template) {
       $scope.chosenTemplate === template;
+    }
+  });
+});
+
+app.controller('ShareSettingsModalController', function ($scope, $modalInstance, $http, author, appUrls, config) {
+  angular.extend($scope, {
+    author,
+    collaborations: angular.copy(config.collaborations) || [], // TODO: change to collaborations
+
+    getUsers(filterValue) {
+      // todo: add support for filterValue
+      return $http.get(appUrls.usersList).then(result =>
+        result.data.filter(user => !this.userIsCollaborator(user))
+      );
+    },
+
+    addCollaboration() {
+      this.collaborations.push({
+        user: {
+          id: this.selectedUser.id,
+          name: this.selectedUser.name
+        },
+        access: undefined // todo: add support for edit/view access rights
+      });
+    },
+
+    deleteCollaboration(userId) {
+      this.collaborations.splice(this.collaborations.findIndex(user => user.id === userId), 1);
+    },
+
+    userIsCollaborator(user) {
+      const isOwner = user.id === (author || {}).id;
+      return isOwner || this.collaborations.find(c => c.user.id === user.id);
+    },
+
+    ok() {
+      $modalInstance.close(this.collaborations);
+    },
+
+    cancel() {
+      $modalInstance.dismiss();
     }
   });
 });
