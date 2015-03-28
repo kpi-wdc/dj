@@ -17,8 +17,8 @@
 
     <div ng-repeat="collaboration in collaborations" class="row row-no-left-padding">
       <div class="column medium-7">
-        {{author.name}}
-        <i>({{author.email}})</i>
+        {{collaboration.user.name}}
+        <i>({{collaboration.user.email}})</i>
       </div>
       <div class="column medium-3">
         <select>
@@ -29,8 +29,8 @@
              ng-click="deleteCollaboration(collaboration.user.id)"
              value="Delete">
     </div>
-    <div ng-if="collaboration.length === 0 && !author.exists">
-      No collaborators added yet! Owner is not set.
+    <div ng-if="collaborations.length === 0 && !author.exists">
+      No collaborators added yet! Owner is not set. <br><br>
     </div>
   </fieldset>
 

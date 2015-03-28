@@ -652,7 +652,8 @@ app.controller('ShareSettingsModalController', function ($scope, $modalInstance,
       this.collaborations.push({
         user: {
           id: this.selectedUser.id,
-          name: this.selectedUser.name
+          name: this.selectedUser.name,
+          email: this.selectedUser.email
         },
         access: undefined // todo: add support for edit/view access rights
       });
