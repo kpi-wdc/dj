@@ -48,12 +48,12 @@ module.exports = {
     ));
   },
 
-  isOwner: function () {
-    if (!found.owner) {
+  isOwner: function (app, user) {
+    if (!app.owner) {
       // No owner means everybody is an owner
       return true;
     }
-    return found.owner.id === req.user.id;
+    return app.owner.id === user.id;
   }
 };
 

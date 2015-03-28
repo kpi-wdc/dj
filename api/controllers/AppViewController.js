@@ -25,7 +25,7 @@ module.exports = {
               photo: app.owner.photo,
               exists: true
             },
-            isAppOwner: isAppOwner,
+            isOwner: isOwner,
             isCollaborator: isCollaborator
           });
         } else {
