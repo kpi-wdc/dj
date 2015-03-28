@@ -454,7 +454,7 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
     },
 
     cancel() {
-      $modalInstance.dismiss.bind($modalInstance);
+      $modalInstance.dismiss();
     },
 
     updateData(value) {
