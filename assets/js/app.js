@@ -644,7 +644,14 @@ app.controller('ShareSettingsModalController', function ($scope, $modalInstance,
     getUsers(filterValue) {
       // todo: add support for filterValue
       return $http.get(appUrls.usersList).then(result =>
-        result.data.filter(user => !this.userIsCollaborator(user))
+        /* Hack: filters do not work in angular-foundation's typeahead view for some reason */
+        result.data
+          .filter(user => !this.userIsCollaborator(user))
+          .filter(user =>
+            user.name.includes(filterValue) ||
+            user.email.includes(filterValue)
+          )
+          .slice(0, 8)
       );
     },
 

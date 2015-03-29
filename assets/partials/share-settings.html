@@ -39,7 +39,7 @@
   <fieldset class="row invite-people row-no-left-padding">
     <div class="column medium-7">
       <input type="text" ng-model="selectedUser" placeholder="Enter name..."
-             typeahead="user as user.name for user in getUsers($viewValue)"
+             typeahead="user as user.name + ' ' + user.email for user in getUsers($viewValue)"
              typeahead-editable="false"
              typeahead-on-select="addCollaboration()"
              typeahead-loading="loadingUsers" class="form-control">
