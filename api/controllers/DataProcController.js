@@ -82,6 +82,28 @@ module.exports = {
         return res.badRequest(err_body);
       }
     });
-  }
+  },
+
+
+  /**
+   * `DataProcController.getById()`
+   *  Gets a data by its id
+   */
+  getById: function (req, res) {
+    ProcData.findOne({
+      id: req.params.dataId
+    }, function (err, found) {
+      if (!err) {
+        if (found) {
+          if (!found.parent) delete found.parent;
+          res.send(found);
+        } else {
+          res.forbidden();
+        }
+      } else {
+        res.serverError();
+      }
+    });
+  },
 };
 
