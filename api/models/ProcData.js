@@ -1,30 +1,37 @@
 /**
- * DataSource.js
+ * ProcData.js
  *
- * @description :: Data Source model
+ * @description :: Model for all processed data (either data source
+ *                  data or some other saved/processed)
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
 module.exports = {
-  // Enforce model schema in the case of schemaless databases
-  schema: true,
 
   attributes: {
     name: {
       type: 'string',
       required: false
     },
+    isDataSource: {
+      type: 'boolean',
+      required: false
+    },
     metadata: {
       type: 'json',
-      required: true
+      required: false
     },
     value: {
       type: 'json',
       required: true
     },
+    parent: {
+      type: 'string',
+      required: false
+    },
     hash: {
       type: 'string',
-      required: true,
+      required: false,
       unique: true
     }
   }
