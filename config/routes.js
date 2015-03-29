@@ -44,5 +44,8 @@ module.exports.routes = {
   'get /api/data/dataSources/' : 'DataSourceController.list',
 
   // DataSource view URLs
-  'get /data/dataSources': 'DataSourceViewController.getView'
+  'get /data/dataSources': 'DataSourceViewController.getView',
+
+  // DataProcessing manipulation URLs
+  'post /api/data/process' : 'DataProcController.process'
 };
