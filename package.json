@@ -35,6 +35,7 @@
     "sails-hook-autoreload": "0.11.2"
   },
   "dependencies": {
+    "avg": "file:proc/avg",
     "babel": "4.7.1",
     "bcryptjs": "2.1.0",
     "connect-mongo": "0.7.0",
@@ -43,6 +44,7 @@
     "es6-module-loader": "0.11.2",
     "express": "3.20.1",
     "gravatar": "1.1.0",
+    "fast-stats": "0.0.2",
     "gulp": "3.8.11",
     "gulp-angular-templatecache": "1.5.0",
     "gulp-babel": "4.0.0",

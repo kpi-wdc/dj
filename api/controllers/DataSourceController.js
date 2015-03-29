@@ -25,21 +25,21 @@ module.exports = {
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
         filecrypto.getMd5(uploadedFileAbsolutePath, function(md5) {
-          DataSource.findOne({hash : md5}).then(function (json) {
+          ProcData.findOne({hash : md5}).then(function (json) {
             // json, corresponding to md5 hash already exists in a database,
             // so there is no need to process xls again, just send back its id
             if (json) {
               return res.send(json.id);
             } else {
-
               var child = launcher.instance(sails.config.executables.converter, [uploadedFileAbsolutePath]);
               // listen to a message with processed json
               child.onMessage(function(json) {
-                DataSource.create({
+                ProcData.create({
                   name: json.name,
                   metadata: json.metadata,
                   value: json.value,
-                  hash: md5
+                  hash: md5,
+                  isDataSource: true
                 }, function (err, obj) {
                   if (err) {
                     sails.log.error('Error while adding new data source: ' + err);
@@ -76,8 +76,9 @@ module.exports = {
    *  Gets a data source by its id
    */
   getByDataSourceId: function (req, res) {
-    DataSource.findOne({
-      id: req.params.dataSourceId
+    ProcData.findOne({
+      id: req.params.dataSourceId,
+      isDataSource : true
     }, function (err, found) {
       if (!err) {
         if (found) {
@@ -98,13 +99,14 @@ module.exports = {
    *  Lists all available data sources without value field
    */
   list: function (req, res) {
-    DataSource.find({},
+    ProcData.find({isDataSource : true},
       function (err, found) {
       if (!err) {
         if (found) {
           for (var i = 0; i < found.length; i++) {
             delete found[i].hash;
             delete found[i].value;
+            delete found[i].isDataSource;
           }
           res.send(found);
         } else {
