@@ -43,6 +43,10 @@ module.exports = {
   },
 
   isCollaborator: function (app, user) {
+    if (!user) {
+      // user is not logged in - therefore not a collaborator
+      return false;
+    }
     return !_.isUndefined(_.find(app.collaborations,
       function (c) { return c.user.id === user.id; }
     ));
@@ -52,6 +56,10 @@ module.exports = {
     if (!app.owner) {
       // No owner means everybody is an owner
       return true;
+    }
+    if (!user) {
+      // user is not logged in - therefore not an owner
+      return false;
     }
     return app.owner.id === user.id;
   }
