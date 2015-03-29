@@ -7,7 +7,6 @@ dataSources.controller('DataSourcesController', function ($scope, $http) {
     var fd = new FormData();
     //Take the first selected file
     fd.append('file', files[0]);
-    fd.append('dataSourceName', files[0].name);
     $http.post(`/api/data/dataSource`, fd, {
       withCredentials: true,
       headers: {'Content-Type': undefined},
