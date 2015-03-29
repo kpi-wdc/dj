@@ -21,6 +21,7 @@ module.exports = {
               id: app.id,
               name: app.name,
               owner: app.owner && {
+                id: app.owner.id,
                 name: app.owner.name,
                 email: app.owner.email
               }
