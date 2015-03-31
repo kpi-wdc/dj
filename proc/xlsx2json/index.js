@@ -1,170 +1,142 @@
-var fs = require('fs');
-var LINQ = require('node-linq').LINQ;
-var XLSX = require('node-xlsx');
+var XLSX = require('xlsx');
+var XLS = require('xlsjs');
 
-exports.get = function(filename) {
-    var dimensionMap = [];
-    var obj = XLSX.parse(filename);
-    var result = {};
+var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    var metadata = new LINQ(obj)
-        .Where(function(sheet){
-            return sheet.name === "metadata";
-        })
-        .ToArray()[0]
-        .data;
-    var data = new LINQ(obj)
-        .Where(function(sheet){
-            return sheet.name === "data";
-        })
-        .ToArray()[0]
-        .data;
-    var dataFields = {};
-    data[0].forEach(function(item,index){
-        dataFields[item] = index;
-    })
-    var datasetName = getMetadataValue(metadata,"dataset");
-    result[datasetName] = {};
-    result[datasetName].note = getMetadataValue(metadata,"dataset.note");
-    result[datasetName].label = getMetadataValue(metadata,"dataset.label");
-    result[datasetName].updated = getMetadataValue(metadata,"dataset.updated");
-    result[datasetName].status = getMetadataValue(metadata,"dataset.status");
-    result[datasetName].source = getMetadataValue(metadata,"dataset.source");
-    result[datasetName].dimension = {};
-    result[datasetName].dimension.id = getMetadataArray(metadata,"dimension.id");
-    result[datasetName].dimension.role = {};
-    result[datasetName].dimension.role.geo = getMetadataArray(metadata,"role.geo");
-    result[datasetName].dimension.role.time = getMetadataArray(metadata,"role.time");
-    result[datasetName].dimension.role.metric = getMetadataArray(metadata,"role.metric");
-    result[datasetName].dimension.size = [];
-    result[datasetName].dimension.id.forEach(
-        function(id) {
-            var idFieldName = getMetadataValue(metadata,id+".category.id");
-            var labelFieldName = getMetadataValue(metadata,id+".category.label");
-            result[datasetName].dimension[id] = {};
-            result[datasetName].dimension[id].label = getMetadataValue(metadata,id+".label");
-            result[datasetName].dimension[id].category = {};
-            result[datasetName].dimension[id].category.index = getID(data, idFieldName,dimensionMap);
-            result[datasetName].dimension[id].category.label = getLabel(data, idFieldName, labelFieldName);
-            result[datasetName].dimension.size.push(Object.keys(result[datasetName].dimension[id].category.label).length);
-        }
-    );
-    result[datasetName].value = [];
-    var valueIndex = dataFields[getMetadataValue(metadata,"dataset.value")];
-    var getDataValue = function(level,indexes,body){
-        if (level == indexes.length-1){
-            return new LINQ(body)
-                .Where(function(item){
-                    return item[dataFields[dimensionMap[level].field]] === dimensionMap[level].values[indexes[level]];
-                })
-                .Select(function(item){
-                    return item[valueIndex];
-                })
-                .ToArray()[0]
-        }
-        return getDataValue(level+1,indexes,
-            new LINQ(body)
-                .Where(function(item){
-                    return item[dataFields[dimensionMap[level].field]] === dimensionMap[level].values[indexes[level]];
-                })
-                //.Select(function(item){return item[valueIndex]})
-                .ToArray()
-        )
-    }
-    var forEachIndexes = function (level,size,current){
-        if(size.length == current.length){
-            result[datasetName].value.push(getDataValue(0,current,data));
-            return;
-        }
-        var currentValue = 0;
-        while (currentValue < size[level]){
-            current.push(currentValue);
-            forEachIndexes(level+1,size,current);
-            current.pop();
-            currentValue++;
-        }
-    }
-    forEachIndexes(0,result[datasetName].dimension.size ,[]);
-    return result;
+exports.JSONSTAT = function(str) {
+	var result = [];
+	try {
+		var json = JSON.parse(str);
+		for(val in json) {
+			var data = json[val]['value'];
+			if (data) 
+				data.forEach(function (obj) {
+					result.push(obj['value']);});
+			json[val]['value'] = result;
+			return JSON.stringify(json);}
+	} catch(e) {
+		console.log(e);}
+	return null;
 }
-
-function getMetadataValue(metadata,key){
-        return new LINQ(metadata)
-            .Where(function(item){
-                return item[0] === key;
-            })
-            .Select(function(item){
-                return item[1];
-            })
-            .ToArray()[0];
-    }
-
-function getMetadataArray(metadata,key){
-    var result = new LINQ(metadata)
-        .Where(function(item){
-            return item[0] === key;
-        })
-        .ToArray()[0];
-    if(result){
-        return result.filter(function (item, index){
-            return index>0;
-        });
-    }
-    return undefined;
+exports.readJSONSTAT = function(filename) {
+	getJSONSTAT(readJSON(filename));
 }
-
-function getID(data,field,dimensionMap){
-    var fields = {};
-    data[0].forEach(function(item,index){
-        fields[item] = index;
-    })
-    var a = new LINQ(data)
-        .Select(function(item){
-            return item[fields[field]];
-        })
-        //.Distinct()
-        .ToArray();
-    if(a) {
-        a = new LINQ(a.filter(function (item, index) {
-            return index > 0;
-        }))
-        .OrderBy(function(item){
-            return item;
-        })
-        .ToArray();
-        dimensionMap.push({field:field, values:a});
-        var result = {};
-        a.forEach(function(item,index){
-            result[item] = index;
-        });
-        return result;
-    }
-    return undefined;
+exports.readJSON = function(filename) {
+	console.time(filename);
+	var workbook, worksheet, datasheet;
+	try {
+		var name = filename.split('.');
+		if (name[name.length - 1] == 'xlsx')
+			workbook = XLSX.readFile(filename);
+		else workbook = XLS.readFile(filename);
+		var datasheet = workbook.Sheets['data'];
+		var worksheet = workbook.Sheets['metadata'];
+		if (datasheet == null || worksheet == null) {
+			console.log("Can't read sheets from file!"); return null;}
+	} catch(e) {
+		console.log(e);
+		return null;}
+	var result = {};
+	try {
+		var dataset_name = GetValue(worksheet, 'dataset');
+		result[dataset_name] = {};
+		result[dataset_name]['note'] = GetValue(worksheet, 'dataset.note');
+		result[dataset_name]['label'] = GetValue(worksheet, 'dataset.note');
+		result[dataset_name]['updated'] = GetValue(worksheet, 'dataset.updated');
+		result[dataset_name]['status'] = GetValue(worksheet, 'dataset.status');
+		result[dataset_name]['source'] = GetValue(worksheet, 'dataset.source');
+		result[dataset_name]['dimension'] = {};
+		result[dataset_name]['dimension']['id'] = GetArray(worksheet, 'dimension.id');
+		result[dataset_name]['dimension']['role'] = {};
+		result[dataset_name]['dimension']['role']['geo'] = GetValue(worksheet, 'role.geo');
+		result[dataset_name]['dimension']['role']['time'] = GetValue(worksheet, 'role.time');
+		result[dataset_name]['dimension']['role']['metric'] = GetValue(worksheet, 'role.metric');
+		result[dataset_name]['dimension']['size'] = [];
+		var indeces = {};
+		result[dataset_name]['dimension']['id'].forEach(function(object) {
+			result[dataset_name]['dimension'][object] = {};
+			result[dataset_name]['dimension'][object]['label'] = GetValue(worksheet, object + '.label');
+			result[dataset_name]['dimension'][object]['category'] = {};
+			result[dataset_name]['dimension'][object]['category']['index'] = {};
+			result[dataset_name]['dimension'][object]['category']['label'] = {};
+			var index_id = GetID(datasheet, GetValue(worksheet, object + '.category.id'));
+			var label_id = GetID(datasheet, GetValue(worksheet, object + '.category.label'));
+			var obj = GetObject(datasheet, index_id, label_id);
+			indeces[index_id] = obj['indeces'];
+			for (i = 0; i < obj['indeces'].length; i++) {
+				result[dataset_name]['dimension'][object]['category']['index'][obj['indeces'][i]] = i;
+				result[dataset_name]['dimension'][object]['category']['label'][obj['indeces'][i]] = obj['labels'][obj['indeces'][i]];}
+			result[dataset_name]['dimension']['size'].push(obj['indeces'].length);
+		});
+		result[dataset_name]['value'] = GetDataObject(datasheet, GetValue(worksheet, 'dataset.value'), indeces, result[dataset_name]['dimension']['size']);
+	} catch(e) {
+		console.log(e);
+		return null;}
+	return JSON.stringify(result);
 }
-
-var getLabel = function(data,idField,labelField){
-    var fields = {};
-    data[0].forEach(function(item,index){
-        fields[item] = index;
-    })
-    var a = new LINQ(data)
-        .Select(function(item){
-            return {
-                id : item[fields[idField]],
-                label : item[fields[labelField]]
-            };
-        })
-        //.Distinct()
-        .ToArray();
-    if(a) {
-        a = a.filter(function (item, index) {
-            return index > 0;
-        });
-        var result = {};
-        a.forEach(function(item,index){
-            result[item.id] = item.label;
-        })
-        return result;
-    }
-    return undefined;
+function GetValue(worksheet, value) {
+for (i = 1;; i++)
+	if (!worksheet['A' + i]) return null;
+	else if (worksheet['A' + i].v == value) return worksheet['B' + i].v;
+}
+function GetArray(worksheet, value) {
+	var result = [];
+	for (i = 1;; i++)
+		if (!worksheet['A' + i]) return result;
+		else if (worksheet['A' + i].v == value)
+			for (j = 1; j < alpha.length; j++)
+				if (worksheet[alpha[j] + i]) result.push(worksheet[alpha[j] + i].v);
+				else return result;
+}
+function GetID(datasheet, name) {
+	for (i = 0;; i++)
+		if (!datasheet[alpha[i] + 1]) return null;
+		else if (datasheet[alpha[i] + '1'].v == name) return alpha[i];
+}
+function GetObject(datasheet, index_id, label_id) {
+	var obj = {};
+	obj['indeces'] = [];
+	obj['labels'] = {};
+	if (index_id == null || label_id == null) return obj;
+	for (i = 2;; i++)
+		if (!datasheet[index_id + i] || !datasheet[label_id + i]) {
+			obj['indeces'] = obj['indeces'].sort();
+			return obj;
+		} else 	if (obj['indeces'].indexOf(datasheet[index_id + i].v) < 0) {
+			obj['indeces'].push(datasheet[index_id + i].v);
+			obj['labels'][datasheet[index_id + i].w] = datasheet[label_id + i].v;}
+}
+function GetDataObject(datasheet, value, indeces, lengths) {
+	value = GetID(datasheet, value);
+	res = {result: [], names: [], state: [], length : 1, data: {}};
+	for (key in indeces) {
+		res.state.push(0);
+		res.names.push(key);}
+	lengths.forEach(function(val) { res.length *= val; });
+	for (i = 2;;i++) {
+		if (!datasheet['A' + i]) break;
+			var ID = [];
+			for (key in indeces) ID.push(datasheet[key + i].v);
+			res.data[ID] = datasheet[value + i].v;}
+	var ID = function(state, names, indeces, result) {
+		for (var j = 0; j < state.length; j++) result.push(indeces[names[j]][state[j]]); return result; }
+	var REFRESH = function(state, lengths) {
+		state[state.length - 1]++;
+		for (j = 1; j < state.length; j++) {
+			if (j > 0 && state[j] >= lengths[j]) {
+				state[j - 1]++;
+				for (k = j; k < state.length;k++) state[k] = 0;
+				j-=2;}}
+		return state;}
+	for (var i = 0; i < res.length; i++) {
+		var id = ID(res.state, res.names, indeces, [])
+		var obj = res.data[id];
+		res.state = REFRESH(res.state, lengths);
+		if (obj) {
+			var data = {};
+			for (j = 0; j < res.names.length; j++) data[res.names[j]] = id[j];
+			data['value'] = obj;
+			res.result.push(data);
+		}}
+	return res.result;
 }
