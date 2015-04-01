@@ -72,7 +72,6 @@
     "jspm": "0.14.0",
     "newrelic": "1.16.2",
     "node-linq": "0.0.5",
-    "node-xlsx": "0.5.1",
     "oauth": "0.9.12",
     "passport": "0.2.1",
     "passport-google-oauth": "0.1.5",
@@ -85,6 +84,8 @@
     "systemjs": "0.11.3",
     "traceur": "0.0.86",
     "validator": "3.32.0",
+    "xlsjs": "0.7.5",
+    "xlsx": "0.7.12",
     "xlsx-json-parser": "file:proc/xlsx2json",
     "yargs": "3.0.4"
   },
