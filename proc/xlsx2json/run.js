@@ -1,7 +1,7 @@
 var xlsxJsonParser = require('./index');
 
 var args = process.argv.slice(2);
-var json = xlsxJsonParser.get(args[0]);
+var json = xlsxJsonParser.readJSONSTAT(args[0]);
 
 // get name of the datasource
 var dataSourceName;
