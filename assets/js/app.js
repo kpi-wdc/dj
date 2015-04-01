@@ -408,6 +408,9 @@ app.controller('MainController', function ($scope, $location, $cookies,
     let cnf = $scope.globalConfig;
     cnf.debugMode = cnf.debugMode && !cnf.designMode;
   });
+
+  window.onbeforeunload = () =>
+    "Are you sure that you want to leave the website without saving the changes?";
 });
 
 app.controller('PageController', function ($scope, pageConfig, widgetManager) {
