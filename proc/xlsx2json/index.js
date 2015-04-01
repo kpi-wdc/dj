@@ -3,7 +3,7 @@ var XLS = require('xlsjs');
 
 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-exports.JSONSTAT = function(str) {
+exports.getJSONSTAT = function(str) {
 	var result = [];
 	try {
 		var json = JSON.parse(str);
