@@ -30,21 +30,23 @@
       </span>
       <a href="/app/{{app.name}}/" class="button tiny success column small-2">View</a>
       <input type="button" class="button tiny column small-2"
-          <% if (!user) { %> disabled <% } %>
+          ng-disabled="!isOwner(app) && !isCollaborator(app)"
           value="Rename" ng-click="renameApp(app.id)">
       <input type="button" class="button alert tiny column small-2"
-          <% if (!user) { %> disabled <% } %>
+          ng-disabled="!isOwner(app) && !isCollaborator(app)"
           value="Delete" ng-click="deleteApp(app.id, app.name)">
     </div>
   </fieldset>
 
   <% if (user) { %>
   <fieldset>
-    <label>Add new app
-      <input placeholder="App name" name="appName" ng-model="model.newAppName" autocomplete="off">
-    </label><br>
-    <input type="button" value="Submit" class="button success tiny"
-           disabled ng-disabled="!model.newAppName" ng-click="createApp()">
+    <form ng-submit="createApp()">
+      <label>Add new app
+        <input placeholder="App name" name="appName" ng-model="model.newAppName" autocomplete="off">
+      </label><br>
+      <input type="submit" value="Submit" class="button success tiny"
+        disabled ng-disabled="!model.newAppName">
+    </form>
   </fieldset>
   <% } %>
 

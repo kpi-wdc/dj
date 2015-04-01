@@ -10,6 +10,10 @@
  *
  */
 
+var path = require('path');
+var express = require('express');
+var staticPath = path.join('.tmp', 'public');
+
 module.exports = {
 
   /***************************************************************************
@@ -32,6 +36,14 @@ module.exports = {
    ***************************************************************************/
 
   port: process.env.PORT || 80,
+
+  http: {
+    middleware: {
+      www: express.static(staticPath, {
+        maxAge: 20 * 60 * 1000 // 20 min and only in production
+      })
+    }
+  },
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *

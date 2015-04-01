@@ -18,6 +18,8 @@
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
+
+  <% if (isOwner || isCollaborator)  {%>
   <div id="page-design-panel">
     <h3>Design panel</h3>
 
@@ -26,6 +28,9 @@
             disabled
             ng-disabled="app.sendingToServer || !app.wasModified">
       Submit changes to server
+    </button>
+    <button class="button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn">
+      <i class="fi-lock"></i> Share
     </button>
     <button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn">
       App settings
@@ -41,8 +46,6 @@
             ng-click="app.deletePage(app.currentPageIndex())">
       Delete page
     </button>
-
-    <% if (isAppOwner)  {%>
     <div>
       <div class="left">
         <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
@@ -62,9 +65,9 @@
         </div>
       </div>
     </div>
-    <% } %>
     <hr>
   </div>
+  <% } %>
 </header>
 
 <div class="row">
@@ -132,6 +135,7 @@
       .constant('initialConfig', {
         id: "<%= app.id %>",
         name: "<%= app.name %>",
+        collaborations: <%- JSON.stringify(app.collaborations) %>,
         pages: <%- JSON.stringify(app.pages) %>,
         title: "<%= app.title %>",
         description: "<%= app.description %>",

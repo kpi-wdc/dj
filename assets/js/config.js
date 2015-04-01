@@ -5,7 +5,6 @@ System.config({
     "app-list": "js/app-list.js",
     "data-sources": "js/data-sources.js",
     "info": "js/info.js",
-    "shims": "js/shims.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
     "jquery": "components/jquery/dist/jquery.js",
@@ -123,7 +122,9 @@ System.config({
 
 System.config({
   "map": {
-    "text": "github:systemjs/plugin-text@0.0.2"
+    "text": "github:systemjs/plugin-text@0.0.2",
+    "traceur": "github:jmcriffey/bower-traceur@0.0.87",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87"
   }
 });
 

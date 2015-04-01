@@ -2,6 +2,7 @@
   "title": "Title",
   "description": "Description",
   "keywords": [],
+  "collaborations": [],
   "isPublished": true,
   "pages": [
     {
@@ -19,7 +20,7 @@
             {
               "type": "htmlwidget",
               "instanceName": "main-page-html-widget",
-              "text": "<h3>Home page</h3> Empty home page. You can switch to design mode to edit this contents or add new widgets"
+              "text": "Empty home page. You can switch to design mode to edit this contents or add new widgets"
             }
           ]
         }

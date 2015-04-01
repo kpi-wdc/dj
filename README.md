@@ -17,7 +17,7 @@ Required software:
 
 - `node.js` (or `io.js`) is installed (better 0.11.x or newer)
 Install latest node.js using `npm install -g n; n latest` as root/admin user
-- `npm` is installed (1.2 doesn't work, 1.4 and newer is OK, check with `npm --version`.
+- `npm` is installed (minimum 2.0, check with `npm --version`.
 Upgrade to newer npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
 - `mongodb` is installed
 
@@ -71,16 +71,17 @@ Open `docs/index.html` to view documentation in the browser.
 ## Used technologies
 
   - git (version control)
-  - ES6 JavaScript
+  - ES6/7 JavaScript (modules, async/await, classes, arrow functions etc...)
   - Sails.JS (node.js MVC framework)
   - npm (front-end dev. dependencies)
   - bower (front-end dependencies)
+  - jspm (front-end dependencies)
   - gulp (front-end task-runner)
   - karma (front-end unit-test runner)
   - protractor (end-to-end test runner)
   - jasmine (test framework)
   - angularjs (MVVM front-end framework)
-  - requirejs (AMD loader)
+  - SystemJS (universal dependency loader)
   - LESS (CSS replacement)
   - jsdoc (JS documentation engine)
   - travis (Continuous Integration)

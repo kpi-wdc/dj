@@ -85,8 +85,7 @@ exports.get = function(filename) {
         }
     }
     forEachIndexes(0,result[datasetName].dimension.size ,[]);
-    var json = JSON.stringify(result);
-    return json;
+    return result;
 }
 
 function getMetadataValue(metadata,key){
