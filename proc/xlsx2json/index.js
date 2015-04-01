@@ -19,7 +19,7 @@ exports.getJSONSTAT = function(str) {
 	return null;
 }
 exports.readJSONSTAT = function(filename) {
-	getJSONSTAT(readJSON(filename));
+	exports.getJSONSTAT(readJSON(filename));
 }
 exports.readJSON = function(filename) {
 	console.time(filename);
