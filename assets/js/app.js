@@ -161,7 +161,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
 
   angular.extend(this, {
     sendingToServer: false,
-    wasModified: true,
+    wasModified: false,
 
     isHomePageOpened() {
       return $stateParams.href === '';
@@ -195,6 +195,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
     },
 
     submitToServer(callback) {
+      this.wasModified = false;
       this.sendingToServer = true;
       return $http.put(appUrls.appConfig, config)
         .then(() => {
@@ -246,7 +247,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
             return templateTypesPromise;
           }
         }
-      });
+      }).result.then( () => this.wasModified = true );
     },
 
     openShareSettings() {
@@ -268,6 +269,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
       }).result.then((newSettings) => {
         angular.extend(config, newSettings);
       });
+      this.wasModified = true;
     },
 
     onStateChangeStart(evt, toState, toParams) {
@@ -307,7 +309,7 @@ app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUr
   };
 });
 
-app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls) {
+app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, app) {
   angular.extend(this, {
     deleteIthWidgetFromHolder(holder, index) {
       const removedWidget = holder.widgets.splice(index, 1)[0];
@@ -344,6 +346,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
           angular.copy(newWidgetConfig, widget);
           const user = new APIUser();
           user.invokeAll(APIProvider.RECONFIG_SLOT);
+          app.wasModified = true;
         });
     },
 
@@ -381,7 +384,7 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
   });
 });
 
-app.controller('MainController', function ($scope, $location, $cookies,
+app.controller('MainController', function ($scope, $location, $cookies, $window,
                                            alert, app, config) {
   angular.extend($scope, {
     globalConfig: {},
@@ -408,6 +411,19 @@ app.controller('MainController', function ($scope, $location, $cookies,
     let cnf = $scope.globalConfig;
     cnf.debugMode = cnf.debugMode && !cnf.designMode;
   });
+
+  $window.onbeforeunload = (evt) => {
+    var message = "Are you sure that you want to leave the website without saving the changes?";
+    if(app.wasModified) {
+      if (typeof evt == "undefined") {
+        evt = window.event;
+      }
+      if (evt) {
+        evt.returnValue = message;
+      }
+      return message;
+    }
+  };
 });
 
 app.controller('PageController', function ($scope, pageConfig, widgetManager) {
