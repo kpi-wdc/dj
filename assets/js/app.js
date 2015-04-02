@@ -413,10 +413,10 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   });
 
   $window.onbeforeunload = (evt) => {
-    var message = "Are you sure that you want to leave the website without saving the changes?";
-    if(app.wasModified) {
-      if (typeof evt == "undefined") {
-        evt = window.event;
+    let message = "Are you sure that you want to leave the website without saving the changes?";
+    if (app.wasModified) {
+      if (typeof evt === "undefined") {
+        evt = $window.event;
       }
       if (evt) {
         evt.returnValue = message;
