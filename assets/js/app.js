@@ -162,13 +162,19 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
   angular.extend(this, {
     sendingToServer: false,
     wasModified: false,
+    currentPageIndex: 0,
 
     isHomePageOpened() {
       return $stateParams.href === '';
     },
 
     is404PageOpened() {
-      return config.pages.indexOf($stateParams.href) === -1;
+      //return config.pages.indexOf($stateParams.href) === -1;
+      for (let i = 0; i < config.pages.length; i++){
+        if (config.pages[i].href === $stateParams.href)
+          return false;
+      }
+      return true;
     },
 
     pageIndexByHref(href) {
@@ -274,7 +280,9 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
 
     onStateChangeStart(evt, toState, toParams) {
       if (toState.name === 'page') {
-        pageConf = config.pages[this.pageIndexByHref(toParams.href)];
+        let pageIndex = this.pageIndexByHref(toParams.href);
+        pageConf = config.pages[pageIndex];
+        this.currentPageIndex = pageIndex;
       } else {
         console.log('No config available - non-page routing...');
         pageConf = undefined;
