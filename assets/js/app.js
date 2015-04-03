@@ -196,6 +196,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
     deletePage(index) {
       if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
         config.pages.splice(index, 1);
+        this.wasModified = true;
       }
       $state.go('page', {href: ''});
     },
