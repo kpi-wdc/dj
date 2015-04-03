@@ -169,12 +169,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
     },
 
     is404PageOpened() {
-      //return config.pages.indexOf($stateParams.href) === -1;
-      for (let i = 0; i < config.pages.length; i++){
-        if (config.pages[i].href === $stateParams.href)
-          return false;
-      }
-      return true;
+      return this.pageConfig().href === '404';
     },
 
     pageIndexByHref(href) {
