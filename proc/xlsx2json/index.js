@@ -18,6 +18,23 @@ exports.getJSONSTAT = function(str) {
 		console.log(e);}
 	return null;
 }
+exports.getOBJECT = function(str) {
+	var result = {};
+	try {
+		var json = JSON.parse(str);
+		for(obj in json) {
+			result = {};
+			result['name'] = obj;
+			result['metadata'] = {};
+			result['value'] = [];
+			for(val in json[val]) {
+				if (val == 'value') { result['value'] = json[obj][val];}
+				else { result['metadata'][val] = json[obj][val];}}
+			return result;}
+	} catch(e) {
+		console.log(e);}
+	return null;
+}
 exports.readJSONSTAT = function(filename) {
 	exports.getJSONSTAT(exports.readJSON(filename));
 }
