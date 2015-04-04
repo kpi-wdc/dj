@@ -23,7 +23,6 @@ module.exports = {
       // exists in a database, so there is no need to process it
       // again, just send back previous computational result
       if (json) {
-        console.log('cached');
         if (!json.parent) {
           delete json.parent;
         }
@@ -40,7 +39,6 @@ module.exports = {
         json.status_code = 0;
         return res.send(json);
       } else {
-        console.log('processing...');
         var obj_to_process = {};
         var parent_proc = "";
         if (req.body.data) {
