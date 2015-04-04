@@ -42,7 +42,7 @@ exports.getOBJECT = function(str) {
 			result['name'] = obj;
 			result['metadata'] = {};
 			result['value'] = [];
-			for(val in json[val]) {
+			for(val in json[obj]) {
 				if (val == 'value') { result['value'] = json[obj][val];}
 				else { result['metadata'][val] = json[obj][val];}}
 			return result;}
