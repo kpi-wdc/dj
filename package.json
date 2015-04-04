@@ -90,9 +90,7 @@
     "xlsjs": "0.7.5",
     "xlsx": "0.7.12",
     "xlsx-json-parser": "file:proc/xlsx2json",
-    "yargs": "3.0.4",
-	"xlsx": "0.7.12",
-    "xlsjs": "0.7.5"
+    "yargs": "3.0.4"
   },
   "jspm": {
     "directories": {

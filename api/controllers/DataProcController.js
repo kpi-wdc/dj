@@ -16,24 +16,26 @@ module.exports = {
     var obj_to_process = {};
     var parent_proc = "";
     if (req.body.data) {
-      console.log("data");
       obj_to_process.data = req.body.data;
       obj_to_process.params = req.body.params;
       console.log(obj_to_process.data.values);
       child.send(obj_to_process);
     } else if (req.body.data_id) {
-      console.log("data_id");
       ProcData.findOne({
         id: req.body.data_id
       }, function (err, found) {
         if (!err) {
           if (found) {
-            obj_to_process.data = found.value;
-            obj_to_process.params = req.body.params;
+            if (found.isDataSource) {
+              obj_to_process = found;
+            } else {
+              obj_to_process.data = found.value;
+              obj_to_process.params = req.body.params;
+            }
             parent_proc = found.id;
             child.send(obj_to_process);
           } else {
-            return res.forbidden("No data was found for the specified id");
+            return res.forbidden("No data was found for the specified id: " + req.body.data_id);
           }
         } else {
           return res.serverError();
@@ -96,6 +98,9 @@ module.exports = {
       if (!err) {
         if (found) {
           if (!found.parent) delete found.parent;
+          delete found.createdAt;
+          delete found.updatedAt;
+          delete found.hash;
           res.send(found);
         } else {
           res.forbidden();
@@ -104,6 +109,6 @@ module.exports = {
         res.serverError();
       }
     });
-  },
+  }
 };
 

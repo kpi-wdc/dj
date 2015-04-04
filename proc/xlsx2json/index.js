@@ -15,6 +15,73 @@ exports.getJSONSTAT = function(str) {
 			json[val]['value'] = result;
 			return JSON.stringify(json);}
 	} catch(e) {
+		process.stderr.write(e.toString());
+		process.exit(10);}
+	return null;
+}
+exports.toJSONSTAT = function(obj) {
+	return exports.getJSONSTAT(exports.toJSON(obj));
+}
+exports.toJSON = function(obj) {
+	var result = {};
+	try{
+		result[obj['name']] = {};
+		for(val in obj['metadata']) {
+			result[obj['name']][val] = obj['metadata'][val];}
+		result[obj['name']]['value'] = obj['value'];
+		return JSON.stringify(result);
+	} catch(e) {
+		process.stderr.write(e.toString());
+		process.exit(11);}
+	return null;
+}
+exports.getOBJECT = function(str) {
+	var result = {};
+	try {
+		var json = JSON.parse(str);
+		for(obj in json) {
+			result = {};
+			result['name'] = obj;
+			result['metadata'] = {};
+			result['value'] = [];
+			for(val in json[obj]) {
+				if (val == 'value') { result['value'] = json[obj][val];}
+				else { result['metadata'][val] = json[obj][val];}}
+			return result;}
+	} catch(e) {
+		process.stderr.write(e.toString());
+		process.exit(12);}
+	return null;
+}
+exports.toJSONSTAT = function(obj) {
+	return exports.getJSONSTAT(exports.toJSON(obj));
+}
+exports.toJSON = function(obj) {
+	var result = {};
+	try{
+		result[obj['name']] = {};
+		for(val in obj['metadata']) {
+			result[obj['name']][val] = obj['metadata'][val];}
+		result[obj['name']]['value'] = obj['value'];
+		return JSON.stringify(result);
+	} catch(e) {
+		console.log(e);}
+	return null;
+}
+exports.getOBJECT = function(str) {
+	var result = {};
+	try {
+		var json = JSON.parse(str);
+		for(obj in json) {
+			result = {};
+			result['name'] = obj;
+			result['metadata'] = {};
+			result['value'] = [];
+			for(val in json[obj]) {
+				if (val == 'value') { result['value'] = json[obj][val];}
+				else { result['metadata'][val] = json[obj][val];}}
+			return result;}
+	} catch(e) {
 		console.log(e);}
 	return null;
 }
@@ -32,9 +99,12 @@ exports.readJSON = function(filename) {
 		var datasheet = workbook.Sheets['data'];
 		var worksheet = workbook.Sheets['metadata'];
 		if (datasheet == null || worksheet == null) {
-			console.log("Can't read sheets from file!"); return null;}
+			process.stderr.write("Can't read sheets from file!");
+			process.exit(13);
+			return null;}
 	} catch(e) {
-		console.log(e);
+		process.stderr.write(e.toString());
+		process.exit(14);
 		return null;}
 	var result = {};
 	try {
@@ -70,7 +140,8 @@ exports.readJSON = function(filename) {
 		});
 		result[dataset_name]['value'] = GetDataObject(datasheet, GetValue(worksheet, 'dataset.value'), indeces, result[dataset_name]['dimension']['size']);
 	} catch(e) {
-		console.log(e);
+		process.stderr.write(e.toString());
+		process.exit(15);
 		return null;}
 	return JSON.stringify(result);
 }
