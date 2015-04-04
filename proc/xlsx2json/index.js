@@ -35,6 +35,18 @@ exports.getOBJECT = function(str) {
 		console.log(e);}
 	return null;
 }
+exports.toJSON = function(obj) {
+	var result = {};
+	try{
+		result[obj['name']] = {};
+		for(val in obj['metadata']) {
+			result[obj['name']][val] = obj['metadata'][val];}
+		result[obj['name']]['value'] = obj['value'];
+		return JSON.stringify(result);
+	} catch(e) {
+		console.log(e);}
+	return null;
+}
 exports.readJSONSTAT = function(filename) {
 	exports.getJSONSTAT(exports.readJSON(filename));
 }
