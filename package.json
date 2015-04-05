@@ -73,7 +73,7 @@
     "newrelic": "1.16.2",
     "node-linq": "0.0.5",
     "oauth": "0.9.12",
-    "object-hash": "^0.5.0",
+    "object-hash": "0.5.0",
     "passport": "0.2.1",
     "passport-google-oauth": "0.1.5",
     "passport-local": "1.0.0",
