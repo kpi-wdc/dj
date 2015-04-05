@@ -270,8 +270,8 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
         backdrop: 'static'
       }).result.then((newSettings) => {
         angular.extend(config, newSettings);
+        this.wasModified = true;
       });
-      this.wasModified = true;
     },
 
     onStateChangeStart(evt, toState, toParams) {
@@ -319,6 +319,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
       const removedWidget = holder.widgets.splice(index, 1)[0];
       const user = new APIUser();
       user.tryInvoke(removedWidget.instanceName, APIProvider.REMOVAL_SLOT);
+      app.wasModified = true;
     },
 
     openWidgetConfigurationDialog(widget) {
