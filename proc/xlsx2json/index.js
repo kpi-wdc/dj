@@ -3,22 +3,6 @@ var XLS = require('xlsjs');
 
 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-exports.getJSONSTAT = function(str) {
-	var result = [];
-	try {
-		var json = JSON.parse(str);
-		for(val in json) {
-			var data = json[val]['value'];
-			if (data) 
-				data.forEach(function (obj) {
-					result.push(obj['value']);});
-			json[val]['value'] = result;
-			return JSON.stringify(json);}
-	} catch(e) {
-		process.stderr.write(e.toString());
-		process.exit(10);}
-	return null;
-}
 exports.toJSONSTAT = function(obj) {
 	return exports.getJSONSTAT(exports.toJSON(obj));
 }
@@ -30,6 +14,22 @@ exports.toJSON = function(obj) {
 			result[obj['name']][val] = obj['metadata'][val];}
 		result[obj['name']]['value'] = obj['value'];
 		return JSON.stringify(result);
+	} catch(e) {
+		process.stderr.write(e.toString());
+		process.exit(10);}
+	return null;
+}
+exports.getJSONSTAT = function(str) {
+	var result = [];
+	try {
+		var json = JSON.parse(str);
+		for(val in json) {
+			var data = json[val]['value'];
+			if (data) 
+				data.forEach(function (obj) {
+					result.push(obj['value']);});
+			json[val]['value'] = result;
+			return JSON.stringify(json);}
 	} catch(e) {
 		process.stderr.write(e.toString());
 		process.exit(11);}
@@ -51,38 +51,6 @@ exports.getOBJECT = function(str) {
 	} catch(e) {
 		process.stderr.write(e.toString());
 		process.exit(12);}
-	return null;
-}
-exports.toJSONSTAT = function(obj) {
-	return exports.getJSONSTAT(exports.toJSON(obj));
-}
-exports.toJSON = function(obj) {
-	var result = {};
-	try{
-		result[obj['name']] = {};
-		for(val in obj['metadata']) {
-			result[obj['name']][val] = obj['metadata'][val];}
-		result[obj['name']]['value'] = obj['value'];
-		return JSON.stringify(result);
-	} catch(e) {
-		console.log(e);}
-	return null;
-}
-exports.getOBJECT = function(str) {
-	var result = {};
-	try {
-		var json = JSON.parse(str);
-		for(obj in json) {
-			result = {};
-			result['name'] = obj;
-			result['metadata'] = {};
-			result['value'] = [];
-			for(val in json[obj]) {
-				if (val == 'value') { result['value'] = json[obj][val];}
-				else { result['metadata'][val] = json[obj][val];}}
-			return result;}
-	} catch(e) {
-		console.log(e);}
 	return null;
 }
 exports.readJSONSTAT = function(filename) {
