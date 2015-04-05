@@ -86,6 +86,7 @@ Open `docs/index.html` to view documentation in the browser.
   - jsdoc (JS documentation engine)
   - travis (Continuous Integration)
   - heroku (PaaS)
+  - gravatar (service for centralized user avatar (image)  store)
 
 ## Intellij Idea
 
