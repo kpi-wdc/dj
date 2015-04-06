@@ -22,14 +22,14 @@ Upgrade to newer npm with `npm install -g npm` and make sure new npm is in `PATH
 - `mongodb` is installed
 
 Highly recommended:
-- bower is installed (run `npm install -g bower` as admin)
-- gulp is installed (run `npm install -g gulp` as admin)
+- `bower` is installed (run `npm install -g bower` as admin)
+- `gulp` is installed (run `npm install -g gulp` as admin)
 
 Optional:
-- karma is installed (run `npm install -g karma` as admin)
-- protractor is installed (run `npm install -g protractor` as admin)
-- chrome and firefox (optional) are installed
-- docker and docker-compose. Installation instructions -
+- `karma is installed (run `npm install -g karma` as admin)
+- `protractor` is installed (run `npm install -g protractor` as admin)
+- `chrome` and `firefox` (optional) are installed
+- `docker` and `docker-compose`. Installation instructions -
 [Ubuntu](https://docs.docker.com/installation/ubuntulinux/),
 [Windows](https://docs.docker.com/installation/windows/),
 
@@ -44,7 +44,7 @@ OR if docker and docker-compose are installed (better suited for production usag
     docker build -t sochka/wdc .
     docker-compose up
 
-Intellij idea project has preconfigured maven run configuration.
+Intellij idea project has preconfigured run configurations.
 
 ## API docs
 To generate API documentation run `gulp docs`
@@ -95,6 +95,7 @@ Open `docs/index.html` to view documentation in the browser.
   - travis (Continuous Integration)
   - heroku (PaaS)
   - gravatar (service for centralized user avatar (image)  store)
+  - docker (deployment) (deployment)
 
 ## Intellij Idea
 
@@ -119,3 +120,4 @@ The following steps will make your work with Intellij Idea more productive
 
   - angularjs batarang
   - JetBrains IDE support
+
