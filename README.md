@@ -29,12 +29,20 @@ Optional:
 - karma is installed (run `npm install -g karma` as admin)
 - protractor is installed (run `npm install -g protractor` as admin)
 - chrome and firefox (optional) are installed
+- docker and docker-compose. Installation instructions -
+[Ubuntu](https://docs.docker.com/installation/ubuntulinux/),
+[Windows](https://docs.docker.com/installation/windows/),
 
 ## Build
 To run this project from terminal run the following command:
 
      npm install
      npm start
+
+OR if docker and docker-compose are installed (better suited for production usage):
+
+    docker build -t sochka/wdc .
+    docker-compose up
 
 Intellij idea project has preconfigured maven run configuration.
 
