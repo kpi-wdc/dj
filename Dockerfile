@@ -13,5 +13,5 @@ ENV PORT 80
 EXPOSE 80
 
 WORKDIR /app
-CMD ["node", "app.js"]
+CMD ["node", "app.js", "--prod"]
 
