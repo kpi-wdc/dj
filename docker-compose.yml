@@ -1,6 +1,6 @@
 web:
   build: .
-  command: node app.js
+  command: node app.js --prod
   links:
    - db
   ports:

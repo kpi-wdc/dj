@@ -7,11 +7,11 @@ COPY . /app
 ENV PRODUCTION true
 ENV NPM_CONFIG_PRODUCTION true
 
-RUN cd /app; npm install
+WORKDIR /app
+RUN npm install
 
 ENV PORT 80
 EXPOSE 80
 
-WORKDIR /app
 CMD ["node", "app.js", "--prod"]
 
