@@ -4,6 +4,9 @@
 # Docker
 docker-compose.yml
 
+# Build
+.tmp
+
 # Tests
 test
 karma.conf.js
