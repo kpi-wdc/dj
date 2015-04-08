@@ -1,9 +1,6 @@
 # Version Control
 .git
 
-# Build
-.tmp
-
 # Docker
 docker-compose.yml
 
