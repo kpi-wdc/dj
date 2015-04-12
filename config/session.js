@@ -71,7 +71,7 @@ module.exports.session = {
   port: process.env.DB_PORT_27017_TCP_PORT || 27017,
   db: 'wdc-session',
   collection: 'sessions',
-  url: process.env.MONGOLAB_URI,
+  url: process.env.MONGOLAB_URI || process.env.MONGODB_URL
 
   /***************************************************************************
   *                                                                          *
