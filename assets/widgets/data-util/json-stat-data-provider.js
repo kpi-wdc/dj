@@ -207,7 +207,7 @@ m.factory('JSONstatDataProvider', ["$http", function ($http) {
       }
       test = test.join("&&");
 
-      var queryStr = "from r in $0 where " + test + " select r";
+      var queryStr = "from r in $0 where (r.value != null) && " + test + " select r";
 
       //console.log(queryStr)
 

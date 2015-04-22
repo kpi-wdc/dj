@@ -92,6 +92,9 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
           }
           r.push(current);
         }
+        
+         var r = r.filter(function(row){return Object.keys(row.values).length>0}); 
+
         var header = {};
         header.label = conf.selectedDataset.dimensions[rowsDim].label;
         header.body = {};
