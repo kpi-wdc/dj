@@ -3,15 +3,60 @@ var XLS = require('xlsjs');
 
 var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+
+var getDimIDs = function(def,dimensionLabel){
+	var indexes = def[dimensionLabel].category.index;
+	var result = [];
+	for(var f in indexes){
+		result[indexes[f]] = f;
+	}
+	return result;
+}
+
 exports.getJSONSTAT = function(str) {
 	var result = [];
 	try {
 		var json = JSON.parse(str);
+
 		for(val in json) {
+			var dims = json[val]['dimension']['id'];
+			indexes = [];
+			dims.forEach(function(id){
+				indexes.push({id:id,index:getDimIDs(json[val]['dimension'],id)});
+			})
+			
 			var data = json[val]['value'];
-			if (data) 
-				data.forEach(function (obj) {
-					result.push(obj['value']);});
+			var result = [];
+
+			var getDataValue = function(current){
+		
+				var q = data.filter(function(item){
+					var result = true;
+					current.forEach(function(ci,index){
+						result &= item['#'+indexes[index].id] == indexes[index].index[ci];
+					})
+					return result;
+				})
+
+				 return (q.length == 0) ? null : q[0]['#value'];    
+			}
+			
+			var forEachIndexes = function (level,size,current){
+			    if(size.length == current.length){
+			        result.push(getDataValue(current));
+			        return;
+			    }
+			    var currentValue = 0;
+			    while (currentValue < size[level]){
+			        current.push(currentValue);
+			        forEachIndexes(level+1,size,current);
+			        current.pop();
+			        currentValue++;
+			    }
+			}
+
+			forEachIndexes(0,json[val]['dimension']['size'] ,[]);
+
 			json[val]['value'] = result;
 			return JSON.stringify(json);}
 	} catch(e) {
@@ -19,6 +64,7 @@ exports.getJSONSTAT = function(str) {
 		process.exit(10);}
 	return null;
 }
+
 exports.toJSONSTAT = function(obj) {
 	return exports.getJSONSTAT(exports.toJSON(obj));
 }
@@ -138,7 +184,7 @@ exports.readJSON = function(filename) {
 				result[dataset_name]['dimension'][object]['category']['label'][obj['indeces'][i]] = obj['labels'][obj['indeces'][i]];}
 			result[dataset_name]['dimension']['size'].push(obj['indeces'].length);
 		});
-		result[dataset_name]['value'] = GetDataObject(datasheet, GetValue(worksheet, 'dataset.value'), indeces, result[dataset_name]['dimension']['size']);
+		result[dataset_name]['value'] = GetDataObject(datasheet, worksheet, GetValue(worksheet, 'dataset.value'), indeces, result[dataset_name]['dimension']['size']);
 	} catch(e) {
 		process.stderr.write(e.toString());
 		process.exit(15);
@@ -177,37 +223,65 @@ function GetObject(datasheet, index_id, label_id) {
 			obj['indeces'].push(datasheet[index_id + i].v);
 			obj['labels'][datasheet[index_id + i].w] = datasheet[label_id + i].v;}
 }
-function GetDataObject(datasheet, value, indeces, lengths) {
-	value = GetID(datasheet, value);
-	res = {result: [], names: [], state: [], length : 1, data: {}};
-	for (key in indeces) {
-		res.state.push(0);
-		res.names.push(key);}
-	lengths.forEach(function(val) { res.length *= val; });
-	for (i = 2;;i++) {
-		if (!datasheet['A' + i]) break;
-			var ID = [];
-			for (key in indeces) ID.push(datasheet[key + i].v);
-			res.data[ID] = datasheet[value + i].v;}
-	var ID = function(state, names, indeces, result) {
-		for (var j = 0; j < state.length; j++) result.push(indeces[names[j]][state[j]]); return result; }
-	var REFRESH = function(state, lengths) {
-		state[state.length - 1]++;
-		for (j = 1; j < state.length; j++) {
-			if (j > 0 && state[j] >= lengths[j]) {
-				state[j - 1]++;
-				for (k = j; k < state.length;k++) state[k] = 0;
-				j-=2;}}
-		return state;}
-	for (var i = 0; i < res.length; i++) {
-		var id = ID(res.state, res.names, indeces, [])
-		var obj = res.data[id];
-		res.state = REFRESH(res.state, lengths);
-		if (obj) {
-			var data = {};
-			for (j = 0; j < res.names.length; j++) data[res.names[j]] = id[j];
-			data['value'] = obj;
-			res.result.push(data);
-		}}
-	return res.result;
+// function GetDataObject(datasheet, value, indeces, lengths) {
+// 	value = GetID(datasheet, value);
+// 	res = {result: [], names: [], state: [], length : 1, data: {}};
+// 	for (key in indeces) {
+// 		res.state.push(0);
+// 		res.names.push(key);}
+// 	lengths.forEach(function(val) { res.length *= val; });
+// 	for (i = 2;;i++) {
+// 		if (!datasheet['A' + i]) break;
+// 			var ID = [];
+// 			for (key in indeces) ID.push(datasheet[key + i].v);
+// 			res.data[ID] = datasheet[value + i].v;}
+// 	var ID = function(state, names, indeces, result) {
+// 		for (var j = 0; j < state.length; j++) result.push(indeces[names[j]][state[j]]); return result; }
+// 	var REFRESH = function(state, lengths) {
+// 		state[state.length - 1]++;
+// 		for (j = 1; j < state.length; j++) {
+// 			if (j > 0 && state[j] >= lengths[j]) {
+// 				state[j - 1]++;
+// 				for (k = j; k < state.length;k++) state[k] = 0;
+// 				j-=2;}}
+// 		return state;}
+// 	for (var i = 0; i < res.length; i++) {
+// 		var id = ID(res.state, res.names, indeces, [])
+// 		var obj = res.data[id];
+// 		res.state = REFRESH(res.state, lengths);
+// 		if (obj) {
+// 			var data = {};
+// 			for (j = 0; j < res.names.length; j++) data[res.names[j]] = id[j];
+// 			data['value'] = obj;
+// 			res.result.push(data);
+// 		}}
+// 	return res.result;
+// }
+function GetDataObject(datasheet, worksheet) {
+	var fieldMap = [];
+	var dimensions = GetArray(worksheet, 'dimension.id');
+	dimensions.forEach(function(currentDim){
+		fieldMap.push({source:GetValue(worksheet, currentDim + '.category.id'),
+						target:"#"+currentDim});
+		fieldMap.push({source:GetValue(worksheet, currentDim + '.category.label'),
+						target:currentDim});
+	})
+	fieldMap.push({source:GetValue(worksheet,'dataset.value'),target:"#value"});
+	
+	var dataDump = XLSX.utils.sheet_to_json(datasheet);
+	var result = [];
+	dataDump.forEach(function (currentData){
+		var item = {};
+		for(var field in currentData){
+			var targets = fieldMap.filter(function(f){return f.source==field})
+			targets.forEach(function(c){
+				item[c.target] = (c.target == '#value') 
+					? new Number(currentData[c.source])
+					: currentData[c.source];
+			});
+		}
+		result.push(item);
+	})
+
+	return result;
 }
