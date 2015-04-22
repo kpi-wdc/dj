@@ -20,6 +20,7 @@ m.controller('DataSourceController',
         function (data) {
 
           data = ($scope.url.indexOf("/api/data/process/")>0) ? data.value : data;
+          $scope.data = data;
           if (JSONstatDataProvider.isCompatible(data)) {
             $scope.provider = new JSONstatDataProvider($scope.data, $scope.url);
             $scope.info = $scope.provider.getDatasets();

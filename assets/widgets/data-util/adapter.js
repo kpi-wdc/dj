@@ -522,7 +522,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
       //console.log(PCA.getData(table))
       table.body = table.body.filter(function (item) {
         //console.log(item)
-        for (var i in item.values) {
+        for (var i in table.header.body) {
           if (angular.isUndefined(item.values[i]) || isNaN(item.values[i]) || item.values[i] == null) return false;
         }
         return true;
