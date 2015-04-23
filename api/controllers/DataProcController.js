@@ -2,7 +2,7 @@
  * DataProcController
  *
  * @description :: Server-side logic for managing data processes
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {

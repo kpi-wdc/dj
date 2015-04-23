@@ -1,0 +1,11 @@
+{
+  "name": "save",
+  "version": "0.0.1",
+  "description": "Module to save data in dps (data processing service) and return this data",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}
