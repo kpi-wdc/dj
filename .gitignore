@@ -36,4 +36,5 @@ xlsx
 
 # Other
 *.swp # vim
+*~ #tmp file
 
