@@ -1,4 +1,4 @@
-FROM dockerfile/nodejs
+FROM node:0.12-onbuild
 MAINTAINER Oleksandr Sochka "sasha.sochka@gmail.com"
 
 COPY . /app
