@@ -260,6 +260,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
         backdrop: 'static'
       }).result.then((collaborations) => {
         config.collaborations = collaborations;
+          this.wasModified = true;
       });
     },
 
