@@ -373,6 +373,13 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
           }
         }
       });
+    },
+
+    cloneWidget(holder, widget){
+      let newWidget = angular.copy(widget);
+      newWidget.instanceName = Math.random().toString(36).substring(2);
+      holder.widgets.push(newWidget);
+      app.wasModified = true;
     }
   });
 });
@@ -437,7 +444,8 @@ app.controller('PageController', function ($scope, pageConfig, widgetManager) {
     config: pageConfig,
     deleteIthWidgetFromHolder: widgetManager.deleteIthWidgetFromHolder.bind(widgetManager),
     openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
-    addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager)
+    addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager),
+    cloneWidget: widgetManager.cloneWidget.bind(widgetManager)
   });
 });
 

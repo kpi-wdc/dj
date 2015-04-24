@@ -5,6 +5,7 @@
       <span class="widget-type label radius left" ng-bind="widget.type"></span>
       <span class="widget-delete-btn right" ng-click="deleteIthWidgetFromHolder(holder, $index)"><i class="glyphicon fi-x"></i></span>
       <span class="widget-config-btn right" ng-click="openWidgetConfigurationDialog(widget)"><i class="glyphicon fi-wrench"></i></span>
+      <span class="widget-clone-btn right" ng-click="cloneWidget(holder, widget)"><i class="glyphicon fi-page-copy"></i></span>
     </div>
   </div>
   <div ng-include="widgetTemplateUrl(widget.type)"
