@@ -12,6 +12,8 @@ import 'angular-json-editor';
 import 'angular-cookies';
 import 'template-cached-pages';
 import 'sceditor';
+import 'file-upload';
+
 
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',

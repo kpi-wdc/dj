@@ -1,0 +1,77 @@
+<h4>Widget Settings Wizard</h4>
+<!--
+<div class="border" style="padding: 0.2rem">
+  <div class="toolbar left">Steps:</div>
+  <button ng-repeat="step in dialog.steps"
+          ng-disabled="step.disabled"
+          ng-click="dialog.gotoStep(step)"
+          class="button radius toolbar"
+          ng-class="{ secondary:!step.active}"
+          style="margin:0 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+    {{step.title}}
+  </button>
+</div>
+-->
+
+<div>
+  <div class="panel wizard" style="font-size:small;">
+    <div class="row">
+      <h5>Select Widget Name and Datasource</h5>
+
+      <div class="columns left  medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label>Widget name:<input type="text" ng-model="dialog.conf.instanceName"></label>
+      </div>
+
+      <div class="columns left  medium-6 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label>URL:<input type="text" ng-model="dialog.conf.url"></label>
+      </div>
+    </div>
+    
+    <div class="panel wizard">
+      <h5>Select Datasource:</h5>
+      <button class="button tiny radius"
+              ng-file-select 
+              ng-model="dialog.files" 
+              ng-multiple="true">
+              Upload Datasource</button>
+
+      <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0">
+        <div ng-click = "dialog.selectDataSource(d)"
+             ng-repeat="d in dialog.ds"
+             style="cursor:pointer;margin:0.3rem;padding:0.3rem;border:solid 1px #d8d8d8;"
+             class="border column left  medium-3 container-top"
+             ng-style = "dialog.getStyle(d)"
+        >
+          <label style="font-size:medium;font-weight: bold">
+            {{d.metadata.label}}
+          </label>
+          <label style="font-size:smaller"><b>Source:</b> {{d.metadata.source}}</label>
+          <label style="font-size:smaller"><b>Updated:</b> {{d.metadata.updated}}</label>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+      {{d.id}}&nbsp;{{d.metadata.label}}&nbsp;{{d.metadata.updated}}
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+      <button class="button tiny alert right" style="margin:0 0 0 0.3rem"
+              ng-click="cancel()">
+        Cancel
+      </button>
+      <button class="button tiny right"
+              style="margin:0 0 0 0.785rem"
+              ng-class="{secondary : (dialog.conf.url == undefined)}"
+              ng-click="dialog.saveState()" ng-disabled="dialog.conf.url == undefined">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+

@@ -7,6 +7,8 @@ System.config({
     "info": "js/info.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
+    "file-upload-shim": "components/ng-file-upload/angular-file-upload-shim.js",
+    "file-upload": "components/ng-file-upload/angular-file-upload.js",
     "jquery": "components/jquery/dist/jquery.js",
     "angular": "components/angular/angular.js",
     "angular-mocks": "components/angular-mocks/angular-mocks.js",
@@ -32,11 +34,20 @@ System.config({
 
 System.config({
   "meta": {
+    "file-upload-shim": {
+      "deps": []
+    },
     "angular": {
       "deps": [
-        "jquery"
+        "jquery",
+        "file-upload-shim"
       ],
       "exports": "angular"
+    },
+    "file-upload": {
+      "deps": [
+        "angular"
+      ]
     },
     "jquery": {
       "exports": "$"
