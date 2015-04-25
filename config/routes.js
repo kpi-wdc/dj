@@ -35,9 +35,12 @@ module.exports.routes = {
   'get /data/dataSources': 'DataSourceViewController.getView',
 
   /*** APIs ***/
+  // IMPORTANT! - don't forget to update policies.js!
   // Apps
   'get /api/app/create/:appName': 'AppController.create',
   'put /api/app/config/:appId': 'AppController.update',
+  'get /api/app/import/:appId': 'AppController.import',
+  'post /api/app/export': 'AppController.export',
   'get /api/app/rename/:appId/:newAppName': 'AppController.rename',
   'get /api/app/delete/:appId': 'AppController.delete',
 
