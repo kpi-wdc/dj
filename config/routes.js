@@ -51,7 +51,7 @@ module.exports.routes = {
   'post /api/data/dataSource' : 'DataSourceController.add',
   'get /api/data/dataSource/:dataSourceId' : 'DataSourceController.getByDataSourceId',
   'get /api/data/dataSources/' : 'DataSourceController.list',
-  
+
   // DataProcessing manipulation URLs
   'post /api/data/process' : 'DataProcController.process',
   'get /api/data/process/:dataId' : 'DataProcController.getById'

@@ -15,7 +15,7 @@ module.exports = {
       .then(function (newApp) {
         delete newApp.id;
         newApp.isPublished = true;
-        newApp.name = req.params.appName
+        newApp.name = req.params.appName;
         newApp.owner = req.user.id;
 
         AppConfig.create(newApp).then(function (created) {
