@@ -678,8 +678,8 @@ app.controller('ShareSettingsModalController', function ($scope, $modalInstance,
         result.data
           .filter(user => !this.userIsCollaborator(user))
           .filter(user =>
-            user.name.includes(filterValue) ||
-            user.email.includes(filterValue)
+            user.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+            user.email.toLowerCase().includes(filterValue.toLowerCase())
           )
           .slice(0, 8)
       );
