@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "avg": "file:proc/avg",
-    "babel": "5.1.13",
+    "babel": "4.7.16",
     "bcryptjs": "2.1.0",
     "connect-mongo": "0.8.1",
     "del": "1.1.1",
@@ -47,7 +47,7 @@
     "fast-stats": "0.0.2",
     "gulp": "3.8.11",
     "gulp-angular-templatecache": "1.6.0",
-    "gulp-babel": "5.1.0",
+    "gulp-babel": "4.0.1",
     "gulp-bower": "0.0.10",
     "gulp-cached": "1.0.4",
     "gulp-changed": "1.2.1",
