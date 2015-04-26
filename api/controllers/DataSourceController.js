@@ -84,8 +84,6 @@ module.exports = {
         if (found) {
           delete found.hash;
           delete found.isDataSource;
-          delete found.createdAt;
-          delete found.updatedAt;
           res.send(found);
         } else {
           res.forbidden();
@@ -110,8 +108,6 @@ module.exports = {
             delete found[i].hash;
             delete found[i].value;
             delete found[i].isDataSource;
-            delete found[i].createdAt;
-            delete found[i].updatedAt;
           }
           res.send(found);
         } else {

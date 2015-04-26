@@ -1,0 +1,11 @@
+{
+  "name": "update",
+  "version": "0.0.1",
+  "description": "Module update an object",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

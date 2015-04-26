@@ -19,6 +19,7 @@ module.exports = {
     var md5 = require('object-hash').MD5(tempObj);
 
     ProcData.findOne({hash : md5}).then(function (json) {
+      var obj_to_process = {};
       // json, corresponding to md5 hash of the request already
       // exists in a database, so there is no need to process it
       // again, just send back previous computational result
@@ -32,14 +33,11 @@ module.exports = {
           delete json.data;
         }
         delete json.hash;
-        delete json.createdAt;
-        delete json.updatedAt;
         json.data_id = json.id;
         delete json.id;
         json.status_code = 0;
         return res.send(json);
       } else {
-        var obj_to_process = {};
         var parent_proc = "";
         if (req.body.data) {
           obj_to_process.data = req.body.data;
@@ -83,17 +81,21 @@ module.exports = {
         child.on('close', function(code) {
           if (code == 0) {
             res_body.status_code = code;
+            console.log(res_body);
             // save result to DB
             ProcData.create({
               value: res_body.data,
               parent: parent_proc,
-              hash: md5
+              hash: md5,
+              createdAt: obj_to_process.createdAt
             }, function (err, obj) {
               if (err) {
-                sails.log.error('Error while processing proc request: ' + err);
+                sails.log.error('Error while processing proc request: ' + err.toString());
                 return res.serverError();
               } else {
                 res_body.data_id = obj.id;
+                res_body.createdAt = obj.createdAt;
+                res_body.updatedAt = obj.updatedAt;
                 if (parent_proc) {
                   res_body.parent = parent_proc;
                 }
@@ -125,8 +127,6 @@ module.exports = {
       if (!err) {
         if (found) {
           if (!found.parent) delete found.parent;
-          delete found.createdAt;
-          delete found.updatedAt;
           delete found.hash;
           res.send(found);
         } else {
