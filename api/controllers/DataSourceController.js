@@ -2,7 +2,7 @@
  * DataSourceController
  *
  * @description :: Server-side logic for managing Datasources
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {

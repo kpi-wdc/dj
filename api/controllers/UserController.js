@@ -2,7 +2,7 @@
  * UserController
  *
  * @description :: Server-side logic for managing app configs
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @help        :: See hhttp://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {

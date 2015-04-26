@@ -2,7 +2,7 @@
  * AppViewController
  *
  * @description :: Server-side logic for managing Appviews
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
