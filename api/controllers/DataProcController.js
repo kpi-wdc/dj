@@ -83,6 +83,7 @@ module.exports = {
         child.on('close', function(code) {
           if (code == 0) {
             res_body.status_code = code;
+            sails.log.debug('Child Process return: ' + code);
             // save result to DB
             ProcData.create({
               value: res_body.data,

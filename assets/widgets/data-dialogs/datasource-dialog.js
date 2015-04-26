@@ -32,6 +32,7 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
       this.updateDatasourceList();
       this.conf.instanceName = scope.widget.instanceName;
       this.conf.url = scope.widget.url;
+      this.conf.dataID = scope.widget.dataID;
       
     };
 
@@ -40,6 +41,7 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
      
       saveState: function(){
           this.scope.widget.url = this.conf.url;
+          this.scope.widget.dataID = this.conf.dataID;
           this.modal.close();
           this.scope.APIUser.invoke(this.scope.widget.instanceName, APIProvider.RECONFIG_SLOT);
       },
@@ -47,7 +49,13 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
       updateDatasourceList: function(){
         var thos = this;
         $http.get("./api/data/dataSources/").success(function (data) {
-          thos.ds= data;  
+          thos.ds= data.reverse();
+          var selectedDS = thos.ds.filter(function(item){
+            return item.id == thos.conf.dataID;
+          });
+          if(selectedDS.length>0){
+            thos.selectDataSource(selectedDS[0])
+          }  
         })
         .error(function (data, status) {
           $window.alert("$http error " + status + " - cannot load data");
@@ -55,12 +63,13 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
       },
 
       selectDataSource: function(datasource){
-        if (this.conf.dataID == datasource.id) return;
+        // if (this.conf.dataID == datasource.id) return;
         if(!this.ds) return;
         var thos = this;
         this.ds.forEach(function(item){
           if(item.id == datasource.id){
             item.selected = true;
+            thos.selectedDataSource = datasource;
             thos.conf.dataID = datasource.id;
             thos.getDatasetURL(datasource)
           }else{
@@ -75,6 +84,9 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
         }
         var thos = this;
 
+        this.waitURL = true;
+        this.conf.url = undefined;
+
         $http.post("./api/data/process/",
               {
                   "data_id": dataset.id,
@@ -82,7 +94,7 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
                   "response_type": "data"
               }
           ).success(function (data) {
-            console.log(data)
+           thos.waitURL = false;
            thos.conf.url = "./api/data/process/"+data.data_id
         })
         .error(function (data, status) {
@@ -101,7 +113,7 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
 
      upload: function (file) {
       var thos = this;
-
+     
       file.upload = $upload.upload({
         url: './api/data/dataSource',
         method: 'POST',
@@ -113,7 +125,7 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
 
       file.upload.then(function(response) {
         $timeout(function() {
-          console.log(response);
+          // console.log(response);
           thos.updateDatasourceList();
           // file.result = response.data;
         });
@@ -125,6 +137,7 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
       file.upload.progress(function(evt) {
         // Math.min is to fix IE which reports 200% sometimes
         file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        console.log(file)
       });
 
       file.upload.xhr(function(xhr) {
