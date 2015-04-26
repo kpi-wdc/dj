@@ -10,6 +10,7 @@ System.config({
     "jquery": "components/jquery/dist/jquery.js",
     "angular": "components/angular/angular.js",
     "angular-mocks": "components/angular-mocks/angular-mocks.js",
+    "angular-animate": "components/angular-animate/angular-animate.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
@@ -48,6 +49,11 @@ System.config({
       "exports": "JSONEditor"
     },
     "angular-mocks": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-animate": {
       "deps": [
         "angular"
       ]

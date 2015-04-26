@@ -179,3 +179,24 @@ widget-holder {
 .row-no-left-padding > *:first-child {
   padding-left: 0;
 }
+
+[ui-view].ng-enter, [ui-view].ng-leave {
+  transition: all .5s ease-in-out;
+  -webkit-transition: all .5s ease-in-out;
+}
+
+[ui-view].ng-enter {
+  opacity: 0;
+  transform: scale3d(0.95, 0.95, 0.95);
+  -webkit-transform: scale3d(0.95, 0.95, 0.95);
+}
+
+[ui-view].ng-enter-active {
+  opacity: 1;
+  transform: scale3d(1, 1, 1);
+  -webkit-transform: scale3d(1, 1, 1);
+}
+
+[ui-view].ng-leave {
+  display: none;
+}

@@ -6,6 +6,7 @@ import 'widget-api';
 import 'info';
 import 'angular-ui-router';
 import 'ngstorage';
+import 'angular-animate'
 import 'angular-oclazyload';
 import 'angular-foundation';
 import 'angular-json-editor';
@@ -14,7 +15,7 @@ import 'template-cached-pages';
 import 'sceditor';
 
 
-const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
+const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
   'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
 
