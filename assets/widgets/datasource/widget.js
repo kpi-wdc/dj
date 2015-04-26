@@ -52,3 +52,4 @@ m.controller("DataSourceController", ["$scope", "$http", "$window", "APIUser", "
     return $scope.provider;
   });
 }]);
+//# sourceMappingURL=../datasource/widget.js.map
