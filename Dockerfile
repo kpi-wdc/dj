@@ -1,4 +1,4 @@
-FROM node:0.12
+FROM iojs:1.8.1
 MAINTAINER Oleksandr Sochka "sasha.sochka@gmail.com"
 
 # Set production settings
