@@ -10,9 +10,6 @@ module.exports = {
    * `DataProcController.process()`
    */
   process: function (req, res) {
-    var launchingFilePath = sails.config.executables[req.body.proc_name];
-    var child = require('child_process').fork(launchingFilePath, [], {silent: true});
-
     var tempObj = req.body;
     // response type doesn't matter - we compute every time
     delete tempObj.response_type;
@@ -38,6 +35,8 @@ module.exports = {
         json.status_code = 0;
         return res.send(json);
       } else {
+        var launchingFilePath = sails.config.executables[req.body.proc_name];
+        var child = require('child_process').fork(launchingFilePath, [], {silent: true});
         var parent_proc = "";
         if (req.body.data) {
           obj_to_process.data = req.body.data;
