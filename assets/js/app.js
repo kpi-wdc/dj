@@ -6,6 +6,7 @@ import 'widget-api';
 import 'info';
 import 'angular-ui-router';
 import 'ngstorage';
+import 'angular-animate'
 import 'angular-oclazyload';
 import 'angular-foundation';
 import 'angular-json-editor';
@@ -16,7 +17,7 @@ import 'file-upload';
 
 
 
-const app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
+const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
   'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
 
@@ -262,6 +263,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
         backdrop: 'static'
       }).result.then((collaborations) => {
         config.collaborations = collaborations;
+          this.wasModified = true;
       });
     },
 
@@ -374,6 +376,13 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
           }
         }
       });
+    },
+
+    cloneWidget(holder, widget){
+      let newWidget = angular.copy(widget);
+      newWidget.instanceName = Math.random().toString(36).substring(2);
+      holder.widgets.push(newWidget);
+      app.wasModified = true;
     }
   });
 });
@@ -438,7 +447,8 @@ app.controller('PageController', function ($scope, pageConfig, widgetManager) {
     config: pageConfig,
     deleteIthWidgetFromHolder: widgetManager.deleteIthWidgetFromHolder.bind(widgetManager),
     openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
-    addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager)
+    addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager),
+    cloneWidget: widgetManager.cloneWidget.bind(widgetManager)
   });
 });
 
@@ -671,8 +681,8 @@ app.controller('ShareSettingsModalController', function ($scope, $modalInstance,
         result.data
           .filter(user => !this.userIsCollaborator(user))
           .filter(user =>
-            user.name.includes(filterValue) ||
-            user.email.includes(filterValue)
+            user.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+            user.email.toLowerCase().includes(filterValue.toLowerCase())
           )
           .slice(0, 8)
       );

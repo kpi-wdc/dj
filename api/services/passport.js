@@ -84,16 +84,21 @@ passport.connect = function (req, query, profile, next) {
   // add it to the user.
   if (profile.hasOwnProperty('emails')) {
     user.email = profile.emails[0].value;
-
-    // Gravatar photo
-    user.photo = gravatar.url(user.email, {s: 200, r: 'pg'});
   }
-
 
   // If the profile object contains displayable name, add it to the user.
   if (profile.hasOwnProperty('displayName')) {
     user.name = profile.displayName;
   }
+
+  if (profile.hasOwnProperty('photos') && profile.photos.length !== 0) {
+    // url ends with "sz=50". Adding another zero increases photo resolution
+    user.photo = profile.photos[0].value + '0';
+  } else {
+    // Gravatar photo
+    user.photo = gravatar.url(user.email, {s: 200, r: 'pg'});
+  }
+
 
   // If neither an email or a username was available in the profile, we don't
   // have a way of identifying the user in the future. Throw an error and let

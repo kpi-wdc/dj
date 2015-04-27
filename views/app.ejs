@@ -138,8 +138,8 @@
       .constant('initialConfig', {
         id: "<%= app.id %>",
         name: "<%= app.name %>",
-        collaborations: <%- JSON.stringify(app.collaborations) %>,
-        pages: <%- JSON.stringify(app.pages) %>,
+        collaborations: <%- JSON.stringify(app.collaborations || []) %>,
+        pages: <%- JSON.stringify(app.pages) || []%>,
         title: "<%= app.title %>",
         description: "<%= app.description %>",
         keywords: "<%= app.keywords %>",

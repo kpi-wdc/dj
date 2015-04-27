@@ -56,6 +56,32 @@ appList.controller('AppListController', function ($scope, $http, $window,
         });
     },
 
+    setExportFile(file) {
+      this.$apply(() => {
+        this.exportFile = file;
+      });
+    },
+
+    exportApp() {
+      var fd = new FormData();
+      //Take the first selected file
+      fd.append('file', this.exportFile);
+      $http.post(`/api/app/export`, fd, {
+        withCredentials: true,
+        headers: {'Content-Type': undefined},
+        transformRequest: angular.identity
+      }).success((data, status) => {
+        const app = {
+          name: data.name,
+          owner: user
+        };
+
+        this.apps.push(app);
+      }).error((data, status) => {
+        alert.error(`Error happened while exporting app: ${status}`);
+      });
+    },
+
     renameApp(appId) {
       prompt('New name:').then((newAppName) => {
         this.saveApps();
