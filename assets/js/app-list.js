@@ -78,7 +78,11 @@ appList.controller('AppListController', function ($scope, $http, $window,
 
         this.apps.push(app);
       }).error((data, status) => {
-        alert.error(`Error happened while importing app: ${status}`);
+        if (status === 415) {
+          alert.error(`Cannot parse this data as a valid json configuration file: ${data}`);
+        } else {
+          alert.error(`Error happened while importing app: ${status}`);
+        }
       });
     },
 

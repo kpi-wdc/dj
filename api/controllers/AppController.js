@@ -92,16 +92,20 @@ module.exports = {
             return res.negotiate(err);
           }
 
-          var app = JSON.parse(body);
-          app.owner = req.user.id;
-          AppConfig.create(app).then(function () {
-            res.ok({
-              name: app.name
+          try {
+            var app = JSON.parse(body);
+            app.owner = req.user.id;
+            AppConfig.create(app).then(function () {
+              res.ok({
+                name: app.name
+              });
+            }).catch(function (err) {
+              sails.log.warn('AppController.export error: ' + err);
+              res.serverError();
             });
-          }).catch(function (err) {
-            sails.log.warn('AppController.export error: ' + err);
-            res.serverError();
-          });
+          } catch (e) {
+            res.send(415, e.message);
+          }
         });
       });
   },
