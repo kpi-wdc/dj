@@ -6,18 +6,62 @@
 */
 
 module.exports = {
+  // Enforce model schema in the case of schemaless databases
+  schema: true,
 
   attributes: {
-    appName: {
-      type: 'string',
+    name: {
+      type: 'alphanumericdashed',
       required: true,
       unique: true,
       notEmpty: true
     },
-    config: {
-      type: 'json',
+    pages: {
+      type: 'array',
       required: true
+    },
+    title: {
+      type: 'string',
+      required: true
+    },
+    description: {
+      type: 'string'
+    },
+    keywords: {
+      type: 'array'
+    },
+    collaborations: {
+      type: 'array'
+    },
+    isPublished: {
+      type: 'boolean',
+      required: true
+    },
+    owner: {
+      model: 'User'
     }
+  },
+
+  isCollaborator: function (app, user) {
+    if (!user) {
+      // user is not logged in - therefore not a collaborator
+      return false;
+    }
+    return !_.isUndefined(_.find(app.collaborations,
+      function (c) { return c.user.id === user.id; }
+    ));
+  },
+
+  isOwner: function (app, user) {
+    if (!user) {
+      // user is not logged in - therefore not an owner
+      return false;
+    }
+    if (!app.owner) {
+      // No owner means every logged user is an owner
+      return true;
+    }
+    return app.owner.id === user.id;
   }
 };
 

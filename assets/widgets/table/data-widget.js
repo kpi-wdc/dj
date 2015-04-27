@@ -1,7 +1,7 @@
 define([
     'angular',
     'angular-oclazyload',
-    '/widgets/data-util/adapter.js'
+    'widgets/data-util/adapter'
   ],
   function (angular) {
 

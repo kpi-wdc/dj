@@ -1,0 +1,11 @@
+{
+  "name": "multiplier",
+  "version": "0.0.1",
+  "description": "Module to multiply array of values by a value",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

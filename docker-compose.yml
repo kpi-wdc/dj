@@ -1,0 +1,10 @@
+web:
+  build: .
+  command: node app.js --prod
+  links:
+   - db
+  ports:
+   - "8080:80"
+
+db:
+  image: dockerfile/mongodb

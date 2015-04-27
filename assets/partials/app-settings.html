@@ -1,0 +1,53 @@
+<h3>Application settings</h3>
+<form>
+  <div class="row">
+    <div class="column medium-2">
+      <label for="appSettingsInputName">App name </label>
+    </div>
+    <div class="column large-10">
+      <input ng-model="settings.name" id="appSettingsInputName" placeholder="Application name (shown in URL)" type="text">
+    </div>
+  </div>
+  <div class="row">
+    <div class="column medium-2">
+      <label for="appSettingsInputKeywords">App keywords</label>
+    </div>
+    <div class="column large-10">
+      <input ng-model="settings.keywords" id="appSettingsInputKeywords" placeholder="Keywords for search engines" type="text">
+    </div>
+  </div>
+  <div class="row">
+    <div class="column medium-2">
+      <label for="appSettingsInputTitle">App title</label>
+    </div>
+    <div class="column large-10">
+      <input ng-model="settings.title" id="appSettingsInputTitle" placeholder="Application title" type="text">
+    </div>
+  </div>
+  <div class="row">
+    <div class="column medium-2">
+      <label for="appSettingsInputDescription">App description</label>
+    </div>
+    <div class="column large-10">
+      <textarea ng-model="settings.description" id="appSettingsInputDescription" placeholder="Application description">
+      </textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column medium-2">
+      Is published
+    </div>
+    <div class="column large-10">
+      <div class="switch tiny">
+        <input type="checkbox" id="appSettingsCheckboxPublished"
+               ng-model="settings.isPublished"
+               disabled ng-disabled="globalConfig.designMode">
+        <label for="appSettingsCheckboxPublished"></label>
+      </div>
+    </div>
+  </div>
+</form>
+<br>
+<button class="button small" ng-click="ok()">Save</button>
+<button class="button alert small" ng-click="cancel()">Cancel</button>
+<a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

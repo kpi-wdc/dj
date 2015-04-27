@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head ng-controller="MetaInfoController">
   <base href="/">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,31 +9,68 @@
   <link rel="stylesheet" href="/components/SCEditor/minified/themes/default.min.css">
   <link rel="stylesheet" href="/components/foundation-icon-fonts/foundation-icons.css">
   <link rel="stylesheet" href="/css/main.css">
-  <title>World Data Center</title>
+  <title ng-bind="title"><%= app.name %></title>
+  <meta name="description" content="<%= app.description %>">
+  <meta name="keywords" content="<%= app.keywords ? app.keywords.join(', ') : "" %>">
+  <meta name="author" content="<%= ownerInfo.name %>">
+  <% /* The following should be inside <head> tag! */ %>
+  <% include ga.ejs %>
 </head>
-<body ng-controller="MainCtrl" ng-class="{'debug-enabled': globalConfig.debugMode}">
+<body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
-  <div ng-if="globalConfig.designMode" id="page-design-panel" ng-cloak>
-    <h3>Design mode panel</h3>
-    <button class="button tiny radius" ng-click="appConfig.submitToServer(alertAppConfigSubmissionFailed)"
+
+  <% if (isOwner || isCollaborator)  {%>
+  <div id="page-design-panel">
+    <h3>Design panel</h3>
+
+    <button class="button tiny radius" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
             disabled
-            ng-disabled="appConfig.sendingToServer || !appConfig.wasModified">
+            ng-disabled="app.sendingToServer || !app.wasModified">
       Submit changes to server
     </button>
-    <button class="button tiny radius" ng-click="appConfig.addNewPageInModal()"
+    <button class="button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn">
+      <i class="fi-lock"></i> Share
+    </button>
+    <button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn">
+      App settings
+    </button>
+    <button class="button tiny radius" ng-click="app.addNewPageInModal()"
             id="addNewPageBtn">
       <i class="fi-plus black"></i> Add new page
     </button>
     <button class="button alert radius tiny"
             id="deletePageBtn"
-            ng-disabled="appConfig.isHomePageOpened() || appConfig.is404PageOpened()"
+            ng-disabled="app.isHomePageOpened() || app.is404PageOpened()"
             disabled
-            ng-click="appConfig.deletePage(appConfig.currentPageIndex())">
+            ng-click="app.deletePage(app.currentPageIndex)">
       Delete page
     </button>
+    <a class="button tiny radius" id="HomeBtn" href="/">
+      <i class="fi-home black"></i> Home
+    </a>
+    <div>
+      <div class="left">
+        <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+        <div class="switch tiny left">
+          <input type="checkbox" id="designModeCheckbox"
+                 ng-model="globalConfig.designMode">
+          <label for="designModeCheckbox"></label>
+        </div>
+      </div>
+      <div class="left">
+        <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;Debug mode:&nbsp;&nbsp; </h6>
+        <div class="switch tiny left">
+          <input type="checkbox" id="debugModeCheckbox"
+                 ng-model="globalConfig.debugMode"
+                 disabled ng-disabled="globalConfig.designMode">
+          <label for="debugModeCheckbox"></label>
+        </div>
+      </div>
+    </div>
     <hr>
   </div>
+  <% } %>
 </header>
 
 <div class="row">
@@ -46,7 +83,9 @@
   <nav class="medium-2 pull-10 columns">
     <h1><img src="/img/logo.png" style="width:90%;"></h1>
     <ul class="side-nav">
-      <li ng-repeat="page in appConfig.config.pages" ng-if="page.shortTitle"><a href="/app/<%=appName%>/{{page.href}}" ng-bind="page.shortTitle"></a></li>
+      <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
+        <a href="/app/<%= app.name %>/{{page.href}}" ng-bind="page.shortTitle"></a>
+      </li>
     </ul>
   </nav>
 </div>
@@ -62,35 +101,53 @@
   </div>
 </footer>
 <div class="row">
-  <div ng-if="globalConfig.loggedIn">
-    <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
-    <div class="switch tiny">
-      <input type="checkbox"
-             id="designModeCheckbox"
-             ng-model="globalConfig.designMode">
-      <label for="designModeCheckbox"></label>
-    </div>
-    <br>
-    <h6 class="left">Debug mode:&nbsp;&nbsp; </h6>
-    <div class="switch tiny">
-      <input type="checkbox"
-             id="debugModeCheckbox"
-             ng-model="globalConfig.debugMode"
-             ng-disabled="globalConfig.designMode">
-      <label for="debugModeCheckbox"></label>
-    </div>
+  <% if (user) {%>
+  <div>
     <button class="button tiny alert right" ng-click="logOut()">Log out</button>
   </div>
-  <div ng-click="logIn()" ng-if="!globalConfig.loggedIn" ng-cloak>
-    <button class="button tiny" id="logInButton">Log in</button>
+  <% } else { %>
+  <div>
+    <button class="button tiny primary right" ng-click="logIn()" id="logInButton">Login with Google</button>
   </div>
+  <% }%>
 </div>
 <!-- ES6 polyfill. Load before every other JS file -->
-<script src="js/es6-polyfill.js"></script>
+<script src="/js/es6-polyfill.js"></script>
+<script src="/components/es6-module-loader/dist/es6-module-loader.src.js"></script>
+<script src="/components/system.js/dist/system.src.js"></script>
 <script>
-  window.appName = "<%= appName %>";
-  window.appConfig = <%- JSON.stringify(config) %>;
+  window.define = System.amdDefine.bind(System);
+  window.require = window.requirejs = System.amdRequire.bind(System);
 </script>
-<script data-main="js/main" src="/components/requirejs/require.js"></script>
+<script src="/js/config.js"></script>
+<script>
+  define('user', ['angular'], function (angular) {
+    angular.module('app.user', [])
+      .constant('user', <%- JSON.stringify(user || {}) %>);
+  });
+
+  define('author', ['angular'], function (angular) {
+    angular.module('app.author', [])
+      .constant('author', <%- JSON.stringify(ownerInfo) %>);
+  });
+
+  define('app-config', ['angular'], function (angular) {
+    angular.module('app.config', [])
+      .constant('appId', "<%= app.id %>")
+      .constant('appName', "<%= app.name %>")
+      .constant('initialConfig', {
+        id: "<%= app.id %>",
+        name: "<%= app.name %>",
+        collaborations: <%- JSON.stringify(app.collaborations || []) %>,
+        pages: <%- JSON.stringify(app.pages) || []%>,
+        title: "<%= app.title %>",
+        description: "<%= app.description %>",
+        keywords: "<%= app.keywords %>",
+        isPublished: <%= app.isPublished %>
+      });
+  });
+
+  System.import('app'); // Kick-start the app!
+</script>
 </body>
 </html>

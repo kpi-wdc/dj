@@ -1,0 +1,18 @@
+# Version Control
+.git
+
+# Docker
+docker-compose.yml
+
+# Build
+.tmp
+
+# Tests
+test
+karma.conf.js
+protractor.conf.js
+
+# Project files
+.idea
+wdc.iml
+

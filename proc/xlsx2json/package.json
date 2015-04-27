@@ -1,0 +1,13 @@
+{
+  "name": "xlsx-json-parser",
+  "version": "0.0.4",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+    "xlsx": "0.7.12",
+    "xlsjs": "0.7.5"
+  }
+}

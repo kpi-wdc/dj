@@ -1,58 +1,56 @@
 module.exports = function (config) {
   config.set({
-
-    basePath: './.tmp/public',
-
-    files: [
-      'js/es6-polyfill.js',
-      // HACK: manually inject RequireJS framework
-      // otherwise it's impossible to load polyfills before other code
-      // Note: RequireJS is not listed in `frameworks` property
-      'components/requirejs/require.js',
-      '../../node_modules/karma-requirejs/lib/adapter.js',
-      // END OF HACK
-      'js/main.js',
-      {pattern: 'js/*.js', included: false},
-      {pattern: 'widgets/**/*.js', included: false},
-      {pattern: 'components/**/*.js', included: false},
-      {pattern: '../test/unit/**/*Spec.js', included: false}
-    ],
-
     autoWatch: true,
-
-    frameworks: ['jasmine'],
+    singleRun: true,
+    colors: true,
 
     browsers: ['PhantomJS'],
 
-    singleRun: true,
-
     captureTimeout: 10000,
-
     reportSlowerThan: 5000,
 
-    reporters: ['progress', 'coverage'],
+    files: [
+      '.tmp/public/js/es6-polyfill.js'
+    ],
 
+    frameworks: ['jasmine', 'jspm', 'phantomjs-shim'],
+
+    reporters: ['progress', 'verbose', 'coverage'],
+
+    jspm: {
+      // Edit this to your needs
+      config: 'assets/js/config.js',
+      loadFiles: [
+        'test/unit/*.js'
+      ],
+      serveFiles: [
+        'assets/js/*.js',
+        '.tmp/public/js/templates.js',
+        '.tmp/public/components/**/*.js'
+      ]
+    },
+
+    proxies: {
+      '/base/js/templates.js': '/base/.tmp/public/js/templates.js',
+      '/base/js': '/base/assets/js',
+      '/base/components': '/base/.tmp/public/components',
+      '/jspm_packages': '/base/jspm_packages'
+    },
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
+
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '!(components|test)/**/!(templates)*.js': ['coverage']
+      'test/unit/*.js': ['babel', 'coverage'],
+      'assets/js/*.js': ['babel', 'coverage']
     },
 
     coverageReporter: {
       type: 'lcov',
-      dir: '../coverage/'
-    },
-
-    client: {
-      requireJsShowNoTimestampsError: false
-    },
-
-    plugins: [
-      'karma-chrome-launcher',
-      'karma-firefox-launcher',
-      'karma-phantomjs-launcher',
-      'karma-jasmine',
-      'karma-requirejs',
-      'karma-coverage',
-      'karma-junit-reporter'
-    ]
+      dir: '.tmp/coverage/'
+    }
   });
 };

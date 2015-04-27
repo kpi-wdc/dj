@@ -1,4 +1,4 @@
-var newrelic = require('newrelic');
+#!/usr/bin/env node
 /**
  * app.js
  *
@@ -21,6 +21,10 @@ var newrelic = require('newrelic');
 
 // Ensure a "sails" can be located:
 (function() {
+  if (process.env.NEW_RELIC_LICENSE_KEY) {
+    require('newrelic');
+  }
+
   var sails;
   try {
     sails = require('sails');

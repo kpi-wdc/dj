@@ -44,6 +44,27 @@
 /*border:0;*/
 /*}*/
 
+
+.nvtooltip {
+  position: absolute;
+  background-color: rgba(255,255,255,1.0);
+  padding: 1px;
+  opacity:0.5;
+  border: 1px solid rgba(0,0,0,.2);
+  z-index: 10000;
+  font-family: Arial;
+  font-size: 13px;
+  text-align: left;
+  pointer-events: none;
+  white-space: nowrap;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .border {
   border: 1px solid #dfdfdf;
   padding: 0.5rem;

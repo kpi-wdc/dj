@@ -20,10 +20,9 @@ var addDefaultAppConfigs = function () {
           fs.readFile('apps/' + filename, function (err, data) {
             if (!err) {
               sails.log.info('Preexisting app configuration found: apps/' + filename);
-              AppConfig.findOrCreate({appName: appName}, {
-                appName: appName,
-                config: data
-              }, function (err) {
+              var app = JSON.parse(data);
+              app.name = appName;
+              AppConfig.findOrCreate({name: appName}, app, function (err) {
                 if (err) {
                   sails.log.warn('Error in AppConfig.findOrCreate app config during sails bootstrap: ' + err);
                 }
@@ -41,6 +40,7 @@ var addDefaultAppConfigs = function () {
 };
 
 module.exports.bootstrap = function (cb) {
+  sails.services.passport.loadStrategies();
   addDefaultAppConfigs(); // allow running async, even after bootstrap is finished
 
   // It's very important to trigger this callback method when you are finished

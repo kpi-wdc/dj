@@ -1,0 +1,1293 @@
+{
+  "title": "Maps",
+  "description": "Maps widgets",
+  "isPublished": true,
+  "collaborations": [],
+  "pages": [
+    {
+      "shortTitle": "Home",
+      "href": "",
+      "template": "left-right-bottom",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "url": "./data/CQLCSL20052013.json",
+              "type": "datasource",
+              "instanceName": "8m9bxald0namunmi"
+            }
+          ]
+        },
+        "topleft": {
+          "widgets": [
+            {
+              "type": "nvd3-map",
+              "instanceName": "hfjz558p6869a4i",
+              "decoration": {
+                "height": 250,
+                "color": [
+                  "#d7191c",
+                  "#fdae61",
+                  "#a6d96a",
+                  "#1a9641"
+                ],
+                "showLabels": false,
+                "showValues": false,
+                "showTiles": true,
+                "selectedTiles": "mapbox.outdoors",
+                "interactive": true,
+                "defaultFill": "#f0f0f0",
+                "defaultFillOpacity": 0,
+                "defaultStroke": "#909095",
+                "defaultStrokeWidth": 1,
+                "defaultStrokeOpacity": 0.75,
+                "selectedFillOpacity": 0.5,
+                "selectedStrokeWidth": 2,
+                "title": "Сan use different Mapbox Tiles",
+                "subtitle": "Current tile: mapbox.outdoors"
+              },
+              "datasource": "8m9bxald0namunmi",
+              "data": {
+                "url": "./data/CQLCSL20052013.json",
+                "selectedDataset": "CQLCSL20052013",
+                "selection": [
+                  {
+                    "collection": [
+                      {
+                        "id": "Cql",
+                        "index": "0",
+                        "label": "Quality of Life Component"
+                      }
+                    ],
+                    "role": "Rows"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "UKR",
+                        "index": "129",
+                        "label": "Ukraine"
+                      },
+                      {
+                        "id": "ROU",
+                        "index": "107",
+                        "label": "Romania"
+                      },
+                      {
+                        "id": "SVK",
+                        "index": "116",
+                        "label": "Slovakia"
+                      },
+                      {
+                        "id": "POL",
+                        "index": "104",
+                        "label": "Poland"
+                      },
+                      {
+                        "id": "BGR",
+                        "index": "11",
+                        "label": "Bulgaria"
+                      }
+                    ],
+                    "role": "Columns"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "2010",
+                        "index": "5",
+                        "label": 2010
+                      }
+                    ],
+                    "role": "Fix Value"
+                  }
+                ],
+                "standalone": false
+              }
+            },
+            {
+              "type": "nvd3-map",
+              "instanceName": "c69wyj38gjtyy14i",
+              "decoration": {
+                "height": 350,
+                "color": [
+                  "#31a354",
+                  "#addd8e",
+                  "#f7fcb9"
+                ],
+                "showLabels": false,
+                "showValues": false,
+                "showTiles": true,
+                "selectedTiles": "mapbox.outdoors",
+                "interactive": true,
+                "defaultFill": "#f0f0f0",
+                "defaultFillOpacity": 0,
+                "defaultStroke": "#909095",
+                "defaultStrokeWidth": 1,
+                "defaultStrokeOpacity": 0.75,
+                "selectedFillOpacity": 0.5,
+                "selectedStrokeWidth": 3,
+                "title": "Auto Zoom and Pane to Country Selection",
+                "subtitle": "Ukraine selected"
+              },
+              "datasource": "8m9bxald0namunmi",
+              "data": {
+                "url": "./data/CQLCSL20052013.json",
+                "selectedDataset": "CQLCSL20052013",
+                "selection": [
+                  {
+                    "collection": [
+                      {
+                        "id": "Cql",
+                        "index": "0",
+                        "label": "Quality of Life Component"
+                      }
+                    ],
+                    "role": "Rows"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "UKR",
+                        "index": "129",
+                        "label": "Ukraine"
+                      }
+                    ],
+                    "role": "Columns"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "2010",
+                        "index": "5",
+                        "label": 2010
+                      }
+                    ],
+                    "role": "Fix Value"
+                  }
+                ],
+                "standalone": false
+              }
+            }
+          ]
+        },
+        "topright": {
+          "widgets": [
+            {
+              "type": "nvd3-map",
+              "instanceName": "dz6qvrgzcf7xpqfr",
+              "decoration": {
+                "height": 250,
+                "color": [
+                  "#8e0152",
+                  "#c51b7d",
+                  "#de77ae",
+                  "#f1b6da",
+                  "#fde0ef",
+                  "#f7f7f7",
+                  "#e6f5d0",
+                  "#b8e186",
+                  "#7fbc41",
+                  "#4d9221",
+                  "#276419"
+                ],
+                "showLabels": false,
+                "showValues": false,
+                "showTiles": true,
+                "selectedTiles": "mapbox.outdoors",
+                "interactive": true,
+                "defaultFill": "#f0f0f0",
+                "defaultFillOpacity": 0,
+                "defaultStroke": "#909095",
+                "defaultStrokeWidth": 1,
+                "defaultStrokeOpacity": 0.75,
+                "selectedFillOpacity": 0.5,
+                "selectedStrokeWidth": 3,
+                "title": "Can use different colors",
+                "subtitle": "Current brewer color scheme with 11 colors"
+              },
+              "datasource": "8m9bxald0namunmi",
+              "data": {
+                "url": "./data/CQLCSL20052013.json",
+                "selectedDataset": "CQLCSL20052013",
+                "selection": [
+                  {
+                    "collection": [
+                      {
+                        "id": "Csl",
+                        "index": "1",
+                        "label": "Security of Life Component"
+                      }
+                    ],
+                    "role": "Rows"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "DEU",
+                        "index": "33",
+                        "label": "Germany"
+                      },
+                      {
+                        "id": "FRA",
+                        "index": "44",
+                        "label": "France"
+                      },
+                      {
+                        "id": "GBR",
+                        "index": "45",
+                        "label": "United Kingdom"
+                      }
+                    ],
+                    "role": "Columns"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "2011",
+                        "index": "6",
+                        "label": 2011
+                      }
+                    ],
+                    "role": "Fix Value"
+                  }
+                ],
+                "standalone": false
+              }
+            },
+            {
+              "type": "nvd3-map",
+              "instanceName": "qwqyy2u2hzx5hfr",
+              "decoration": {
+                "height": 350,
+                "color": [
+                  "#c51b7d",
+                  "#de77ae",
+                  "#f1b6da",
+                  "#fde0ef",
+                  "#f7f7f7",
+                  "#e6f5d0",
+                  "#b8e186",
+                  "#7fbc41",
+                  "#4d9221"
+                ],
+                "showLabels": true,
+                "showValues": true,
+                "showTiles": false,
+                "selectedTiles": "mapbox.outdoors",
+                "interactive": true,
+                "defaultFill": "#f0f0f0",
+                "defaultFillOpacity": 0,
+                "defaultStroke": "#909095",
+                "defaultStrokeWidth": 1,
+                "defaultStrokeOpacity": 0.75,
+                "selectedFillOpacity": 0.5,
+                "selectedStrokeWidth": 3,
+                "title": "Use multiple layers",
+                "subtitle": "Switch to serie in legend"
+              },
+              "datasource": "8m9bxald0namunmi",
+              "data": {
+                "url": "./data/CQLCSL20052013.json",
+                "selectedDataset": "CQLCSL20052013",
+                "selection": [
+                  {
+                    "collection": [
+                      {
+                        "id": "Cql",
+                        "index": "0",
+                        "label": "Quality of Life Component"
+                      },
+                      {
+                        "id": "Csl",
+                        "index": "1",
+                        "label": "Security of Life Component"
+                      }
+                    ],
+                    "role": "Rows"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "GBR",
+                        "index": "45",
+                        "label": "United Kingdom"
+                      },
+                      {
+                        "id": "GRC",
+                        "index": "50",
+                        "label": "Greece"
+                      },
+                      {
+                        "id": "GEO",
+                        "index": "46",
+                        "label": "Georgia"
+                      },
+                      {
+                        "id": "FIN",
+                        "index": "42",
+                        "label": "Finland"
+                      },
+                      {
+                        "id": "DNK",
+                        "index": "34",
+                        "label": "Denmark"
+                      },
+                      {
+                        "id": "CHE",
+                        "index": "22",
+                        "label": "Switzerland"
+                      },
+                      {
+                        "id": "DEU",
+                        "index": "33",
+                        "label": "Germany"
+                      },
+                      {
+                        "id": "FRA",
+                        "index": "44",
+                        "label": "France"
+                      },
+                      {
+                        "id": "EST",
+                        "index": "40",
+                        "label": "Estonia"
+                      },
+                      {
+                        "id": "CZE",
+                        "index": "32",
+                        "label": "Czech Republic"
+                      },
+                      {
+                        "id": "BIH",
+                        "index": "12",
+                        "label": "Bosnia and Herzegovina"
+                      },
+                      {
+                        "id": "ALB",
+                        "index": "1",
+                        "label": "Albania"
+                      },
+                      {
+                        "id": "BEL",
+                        "index": "7",
+                        "label": "Belgium"
+                      },
+                      {
+                        "id": "BGR",
+                        "index": "11",
+                        "label": "Bulgaria"
+                      },
+                      {
+                        "id": "ISL",
+                        "index": "60",
+                        "label": "Iceland"
+                      },
+                      {
+                        "id": "ITA",
+                        "index": "62",
+                        "label": "Italy"
+                      },
+                      {
+                        "id": "HRV",
+                        "index": "54",
+                        "label": "Croatia"
+                      },
+                      {
+                        "id": "HUN",
+                        "index": "55",
+                        "label": "Hungary"
+                      },
+                      {
+                        "id": "MDA",
+                        "index": "79",
+                        "label": "Moldova, Republic of"
+                      },
+                      {
+                        "id": "NOR",
+                        "index": "96",
+                        "label": "Norway"
+                      },
+                      {
+                        "id": "POL",
+                        "index": "104",
+                        "label": "Poland"
+                      },
+                      {
+                        "id": "SVK",
+                        "index": "116",
+                        "label": "Slovakia"
+                      },
+                      {
+                        "id": "SRB",
+                        "index": "115",
+                        "label": "Serbia"
+                      },
+                      {
+                        "id": "ROU",
+                        "index": "107",
+                        "label": "Romania"
+                      },
+                      {
+                        "id": "NLD",
+                        "index": "95",
+                        "label": "Netherlands"
+                      },
+                      {
+                        "id": "LVA",
+                        "index": "77",
+                        "label": "Latvia"
+                      },
+                      {
+                        "id": "SWE",
+                        "index": "118",
+                        "label": "Sweden"
+                      },
+                      {
+                        "id": "UKR",
+                        "index": "129",
+                        "label": "Ukraine"
+                      },
+                      {
+                        "id": "SVN",
+                        "index": "117",
+                        "label": "Slovenia"
+                      },
+                      {
+                        "id": "PRT",
+                        "index": "105",
+                        "label": "Portugal"
+                      },
+                      {
+                        "id": "LUX",
+                        "index": "76",
+                        "label": "Luxembourg"
+                      }
+                    ],
+                    "role": "Columns"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "2012",
+                        "index": "7",
+                        "label": 2012
+                      }
+                    ],
+                    "role": "Fix Value"
+                  }
+                ],
+                "standalone": false
+              }
+            }
+          ]
+        },
+        "bottom": {
+          "widgets": [
+            {
+              "type": "nvd3-map",
+              "instanceName": "r1dthghc63kdquxr",
+              "decoration": {
+                "height": 750,
+                "color": [
+                  "#8e0152",
+                  "#c51b7d",
+                  "#de77ae",
+                  "#f1b6da",
+                  "#fde0ef",
+                  "#f7f7f7",
+                  "#e6f5d0",
+                  "#b8e186",
+                  "#7fbc41",
+                  "#4d9221",
+                  "#276419"
+                ],
+                "showLabels": false,
+                "showValues": false,
+                "showTiles": true,
+                "selectedTiles": "mapbox.outdoors",
+                "interactive": true,
+                "defaultFill": "#f0f0f0",
+                "defaultFillOpacity": 0,
+                "defaultStroke": "#909095",
+                "defaultStrokeWidth": 1,
+                "defaultStrokeOpacity": 0.75,
+                "selectedFillOpacity": 0.5,
+                "selectedStrokeWidth": 1,
+                "title": "Interactive Zoom and Pane",
+                "subtitle": "Use mouse wheel and drag&drop"
+              },
+              "datasource": "8m9bxald0namunmi",
+              "data": {
+                "url": "./data/CQLCSL20052013.json",
+                "selectedDataset": "CQLCSL20052013",
+                "selection": [
+                  {
+                    "collection": [
+                      {
+                        "id": "Cql",
+                        "index": "0",
+                        "label": "Quality of Life Component"
+                      },
+                      {
+                        "id": "Csl",
+                        "index": "1",
+                        "label": "Security of Life Component"
+                      }
+                    ],
+                    "role": "Rows"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "AGO",
+                        "index": "0",
+                        "label": "Angola"
+                      },
+                      {
+                        "id": "ALB",
+                        "index": "1",
+                        "label": "Albania"
+                      },
+                      {
+                        "id": "ARG",
+                        "index": "2",
+                        "label": "Argentina"
+                      },
+                      {
+                        "id": "ARM",
+                        "index": "3",
+                        "label": "Armenia"
+                      },
+                      {
+                        "id": "AUS",
+                        "index": "4",
+                        "label": "Australia"
+                      },
+                      {
+                        "id": "AUT",
+                        "index": "5",
+                        "label": "Austria"
+                      },
+                      {
+                        "id": "AZE",
+                        "index": "6",
+                        "label": "Azerbaijan"
+                      },
+                      {
+                        "id": "BEL",
+                        "index": "7",
+                        "label": "Belgium"
+                      },
+                      {
+                        "id": "BEN",
+                        "index": "8",
+                        "label": "Benin"
+                      },
+                      {
+                        "id": "BFA",
+                        "index": "9",
+                        "label": "Burkina faso"
+                      },
+                      {
+                        "id": "BGD",
+                        "index": "10",
+                        "label": "Bangladesh"
+                      },
+                      {
+                        "id": "BGR",
+                        "index": "11",
+                        "label": "Bulgaria"
+                      },
+                      {
+                        "id": "BIH",
+                        "index": "12",
+                        "label": "Bosnia and Herzegovina"
+                      },
+                      {
+                        "id": "BLR",
+                        "index": "13",
+                        "label": "Belarus"
+                      },
+                      {
+                        "id": "BLZ",
+                        "index": "14",
+                        "label": "Belize"
+                      },
+                      {
+                        "id": "BOL",
+                        "index": "15",
+                        "label": "Bolivia, Plurinational State of"
+                      },
+                      {
+                        "id": "BRA",
+                        "index": "16",
+                        "label": "Brazil"
+                      },
+                      {
+                        "id": "BRB",
+                        "index": "17",
+                        "label": "Barbados"
+                      },
+                      {
+                        "id": "BTN",
+                        "index": "18",
+                        "label": "Bhutan"
+                      },
+                      {
+                        "id": "BWA",
+                        "index": "19",
+                        "label": "Botswana"
+                      },
+                      {
+                        "id": "CAF",
+                        "index": "20",
+                        "label": "Central african republic"
+                      },
+                      {
+                        "id": "CAN",
+                        "index": "21",
+                        "label": "Canada"
+                      },
+                      {
+                        "id": "CHE",
+                        "index": "22",
+                        "label": "Switzerland"
+                      },
+                      {
+                        "id": "CHL",
+                        "index": "23",
+                        "label": "Chile"
+                      },
+                      {
+                        "id": "CHN",
+                        "index": "24",
+                        "label": "China"
+                      },
+                      {
+                        "id": "CIV",
+                        "index": "25",
+                        "label": "Cote d`Ivoire"
+                      },
+                      {
+                        "id": "CMR",
+                        "index": "26",
+                        "label": "Cameroon"
+                      },
+                      {
+                        "id": "COG",
+                        "index": "27",
+                        "label": "Congo, Republic of the"
+                      },
+                      {
+                        "id": "COL",
+                        "index": "28",
+                        "label": "Colombia"
+                      },
+                      {
+                        "id": "CPV",
+                        "index": "29",
+                        "label": "Cape verde"
+                      },
+                      {
+                        "id": "CRI",
+                        "index": "30",
+                        "label": "Costa Rica"
+                      },
+                      {
+                        "id": "CYP",
+                        "index": "31",
+                        "label": "Cyprus"
+                      },
+                      {
+                        "id": "CZE",
+                        "index": "32",
+                        "label": "Czech Republic"
+                      },
+                      {
+                        "id": "DEU",
+                        "index": "33",
+                        "label": "Germany"
+                      },
+                      {
+                        "id": "DNK",
+                        "index": "34",
+                        "label": "Denmark"
+                      },
+                      {
+                        "id": "DOM",
+                        "index": "35",
+                        "label": "Dominican Republic"
+                      },
+                      {
+                        "id": "DZA",
+                        "index": "36",
+                        "label": "Algeria"
+                      },
+                      {
+                        "id": "ECU",
+                        "index": "37",
+                        "label": "Ecuador"
+                      },
+                      {
+                        "id": "EGY",
+                        "index": "38",
+                        "label": "Egypt"
+                      },
+                      {
+                        "id": "ESP",
+                        "index": "39",
+                        "label": "Spain"
+                      },
+                      {
+                        "id": "EST",
+                        "index": "40",
+                        "label": "Estonia"
+                      },
+                      {
+                        "id": "ETH",
+                        "index": "41",
+                        "label": "Ethiopia"
+                      },
+                      {
+                        "id": "FIN",
+                        "index": "42",
+                        "label": "Finland"
+                      },
+                      {
+                        "id": "FJI",
+                        "index": "43",
+                        "label": "Fiji"
+                      },
+                      {
+                        "id": "FRA",
+                        "index": "44",
+                        "label": "France"
+                      },
+                      {
+                        "id": "GBR",
+                        "index": "45",
+                        "label": "United Kingdom"
+                      },
+                      {
+                        "id": "GEO",
+                        "index": "46",
+                        "label": "Georgia"
+                      },
+                      {
+                        "id": "GHA",
+                        "index": "47",
+                        "label": "Ghana"
+                      },
+                      {
+                        "id": "GIN",
+                        "index": "48",
+                        "label": "Guinea"
+                      },
+                      {
+                        "id": "GMB",
+                        "index": "49",
+                        "label": "Gambia"
+                      },
+                      {
+                        "id": "GRC",
+                        "index": "50",
+                        "label": "Greece"
+                      },
+                      {
+                        "id": "GTM",
+                        "index": "51",
+                        "label": "Guatemala"
+                      },
+                      {
+                        "id": "GUY",
+                        "index": "52",
+                        "label": "Guyana"
+                      },
+                      {
+                        "id": "HND",
+                        "index": "53",
+                        "label": "Honduras"
+                      },
+                      {
+                        "id": "HRV",
+                        "index": "54",
+                        "label": "Croatia"
+                      },
+                      {
+                        "id": "HUN",
+                        "index": "55",
+                        "label": "Hungary"
+                      },
+                      {
+                        "id": "IDN",
+                        "index": "56",
+                        "label": "Indonesia"
+                      },
+                      {
+                        "id": "IND",
+                        "index": "57",
+                        "label": "India"
+                      },
+                      {
+                        "id": "IRL",
+                        "index": "58",
+                        "label": "Ireland"
+                      },
+                      {
+                        "id": "IRN",
+                        "index": "59",
+                        "label": "Iran"
+                      },
+                      {
+                        "id": "ISL",
+                        "index": "60",
+                        "label": "Iceland"
+                      },
+                      {
+                        "id": "ISR",
+                        "index": "61",
+                        "label": "Israel"
+                      },
+                      {
+                        "id": "ITA",
+                        "index": "62",
+                        "label": "Italy"
+                      },
+                      {
+                        "id": "JAM",
+                        "index": "63",
+                        "label": "Jamaica"
+                      },
+                      {
+                        "id": "JOR",
+                        "index": "64",
+                        "label": "Jordan"
+                      },
+                      {
+                        "id": "JPN",
+                        "index": "65",
+                        "label": "Japan"
+                      },
+                      {
+                        "id": "KAZ",
+                        "index": "66",
+                        "label": "Kazakhstan"
+                      },
+                      {
+                        "id": "KEN",
+                        "index": "67",
+                        "label": "Kenya"
+                      },
+                      {
+                        "id": "KGZ",
+                        "index": "68",
+                        "label": "Kyrgyzstan"
+                      },
+                      {
+                        "id": "KHM",
+                        "index": "69",
+                        "label": "Cambodia"
+                      },
+                      {
+                        "id": "KOR",
+                        "index": "70",
+                        "label": "Korea, Republic of"
+                      },
+                      {
+                        "id": "LAO",
+                        "index": "71",
+                        "label": "Laos"
+                      },
+                      {
+                        "id": "LBN",
+                        "index": "72",
+                        "label": "Lebanon"
+                      },
+                      {
+                        "id": "LKA",
+                        "index": "73",
+                        "label": "Sri Lanka"
+                      },
+                      {
+                        "id": "LSO",
+                        "index": "74",
+                        "label": "Lesotho"
+                      },
+                      {
+                        "id": "LTU",
+                        "index": "75",
+                        "label": "Lithuania"
+                      },
+                      {
+                        "id": "LUX",
+                        "index": "76",
+                        "label": "Luxembourg"
+                      },
+                      {
+                        "id": "LVA",
+                        "index": "77",
+                        "label": "Latvia"
+                      },
+                      {
+                        "id": "MAR",
+                        "index": "78",
+                        "label": "Morocco"
+                      },
+                      {
+                        "id": "MDA",
+                        "index": "79",
+                        "label": "Moldova, Republic of"
+                      },
+                      {
+                        "id": "MDG",
+                        "index": "80",
+                        "label": "Madagascar"
+                      },
+                      {
+                        "id": "MEX",
+                        "index": "81",
+                        "label": "Mexico"
+                      },
+                      {
+                        "id": "MKD",
+                        "index": "82",
+                        "label": "Macedonia, the former Yugoslav Republic of"
+                      },
+                      {
+                        "id": "MLI",
+                        "index": "83",
+                        "label": "Mali"
+                      },
+                      {
+                        "id": "MLT",
+                        "index": "84",
+                        "label": "Malta"
+                      },
+                      {
+                        "id": "MNE",
+                        "index": "85",
+                        "label": "Montenegro"
+                      },
+                      {
+                        "id": "MNG",
+                        "index": "86",
+                        "label": "Mongolia"
+                      },
+                      {
+                        "id": "MOZ",
+                        "index": "87",
+                        "label": "Mozambique"
+                      },
+                      {
+                        "id": "MUS",
+                        "index": "88",
+                        "label": "Mauritius"
+                      },
+                      {
+                        "id": "MWI",
+                        "index": "89",
+                        "label": "Malawi"
+                      },
+                      {
+                        "id": "MYS",
+                        "index": "90",
+                        "label": "Malaysia"
+                      },
+                      {
+                        "id": "NAM",
+                        "index": "91",
+                        "label": "Namibia"
+                      },
+                      {
+                        "id": "NER",
+                        "index": "92",
+                        "label": "Niger"
+                      },
+                      {
+                        "id": "NGA",
+                        "index": "93",
+                        "label": "Nigeria"
+                      },
+                      {
+                        "id": "NIC",
+                        "index": "94",
+                        "label": "Nicaragua"
+                      },
+                      {
+                        "id": "NLD",
+                        "index": "95",
+                        "label": "Netherlands"
+                      },
+                      {
+                        "id": "NOR",
+                        "index": "96",
+                        "label": "Norway"
+                      },
+                      {
+                        "id": "NPL",
+                        "index": "97",
+                        "label": "Nepal"
+                      },
+                      {
+                        "id": "NZL",
+                        "index": "98",
+                        "label": "New Zealand"
+                      },
+                      {
+                        "id": "OMN",
+                        "index": "99",
+                        "label": "Oman"
+                      },
+                      {
+                        "id": "PAK",
+                        "index": "100",
+                        "label": "Pakistan"
+                      },
+                      {
+                        "id": "PAN",
+                        "index": "101",
+                        "label": "Panama"
+                      },
+                      {
+                        "id": "PER",
+                        "index": "102",
+                        "label": "Peru"
+                      },
+                      {
+                        "id": "PHL",
+                        "index": "103",
+                        "label": "Philippines"
+                      },
+                      {
+                        "id": "POL",
+                        "index": "104",
+                        "label": "Poland"
+                      },
+                      {
+                        "id": "PRT",
+                        "index": "105",
+                        "label": "Portugal"
+                      },
+                      {
+                        "id": "PRY",
+                        "index": "106",
+                        "label": "Paraguay"
+                      },
+                      {
+                        "id": "ROU",
+                        "index": "107",
+                        "label": "Romania"
+                      },
+                      {
+                        "id": "RUS",
+                        "index": "108",
+                        "label": "Russian Federation"
+                      },
+                      {
+                        "id": "RWA",
+                        "index": "109",
+                        "label": "Rwanda"
+                      },
+                      {
+                        "id": "SAU",
+                        "index": "110",
+                        "label": "Saudi arabia"
+                      },
+                      {
+                        "id": "SEN",
+                        "index": "111",
+                        "label": "Senegal"
+                      },
+                      {
+                        "id": "SGP",
+                        "index": "112",
+                        "label": "Singapore"
+                      },
+                      {
+                        "id": "SLE",
+                        "index": "113",
+                        "label": "Sierra leone"
+                      },
+                      {
+                        "id": "SLV",
+                        "index": "114",
+                        "label": "El Salvador"
+                      },
+                      {
+                        "id": "SRB",
+                        "index": "115",
+                        "label": "Serbia"
+                      },
+                      {
+                        "id": "SVK",
+                        "index": "116",
+                        "label": "Slovakia"
+                      },
+                      {
+                        "id": "SVN",
+                        "index": "117",
+                        "label": "Slovenia"
+                      },
+                      {
+                        "id": "SWE",
+                        "index": "118",
+                        "label": "Sweden"
+                      },
+                      {
+                        "id": "SWZ",
+                        "index": "119",
+                        "label": "Swaziland"
+                      },
+                      {
+                        "id": "SYC",
+                        "index": "120",
+                        "label": "Seychelles"
+                      },
+                      {
+                        "id": "SYR",
+                        "index": "121",
+                        "label": "Syria"
+                      },
+                      {
+                        "id": "TGO",
+                        "index": "122",
+                        "label": "Togo"
+                      },
+                      {
+                        "id": "THA",
+                        "index": "123",
+                        "label": "Thailand"
+                      },
+                      {
+                        "id": "TJK",
+                        "index": "124",
+                        "label": "Tajikistan"
+                      },
+                      {
+                        "id": "TUN",
+                        "index": "125",
+                        "label": "Tunisia"
+                      },
+                      {
+                        "id": "TUR",
+                        "index": "126",
+                        "label": "Turkey"
+                      },
+                      {
+                        "id": "TZA",
+                        "index": "127",
+                        "label": "Tanzania, United Republic of"
+                      },
+                      {
+                        "id": "UGA",
+                        "index": "128",
+                        "label": "Uganda"
+                      },
+                      {
+                        "id": "UKR",
+                        "index": "129",
+                        "label": "Ukraine"
+                      },
+                      {
+                        "id": "URY",
+                        "index": "130",
+                        "label": "Uruguay"
+                      },
+                      {
+                        "id": "USA",
+                        "index": "131",
+                        "label": "United States"
+                      },
+                      {
+                        "id": "VEN",
+                        "index": "132",
+                        "label": "Venezuela, Bolivarian Republic of"
+                      },
+                      {
+                        "id": "VNM",
+                        "index": "133",
+                        "label": "Viet Nam"
+                      },
+                      {
+                        "id": "YEM",
+                        "index": "134",
+                        "label": "Yemen"
+                      },
+                      {
+                        "id": "ZAF",
+                        "index": "135",
+                        "label": "South Africa"
+                      },
+                      {
+                        "id": "ZMB",
+                        "index": "136",
+                        "label": "Zambia"
+                      }
+                    ],
+                    "role": "Columns"
+                  },
+                  {
+                    "collection": [
+                      {
+                        "id": "2009",
+                        "index": "4",
+                        "label": 2009
+                      }
+                    ],
+                    "role": "Fix Value"
+                  }
+                ],
+                "standalone": false
+              }
+            }
+          ]
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "8m9bxald0namunmi",
+          "receiver": "hfjz558p6869a4i",
+          "signal": "loadDataSuccess",
+          "slot": "setDataProvider"
+        },
+        {
+          "emitter": "8m9bxald0namunmi",
+          "receiver": "dz6qvrgzcf7xpqfr",
+          "signal": "loadDataSuccess",
+          "slot": "setDataProvider"
+        },
+        {
+          "emitter": "8m9bxald0namunmi",
+          "receiver": "c69wyj38gjtyy14i",
+          "signal": "loadDataSuccess",
+          "slot": "setDataProvider"
+        },
+        {
+          "emitter": "8m9bxald0namunmi",
+          "receiver": "qwqyy2u2hzx5hfr",
+          "signal": "loadDataSuccess",
+          "slot": "setDataProvider"
+        },
+        {
+          "emitter": "8m9bxald0namunmi",
+          "receiver": "r1dthghc63kdquxr",
+          "signal": "loadDataSuccess",
+          "slot": "setDataProvider"
+        }
+      ]
+    }, {
+      "href": "404",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [{
+            "type": "title",
+            "title": "404 error",
+            "instanceName": "title"
+          }, {"type": "htmlwidget", "text": "Page not found", "instanceName": "error-message"}]
+        }
+      }
+    }
+  ]
+}

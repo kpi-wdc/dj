@@ -1,12 +1,33 @@
-define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage', 'angular-oclazyload',
-  'angular-foundation', 'angular-json-editor', 'template-cached-pages', 'sceditor'], function (angular) {
-  let app = angular.module('app', ['ui.router', 'ngStorage', 'oc.lazyLoad', 'mm.foundation',
-    'angular-json-editor', 'templates', 'app.widgetApi']);
+import angular from 'angular';
+import 'user';
+import 'author';
+import 'app-config';
+import 'widget-api';
+import 'info';
+import 'angular-ui-router';
+import 'ngstorage';
+import 'angular-animate'
+import 'angular-oclazyload';
+import 'angular-foundation';
+import 'angular-json-editor';
+import 'angular-cookies';
+import 'template-cached-pages';
+import 'sceditor';
 
-  app.constant('appUrls', {
-    appConfig: `/api/app/config/${window.appName}`,
+
+const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
+  'ngCookies', 'angular-json-editor', 'templates',
+  'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
+
+app.factory('appUrls', function (appId) {
+  return {
+    app: (appName, page) => `/app/${appName}/${page || ''}`,
+    appConfig: `/api/app/config/${appId}`,
+    usersList: `/api/users/list`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
+    shareSettingsHTML: '/partials/share-settings.html',
+    appSettingsHTML: '/partials/app-settings.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
     pageModalConfigHTML: '/partials/page-modal-config.html',
@@ -19,203 +40,189 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
     widgetJS: widgetName =>
       `/widgets/${widgetName}/widget.js`,
     widgetJSModule: widgetName =>
-      `widgets/${widgetName}/widget.js`,
+      `widgets/${widgetName}/widget`,
     widgetHTML: widgetName =>
       `/widgets/${widgetName}/widget.html`,
     widgetIcon: widgetName =>
       `/widgets/${widgetName}/icon.png`
+  };
+});
+
+app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
+                     $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
+                     appName) {
+
+  $ocLazyLoadProvider.config({
+    loadedModules: ['app'],
+    asyncLoader: System.amdRequire.bind(System)
   });
 
-  app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
-                       $locationProvider, $ocLazyLoadProvider, JSONEditorProvider) {
-
-    $ocLazyLoadProvider.config({
-      loadedModules: ['app'],
-      asyncLoader: require
-    });
-
-    JSONEditorProvider.configure({
-      defaults: {
-        options: {
-          iconlib: 'foundation3',
-          theme: 'foundation5',
-          disable_collapse: true,
-          disable_edit_json: true,
-          disable_properties: true,
-          required_by_default: true
-        }
-      },
-      plugins: {
-        sceditor: {
-          style: '/components/SCEditor/minified/jquery.sceditor.default.min.css',
-          resizeWidth: false
-        }
+  JSONEditorProvider.configure({
+    defaults: {
+      options: {
+        iconlib: 'foundation3',
+        theme: 'foundation5',
+        disable_collapse: true,
+        disable_edit_json: true,
+        disable_properties: true,
+        required_by_default: true
       }
+    },
+    plugins: {
+      sceditor: {
+        style: '/components/SCEditor/minified/jquery.sceditor.default.min.css',
+        resizeWidth: false
+      }
+    }
+  });
+
+  $locationProvider.html5Mode(true);
+
+  // this doesn't seem to work, that's why the next snippet does the same
+  $urlMatcherFactoryProvider.strictMode(false);
+
+  $urlRouterProvider.when(`/app/${appName}`, ($state) => {
+    $state.go('page', {href: ''});
+  });
+
+  // If url is not in this app URL scope - reload the whole page.
+  $urlRouterProvider
+    .otherwise(($injector, $location) => {
+      $injector.get('$window').location.href = $location.url();
     });
 
-    let pageConfigPromise;
-    $locationProvider.html5Mode(true);
+  $stateProvider
+    .state('page', {
+      url: `/app/${appName}/:href`,
+      resolve: {
+        pageConfig($stateParams, $q, alert, app, widgetLoader) {
+          return $q((resolve, reject) => {
+            const pageConfig = app.pageConfig();
 
-    // this doesn't seem to work, that's why the next snippet does the same
-    $urlMatcherFactoryProvider.strictMode(false);
-
-    $urlRouterProvider.when(`/app/${window.appName}`, function ($state) {
-      $state.go('page', {href: ''});
-    });
-
-    $urlRouterProvider
-      .otherwise(`/app/${window.appName}/404`);
-
-    $stateProvider
-      .state('page', {
-        url: `/app/${window.appName}/:href`,
-        resolve: {
-          pageConfig: function ($stateParams, $q, alert, appConfigPromise, appConfig, widgetLoader) {
-            pageConfigPromise = appConfigPromise
-              .then(() => {
-                let pageConfig = appConfig.config.pages[appConfig.pageIndexByHref($stateParams.href)];
-
-                let deferredResult = $q.defer();
-                if (!pageConfig || !pageConfig.holders) {
-                  deferredResult.resolve(pageConfig);
-                  return deferredResult.promise;
-                }
-
-                let widgetTypes = [];
-                for (let holderName in pageConfig.holders) {
-                  if (pageConfig.holders.hasOwnProperty(holderName)) {
-                    for (let widget of pageConfig.holders[holderName].widgets) {
-                      widgetTypes.push(widget.type);
-                      appConfig.updateEventsOnNameChange(widget);
-                    }
-                  }
-                }
-                widgetLoader.load(widgetTypes).then(() => {
-                  deferredResult.resolve(pageConfig);
-                }, (err) => {
-                  alert.error(`Error loading widget controllers. <br><br> ${err}`);
-                  deferredResult.reject(err);
-                });
-
-                return deferredResult.promise;
-              }, (data) => {
-                alert.error(`Error loading app configuration: ${data.statusText} (${data.status})`);
-                return $q.reject(data.status);
-              });
-            return pageConfigPromise;
-          }
-        },
-        templateProvider: function ($http, appUrls, $templateCache) {
-          return pageConfigPromise.then((pageConfig) => {
-            if (!pageConfig || !pageConfig.template) {
-              return "Page not found!";
+            if (!pageConfig || !pageConfig.holders) {
+              resolve(pageConfig);
+              return;
             }
 
-            let url = appUrls.templateHTML(pageConfig.template);
-            return $http.get(url, {cache: $templateCache})
-              .then((result) => result.data);
+            const widgetTypes = [];
+            for (let holderName in pageConfig.holders) {
+              if (pageConfig.holders.hasOwnProperty(holderName)) {
+                for (let widget of pageConfig.holders[holderName].widgets) {
+                  widgetTypes.push(widget.type);
+                  app.updateEventsOnNameChange(widget);
+                }
+              }
+            }
+            widgetLoader.load(widgetTypes).then(() => {
+              resolve(pageConfig);
+            }, (err) => {
+              alert.error(`Error loading widget controllers. <br><br> ${err}`);
+              reject(err);
+            });
           });
-        },
-        controller: 'PageCtrl'
-      });
-  });
+        }
+      },
+      templateProvider($http, $templateCache, appUrls, app) {
+        const pageConfig = app.pageConfig();
+        if (!pageConfig || !pageConfig.template) {
+          return "Page not found!";
+        }
 
-  app.service('alert', function ($modal, $log) {
-    this.error = (msg) => {
-      $log.error(msg);
-      $modal.open({
-        template: msg,
-        windowClass: 'error-message'
-      });
-    };
-  });
-
-  app.factory('prompt', function ($window) {
-    return $window.prompt;
-  });
-
-  app.factory('widgetTypesPromise', function ($http, appUrls) {
-    return $http.get(appUrls.widgetTypes, {cache: true});
-  });
-
-  app.factory('templateTypesPromise', function ($http, appUrls) {
-    return $http.get(appUrls.templateTypes, {cache: true});
-  });
-
-  app.factory('appConfigPromise', function ($q, $window) {
-    return $q((resolve) => {
-      resolve(window.appConfig);
+        const url = appUrls.templateHTML(pageConfig.template);
+        return $http.get(url, {cache: $templateCache})
+          .then((result) => result.data);
+      },
+      controller: 'PageController'
     });
-  });
+});
 
-  app.service('appConfig', function ($http, $state, $stateParams, appConfigPromise,
-                                     appUrls, $rootScope, $modal) {
-    this.config = {};
-    this.isAvailable = false;
-    this.sendingToServer = false;
+app.factory('fullReload', function ($window) {
+  return (url) => $window.location.href = url;
+})
 
-    this.isHomePageOpened = () => {
+app.factory('widgetTypesPromise', function ($http, appUrls) {
+  return $http.get(appUrls.widgetTypes, {cache: true});
+});
+
+app.factory('templateTypesPromise', function ($http, appUrls) {
+  return $http.get(appUrls.templateTypes, {cache: true});
+});
+
+app.factory('config', function (initialConfig) {
+  if (initialConfig.pages.length <= 1) {
+    console.log('When there is no 404 page you might have problems with page routing!');
+  }
+  return angular.copy(initialConfig);
+});
+
+app.service('app', function ($http, $state, $stateParams, config, $rootScope, $modal,
+                             appUrls, appName, fullReload) {
+
+  let pageConf;
+
+  angular.extend(this, {
+    sendingToServer: false,
+    wasModified: false,
+    currentPageIndex: 0,
+
+    isHomePageOpened() {
       return $stateParams.href === '';
-    };
+    },
 
-    this.is404PageOpened = () => {
-      return $stateParams.href === '404';
-    };
+    is404PageOpened() {
+      return this.pageConfig().href === '404';
+    },
 
-    this.pageIndexByHref = (href) => {
-      let result;
-
-      for (let index = 0; index < this.config.pages.length; index++) {
-        if (this.config.pages[index].href === href) {
-          return index;
-        }
-        if (this.config.pages[index].href === '404') {
-          result = index;
-        }
+    pageIndexByHref(href) {
+      let result = config.pages.findIndex(p => p.href === href);
+      if (result !== -1) {
+        return result;
       }
-      return result;
-    };
-
-    this.currentPageIndex = () =>
-      this.pageIndexByHref($stateParams.href);
-
-    this.pageConfig = () => {
-      if (!this.config.pages) {
-        return undefined;
+      result = config.pages.findIndex(p => p.href === '404');
+      if (result !== -1) {
+        return result;
       }
-      return this.config.pages[this.currentPageIndex()];
-    };
 
-    this.wasModified = true; // TODO: implement changing this state
+      console.log("app.pageIndexByHref can't find page!");
+    },
+    pageConfig() {
+      return pageConf;
+    },
 
-    this.deletePage = (index) => {
-      if (angular.isDefined(this.config.pages) && angular.isDefined(this.config.pages[index])) {
-        this.config.pages.splice(index, 1);
+    deletePage(index) {
+      if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
+        config.pages.splice(index, 1);
+        this.wasModified = true;
       }
       $state.go('page', {href: ''});
-    };
+    },
 
-    this.submitToServer = (callback) => {
+    submitToServer(callback) {
+      this.wasModified = false;
       this.sendingToServer = true;
-      return $http.put(appUrls.appConfig, this.config)
+      return $http.put(appUrls.appConfig, config)
         .then(() => {
           this.sendingToServer = false;
+
+          if (config.name !== appName) {
+            fullReload(appUrls.app(config.name, $stateParams.href));
+          }
         }, (data) => {
           this.sendingToServer = false;
           if (callback) {
             callback(data);
           }
         });
-    };
+    },
 
-    this.updateEventsOnNameChange = (widget) => {
+    updateEventsOnNameChange(widget) {
       $rootScope.$watch(() => {
         return widget.instanceName;
       }, (newName, oldName) => {
         if (newName !== oldName && newName !== undefined) {
-          let subscriptions = this.pageConfig().subscriptions;
+          const subscriptions = this.pageConfig().subscriptions;
           for (let i = 0; i < (subscriptions ? subscriptions.length : 0); i++) {
-            let subscription = subscriptions[i];
+            const subscription = subscriptions[i];
             if (subscription.emitter === oldName) {
               subscription.emitter = newName;
             }
@@ -226,80 +233,117 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
           }
         }
       });
-    };
+    },
 
-    this.addNewPage = (page) => {
-      this.config.pages.push(page);
-    };
+    addNewPage(page) {
+      page.holders = page.holders || {};
+      config.pages.push(page);
+    },
 
-    this.addNewPageInModal = () => {
+    addNewPageInModal() {
       $modal.open({
         templateUrl: appUrls.pageModalConfigHTML,
         controller: 'PageModalSettingsController',
         backdrop: 'static',
         resolve: {
-          templateTypes: function (templateTypesPromise) {
+          templateTypes(templateTypesPromise) {
             return templateTypesPromise;
           }
         }
-      });
-    };
+      }).result.then( () => this.wasModified = true );
+    },
 
-    appConfigPromise.then((data) => {
-      this.isAvailable = true;
-      this.config = data;
-    });
+    openShareSettings() {
+      $modal.open({
+        templateUrl: appUrls.shareSettingsHTML,
+        controller: 'ShareSettingsModalController',
+        windowClass: 'share-settings-modal',
+        backdrop: 'static'
+      }).result.then((collaborations) => {
+        config.collaborations = collaborations;
+          this.wasModified = true;
+      });
+    },
+
+    openAppSettingsDialog() {
+      $modal.open({
+        templateUrl: appUrls.appSettingsHTML,
+        controller: 'AppSettingsModalController',
+        backdrop: 'static'
+      }).result.then((newSettings) => {
+        angular.extend(config, newSettings);
+        this.wasModified = true;
+      });
+    },
+
+    onStateChangeStart(evt, toState, toParams) {
+      if (toState.name === 'page') {
+        let pageIndex = this.pageIndexByHref(toParams.href);
+        pageConf = config.pages[pageIndex];
+        this.currentPageIndex = pageIndex;
+      } else {
+        console.log('No config available - non-page routing...');
+        pageConf = undefined;
+      }
+    }
   });
 
-  app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
-    this.load = (widgets) => {
-      widgets = angular.isArray(widgets) ? widgets : [widgets];
-      return widgetTypesPromise.then((widgetTypesHTTP) => {
-        let widgetControllers = [];
-        for (let widget of widgets) {
-          let widgetType = widgetTypesHTTP.data[widget];
-          if (angular.isUndefined(widgetType)) {
-            return $q.reject(`Widget "${widget}" doesn't exist!`);
-          }
-          if (!widgetType.nojs) {
-            widgetControllers.push({
-              name: 'app.widgets.' + widget,
-              files: [appUrls.widgetJSModule(widget)]
-            });
-          }
+  pageConf = config.pages[this.pageIndexByHref($stateParams.href || '')];
+
+  $rootScope.$on('$stateChangeStart', this.onStateChangeStart.bind(this));
+});
+
+app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
+  this.load = (widgets) => {
+    widgets = angular.isArray(widgets) ? widgets : [widgets];
+    return widgetTypesPromise.then((widgetTypesHTTP) => {
+      const widgetControllers = [];
+      for (let widget of widgets) {
+        const widgetType = widgetTypesHTTP.data[widget];
+        if (angular.isUndefined(widgetType)) {
+          return $q.reject(`Widget "${widget}" doesn't exist!`);
         }
-        return $ocLazyLoad.load(widgetControllers);
-      });
-    };
-  });
+        if (!widgetType.nojs) {
+          widgetControllers.push({
+            name: `app.widgets.${widget}`,
+            files: [appUrls.widgetJSModule(widget)]
+          });
+        }
+      }
+      return $ocLazyLoad.load(widgetControllers);
+    });
+  };
+});
 
-  app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, prompt) {
-    this.deleteIthWidgetFromHolder = (holder, index) => {
-      let removedWidget = holder.widgets.splice(index, 1)[0];
-      let user = new APIUser();
+app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, app) {
+  angular.extend(this, {
+    deleteIthWidgetFromHolder(holder, index) {
+      const removedWidget = holder.widgets.splice(index, 1)[0];
+      const user = new APIUser();
       user.tryInvoke(removedWidget.instanceName, APIProvider.REMOVAL_SLOT);
-    };
+      app.wasModified = true;
+    },
 
-    this.openWidgetConfigurationDialog = (widget) => {
-      let invocation = (new APIUser()).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
+    openWidgetConfigurationDialog(widget) {
+      const invocation = (new APIUser()).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
       if (!invocation.success) {
         this.openDefaultWidgetConfigurationDialog(widget);
       }
-    };
+    },
 
-    this.openDefaultWidgetConfigurationDialog = (widget) => {
+    openDefaultWidgetConfigurationDialog(widget) {
       $modal.open({
         templateUrl: appUrls.widgetModalConfigHTML,
         controller: 'WidgetModalSettingsController',
         backdrop: 'static',
         resolve: {
-          widgetScope: () => {
+          widgetScope() {
             return (new APIUser()).getScopeByInstanceName(widget.instanceName);
           },
-          widgetConfig: () => {
+          widgetConfig() {
             return widget;
           },
-          widgetType: (widgetTypesPromise) => {
+          widgetType(widgetTypesPromise) {
             return widgetTypesPromise.then((widgetTypesHTTP) =>
                 widgetTypesHTTP.data[widget.type]
             );
@@ -307,109 +351,143 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         }
       }).result.then((newWidgetConfig) => {
           angular.copy(newWidgetConfig, widget);
-          let user = new APIUser();
+          const user = new APIUser();
           user.invokeAll(APIProvider.RECONFIG_SLOT);
+          app.wasModified = true;
         });
-    };
+    },
 
-    this.addNewWidgetToHolder = (holder) => {
+    addNewWidgetToHolder(holder) {
       $modal.open({
         templateUrl: appUrls.widgetModalAddNewHTML,
         controller: 'WidgetModalAddNewController',
         backdrop: 'static',
         resolve: {
-          widgetTypes: function (widgetTypesPromise) {
+          widgetTypes(widgetTypesPromise) {
             return widgetTypesPromise;
           },
-          widgetLoader: function () {
+          widgetLoader() {
             return widgetLoader;
           },
-          holder: function () {
+          holder() {
             return holder;
           }
         }
       });
-    };
-  });
+    },
 
-  app.controller('MainCtrl', function ($scope, $localStorage, alert, appConfig) {
-    if ($localStorage.localStorageInitialized === undefined) {
-      $localStorage.globalConfig = {
-        debugMode: false,
-        designMode: false,
-        loggedIn: false
-      };
-      $localStorage.localStorageInitialized = true;
+    cloneWidget(holder, widget){
+      let newWidget = angular.copy(widget);
+      newWidget.instanceName = Math.random().toString(36).substring(2);
+      holder.widgets.push(newWidget);
+      app.wasModified = true;
     }
-    let cnf = $scope.globalConfig = $localStorage.globalConfig;
+  });
+});
 
-    $scope.appConfig = appConfig;
-
-    $scope.logIn = () => {
-      cnf.loggedIn = true;
-    };
-
-    $scope.logOut = () => {
-      cnf.loggedIn = false;
-    };
-
-    $scope.$watch('globalConfig.designMode', () => {
-      cnf.debugMode = cnf.debugMode && !cnf.designMode;
-    });
-
-    $scope.$watch('globalConfig.loggedIn', () => {
-      cnf.debugMode = cnf.debugMode && cnf.loggedIn;
-      cnf.designMode = cnf.designMode && cnf.loggedIn;
-    });
-
-    $scope.alertAppConfigSubmissionFailed = (data) => {
-      alert.error('Error submitting application configuration!<br>' +
-      `HTTP error ${data.status}: ${data.statusText}`);
-    };
+app.controller('MetaInfoController', function ($scope, $rootScope, appName, app, config, author) {
+  angular.extend($scope, {
+    title: appName,
+    author: author.name,
+    config
   });
 
-  app.controller('PageCtrl', function ($scope, pageConfig, widgetManager) {
-    $scope.config = pageConfig;
-    $scope.deleteIthWidgetFromHolder = widgetManager.deleteIthWidgetFromHolder.bind(widgetManager);
-    $scope.openWidgetConfigurationDialog = widgetManager.openWidgetConfigurationDialog.bind(widgetManager);
-    $scope.addNewWidgetToHolder = widgetManager.addNewWidgetToHolder.bind(widgetManager);
+  $rootScope.$on('$stateChangeSuccess', () => {
+    const pageName = app.pageConfig().shortTitle;
+    $scope.title = `${pageName} - ${config.title}`;
+  });
+});
+
+app.controller('MainController', function ($scope, $location, $cookies, $window,
+                                           alert, app, config) {
+  angular.extend($scope, {
+    globalConfig: {},
+    app,
+    config,
+
+    logIn() {
+      $cookies.redirectToUrl = $location.url();
+      $location.url('/auth/google');
+    },
+
+    logOut() {
+      $cookies.redirectToUrl = $location.url();
+      $location.url('/logout');
+    },
+
+    alertAppConfigSubmissionFailed(data) {
+      alert.error(`Error submitting application configuration!<br>
+        HTTP error ${data.status}: ${data.statusText}`);
+    }
   });
 
-  app.directive('widgetHolder', function (appUrls) {
-    return {
-      restrict: 'E',
-      templateUrl: appUrls.widgetHolderHTML,
-      transclude: true,
-      scope: true,
-      link: (scope, element, attrs) => {
-        scope.$watchCollection('scope.config.holders', () => {
-          if (scope.config.holders) {
-            scope.holder = scope.config.holders[attrs.name] || {};
-          }
-        });
+  $scope.$watch('globalConfig.designMode', () => {
+    let cnf = $scope.globalConfig;
+    cnf.debugMode = cnf.debugMode && !cnf.designMode;
+  });
 
-        scope.widgetTemplateUrl = appUrls.widgetHTML;
+  $window.onbeforeunload = (evt) => {
+    let message = "Are you sure that you want to leave the website without saving the changes?";
+    if (app.wasModified) {
+      if (typeof evt === "undefined") {
+        evt = $window.event;
       }
-    };
+      if (evt) {
+        evt.returnValue = message;
+      }
+      return message;
+    }
+  };
+});
+
+app.controller('PageController', function ($scope, pageConfig, widgetManager) {
+  angular.extend($scope, {
+    config: pageConfig,
+    deleteIthWidgetFromHolder: widgetManager.deleteIthWidgetFromHolder.bind(widgetManager),
+    openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
+    addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager),
+    cloneWidget: widgetManager.cloneWidget.bind(widgetManager)
   });
+});
 
-  app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
-                                                            widgetScope, widgetConfig, widgetType) {
-    $scope.widgetScope = widgetScope;
-    $scope.widgetType = widgetType;
+app.directive('widgetHolder', function (appUrls) {
+  return {
+    restrict: 'E',
+    templateUrl: appUrls.widgetHolderHTML,
+    transclude: true,
+    scope: true,
+    link(scope, element, attrs) {
+      scope.$watchCollection('scope.config.holders', () => {
+        if (scope.config.holders) {
+          scope.holder = scope.config.holders[attrs.name] || {};
+        }
+      });
 
-    $scope.widgetConfig = angular.copy(widgetConfig);
-    // split widgetConfig into basicProperties (not available in json-editor)
-    // and $scope.widgetConfig - everything else, modifiable in json-editor
-    delete $scope.widgetConfig.instanceName;
-    delete $scope.widgetConfig.type;
-    let data = $scope.widgetConfig;
-    $scope.basicProperties = {
+      scope.widgetTemplateUrl = appUrls.widgetHTML;
+    }
+  };
+});
+
+app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
+                                                          widgetScope, widgetConfig, widgetType) {
+  let data = angular.copy(widgetConfig);
+
+  // split widgetConfig into basicProperties (not available in json-editor)
+  // and data - everything else, modifiable in json-editor
+  delete data.instanceName;
+  delete data.type;
+
+  angular.extend($scope, {
+    widgetScope,
+    widgetType,
+    widgetConfig: data,
+
+    basicProperties: {
       type: widgetConfig.type,
       instanceName: widgetConfig.instanceName
-    };
+    },
 
-    $scope.ok = () => {
+    ok() {
       // Use $timeout as a fix for android
       // On mobile devices (at least android) `data` is updated AFTER `ng-click` event happens if
       // submit button is pressed while input fields are still focused.
@@ -417,48 +495,52 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
       $timeout(() => {
         $modalInstance.close(angular.extend(data, $scope.basicProperties));
       }, 100);
-    };
+    },
 
-    $scope.cancel = $modalInstance.dismiss.bind($modalInstance);
+    cancel() {
+      $modalInstance.dismiss();
+    },
 
-    $scope.updateData = (value) => {
+    updateData(value) {
       data = value;
-    };
-  });
-
-  app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
-                                                          widgetLoader, holder, appUrls) {
-    // create array instead of map (easy filtering)
-    let widgetTypesArr = [];
-    let currentWidget;
-
-    for (let type in widgetTypes.data) {
-      currentWidget = {};
-      currentWidget.type = type;
-      currentWidget.description = widgetTypes.data[type].description;
-
-      // add path to icon of a widget
-      if (widgetTypes.data[type].noicon) {
-        currentWidget.icon = appUrls.defaultWidgetIcon;
-      } else {
-        currentWidget.icon = appUrls.widgetIcon(currentWidget.type);
-      }
-      widgetTypesArr.push(currentWidget);
     }
+  });
+});
 
-    $scope.widgetTypes = widgetTypesArr;
+app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
+                                                        widgetLoader, holder, appUrls,
+                                                        $timeout, widgetManager) {
+  // create array instead of map (easy filtering)
+  let widgetTypesArr = [];
+  let currentWidget;
 
-    $scope.chooseWidget = (widget) => {
+  for (let type in widgetTypes.data) {
+    currentWidget = {};
+    currentWidget.type = type;
+    currentWidget.description = widgetTypes.data[type].description;
+
+    // add path to icon of a widget
+    if (widgetTypes.data[type].noicon) {
+      currentWidget.icon = appUrls.defaultWidgetIcon;
+    } else {
+      currentWidget.icon = appUrls.widgetIcon(currentWidget.type);
+    }
+    widgetTypesArr.push(currentWidget);
+  }
+
+  angular.extend($scope, {
+    widgetTypes: widgetTypesArr,
+    chooseWidget(widget) {
       $scope.chosenWidget = widget;
       // no error as a widget was chosen
       $scope.widgetErr = {};
-    };
+    },
 
-    $scope.add = (widget) => {
+    add(widget) {
       // checks whether chosen template belongs to the current filter criteria
       $scope.chosenWidget = widget;
 
-      let realWidget = {
+      const realWidget = {
         type: $scope.chosenWidget.type,
         instanceName: Math.random().toString(36).substring(2)
       };
@@ -468,71 +550,73 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
           holder.widgets.push(realWidget);
           $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
         }, (error) => {
-          console.log('ERROR', error);
-          alert.error('Cannot add widget: ' + error);
+          alert.error('Cannot add widget: ${error}');
         });
       $modalInstance.close();
-    };
+    },
 
-    $scope.isSelected = (widget) => {
-      return $scope.chosenWidget === widget;
-    };
+    isSelected(widget) {
+      $scope.chosenWidget === widget
+    },
 
-    $scope.cancel = () => {
+    cancel() {
       $modalInstance.dismiss();
-    };
-  });
-
-  app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
-                                                          appConfig, templateTypes, appUrls) {
-    // array of all template types
-    let templateTypesArr = [];
-
-    // create templateTypesArr out of templateTypes map
-    for (let type in templateTypes.data) {
-      let currentTemplate = {};
-      currentTemplate.type = type;
-      currentTemplate.description = templateTypes.data[type].description;
-      currentTemplate.holders = templateTypes.data[type].holders;
-      currentTemplate.icon = appUrls.templateIcon(currentTemplate.type);
-
-      templateTypesArr.push(currentTemplate);
     }
+  });
+});
+
+app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
+                                                        app, templateTypes, appUrls) {
+
+  // array of all template types
+  const templateTypesArr = [];
+
+  // create templateTypesArr out of templateTypes map
+  for (let type in templateTypes.data) {
+    const currentTemplate = {
+      type,
+      description: templateTypes.data[type].description,
+      holders: templateTypes.data[type].holders,
+      icon: appUrls.templateIcon(type)
+    };
+
+    templateTypesArr.push(currentTemplate);
+  }
+
+  angular.extend($scope, {
+
+    href: "",
 
     // check whether shortTitle is correct (isn't empty for now)
-    $scope.checkShortTitle = (shortTitle) => {
+    checkShortTitle(shortTitle) {
       $scope.titleErr = {};
       if (!shortTitle) {
         $scope.titleErr.message = 'field mustn\'t be empty';
         $scope.titleErr.class = 'red';
       }
-    };
+    },
 
     // check whether href is correct (isn't empty for now)
-    $scope.checkHref = (href) => {
+    checkHref(href) {
       $scope.hrefErr = {};
-      if (!href) {
-        $scope.hrefErr.message = 'field mustn\'t be empty';
-        $scope.hrefErr.class = 'red';
-      }
-    };
+      //if (!href) {
+      //  $scope.hrefErr.message = 'field mustn\'t be empty';
+      //  $scope.hrefErr.class = 'red';
+      //}
+    },
 
-    $scope.templateTypes = templateTypesArr;
+    templateTypes: templateTypesArr,
 
     // add button action
-    $scope.add = (shortTitle, href, filteredTemplates) => {
-      let hasHrefAndTitle = href && shortTitle;
-
-      if (!hasHrefAndTitle) {
-        $scope.checkHref(href);
-        $scope.checkShortTitle(shortTitle);
-      }
+    add(shortTitle, href, filteredTemplates) {
+      $scope.checkHref(href);
+      $scope.checkShortTitle(shortTitle);
 
       // checks whether chosen template belongs to the current filter criteria
       let inFilter = false;
 
-      for (let i = 0; i < filteredTemplates.length; i++) {
-        if (filteredTemplates[i] === $scope.chosenTemplate) {
+      for (let template of filteredTemplates) {
+        if (template === $scope.chosenTemplate) {
           inFilter = true;
           break;
         }
@@ -544,47 +628,114 @@ define(['angular', 'js/shims', 'js/widget-api', 'angular-ui-router', 'ngstorage'
         $scope.templateErr = {};
         $scope.templateErr.message = 'choose a template';
         $scope.templateErr.class = 'red';
-      }
-
-      if (!hasHrefAndTitle || !inFilter) {
         return;
       }
 
-      let page = {};
-      page.shortTitle = shortTitle;
-      page.href = href;
+      const page = {
+        shortTitle: shortTitle,
+        href,
+        template: $scope.chosenTemplate.type,
+        holders: {}
+      };
 
-      page.template = $scope.chosenTemplate.type;
-      page.holders = {};
       for (let holderName of $scope.chosenTemplate.holders) {
         page.holders[holderName] = {
           widgets: []
         };
       }
 
-      appConfig.addNewPage(page);
+      app.addNewPage(page);
 
       // redirect to the new page
-      $state.go('page', {href: href});
+      $state.go('page', {href}, {reload: true});
       $modalInstance.close();
-    };
+    },
 
-    $scope.chooseTemplate = (template) => {
+    chooseTemplate(template) {
       $scope.chosenTemplate = template;
       // don't show any error message
       $scope.templateErr = {};
-    };
+    },
 
-    $scope.cancel = () => {
+    cancel() {
       $modalInstance.dismiss();
-    };
+    },
 
-    $scope.isSelected = (template) => {
-      return $scope.chosenTemplate === template;
-    };
+    isSelected(template) {
+      $scope.chosenTemplate === template;
+    }
   });
+});
 
-  return angular.bootstrap(document, ['app'], {
-    strictDi: false
+app.controller('ShareSettingsModalController', function ($scope, $modalInstance, $http, author, appUrls, config) {
+  angular.extend($scope, {
+    author,
+    collaborations: angular.copy(config.collaborations) || [], // TODO: change to collaborations
+
+    getUsers(filterValue) {
+      // todo: add support for filterValue
+      return $http.get(appUrls.usersList).then(result =>
+        /* Hack: filters do not work in angular-foundation's typeahead view for some reason */
+        result.data
+          .filter(user => !this.userIsCollaborator(user))
+          .filter(user =>
+            user.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+            user.email.toLowerCase().includes(filterValue.toLowerCase())
+          )
+          .slice(0, 8)
+      );
+    },
+
+    addCollaboration() {
+      this.collaborations.push({
+        user: {
+          id: this.selectedUser.id,
+          name: this.selectedUser.name,
+          email: this.selectedUser.email
+        },
+        access: undefined // todo: add support for edit/view access rights
+      });
+    },
+
+    deleteCollaboration(userId) {
+      this.collaborations.splice(this.collaborations.findIndex(user => user.id === userId), 1);
+    },
+
+    userIsCollaborator(user) {
+      const isOwner = user.id === (author || {}).id;
+      return isOwner || this.collaborations.find(c => c.user.id === user.id);
+    },
+
+    ok() {
+      $modalInstance.close(this.collaborations);
+    },
+
+    cancel() {
+      $modalInstance.dismiss();
+    }
   });
+});
+
+app.controller('AppSettingsModalController', function ($scope, $modalInstance, appName, config) {
+  angular.extend($scope, {
+    settings: {
+      isPublished: config.isPublished,
+      name: config.name,
+      keywords: config.keywords,
+      title: config.title,
+      description: config.description
+    },
+
+    ok() {
+      $modalInstance.close(this.settings);
+    },
+
+    cancel() {
+      $modalInstance.dismiss();
+    }
+  });
+});
+
+angular.bootstrap(document, ['app'], {
+  strictDi: false
 });

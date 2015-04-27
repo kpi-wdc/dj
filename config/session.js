@@ -26,14 +26,13 @@ module.exports.session = {
 
   /***************************************************************************
   *                                                                          *
-  * Set the session cookie expire time The maxAge is set by milliseconds,    *
-  * the example below is for 24 hours                                        *
+  * Set the session cookie expire time The maxAge is set by milliseconds.    *
   *                                                                          *
   ***************************************************************************/
 
-  // cookie: {
-  //   maxAge: 24 * 60 * 60 * 1000
-  // }
+  cookie: {
+     maxAge: 365 * 24 * 60 * 60 * 1000 // 1 year
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -68,11 +67,11 @@ module.exports.session = {
   ***************************************************************************/
 
   adapter: 'mongo',
-  host: 'localhost',
-  port: 27017,
-  db: 'sails',
+  host: process.env.DB_PORT_27017_TCP_ADDR || 'localhost',
+  port: process.env.DB_PORT_27017_TCP_PORT || 27017,
+  db: 'wdc-session',
   collection: 'sessions',
-  url: process.env.MONGOLAB_URI,
+  url: process.env.MONGOLAB_URI || process.env.MONGODB_URL
 
   /***************************************************************************
   *                                                                          *

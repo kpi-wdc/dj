@@ -1,8 +1,8 @@
-require.config({
+System.config({
   paths: {
-    'statkit': 'widgets/data-util/statkit'
+    'statkit': 'widgets/data-util/statkit.js'
   },
-  shim: {
+  meta: {
     'statkit': {
       exports: 'statkit'
     }

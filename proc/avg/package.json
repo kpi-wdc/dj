@@ -1,0 +1,12 @@
+{
+  "name": "avg",
+  "version": "0.0.1",
+  "description": "Module to find averages",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+    "fast-stats": "0.0.2"
+  }
+}

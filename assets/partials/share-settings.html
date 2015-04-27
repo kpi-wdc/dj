@@ -1,0 +1,58 @@
+<div>
+  <h3>Share with others</h3>
+
+  <h5>People</h5>
+  <fieldset>
+    <div ng-if="author.exists" class="row row-no-left-padding">
+      <div class="column medium-7">
+        <b>{{author.name}}</b>
+        <i>({{author.email}})</i>
+      </div>
+      <div class="column medium-3 end">
+        <select disabled>
+          <option selected>Owner</option>
+        </select>
+      </div>
+    </div>
+
+    <div ng-repeat="collaboration in collaborations" class="row row-no-left-padding">
+      <div class="column medium-7">
+        {{collaboration.user.name}}
+        <i>({{collaboration.user.email}})</i>
+      </div>
+      <div class="column medium-3">
+        <select>
+          <option selected>Can edit</option>
+        </select>
+      </div>
+      <input type="button" class="button alert tiny"
+             ng-click="deleteCollaboration(collaboration.user.id)"
+             value="Delete">
+    </div>
+    <div ng-if="collaborations.length === 0 && !author.exists">
+      No collaborators added yet! Owner is not set. <br><br>
+    </div>
+  </fieldset>
+
+  <hr>
+  <h5>Invite people</h5>
+  <fieldset class="row invite-people row-no-left-padding">
+    <div class="column medium-7">
+      <input type="text" ng-model="selectedUser" placeholder="Enter name..."
+             typeahead="user as user.name + ' ' + user.email for user in getUsers($viewValue)"
+             typeahead-editable="false"
+             typeahead-on-select="addCollaboration()"
+             typeahead-loading="loadingUsers" class="form-control">
+      <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
+    </div>
+    <div class="column medium-3 end">
+      <select>
+        <option selected>Can edit</option>
+      </select>
+    </div>
+  </fieldset>
+</div>
+<br>
+<button class="button small" ng-click="ok()">Save</button>
+<button class="button alert small" ng-click="cancel()">Cancel</button>
+<a class="close-reveal-modal" ng-click="cancel()">&#215;</a>
