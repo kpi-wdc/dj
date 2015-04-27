@@ -266,4 +266,3 @@ m.factory("JSONstatDataProvider", ["$http", function ($http) {
   };
   return JSONstatDataProvider;
 }]);
-//# sourceMappingURL=../data-util/json-stat-data-provider.js.map

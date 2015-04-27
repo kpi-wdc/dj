@@ -180,4 +180,4 @@ define(["angular", "widgets/data-util/keyset", "widgets/data-util/adapter", "ang
     };
   }]);
 });
-/*angular.extend(data, $scope.basicProperties)*/
+
