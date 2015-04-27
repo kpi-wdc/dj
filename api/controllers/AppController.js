@@ -7,8 +7,6 @@
 var fs = require('fs');
 
 module.exports = {
-  _config: { actions: true, rest: false, shortcuts: false },
-
   create: function (req, res) {
     // Clone default application
     AppConfig.findOne({name: 'default'})
@@ -49,7 +47,6 @@ module.exports = {
   },
 
   export: function (req, res) {
-    // fixme: do case-insensitive search here!
     AppConfig.findOne({id: req.params.appId})
       .populate('owner')
       .then(function (app) {
@@ -128,7 +125,7 @@ module.exports = {
     });
   },
 
-  delete: function (req, res) {
+  destroy: function (req, res) {
     AppConfig.destroy({
       id: req.params.appId
     }).then(function (updatedArr) {

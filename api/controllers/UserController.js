@@ -6,8 +6,6 @@
  */
 
 module.exports = {
-  _config: { actions: true, rest: false, shortcuts: false },
-
   getList: function (req, res) {
     User.find().then(function (result) {
       // todo: add support for filtering users

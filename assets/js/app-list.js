@@ -107,7 +107,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
 
         this.saveApps();
         this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
-        $http.get(`/api/app/delete/${appId}`).error((data, error) => {
+        $http.get(`/api/app/destroy/${appId}`).error((data, error) => {
           this.restoreApps();
           alert.error(`Error while deleting the app (${error}): ${data}`);
         });

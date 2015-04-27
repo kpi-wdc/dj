@@ -42,7 +42,7 @@ module.exports.routes = {
   'get /api/app/export/:appId': 'AppController.export',
   'post /api/app/import': 'AppController.import',
   'get /api/app/rename/:appId/:newAppName': 'AppController.rename',
-  'get /api/app/delete/:appId': 'AppController.delete',
+  'get /api/app/destroy/:appId': 'AppController.destroy',
 
   // Users
   'get /api/users/list': 'UserController.getList',
