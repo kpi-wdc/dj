@@ -39,8 +39,8 @@ module.exports.routes = {
   // Apps
   'get /api/app/create/:appName': 'AppController.create',
   'put /api/app/config/:appId': 'AppController.update',
-  'get /api/app/import/:appId': 'AppController.import',
-  'post /api/app/export': 'AppController.export',
+  'get /api/app/export/:appId': 'AppController.export',
+  'post /api/app/import': 'AppController.import',
   'get /api/app/rename/:appId/:newAppName': 'AppController.rename',
   'get /api/app/delete/:appId': 'AppController.delete',
 

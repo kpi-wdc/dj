@@ -6,7 +6,7 @@ import 'widget-api';
 import 'info';
 import 'angular-ui-router';
 import 'ngstorage';
-import 'angular-animate'
+import 'angular-animate';
 import 'angular-oclazyload';
 import 'angular-foundation';
 import 'angular-json-editor';

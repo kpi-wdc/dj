@@ -33,7 +33,7 @@
           ng-disabled="!isOwner(app) && !isCollaborator(app)"
           value="Rename" ng-click="renameApp(app.id)">
       <a type="button" class="button tiny column small-2" style="background-color: #cdab42"
-             href="/api/app/import/{{app.id}}">Import</a>
+             href="/api/app/export/{{app.id}}">Export</a>
       <input type="button" class="button alert tiny column small-2"
           ng-disabled="!isOwner(app) && !isCollaborator(app)"
           value="Delete" ng-click="deleteApp(app.id, app.name)">
@@ -50,14 +50,14 @@
         disabled ng-disabled="!model.newAppName">
     </form>
     <form>
-      <label>Export app
+      <label>Import app
         <input type="file" name="file"
-               onchange="angular.element(this).scope().setExportFile(this.files[0])"
+               onchange="angular.element(this).scope().setImportFile(this.files[0])"
                required>
       </label>
-      <input type="submit" value="Export" class="button success tiny"
-             ng-disabled="!exportFile"
-             ng-click="exportApp()">
+      <input type="submit" value="Import" class="button success tiny"
+             ng-disabled="!importFile"
+             ng-click="importApp()">
     </form>
   </fieldset>
   <% } %>

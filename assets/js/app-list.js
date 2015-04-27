@@ -56,17 +56,17 @@ appList.controller('AppListController', function ($scope, $http, $window,
         });
     },
 
-    setExportFile(file) {
+    setImportFile(file) {
       this.$apply(() => {
-        this.exportFile = file;
+        this.importFile = file;
       });
     },
 
-    exportApp() {
+    importApp() {
       var fd = new FormData();
       //Take the first selected file
-      fd.append('file', this.exportFile);
-      $http.post(`/api/app/export`, fd, {
+      fd.append('file', this.importFile);
+      $http.post(`/api/app/import`, fd, {
         withCredentials: true,
         headers: {'Content-Type': undefined},
         transformRequest: angular.identity
@@ -78,7 +78,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
 
         this.apps.push(app);
       }).error((data, status) => {
-        alert.error(`Error happened while exporting app: ${status}`);
+        alert.error(`Error happened while importing app: ${status}`);
       });
     },
 

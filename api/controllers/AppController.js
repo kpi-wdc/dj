@@ -48,7 +48,7 @@ module.exports = {
     });
   },
 
-  import: function (req, res) {
+  export: function (req, res) {
     // fixme: do case-insensitive search here!
     AppConfig.findOne({id: req.params.appId})
       .populate('owner')
@@ -74,7 +74,7 @@ module.exports = {
       });
   },
 
-  export: function (req, res) {
+  import: function (req, res) {
     req.file('file').upload({},
       function (err, uploadedFiles) {
         if (err) {
