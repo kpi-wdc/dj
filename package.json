@@ -90,8 +90,7 @@
     "validator": "3.39.0",
     "xlsjs": "0.7.5",
     "xlsx": "0.8.0",
-    "xlsx-json-parser": "file:proc/xlsx2json",
-    "yargs": "3.8.0"
+    "xlsx-json-parser": "file:proc/xlsx2json"
   },
   "jspm": {
     "directories": {

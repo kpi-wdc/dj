@@ -3,7 +3,6 @@ var gulp = require('gulp');
 var del = require('del');
 var path = require('path');
 var runSequence = require('run-sequence');
-var argv = require('yargs').argv;
 var fs = require('fs');
 
 // HELPER FUNCTIONS
