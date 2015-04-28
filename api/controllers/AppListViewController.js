@@ -6,7 +6,6 @@
  */
 
 module.exports = {
-  _config: { actions: true, rest: false, shortcuts: false },
   /**
    * `AppListViewController.getView()`
    */

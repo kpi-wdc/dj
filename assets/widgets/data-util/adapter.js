@@ -8,14 +8,12 @@ System.config({
   }
 });
 
-
 define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (angular, jsinq) {
   var m = angular.module("app.widgets.data-util.adapter", ["app.widgets.data-util.stat", "app.widgets.data-util.pca", "app.widgets.data-util.cluster"]);
 
-
   m.service("TableGenerator", function () {
-    var str = function (arg) {
-      return angular.isString(arg) ? "'" + arg + "'" : arg;
+    var str = function str(arg) {
+      return angular.isString(arg) ? `"${arg}"` : arg;
     };
 
     this.getData = function (conf, provider) {
@@ -30,7 +28,6 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
         //console.log(result)
 
         var rowsDim, columnsDim, splitDim, rowCollection, columnCollection, splitCollection;
-
 
         for (var i in conf.selection) {
           if (conf.selection[i].role == "Rows") {
@@ -92,14 +89,32 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
           }
           r.push(current);
         }
-        
-         var r = r.filter(function(row){return Object.keys(row.values).length>0}); 
+
+        var r = r.filter(function (row) {
+          var keys = Object.keys(row.values);
+          var res = true
+          for(i in keys){
+            res &= row.values[keys[i]] == null;
+          }
+          return !res;
+        });
+
+        //todo remove null columnes
+
+        var headerTemplate = r[0];
+        r.forEach(function(row){
+          // console.log(row)
+          if(Object.keys(headerTemplate.values).length<Object.keys(row.values).length){
+            headerTemplate = row;
+            // console,log("HEADER FIX",Object.keys(headerTemplate.values))
+          }
+        })
 
         var header = {};
         header.label = conf.selectedDataset.dimensions[rowsDim].label;
         header.body = {};
         //console.log("ColumnsCollection",columnCollection)
-        for (var i in r[0].values) {
+        for (var i in headerTemplate.values) {
           header.body[i] = {};
           header.body[i].label = i;
           header.body[i].title = i;
@@ -111,7 +126,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
             header.body[i].id = fcol.id;
           }
         }
-        //console.log(r)
+        // console.log("HEADER", header)
         //r = r.filter(function(item){
         //    for(var i in item.values){
         //        if (angular.isUndefined(item.values[i])
@@ -256,12 +271,10 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
     };
   }]);
 
-
   m.service("CorrelationTableGenerator", ["CorrelationMatrixGenerator", function (CorrelationMatrixGenerator) {
     this.getData = function (table) {
       var matrix = CorrelationMatrixGenerator.getData(table);
       var result = {};
-
 
       result.body = matrix.map(function (item) {
         var current = {};
@@ -282,9 +295,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
       //    }
       //}
 
-
       //console.log(result.body);
-
 
       result.header = {};
       result.header.label = table.label;
@@ -372,7 +383,6 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
         return a < b ? -1 : 1;
       });
 
-
       if (normalizeArea == "Columns") {
         for (var i in keys) {
           var data = [];
@@ -430,7 +440,6 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
     };
   }]);
 
-
   m.service("ScatterSerieGenerator", ["PCA", "STAT", "CLUSTER", "Normalizer", function (PCA, STAT, CLUSTER, Normalizer) {
     this.getClusterData = function (serie, scope) {
       var clsInputData = serie.values.map(function (item) {
@@ -472,13 +481,10 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
         base: { title: "Loadings PC1" }
       });
 
-
       return result;
     };
 
-
     this.getPcaData = function (table, scope) {
-
 
       var data = PCA.getData(table);
 
@@ -520,7 +526,6 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
       return [serie, loadings];
     };
 
-
     this.getData = function (table, scope) {
       //console.log(PCA.getData(table))
       table.body = table.body.filter(function (item) {
@@ -530,7 +535,6 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
         }
         return true;
       });
-
 
       if (scope.widget.decoration.pca) return this.getPcaData(table, scope);
 
@@ -566,7 +570,6 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
         //    }
         //}
       }
-
 
       var xValues = [];
       var labels = [];
@@ -628,9 +631,7 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
     };
   }]);
 
-
   m.service("adapter", ["TableGenerator", function (TableGenerator) {
-
 
     this.getData = function (scope, serieGenerator) {
       var conf = scope.widget.data;
@@ -641,19 +642,20 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
       if (angular.isDefined(conf)) {
         if (conf.standalone && conf.series) return conf.series;
       }
-      //console.log(conf)
+      
+      // console.log(scope.widget,conf)
       if (angular.isDefined(conf)) {
         if (conf.standalone && conf.table) return conf.table;
       }
 
       if (angular.isDefined(provider)) {
         //console.log("GET DATA ADAPTER",conf,provider,serieGenerator)
-
         var cfg = {};
         cfg.selectedDataset = provider.getDatasets().find(function (item) {
           return item.id == conf.selectedDataset;
         });
 
+        console.log('ADAPTER',scope.widget,cfg.selectedDataset)
         for (var i in cfg.selectedDataset.dimensions) {
           cfg.selectedDataset.dimensions[i].selection = conf.selection[i];
         }
@@ -670,4 +672,3 @@ define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (
     };
   }]);
 });
-

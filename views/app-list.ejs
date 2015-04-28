@@ -24,7 +24,7 @@
   <fieldset>
     <h4>List of apps:</h4>
     <div ng-repeat="app in apps | orderBy: 'name'" class="row">
-      <span class="column small-6">
+      <span class="column small-4">
         <b ng-bind="app.name"></b>
         <span ng-if="app.owner.name">({{app.owner.name}})</span>
       </span>
@@ -32,6 +32,8 @@
       <input type="button" class="button tiny column small-2"
           ng-disabled="!isOwner(app) && !isCollaborator(app)"
           value="Rename" ng-click="renameApp(app.id)">
+      <a type="button" class="button tiny column small-2" style="background-color: #cdab42"
+             href="/api/app/export/{{app.id}}">Export</a>
       <input type="button" class="button alert tiny column small-2"
           ng-disabled="!isOwner(app) && !isCollaborator(app)"
           value="Delete" ng-click="deleteApp(app.id, app.name)">
@@ -46,6 +48,16 @@
       </label><br>
       <input type="submit" value="Submit" class="button success tiny"
         disabled ng-disabled="!model.newAppName">
+    </form>
+    <form>
+      <label>Import app
+        <input type="file" name="file"
+               onchange="angular.element(this).scope().setImportFile(this.files[0])"
+               required>
+      </label>
+      <input type="submit" value="Import" class="button success tiny"
+             ng-disabled="!importFile"
+             ng-click="importApp()">
     </form>
   </fieldset>
   <% } %>

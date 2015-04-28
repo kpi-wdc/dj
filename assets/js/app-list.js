@@ -56,6 +56,36 @@ appList.controller('AppListController', function ($scope, $http, $window,
         });
     },
 
+    setImportFile(file) {
+      this.$apply(() => {
+        this.importFile = file;
+      });
+    },
+
+    importApp() {
+      var fd = new FormData();
+      //Take the first selected file
+      fd.append('file', this.importFile);
+      $http.post(`/api/app/import`, fd, {
+        withCredentials: true,
+        headers: {'Content-Type': undefined},
+        transformRequest: angular.identity
+      }).success((data, status) => {
+        const app = {
+          name: data.name,
+          owner: user
+        };
+
+        this.apps.push(app);
+      }).error((data, status) => {
+        if (status === 415) {
+          alert.error(`Cannot parse this data as a valid json configuration file: ${data}`);
+        } else {
+          alert.error(`Error happened while importing app: ${status}`);
+        }
+      });
+    },
+
     renameApp(appId) {
       prompt('New name:').then((newAppName) => {
         this.saveApps();
@@ -77,7 +107,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
 
         this.saveApps();
         this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
-        $http.get(`/api/app/delete/${appId}`).error((data, error) => {
+        $http.get(`/api/app/destroy/${appId}`).error((data, error) => {
           this.restoreApps();
           alert.error(`Error while deleting the app (${error}): ${data}`);
         });

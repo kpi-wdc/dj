@@ -3,7 +3,6 @@ var gulp = require('gulp');
 var del = require('del');
 var path = require('path');
 var runSequence = require('run-sequence');
-var argv = require('yargs').argv;
 var fs = require('fs');
 
 // HELPER FUNCTIONS
@@ -239,14 +238,7 @@ gulp.task('copy-static-files', function () {
 });
 
 if (!npmProduction) {
-  gulp.task('test', (isFlagPositive(argv.skipTests) ? [] :
-    ['unit-test']), function (cb) {
-    if (isEnvEnabled('SEND_COVERAGE')) {
-      runSequence('coveralls', cb);
-    } else {
-      cb();
-    }
-  });
+  gulp.task('test', ['unit-test']);
 
   gulp.task('unit-test', ['copy-es6-polyfill',
     'build-template-cache',

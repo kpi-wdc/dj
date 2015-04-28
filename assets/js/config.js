@@ -7,9 +7,12 @@ System.config({
     "info": "js/info.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
+    "file-upload-shim": "components/ng-file-upload/angular-file-upload-shim.js",
+    "file-upload": "components/ng-file-upload/angular-file-upload.js",
     "jquery": "components/jquery/dist/jquery.js",
     "angular": "components/angular/angular.js",
     "angular-mocks": "components/angular-mocks/angular-mocks.js",
+    "angular-animate": "components/angular-animate/angular-animate.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
@@ -32,11 +35,20 @@ System.config({
 
 System.config({
   "meta": {
+    "file-upload-shim": {
+      "deps": []
+    },
     "angular": {
       "deps": [
-        "jquery"
+        "jquery",
+        "file-upload-shim"
       ],
       "exports": "angular"
+    },
+    "file-upload": {
+      "deps": [
+        "angular"
+      ]
     },
     "jquery": {
       "exports": "$"
@@ -48,6 +60,11 @@ System.config({
       "exports": "JSONEditor"
     },
     "angular-mocks": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-animate": {
       "deps": [
         "angular"
       ]

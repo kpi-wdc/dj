@@ -1,0 +1,117 @@
+<h4>Datasource Settings Wizard</h4>
+
+<div>
+  <div class="panel wizard" style="font-size:small;">
+    <div class="row">
+      <h5>Select Widget Name and Datasource</h5>
+
+      <div class="medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+        <label>Widget name:<input type="text" ng-model="dialog.conf.instanceName"></label>
+      </div>
+      
+      <div class="panel wizard">
+        <h5>Datasource Settings:</h5>
+        <div class="medium-6 container-top" style="font-size: small; padding-bottom:1rem;">
+          <label ng-show="!dialog.waitURL">URL: &nbsp;{{dialog.conf.url}}
+            <!--<input type="text" ng-model="dialog.conf.url"> -->
+           </label>
+          <label ng-show="dialog.waitURL">URL:
+            <img src="./img/ajax-loader.gif">
+          </label>
+        </div>
+      
+        <div class="medium-6 container-top" 
+           style="font-size: small; padding-bottom:1rem;"
+           ng-show = "dialog.selectedDataSource && !dialog.waitURL"
+            style="font-size: smaller;"
+        >
+          <label>Info:</label>
+          <label style="font-size: small;"><b>Label:</b> {{dialog.selectedDataSource.metadata.label}}</label>
+          <label style="font-size: small;"><b>Note:</b> {{dialog.selectedDataSource.metadata.note}}</label>
+          <label style="font-size: small;"><b>Source:</b> {{dialog.selectedDataSource.metadata.source}}</label>
+          <label style="font-size: small;"><b>Updated:</b> {{dialog.selectedDataSource.metadata.updated}}</label>
+          <label style="font-size: small;"><b>Dimensions:</b></label>
+          <ul>
+            <li style="font-size: small;" ng-repeat=" dim in dialog.selectedDataSource.metadata.dimension.id track by $index">
+              {{dialog.selectedDataSource.metadata.dimension[dim].label}}:&nbsp;{{dialog.selectedDataSource.metadata.dimension.size[$index]}}&nbsp;items
+            </li>
+          </ul>
+        </div>
+
+      </div>
+        
+      
+    
+    </div>
+
+     
+      
+
+    <div class="panel wizard">
+      <h5>Select Datasource:</h5>
+      <button class="button tiny radius"
+              ng-file-select 
+              ng-model="dialog.files" 
+              ng-multiple="true">
+              Upload Datasource
+      </button>
+
+
+
+<!--
+      <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0">
+        <div ng-click = "dialog.selectDataSource(d)"
+             ng-repeat="d in dialog.ds"
+             style="cursor:pointer;margin:0.3rem;padding:0.3rem;border:solid 1px #d8d8d8;"
+             class="border column left  medium container-top"
+             ng-style = "dialog.getStyle(d)"
+        >
+          <label style="font-size:medium;font-weight: bold" class="left">
+            {{d.metadata.label}}
+          </label>
+          <label style="font-size:smaller"><b>Source:</b> {{d.metadata.source}}</label>
+          <label style="font-size:smaller"><b>Updated:</b> {{d.metadata.updated}}</label>
+        </div>
+      </div>
+    </div>
+-->
+    <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;height:350px;overflow:auto; ">
+    <table>
+      <tr>
+        <th>Label</th>
+        <th>Note</th>
+        <th>Source</th>
+        <th>Updated</th>
+      </tr>
+      <tbody>
+        <tr ng-click = "dialog.selectDataSource(d)"
+               ng-repeat="d in dialog.ds"
+               style="cursor:pointer;margin:0.3rem;padding:0.3rem;border:solid 1px #d8d8d8;"
+               ng-style = "dialog.getStyle(d)"
+        >
+          <td>{{d.metadata.label}}</td>
+          <td>{{d.metadata.note}}</td>
+          <td>{{d.metadata.source}}</td>
+          <td>{{d.metadata.updated}}</td>
+        </tr>  
+      </tbody>
+    </table>
+    </div>
+      
+
+
+    <div class="row" style="margin-top:0; margin-bottom:0; padding-bottom: 0;padding-top: 0;">
+      <button class="button tiny alert right" style="margin:0 0 0 0.3rem"
+              ng-click="cancel()">
+        Cancel
+      </button>
+      <button class="button tiny right"
+              style="margin:0 0 0 0.785rem"
+              ng-class="{secondary : (dialog.conf.url == undefined)}"
+              ng-click="dialog.saveState()" ng-disabled="dialog.conf.url == undefined">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
