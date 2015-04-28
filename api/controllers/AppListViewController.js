@@ -11,7 +11,8 @@ module.exports = {
    */
   getView: function (req, res) {
     AppConfig
-      .find({sort: 'name'})
+      .find()
+      .sort('name')
       .populate('owner')
       .then(function (apps) {
         res.view('app-list', {

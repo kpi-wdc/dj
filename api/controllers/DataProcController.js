@@ -15,7 +15,7 @@ module.exports = {
     delete tempObj.response_type;
     var md5 = require('object-hash').MD5(tempObj);
 
-    ProcData.findOne({hash : md5}).then(function (json) {
+    ProcData.findOneByHash(md5).then(function (json) {
       var obj_to_process = {};
       // json, corresponding to md5 hash of the request already
       // exists in a database, so there is no need to process it
@@ -120,10 +120,8 @@ module.exports = {
    *  Gets a data by its id
    */
   getById: function (req, res) {
-    ProcData.findOne({
-      id: req.params.dataId
-    }, function (err, found) {
-      if (!err) {
+    ProcData.findOneById(req.params.dataId)
+      .then(function (found) {
         if (found) {
           if (!found.parent) delete found.parent;
           delete found.hash;
@@ -131,10 +129,9 @@ module.exports = {
         } else {
           res.forbidden();
         }
-      } else {
-        res.serverError();
-      }
-    });
+      }, function (err) {
+        res.negotiate(err);
+      });
   }
 };
 

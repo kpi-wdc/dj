@@ -9,7 +9,7 @@ var fs = require('fs');
 module.exports = {
   create: function (req, res) {
     // Clone default application
-    AppConfig.findOne({name: 'default'})
+    AppConfig.findOneByName('default')
       .then(function (newApp) {
         delete newApp.id;
         newApp.isPublished = true;
@@ -47,7 +47,7 @@ module.exports = {
   },
 
   export: function (req, res) {
-    AppConfig.findOne({id: req.params.appId})
+    AppConfig.findOneById(req.params.appId)
       .populate('owner')
       .then(function (app) {
         if (!app) throw 'Cannot find app with specified id';
