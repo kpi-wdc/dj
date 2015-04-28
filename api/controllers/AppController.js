@@ -55,6 +55,7 @@ module.exports = {
         var isCollaborator = AppConfig.isCollaborator(app, req.user);
         if (isOwner || isCollaborator || app.isPublished) {
           res.setHeader('Content-disposition', 'attachment; filename=' + app.name + '.json');
+          AppConfig.destringifyPages(app);
           delete app.id; // New id will be re-assigned when the app is exported
           delete app.owner; // The owner will change if another person exports this app
           delete app.collaborations; // We can't re-use this field because collaborator IDs aren't same in other DBs

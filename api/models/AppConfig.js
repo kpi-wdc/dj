@@ -42,6 +42,27 @@ module.exports = {
     }
   },
 
+  afterValidate: function (app, cb) {
+    // this is needed because app.pages[i] is a JSON which might contain dots inside it's keys
+    // it's not supported by mongodb: see http://stackoverflow.com/questions/12397118/mongodb-dot-in-key-name
+    // so we are stringifying it here and a reverse operation when passing data back to the user.
+    if (!app.pages) {
+      cb();
+      return;
+    }
+    for (var i = 0; i < app.pages.length; ++i) {
+      app.pages[i] = JSON.stringify(app.pages[i]);
+    }
+    cb();
+  },
+
+  destringifyPages: function (app) {
+    if (!app.pages) return;
+    for (var i = 0; i < app.pages.length; ++i) {
+      app.pages[i] = JSON.parse(app.pages[i]);
+    }
+  },
+
   isCollaborator: function (app, user) {
     if (!user) {
       // user is not logged in - therefore not a collaborator

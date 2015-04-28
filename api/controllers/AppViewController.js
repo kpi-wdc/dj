@@ -14,6 +14,7 @@ module.exports = {
         var isOwner = AppConfig.isOwner(app, req.user);
         var isCollaborator = AppConfig.isCollaborator(app, req.user);
         if (isOwner || isCollaborator || app.isPublished) {
+          AppConfig.destringifyPages(app);
           res.view('app', {
             app: app,
             ownerInfo: !app.owner ? {
