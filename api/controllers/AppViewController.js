@@ -2,22 +2,36 @@
  * AppViewController
  *
  * @description :: Server-side logic for managing Appviews
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
   getView: function (req, res) {
-    AppConfig.findOne({ appName: req.params.appName})
+    // fixme: do case-insensitive search here!
+    AppConfig.findOne({ name: req.params.appName})
       .populate('owner')
       .then(function (app) {
-        res.view('app', {
-          app: app,
-          ownerInfo: !app.owner ? {} : {
-            name: app.owner.name,
-            email: app.owner.email
-          },
-          isAppOwner: req.user && (!app.owner || req.user.id === app.owner.id)
-        });
+        var isOwner = AppConfig.isOwner(app, req.user);
+        var isCollaborator = AppConfig.isCollaborator(app, req.user);
+        if (isOwner || isCollaborator || app.isPublished) {
+          res.view('app', {
+            app: app,
+            ownerInfo: !app.owner ? {
+              exists: false
+            } : {
+              id: app.owner.id,
+              name: app.owner.name,
+              email: app.owner.email,
+              photo: app.owner.photo,
+              exists: true
+            },
+            isOwner: isOwner,
+            isCollaborator: isCollaborator
+          });
+        } else {
+          sails.log.silly('App is not published or user is not an owner');
+          res.forbidden();
+        }
       }).catch(function (err) {
         sails.log.silly(err);
         res.notFound();

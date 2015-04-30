@@ -21,30 +21,36 @@
  */
 
 module.exports.routes = {
-  // Login URLs
+  // Auth URLs
   'get /logout': 'AuthController.logout',
 
   'get /auth/:provider': 'AuthController.provider',
   'get /auth/:provider/callback': 'AuthController.callback',
   'get /auth/:provider/:action': 'AuthController.callback',
 
-  // Main urls
+  // Views
   'get /': 'AppListViewController.getView',
-  'get /api/app/create/:appName': 'AppController.create',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
-  'get /api/app/config/:appName': 'AppController.getConfig',
-  'put /api/app/config/:appName': 'AppController.update',
-  'get /api/app/rename/:appName/:newAppName': 'AppController.rename',
-  'get /api/app/delete/:appName': 'AppController.delete',
+  'get /data/dataSources': 'DataSourceViewController.getView',
+
+  /*** APIs ***/
+  // IMPORTANT! - don't forget to update policies.js!
+  // Apps
+  'get /api/app/create/:appName': 'AppController.create',
+  'put /api/app/config/:appId': 'AppController.update',
+  'get /api/app/export/:appId': 'AppController.export',
+  'post /api/app/import': 'AppController.import',
+  'get /api/app/rename/:appId/:newAppName': 'AppController.rename',
+  'get /api/app/destroy/:appId': 'AppController.destroy',
+
+  // Users
+  'get /api/users/list': 'UserController.getList',
 
   // DataSource manipulation URLs
   'post /api/data/dataSource' : 'DataSourceController.add',
   'get /api/data/dataSource/:dataSourceId' : 'DataSourceController.getByDataSourceId',
   'get /api/data/dataSources/' : 'DataSourceController.list',
-
-  // DataSource view URLs
-  'get /data/dataSources': 'DataSourceViewController.getView',
 
   // DataProcessing manipulation URLs
   'post /api/data/process' : 'DataProcController.process',

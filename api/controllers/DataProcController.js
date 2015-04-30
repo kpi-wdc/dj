@@ -2,7 +2,7 @@
  * DataProcController
  *
  * @description :: Server-side logic for managing data processes
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
@@ -10,9 +10,6 @@ module.exports = {
    * `DataProcController.process()`
    */
   process: function (req, res) {
-    var launchingFilePath = sails.config.executables[req.body.proc_name];
-    var child = require('child_process').fork(launchingFilePath, [], {silent: true});
-
     var tempObj = req.body;
     // response type doesn't matter - we compute every time
     delete tempObj.response_type;
@@ -81,7 +78,7 @@ module.exports = {
         child.on('close', function(code) {
           if (code == 0) {
             res_body.status_code = code;
-            console.log(res_body);
+            sails.log.debug('Child Process return: ' + code);
             // save result to DB
             ProcData.create({
               value: res_body.data,

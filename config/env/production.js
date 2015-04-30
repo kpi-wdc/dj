@@ -10,7 +10,17 @@
  *
  */
 
+var path = require('path');
+var express = require('express');
+var staticPath = path.join('.tmp', 'public');
+
 module.exports = {
+
+  blueprints: {
+    actions: false,
+    shortcuts: false,
+    rest: false
+  },
 
   /***************************************************************************
    * Set the default database connection for models in the production        *
@@ -32,6 +42,14 @@ module.exports = {
    ***************************************************************************/
 
   port: process.env.PORT || 80,
+
+  http: {
+    middleware: {
+      www: express.static(staticPath, {
+        maxAge: 20 * 60 * 1000 // 20 min and only in production
+      })
+    }
+  },
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *

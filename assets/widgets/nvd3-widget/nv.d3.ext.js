@@ -2,7 +2,7 @@
 
 (function () {
   //console.log("LOAD nv.d3.ext")
-d3.geo.tileServerEnable = false;
+d3.geo.tileServerEnable = true;
 
 d3.html(
   "http://api.tiles.mapbox.com/v4/"

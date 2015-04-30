@@ -3,5 +3,6 @@ module.exports.executables = {
   json2jsonstat: './proc/xlsx2json/json2jsonstat.js',
   avg: './proc/avg/run.js',
   multiplier: './proc/multiplier/run.js',
-  update: './proc/update/run.js'
+  update: './proc/update/run.js',
+  save: './proc/save/run.js'
 };

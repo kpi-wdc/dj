@@ -17,18 +17,21 @@ Required software:
 
 - `node.js` (or `io.js`) is installed (better 0.11.x or newer)
 Install latest node.js using `npm install -g n; n latest` as root/admin user
-- `npm` is installed (1.2 doesn't work, 1.4 and newer is OK, check with `npm --version`.
+- `npm` is installed (minimum 2.0, check with `npm --version`.
 Upgrade to newer npm with `npm install -g npm` and make sure new npm is in `PATH` with higher priority than the old one.
 - `mongodb` is installed
 
 Highly recommended:
-- bower is installed (run `npm install -g bower` as admin)
-- gulp is installed (run `npm install -g gulp` as admin)
+- `bower` is installed (run `npm install -g bower` as admin)
+- `gulp` is installed (run `npm install -g gulp` as admin)
 
 Optional:
-- karma is installed (run `npm install -g karma` as admin)
-- protractor is installed (run `npm install -g protractor` as admin)
-- chrome and firefox (optional) are installed
+- `karma is installed (run `npm install -g karma` as admin)
+- `protractor` is installed (run `npm install -g protractor` as admin)
+- `chrome` and `firefox` (optional) are installed
+- `docker` and `docker-compose`. Installation instructions -
+[Ubuntu](https://docs.docker.com/installation/ubuntulinux/),
+[Windows](https://docs.docker.com/installation/windows/),
 
 ## Build
 To run this project from terminal run the following command:
@@ -36,7 +39,12 @@ To run this project from terminal run the following command:
      npm install
      npm start
 
-Intellij idea project has preconfigured maven run configuration.
+OR if docker and docker-compose are installed (better suited for production usage):
+
+    docker build -t sochka/wdc .
+    docker-compose up
+
+Intellij idea project has preconfigured run configurations.
 
 ## API docs
 To generate API documentation run `gulp docs`
@@ -71,20 +79,23 @@ Open `docs/index.html` to view documentation in the browser.
 ## Used technologies
 
   - git (version control)
-  - ES6 JavaScript
+  - ES6/7 JavaScript (modules, async/await, classes, arrow functions etc...)
   - Sails.JS (node.js MVC framework)
   - npm (front-end dev. dependencies)
   - bower (front-end dependencies)
+  - jspm (front-end dependencies)
   - gulp (front-end task-runner)
   - karma (front-end unit-test runner)
   - protractor (end-to-end test runner)
   - jasmine (test framework)
   - angularjs (MVVM front-end framework)
-  - requirejs (AMD loader)
+  - SystemJS (universal dependency loader)
   - LESS (CSS replacement)
   - jsdoc (JS documentation engine)
   - travis (Continuous Integration)
   - heroku (PaaS)
+  - gravatar (service for centralized user avatar (image)  store)
+  - docker (deployment) (deployment)
 
 ## Intellij Idea
 
@@ -109,3 +120,4 @@ The following steps will make your work with Intellij Idea more productive
 
   - angularjs batarang
   - JetBrains IDE support
+

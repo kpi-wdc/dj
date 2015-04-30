@@ -1,10 +1,11 @@
 {
   "name": "WDC",
   "private": true,
-  "version": "0.7.4",
+  "version": "0.10.1",
   "dependencies": {
     "angular": "1.3.14",
     "angular-cookies": "1.3.14",
+    "angular-animate": "1.3.14",
     "angular-foundation": "0.5.1",
     "angular-json-editor": "0.1.8",
     "angular-leaflet": "0.7.11",
@@ -22,11 +23,13 @@
     "oclazyload": "0.5.2",
     "SCEditor": "1.4.4",
     "system.js": "0.15.0",
-    "topojson": "1.6.18"
+    "topojson": "1.6.18",
+    "ng-file-upload": "~3.3.4"
   },
   "resolutions": {
     "angular": "1.3.14",
     "angular-cookies": "1.3.14",
+    "angular-animate": "1.3.14",
     "angular-foundation": "0.5.1",
     "angular-json-editor": "0.1.8",
     "angular-leaflet": "0.7.11",

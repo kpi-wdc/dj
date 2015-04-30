@@ -1,0 +1,7 @@
+{
+  "description": "Description of widget \"htmlwidget\"",
+  "schema": {
+    "type": "object",
+    "title": "About authors"
+  }
+}

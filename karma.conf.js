@@ -13,7 +13,7 @@ module.exports = function (config) {
       '.tmp/public/js/es6-polyfill.js'
     ],
 
-    frameworks: ['jasmine', 'jspm'],
+    frameworks: ['jasmine', 'jspm', 'phantomjs-shim'],
 
     reporters: ['progress', 'verbose', 'coverage'],
 

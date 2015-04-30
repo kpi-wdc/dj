@@ -240,7 +240,7 @@ widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
   return APIUser;
 });
 
-widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope, appConfig) {
+widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope, app) {
   /**
    * @class EventEmitter
    * @description Provides a class which allows to emit events which, in row, can invoke slots on other widgets
@@ -330,7 +330,7 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
   }
 
   $rootScope.$watch(() => {
-    const pageConf = appConfig.pageConfig();
+    const pageConf = app.pageConfig();
     return pageConf && pageConf.subscriptions;
   }, (newSubscriptions) => {
     EventPublisher.replacePageSubscriptions(newSubscriptions);
@@ -358,9 +358,9 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
  *
  * @returns {Array}
  */
-widgetApi.factory('pageSubscriptions', function (appConfig) {
+widgetApi.factory('pageSubscriptions', function (app) {
   return () => {
-    const pageConf = appConfig.pageConfig();
+    const pageConf = app.pageConfig();
     pageConf.subscriptions = pageConf.subscriptions || [];
     return pageConf.subscriptions;
   };
@@ -379,9 +379,9 @@ widgetApi.factory('pageSubscriptions', function (appConfig) {
  * Please don't modify returned object!
  * @returns {Array}
  */
-widgetApi.factory('pageWidgets', function (appConfig) {
+widgetApi.factory('pageWidgets', function (app) {
   return () => {
-    const holders = appConfig.pageConfig().holders;
+    const holders = app.pageConfig().holders;
     let widgets = [];
     for (let holderName in holders) {
       if (holders.hasOwnProperty(holderName)) {

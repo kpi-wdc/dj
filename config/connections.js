@@ -58,9 +58,9 @@ module.exports.connections = {
   ***************************************************************************/
   mongodbServer: {
     adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    url: process.env.MONGOLAB_URI,
+    host: process.env.DB_PORT_27017_TCP_ADDR || 'localhost',
+    port: process.env.DB_PORT_27017_TCP_PORT || 27017,
+    url: process.env.MONGOLAB_URI || process.env.MONGODB_URL,
     // user: 'username',
     // password: 'password',
     database: 'wdc'

@@ -5,12 +5,14 @@ System.config({
     "app-list": "js/app-list.js",
     "data-sources": "js/data-sources.js",
     "info": "js/info.js",
-    "shims": "js/shims.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
+    "file-upload-shim": "components/ng-file-upload/angular-file-upload-shim.js",
+    "file-upload": "components/ng-file-upload/angular-file-upload.js",
     "jquery": "components/jquery/dist/jquery.js",
     "angular": "components/angular/angular.js",
     "angular-mocks": "components/angular-mocks/angular-mocks.js",
+    "angular-animate": "components/angular-animate/angular-animate.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
@@ -33,11 +35,20 @@ System.config({
 
 System.config({
   "meta": {
+    "file-upload-shim": {
+      "deps": []
+    },
     "angular": {
       "deps": [
-        "jquery"
+        "jquery",
+        "file-upload-shim"
       ],
       "exports": "angular"
+    },
+    "file-upload": {
+      "deps": [
+        "angular"
+      ]
     },
     "jquery": {
       "exports": "$"
@@ -49,6 +60,11 @@ System.config({
       "exports": "JSONEditor"
     },
     "angular-mocks": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-animate": {
       "deps": [
         "angular"
       ]
@@ -123,7 +139,9 @@ System.config({
 
 System.config({
   "map": {
-    "text": "github:systemjs/plugin-text@0.0.2"
+    "text": "github:systemjs/plugin-text@0.0.2",
+    "traceur": "github:jmcriffey/bower-traceur@0.0.87",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87"
   }
 });
 
