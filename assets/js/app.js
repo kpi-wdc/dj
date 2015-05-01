@@ -471,7 +471,8 @@ app.directive('widgetHolder', function (appUrls) {
 });
 
 app.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
-                                                          widgetScope, widgetConfig, widgetType) {
+                                                          widgetScope, widgetConfig, widgetType,
+                                                          app) {
   let data = angular.copy(widgetConfig);
 
   // split widgetConfig into basicProperties (not available in json-editor)
@@ -496,6 +497,7 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
       // this is probably related to touch vs mouse behaviour and underlying json-editor implementation.
       $timeout(() => {
         $modalInstance.close(angular.extend(data, $scope.basicProperties));
+        app.wasModified = true;
       }, 100);
     },
 
