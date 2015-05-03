@@ -1,0 +1,11 @@
+{
+  "name": "query",
+  "version": "0.0.1",
+  "description": "Execute query from data cube",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

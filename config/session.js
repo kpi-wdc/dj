@@ -67,7 +67,7 @@ module.exports.session = {
   ***************************************************************************/
 
   adapter: 'mongo',
-  host: process.env.DB_PORT_27017_TCP_ADDR || 'localhost',
+  host: process.env.DB_PORT_27017_TCP_ADDR || '127.0.0.1',
   port: process.env.DB_PORT_27017_TCP_PORT || 27017,
   db: 'wdc-session',
   collection: 'sessions',
