@@ -6,5 +6,5 @@ module.exports.executables = {
   'math/vector/multiplier': './proc/multiplier/run.js',
   update: './proc/update/run.js',
   query: './proc/query/run.js',
-  table: './proc/table/run.js'
+  barchartserie: './proc/serieadapter/barchart/run.js'
 };

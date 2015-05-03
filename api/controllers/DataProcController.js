@@ -22,21 +22,21 @@ module.exports = {
       // json, corresponding to md5 hash of the request already
       // exists in a database, so there is no need to process it
       // again, just send back previous computational result
-      // if (json) {
-      //   if (!json.parent) {
-      //     delete json.parent;
-      //   }
-      //   json.data = json.value;
-      //   delete json.value;
-      //   if (req.body.response_type === 'data_id') {
-      //     delete json.data;
-      //   }
-      //   delete json.hash;
-      //   json.data_id = json.id;
-      //   delete json.id;
-      //   json.status_code = 0;
-      //   return res.send(json);
-      // } else {
+      if (json) {
+        if (!json.parent) {
+          delete json.parent;
+        }
+        json.data = json.value;
+        delete json.value;
+        if (req.body.response_type === 'data_id') {
+          delete json.data;
+        }
+        delete json.hash;
+        json.data_id = json.id;
+        delete json.id;
+        json.status_code = 0;
+        return res.send(json);
+      } else {
 
         var launchingFilePath = sails.config.executables[req.body.proc_name];
         var child = require('child_process').fork(launchingFilePath, [], {silent: true});
@@ -114,7 +114,7 @@ module.exports = {
             return res.badRequest(err_body);
           }
         });
-      // }
+      }
     });
   },
 
