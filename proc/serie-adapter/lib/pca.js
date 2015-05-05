@@ -1,12 +1,95 @@
-import angular from 'angular';
-import d3 from 'd3';
+var d3 = {};
 
-const m = angular.module('app.widgets.data-util.pca', []);
+  d3.min = function(array, f) {
+    var i = -1, n = array.length, a, b;
+    if (arguments.length === 1) {
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
+      while (++i < n) if ((b = array[i]) != null && a > b) a = b;
+    } else {
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
+      while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
+    }
+    return a;
+  };
+  
+  d3.max = function(array, f) {
+    var i = -1, n = array.length, a, b;
+    if (arguments.length === 1) {
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
+      while (++i < n) if ((b = array[i]) != null && b > a) a = b;
+    } else {
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
+      while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
+    }
+    return a;
+  };
 
-m.service('PCA', function () {
-  //var PCA = function(){
-  //    this.scale = scale;
-  //    this.getData = getData;
+  d3.sum = function(array, f) {
+    var s = 0, n = array.length, a, i = -1;
+    if (arguments.length === 1) {
+      while (++i < n) if (d3_numeric(a = +array[i])) s += a;
+    } else {
+      while (++i < n) if (d3_numeric(a = +f.call(array, array[i], i))) s += a;
+    }
+    return s;
+  };
+
+  function d3_range_integerScale(x) {
+    var k = 1;
+    while (x * k % 1) k *= 10;
+    return k;
+  }
+
+  var abs = Math.abs;
+  d3.range = function(start, stop, step) {
+  if (arguments.length < 3) {
+    step = 1;
+    if (arguments.length < 2) {
+      stop = start;
+      start = 0;
+    }
+  }
+  if ((stop - start) / step === Infinity) throw new Error("infinite range");
+  var range = [], k = d3_range_integerScale(abs(step)), i = -1, j;
+  start *= k, stop *= k, step *= k;
+  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k); else while ((j = start + step * ++i) < stop) range.push(j / k);
+  return range;
+};
+
+  function d3_number(x) {
+    return x === null ? NaN : +x;
+  }
+  function d3_numeric(x) {
+    return !isNaN(x);
+  }
+
+  d3.sum = function(array, f) {
+  var s = 0, n = array.length, a, i = -1;
+  if (arguments.length === 1) {
+    while (++i < n) if (d3_numeric(a = +array[i])) s += a;
+  } else {
+    while (++i < n) if (d3_numeric(a = +f.call(array, array[i], i))) s += a;
+  }
+  return s;
+};
+
+  d3.zip = function() {
+    if (!(n = arguments.length)) return [];
+    for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m; ) {
+      for (var j = -1, n, zip = zips[i] = new Array(n); ++j < n; ) {
+        zip[j] = arguments[j][i];
+      }
+    }
+    return zips;
+  };
+
+  function d3_zipLength(d) {
+    return d.length;
+  }
+
+
+
+
 
   function mean(X) {
     // mean by col
@@ -93,7 +176,7 @@ m.service('PCA', function () {
   }
 
   function sub(x, y) {
-    console.assert(x.length == y.length, 'dim(x) == dim(y)');
+    // console.assert(x.length == y.length, 'dim(x) == dim(y)');
     return d3.zip(x, y).map(function (v) {
       if (typeof(v[0]) == 'number') return v[0] - v[1];
       else return d3.zip(v[0], v[1]).map(function (w) {
@@ -103,7 +186,7 @@ m.service('PCA', function () {
   }
 
   function div(x, y) {
-    console.assert(x.length == y.length, 'dim(x) == dim(y)');
+    // console.assert(x.length == y.length, 'dim(x) == dim(y)');
     return d3.zip(x, y).map(function (v) {
       return v[0] / v[1];
     });
@@ -146,7 +229,7 @@ m.service('PCA', function () {
     var m = u.length;
     var n = u[0].length;
 
-    console.assert(m >= n, 'Need more rows than columns');
+    // console.assert(m >= n, 'Need more rows than columns');
 
     var e = d3.range(n).map(function () {
       return 0;
@@ -317,7 +400,7 @@ m.service('PCA', function () {
           break  //break out of iteration loop and move on to next k value
         }
 
-        console.assert(iteration < itmax - 1, 'Error: no convergence.');
+        // console.assert(iteration < itmax - 1, 'Error: no convergence.');
 
         // shift from bottom 2x2 minor
         x = q[l]
@@ -402,21 +485,23 @@ m.service('PCA', function () {
     return {U: u, S: q, V: v}
   }
 
-  this.getData = function (table) {
+  exports.PCA = function (table) {
+
     //console.log(table);
     var X = table.body.map(function (row) {
-      //console.log(row)
-      var res = [];
-      var keys = Object.keys(row.values);
-      keys.sort(function (a, b) {
-        return (a < b) ? -1 : 1;
-      })
-      for (var i in keys) res.push(row.values[keys[i]]);
-      return res
+      return row.value;
+      // //console.log(row)
+      // var res = [];
+      // var keys = Object.keys(row.values);
+      // keys.sort(function (a, b) {
+      //   return (a < b) ? -1 : 1;
+      // })
+      // for (var i in keys) res.push(row.values[keys[i]]);
+      // return res
     });
+    
 
-
-    console.log(X);
+    //console.log(X);
 
     var USV = svd(scale(X, true, true));
     var U = USV.U;
@@ -434,6 +519,3 @@ m.service('PCA', function () {
     //console.log("eigenValues",S);
     return {eigenValues: S, eigenVectors: V, scores: pcUdS};
   }
-  //};
-  //return PCA;
-});

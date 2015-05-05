@@ -1,0 +1,11 @@
+{
+  "name": "correlation-matrix",
+  "version": "0.0.1",
+  "description": "Prepare Correlation Matrix",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

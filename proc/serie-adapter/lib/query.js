@@ -1,4 +1,3 @@
-
 var Query = function(data){
 	this.data = data;
 	this.result = data;
@@ -49,32 +48,6 @@ exports.Query = Query;
 
 
 
-var concatLabels = function(list){
-	var result = "";
-	list.forEach(function(item,index){
-		result += item.label;
-		result += (index < list.length-1) ? ", " : "";
-	})
-	return result;
-	// return JSON.stringify(list)
-}
 
 
-exports.BarChartSerie = function(table){
-	  
-	  var result = [];
-      table.body.forEach(function(serieData){
-      	var currentSerie = {key:concatLabels(serieData.metadata), values:[]}
-      	table.header.forEach(function(currentColumn,index){
-      		currentSerie.values.push(
-      				{
-      					label : concatLabels(currentColumn.metadata),
-      					value : serieData.value[index]
-      				}
-      			)
-      	})
-      	result.push(currentSerie)
-      })
 
-      return result;
-}

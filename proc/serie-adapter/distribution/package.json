@@ -1,0 +1,11 @@
+{
+  "name": "distribution",
+  "version": "0.0.1",
+  "description": "Generate Statistical Distributions as Scatter Series",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

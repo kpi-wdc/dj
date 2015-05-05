@@ -24,22 +24,22 @@ m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widge
                "select": [
                 {
                   "dimension":"year",
-                  "collection": ["2010","2011"],
-                  "role": "Split Columns"
+                  "collection": [],
+                  "role": "Rows"
                 },
                 
                 {
                   "dimension":"country",
                   "collection": ["UKR","RUS","USA"],
-                  "role": "Rows"
+                  "role": "Columns"
                 },
                 {
                   "dimension":"indicator",
                   "collection": [],
-                  "role": "Columns"
+                  "role": "Split Columns"
                 }
               ],
-              "r":42
+              "r":Math.random()
             },
             "proc_name": "query",
             "response_type": "data_id"
@@ -51,6 +51,21 @@ m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widge
           "response_type": "data"
          };                 
 
+        var CorrMatrixRequest = {
+          "data_id": "",
+          "proc_name": "corr-table",
+          "response_type": "data"
+         }; 
+
+         var NormRequest = {
+          "data_id": "",
+          "params": {
+            "mode" : "Range to [0,1]",
+            "direction" : "Columns"
+          },
+          "proc_name": "normalizer",
+          "response_type": "data",
+        }    
 
         // new Requestor(
         //   [
@@ -91,7 +106,7 @@ m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widge
         // .execute("554788170dbe3d1024317bd6",function(data){
         //   $scope.settings = {options: $scope.options, data: $scope.data };
         // })
-
+        var corrDataId;
 
       new Requestor()
         .push("getOptions",function(requestor,value){
@@ -108,6 +123,7 @@ m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widge
           $http.post("./api/data/process/",queryRequest)
           .success(function (data) {
               console.log("Query")
+              corrDataId = data.data_id;
               requestor.resolve(data.data_id)          
           })
          })
@@ -120,8 +136,200 @@ m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widge
                   requestor.resolve(response)          
           })
          })
-        .execute("554788170dbe3d1024317bd6",function(data){
+        .execute("554922c16b22cd3826683417",function(data){
           $scope.settings = {options: $scope.options, data: $scope.data };
+          
+          CorrMatrixRequest.data_id = corrDataId;
+          $http.post("./api/data/process/",CorrMatrixRequest)
+          .success(function (data) {
+              console.log("Correlation",data)
+          })
+
+          
+          $http.post("./api/data/process/",
+              {
+                "data_id": corrDataId,
+                "params": {
+                  "mode" : "Range to [0,1]",
+                  "direction" : "Rows"
+                },
+                "proc_name": "normalizer",
+                "response_type": "data",
+                "r": Math.random()
+              }    
+            )
+            .success(function (data) {
+                console.log("Norm Rows [0,1]",data)
+          })
+
+          
+          $http.post("./api/data/process/",
+                {
+                  "data_id": corrDataId,
+                  "params": {
+                    "mode" : "Standartization",
+                    "direction" : "Rows"
+                  },
+                  "proc_name": "normalizer",
+                  "response_type": "data",
+                  "r": Math.random()
+                }    
+              )
+              .success(function (data) {
+                  console.log("Norm Rows Standartization",data)
+          })
+          
+          
+          
+           $http.post("./api/data/process/",
+                {
+                  "data_id": corrDataId,
+                  "params": {
+                    "mode" : "Logistic",
+                    "direction" : "Rows"
+                  },
+                  "proc_name": "normalizer",
+                  "response_type": "data",
+                  "r": Math.random()
+                }    
+              )
+              .success(function (data) {
+                  console.log("Norm Rows Logistic",data)
+          })
+
+          $http.post("./api/data/process/",
+              {
+                "data_id": corrDataId,
+                "params": {
+                  "mode" : "Range to [0,1]",
+                  "direction" : "Columns"
+                },
+                "proc_name": "normalizer",
+                "response_type": "data",
+                "r": Math.random()
+              }    
+            )
+            .success(function (data) {
+                console.log("Norm Columns [0,1]",data)
+          })
+
+          
+          $http.post("./api/data/process/",
+                {
+                  "data_id": corrDataId,
+                  "params": {
+                    "mode" : "Standartization",
+                    "direction" : "Columns"
+                  },
+                  "proc_name": "normalizer",
+                  "response_type": "data",
+                  "r": Math.random()
+                }    
+              )
+              .success(function (data) {
+                  console.log("Norm Columns Standartization",data)
+          })
+          
+          
+          
+           $http.post("./api/data/process/",
+                {
+                  "data_id": corrDataId,
+                  "params": {
+                    "mode" : "Logistic",
+                    "direction" : "Columns"
+                  },
+                  "proc_name": "normalizer",
+                  "response_type": "data",
+                  "r": Math.random()
+                }    
+              )
+              .success(function (data) {
+                  console.log("Norm Columns Logistic",data)
+          })
+
+
+          $http.post("./api/data/process/",
+                {
+                  "data_id": corrDataId,
+                  "params": {
+                    "mode" : "All Nulls",
+                    "direction" : "Rows"
+                  },
+                  "proc_name": "reduce-null",
+                  "response_type": "data",
+                  "r": Math.random()
+                }    
+              )
+              .success(function (data) {
+                  console.log("Reduce Rows Has Null",data)
+          })
+
+           $http.post("./api/data/process/",
+                {
+                  "data_id": corrDataId,
+                  "params": {
+                    "mode" : "Has Null",
+                    "direction" : "Columns"
+                  },
+                  "proc_name": "reduce-null",
+                  "response_type": "data",
+                  "r": Math.random()
+                }    
+              )
+              .success(function (data) {
+                  console.log("Reduce Columns Has Null",data)
+          })    
+
+          $http.post("./api/data/process/",
+                {
+                    "data_id":  corrDataId,
+                    "params": {
+                      "axisX" : -1,
+                      // "normalized": false,
+                      // "mode" : "Range to [0,1]",
+                      "pca" : true,
+                      "includeLoadings": true,
+                      "clustered" : true,
+                      "clusters":2,
+                      "includeCentroids":true,
+                      "withRadius":true,
+                      // ,
+                      "precision":2     
+                    },
+                    "proc_name": "scatter-serie",
+                    "response_type": "data",
+                    "r": Math.random()
+                }
+              )
+              .success(function (data) {
+                  console.log("Scatter",data)
+          })    
+
+          $http.post("./api/data/process/",
+                {
+                    "data_id":  corrDataId,
+                    "params": {
+                      "normalized": false,
+                      "mode" : "Range to [0,1]",
+                      "direction":"Columns",
+                      "cumulate":false,
+                      "beans":3,
+                      "precision":2     
+                    },
+                    "proc_name": "distribution",
+                    "response_type": "data",
+                    "r": Math.random()
+                }
+              )
+              .success(function (data) {
+                  console.log("Distribution",data)
+          })    
+
+
+
+
+
         })
 
       }, true)
