@@ -11,9 +11,9 @@ process.on('message', function (json) {
   	process.exit(1);
   }
 
-  var params = json.params.grad;
+ 
 
-  process.send(generate(json.data,params));
+  process.send(generate(json.data,json.params));
   // process.send(json.data)
   process.exit(0);
 });

@@ -1,0 +1,66 @@
+<h4>{{wizard.title}}</h4>
+
+<div class="border" style="padding: 0.2rem">
+  <div class="toolbar left">Steps:</div>
+  <button ng-repeat="step in wizard.steps track by $index"
+          ng-disabled="!step.enabled"
+          ng-click="wizard.activate($index)"
+          class="button radius toolbar"
+          ng-class="{ secondary:!step.active } "
+          style="margin:0 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+    {{$index}}.&nbsp;{{step.title}}
+  </button>
+</div>
+
+<h5 class="wizard note">{{wizard.steps[wizard.currentStepIndex].description}}</h5>
+
+<div id="stepsHolder" class="border" 
+	style="	margin-top:0; 
+			margin-bottom:0; 
+			padding-bottom:0;
+			padding-top:0; 
+			
+			style="font-size:small;"
+>
+	<div
+		ng-repeat = "step in wizard.steps track by $index"
+		ng-if = "step.active"
+	>
+		
+		<div  class="row" ng-include="step.html"/>
+	</div>
+</div> 
+
+<div class="row" style="margin-top:0.5rem; margin-bottom:0; padding-bottom: 0;padding-top: 0; font-size: small;">
+
+      <button class="button alert radius right toolbar" style="margin:0 0 0 0.3rem" ng-click="cancel()">Cancel</button>
+      
+      <button class="button radius right toolbar" 
+      	ng-show = "(wizard.steps.length-1) == wizard.currentStepIndex"
+      	style="margin:0 0 0 0.785rem" 
+      	ng-click="finish()">
+      		Finish
+      </button>
+
+      <button 
+      	ng-show = "(wizard.steps.length-1) > wizard.currentStepIndex"
+      	class="button radius right toolbar" 
+      	ng-class="{secondary : !wizard.steps[wizard.currentStepIndex+1].enabled}"
+        style="margin:0 0 0 0.785rem"
+        ng-disabled="!wizard.steps[wizard.currentStepIndex+1].enabled"
+        ng-click="wizard.next()">
+        	Next
+      </button>
+
+      <button 
+      	ng-show = "0 < wizard.currentStepIndex"
+      	class="button radius right toolbar" 
+      	ng-class="{secondary : !wizard.steps[wizard.currentStepIndex-1].enabled}"
+        style="margin:0 0 0 0.785rem"
+        ng-disabled="!wizard.steps[wizard.currentStepIndex-1].enabled"
+        ng-click="wizard.prev()">
+        	Prev
+      </button>
+
+     
+</div>

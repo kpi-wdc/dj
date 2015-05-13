@@ -6,7 +6,7 @@ process.on('message', function (json) {
   delete json.isDataSource;
   delete json.id;
 
-  process.send(generate(json.data));
+  process.send(generate(json.data,json.params));
   // process.send(json.data)
   process.exit(0);
 });

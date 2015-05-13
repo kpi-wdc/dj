@@ -135,13 +135,13 @@ select {
 /*}*/
 
 button.toolbar {
-  padding: 0.2rem;
+  padding: 0.3rem;
   font-size: 0.6875rem;
   border: 1px solid #dadada
 }
 
 div .toolbar {
-  padding: 0.2rem;
+  padding: 0.3rem;
   font-size: 0.6875rem;
   /*background-color: transparent;*/
   font-size: smaller;

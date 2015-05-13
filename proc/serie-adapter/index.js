@@ -3,9 +3,21 @@ var Query = require("./lib/query").Query,
 	PCA = require("./lib/pca").PCA,
 	CLUSTER = require("./lib/cluster").CLUSTER;
 
-var concatLabels = function(list){
+	
+var concatLabels = function(list,usage){
 	var result = "";
-	list.forEach(function(item,index){
+	var data;
+	if( usage==null || usage == undefined || (usage.length && usage.length == 0)){
+		data = list
+	}else{
+		data = list
+				.filter(function(item,index){
+					return usage[index];
+				});
+	}
+	
+	data.forEach(function(item,index){
+
 		result += item.label;
 		result += (index < list.length-1) ? ", " : "";
 	})
@@ -23,15 +35,19 @@ exports.FormatValues = function(table,params){
 	return table;
 }
 
-exports.BarChartSerie = function(table){
+exports.BarChartSerie = function(table,params){
+	  
+	  var useColumnMetadata = params.useColumnMetadata || [];
+	  var useRowMetadata = params.useRowMetadata || [];
+	   		
 	  
 	  var result = [];
       table.body.forEach(function(serieData){
-      	var currentSerie = {key:concatLabels(serieData.metadata), values:[]}
+      	var currentSerie = {key:concatLabels(serieData.metadata, useRowMetadata), values:[]}
       	table.header.forEach(function(currentColumn,index){
       		currentSerie.values.push(
       				{
-      					label : concatLabels(currentColumn.metadata),
+      					label : concatLabels(currentColumn.metadata,useColumnMetadata),
       					value : serieData.value[index]
       				}
       			)
@@ -42,7 +58,7 @@ exports.BarChartSerie = function(table){
       return result;
 }
 
-exports.CorrelationMatrix = function(table){
+exports.CorrelationMatrix = function(table,params){
 	var series = exports.BarChartSerie(table);
 	series.forEach(function(item){
 		item.values = item.values.map(function (current) {
@@ -60,7 +76,7 @@ exports.CorrelationMatrix = function(table){
 	return result;
 };
 
-exports.CorrelationTable = function (table) {
+exports.CorrelationTable = function (table,params) {
       var matrix = exports.CorrelationMatrix(table);
       var result = {};
 
@@ -137,7 +153,8 @@ exports.MapSerie = function (table, grad) {
 exports.Normalize = function (table, params) {
 
   var normalizeMode = params.mode || "Range to [0,1]"; 
-  var normalizeArea = params.direction || "Columns"; 
+  var normalizeArea = params.direction || "Columns";
+  var precision = params.precision || 2; 
 
   if(normalizeArea == "Columns"){
   	table.header.forEach(function(currentColumn,columnIndex){
@@ -156,7 +173,8 @@ exports.Normalize = function (table, params) {
               break;
           }
           data.forEach(function(currentValue,rowIndex){
-          	table.body[rowIndex].value[columnIndex] = (currentValue == null) ? null : new Number (Number(currentValue).toPrecision(2)); 
+          	table.body[rowIndex].value[columnIndex] = (currentValue == null) ? null 
+          	: new Number (Number(currentValue).toFixed(precision)); 
           })
   	})
   	return table;
@@ -325,6 +343,10 @@ exports.ClusterResults = function(serie,params){
 
 exports.PCAResults = function (table,params){
 	
+	var useColumnMetadata = params.useColumnMetadata || [];
+	var useRowMetadata = params.useRowMetadata || [];
+	  
+	
 	var axisXIndex = params.axisX || 0; 
 	var precision = params.precision || null;
 	var includeLoadings = params.includeLoadings || false;
@@ -362,7 +384,7 @@ exports.PCAResults = function (table,params){
 	
 	table.body.forEach(function(currentRow,index){
 		serie.values.push({
-	      label: concatLabels(currentRow.metadata),
+	      label: concatLabels(currentRow.metadata,useRowMetadata),
 	      x: data.scores[index][0],
 	      y: data.scores[index][1]
 	    });
@@ -380,7 +402,7 @@ exports.PCAResults = function (table,params){
 
 		table.header.forEach(function(currentVar,index){
 			loadings.values.push({
-		      label: concatLabels(currentVar.metadata),
+		      label: concatLabels(currentVar.metadata,useColumnMetadata),
 		      ox: 0,
 		      oy: 0,
 		      x: data.eigenVectors[index][0],
@@ -420,7 +442,9 @@ exports.ScatterSerie = function (table,params){
  	 var normalize = params.normalized || false;
 	 var pca = params.pca || false;
 	 var precision = params.precision || null;
-
+	 var useColumnMetadata = params.useColumnMetadata || [];
+	 var useRowMetadata = params.useRowMetadata || [];
+	  
 
 	 // table = exports.ReduceNull(table,{direction:"Rows",mode:"Has Null"});
 
@@ -447,13 +471,13 @@ exports.ScatterSerie = function (table,params){
       		(!isNaN(currentRow.metadata[-axisXIndex-1]).id) ? 
       			new Number(currentRow.metadata[-axisXIndex-1].id) 
   				: rowIndex);
-      	labels.push(concatLabels(currentRow.metadata));
+      	labels.push(concatLabels(currentRow.metadata,useRowMetadata));
       	yValues.push(currentRow.value)
       })
   }else{
       table.body.forEach(function(currentRow){
       	xValues.push( currentRow.value[axisXIndex] );
-      	labels.push( concatLabels(currentRow.metadata) );
+      	labels.push( concatLabels(currentRow.metadata,useRowMetadata) );
       	var tmp = 
       	yValues.push( currentRow.value.filter( function(item,index){ return index != axisXIndex}) )
       })
@@ -462,8 +486,8 @@ exports.ScatterSerie = function (table,params){
   var result = [];
   series.forEach(function(serie, yValueIndex){
   		var currentSerie = {
-  			key		: concatLabels(serie.metadata), 
-  			base 	: (axisXIndex < 0)? baseLabel : concatLabels(table.header[axisXIndex].metadata),
+  			key		: concatLabels(serie.metadata,useColumnMetadata), 
+  			base 	: (axisXIndex < 0)? baseLabel : concatLabels(table.header[axisXIndex].metadata,useColumnMetadata),
   			values 	: []
   		}
   		xValues.forEach(function(currentXValue, index){
@@ -497,6 +521,8 @@ exports.Distribution = function(table,params){
 	var direction = params.direction || "Columns";
 	var precision = params.precision || null;
 	var cumulate = params.cumulate || false;
+	var useColumnMetadata = params.useColumnMetadata || [];
+	var useRowMetadata = params.useRowMetadata || [];
 
 
 	// normalize data if needed
@@ -525,7 +551,7 @@ exports.Distribution = function(table,params){
 		
 	if (direction == "Rows"){
 		table.body.forEach(function(currentRow){
-			var serie = {key:concatLabels(currentRow.metadata), values:[]}
+			var serie = {key:concatLabels(currentRow.metadata,useRowMetadata), values:[]}
 			for (var j = 0; j < beans; j++) {
 			  serie.values.push({
 			    label: ((j + 0.5) * (gMax - gMin) / beans),
@@ -561,7 +587,7 @@ exports.Distribution = function(table,params){
 
 	if( direction == "Columns"){
 		table.header.forEach(function(currentColumn,columnIndex){
-			var serie = {key:concatLabels(currentColumn.metadata), values:[]};
+			var serie = {key:concatLabels(currentColumn.metadata,useColumnMetadata), values:[]};
 			for (var j = 0; j < beans; j++) {
 			  serie.values.push({
 			    label: ((j + 0.5) * (gMax - gMin) / beans),

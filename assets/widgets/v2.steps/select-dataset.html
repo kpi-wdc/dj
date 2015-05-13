@@ -1,0 +1,54 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+  <button class="button radius toolbar"
+              ng-file-select 
+              ng-model="step.files" 
+              ng-multiple="true"
+              style="font-size:small; margin: 1rem 0 0">
+              Upload Dataset
+  </button>
+
+
+  <div class="medium container-top" ng-if = "step.selectedDataset" 
+
+    style="font-size: small;
+            color: #008CBA;
+            border: 1px solid;
+            padding: 0.5rem;
+            margin: 0.3rem;"
+    >
+    <label style="color: #008CBA;">
+    <b>Current selection :</b> 
+      <b>{{step.selectedDataset.metadata.label}}</b> &nbsp;
+      <i>{{step.selectedDataset.metadata.note}}</i>   &nbsp;
+      Source: {{step.selectedDataset.metadata.source}} &nbsp;
+      Updated: {{step.selectedDataset.metadata.updated}}
+    </label>
+  </div>
+
+  
+  <h5>
+    Available Datasets:
+  </h5>
+  <div style="overflow:auto; height:250px;">
+    <table>
+      <tr>
+        <th style="width:3%">&nbsp;</th>
+        <th style="width:70%;text-align:center">Note</th>
+        <th style="width:25%;text-align:center">Source</th>
+        
+      </tr>
+      <tbody>
+        <tr    ng-repeat="d in step.datasets track by $index"
+               ng-click = "step.select(d)"
+               style="cursor:pointer;margin:0.3rem;padding:0.3rem;border:solid 1px #d8d8d8;"
+               ng-class="{selected : d.selected}"
+        >
+          <td style="text-align:center" ng-class="{selected : d.selected}">{{$index+1}}</td>
+          <td ng-class="{selected : d.selected}"><b>{{d.metadata.label}}</b>&nbsp;<i>{{d.metadata.note}}</i></td>
+          <td ng-class="{selected : d.selected}">{{d.metadata.source}}</td>
+         
+        </tr>  
+      </tbody>
+    </table>
+  </div>
+</div>

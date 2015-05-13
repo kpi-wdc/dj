@@ -1,0 +1,36 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;height:350px;overflow:auto; ">
+  
+  <div class="medium-4 container-top" style="font-size: small; padding-bottom:1rem;">
+    <label>Selected Datasource : 
+      <b>{{step.selectedDatasource.metadata.label}}</b>
+      {{step.selectedDatasource.metadata.note}}
+    </label>
+  </div>
+
+  <button class="button tiny radius"
+              ng-file-select 
+              ng-model="step.files" 
+              ng-multiple="true">
+              Upload Datasource
+  </button>
+
+  <table>
+    <tr>
+      <th>Label</th>
+      <th>Note</th>
+      <th>Source</th>
+      <th>Updated</th>
+    </tr>
+    <tbody>
+      <tr    ng-repeat="d in step.datasources"
+             ng-click = "step.select(d)"
+             style="cursor:pointer;margin:0.3rem;padding:0.3rem;border:solid 1px #d8d8d8;"
+      >
+        <td>{{d.metadata.label}}</td>
+        <td>{{d.metadata.note}}</td>
+        <td>{{d.metadata.source}}</td>
+        <td>{{d.metadata.updated}}</td>
+      </tr>  
+    </tbody>
+  </table>
+</div>

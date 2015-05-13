@@ -13,6 +13,7 @@ process.on('message', function (json) {
 
   var params = json.params.select;
   var data = json.value;
+  var dsMetadata = json.metadata;
 
 	var getIDList = function(data,dimension,items){
 		return new query(data)
@@ -94,7 +95,9 @@ var product = [];
 
 rowsDimension.IDList.forEach(function(row){
 	var metadata = row;
-	metadata.dimension = rowsDimension.dimension; 
+	metadata.dimension = rowsDimension.dimension;
+	metadata.dimensionLabel = dsMetadata.dimension[metadata.dimension].label;
+	 
 	var resultRow = {metadata:[metadata], value:[]};
 	var rowData = new query(result)
 		.select(function(item){
@@ -111,7 +114,8 @@ var splitRow = function(data,dimension){
 	data.forEach(function(rowset){
 		dimension.IDList.forEach(function(current){
 			var m = current;
-			m.dimension = dimension.dimension; 
+			m.dimension = dimension.dimension;
+			m.dimensionLabel = dsMetadata.dimension[m.dimension].label; 
 			
 			var c = {metadata:rowset.metadata.map(function(item){return item})};
 			c.metadata.push(m);
@@ -131,7 +135,8 @@ var splitColumns = function(data,dimension){
 	data.forEach(function(colset){
 		dimension.IDList.forEach(function(current){
 			var m = current;
-			m.dimension = dimension.dimension; 
+			m.dimension = dimension.dimension;
+			m.dimensionLabel = dsMetadata.dimension[m.dimension].label;  
 			
 			var c = {metadata:colset.metadata.map(function(item){return item})};
 			c.metadata.push(m);
@@ -155,7 +160,8 @@ product.forEach(function(row){
 	var columnes = [];
 	columnsDimension.IDList.forEach(function(currentColumnSet){
 		var m = currentColumnSet;
-		m.dimension = columnsDimension.dimension; 
+		m.dimension = columnsDimension.dimension;
+		m.dimensionLabel = dsMetadata.dimension[m.dimension].label;  
 		columnes.push(
 			{
 				metadata:[m],
