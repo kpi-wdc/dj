@@ -32,7 +32,6 @@ module.exports.routes = {
   'get /': 'AppListViewController.getView',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
-  'get /data/dataSources': 'DataSourceViewController.getView',
 
   /*** APIs ***/
   // IMPORTANT! - don't forget to update policies.js!

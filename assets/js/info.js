@@ -4,6 +4,13 @@ import 'angular-foundation';
 const info = angular.module('app.info', ['mm.foundation']);
 
 info.service('alert', function ($modal, $log) {
+  this.message = (msg) => {
+    $log.info(msg);
+    $modal.open({
+      template: msg
+    });
+  };
+
   this.error = (msg) => {
     $log.error(msg);
     $modal.open({

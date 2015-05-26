@@ -41,6 +41,13 @@
   </fieldset>
 
   <% if (user) { %>
+  <fieldset ng-controller="DataSourcesController">
+    <h4>Datasource uploader</h4>
+    Here you are able to choose an xlsx file to upload to server. It will be processed as a json document.
+    <br>
+    <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+  </fieldset>
+
   <fieldset>
     <form ng-submit="createApp()">
       <label>Add new app
