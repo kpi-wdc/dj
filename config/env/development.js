@@ -16,10 +16,11 @@ module.exports = {
    * Set the default database connection for models in the development       *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-  port: process.env.PORT || 8080
+  port: process.env.PORT || 8080,
 
   // models: {
   //   connection: 'someMongodbServer'
   // }
 
+  level: process.env.SAILS_LOG_LEVEL || "info"
 };
