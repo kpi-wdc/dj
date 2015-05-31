@@ -1,4 +1,4 @@
-FROM iojs:1.8.1
+FROM iojs:2.1
 MAINTAINER Oleksandr Sochka "sasha.sochka@gmail.com"
 
 # Set production settings
