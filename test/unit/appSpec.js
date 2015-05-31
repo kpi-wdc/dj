@@ -30,12 +30,10 @@ define(['app', 'angular-mocks'], () => {
 
   describe("Testing controllers", () => {
     let MainControllerScope;
-    let PageControllerScope;
     let $controller;
     beforeEach(inject((_$controller_, $rootScope) => {
       $controller = _$controller_;
       MainControllerScope = $rootScope.$new();
-      PageControllerScope = $rootScope.$new();
     }));
 
     it('ensure MainController exists and works', () => {
@@ -47,11 +45,6 @@ define(['app', 'angular-mocks'], () => {
           statusText: 'Page not found'
         }
       });
-    });
-
-    it('ensure PageController exists and works', () => {
-      $controller('PageController', {$scope: PageControllerScope, pageConfig: {}});
-      expect(PageControllerScope).toBeDefined();
     });
   });
 
