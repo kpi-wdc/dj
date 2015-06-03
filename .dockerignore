@@ -4,8 +4,14 @@
 # Docker
 docker-compose.yml
 
+# Packages
+jspm_packages
+bower_components
+node_modules
+
 # Build
 .tmp
+docs
 
 # Tests
 test
