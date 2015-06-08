@@ -39,6 +39,10 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $ht
       		});
       },
 
+      onFinishWizard: function(wizard){
+        wizard.conf.datasetID  =  this.datasetID;
+      },
+
     updateDatasetList: function(){
     	var thos = this;
     	$http.get("./api/data/dataSources/")
@@ -52,7 +56,8 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $ht
       		}
       	if (selectedDS && selectedDS.length > 0){
             thos.select(selectedDS[0])
-        }  
+        }
+        thos.uploaded = false;  
     	})
     	.error(function (data, status) {
       		$window.alert("$http error " + status + " - cannot load data");
@@ -60,6 +65,7 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $ht
   	},
 
 		upload: function (file) {
+      this.uploaded = true;
 			var thos = this;
 
 			file.upload = $upload.upload({

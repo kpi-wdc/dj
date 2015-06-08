@@ -14,7 +14,7 @@ module.exports.executables = {
   "normalizer"		: './proc/serie-adapter/normalizer/run.js',
   "reduce-null"		: './proc/serie-adapter/reduce-null/run.js',
   "scatter-serie"	: './proc/serie-adapter/scatter-serie/run.js',
-  "distribution"	: './proc/serie-adapter/distribution/run.js'
-  
+  "distribution"	: './proc/serie-adapter/distribution/run.js',
+  "post-process"  : './proc/serie-adapter/post-process/run.js'
       
 };

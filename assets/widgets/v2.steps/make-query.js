@@ -16,7 +16,7 @@ m.factory("MakeQuery",function(){
         item.selected = true;
       })
      if( this.testQuery()){
-      this.wizard.complete(this)
+      // this.wizard.complete(this)
      }else{
         this.query = undefined;
         this.wizard.process(this)
@@ -28,7 +28,7 @@ m.factory("MakeQuery",function(){
         item.selected = false;
       })
       if( this.testQuery()){
-      this.wizard.complete(this)
+      // this.wizard.complete(this)
       }else{
         this.query = undefined;
         this.wizard.process(this)
@@ -40,7 +40,7 @@ m.factory("MakeQuery",function(){
         item.selected = !item.selected;
       })
      if( this.testQuery()){
-      this.wizard.complete(this)
+      // this.wizard.complete(this)
      }else{
         this.query = undefined;
         this.wizard.process(this)
@@ -50,7 +50,7 @@ m.factory("MakeQuery",function(){
     select: function(item){
       item.selected = !item.selected;
       if( this.testQuery()){
-      this.wizard.complete(this)
+      // this.wizard.complete(this)
      }else{
         this.query = undefined;
         this.wizard.process(this)
@@ -70,7 +70,7 @@ m.factory("MakeQuery",function(){
 
       section.dimension.role = role;
       if( this.testQuery()){
-        this.wizard.complete(this)
+        // this.wizard.complete(this)
        }else{
           this.query = undefined;
           this.wizard.process(this)
@@ -80,7 +80,7 @@ m.factory("MakeQuery",function(){
     makeQuery: function(){
       var thos = this;
       this.query = {};
-      this.query.data_id = this.wizard.dataset.id;
+      this.query.data_id = this.wizard.conf.dataset.id;
       this.query.proc_name = "query";
       this.query.response_type = "data";
       this.query.params={};
@@ -101,10 +101,13 @@ m.factory("MakeQuery",function(){
               collection : collection 
             }
           )
-      })
+      });
+      this.wizard.conf.query = this.query;
+      this.wizard.complete(this);
     },
 
     testQuery : function(){
+      this.wizard.process(this);
       var columnsAvailable = false;
       var rowsAvailable = false;
       var splitColumnsAvailable = true;
@@ -145,6 +148,35 @@ m.factory("MakeQuery",function(){
 
     onStartWizard: function(wizard){
       this.wizard = wizard;
+      this.query = wizard.conf.query;
+      if (angular.isUndefined(this.query)){
+        wizard.process(this);
+      }else{
+        this.wizard.complete(this)
+      }  
+    },
+
+    onFinishWizard : function(wizard){
+      wizard.conf.query = this.query;
+    },
+
+    
+
+    getQuerySelection : function(dim,item){
+      if(angular.isUndefined(this.query)) return false;
+      var a = this.query.params.select;
+      var qItem = a.filter(function(item){return item.dimension == dim})[0];
+      if(angular.isUndefined(qItem)) return false;
+      if(qItem.collection.length == 0) return true;
+
+      return qItem.collection.filter(function(key){return key == item}).length == 1
+    },
+
+    getQueryRole : function(dim){
+      if(angular.isUndefined(this.query)) return "Ignore";
+      var a = this.query.params.select;
+      var qItem = a.filter(function(item){return item.dimension == dim})[0];
+      return (qItem) ? qItem.role : "Ignore" 
     },
 
     prepareSections: function(){
@@ -157,14 +189,14 @@ m.factory("MakeQuery",function(){
           items.push({
               id:i,
               label:labels[i],
-              selected:false
+              selected: thos.getQuerySelection(dim,i)
           })
         }
         thos.sections.push({
           dimension:{
             id:dim,
             label:thos.dataset.metadata.dimension[dim].label,
-            role:"Ignore"
+            role: thos.getQueryRole(dim)
           },
           items:items
         })  
@@ -173,19 +205,22 @@ m.factory("MakeQuery",function(){
     
     activate : function(wizard){
         this.query = wizard.conf.query;
-        this.dataset = wizard.dataset;
+        this.dataset = wizard.conf.dataset;
+        
         this.prepareSections();
         if(angular.isUndefined(this.query)){
-          this.query = [];
-          var thos = this;
-          this.dataset.metadata.dimension.id.forEach(function (dim){
-            thos.query.push({
-              dimension:dim,
-              collection:null,
-              role:"Ignore"
-            });
-          });
+          // this.query = [];
+          // var thos = this;
+          // this.dataset.metadata.dimension.id.forEach(function (dim){
+          //   thos.query.push({
+          //     dimension:dim,
+          //     collection:null,
+          //     role:"Ignore"
+          //   });
+          // });
           wizard.process(this);
+        }else{
+          wizard.complete(this);
         }
     }	
 	}

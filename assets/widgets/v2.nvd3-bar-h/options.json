@@ -1,0 +1,164 @@
+{
+  
+  "chart": {
+    "type": "multiBarHorizontalChart",
+    "height": 450,
+    "showControls": true,
+    "showValues": true,
+    "transitionDuration": 500,
+    "xAxis": {
+      "showMaxMin": false,
+      "orient": "left",
+      "tickValues": null,
+      "tickSubdivide": 0,
+      "tickSize": 6,
+      "tickPadding": 5,
+      "domain": [
+        0,
+        1
+      ],
+      "range": [
+        0,
+        1
+      ],
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "width": 75,
+      "ticks": null,
+      "height": 60,
+      "axisLabel": "",
+      "highlightZero": false,
+      "rotateYLabel": true,
+      "rotateLabels": 0,
+      "staggerLabels": false,
+      "axisLabelDistance": 12
+    },
+    "yAxis": {
+      "axisLabel": "",
+      "orient": "bottom",
+      "tickValues": null,
+      "tickSubdivide": 0,
+      "tickSize": 6,
+      "tickPadding": 3,
+      "domain": [
+        0,
+        1
+      ],
+      "range": [
+        0,
+        1
+      ],
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "width": 75,
+      "ticks": null,
+      "height": 60,
+      "showMaxMin": true,
+      "highlightZero": true,
+      "rotateYLabel": true,
+      "rotateLabels": 0,
+      "staggerLabels": false,
+      "axisLabelDistance": 12
+    },
+    "dispatch": {},
+    "multibar": {
+      "dispatch": {},
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "width": 960,
+      "height": 500,
+      "forceY": [
+        0
+      ],
+      "stacked": false,
+      "barColor": null,
+      "id": 3222,
+      "delay": 1200,
+      "showValues": false,
+      "showBarLabels": false,
+      "valuePadding": 60
+    },
+    "legend": {
+      "dispatch": {},
+      "margin": {
+        "top": 5,
+        "right": 0,
+        "bottom": 5,
+        "left": 0
+      },
+      "width": 400,
+      "height": 30,
+      "align": true,
+      "rightAlign": true,
+      "updateState": true,
+      "radioButtonMode": false
+    },
+    "forceY": [
+      0
+    ],
+    "id": 3222,
+    "delay": 1200,
+    "showBarLabels": false,
+    "stacked": false,
+    "barColor": null,
+    "margin": {
+      "top": 30,
+      "right": 20,
+      "bottom": 50,
+      "left": 60
+    },
+    "width": null,
+    "showLegend": true,
+    "showXAxis": true,
+    "showYAxis": true,
+    "tooltips": true,
+    "state": {
+      "stacked": false,
+      "disabled": [
+        false,
+        false
+      ]
+    },
+    "defaultState": null,
+    "noData": "No Data Available."
+  },
+  "title": {
+    "enable": true,
+    "text": "Write Your Title",
+    "class": "chartTitle",
+    "css": {
+      "width": "nullpx",
+      "textAlign": "center"
+    }
+  },
+  "subtitle": {
+    "enable": true,
+    "text": "Write Your Subtitle",
+    "class": "chartSubTitle"
+  },
+  "caption": {
+    "enable": true,
+    "text": "Figure 1. Write Your Caption text.",
+    "class": "chartCaption"
+  },
+  "styles": {
+    "classes": {
+      "with-3d-shadow": true,
+      "with-transitions": true,
+      "gallery": false
+    },
+    "css": {}
+  }
+}

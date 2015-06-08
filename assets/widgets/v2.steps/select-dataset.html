@@ -29,7 +29,10 @@
   <h5>
     Available Datasets:
   </h5>
-  <div style="overflow:auto; height:250px;">
+  <div ng-show="step.uploaded">
+    <center><img src="./img/ajax-loader.gif"/></center>
+  </div>
+  <div ng-show="!step.uploaded" style="overflow:auto; height:250px;">
     <table>
       <tr>
         <th style="width:3%">&nbsp;</th>

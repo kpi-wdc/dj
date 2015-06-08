@@ -35,28 +35,7 @@ exports.FormatValues = function(table,params){
 	return table;
 }
 
-exports.BarChartSerie = function(table,params){
-	  
-	  var useColumnMetadata = params.useColumnMetadata || [];
-	  var useRowMetadata = params.useRowMetadata || [];
-	   		
-	  
-	  var result = [];
-      table.body.forEach(function(serieData){
-      	var currentSerie = {key:concatLabels(serieData.metadata, useRowMetadata), values:[]}
-      	table.header.forEach(function(currentColumn,index){
-      		currentSerie.values.push(
-      				{
-      					label : concatLabels(currentColumn.metadata,useColumnMetadata),
-      					value : serieData.value[index]
-      				}
-      			)
-      	})
-      	result.push(currentSerie)
-      })
 
-      return result;
-}
 
 exports.CorrelationMatrix = function(table,params){
 	var series = exports.BarChartSerie(table);
@@ -154,7 +133,7 @@ exports.Normalize = function (table, params) {
 
   var normalizeMode = params.mode || "Range to [0,1]"; 
   var normalizeArea = params.direction || "Columns";
-  var precision = params.precision || 2; 
+  var precision = params.precision || null; 
 
   if(normalizeArea == "Columns"){
   	table.header.forEach(function(currentColumn,columnIndex){
@@ -174,7 +153,7 @@ exports.Normalize = function (table, params) {
           }
           data.forEach(function(currentValue,rowIndex){
           	table.body[rowIndex].value[columnIndex] = (currentValue == null) ? null 
-          	: new Number (Number(currentValue).toFixed(precision)); 
+          	: (precision !=null) ? new Number (Number(currentValue).toFixed(precision)) : currentValue; 
           })
   	})
   	return table;
@@ -194,7 +173,8 @@ exports.Normalize = function (table, params) {
               break;
           };
           currentRow.value = currentRow.value.map(function(currentValue){
-          	return (currentValue == null) ? null : new Number (Number(currentValue).toPrecision(2));
+          	return (currentValue == null) ? null : 
+          	(precision != null) ? new Number (Number(currentValue).toPrecision(precision)) : currentValue;
           })
   	})
   	return table;
@@ -258,6 +238,51 @@ exports.ReduceNull = function(table,params){
 		return table;	
 	}
 	
+}
+
+exports.PostProcess = function(table,params){
+	var useColumnMetadata = params.useColumnMetadata || [];
+	var useRowMetadata = params.useRowMetadata || [];
+	var normalize = params.normalized || false;
+	var precision = params.precision || null;
+	if (normalize) table = exports.Normalize(table,params);
+	
+	if (precision !=null){
+		table.body.forEach(function(currentRow){
+			currentRow.value = currentRow.value.map(function(v){
+				return 	(v == null)? 	null : 
+				 						new Number(v.toFixed(precision))
+			})	
+		})
+	}
+
+	return table; 		
+	  
+}
+
+exports.BarChartSerie = function(table,params){
+	  
+	  var useColumnMetadata = params.useColumnMetadata || [];
+	  var useRowMetadata = params.useRowMetadata || [];
+	  var normalize = params.normalized || false;
+	  var precision = params.precision || null; 		
+	  if (normalize) table = exports.Normalize(table,params)
+	  
+	  var result = [];
+      table.body.forEach(function(serieData){
+      	var currentSerie = {key:concatLabels(serieData.metadata, useRowMetadata), values:[]}
+      	table.header.forEach(function(currentColumn,index){
+      		currentSerie.values.push(
+      				{
+      					label : concatLabels(currentColumn.metadata,useColumnMetadata),
+      					value : serieData.value[index]
+      				}
+      			)
+      	})
+      	result.push(currentSerie)
+      })
+
+      return result;
 }
 
 // Execute K-means & Generate Scatter Series
@@ -513,7 +538,7 @@ exports.ScatterSerie = function (table,params){
 // direction 			Columns/Rows 												(default Columns)
 // beans				number of Distribution beans							    (default 5)
 // precision 			see exports.FormatValues params 							(default null)
-
+// cumulate                                                                         (default false)
 exports.Distribution = function(table,params){
 
 	var beans = params.beans || 5;
@@ -548,18 +573,25 @@ exports.Distribution = function(table,params){
 	
 
 	var result = []
-		
-	if (direction == "Rows"){
-		table.body.forEach(function(currentRow){
-			var serie = {key:concatLabels(currentRow.metadata,useRowMetadata), values:[]}
+
+	var initHistogram = function(serie,beans){
+			var step = (gMax - gMin) / beans;
 			for (var j = 0; j < beans; j++) {
 			  serie.values.push({
-			    label: ((j + 0.5) * (gMax - gMin) / beans),
-			    x: ((j + 0.5) * (gMax - gMin) / beans),
+			    label: (gMin+(j) * step).toFixed(3)+" - "+ (gMin+(j+1) * step).toFixed(3),
+			    x: gMin+(j + 0.5) * step,
 			    y: 0
 			  });
 			}
-			currentRow.value.forEach(function(item){
+			serie.values[0].x = gMin;
+			serie.values[beans-1].x = gMax;
+			
+			return serie;	 
+	}
+
+	var generateHistogram = function(values, serie, beans){
+		
+		values.forEach(function(item){
 				if(item !=null){
 					var index = Math.floor((item - gMin) / (gMax - gMin) * beans);
 					index = index == beans ? index - 1 : index;
@@ -573,56 +605,103 @@ exports.Distribution = function(table,params){
 				});
 			}
 
-			var l = currentRow.value.filter(function(item){return item != null}).length;
+			var l = values.filter(function(item){return item != null}).length;
 			serie.values = serie.values.map(function (item) {
 				return { 
-					label: (precision != null) ? item.label.toFixed(precision) : item.label, 
+					label: /*(precision != null) ? item.label.toFixed(precision) :*/ item.label, 
 					x: (precision != null) ? new Number(item.x.toFixed(precision)) : item.x, 
 					y: (precision != null) ? new Number((item.y/l).toFixed(precision)) : item.y/l};
 			});
-			result.push(serie)
+		return serie;	
+	}
+		
+	if (direction == "Rows"){
+		table.body.forEach(function(currentRow){
+			var hist = {key:concatLabels(currentRow.metadata,useRowMetadata), values:[]};
+			hist = initHistogram( hist, beans);
+			// for (var j = 0; j < beans; j++) {
+			//   serie.values.push({
+			//     label: ((j + 0.5) * (gMax - gMin) / beans),
+			//     x: ((j + 0.5) * (gMax - gMin) / beans),
+			//     y: 0
+			//   });
+			// }
+			// currentRow.value.forEach(function(item){
+			// 	if(item !=null){
+			// 		var index = Math.floor((item - gMin) / (gMax - gMin) * beans);
+			// 		index = index == beans ? index - 1 : index;
+			// 		serie.values[index].y += 1;
+			// 	}
+			// })
+			// if (cumulate){
+			// 	var s = 0;
+			// 	serie.values.forEach(function (val) {
+			// 		val.y = s += val.y;
+			// 	});
+			// }
+
+			// var l = currentRow.value.filter(function(item){return item != null}).length;
+			// serie.values = serie.values.map(function (item) {
+			// 	return { 
+			// 		label: (precision != null) ? item.label.toFixed(precision) : item.label, 
+			// 		x: (precision != null) ? new Number(item.x.toFixed(precision)) : item.x, 
+			// 		y: (precision != null) ? new Number((item.y/l).toFixed(precision)) : item.y/l};
+			// });
+
+			result.push(generateHistogram(currentRow.value, hist, beans));
 		})
 		return result;
 	}
 
 	if( direction == "Columns"){
-		table.header.forEach(function(currentColumn,columnIndex){
-			var serie = {key:concatLabels(currentColumn.metadata,useColumnMetadata), values:[]};
-			for (var j = 0; j < beans; j++) {
-			  serie.values.push({
-			    label: ((j + 0.5) * (gMax - gMin) / beans),
-			    x: ((j + 0.5) * (gMax - gMin) / beans),
-			    y: 0
-			  });
-			}
-			table.body.forEach(function(currentRow){
-				var item = currentRow.value[columnIndex];
-				if(item !=null){
-					var index = Math.floor((item - gMin) / (gMax - gMin) * beans);
-					index = index == beans ? index - 1 : index;
-					serie.values[index].y += 1;
-				}	
-			})
-			if (cumulate){
-				var s = 0;
-				serie.values.forEach(function (val) {
-					val.y = s += val.y;
-				});
-			}
 
-			var l = 0;
-			table.body.forEach(function(currentRow){
-				if(currentRow.value[columnIndex] != null) l++;
-			})
+		table.header.forEach(function(currentColumn,columnIndex){
+			var hist = {key:concatLabels(currentColumn.metadata,useColumnMetadata), values:[]};
+			hist = initHistogram(hist, beans);
+			// for (var j = 0; j < beans; j++) {
+			//   serie.values.push({
+			//     label: ((j + 0.5) * (gMax - gMin) / beans),
+			//     x: ((j + 0.5) * (gMax - gMin) / beans),
+			//     y: 0
+			//   });
+			// }
 			
-			serie.values = serie.values.map(function (item) {
-				return { 
-					label: (precision != null) ? item.label.toFixed(precision) : item.label, 
-					x: (precision != null) ? new Number(item.x.toFixed(precision)) : item.x, 
-					y: (precision != null) ? new Number((item.y/l).toFixed(precision)) : item.y/l};
+
+			var columnData = table.body.map(function(item){
+				return item.value[columnIndex]
 			});
-			result.push(serie)
+
+
+			// table.body.forEach(function(currentRow){
+			// 	var item = currentRow.value[columnIndex];
+			// 	if(item !=null){
+			// 		var index = Math.floor((item - gMin) / (gMax - gMin) * beans);
+			// 		index = index == beans ? index - 1 : index;
+			// 		serie.values[index].y += 1;
+			// 	}	
+			// })
+			// if (cumulate){
+			// 	var s = 0;
+			// 	serie.values.forEach(function (val) {
+			// 		val.y = s += val.y;
+			// 	});
+			// }
+
+			// var l = 0;
+			// table.body.forEach(function(currentRow){
+			// 	if(currentRow.value[columnIndex] != null) l++;
+			// })
+			
+			// serie.values = serie.values.map(function (item) {
+			// 	return { 
+			// 		label: (precision != null) ? item.label.toFixed(precision) : item.label, 
+			// 		x: (precision != null) ? new Number(item.x.toFixed(precision)) : item.x, 
+			// 		y: (precision != null) ? new Number((item.y/l).toFixed(precision)) : item.y/l};
+			// });
+			result.push(generateHistogram(columnData, hist, beans))
 		})
 		return result;
-	}		
+	}
+
+	return {response : "No Execution"}		
 }

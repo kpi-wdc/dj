@@ -1,40 +1,44 @@
 import angular from 'angular';
 import 'widgets/nvd3-widget/nvd3-widget';
-import 'widgets/data-util/dps';
-import "widgets/wizard/wizard";
-import "widgets/v2.steps/edit-widget-id";
-import "widgets/v2.steps/select-dataset";
-import "widgets/v2.steps/make-query";
-import "widgets/v2.steps/post-process";
+// import 'widgets/data-util/dps';
+// import "widgets/wizard/wizard";
+// import "widgets/v2.steps/edit-widget-id";
+// import "widgets/v2.steps/select-dataset";
+// import "widgets/v2.steps/make-query";
+// import "widgets/v2.steps/post-process";
+// import "widgets/v2.steps/bar-chart-decoration";
+// import "widgets/r-bar/serie-adapter";
+
+import "widgets/r-bar/wizard";
 
 
-import "widgets/wizard/step"
+
+
+
+import "widgets/wizard/step";
 
 
 const m = angular.module('app.widgets.r-bar', [
   'app.widgets.nvd3-widget',
-  "app.widgets.data-util.dps",
-  "app.widgets.wizard",
-  "app.widgets.v2.steps.edit-widget-id",
-  "app.widgets.v2.steps.select-dataset",
-  "app.widgets.v2.steps.make-query",
-  "app.widgets.v2.steps.post-process",
-  
-  
-  "app.widgets.wizard.step"
+  "app.widgets.v2.bar-serie-adapter",
+  'app.widgets.v2.bar-chart-wizard'
 ]);
 
 
 
 m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widget, 
-                                           Requestor, 
-                                           Wizard,
-                                           EditWidgetID,
-                                           SelectDataset,
-                                           MakeQuery,
-                                           PostProcess, 
+                                           // Requestor, 
+                                           // Wizard,
+                                           // EditWidgetID,
+                                           // SelectDataset,
+                                           // MakeQuery,
+                                           // PostProcess,
+                                           // BarChartDecoration,
+                                           // parentHolder,
+                                           BarChartWizard,
+                                           BarSerieAdapter, 
                                            $modal,
-                                           Step, $timeout) {
+                                           $timeout ) {
  
     
       $scope.APIProvider = new APIProvider($scope);
@@ -358,115 +362,84 @@ m.controller('Nvd3BarChartCtrl', function ($scope, $http, APIProvider, NVD3Widge
 
       }, true)
       .openCustomSettings(function () {
-        console.log($scope)
-        console.log(EditWidgetID.html)
-        $scope.wizard = new Wizard($modal)
-          .setTitle("R-BAR Settings")
-          .push(EditWidgetID)
-          .push(SelectDataset)
-          .push(MakeQuery)
-          .push(PostProcess)
+        // console.log($scope)
+        // console.log(EditWidgetID.html)
+        $scope.wizard = BarChartWizard;
+          // new Wizard($modal)
+          // .setTitle("R-BAR Settings")
+          // .push(EditWidgetID)
+          // .push(SelectDataset)
+          // .push(MakeQuery)
+          // .push(PostProcess)
+          // .push(BarChartDecoration)
 
-          .push(            
-            Step
-          )
-          
-          .push(
-            {
-              title:"Step 2",
-              description: "Make Query...", 
-              html:"./widgets/wizard/s2.html",
-                enable:function(wizard){
-                  console.log("Enable Step 2");
-                },
-                disable:function(wizard){
-                  console.log("Disable Step 2");
-                },
-                activate : function(wizard){
-                  // wizard.enable(2)
-                  console.log("Activate Step 2");
-                }
-            }
-          )
-           .push(
-            {
-              title:"Step 3",
-              description: "Set widget decoration...", 
-              html:"./widgets/wizard/s3.html",
-                enable:function(wizard){
-                  console.log("Enable Step 3");
-                },
-                disable:function(wizard){
-                  console.log("Disable Step 3");
-                },
-                activate : function(wizard){
-                  console.log("Activate Step 3");
-                }
-            }
-          )
 
-          .onStart(function(wizard){
-            wizard.conf = angular.copy(wizard.parentScope.widget);
-            console.log("Start Wizard")
-            console.log(wizard.conf);
-          })
-          .onCompleteStep( function(wizard,step){
-            console.log("OnComplete", step )
-            if(step.index == 1){
-              wizard.disable(wizard.getAboveIndexes(step));
-              wizard.dataset = step.selectedDataset;
-              wizard.enable(step.index+1);
-            }
-            if(step.index == 2){
-              wizard.disable(wizard.getAboveIndexes(step));
-              wizard.query = step.query;
-              wizard.enable(step.index+1);
-            }
-            if(step.index == 3){
-              console.log("POSTPROCESS",step)
-              $http
-                .post("./api/data/process",{
-                  "data_id":  step.postprocessDataId,
-                  "params": {
-                      "axisX" : -1,
-                      "normalized": step.normalize,
-                      "mode" : step.mode,
-                      "direction": step.direction,
-                      "precision":step.precision,
-                      "useColumnMetadata" : step.useHeaderMetadata,
-                      "useRowMetadata" : step.useRowMetadata     
-                  },
-                "proc_name": "scatter-serie",
-                "response_type": "data",
-                "r": Math.random()
-                })
-                .success(function (data) {
-                  console.log("Distribution",data)
-                })    
-            }
+          // .onStart(function(wizard){
+          //   wizard.conf = angular.copy(wizard.parentScope.widget);
+          // })
 
-          })
-          .onProcessStep( function(wizard,step){
-            if(step.index == 1 || step.index == 2){
-              wizard.disable(wizard.getAboveIndexes(step));
-              return;
-            }
+          // .onCompleteStep( function(wizard,step){
+          //    console.log("OnComplete", step )
+          //   if(step.title == "Dataset"){
+          //     wizard.conf.dataset = step.selectedDataset;
+          //     wizard.enable(step.index+1);
+          //   }
+          //   if(step.title == "Query"){
+          //     // wizard.disable(wizard.getAboveIndexes(step));
+          //     wizard.conf.query = step.query;
+          //     wizard.enable(step.index+1);
+          //   }
+          //   if(step.title == "Postprocessing"){
+          //     wizard.conf.postprocessSettings = step.postprocessSettings;
+          //     wizard.conf.queryResultId = step.queryResultId
+          //     wizard.enable(wizard.getAboveIndexes(step));
+          //   }
+          //   if(step.title == "Chart Decoration"){
+          //     wizard.conf.serieRequest = step.request;
+          //     // console.log(step.serieDataId);
+          //     // wizard.conf.serieDataId = step.serieDataId;
+          //   }
+          // })
 
-          })
+          // .onProcessStep( function(wizard,step){
+          //   console.log("On process ", step)
+          //   if(step.title == "Dataset"){
+          //     wizard.conf.query = undefined;
+          //     wizard.disable(wizard.getAboveIndexes(step));
+          //     return;
+          //   }
+          //   if(step.title == "Query"){
+          //    wizard.conf.postprocessSettings = undefined;
+          //    wizard.conf.serieRequest = undefined;
+          //    wizard.disable(wizard.getAboveIndexes(step));
+          //   }
+          //   if(step.title == "Postprocessing"){
+          //     wizard.conf.serieRequest = undefined;
+          //   }
 
-          .onCancel(function(wizard){
-            console.log("Cancel Widget")
-          })
+          // })
 
-          .onFinish(function(wizard){
-            var conf = wizard.parentScope.widget; 
-            conf.instanceName  =  wizard.steps[0].instanceName;
-            conf.datasetID  =  wizard.steps[1].datasetID;
-           
+          // .onCancel(function(wizard){
+          //   console.log("Cancel Widget")
+          // })
+
+          // .onFinish(function(wizard){
             
-            console.log("Finish Widget")
-            console.log( wizard.parentScope.widget )
-          });
+          //   var conf = wizard.parentScope.widget; 
+          //   conf.instanceName  =  wizard.conf.instanceName;
+          //   conf.datasetID  =  wizard.conf.datasetID;
+          //   conf.query  =  wizard.conf.query;
+          //   conf.postprocessSettings  =  wizard.conf.postprocessSettings;
+          //   conf.postprocess  =  wizard.conf.postprocess;
+          //   conf.decoration = wizard.conf.decoration;
+          //   conf.serieRequest = wizard.conf.serieRequest;
+          //   conf.serieDataId = wizard.conf.serieDataId;
+             
+           
+          //   // wizard.parentScope.widget = wizard.conf;
+          //   console.log("Finish Widget")
+          //   console.log( wizard )
+          // });
           $scope.wizard.start($scope);
       })
     

@@ -24,7 +24,7 @@
 >
 	<div
 		ng-repeat = "step in wizard.steps track by $index"
-		ng-if = "step.active"
+		ng-show = "step.active"
 	>
 		
 		<div  class="row" ng-include="step.html"/>

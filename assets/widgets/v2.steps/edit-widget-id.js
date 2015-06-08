@@ -13,6 +13,10 @@ m.factory("EditWidgetID",function(){
 		
 		onStartWizard: function(wizard){
 		      	this.instanceName = wizard.conf.instanceName;
+        },
+
+        onFinishWizard: function(wizard){
+        	wizard.conf.instanceName = this.instanceName;	
         }
 	}
 });	

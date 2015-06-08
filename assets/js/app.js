@@ -462,6 +462,7 @@ app.directive('widgetHolder', function (appUrls) {
       scope.$watchCollection('scope.config.holders', () => {
         if (scope.config.holders) {
           scope.holder = scope.config.holders[attrs.name] || {};
+          scope.holder.width = angular.element(element[0]).width();
         }
       });
 
@@ -552,6 +553,7 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
           holder.widgets.push(realWidget);
           $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
         }, (error) => {
+          console.log(error)
           alert.error('Cannot add widget: ${error}');
         });
       $modalInstance.close();

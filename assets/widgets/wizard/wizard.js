@@ -63,7 +63,7 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 		},
 
 		complete : function(step){
-			console.log("W complete", step)
+			// console.log("W complete", step)
 			if ( this.onCompleteStepCallback ) this.onCompleteStepCallback(this,step);
 		},
 

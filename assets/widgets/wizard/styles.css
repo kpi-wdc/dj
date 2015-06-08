@@ -81,6 +81,7 @@ input.wizard {
   /*width: inherit;*/ 
   height: inherit;
   font-size: small;
+  margin: 0 0 0.2rem 0;
 }
 
 label.wizard {
@@ -93,10 +94,10 @@ label.wizard.section{
 }
 
 div.wizard.setting{
-  background-color: #EFEDF2;
-  padding:0.2rem; 
-  margin: 0.3rem 0.2rem 0.2rem 0; 
-  font-size:small;
+  background-color: #efefef;
+  padding: 0;
+  margin: 0.3rem 0.2rem 0 0;
+  font-size: small;
 }
 
 h5.wizard.note {
@@ -105,3 +106,36 @@ h5.wizard.note {
   color: #015B79;
   margin: 1rem 2rem;
 }
+
+button.apply{
+  clear: both;
+  margin: 0 0 0.1rem 0;
+}
+
+.accordion .accordion-navigation > a, .accordion dd > a {
+  background: #DBDBDB;
+  color: #414141;
+  padding: 0.2rem;
+  display: block;
+  font-size: small;
+  font-weight: bold;
+  border: 1px solid #afafaf;
+  margin: 0;
+}
+
+.accordion .accordion-navigation > .content, .accordion dd > .content {
+  display: none;
+  padding: .1rem;
+  border-left: 1px solid #afafaf;
+  border-right: 1px solid #afafaf;
+  border-bottom: 1px solid #afafaf;
+  background: #efefef;
+  margin: 0 0 0.1rem 0;
+}
+
+.axis {
+  background: #FAFCA9;
+  color: #E51919;
+  text-align: center;
+  font-weight: bold;
+}  
