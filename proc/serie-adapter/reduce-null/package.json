@@ -1,0 +1,11 @@
+{
+  "name": "reduce-null",
+  "version": "0.0.1",
+  "description": "Reduce null rows or columns",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

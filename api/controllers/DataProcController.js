@@ -11,6 +11,8 @@ module.exports = {
    */
   process: function (req, res) {
     var tempObj = req.body;
+
+    sails.log.debug("REQUEST ",req.body)
     // response type doesn't matter - we compute every time
     delete tempObj.response_type;
     var md5 = require('object-hash').MD5(tempObj);
@@ -35,6 +37,7 @@ module.exports = {
         json.status_code = 0;
         return res.send(json);
       } else {
+
         var launchingFilePath = sails.config.executables[req.body.proc_name];
         var child = require('child_process').fork(launchingFilePath, [], {silent: true});
         var parent_proc = "";
@@ -50,6 +53,7 @@ module.exports = {
               if (found) {
                 if (found.isDataSource) {
                   obj_to_process = found;
+                  obj_to_process.params = req.body.params;
                 } else {
                   obj_to_process.data = found.value;
                   obj_to_process.params = req.body.params;

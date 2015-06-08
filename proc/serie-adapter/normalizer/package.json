@@ -1,0 +1,11 @@
+{
+  "name": "normalizer",
+  "version": "0.0.1",
+  "description": "Prepare Correlation Table",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

@@ -1,0 +1,145 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div class="column medium-3 left">
+	<h5>Postprocess Settings</h5>
+		
+		<accordion close-others="false">
+			<accordion-group heading="Data Normalization">
+				<div class="row wizard setting">
+			
+					<label class="wizard left">
+						Enable
+					</label>
+						
+				 	<div class="switch tiny right">
+			          <input type="checkbox"
+			                 id="normCheckbox"
+			                 ng-model="step.postprocessSettings.normalize"
+			           >
+			          <label for="normCheckbox"></label>
+			        </div>
+
+			        <div ng-if="step.postprocessSettings.normalize" style="clear:both;">
+				        <label class="wizard left">
+				        	Mode:
+				        </label>
+				        <select ng-model="step.postprocessSettings.mode" class="wizard">
+				          <option>Range to [0,1]</option>
+				          <option>Standartization</option>
+				          <option>Logistic</option>
+				        </select>
+						<br/>
+				        <label class="wizard left"> 
+				        	Direction:
+				        </label>
+				        <select ng-model="step.postprocessSettings.direction" class="wizard">
+				          <option>Rows</option>
+				          <option>Columns</option>
+				        </select>
+			        </div>
+		    	</div>
+	    	</accordion-group>	    
+			
+			<accordion-group heading="Data Precision">
+				<div class="row wizard setting">
+					<input type="number" min="2" max="10" ng-model="step.postprocessSettings.precision" class="wizard">
+		        </div>
+		    </accordion-group>
+
+		    <accordion-group heading="Axis X">
+				<div class="row wizard setting">
+			
+			    <label class="wizard left">
+		        	Column:
+		        </label>
+		        <select ng-model="step.axisXColumn" ng-change="step.selectAxisX()" class="wizard">
+		          <option ng-repeat="item in step.axisXList">{{item.label}}</option>
+		        </select>
+			
+		    	</div>
+	    	</accordion-group>	    
+			
+
+
+
+		    <accordion-group heading="Include Column Metadata">
+		        <div class="row wizard setting">
+					<div ng-repeat="item in step.response.data.header[0].metadata track by $index" style="clear:both;">
+						<label class="wizard left">
+							{{item.dimensionLabel}}
+						</label>
+						
+					 	<div class="switch tiny right">
+				          <input type="checkbox"
+				                 id="{{'hmeta'+$index}}"
+				                 ng-model="step.postprocessSettings.useColumnMetadata[$index]"
+				                 ng-disabled = "(step.getSelectedItemsCount(step.postprocessSettings.useColumnMetadata) <= 1)&&
+				                 (step.postprocessSettings.useColumnMetadata[$index] == true)"
+				           >
+				          <label for="{{'hmeta'+$index}}"></label>
+				        </div>
+
+					</div>
+		        </div>
+			</accordion-group>
+
+			<accordion-group heading="Include Row Metadata">
+				<div class="row wizard setting">
+					<div ng-repeat="item in step.response.data.body[0].metadata track by $index" style="clear:both;">
+						<label class="wizard left">
+							{{item.dimensionLabel}}
+						</label>
+						
+					 	<div class="switch tiny right">
+				          <input type="checkbox"
+				                 id="{{'rmeta'+$index}}"
+				                 ng-model="step.postprocessSettings.useRowMetadata[$index]"
+				                 ng-disabled = "(step.getSelectedItemsCount(step.postprocessSettings.useRowMetadata) <= 1)&&
+				                 (step.postprocessSettings.useRowMetadata[$index] == true)"
+				           >
+				          <label for="{{'rmeta'+$index}}"></label>
+				        </div>
+						
+					</div>    
+				</div>
+			</accordion-group>
+		</accordion>		
+
+	    <button class="button radius right toolbar apply" style="margin:0.3rem" ng-click="step.apply()">Apply</button>
+
+	</div>
+
+	<div class="column medium-9 left">
+	<h5>Query result</h5>
+	<div class="row wizard setting" style="overflow:auto; background:#ffffff;">
+		<img ng-if="!step.response" src="./img/ajax-loader.gif"/>
+		<table ng-if="step.response">
+			<tr ng-repeat="hmetaIndex in step.range(0,step.response.data.header[0].metadata.length-1)">
+				<th ng-if="hmetaIndex == 0"
+					colspan="{{step.response.data.body[0].metadata.length}}" 
+					rowspan="{{step.response.data.header[0].metadata.length}}"
+					style="text-align:center">
+					Row Metadata
+				</th>
+				<th ng-repeat="hcol in step.response.data.header"
+					style="text-align:center"
+					ng-class = "{selected : step.postprocessSettings.useColumnMetadata[hmetaIndex] == true}">
+					{{hcol.metadata[hmetaIndex].label}}
+				</th>
+			</tr>
+			<tr ng-repeat="brow in step.response.data.body">
+				<th ng-repeat="rowMeta in brow.metadata track by $index"
+						style="text-align:center"
+						ng-class = "{selected : step.postprocessSettings.useRowMetadata[$index] == true, axis :$index == (-1-step.postprocessSettings.axisX)}">
+					{{rowMeta.label}}	
+				</th>
+				<td ng-repeat="data in brow.value track by $index"
+						style="text-align:right"
+						ng-class="{axis :$index == step.postprocessSettings.axisX}"
+						>
+					{{ step.getValue(brow.value[$index]) }}
+				</td>
+			</tr>
+		</table>
+	</div>
+	</div>
+</div>

@@ -8,6 +8,7 @@ System.config({
   }
 });
 
+
 define(["angular", "jsinq", "jsinq-query", "stat", "pca", "cluster"], function (angular, jsinq) {
   var m = angular.module("app.widgets.data-util.adapter", ["app.widgets.data-util.stat", "app.widgets.data-util.pca", "app.widgets.data-util.cluster"]);
 

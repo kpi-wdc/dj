@@ -391,3 +391,17 @@ widgetApi.factory('pageWidgets', function (app) {
     return widgets;
   };
 });
+
+widgetApi.factory('parentHolder', function (app) {
+  return (widget) => {
+    const holders = app.pageConfig().holders;
+    for (let holderName in holders) {
+      if (holders.hasOwnProperty(holderName)) {
+        let result = holders[holderName].widgets.filter((w) =>{
+          return w.instanceName == widget.instanceName
+        });
+        if( result.length == 1 ) return holders[holderName];
+      }
+    }
+  };
+});

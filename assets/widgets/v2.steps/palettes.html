@@ -1,0 +1,13 @@
+<ul  id="dropdown-example-3"
+                    class="f-dropdown tiny"
+                    style="height:10rem; overflow: auto;">
+                  <li ng-repeat="palette in step.palettes"  ng-click="step.setColor(palette)">
+                    <!-- <a style="padding: 0; margin: 0;" ng-click="step.setColor(palette)"> -->
+                                      <!-- <span> -->
+                                          <span ng-repeat="color in palette"
+                                                style="background-color: {{color}};width:10px;height:10px;display: inline-block; margin:0;padding:0;border:1px solid #afafaf;"> 
+                                          </span>
+                                      <!-- </span> -->
+                    <!-- </a> -->
+                  </li>
+              </ul>

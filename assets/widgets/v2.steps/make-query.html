@@ -1,0 +1,172 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div ng-repeat="section in step.sections track by $index">
+		 <div class="row">
+		  	<div class="toolbar border left">
+				<div class="left" style="padding:0 0.3rem">
+		            Dimension: <b>{{section.dimension.label}}.</b>&nbsp;
+		            Selected:&nbsp;{{step.getSelectedItems(section).length}}&nbsp;from&nbsp; 
+		            {{section.items.length}}&nbsp;items. 
+		         </div>
+		         <button 
+		         		 ng-click="step.selectAll(section)"
+		         		 class="button radius toolbar left"
+	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Select All       
+	            </button>
+		         <button ng-if = "!section.showItemsOptions"
+		         		 ng-click="section.showItemsOptions = true"
+		         		 class="button radius toolbar left"
+	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Show Items       
+	            </button>
+	            <button  ng-if = "section.showItemsOptions"
+	            		 ng-click="section.showItemsOptions = false"
+		         		 class="button radius toolbar left"
+	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Hide Items
+	            </button>
+
+	        </div> 
+	         <div class="toolbar border right">
+	            <div class="left" style="padding:0 0.3rem">
+	            	Role:
+	            </div>
+	            <button ng-click="step.setRole(section, 'Rows')"
+	            		ng-class="{warning : section.dimension.role == 'Rows'}"
+	                    class="button radius secondary toolbar left"
+	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Rows
+	            </button>
+	            
+	            <button ng-click="step.setRole(section, 'Split Rows')"
+	            		ng-class="{warning : section.dimension.role == 'Split Rows'}"
+	                    class="button radius secondary toolbar left"
+	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Split Rows
+	            </button>
+	            
+	            <button ng-click="step.setRole(section, 'Columns')"
+	            		ng-class="{warning : section.dimension.role == 'Columns'}"
+	                    class="button radius secondary toolbar left"
+	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Columns
+	            </button>
+
+	            <button ng-click="step.setRole(section, 'Split Columns')"
+	            		ng-class="{warning : section.dimension.role == 'Split Columns'}"
+	                    class="button radius secondary toolbar left"
+	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Split Columns
+	            </button>
+				
+				<button ng-click="step.setRole(section, 'Ignore')"
+	            		ng-class="{warning : section.dimension.role == 'Ignore'}"
+	                    class="button radius secondary toolbar left"
+	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Ignore
+	            </button>
+
+	          </div>
+          </div>
+
+        <div class="row" ng-if="section.showItemsOptions">
+        	
+         	<div class="toolbar border right">
+				<div class="left" style="padding:0 0.3rem">
+		            Selection:
+		         </div>
+		         <button 
+		        		 ng-click = "step.selectAll(section)"	 		
+		         		 class="button radius toolbar left"
+	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Select All
+	            </button>
+	            <button 
+		         		 ng-click = "step.inverseSelection(section)"	 		
+		         		 class="button radius toolbar left"
+	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Inverse
+	            </button>
+	            <button  
+	            		 ng-click = "step.clearSelection(section)"	
+		         		 class="button radius toolbar left"
+	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Clear
+	            </button>
+
+	        </div> 
+
+	        <div class="toolbar border right">
+				<div class="left" style="padding:0 0.3rem">
+		            Filter:
+		        </div>
+		        
+		        <div class="left" style="padding:0 0.1rem 0 0.3rem">
+		            ID
+		        </div>
+		        
+		        <div class="left" style="padding:0">
+	             	<input type="text" 
+	         			ng-model="section.filter.id"
+	         			style="
+	         				font-size: smaller;
+	         				margin: 0;
+	         				padding: 0.2rem;
+	         				height: inherit;"
+		         	/>
+		        </div>
+		        
+		        <div class="left" style="padding:0 0.2rem 0 0.3rem">
+		            Label
+		        </div>
+		        
+		        <div class="left" style="padding:0">
+		            <input class="left"	type="text" 
+		         			ng-model="section.filter.label"
+		         			style="
+		         				font-size: smaller;
+		         				margin: 0;
+		         				padding: 0.2rem;
+		         				height: inherit;"
+		         	/>
+		        </div>
+		   </div>
+	    </div>  
+
+         <div 	class="row border" 
+         		style="height:150px; overflow:auto"
+         		ng-if="section.showItemsOptions"
+         >
+	         
+         	<table>
+         		<tr>
+         			<th>ID</th>
+         			<th>Label</th>
+         		</tr>
+         		<tr 
+         			ng-click="step.select(item)"
+         			ng-repeat="item in section.items | filter : section.filter" 
+         			ng-class="{selected : item.selected}"
+         			style="cursor:pointer;"
+         		>
+	         		<td ng-class="{selected : item.selected}">{{item.id}}</td>
+	         		<td ng-class="{selected : item.selected}">{{item.label}}</td>
+         		</tr>
+         	</table>
+         	<!--	
+	         <div ng-repeat="item in section.items" ng-class="{selected : item.selected}">
+	         	{{item.id}}&nbsp;{{item.label}}
+	         </div>
+	        --> 
+         </div>   
+	</div>
+	
+	<div class="row" ng-if="step.query">
+		{{step.query}}
+	</div>
+	<div class="row" ng-if="!step.query">
+		Query not complete
+	</div>
+
+
+</div>

@@ -416,7 +416,7 @@ m.service('PCA', function () {
     });
 
 
-    //console.log(X);
+    console.log(X);
 
     var USV = svd(scale(X, true, true));
     var U = USV.U;

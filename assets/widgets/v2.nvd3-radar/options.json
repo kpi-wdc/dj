@@ -1,0 +1,90 @@
+{
+  "chart": {
+    "type": "radarChart",
+    "height": 450,
+    "isArea": true,
+    "margin": {
+      "top": 20,
+      "right": 10,
+      "bottom": 40,
+      "left": 0
+    },
+    "useInteractiveGuideline": false,
+    "dispatch": {},
+    "lines": {
+      "grid": true,
+      "axisLabel": true,
+      "tickLabel": true,
+      "ticks": 5,
+      "clipVoronoi": true,
+      "useVoronoi": true,
+      "interactive": true
+    },
+    "legend": {
+      "dispatch": {},
+      "margin": {
+        "top": 5,
+        "right": 0,
+        "bottom": 5,
+        "left": 0
+      },
+      "align": true,
+      "rightAlign": true,
+      "updateState": true,
+      "radioButtonMode": false
+    },
+    "interactiveLayer": {
+      "dispatch": {},
+      "margin": {
+        "left": 55,
+        "top": 30
+      },
+      "width": null,
+      "height": null,
+      "showGuideLine": true,
+      "svgContainer": null
+    },
+    "clipVoronoi": true,
+    "useVoronoi": true,
+    "interactive": true,
+    "showLegend": true,
+    "tooltips": true,
+    "state": {
+      "disabled": [
+        true,
+        true,
+        false
+      ]
+    },
+    "defaultState": null,
+    "noData": "No Data Available.",
+    "transitionDuration": 250
+  },
+  "title": {
+    "enable": true,
+    "text": "Write Your Title",
+    "class": "chartTitle",
+    "css": {
+      "width": "nullpx",
+      "textAlign": "center"
+    }
+  },
+  "subtitle": {
+    "enable": true,
+    "text": "Write Your Subtitle",
+    "class": "chartSubTitle"
+  },
+  "caption": {
+    "enable": true,
+    "text": "Figure 1. Write Your Caption text.",
+    "class": "chartCaption"
+  },
+  "styles": {
+    "classes": {
+      "with-3d-shadow": true,
+      "with-transitions": true,
+      "gallery": false
+    },
+    "css": {}
+  }
+}

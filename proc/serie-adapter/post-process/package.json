@@ -1,0 +1,11 @@
+{
+  "name": "post-process",
+  "version": "0.0.1",
+  "description": "Prepare postprocessing result",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}
