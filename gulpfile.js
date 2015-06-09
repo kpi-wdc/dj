@@ -72,6 +72,7 @@ gulp.task('generate-bower-json', ['collect-widgets-with-deps'], function () {
         var widgetName = widgetsWithDeps[dep];
         json.dependencies[widgetBowerPackagePrefix + widgetName] = "../assets/widgets/" + widgetName + "/";
       }
+      json.resolutions = json.dependencies;
       return json;
     }))
     .on('error', handleError)

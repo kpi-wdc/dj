@@ -41,29 +41,5 @@
     "system.js": "0.17.1",
     "topojson": "1.6.19",
     "ng-file-upload": "3.3.4"
-  },
-  "resolutions": {
-    "angular": "1.4.0",
-    "angular-cookies": "1.4.0",
-    "angular-animate": "1.4.0",
-    "angular-foundation": "0.6.0",
-    "angular-json-editor": "0.1.8",
-    "angular-leaflet": "0.7.11",
-    "angular-mocks": "1.4.0",
-    "angular-nvd3": "0.1.1",
-    "angular-ui-router": "0.2.15",
-    "es6-module-loader": "0.17.0",
-    "foundation": "5.5.2",
-    "foundation-icon-fonts": "zurb/foundation-icon-fonts",
-    "javascript-state-machine": "jakesgordon/javascript-state-machine",
-    "jquery": "2.1.4",
-    "jsinq": "hoehrmann/jsinq",
-    "jsonstat": "badosa/JSON-stat",
-    "ngstorage": "0.3.0",
-    "oclazyload": "0.5.2",
-    "SCEditor": "1.4.4",
-    "system.js": "0.17.1",
-    "topojson": "1.6.19",
-    "ng-file-upload": "3.3.4"
   }
 }
