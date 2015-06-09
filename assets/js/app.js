@@ -15,8 +15,6 @@ import 'template-cached-pages';
 import 'sceditor';
 import 'file-upload';
 
-
-
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
   'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
@@ -97,7 +95,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     .state('page', {
       url: `/app/${appName}/:href`,
       resolve: {
-        pageConfig($stateParams, $q, alert, app, widgetLoader) {
+        pageConfig($q, alert, app, widgetLoader) {
           return $q((resolve, reject) => {
             const pageConfig = app.pageConfig();
 
