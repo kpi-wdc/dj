@@ -36,7 +36,7 @@
     "jsinq": "hoehrmann/jsinq",
     "jsonstat": "badosa/JSON-stat",
     "ngstorage": "0.3.0",
-    "oclazyload": "0.5.2",
+    "oclazyload": "1.0.1",
     "SCEditor": "1.4.4",
     "system.js": "0.17.1",
     "topojson": "1.6.19",

@@ -304,10 +304,7 @@ app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUr
           return $q.reject(`Widget "${widget}" doesn't exist!`);
         }
         if (!widgetType.nojs) {
-          widgetControllers.push({
-            name: `app.widgets.${widget}`,
-            files: [appUrls.widgetJSModule(widget)]
-          });
+          widgetControllers.push(appUrls.widgetJS(widget));
         }
       }
       return $ocLazyLoad.load(widgetControllers);
