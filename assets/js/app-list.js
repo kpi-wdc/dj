@@ -1,10 +1,9 @@
 import angular from 'angular';
 import 'app-list/list';
-import 'datasource-uploader';
 import 'info';
 import 'user';
 
-const appList = angular.module('appList', ['app.user', 'appList.list', 'app.info', 'datasource-uploader']);
+const appList = angular.module('appList', ['app.user', 'appList.list', 'app.info']);
 
 appList.controller('AppListController', function ($scope, $http, $window,
                                                   appList, prompt, alert,
