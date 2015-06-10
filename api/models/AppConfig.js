@@ -74,13 +74,13 @@ module.exports = {
   },
 
   isOwner: function (app, user) {
-    if (!user) {
-      // user is not logged in - therefore not an owner
-      return false;
-    }
     if (!app.owner) {
       // No owner means every logged user is an owner
       return true;
+    }
+    if (!user) {
+      // user is not logged in - therefore not an owner
+      return false;
     }
     return app.owner.id === user.id;
   }
