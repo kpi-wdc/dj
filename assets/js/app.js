@@ -148,14 +148,14 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.templateTypes, {cache: true});
 });
 
-app.factory('config', function (initialConfig) {
+app.factory('config', function (initialConfig, $log) {
   if (initialConfig.pages.length <= 1) {
-    console.log('When there is no 404 page you might have problems with page routing!');
+    $log.info('When there is no 404 page you might have problems with page routing!');
   }
   return angular.copy(initialConfig);
 });
 
-app.service('app', function ($http, $state, $stateParams, config, $rootScope, $modal,
+app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
                              appUrls, appName, fullReload) {
 
   let pageConf;
@@ -183,7 +183,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
         return result;
       }
 
-      console.log("app.pageIndexByHref can't find page!");
+      $log.warn("app.pageIndexByHref can't find page!");
     },
     pageConfig() {
       return pageConf;
@@ -282,7 +282,7 @@ app.service('app', function ($http, $state, $stateParams, config, $rootScope, $m
         pageConf = config.pages[pageIndex];
         this.currentPageIndex = pageIndex;
       } else {
-        console.log('No config available - non-page routing...');
+        $log.warn('No config available - non-page routing...');
         pageConf = undefined;
       }
     }
@@ -510,9 +510,9 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
   });
 });
 
-app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, widgetTypes,
+app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, $log, $timeout,
                                                         widgetLoader, holder, appUrls,
-                                                        $timeout, widgetManager) {
+                                                        widgetTypes, widgetManager) {
   // create array instead of map (easy filtering)
   let widgetTypesArr = [];
   let currentWidget;
@@ -553,7 +553,6 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
           holder.widgets.push(realWidget);
           $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
         }, (error) => {
-          console.log(error)
           alert.error('Cannot add widget: ${error}');
         });
       $modalInstance.close();
