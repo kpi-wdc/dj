@@ -297,6 +297,7 @@ if (!npmProduction) {
     gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(`${buildDir}test/e2e`))
       .pipe(plugins.babel())
+      .on('error', handleError)
       .pipe(gulp.dest(`${buildDir}/test/e2e`))
   );
 
@@ -335,8 +336,8 @@ if (!npmProduction) {
   gulp.task('release', () => bump('major'));
 
   // Rerun the task when a file changes
-  gulp.task('watch', ['build'], () =>
-    gulp.watch(['assets/**', 'test/**', 'bower.json'], ['build'])
+  gulp.task('watch', ['build', 'build-e2e-test'], () =>
+    gulp.watch(['assets/**', 'test/**', 'bower.json'], ['build', 'build-e2e-test'])
   );
 
   // Rerun the task when a file changes
