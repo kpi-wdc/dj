@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="watch" type="js.build_tools.gulp" factoryName="Gulp.js">
+    <node-options />
+    <gulpfile>$PROJECT_DIR$/gulpfile.babel.js</gulpfile>
+    <tasks>
+      <task>watch</task>
+    </tasks>
+    <arguments />
+    <pass-parent-envs>true</pass-parent-envs>
+    <envs />
+    <RunnerSettings RunnerId="Js.BuildTools.Gulp" />
+    <RunnerSettings RunnerId="node-js.debug.program.runner" />
+    <ConfigurationWrapper RunnerId="Js.BuildTools.Gulp" />
+    <ConfigurationWrapper RunnerId="node-js.debug.program.runner" />
+    <method />
+  </configuration>
+</component>
