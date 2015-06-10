@@ -36,13 +36,13 @@ console.log(`NPM in production mode: ${npmProduction}`);
 // Get gulp plugins
 let conf = npmProduction ? {
   scope: ['dependencies']
-} : undefined; //
+} : undefined;
 
 let plugins = gulpLoadPlugins(conf);
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-css', 'build-js', 'merge-widget-configs',
+gulp.task('build', ['build-css', 'build-js', 'build-translations', 'merge-widget-configs',
   'copy-templates-json', 'build-template-images', 'copy-static-files']);
 
 gulp.task('bower-install', ['generate-bower-json'], () =>
@@ -200,6 +200,12 @@ gulp.task('build-widgets-js', ['move-widgets'], () =>
 );
 
 gulp.task('build-widgets', ['move-widgets', 'build-widgets-js']);
+
+gulp.task('build-translations', () =>
+  gulp.src('assets/translations/**')
+    .pipe(plugins.cached('build-translations'))
+    .pipe(gulp.dest(`${buildPublicDir}/translations`))
+);
 
 gulp.task('merge-widget-configs', () =>
    gulp.src('assets/widgets/**/widget.json')

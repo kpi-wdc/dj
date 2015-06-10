@@ -1,41 +1,48 @@
-<h3>Application settings</h3>
+<h3 translate>APPLICATION_SETTINGS</h3>
 <form>
   <div class="row">
     <div class="column medium-2">
-      <label for="appSettingsInputName">App name </label>
+      <label for="appSettingsInputName" translate>APP_NAME</label>
     </div>
     <div class="column large-10">
-      <input ng-model="settings.name" id="appSettingsInputName" placeholder="Application name (shown in URL)" type="text">
+      <input ng-model="settings.name" id="appSettingsInputName"
+             translate translate-attr-placeholder="APP_NAME_SHOWN_IN_URL"
+             type="text">
     </div>
   </div>
   <div class="row">
     <div class="column medium-2">
-      <label for="appSettingsInputKeywords">App keywords</label>
+      <label for="appSettingsInputKeywords" translate>APP_KEYWORDS</label>
     </div>
     <div class="column large-10">
-      <input ng-model="settings.keywords" id="appSettingsInputKeywords" placeholder="Keywords for search engines" type="text">
+      <input ng-model="settings.keywords" id="appSettingsInputKeywords"
+             translate translate-attr-placeholder="KEYWORDS_FOR_SEARCH_ENGINES"
+             type="text">
     </div>
   </div>
   <div class="row">
     <div class="column medium-2">
-      <label for="appSettingsInputTitle">App title</label>
+      <label for="appSettingsInputTitle" translate>APP_TITLE</label>
     </div>
     <div class="column large-10">
-      <input ng-model="settings.title" id="appSettingsInputTitle" placeholder="Application title" type="text">
+      <input ng-model="settings.title" id="appSettingsInputTitle"
+             translate translate-attr-placeholder="APPLICATION_TITLE"
+             type="text">
     </div>
   </div>
   <div class="row">
     <div class="column medium-2">
-      <label for="appSettingsInputDescription">App description</label>
+      <label for="appSettingsInputDescription" translate>APP_DESCRIPTION</label>
     </div>
     <div class="column large-10">
-      <textarea ng-model="settings.description" id="appSettingsInputDescription" placeholder="Application description">
+      <textarea ng-model="settings.description" id="appSettingsInputDescription"
+                translate translate-attr-placeholder="APPLICATION_DESCRIPTION">
       </textarea>
     </div>
   </div>
   <div class="row">
     <div class="column medium-2">
-      Is published
+      <label for="appSettingsCheckboxPublished" translate>IS_PUBLISHED</label>
     </div>
     <div class="column large-10">
       <div class="switch tiny">
@@ -48,6 +55,6 @@
   </div>
 </form>
 <br>
-<button class="button small" ng-click="ok()">Save</button>
-<button class="button alert small" ng-click="cancel()">Cancel</button>
+<button class="button small" ng-click="ok()" translate>SAVE</button>
+<button class="button alert small" ng-click="cancel()" translate>CANCEL</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

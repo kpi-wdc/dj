@@ -16,11 +16,24 @@ define('author', ['angular'], function (angular) {
 });
 
 define(['app', 'angular-mocks'], () => {
-  beforeEach(module('app'));
-
   let noWidgetsJson = {};
 
-  let $httpBackend;
+  let $httpBackend, $provide, $translateProvider;
+
+  beforeEach(module('app', (_$provide_, _$translateProvider_) => {
+    $provide = _$provide_;
+    $translateProvider = _$translateProvider_;
+
+    $provide.factory('unitTestLanguageLoader', ($q) =>
+      (options) => {
+        let deferred = $q.defer();
+        deferred.resolve({});
+        return deferred.promise;
+      }
+    );
+
+    $translateProvider.useLoader('unitTestLanguageLoader');
+  }));
 
   beforeEach(inject((_$httpBackend_) => {
     $httpBackend = _$httpBackend_;

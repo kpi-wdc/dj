@@ -1,27 +1,36 @@
 <h3>Add a new page</h3>
 <div class="row">
   <div class="small-3 large-4 columns">
-    <label ng-class="titleErr.class">Short title
-      <span ng-if="titleErr.message">
-        Error: {{titleErr.message}}
+    <label ng-class="titleErr.class">
+      <span translate>SHORT_TITLE</span>
+      <span ng-if="titleErr.message"
+            translate translate-value-msg="{{titleErr.message}}">
+        ERROR_MESSAGE_WITH_TEXT
       </span>
       <input type="text" ng-model="shortTitle"
              ng-change="checkShortTitle(shortTitle)"
-             placeholder="Unique page title" >
+             translate translate-attr-placeholder="UNIQUE_PAGE_TITLE">
     </label>
-    <label ng-class="hrefErr.class">Unique link (leave empty for home page)
-      <span ng-if="hrefErr.message">
-        Error: {{hrefErr.message}}
+    <label ng-class="hrefErr.class">
+      <span translate>UNIQUE_LINK_LEAVE_EMPTY_FOR_HOME_PAGE</span>
+      <span ng-if="hrefErr.message"
+            translate translate-value-msg="{{hrefErr.message}}">
+        ERROR_MESSAGE_WITH_TEXT
       </span>
       <input type="text" ng-model="href"
              ng-change="checkHref(href)"
-             placeholder="Unique link">
+             translate translate-attr-placeholder="UNIQUE_LINK">
     </label>
   </div>
   <div class="addPage small-6 large-40 columns">
-    <label>Template <input ng-model="filterCriteria" placeholder="Search for template ...">
-    <span ng-class="templateErr.class" ng-if="templateErr.message">
-      Error: {{templateErr.message}}
+    <label>
+      <span translate>TEMPLATE</span>
+      <input ng-model="filterCriteria"
+             translate
+             translate-attr-placeholder="SEARCH_FOR_TEMPLATE_DOTS">
+    <span ng-class="templateErr.class" ng-if="templateErr.message"
+          translate translate-value-msg="{{templateErr.message}}">
+        ERROR_MESSAGE_WITH_TEXT
     </span>
     </label>
     <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
@@ -36,6 +45,7 @@
     </ul>
   </div>
 </div>
-<button class="button small" ng-click="add(shortTitle, href, filteredTemplates)">Add</button>
-<button class="button alert small" ng-click="cancel()">Cancel</button>
+<button ng-click="add(shortTitle, href, filteredTemplates)"
+        class="button small" translate>ADD</button>
+<button class="button alert small" ng-click="cancel()">CANCEL</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

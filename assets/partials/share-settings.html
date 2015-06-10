@@ -1,7 +1,6 @@
 <div>
-  <h3>Share with others</h3>
-
-  <h5>People</h5>
+  <h3 translate>SHARE_WITH_OTHERS</h3>
+  <h5 translate>PEOPLE</h5>
   <fieldset>
     <div ng-if="author.exists" class="row row-no-left-padding">
       <div class="column medium-7">
@@ -10,7 +9,7 @@
       </div>
       <div class="column medium-3 end">
         <select disabled>
-          <option selected>Owner</option>
+          <option selected translate>OWNER</option>
         </select>
       </div>
     </div>
@@ -22,15 +21,16 @@
       </div>
       <div class="column medium-3">
         <select>
-          <option selected>Can edit</option>
+          <option selected>CAN_EDIT</option>
         </select>
       </div>
       <input type="button" class="button alert tiny"
              ng-click="deleteCollaboration(collaboration.user.id)"
-             value="Delete">
+             translate translate-attr-value="DELETE">
     </div>
     <div ng-if="collaborations.length === 0 && !author.exists">
-      No collaborators added yet! Owner is not set. <br><br>
+      <span translate>NO_COLLABORATORS_YET</span>
+      <br><br>
     </div>
   </fieldset>
 
@@ -38,7 +38,8 @@
   <h5>Invite people</h5>
   <fieldset class="row invite-people row-no-left-padding">
     <div class="column medium-7">
-      <input type="text" ng-model="selectedUser" placeholder="Enter name..."
+      <input type="text" ng-model="selectedUser"
+             translate translate-attr-placeholder="ENTER_NAME_DOTS"
              typeahead="user as user.name + ' ' + user.email for user in getUsers($viewValue)"
              typeahead-editable="false"
              typeahead-on-select="addCollaboration()"
@@ -47,12 +48,12 @@
     </div>
     <div class="column medium-3 end">
       <select>
-        <option selected>Can edit</option>
+        <option selected translate>CAN_EDIT</option>
       </select>
     </div>
   </fieldset>
 </div>
 <br>
-<button class="button small" ng-click="ok()">Save</button>
-<button class="button alert small" ng-click="cancel()">Cancel</button>
+<button class="button small" ng-click="ok()" translate>SAVE</button>
+<button class="button alert small" ng-click="cancel()" translate>CANCEL</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

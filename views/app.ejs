@@ -21,37 +21,38 @@
 
   <% if (isOwner || isCollaborator)  {%>
   <div id="page-design-panel">
-    <h3>Design panel</h3>
+    <h3 translate>DESIGN_PANEL</h3>
 
     <button class="button tiny radius" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
             id="submitChangesToServerBtn"
             disabled
-            ng-disabled="app.sendingToServer || !app.wasModified">
-      Submit changes to server
+            ng-disabled="app.sendingToServer || !app.wasModified" translate>
+      SUBMIT_CHANGES_BTN_TEXT
     </button>
     <button class="button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn">
-      <i class="fi-lock"></i> Share
+      <i class="fi-lock"></i> <span translate>SHARE</span>
     </button>
-    <button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn">
-      App settings
+    <button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn" translate>
+      APP_SETTINGS
     </button>
     <button class="button tiny radius" ng-click="app.addNewPageInModal()"
             id="addNewPageBtn">
-      <i class="fi-plus black"></i> Add new page
+      <i class="fi-plus black"></i> <span translate>ADD_NEW_PAGE</span>
     </button>
     <button class="button alert radius tiny"
             id="deletePageBtn"
             ng-disabled="app.isHomePageOpened() || app.is404PageOpened()"
             disabled
-            ng-click="app.deletePage(app.currentPageIndex)">
-      Delete page
+            ng-click="app.deletePage(app.currentPageIndex)"
+            translate>
+      DELETE_PAGE
     </button>
     <a class="button tiny radius" id="HomeBtn" href="/">
-      <i class="fi-home black"></i> Home
+      <i class="fi-home black"></i> <span translate>HOME</span>
     </a>
     <div>
       <div class="left">
-        <h6 class="left">Design mode: &nbsp;&nbsp; </h6>
+        <h6 class="left"><span translate>DESIGN_MODE</span>:&nbsp;&nbsp;</h6>
         <div class="switch tiny left">
           <input type="checkbox" id="designModeCheckbox"
                  ng-model="globalConfig.designMode">
@@ -59,7 +60,9 @@
         </div>
       </div>
       <div class="left">
-        <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;Debug mode:&nbsp;&nbsp; </h6>
+        <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;
+          <span translate>DEBUG_MODE</span>:&nbsp;&nbsp;
+        </h6>
         <div class="switch tiny left">
           <input type="checkbox" id="debugModeCheckbox"
                  ng-model="globalConfig.debugMode"
@@ -76,7 +79,7 @@
 <div class="row">
   <div class="medium-10 push-2 columns" id="page-view">
     <div ui-view>
-      Loading...
+      <span translate>LOADING_DOTS</span>
     </div>
   </div>
 
@@ -87,6 +90,12 @@
         <a href="/app/<%= app.name %>/{{page.href}}" ng-bind="page.shortTitle"></a>
       </li>
     </ul>
+    <b style="font-size: 14px">Мова:</b>
+    <ul class="side-nav language-nav" ng-controller="LanguageSelectionController">
+      <li ng-click="selectLanguage('en')">English</li>
+      <li ng-click="selectLanguage('uk')">Українська</li>
+      <li ng-click="selectLanguage('ru')">Русский</li>
+    </ul>
   </nav>
 </div>
 
@@ -95,7 +104,7 @@
     <hr>
     <div class="row">
       <div class="medium-6 columns">
-        <p>&copy; Copyright</p>
+        <p>&copy; <span translate>COPYRIGHT</span></p>
       </div>
     </div>
   </div>
@@ -103,11 +112,11 @@
 <div class="row">
   <% if (user) {%>
   <div>
-    <button class="button tiny alert right" ng-click="logOut()">Log out</button>
+    <button class="button tiny alert right" ng-click="logOut()" translate>LOG_OUT</button>
   </div>
   <% } else { %>
   <div>
-    <button class="button tiny primary right" ng-click="logIn()" id="logInButton">Login with Google</button>
+    <button class="button tiny primary right" ng-click="logIn()" id="logInButton" translate>LOGIN_WITH_GOOGLE</button>
   </div>
   <% }%>
 </div>

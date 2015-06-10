@@ -4,6 +4,7 @@ import 'author';
 import 'app-config';
 import 'widget-api';
 import 'info';
+import 'l10n';
 import 'angular-ui-router';
 import 'ngstorage';
 import 'angular-animate';
@@ -17,7 +18,8 @@ import 'file-upload';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
-  'app.widgetApi', 'app.config', 'app.user', 'app.info', 'app.author']);
+  'app.widgetApi', 'app.config', 'app.l10n',
+  'app.user', 'app.info', 'app.author']);
 
 app.factory('appUrls', function (appId) {
   return {
@@ -399,7 +401,7 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 });
 
 app.controller('MainController', function ($scope, $location, $cookies, $window,
-                                           alert, app, config) {
+                                           alert, app, config, $translate) {
   angular.extend($scope, {
     globalConfig: {},
     app,
@@ -416,8 +418,9 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     },
 
     alertAppConfigSubmissionFailed(data) {
-      alert.error(`Error submitting application configuration!<br>
-        HTTP error ${data.status}: ${data.statusText}`);
+      $translate('ERROR_SUBMITTING_APP_CONF', data).then(translation =>
+        alert.error(translation)
+      );
     }
   });
 
@@ -427,7 +430,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   });
 
   $window.onbeforeunload = (evt) => {
-    let message = "Are you sure that you want to leave the website without saving the changes?";
+    let message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING')
     if (app.wasModified) {
       if (typeof evt === "undefined") {
         evt = $window.event;
@@ -512,7 +515,7 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
 
 app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, $log, $timeout,
                                                         widgetLoader, holder, appUrls,
-                                                        widgetTypes, widgetManager) {
+                                                        $translate, widgetManager) {
   // create array instead of map (easy filtering)
   let widgetTypesArr = [];
   let currentWidget;
@@ -553,7 +556,7 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
           holder.widgets.push(realWidget);
           $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
         }, (error) => {
-          alert.error('Cannot add widget: ${error}');
+          alert.error($translate.instant('CANNOT_ADD_WIDGET', {error}));
         });
       $modalInstance.close();
     },
@@ -568,7 +571,8 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
   });
 });
 
-app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance, alert,
+app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance,
+                                                        $translate, alert,
                                                         app, templateTypes, appUrls) {
 
   // array of all template types
@@ -594,7 +598,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     checkShortTitle(shortTitle) {
       $scope.titleErr = {};
       if (!shortTitle) {
-        $scope.titleErr.message = 'field mustn\'t be empty';
+        $scope.titleErr.message = $translate.instant('FIELD_MUSTNT_BE_EMPTY');
         $scope.titleErr.class = 'red';
       }
     },
@@ -603,7 +607,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     checkHref(href) {
       $scope.hrefErr = {};
       //if (!href) {
-      //  $scope.hrefErr.message = 'field mustn\'t be empty';
+      //  $scope.hrefErr.message = $translate.instant('FIELD_MUSTNT_BE_EMPTY');
       //  $scope.hrefErr.class = 'red';
       //}
     },
@@ -629,7 +633,7 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
       if (!inFilter) {
         $scope.chosenTemplate = {};
         $scope.templateErr = {};
-        $scope.templateErr.message = 'choose a template';
+        $scope.templateErr.message = $translate.instant('CHOOSE_A_TEMPLATE');
         $scope.templateErr.class = 'red';
         return;
       }

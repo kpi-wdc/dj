@@ -4,6 +4,7 @@ System.config({
     "app": "js/app.js",
     "app-list": "js/app-list.js",
     "info": "js/info.js",
+    "l10n": "js/l10n.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
     "file-upload-shim": "components/ng-file-upload/angular-file-upload-shim.js",
@@ -12,6 +13,10 @@ System.config({
     "angular": "components/angular/angular.js",
     "angular-mocks": "components/angular-mocks/angular-mocks.js",
     "angular-animate": "components/angular-animate/angular-animate.js",
+    "angular-translate": "components/angular-translate/angular-translate.js",
+    "angular-translate-loader-static-files": "components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+    "angular-translate-storage-cookie": "components/angular-translate-storage-cookie/angular-translate-storage-cookie.js",
+    "angular-translate-storage-local": "components/angular-translate-storage-local/angular-translate-storage-local.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
@@ -66,6 +71,28 @@ System.config({
     "angular-animate": {
       "deps": [
         "angular"
+      ]
+    },
+    "angular-translate": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-translate-loader-static-files": {
+      "deps": [
+        "angular-translate"
+      ]
+    },
+    "angular-translate-storage-cookie": {
+      "deps": [
+        "angular-translate",
+        "angular-cookies"
+      ]
+    },
+    "angular-translate-storage-local": {
+      "deps": [
+        "angular-translate",
+        "angular-translate-storage-cookie"
       ]
     },
     "angular-ui-router": {

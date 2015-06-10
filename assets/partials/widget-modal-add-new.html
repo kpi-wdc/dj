@@ -1,11 +1,17 @@
-<h3>Choose widget type <input ng-model="filterCriteria" placeholder="Search for...">
-  <span ng-class="widgetErr.class" ng-bind="' Error: ' + widgetErr.message" ng-if="widgetErr.message"></span>
+<h3>Choose widget type
+  <input ng-model="filterCriteria"
+         translate translate-attr-placeholder="SEARCH_FOR_DOTS">
+  <span ng-class="widgetErr.class" ng-if="widgetErr.message"
+        translate translate-value-msg="{{widgetErr.message}}">
+    ERROR_MESSAGE_WITH_TEXT
+  </span>
 </h3>
   <div class="addWidget">
     <ul class="small-block-grid-3 medium-block-grid-6 large-block-grid-8">
       <li ng-repeat="widget in filteredWidgets = (widgetTypes | filter: filterCriteria)"
           ng-click="add(widget)"
-          class="has-tip" title="{{widget.type + ': ' + widget.description}}">
+          class="has-tip"
+          title="{{widget.type + ': ' + widget.description}}">
         <img class="th" ng-class="{selected: isSelected(filteredWidgets[$index])}" ng-src="{{widget.icon}}"/>
       </li>
     </ul>

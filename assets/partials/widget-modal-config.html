@@ -1,11 +1,11 @@
-
-<h3>Settings for widget "{{basicProperties.instanceName}}" of type {{basicProperties.type}}</h3>
+<h3 translate translate-values="basicProperties">SETTINGS_FOR_WIDGET_OF_TYPE</h3>
 <tabset class="widget-config-tabset">
-  <tab heading="General settings">
-    Widget instance name:
-    <input ng-model="basicProperties.instanceName" type="text" placeholder="Unique widget name">
+  <tab heading="{{'GENERAL_SETTINGS' | translate}}">
+    <span translate>WIDGET_INSTANCE_NAME</span>:
+    <input ng-model="basicProperties.instanceName" type="text"
+           translate translate-attr-placeholder="UNIQUE_WIDGET_NAME">
   </tab>
-  <tab heading="Custom settings" ng-if="widgetType.schema">
+  <tab heading="{{'CUSTOM_SETTINGS' | translate}}" ng-if="widgetType.schema">
     <div class="container">
       <json-editor schema="widgetType.schema" startval="widgetConfig"
                    on-change="updateData($editorValue)">
@@ -19,10 +19,10 @@
       </script>
     </div>
   </tab>
-  <tab heading="Event settings">
+  <!--<tab heading="{{'EVENT_SETTINGS' | translate}}">-->
 
-  </tab>
+  <!--</tab>-->
 </tabset>
-<button class="button small" ng-click="ok()">Save</button>
-<button class="button alert small" ng-click="cancel()">Cancel</button>
+<button class="button small" ng-click="ok()" translate>SAVE</button>
+<button class="button alert small" ng-click="cancel()" translate>CANCEL</button>
 <a class="close-reveal-modal" ng-click="cancel()">&#215;</a>

@@ -1,11 +1,15 @@
 import angular from 'angular';
 import 'app-list/list';
+import 'l10n';
 import 'info';
 import 'user';
 
-const appList = angular.module('appList', ['app.user', 'appList.list', 'app.info']);
+const appList = angular.module('appList', [
+  'ngCookies',
+  'app.user', 'app.info', 'app.l10n',
+  'appList.list']);
 
-appList.controller('AppListController', function ($scope, $http, $window,
+appList.controller('AppListController', function ($scope, $http, $translate,
                                                   appList, prompt, alert,
                                                   user) {
   angular.extend($scope, {
@@ -52,7 +56,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
         })
         .error((data, error) => {
           this.restoreApps();
-          alert.error(`Error while creating the app (${error}): ${data}`);
+          alert.error($translate.instant('ERROR_CREATING_APP', {data, error}));
         });
     },
 
@@ -79,9 +83,9 @@ appList.controller('AppListController', function ($scope, $http, $window,
         this.apps.push(app);
       }).error((data, status) => {
         if (status === 415) {
-          alert.error(`Cannot parse this data as a valid json configuration file: ${data}`);
+          alert.error($translate.instant('CANNOT_PARSE_DATA_AS_VALID_JSON', {data}));
         } else {
-          alert.error(`Error happened while importing app: ${status}`);
+          alert.error($translate.instant('ERROR_IMPORTING_APP', {status}));
         }
       });
     },
@@ -93,15 +97,15 @@ appList.controller('AppListController', function ($scope, $http, $window,
         $http.get(`/api/app/rename/${appId}/${newAppName}/`)
           .error((data, error) => {
             this.restoreApps();
-            alert.error(`Error while renaming the app (${error}): ${data}`);
+            alert.error($translate.instant('ERROR_RENAMING_APP', {error, data}));
           });
       });
     },
 
     deleteApp(appId, appName) {
-      prompt('Type again name of the app to confirm deletion: ').then((confirmName) => {
+      prompt($translate.instant('TYPE_APP_NAME_TO_CONFIRM_DELETION')).then((confirmName) => {
         if (confirmName !== appName) {
-          alert.error('Wrong name, app is not deleted!');
+          alert.error($translate.instant('WRONG_NAME_APP_NOT_DELETED'));
           return;
         }
 
@@ -109,7 +113,7 @@ appList.controller('AppListController', function ($scope, $http, $window,
         this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
         $http.get(`/api/app/destroy/${appId}`).error((data, error) => {
           this.restoreApps();
-          alert.error(`Error while deleting the app (${error}): ${data}`);
+          alert.error($translate.instant('ERROR_DELETING_APP'));
         });
       });
     }
