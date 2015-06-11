@@ -173,8 +173,9 @@ gulp.task('compile-js', () =>
     .pipe(gulp.dest(`${buildPublicDir}/js`))
 );
 
-gulp.task('annotate-js', ['build-template-cache', 'build-widgets-js', 'build-components', 'compile-js'], () =>
-  gulp.src([`${buildPublicDir}/**/*.js`, `!${buildPublicDir}/components/**/*`])
+gulp.task('annotate-js', ['compile-js'], () =>
+  gulp.src([`${buildPublicDir}/**/*.js`, `!${buildPublicDir}/widgets/**/*`,
+      `!${buildPublicDir}/components/**/*`])
     .pipe(plugins.cached('annotate-js'))
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
@@ -189,11 +190,13 @@ gulp.task('move-widgets', () =>
     .pipe(gulp.dest(`${buildPublicDir}/widgets`))
 );
 
-gulp.task('build-widgets-js', ['move-widgets'], () =>
+gulp.task('build-widgets-js', () =>
   gulp.src('assets/widgets/**/*.js')
     .pipe(plugins.cached('build-widgets-js'))
+    .pipe(plugins.changed(`${buildPublicDir}/widgets`))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel())
+    .pipe(plugins.ngAnnotate())
     .on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest(`${buildPublicDir}/widgets`))
