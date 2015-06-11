@@ -7,8 +7,8 @@
             translate translate-value-msg="{{titleErr.message}}">
         ERROR_MESSAGE_WITH_TEXT
       </span>
-      <input type="text" ng-model="shortTitle"
-             ng-change="checkShortTitle(shortTitle)"
+      <input type="text" ng-model="settings.shortTitle"
+             ng-change="settings.checkShortTitle()"
              translate translate-attr-placeholder="UNIQUE_PAGE_TITLE">
     </label>
     <label ng-class="hrefErr.class">
@@ -17,15 +17,15 @@
             translate translate-value-msg="{{hrefErr.message}}">
         ERROR_MESSAGE_WITH_TEXT
       </span>
-      <input type="text" ng-model="href"
-             ng-change="checkHref(href)"
+      <input type="text" ng-model="settings.href"
+             ng-change="settings.checkHref()"
              translate translate-attr-placeholder="UNIQUE_LINK">
     </label>
   </div>
   <div class="addPage small-6 large-40 columns">
     <label>
       <span translate>TEMPLATE</span>
-      <input ng-model="filterCriteria"
+      <input ng-model="settings.filterCriteria"
              translate
              translate-attr-placeholder="SEARCH_FOR_TEMPLATE_DOTS">
     <span ng-class="templateErr.class" ng-if="templateErr.message"
@@ -34,18 +34,18 @@
     </span>
     </label>
     <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
-      <li ng-repeat="template in filteredTemplates = (templateTypes | filter: filterCriteria)"
-          ng-click="chooseTemplate(template)"
+      <li ng-repeat="template in filteredTemplates = (settings.templateTypes | filter: filterCriteria)"
+          ng-click="settings.chooseTemplate(template)"
           class="has-tip"
           title="{{template.type + ': ' + template.description}}">
         <img class="th"
-             ng-class="{selected: isSelected(filteredTemplates[$index])}"
+             ng-class="{selected: settings.isSelected(filteredTemplates[$index])}"
              ng-src="{{template.icon}}"/>
       </li>
     </ul>
   </div>
 </div>
-<button ng-click="add(shortTitle, href, filteredTemplates)"
+<button ng-click="settings.add()"
         class="button small" translate>ADD</button>
-<button class="button alert small" ng-click="cancel()" translate>CANCEL</button>
-<a class="close-reveal-modal" ng-click="cancel()">&#215;</a>
+<button class="button alert small" ng-click="settings.cancel()" translate>CANCEL</button>
+<a class="close-reveal-modal" ng-click="settings.cancel()">&#215;</a>

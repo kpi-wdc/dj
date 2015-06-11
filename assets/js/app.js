@@ -245,7 +245,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     addNewPageInModal() {
       $modal.open({
         templateUrl: appUrls.pageModalConfigHTML,
-        controller: 'PageModalSettingsController',
+        controller: 'AddNewPageModalController',
         backdrop: 'static',
         resolve: {
           templateTypes(templateTypesPromise) {
@@ -572,9 +572,10 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
   });
 });
 
-app.controller('PageModalSettingsController', function ($scope, $state, $modalInstance,
+app.controller('AddNewPageModalController', function ($scope, $state, $modalInstance,
                                                         $translate, alert,
                                                         app, templateTypes, appUrls) {
+  // TODO: Rewrite this piece of SH*T!
 
   // array of all template types
   const templateTypesArr = [];
@@ -591,62 +592,42 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     templateTypesArr.push(currentTemplate);
   }
 
-  angular.extend($scope, {
+  $scope.settings = {
 
     href: "",
 
     // check whether shortTitle is correct (isn't empty for now)
-    checkShortTitle(shortTitle) {
+    checkShortTitle() {
       $scope.titleErr = {};
-      if (!shortTitle) {
+      if (!$scope.settings.shortTitle) {
         $scope.titleErr.message = $translate.instant('FIELD_MUSTNT_BE_EMPTY');
         $scope.titleErr.class = 'red';
       }
     },
 
-    // check whether href is correct (isn't empty for now)
-    checkHref(href) {
-      $scope.hrefErr = {};
-      //if (!href) {
-      //  $scope.hrefErr.message = $translate.instant('FIELD_MUSTNT_BE_EMPTY');
-      //  $scope.hrefErr.class = 'red';
-      //}
-    },
-
     templateTypes: templateTypesArr,
 
     // add button action
-    add(shortTitle, href, filteredTemplates) {
-      $scope.checkHref(href);
-      $scope.checkShortTitle(shortTitle);
-
-      // checks whether chosen template belongs to the current filter criteria
-      let inFilter = false;
-
-      for (let template of filteredTemplates) {
-        if (template === $scope.chosenTemplate) {
-          inFilter = true;
-          break;
-        }
-      }
+    add() {
+      $scope.settings.checkShortTitle();
 
       // if chosen template isn't in the current filter then show an error
-      if (!inFilter) {
-        $scope.chosenTemplate = {};
-        $scope.templateErr = {};
-        $scope.templateErr.message = $translate.instant('CHOOSE_A_TEMPLATE');
-        $scope.templateErr.class = 'red';
-        return;
-      }
+      //if (!$scope.settings.filteredTemplates.indexOf($scope.chosenTemplate) !== -1) {
+      //  $scope.chosenTemplate = {};
+      //  $scope.templateErr = {};
+      //  $scope.templateErr.message = $translate.instant('CHOOSE_A_TEMPLATE');
+      //  $scope.templateErr.class = 'red';
+      //  return;
+      //}
 
       const page = {
-        shortTitle: shortTitle,
-        href,
-        template: $scope.chosenTemplate.type,
+        shortTitle: $scope.settings.shortTitle,
+        href: $scope.settings.href,
+        template: $scope.settings.chosenTemplate.type,
         holders: {}
       };
 
-      for (let holderName of $scope.chosenTemplate.holders) {
+      for (let holderName of $scope.settings.chosenTemplate.holders) {
         page.holders[holderName] = {
           widgets: []
         };
@@ -655,12 +636,12 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
       app.addNewPage(page);
 
       // redirect to the new page
-      $state.go('page', {href}, {reload: true});
+      $state.go('page', {href: $scope.settings.href}, {reload: true});
       $modalInstance.close();
     },
 
     chooseTemplate(template) {
-      $scope.chosenTemplate = template;
+      $scope.settings.chosenTemplate = template;
       // don't show any error message
       $scope.templateErr = {};
     },
@@ -670,9 +651,9 @@ app.controller('PageModalSettingsController', function ($scope, $state, $modalIn
     },
 
     isSelected(template) {
-      $scope.chosenTemplate === template;
+      return $scope.settings.chosenTemplate === template;
     }
-  });
+  };
 });
 
 app.controller('ShareSettingsModalController', function ($scope, $modalInstance, $http, author, appUrls, config) {
