@@ -205,9 +205,9 @@ gulp.task('build-widgets-js', () =>
 gulp.task('build-widgets', ['move-widgets', 'build-widgets-js']);
 
 gulp.task('build-translations', () =>
-  gulp.src('assets/translations/**')
+  gulp.src('assets/i18n/**')
     .pipe(plugins.cached('build-translations'))
-    .pipe(gulp.dest(`${buildPublicDir}/translations`))
+    .pipe(gulp.dest(`${buildPublicDir}/i18n`))
 );
 
 gulp.task('merge-widget-configs', () =>

@@ -4,7 +4,7 @@ System.config({
     "app": "js/app.js",
     "app-list": "js/app-list.js",
     "info": "js/info.js",
-    "l10n": "js/l10n.js",
+    "i18n": "js/i18n.js",
     "widget-api": "js/widget-api.js",
     "template-cached-pages": "js/templates.js",
     "file-upload-shim": "components/ng-file-upload/angular-file-upload-shim.js",

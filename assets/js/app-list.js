@@ -1,12 +1,12 @@
 import angular from 'angular';
 import 'app-list/list';
-import 'l10n';
+import 'i18n';
 import 'info';
 import 'user';
 
 const appList = angular.module('appList', [
   'ngCookies',
-  'app.user', 'app.info', 'app.l10n',
+  'app.user', 'app.info', 'app.i18n',
   'appList.list']);
 
 appList.controller('AppListController', function ($scope, $http, $translate,

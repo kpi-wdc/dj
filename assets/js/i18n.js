@@ -4,9 +4,9 @@ import 'angular-translate-loader-static-files';
 import 'angular-translate-storage-cookie';
 import 'angular-translate-storage-local';
 
-let l10n = angular.module('app.l10n', ['pascalprecht.translate']);
+const i18n = angular.module('app.i18n', ['pascalprecht.translate']);
 
-l10n.config(function ($translateProvider) {
+i18n.config(function ($translateProvider) {
   $translateProvider
     .useSanitizeValueStrategy('escape')
     .useLocalStorage()
@@ -17,7 +17,7 @@ l10n.config(function ($translateProvider) {
       'ru_RU': 'ru'
     })
     .useStaticFilesLoader({
-      prefix: '/translations/',
+      prefix: '/i18n/',
       suffix: '.json'
     })
     .determinePreferredLanguage()
@@ -25,7 +25,7 @@ l10n.config(function ($translateProvider) {
     .fallbackLanguage(['en', 'uk', 'ru']);
 });
 
-l10n.controller('LanguageSelectionController', function ($scope, $translate) {
+i18n.controller('LanguageSelectionController', function ($scope, $translate) {
   angular.extend($scope, {
     selectLanguage(langKey) {
       $translate.use(langKey);
