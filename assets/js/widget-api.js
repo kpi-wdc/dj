@@ -395,11 +395,13 @@ widgetApi.factory('pageWidgets', function (app) {
 widgetApi.factory('parentHolder', function (app) {
   return (widget) => {
     const holders = app.pageConfig().holders;
-    for (let holder of holders) {
-      let result = holder.widgets.filter(w =>
-        w.instanceName === widget.instanceName
-      );
-      if (result.length === 1) return holder;
+    for (let holderName in holders) {
+      if (holders.hasOwnProperty(holderName)) {
+        const holder = holders[holderName];
+        if (holder.widgets.find(w => w.instanceName === widget.instanceName)) {
+          return holder;
+        }
+      }
     }
   };
 });
