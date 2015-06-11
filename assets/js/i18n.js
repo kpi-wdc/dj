@@ -9,20 +9,24 @@ const i18n = angular.module('app.i18n', ['pascalprecht.translate']);
 i18n.config(function ($translateProvider) {
   $translateProvider
     .useSanitizeValueStrategy('escape')
-    .useLocalStorage()
     .registerAvailableLanguageKeys(['en', 'uk', 'ru'], {
-      'en_US': 'en',
-      'en_GB': 'en',
-      'uk_UA': 'uk',
-      'ru_RU': 'ru'
+      'en*': 'en',
+      'uk*': 'uk',
+      'ru*': 'ru'
     })
     .useStaticFilesLoader({
       prefix: '/i18n/',
       suffix: '.json'
     })
     .determinePreferredLanguage()
-    //.preferredLanguage('en')
-    .fallbackLanguage(['en', 'uk', 'ru']);
+    .useLocalStorage();
+});
+
+i18n.run(function ($translate) {
+  // HACK. $translateProvider.fallbackLanguage Should have been used in i18n.config
+  // This caused problems - see
+  // https://github.com/angular-translate/angular-translate/issues/1075
+  $translate.fallbackLanguage(['en', 'uk', 'ru']);
 });
 
 i18n.controller('LanguageSelectionController', function ($scope, $translate) {
