@@ -1,12 +1,12 @@
 {
   "1-col": {
-    "description": "Description of template \"1-col\"",
+    "description": "One-column layout",
     "holders" : [
       "column"
     ]
   },
   "2-cols": {
-    "description": "Description of template \"2-cols\"",
+    "description": "Two-column layout",
     "holders" : [
       "column",
       "left",
@@ -14,7 +14,7 @@
     ]
   },
   "2x2": {
-    "description": "Description of template \"2x2\"",
+    "description": "2-column 2-rows layout",
     "holders" : [
       "column",
       "topleft",
@@ -24,7 +24,7 @@
     ]
   },
   "left-right-bottom": {
-    "description": "Description of template \"left-right-bottom\"",
+    "description": "Layout with two columns in first row and one column in second row",
     "holders" : [
       "column",
       "topleft",
