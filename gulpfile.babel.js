@@ -209,6 +209,7 @@ gulp.task('build-translations', (done) => {
     let tasksLeft = supportedLanguages.length;
     for (let lang of supportedLanguages) {
       gulp.src(`assets/widgets/*/i18n/${lang}.json`)
+        .pipe(plugins.plumber())
         .pipe(plugins.modify({
           fileModifier(file, contents) {
             const widgetName = file.history[file.history.length - 1].substr(file.base.length).split('/')[0];
