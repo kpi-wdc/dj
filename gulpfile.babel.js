@@ -1,11 +1,10 @@
-'use strict';
-import gulp from 'gulp';
 import del from 'del';
-import path from 'path';
-import runSequence from 'run-sequence';
 import fs from 'fs';
+import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import merge2 from 'merge2';
+import path from 'path';
+import runSequence from 'run-sequence';
 
 // HELPER FUNCTIONS
 const isFlagPositive = (value) => value !== undefined && value !== 'false';
@@ -298,13 +297,17 @@ if (!npmProduction) {
         configFile: `${__dirname}/protractor.conf.js`
       }))
       .on('error', e => {
-        if (isEnvEnabled('CI') && !fs.existsSync('protractor.log')) {
-          console.log('protractor.log not found!');
-          console.log('Skipping end-to-end tests...');
-          if (!called) {
-            called = true;
-            cb();
-          }
+        if (isEnvEnabled('CI')) {
+          fs.exists('protractor.log', exists => {
+            if (!exists) {
+              console.log('protractor.log not found!');
+              console.log('Skipping end-to-end tests...');
+              if (!called) {
+                called = true;
+                cb();
+              }
+            }
+          });
         } else {
           throw e;
         }
@@ -346,7 +349,6 @@ if (!npmProduction) {
       .pipe(gulp.dest('./'))
       // commit the changed version number
       .pipe(plugins.git.commit('Bumps package version'))
-
       // read only one file to get the version number
       .pipe(plugins.filter('package.json'))
       // **tag it in the repository**
