@@ -7,9 +7,9 @@ import fs from 'fs';
 import gulpLoadPlugins from 'gulp-load-plugins';
 
 // HELPER FUNCTIONS
-let isFlagPositive = (value) => value !== undefined && value !== 'false';
+const isFlagPositive = (value) => value !== undefined && value !== 'false';
 
-let isEnvEnabled = name => isFlagPositive(process.env[name]);
+const isEnvEnabled = name => isFlagPositive(process.env[name]);
 
 function handleError(err) {
   console.log(err.toString());
@@ -17,15 +17,15 @@ function handleError(err) {
 }
 
 // BUILD CONFIGURATION
-let buildDir = '.tmp';
-let buildPublicDir = '.tmp/public';
+const buildDir = '.tmp';
+const buildPublicDir = '.tmp/public';
 
 // BUILD SETTINGS
-let production = isEnvEnabled('PRODUCTION');
-let minifyCode = production || isEnvEnabled('MINIFY_CODE');
-let npmProduction = isEnvEnabled('NPM_CONFIG_PRODUCTION');
+const production = isEnvEnabled('PRODUCTION');
+const minifyCode = production || isEnvEnabled('MINIFY_CODE');
+const npmProduction = isEnvEnabled('NPM_CONFIG_PRODUCTION');
 
-let showFilesLog = true;
+const showFilesLog = true;
 
 // LOG SETTINGS
 console.log(`Production mode: ${production}`);
@@ -34,11 +34,11 @@ console.log(`Minifying code: ${minifyCode}`);
 console.log(`NPM in production mode: ${npmProduction}`);
 
 // Get gulp plugins
-let conf = npmProduction ? {
+const conf = npmProduction ? {
   scope: ['dependencies']
 } : undefined;
 
-let plugins = gulpLoadPlugins(conf);
+const plugins = gulpLoadPlugins(conf);
 
 gulp.task('default', ['build']);
 
@@ -52,8 +52,8 @@ gulp.task('bower-install', ['generate-bower-json'], () =>
 );
 
 // collect all bower-dependencies in collectedBowerDeps object
-let widgetsWithDeps = []
-let widgetBowerPackagePrefix = 'widget-';
+const widgetsWithDeps = []
+const widgetBowerPackagePrefix = 'widget-';
 gulp.task('collect-widgets-with-deps', () =>
   gulp.src('assets/widgets/*/bower.json')
     .pipe(plugins.jsonEditor(json => {
@@ -67,7 +67,7 @@ gulp.task('generate-bower-json', ['collect-widgets-with-deps'], () =>
   gulp.src('bower.json')
     .pipe(plugins.jsonEditor(json => {
       for (let dep in widgetsWithDeps) {
-        let widgetName = widgetsWithDeps[dep];
+        const widgetName = widgetsWithDeps[dep];
         json.dependencies[widgetBowerPackagePrefix + widgetName] = `../assets/widgets/${widgetName}/`;
       }
       json.resolutions = json.dependencies;
@@ -79,7 +79,7 @@ gulp.task('generate-bower-json', ['collect-widgets-with-deps'], () =>
 );
 
 gulp.task('build-components', ['bower-install'], () => {
-  let removeFilter = plugins.filter([
+  const removeFilter = plugins.filter([
     '**/*',
     '!**/test/**',
     '!**/examples/**',
@@ -210,7 +210,7 @@ gulp.task('build-translations', () =>
 gulp.task('merge-widget-configs', () =>
    gulp.src('assets/widgets/**/widget.json')
     .pipe(plugins.tap(file => {
-      let dir = path.basename(path.dirname(file.path));
+      const dir = path.basename(path.dirname(file.path));
       file.contents = Buffer.concat([
         new Buffer(`{"${dir}": `),
         file.contents,
@@ -248,8 +248,8 @@ if (!npmProduction) {
   gulp.task('unit-test', ['copy-es6-polyfill',
     'build-template-cache',
     'build-components'], function (done) {
-    let karma = require('karma').server;
-    let conf = {
+    const karma = require('karma').server;
+    const conf = {
       configFile: `${__dirname}/karma.conf.js`,
       singleRun: true
     };
@@ -313,7 +313,7 @@ if (!npmProduction) {
     ])().on('error', handleError)
   );
 
-  let bump = importance =>
+  const bump = importance =>
     // get all the files to bump version in
     gulp.src(['./package.json', './bower.json'])
       // bump the version number in those files
@@ -342,8 +342,8 @@ if (!npmProduction) {
 
   // Rerun the task when a file changes
   gulp.task('watch-unit-test', ['build'], done => {
-    let karma = require('karma').server;
-    let conf = {
+    const karma = require('karma').server;
+    const conf = {
       configFile: `${__dirname}/karma.conf.js`,
       singleRun: false
     };
