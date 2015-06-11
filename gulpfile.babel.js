@@ -2,7 +2,6 @@ import del from 'del';
 import fs from 'fs';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
-import merge2 from 'merge2';
 import path from 'path';
 import runSequence from 'run-sequence';
 
@@ -207,26 +206,29 @@ gulp.task('build-widgets', ['move-widgets', 'build-widgets-js']);
 gulp.task('build-translations', (done) => {
   fs.readdir('assets/i18n', (err, files) => {
     const supportedLanguages = files.map(file => file.slice(0, -5));
-    const tasks = [];
+    let tasksLeft = supportedLanguages.length;
     for (let lang of supportedLanguages) {
-      tasks.push(
-        gulp.src(`assets/widgets/*/i18n/${lang}.json`)
-          .pipe(plugins.modify({
-            fileModifier(file, contents) {
-              const widgetName = file.history[file.history.length - 1].substr(file.base.length).split('/')[0];
-              return JSON.stringify({
-                'WIDGET': {
-                  [widgetName.toUpperCase()]: JSON.parse(contents)
-                }
-              });
-            }
-          }))
-          .pipe(plugins.addSrc(`assets/i18n/${lang}.json`))
-          .pipe(plugins.extend(`${lang}.json`))
-          .pipe(gulp.dest(`${buildPublicDir}/i18n`))
-      );
+      gulp.src(`assets/widgets/*/i18n/${lang}.json`)
+        .pipe(plugins.modify({
+          fileModifier(file, contents) {
+            const widgetName = file.history[file.history.length - 1].substr(file.base.length).split('/')[0];
+            return JSON.stringify({
+              'WIDGET': {
+                [widgetName.toUpperCase()]: JSON.parse(contents)
+              }
+            });
+          }
+        }))
+        .pipe(plugins.addSrc(`assets/i18n/${lang}.json`))
+        .pipe(plugins.extend(`${lang}.json`))
+        .on('error', handleError)
+        .pipe(gulp.dest(`${buildPublicDir}/i18n`))
+        .on('end', () => {
+          if (!--tasksLeft) {
+            done();
+          }
+        });
     }
-    return merge2(tasks, done);
   });
 });
 
