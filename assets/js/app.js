@@ -513,9 +513,10 @@ app.controller('WidgetModalSettingsController', function ($scope, $modalInstance
   });
 });
 
-app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, $log, $timeout,
+app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, $log,
+                                                        $timeout, $translate,
                                                         widgetLoader, holder, appUrls,
-                                                        $translate, widgetManager) {
+                                                        widgetTypes, widgetManager) {
   // create array instead of map (easy filtering)
   let widgetTypesArr = [];
   let currentWidget;

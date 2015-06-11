@@ -52,8 +52,7 @@
     <form ng-submit="createApp()">
       <label><span translate>ADD_NEW_APP</span>
         <input
-          translate
-          translate-attr-placeholder="APP_NAME" name="appName"
+          placeholder="{{'APP_NAME' | translate }}" name="appName"
           ng-model="model.newAppName" autocomplete="off">
       </label><br>
       <input type="submit"
