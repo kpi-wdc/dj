@@ -15,6 +15,7 @@ module.exports = {
         newApp.isPublished = true;
         newApp.name = req.params.appName;
         newApp.owner = req.user.id;
+        AppConfig.destringifyPages(newApp);
 
         AppConfig.create(newApp).then(function (created) {
           res.ok({
