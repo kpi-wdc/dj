@@ -1,5 +1,4 @@
 {
-  "description": "Radar Chart",
   "schema": {
     "type": "object",
     "title": "Chart Settings",

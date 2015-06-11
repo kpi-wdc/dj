@@ -1,5 +1,4 @@
 {
-  "description": "nvD3 Distribution Chart",
   "schema": {
     "type": "object",
     "title": "Chart Settings",

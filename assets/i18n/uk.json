@@ -71,6 +71,7 @@
   "UNIQUE_PAGE_TITLE": "Унікальний заголовок сторінки",
   "UNIQUE_WIDGET_NAME": "Унікальне ім’я віджету",
   "VIEW": "Перегляд",
+  "WIDGET_HAS_NO_DESCRIPTION": "віджет не має опису",
   "WIDGET_INSTANCE_NAME": "Ім’я екземпляру віджета",
   "WRONG_NAME_APP_NOT_DELETED": "Неправильне ім’я, застосунок не видалено!"
 }

@@ -1,5 +1,4 @@
 {
-  "description": "Remote Process for nvD3 Bar Chart",
   "schema": {
     "type": "object",
     "title": "Chart Settings",

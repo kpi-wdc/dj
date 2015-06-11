@@ -518,13 +518,21 @@ app.controller('WidgetModalAddNewController', function ($scope, $modalInstance, 
                                                         widgetLoader, holder, appUrls,
                                                         widgetTypes, widgetManager) {
   // create array instead of map (easy filtering)
-  let widgetTypesArr = [];
-  let currentWidget;
+  const widgetTypesArr = [];
 
   for (let type in widgetTypes.data) {
-    currentWidget = {};
-    currentWidget.type = type;
-    currentWidget.description = widgetTypes.data[type].description;
+    const currentWidget = {
+      type
+    };
+
+    const translationId = `WIDGET.${type.toUpperCase()}.DESCRIPTION`;
+    $translate(translationId).then(translation => {
+      if (translation === translationId) {
+        currentWidget.description = $translate.instant('WIDGET_HAS_NO_DESCRIPTION');
+      } else {
+        currentWidget.description = translation;
+      }
+    });
 
     // add path to icon of a widget
     if (widgetTypes.data[type].noicon) {

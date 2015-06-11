@@ -71,6 +71,7 @@
   "UNIQUE_PAGE_TITLE": "Unique page title",
   "UNIQUE_WIDGET_NAME": "Unique widget name",
   "VIEW": "View",
+  "WIDGET_HAS_NO_DESCRIPTION": "widget has no description",
   "WIDGET_INSTANCE_NAME": "Widget instance name",
   "WRONG_NAME_APP_NOT_DELETED": "Wrong name, app is not deleted!"
 }
