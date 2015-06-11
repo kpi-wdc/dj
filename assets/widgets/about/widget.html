@@ -1,10 +1,10 @@
 <div ng-controller="AboutAuthorsController">
   <div ng-if="author.name">
-    Application author: {{author.name}} &lt;{{author.email}}&gt;
+    <span translate>WIDGET.ABOUT.APPLICATION_AUTHOR</span> {{author.name}} &lt;{{author.email}}&gt;
     <br>
     <img ng-src="{{author.photo}}" style="width: 15rem; height: 15rem;">
   </div>
-  <div ng-if="!author.name">
-    This app doesn't have author - everybody can modify it.
+  <div ng-if="!author.name" translate>
+    WIDGET.ABOUT.THIS_APP_DOESNT_HAVE_AUTHOR
   </div>
 </div>
