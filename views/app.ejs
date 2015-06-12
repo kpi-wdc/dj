@@ -18,9 +18,7 @@
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
 <header class="row">
-  <% if (isOwner || isCollaborator)  {%>
-  <design-panel></design-panel>
-  <% } %>
+  <design-panel ng-if="user.isOwner || user.isCollaborator"></design-panel>
 </header>
 
 <div class="row">
@@ -49,11 +47,8 @@
   </div>
 </footer>
 <div class="row">
-  <% if (user) {%>
-  <logout-button></logout-button>
-  <% } else { %>
-  <login-google-button></login-google-button>
-  <% }%>
+  <logout-button ng-if="userInfo.isLoggedIn"></logout-button>
+  <login-google-button ng-if="!userInfo.isLoggedIn"></login-google-button>
 </div>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="/js/es6-polyfill.js"></script>
@@ -67,7 +62,7 @@
 <script>
   define('user', ['angular'], function (angular) {
     angular.module('app.user', [])
-      .constant('user', <%- JSON.stringify(user || {}) %>);
+      .constant('user', <%- JSON.stringify(userInfo) %>);
   });
 
   define('author', ['angular'], function (angular) {

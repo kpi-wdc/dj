@@ -15,8 +15,25 @@ module.exports = {
         var isCollaborator = AppConfig.isCollaborator(app, req.user);
         if (isOwner || isCollaborator || app.isPublished) {
           AppConfig.destringifyPages(app);
+
+          var userInfo;
+          if (req.user) {
+            userInfo = _.extend(_.clone(req.user), {
+              isLoggedIn: true,
+              isOwner: isOwner,
+              isCollaborator: isCollaborator
+            });
+          } else {
+            userInfo = {
+              isLoggedIn: false,
+              isOwner: isOwner,
+              isCollaborator: isCollaborator
+            };
+          }
+
           res.view('app', {
             app: app,
+            userInfo: userInfo,
             ownerInfo: !app.owner ? {
               exists: false
             } : {
@@ -25,9 +42,7 @@ module.exports = {
               email: app.owner.email,
               photo: app.owner.photo,
               exists: true
-            },
-            isOwner: isOwner,
-            isCollaborator: isCollaborator
+            }
           });
         } else {
           sails.log.silly('App is not published or user is not an owner');

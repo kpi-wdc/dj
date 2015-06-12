@@ -401,12 +401,13 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
   });
 });
 
-app.controller('MainController', function ($scope, $location, $cookies, $window,
-                                           alert, app, config, $translate) {
+app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
+                                           alert, app, config, user) {
   angular.extend($scope, {
     globalConfig: {},
     app,
     config,
+    user,
 
     logIn() {
       $cookies.redirectToUrl = $location.url();
