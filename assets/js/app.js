@@ -26,6 +26,8 @@ app.factory('appUrls', function (appId) {
   return {
     app: (appName, page) => `/app/${appName}/${page || ''}`,
     appConfig: `/api/app/config/${appId}`,
+    googleAuth: `/auth/google`,
+    logout: `/logout`,
     usersList: `/api/users/list`,
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
@@ -402,7 +404,7 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 });
 
 app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
-                                           alert, app, config, user) {
+                                           alert, app, config, user, appUrls) {
   angular.extend($scope, {
     globalConfig: {},
     app,
@@ -411,12 +413,12 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
 
     logIn() {
       $cookies.redirectToUrl = $location.url();
-      $location.url('/auth/google');
+      $location.url(appUrls.googleAuth);
     },
 
     logOut() {
       $cookies.redirectToUrl = $location.url();
-      $location.url('/logout');
+      $location.url(appUrls.logout);
     },
 
     alertAppConfigSubmissionFailed(data) {
