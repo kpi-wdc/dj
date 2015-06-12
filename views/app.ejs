@@ -17,39 +17,7 @@
   <% include ga.ejs %>
 </head>
 <body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
-<header class="row">
-  <design-panel ng-if="user.isOwner || user.isCollaborator"></design-panel>
-</header>
-
-<div class="row">
-  <div class="medium-10 push-2 columns" id="page-view">
-    <application-view>
-      <span translate>LOADING_DOTS</span>
-    </application-view>
-  </div>
-
-  <nav class="medium-2 pull-10 columns">
-    <h1><img src="/img/logo.png" style="width:90%;"></h1>
-    <page-list-nav></page-list-nav>
-    <b style="font-size: 14px" translate>LANGUAGE</b>
-    <language-selector-nav></language-selector-nav>
-  </nav>
-</div>
-
-<footer class="row">
-  <div class="medium-12 columns">
-    <hr>
-    <div class="row">
-      <div class="medium-6 columns">
-        <p>&copy; <span translate>COPYRIGHT</span></p>
-      </div>
-    </div>
-  </div>
-</footer>
-<div class="row">
-  <logout-button ng-if="userInfo.isLoggedIn"></logout-button>
-  <login-google-button ng-if="!userInfo.isLoggedIn"></login-google-button>
-</div>
+<ng-include src="skin.url"></ng-include>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="/js/es6-polyfill.js"></script>
 <script src="/components/es6-module-loader/dist/es6-module-loader.src.js"></script>
@@ -77,6 +45,7 @@
       .constant('initialConfig', {
         id: "<%= app.id %>",
         name: "<%= app.name %>",
+        skinName: "<%= app.skinName %>",
         collaborations: <%- JSON.stringify(app.collaborations || []) %>,
         pages: <%- JSON.stringify(app.pages) || []%>,
         title: "<%= app.title %>",

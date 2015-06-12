@@ -16,6 +16,11 @@ module.exports = {
       unique: true,
       notEmpty: true
     },
+    skinName: {
+      type: 'string',
+      required: 'true',
+      notEmpty: 'true'
+    },
     pages: {
       type: 'array',
       required: true

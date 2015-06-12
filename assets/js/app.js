@@ -38,6 +38,8 @@ app.factory('appUrls', function (appId) {
     pageModalConfigHTML: '/partials/page-modal-config.html',
     widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
     defaultWidgetIcon: '/widgets/default_widgets_icon.png',
+    skinUrl: skinName =>
+      `/skins/${skinName}.html`,
     templateHTML: templateName =>
       `/templates/${templateName}/template.html`,
     templateIcon: templateName =>
@@ -410,6 +412,10 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     app,
     config,
     user,
+
+    skin: {
+      url: appUrls.skinUrl(config.skinName)
+    },
 
     logIn() {
       $cookies.redirectToUrl = $location.url();
