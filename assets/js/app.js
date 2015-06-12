@@ -5,6 +5,7 @@ import 'app-config';
 import 'widget-api';
 import 'info';
 import 'i18n';
+import 'skin-directives'
 import 'angular-ui-router';
 import 'ngstorage';
 import 'angular-animate';
@@ -18,7 +19,7 @@ import 'file-upload';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'templates',
-  'app.widgetApi', 'app.config', 'app.i18n',
+  'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author']);
 
 app.factory('appUrls', function (appId) {

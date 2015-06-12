@@ -28,11 +28,3 @@ i18n.run(function ($translate) {
   // https://github.com/angular-translate/angular-translate/issues/1075
   $translate.fallbackLanguage(['en', 'uk', 'ru']);
 });
-
-i18n.controller('LanguageSelectionController', function ($scope, $translate) {
-  angular.extend($scope, {
-    selectLanguage(langKey) {
-      $translate.use(langKey);
-    }
-  });
-});

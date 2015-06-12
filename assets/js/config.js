@@ -6,6 +6,7 @@ System.config({
     "info": "js/info.js",
     "i18n": "js/i18n.js",
     "widget-api": "js/widget-api.js",
+    "skin-directives": "js/skin-directives.js",
     "template-cached-pages": "js/templates.js",
     "file-upload-shim": "components/ng-file-upload/angular-file-upload-shim.js",
     "file-upload": "components/ng-file-upload/angular-file-upload.js",

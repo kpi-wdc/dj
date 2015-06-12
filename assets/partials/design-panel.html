@@ -1,0 +1,50 @@
+<h3 translate>DESIGN_PANEL</h3>
+<button class="button tiny radius" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
+        id="submitChangesToServerBtn"
+        disabled
+        ng-disabled="app.sendingToServer || !app.wasModified" translate>
+  SUBMIT_CHANGES_BTN_TEXT
+</button>
+<button class="button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn">
+  <i class="fi-lock"></i> <span translate>SHARE</span>
+</button>
+<button class="button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn" translate>
+  APP_SETTINGS
+</button>
+<button class="button tiny radius" ng-click="app.addNewPageInModal()"
+        id="addNewPageBtn">
+  <i class="fi-plus black"></i> <span translate>ADD_NEW_PAGE</span>
+</button>
+<button class="button alert radius tiny"
+        id="deletePageBtn"
+        ng-disabled="app.isHomePageOpened() || app.is404PageOpened()"
+        disabled
+        ng-click="app.deletePage(app.currentPageIndex)"
+        translate>
+  DELETE_PAGE
+</button>
+<a class="button tiny radius" id="HomeBtn" href="/">
+  <i class="fi-home black"></i> <span translate>HOME</span>
+</a>
+<div>
+  <div class="left">
+    <h6 class="left"><span translate>DESIGN_MODE</span>:&nbsp;&nbsp;</h6>
+    <div class="switch tiny left">
+      <input type="checkbox" id="designModeCheckbox"
+             ng-model="globalConfig.designMode">
+      <label for="designModeCheckbox"></label>
+    </div>
+  </div>
+  <div class="left">
+    <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;
+      <span translate>DEBUG_MODE</span>:&nbsp;&nbsp;
+    </h6>
+    <div class="switch tiny left">
+      <input type="checkbox" id="debugModeCheckbox"
+             ng-model="globalConfig.debugMode"
+             disabled ng-disabled="globalConfig.designMode">
+      <label for="debugModeCheckbox"></label>
+    </div>
+  </div>
+</div>
+<hr>

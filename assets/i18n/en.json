@@ -65,6 +65,7 @@
   "SUBMIT_CHANGES_BTN_TEXT": "Submit changes to server",
   "SUBMIT": "Submit",
   "TEMPLATE": "Template",
+  "LANGUAGE": "Language",
   "TYPE_APP_NAME_TO_CONFIRM_DELETION": "Type again name of the app to confirm deletion: ",
   "UNIQUE_LINK_LEAVE_EMPTY_FOR_HOME_PAGE": "Unique link (leave empty for home page)",
   "UNIQUE_LINK": "Unique link",

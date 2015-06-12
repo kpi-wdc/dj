@@ -1,0 +1,5 @@
+<ul class="side-nav">
+  <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
+    <a href="/app/{{appName}}/{{page.href}}" ng-bind="page.shortTitle"></a>
+  </li>
+</ul>
