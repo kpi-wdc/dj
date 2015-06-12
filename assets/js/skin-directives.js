@@ -5,7 +5,8 @@ const skin = angular.module('app.skinDirectives', []);
 skin.directive('designPanel', () => {
   return {
     restrict: 'E',
-    templateUrl: '/partials/design-panel.html'
+    templateUrl: '/partials/design-panel.html',
+    require: '^MainController'
   }
 });
 
