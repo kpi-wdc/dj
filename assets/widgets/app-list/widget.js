@@ -48,7 +48,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
 
       this.apps.push(app);
 
-      $http.get(`/api/app/create/${app.name}`)
+      $http.get(appUrls.api.createApp(app.name))
         .success(data => app.id = data.id)
         .error((data, error) => {
           this.restoreApps();
@@ -66,7 +66,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
       var fd = new FormData();
       //Take the first selected file
       fd.append('file', this.importFile);
-      $http.post(`/api/app/import`, fd, {
+      $http.post(appUrls.api.import, fd, {
         withCredentials: true,
         headers: {'Content-Type': undefined},
         transformRequest: angular.identity
@@ -90,7 +90,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
       prompt(`${$translate.instant('WIDGET.APP-LIST.NEW_NAME')}:`).then(newAppName => {
         this.saveApps();
         this.apps[this.apps.findIndex(app => appId === app.id)].name = newAppName;
-        $http.get(`/api/app/rename/${appId}/${newAppName}/`)
+        $http.get(appUrls.api.rename(appId, newAppName))
           .error((data, error) => {
             this.restoreApps();
             alert.error($translate.instant('WIDGET.APP-LIST.ERROR_RENAMING_APP', {error, data}));
@@ -107,7 +107,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
 
         this.saveApps();
         this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
-        $http.get(`/api/app/destroy/${appId}`).error((data, error) => {
+        $http.get(appUrls.api.destroy(appId)).error((data, error) => {
           this.restoreApps();
           alert.error($translate.instant('WIDGET.APP-LIST.ERROR_DELETING_APP'));
         });

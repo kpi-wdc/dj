@@ -24,6 +24,12 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.la
 
 app.factory('appUrls', function (appId) {
   return {
+    api: {
+      createApp: appName => `/api/app/create/${appName}`,
+      destroy: appId => `/api/app/destroy/${appId}`,
+      'import': '/api/app/import',
+      rename: (appId, newAppName) => `/api/app/rename/${appId}/${newAppName}/`
+    },
     app: (appName, page) => `/app/${appName}/${page || ''}`,
     appConfig: `/api/app/config/${appId}`,
     appList: '/api/app/get-list',
