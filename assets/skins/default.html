@@ -1,0 +1,33 @@
+<header class="row">
+  <design-panel ng-if="user.isOwner || user.isCollaborator"></design-panel>
+</header>
+
+<div class="row">
+  <div class="medium-10 push-2 columns" id="page-view">
+    <application-view>
+      <span translate>LOADING_DOTS</span>
+    </application-view>
+  </div>
+
+  <nav class="medium-2 pull-10 columns">
+    <h1><img src="/img/logo.png" style="width:90%;"></h1>
+    <page-list-nav></page-list-nav>
+    <b style="font-size: 14px" translate>LANGUAGE</b>
+    <language-selector-nav></language-selector-nav>
+  </nav>
+</div>
+
+<footer class="row">
+  <div class="medium-12 columns">
+    <hr>
+    <div class="row">
+      <div class="medium-6 columns">
+        <p>&copy; <span translate>COPYRIGHT</span></p>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="row">
+  <logout-button ng-if="user.isLoggedIn"></logout-button>
+  <login-google-button ng-if="!user.isLoggedIn"></login-google-button>
+</div>

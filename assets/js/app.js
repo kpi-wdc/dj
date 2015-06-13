@@ -414,7 +414,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     user,
 
     skin: {
-      url: appUrls.skinUrl(config.skinName)
+      url: appUrls.skinUrl(config.skinName || 'default')
     },
 
     logIn() {
