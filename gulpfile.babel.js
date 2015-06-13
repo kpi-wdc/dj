@@ -165,6 +165,7 @@ gulp.task('compile-js', () =>
   gulp.src('assets/js/**/*.js')
     .pipe(plugins.cached('compile-js'))
     .pipe(plugins.changed(`${buildPublicDir}/js`))
+    .pipe(plugins.plumber())
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel())
     .on('error', handleError)
