@@ -56,9 +56,11 @@ app.factory('appUrls', function (appId) {
   };
 });
 
+app.constant('homePageAppName', 'app-list');
+
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
                      $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
-                     appName) {
+                     appName, homePageAppName) {
 
   $ocLazyLoadProvider.config({
     loadedModules: ['app'],
@@ -139,7 +141,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 
   $stateProvider
     .state('page', {
-      url: `/app/${appName}/:href`,
+      url: appName !== homePageAppName ? `/app/${appName}/:href` : '/:href',
       resolve: {
         pageConfig
       },

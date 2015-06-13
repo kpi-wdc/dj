@@ -29,7 +29,7 @@ module.exports.routes = {
   'get /auth/:provider/:action': 'AuthController.callback',
 
   // Views
-  'get /': 'AppListViewController.getView',
+  'get /': 'AppViewController.getView',
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
 

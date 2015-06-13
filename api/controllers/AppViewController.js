@@ -8,7 +8,7 @@
 module.exports = {
   getView: function (req, res) {
     // fixme: do case-insensitive search here!
-    AppConfig.findOneByName(req.params.appName)
+    AppConfig.findOneByName(req.params.appName || 'app-list')
       .populate('owner')
       .then(function (app) {
         var isOwner = AppConfig.isOwner(app, req.user);
