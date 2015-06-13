@@ -1,0 +1,22 @@
+<div ng-repeat="app in apps | orderBy: 'name'" class="row">
+  <span class="column small-4">
+    <b ng-bind="app.name"></b>
+    <span ng-if="app.owner.name">({{app.owner.name}})</span>
+  </span>
+  <a href="/app/{{app.name}}/"
+     class="button tiny success column small-2"
+     translate>
+    VIEW
+  </a>
+  <input type="button" class="button tiny column small-2"
+         ng-disabled="!isOwner(app) && !isCollaborator(app)"
+         translate translate-attr-value="RENAME"
+         ng-click="renameApp(app.id)">
+  <a type="button" class="button tiny column small-2" style="background-color: #cdab42"
+     href="/api/app/export/{{app.id}}"
+     translate>EXPORT</a>
+  <input type="button" class="button alert tiny column small-2"
+         ng-disabled="!isOwner(app) && !isCollaborator(app)"
+         translate translate-attr-value="DELETE"
+         ng-click="deleteApp(app.id, app.name)">
+</div>

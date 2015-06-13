@@ -1,0 +1,30 @@
+{
+  "skinName": "app-list",
+  "title": "Main page",
+  "description": "Main page description",
+  "keywords": [],
+  "collaborations": [],
+  "isPublished": true,
+  "pages": [
+    {
+      "shortTitle": "List of apps",
+      "href": "",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "type": "title",
+              "title": "List of apps",
+              "instanceName": "title-widget"
+            },
+            {
+              "type": "app-list",
+              "instanceName": "app-list-widget"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

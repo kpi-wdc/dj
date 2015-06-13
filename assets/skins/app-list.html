@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="medium-10 push-2 columns" id="page-view">
+    <application-view>
+      <translate>LOADING_DOTS</translate>
+    </application-view>
+  </div>
+
+  <nav class="medium-2 pull-10 columns">
+    <h1><img src="/img/logo.png" style="width:90%;"></h1>
+    <b style="font-size: 14px" translate>LANGUAGE</b>
+    <language-selector-nav></language-selector-nav>
+  </nav>
+</div>
+
+<footer class="row">
+  <div class="medium-12 columns">
+    <hr>
+    <div class="row">
+      <div class="medium-6 columns">
+        <p>&copy; <translate>COPYRIGHT</translate></p>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="row">
+  <div ng-if="user.isLoggedIn">
+    <logout-button></logout-button>
+    Logged in as {{user.name }}({{user.email}})
+  </div>
+  <login-google-button ng-if="!user.isLoggedIn"></login-google-button>
+</div>

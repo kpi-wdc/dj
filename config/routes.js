@@ -36,6 +36,7 @@ module.exports.routes = {
   /*** APIs ***/
   // IMPORTANT! - don't forget to update policies.js!
   // Apps
+  'get /api/app/get-list': 'AppController.getList',
   'get /api/app/create/:appName': 'AppController.create',
   'put /api/app/config/:appId': 'AppController.update',
   'get /api/app/export/:appId': 'AppController.export',

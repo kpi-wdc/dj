@@ -26,6 +26,7 @@ app.factory('appUrls', function (appId) {
   return {
     app: (appName, page) => `/app/${appName}/${page || ''}`,
     appConfig: `/api/app/config/${appId}`,
+    appList: '/api/app/get-list',
     googleAuth: `/auth/google`,
     logout: `/logout`,
     usersList: `/api/users/list`,
