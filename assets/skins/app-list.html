@@ -17,7 +17,7 @@
     <hr>
     <div class="row">
       <div class="medium-6 columns">
-        <p>&copy; <translate>COPYRIGHT</translate></p>
+        <p>&copy; <translate>COPYRIGHT</translate> 2015</p>
       </div>
     </div>
   </div>
@@ -25,7 +25,7 @@
 <div class="row">
   <div ng-if="user.isLoggedIn">
     <logout-button></logout-button>
-    <translate>LOGGED_IN_AS</translate> {{user.name }}({{user.email}})
+    <translate>LOGGED_IN_AS</translate> {{user.name }} ({{user.email}})
   </div>
   <login-google-button ng-if="!user.isLoggedIn"></login-google-button>
 </div>
