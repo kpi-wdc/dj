@@ -7,42 +7,42 @@
     <a href="/app/{{app.name}}/"
        class="button tiny success column small-2"
        translate>
-      VIEW
+      WIDGET.APP-LIST.VIEW
     </a>
     <input type="button" class="button tiny column small-2"
            ng-disabled="!isOwner(app) && !isCollaborator(app)"
-           translate translate-attr-value="RENAME"
+           translate translate-attr-value="WIDGET.APP-LIST.RENAME"
            ng-click="renameApp(app.id)">
     <a type="button" class="button tiny column small-2" style="background-color: #cdab42"
        target="_blank"
        href="/api/app/export/{{app.id}}"
-       translate>EXPORT</a>
+       translate>WIDGET.APP-LIST.EXPORT</a>
     <input type="button" class="button alert tiny column small-2"
            ng-disabled="!isOwner(app) && !isCollaborator(app)"
-           translate translate-attr-value="DELETE"
+           translate translate-attr-value="WIDGET.APP-LIST.DELETE"
            ng-click="deleteApp(app.id, app.name)">
   </div>
   <div ng-if="user.isLoggedIn">
     <form ng-submit="createApp()">
-      <label><translate>ADD_NEW_APP</translate>
+      <label><translate>WIDGET.APP-LIST.ADD_NEW_APP</translate>
         <input
-          placeholder="{{'APP_NAME' | translate }}" name="appName"
+          placeholder="{{'WIDGET.APP-LIST.APP_NAME' | translate }}" name="appName"
           ng-model="model.newAppName" autocomplete="off">
       </label><br>
       <input type="submit"
-             translate translate-attr-value="SUBMIT"
+             translate translate-attr-value="WIDGET.APP-LIST.SUBMIT"
              class="button success tiny"
              disabled ng-disabled="!model.newAppName">
     </form>
     <form>
-      <label><translate>IMPORT_APP</translate>
+      <label><translate>WIDGET.APP-LIST.IMPORT_APP</translate>
         <input type="file" name="file"
                onchange="angular.element(this).scope().setImportFile(this.files[0])"
                required>
       </label>
       <input type="submit"
              translate
-             translate-attr-value="TO_IMPORT"
+             translate-attr-value="WIDGET.APP-LIST.TO_IMPORT"
              class="button success tiny"
              ng-disabled="!importFile"
              ng-click="importApp()">

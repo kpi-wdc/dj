@@ -49,12 +49,10 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
       this.apps.push(app);
 
       $http.get(`/api/app/create/${app.name}`)
-        .success(function (data) {
-          app.id = data.id;
-        })
+        .success(data => app.id = data.id)
         .error((data, error) => {
           this.restoreApps();
-          alert.error($translate.instant('ERROR_CREATING_APP', {data, error}));
+          alert.error($translate.instant('WIDGET.APP-LIST.ERROR_CREATING_APP', {data, error}));
         });
     },
 
@@ -81,29 +79,29 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
         this.apps.push(app);
       }).error((data, status) => {
         if (status === 415) {
-          alert.error($translate.instant('CANNOT_PARSE_DATA_AS_VALID_JSON', {data}));
+          alert.error($translate.instant('WIDGET.APP-LIST.CANNOT_PARSE_DATA_AS_VALID_JSON', {data}));
         } else {
-          alert.error($translate.instant('ERROR_IMPORTING_APP', {status}));
+          alert.error($translate.instant('WIDGET.APP-LIST.ERROR_IMPORTING_APP', {status}));
         }
       });
     },
 
     renameApp(appId) {
-      prompt('New name:').then((newAppName) => {
+      prompt(`${$translate.instant('WIDGET.APP-LIST.NEW_NAME')}:`).then(newAppName => {
         this.saveApps();
         this.apps[this.apps.findIndex(app => appId === app.id)].name = newAppName;
         $http.get(`/api/app/rename/${appId}/${newAppName}/`)
           .error((data, error) => {
             this.restoreApps();
-            alert.error($translate.instant('ERROR_RENAMING_APP', {error, data}));
+            alert.error($translate.instant('WIDGET.APP-LIST.ERROR_RENAMING_APP', {error, data}));
           });
       });
     },
 
     deleteApp(appId, appName) {
-      prompt($translate.instant('TYPE_APP_NAME_TO_CONFIRM_DELETION')).then((confirmName) => {
+      prompt($translate.instant('WIDGET.APP-LIST.TYPE_APP_NAME_TO_CONFIRM_DELETION')).then(confirmName => {
         if (confirmName !== appName) {
-          alert.error($translate.instant('WRONG_NAME_APP_NOT_DELETED'));
+          alert.error($translate.instant('WIDGET.APP-LIST.WRONG_NAME_APP_NOT_DELETED'));
           return;
         }
 
@@ -111,7 +109,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
         this.apps.splice(this.apps.findIndex(app => appId === app.id), 1);
         $http.get(`/api/app/destroy/${appId}`).error((data, error) => {
           this.restoreApps();
-          alert.error($translate.instant('ERROR_DELETING_APP'));
+          alert.error($translate.instant('WIDGET.APP-LIST.ERROR_DELETING_APP'));
         });
       });
     }
