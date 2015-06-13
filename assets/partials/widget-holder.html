@@ -20,12 +20,12 @@
   <div ng-include="widgetTemplateUrl(widget.type)"
        class="widget-contents"
        ng-class="{'widget-design-mode': globalConfig.designMode}">
-    <span translate>LOADING_WIDGET_DOTS</span>
+    <translate>LOADING_WIDGET_DOTS</translate>
   </div>
 </div>
 <div ng-show="globalConfig.designMode" class="text-center">
   <button class="button radius small" ng-click="addNewWidgetToHolder(holder)">
     <i class="fi-plus black"></i>
-    <span translate>ADD_NEW_WIDGET</span>
+    <translate>ADD_NEW_WIDGET</translate>
   </button>
 </div>

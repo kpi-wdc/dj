@@ -2,7 +2,7 @@
 <div class="row">
   <div class="small-3 large-4 columns">
     <label ng-class="titleErr.class">
-      <span translate>SHORT_TITLE</span>
+      <translate>SHORT_TITLE</translate>
       <span ng-if="titleErr.message"
             translate translate-value-msg="{{titleErr.message}}">
         ERROR_MESSAGE_WITH_TEXT
@@ -12,7 +12,7 @@
              translate translate-attr-placeholder="UNIQUE_PAGE_TITLE">
     </label>
     <label ng-class="hrefErr.class">
-      <span translate>UNIQUE_LINK_LEAVE_EMPTY_FOR_HOME_PAGE</span>
+      <translate>UNIQUE_LINK_LEAVE_EMPTY_FOR_HOME_PAGE</translate>
       <span ng-if="hrefErr.message"
             translate translate-value-msg="{{hrefErr.message}}">
         ERROR_MESSAGE_WITH_TEXT
@@ -24,7 +24,7 @@
   </div>
   <div class="addPage small-6 large-40 columns">
     <label>
-      <span translate>TEMPLATE</span>
+      <translate>TEMPLATE</translate>
       <input ng-model="settings.filterCriteria"
              translate
              translate-attr-placeholder="SEARCH_FOR_TEMPLATE_DOTS">

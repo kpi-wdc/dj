@@ -17,7 +17,7 @@
     <% if (!user)  {%>
     <a href="/auth/google" class="button tiny" translate>LOGIN_WITH_GOOGLE</a>
     <% } else { %>
-    Logged in as <%=user.name %>(<%=user.email%>)<br>
+    <translate>LOGGED_IN_AS</translate> <%=user.name %>(<%=user.email%>)<br>
     <a href="/logout" class="button alert tiny" translate>LOG_OUT</a>
     <% } %>
   </div>
@@ -50,7 +50,7 @@
   <% if (user) { %>
   <fieldset>
     <form ng-submit="createApp()">
-      <label><span translate>ADD_NEW_APP</span>
+      <label><translate>ADD_NEW_APP</translate>
         <input
           placeholder="{{'APP_NAME' | translate }}" name="appName"
           ng-model="model.newAppName" autocomplete="off">
@@ -61,7 +61,7 @@
              disabled ng-disabled="!model.newAppName">
     </form>
     <form>
-      <label><span translate>IMPORT_APP</span>
+      <label><translate>IMPORT_APP</translate>
         <input type="file" name="file"
                onchange="angular.element(this).scope().setImportFile(this.files[0])"
                required>
