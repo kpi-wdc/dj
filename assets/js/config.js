@@ -5,6 +5,7 @@ System.config({
     "app-list": "js/app-list.js",
     "info": "js/info.js",
     "i18n": "js/i18n.js",
+    "modal-controllers": "js/modal-controllers.js",
     "widget-api": "js/widget-api.js",
     "skin-directives": "js/skin-directives.js",
     "template-cached-pages": "js/templates.js",
