@@ -99,47 +99,51 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
       $injector.get('$window').location.href = $location.url();
     });
 
+  const pageConfig = ($q, alert, app, widgetLoader) => {
+    return $q((resolve, reject) => {
+      const pageConfig = app.pageConfig();
+
+      if (!pageConfig || !pageConfig.holders) {
+        resolve(pageConfig);
+        return;
+      }
+
+      const widgetTypes = [];
+      for (let holderName in pageConfig.holders) {
+        if (pageConfig.holders.hasOwnProperty(holderName)) {
+          for (let widget of pageConfig.holders[holderName].widgets) {
+            widgetTypes.push(widget.type);
+            app.updateEventsOnNameChange(widget);
+          }
+        }
+      }
+      widgetLoader.load(widgetTypes).then(() => {
+        resolve(pageConfig);
+      }, (err) => {
+        alert.error(`Error loading widget controllers. <br><br> ${err}`);
+        reject(err);
+      });
+    });
+  };
+
+  const templateProvider = ($http, $templateCache, appUrls, app) => {
+    const pageConfig = app.pageConfig();
+    if (!pageConfig || !pageConfig.template) {
+      return "Page not found!";
+    }
+
+    const url = appUrls.templateHTML(pageConfig.template);
+    return $http.get(url, {cache: $templateCache})
+      .then(result => result.data);
+  }
+
   $stateProvider
     .state('page', {
       url: `/app/${appName}/:href`,
       resolve: {
-        pageConfig($q, alert, app, widgetLoader) {
-          return $q((resolve, reject) => {
-            const pageConfig = app.pageConfig();
-
-            if (!pageConfig || !pageConfig.holders) {
-              resolve(pageConfig);
-              return;
-            }
-
-            const widgetTypes = [];
-            for (let holderName in pageConfig.holders) {
-              if (pageConfig.holders.hasOwnProperty(holderName)) {
-                for (let widget of pageConfig.holders[holderName].widgets) {
-                  widgetTypes.push(widget.type);
-                  app.updateEventsOnNameChange(widget);
-                }
-              }
-            }
-            widgetLoader.load(widgetTypes).then(() => {
-              resolve(pageConfig);
-            }, (err) => {
-              alert.error(`Error loading widget controllers. <br><br> ${err}`);
-              reject(err);
-            });
-          });
-        }
+        pageConfig
       },
-      templateProvider($http, $templateCache, appUrls, app) {
-        const pageConfig = app.pageConfig();
-        if (!pageConfig || !pageConfig.template) {
-          return "Page not found!";
-        }
-
-        const url = appUrls.templateHTML(pageConfig.template);
-        return $http.get(url, {cache: $templateCache})
-          .then((result) => result.data);
-      },
+      templateProvider,
       controller: 'PageController'
     });
 });
@@ -286,7 +290,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
 
     onStateChangeStart(evt, toState, toParams) {
       if (toState.name === 'page') {
-        let pageIndex = this.pageIndexByHref(toParams.href);
+        const pageIndex = this.pageIndexByHref(toParams.href);
         pageConf = config.pages[pageIndex];
         this.currentPageIndex = pageIndex;
       } else {
@@ -385,7 +389,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
     },
 
     cloneWidget(holder, widget){
-      let newWidget = angular.copy(widget);
+      const newWidget = angular.copy(widget);
       newWidget.instanceName = Math.random().toString(36).substring(2);
       holder.widgets.push(newWidget);
       app.wasModified = true;
@@ -436,12 +440,12 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   });
 
   $scope.$watch('globalConfig.designMode', () => {
-    let cnf = $scope.globalConfig;
+    const cnf = $scope.globalConfig;
     cnf.debugMode = cnf.debugMode && !cnf.designMode;
   });
 
   $window.onbeforeunload = (evt) => {
-    let message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING')
+    const message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING')
     if (app.wasModified) {
       if (typeof evt === "undefined") {
         evt = $window.event;
