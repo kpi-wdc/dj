@@ -20,6 +20,7 @@ System.config({
     "angular-translate-storage-cookie": "components/angular-translate-storage-cookie/angular-translate-storage-cookie.js",
     "angular-translate-storage-local": "components/angular-translate-storage-local/angular-translate-storage-local.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
+    "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
     "angular-foundation": "components/angular-foundation/mm-foundation-tpls.js",
@@ -98,6 +99,11 @@ System.config({
       ]
     },
     "angular-ui-router": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-ui-tree": {
       "deps": [
         "angular"
       ]
