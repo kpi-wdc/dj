@@ -23,7 +23,7 @@ import 'widget-api';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'ui.tree',
-  'templates',
+  'app.templates',
   'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals']);
 

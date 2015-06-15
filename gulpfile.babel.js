@@ -128,12 +128,16 @@ gulp.task('build-less', () =>
 );
 
 gulp.task('build-template-cache', () =>
-  gulp.src(['assets/**/*/*.html', 'assets/**/*/*.html'])
-    .pipe(plugins.if(minifyCode, plugins.minifyHtml({empty: true})))
+  gulp.src('assets/**/*.html')
+    .pipe(plugins.if(minifyCode, plugins.minifyHtml({
+      empty: true,
+      loose: true
+    })))
     .on('error', handleError)
     .pipe(gulp.dest(buildPublicDir))
     .pipe(plugins.angularTemplatecache('templates.js', {
       standalone: true,
+      module: 'app.templates',
       moduleSystem: 'RequireJS'
     }))
     .pipe(gulp.dest(`${buildPublicDir}/js`))
