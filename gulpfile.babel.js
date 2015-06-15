@@ -217,7 +217,7 @@ gulp.task('build-translations', (done) => {
         .pipe(plugins.plumber())
         .pipe(plugins.modify({
           fileModifier(file, contents) {
-            const widgetName = file.history[file.history.length - 1].substr(file.base.length).split('/')[0];
+            const widgetName = file.history[file.history.length - 1].substr(file.base.length).split(path.sep)[0];
             return JSON.stringify({
               'WIDGET': {
                 [widgetName.toUpperCase()]: JSON.parse(contents)
