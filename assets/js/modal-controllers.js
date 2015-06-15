@@ -33,7 +33,7 @@ modals.controller('WidgetModalSettingsController', function ($scope, $modalInsta
       // this is probably related to touch vs mouse behaviour and underlying json-editor implementation.
       $timeout(() => {
         $modalInstance.close(angular.extend(data, $scope.basicProperties));
-        app.wasModified = true;
+        app.markModified(true);
       }, 100);
     },
 

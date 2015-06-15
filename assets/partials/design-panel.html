@@ -2,8 +2,11 @@
 <button class="button tiny radius" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
         id="submitChangesToServerBtn"
         disabled
-        ng-disabled="app.sendingToServer || !app.wasModified" translate>
-  SUBMIT_CHANGES_BTN_TEXT
+        style="width: 12em"
+        ng-disabled="app.sendingToServer || !app.wasModified">
+  <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
+  <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
+  <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
 </button>
 <button class="button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn">
   <i class="fi-lock"></i> <translate>SHARE</translate>

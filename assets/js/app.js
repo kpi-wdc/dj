@@ -193,6 +193,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
   angular.extend(this, {
     sendingToServer: false,
     wasModified: false,
+    wasSavedEver: false,
     currentPageIndex: 0,
 
     isHomePageOpened() {
@@ -219,20 +220,25 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       return pageConf;
     },
 
+    markModified() {
+      this.wasModified = true;
+    },
+
     deletePage(index) {
       if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
         config.pages.splice(index, 1);
-        this.wasModified = true;
+        this.markModified(true);
       }
       $state.go('page', {href: ''});
     },
 
     submitToServer(callback) {
-      this.wasModified = false;
       this.sendingToServer = true;
       return $http.put(appUrls.appConfig, config)
         .then(() => {
+          this.wasSavedEver = true;
           this.sendingToServer = false;
+          this.wasModified = false;
 
           if (config.name !== appName) {
             fullReload(appUrls.app(config.name, $stateParams.href));
@@ -280,7 +286,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
             return templateTypesPromise;
           }
         }
-      }).result.then( () => this.wasModified = true );
+      }).result.then( () => this.markModified(true) );
     },
 
     openShareSettings() {
@@ -291,7 +297,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         backdrop: 'static'
       }).result.then((collaborations) => {
         config.collaborations = collaborations;
-          this.wasModified = true;
+          this.markModified(true);
       });
     },
 
@@ -302,7 +308,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         backdrop: 'static'
       }).result.then((newSettings) => {
         angular.extend(config, newSettings);
-        this.wasModified = true;
+        this.markModified(true);
       });
     },
 
@@ -351,7 +357,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
       const removedWidget = holder.widgets.splice(index, 1)[0];
       const user = new APIUser();
       user.tryInvoke(removedWidget.instanceName, APIProvider.REMOVAL_SLOT);
-      app.wasModified = true;
+      app.markModified(true);
     },
 
     openWidgetConfigurationDialog(widget) {
@@ -383,7 +389,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
           angular.copy(newWidgetConfig, widget);
           const user = new APIUser();
           user.invokeAll(APIProvider.RECONFIG_SLOT);
-          app.wasModified = true;
+          app.markModified(true);
         });
     },
 
@@ -410,7 +416,7 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
       const newWidget = angular.copy(widget);
       newWidget.instanceName = Math.random().toString(36).substring(2);
       holder.widgets.push(newWidget);
-      app.wasModified = true;
+      app.markModified(true);
     }
   });
 });

@@ -51,6 +51,8 @@
   "PEOPLE": "People",
   "RENAME": "Rename",
   "SAVE": "Save",
+  "SAVED": "Saved",
+  "SAVING_DOTS": "Saving...",
   "SEARCH_FOR_DOTS": "Search for...",
   "SEARCH_FOR_TEMPLATE_DOTS": "Search for template...",
   "SETTINGS_FOR_WIDGET_OF_TYPE": "Settings for widget \"{{instanceName}}\" of type {{type}}",
