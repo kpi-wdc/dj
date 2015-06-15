@@ -429,7 +429,8 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 });
 
 app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
-                                           alert, app, config, user, appUrls, globalConfig) {
+                                           alert, app, config, user, appUrls, globalConfig,
+                                           fullReload) {
   angular.extend($scope, {
     globalConfig,
     app,
@@ -442,12 +443,12 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
 
     logIn() {
       $cookies.put('redirectToUrl', $location.url());
-      $location.url(appUrls.googleAuth);
+      fullReload(appUrls.googleAuth);
     },
 
     logOut() {
       $cookies.put('redirectToUrl', $location.url());
-      $location.url(appUrls.logout);
+      fullReload(appUrls.logout);
     },
 
     alertAppConfigSubmissionFailed(data) {
