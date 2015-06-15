@@ -464,6 +464,12 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     }
   });
 
+  $scope.$watchCollection('config.pages', (newPages, oldPages) => {
+    if (oldPages !== newPages) {
+      app.markModified();
+    }
+  });
+
   $scope.$watch('globalConfig.designMode', () => {
     const cnf = $scope.globalConfig;
     cnf.debugMode = cnf.debugMode && !cnf.designMode;
