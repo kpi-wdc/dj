@@ -441,12 +441,12 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     },
 
     logIn() {
-      $cookies.redirectToUrl = $location.url();
+      $cookies.put('redirectToUrl', $location.url());
       $location.url(appUrls.googleAuth);
     },
 
     logOut() {
-      $cookies.redirectToUrl = $location.url();
+      $cookies.put('redirectToUrl', $location.url());
       $location.url(appUrls.logout);
     },
 
