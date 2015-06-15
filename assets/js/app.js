@@ -69,6 +69,11 @@ app.factory('appUrls', function (appId) {
 
 app.constant('homePageAppName', 'app-list');
 
+app.constant('globalConfig', {
+  designMode: false,
+  debugMode: false
+});
+
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
                      $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
                      appName, homePageAppName) {
@@ -424,9 +429,9 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 });
 
 app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
-                                           alert, app, config, user, appUrls) {
+                                           alert, app, config, user, appUrls, globalConfig) {
   angular.extend($scope, {
-    globalConfig: {},
+    globalConfig,
     app,
     config,
     user,
