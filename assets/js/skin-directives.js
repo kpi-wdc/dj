@@ -18,14 +18,18 @@ skin.directive('applicationView', () => {
   }
 });
 
-skin.directive('pageListNav', (appName) => {
+skin.directive('pageListNav', (app, appName, config, globalConfig) => {
   // TODO: synchronize css styles on active link after clicking
   return {
     restrict: 'E',
     templateUrl: '/partials/page-list-nav.html',
-    require: '^MainController',
     controller($scope) {
-      $scope.appName = appName;
+      angular.extend($scope, {
+        appName,
+        config,
+        globalConfig,
+        app
+      });
     }
   }
 });

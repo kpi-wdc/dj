@@ -225,11 +225,15 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
     deletePage(index) {
+      const curPageHref = $stateParams.href;
+      const deletedPageHref = config.pages[index].href;
       if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
         config.pages.splice(index, 1);
         this.markModified(true);
       }
-      $state.go('page', {href: ''});
+      if (curPageHref === deletedPageHref) {
+        $state.go('page', {href: ''});
+      }
     },
 
     submitToServer(callback) {
