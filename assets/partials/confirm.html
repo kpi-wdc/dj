@@ -1,0 +1,9 @@
+<form ng-submit="form.close()">
+  <div ng-bind="form.text"></div>
+  <br>
+  <button type="submit" class="button small"
+          translate ng-click="form.ok()">OK</button>
+  <button class="button alert small" ng-click="form.dismiss()"
+          translate>CANCEL</button>
+  <a class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>
+</form>

@@ -20,6 +20,16 @@ info.service('alert', function ($modal, $log) {
   };
 });
 
+info.factory('confirm', function ($modal) {
+  return text => $modal.open({
+    templateUrl: '/partials/confirm.html',
+    controller: 'ConfirmController',
+    resolve: {
+      text: () => text
+    }
+  }).result;
+});
+
 info.factory('prompt', function ($modal) {
   return (text, value) => {
     return $modal.open({
@@ -46,6 +56,19 @@ info.controller('PromptController', function ($scope, $modalInstance, text, valu
     },
     dismiss() {
       $scope.form.dismissed = true;
+      $modalInstance.dismiss();
+    }
+  };
+});
+
+info.controller('ConfirmController', function ($scope, $modalInstance, text) {
+  $scope.form = {
+    text,
+
+    ok() {
+        $modalInstance.close(true);
+    },
+    dismiss() {
       $modalInstance.dismiss();
     }
   };
