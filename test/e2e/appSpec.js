@@ -36,22 +36,6 @@ describe("Webapp", () => {
     expect(browser.getLocationAbsUrl()).toBe('/app/test/dev-page');
   });
 
-  describe("delete button", () => {
-    it('should have non-clickable delete button on home page', () => {
-      expect($('#deletePageBtn').isEnabled()).toBeFalsy();
-    });
-
-    it('should have non-clickable delete button on 404 page', () => {
-      browser.setLocation('/app/test/404');
-      expect($('#deletePageBtn').isEnabled()).toBeFalsy();
-    });
-
-    it('should have clickable delete button on other pages', () => {
-      browser.setLocation('/app/test/dev-page');
-      expect($('#deletePageBtn').isEnabled()).toBeTruthy();
-    });
-  });
-
   describe('widget events', () => {
     it('should react to events', () => {
       browser.setLocation('/app/test/events-page');
