@@ -186,7 +186,7 @@ app.factory('config', function (initialConfig, $log) {
 });
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
-                             appUrls, appName, fullReload) {
+                             $translate, appUrls, appName, fullReload, confirm) {
 
   let pageConf;
 
@@ -234,6 +234,12 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       if (curPageHref === deletedPageHref) {
         $state.go('page', {href: ''});
       }
+    },
+
+    deletePageWithConfirmation(index) {
+      $translate('ARE_YOU_SURE_DELETE_PAGE')
+        .then(confirm)
+        .then((/*ok*/) => this.deletePage(index))
     },
 
     submitToServer(callback) {

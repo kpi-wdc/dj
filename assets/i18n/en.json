@@ -13,6 +13,7 @@
   "APP_NAME_SHOWN_IN_URL": "Application name (shown in URL)",
   "APP_SETTINGS": "App settings",
   "APP_TITLE": "App title",
+  "ARE_YOU_SURE_DELETE_PAGE": "Are you sure you want to delete this page?",
   "CANCEL": "Cancel",
   "CAN_EDIT": "Can edit",
   "CANNOT_ADD_WIDGET": "Cannot add widget: {{error}}",
