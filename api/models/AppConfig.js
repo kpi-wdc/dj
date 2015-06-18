@@ -11,7 +11,7 @@ module.exports = {
 
   attributes: {
     name: {
-      type: 'alphanumericdashed',
+      type: 'string',
       required: true,
       unique: true,
       notEmpty: true
