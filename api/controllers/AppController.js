@@ -117,6 +117,7 @@ module.exports = {
           try {
             var app = JSON.parse(body);
             app.owner = req.user.id;
+            app.skinName = app.skinName || 'default';
             AppConfig.create(app).then(function () {
               res.ok({
                 name: app.name
