@@ -1,5 +1,6 @@
 <ul class="side-nav language-nav">
-  <li ng-click="selectLanguage('en')">English</li>
-  <li ng-click="selectLanguage('uk')">Українська</li>
-  <li ng-click="selectLanguage('ru')">Русский</li>
+  <li ng-repeat="lang in languages" ng-click="selectLanguage(lang.key)">
+    <img ng-if="showFlags" ng-src="/img/{{lang.key}}.png" class="lang-flag">
+    {{lang.title}}
+  </li>
 </ul>

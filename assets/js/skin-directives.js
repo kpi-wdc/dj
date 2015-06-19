@@ -38,11 +38,19 @@ skin.directive('languageSelectorNav', ($translate) => {
   return {
     restrict: 'E',
     templateUrl: '/partials/language-selector-nav.html',
+    scope: {
+      "showFlags": "="
+    },
     controller($scope) {
       angular.extend($scope, {
         selectLanguage(langKey) {
           $translate.use(langKey);
-        }
+        },
+        languages: [
+          {key: "en", title: "English"},
+          {key: "uk", title: "Українська"},
+          {key: "ru", title: "Русский"}
+        ]
       });
     }
   }
