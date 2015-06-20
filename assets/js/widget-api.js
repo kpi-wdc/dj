@@ -172,11 +172,8 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
      * @param slotName
      */
     static wireSignalWithSlot(emitterScope, signalName, providerScope, slotName) {
-      if (!emitterScope) {
-        $log.error(`wireSignalWithSlot called with emitterScope = undefined`)
-      }
-      if (!providerScope) {
-        $log.error(`wireSignalWithSlot called with emitterScope = undefined`)
+      if (!emitterScope || !providerScope) {
+        return;
       }
       const wire = eventWires.get(emitterScope) || [];
       wire.push({signalName, providerScope, slotName});
