@@ -8,12 +8,9 @@
   <ul ui-tree-nodes="" ng-model="config.pages" class="side-nav">
     <li ng-repeat="page in config.pages" ng-if="page.shortTitle" ui-tree-node>
       <a href="/app/{{appName}}/{{page.href}}">
-        <span ui-tree-handle style="color:green">
-          &#9650;
-        </span>
-        <span style="color: red" ng-click="app.deletePageWithConfirmation($index)" onclick="return false;">
-          [X]
-        </span>
+        <i ui-tree-handle style="color:#10521a" class="fi-anchor"></i>
+        <i style="color: #d64c20" class="fi-trash" ng-click="app.deletePageWithConfirmation($index)"
+           onclick="return false;"></i>
         {{page.shortTitle}}
       </a>
     </li>
