@@ -118,9 +118,10 @@ module.exports = {
             var app = JSON.parse(body);
             app.owner = req.user.id;
             app.skinName = app.skinName || 'default';
-            AppConfig.create(app).then(function () {
+            AppConfig.create(app).then(function (created) {
               res.ok({
-                name: app.name
+                name: app.name,
+                id: created.id
               });
             }).catch(function (err) {
               sails.log.warn('AppController.export error: ' + err);
