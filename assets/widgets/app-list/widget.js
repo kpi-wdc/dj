@@ -11,9 +11,8 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
   });
 
   angular.extend($scope, {
-    user,
-    apps: undefined, // appList
-    oldApps: undefined, //appList,
+    apps: undefined,
+    oldApps: undefined,
     isOwner(app) {
       if (!user.id) {
         return false;

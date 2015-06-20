@@ -2,7 +2,7 @@ import angular from 'angular';
 
 angular.module('app.widgets.summator', [])
   .controller('SummatorWidgetController', function ($scope, EventEmitter, APIProvider) {
-    var eventEmitter = new EventEmitter($scope);
+    const eventEmitter = new EventEmitter($scope);
     // For direct slot invocation
     // inject APIUser and use the following code
     // var apiUser = new APIUser($scope);

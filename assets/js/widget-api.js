@@ -13,6 +13,7 @@ const widgetApi = angular.module('app.widgetApi', []);
 /**
  * @ngdoc object
  * @name eventWires
+ * @private
  * @description Array of event-to-slot wires
  * @returns {Object.<string, object>}
  */
@@ -21,6 +22,7 @@ widgetApi.constant('eventWires', {}); // emitterName -> [{signalName, providerNa
 /**
  * @ngdoc object
  * @name widgetSlots
+ * @private
  * @description Mapping from providerName to it's slot and slot's name
  * @returns {Object.<string, object>}
  */
@@ -29,6 +31,7 @@ widgetApi.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
 /**
  * @ngdoc object
  * @name instanceNameToScope
+ * @private
  * @description Mapping from instance name to it's scope
  * @returns {Object.<string, object>}
  */
@@ -301,7 +304,7 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
      * @private
      * @param emitterName
      * @param signalName
-     * @param provideName
+     * @param providerName
      * @param slotName
      */
     static wireSignalWithSlot(emitterName, signalName, providerName, slotName) {
