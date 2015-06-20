@@ -199,6 +199,7 @@ gulp.task('build-widgets-js', () =>
     .pipe(plugins.cached('build-widgets-js'))
     .pipe(plugins.changed(`${buildPublicDir}/widgets`))
     .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.plumber())
     .pipe(plugins.babel())
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
