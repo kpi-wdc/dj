@@ -37,7 +37,16 @@ widgetApi.constant('widgetSlots', {}); // providerName -> [{slotName, fn}]
  */
 widgetApi.constant('instanceNameToScope', {}); // name -> scope
 
-widgetApi.factory('APIProvider', function (widgetSlots, instanceNameToScope) {
+/**
+ * @ngdoc object
+ * @name autoWiredSlotsAndEvents
+ * @private
+ * @description Array of signa/slot/providerNames that
+ * allows widget event auto-configuring api.
+ */
+widgetApi.constant('autoWiredSlotsAndEvents', []); // index -> {slotName, signalName, providerScope}
+
+widgetApi.factory('APIProvider', function (widgetSlots, instanceNameToScope, autoWiredSlotsAndEvents) {
   /**
    * @class APIProvider
    * @description Injectable class
@@ -104,6 +113,21 @@ widgetApi.factory('APIProvider', function (widgetSlots, instanceNameToScope) {
      */
     reconfig(slotFn) {
       this.provide(APIProvider.RECONFIG_SLOT, slotFn);
+      return this;
+    }
+
+    /**
+     * @description Provides possibility auto-wiring events with widget's slots.
+     * @param {string} slotName Name of this widget's slot
+     * @param {string} signalName Name of signal name; when this signal is emitted; slot `slotName` is called
+     * @returns {APIProvider}
+     */
+    autoWireSlotWithEvent(slotName, signalName) {
+      autoWiredSlotsAndEvents.push({
+        slotName,
+        signalName,
+        providerName: this.providerName
+      });
       return this;
     }
 
@@ -243,7 +267,9 @@ widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
   return APIUser;
 });
 
-widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $timeout, $rootScope, app) {
+widgetApi.factory('EventEmitter', function ($log, $timeout, $rootScope,
+                                            eventWires, widgetSlots, autoWiredSlotsAndEvents,
+                                            app) {
   /**
    * @class EventEmitter
    * @description Provides a class which allows to emit events which, in row, can invoke slots on other widgets
@@ -269,12 +295,33 @@ widgetApi.factory('EventEmitter', function (eventWires, widgetSlots, $log, $time
     /**
      * Emit event
      * This automatically calls slots on all subscribed providers
+     * Providers (widgets) can subscribe either using APIProvider.prototype.autoWireSlotWithEvent
+     * or by user event wiring system.
      * @param signalName Name of the signal
      */
     emit(signalName, ...args) {
       $rootScope.$evalAsync(() => {
+        for (let wire of autoWiredSlotsAndEvents) {
+          if (wire.signalName === signalName) {
+
+            const slots = widgetSlots[wire.providerName];
+            if (!slots) {
+              continue;
+            }
+
+            for (let slot of slots) {
+              if (!slot || slot.slotName !== wire.slotName) continue;
+              slot.fn.apply(undefined, [{
+                emitterName: this.emitterName(),
+                signalName: signalName
+              }].concat(args));
+            }
+          }
+        }
+
         if (!this.emitterName() || typeof this.emitterName() !== 'string') {
-          $log.info('Not emitting event because widget\'s instanceName is not set');
+          $log.info(`Not emitting event through user event wiring system
+            because widget's instanceName is not set`);
         }
         const wires = eventWires[this.emitterName()];
         if (!wires) {
