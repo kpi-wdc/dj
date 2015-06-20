@@ -1,10 +1,10 @@
-<ul class="side-nav" ng-if="!globalConfig.designMode">
+<ul class="side-nav view-mode-only">
   <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
     <a href="/app/{{appName}}/{{page.href}}" ng-bind="page.shortTitle"></a>
   </li>
 </ul>
 
-<div ui-tree ng-if="globalConfig.designMode">
+<div ui-tree class="design-mode-only">
   <ul ui-tree-nodes="" ng-model="config.pages" class="side-nav">
     <li ng-repeat="page in config.pages" ng-if="page.shortTitle" ui-tree-node>
       <a href="/app/{{appName}}/{{page.href}}">

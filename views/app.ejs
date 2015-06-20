@@ -17,7 +17,9 @@
   <% /* The following should be inside <head> tag! */ %>
   <% include ga.ejs %>
 </head>
-<body ng-controller="MainController" ng-class="{'debug-enabled': globalConfig.debugMode}">
+<body ng-controller="MainController"
+      ng-class="{'debug-enabled': globalConfig.debugMode,
+                 'design-mode-enabled': globalConfig.designMode}">
 <ng-include src="skin.url"></ng-include>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="/js/es6-polyfill.js"></script>
