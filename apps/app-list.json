@@ -20,7 +20,15 @@
             },
             {
               "type": "app-list",
-              "instanceName": "app-list-widget"
+              "instanceName": "app-list"
+            },
+            {
+              "type": "app-creator",
+              "instanceName": "app-creator"
+            },
+            {
+              "type": "app-importer",
+              "instanceName": "app-importer"
             }
           ]
         }

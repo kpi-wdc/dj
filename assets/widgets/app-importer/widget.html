@@ -1,0 +1,18 @@
+<div ng-controller="AppImporterController">
+  <form ng-if="user.isLoggedIn">
+    <label><translate>WIDGET.APP-IMPORTER.IMPORT_APP</translate>
+      <input type="file" name="file"
+             onchange="angular.element(this).scope().setImportFile(this.files[0])"
+             required>
+    </label>
+    <input type="submit"
+           translate
+           translate-attr-value="WIDGET.APP-IMPORTER.TO_IMPORT"
+           class="button success tiny"
+           ng-disabled="!importFile"
+           ng-click="importApp()">
+  </form>
+  <div ng-if="!user.isLoggedIn" translate>
+    WIDGET.APP-IMPORTER.YOU_NEED_TO_LOGIN_TO_IMPORT_APPS
+  </div>
+</div>

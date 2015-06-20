@@ -1,0 +1,8 @@
+{
+  "CANNOT_PARSE_DATA_AS_VALID_JSON": "Cannot parse this data as a valid json configuration file: {{data}}",
+  "DESCRIPTION": "Widget which allows creating new apps",
+  "ERROR_IMPORTING_APP": "Error happened while importing app: {{status}}",
+  "IMPORT_APP": "Import app",
+  "TO_IMPORT": "Import",
+  "YOU_NEED_TO_LOGIN_TO_IMPORT_APPS": "To import apps you need to login first"
+}

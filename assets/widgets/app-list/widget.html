@@ -22,30 +22,4 @@
            translate translate-attr-value="WIDGET.APP-LIST.DELETE"
            ng-click="deleteApp(app.id, app.name)">
   </div>
-  <div ng-if="user.isLoggedIn">
-    <form ng-submit="createApp()">
-      <label><translate>WIDGET.APP-LIST.ADD_NEW_APP</translate>
-        <input
-          placeholder="{{'WIDGET.APP-LIST.APP_NAME' | translate }}" name="appName"
-          ng-model="model.newAppName" autocomplete="off">
-      </label><br>
-      <input type="submit"
-             translate translate-attr-value="WIDGET.APP-LIST.SUBMIT"
-             class="button success tiny"
-             disabled ng-disabled="!model.newAppName">
-    </form>
-    <form>
-      <label><translate>WIDGET.APP-LIST.IMPORT_APP</translate>
-        <input type="file" name="file"
-               onchange="angular.element(this).scope().setImportFile(this.files[0])"
-               required>
-      </label>
-      <input type="submit"
-             translate
-             translate-attr-value="WIDGET.APP-LIST.TO_IMPORT"
-             class="button success tiny"
-             ng-disabled="!importFile"
-             ng-click="importApp()">
-    </form>
-  </div>
 </div>

@@ -1,0 +1,8 @@
+{
+  "ADD_NEW_APP": "Add new app",
+  "APP_NAME": "App name",
+  "DESCRIPTION": "Widget which allows creating new apps",
+  "ERROR_CREATING_APP": "Error while creating the app {{error}}: {{data}}",
+  "SUBMIT": "Submit",
+  "YOU_NEED_TO_LOGIN_TO_CREATE_APPS": "To create apps you need to login first"
+}

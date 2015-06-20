@@ -1,0 +1,16 @@
+<div ng-controller="AppCreatorController">
+  <form ng-submit="createApp()" ng-if="user.isLoggedIn">
+    <label><translate>WIDGET.APP-CREATOR.ADD_NEW_APP</translate>
+      <input
+        placeholder="{{'WIDGET.APP-CREATOR.APP_NAME' | translate }}" name="appName"
+        ng-model="model.newAppName" autocomplete="off">
+    </label><br>
+    <input type="submit"
+           translate translate-attr-value="WIDGET.APP-CREATOR.SUBMIT"
+           class="button success tiny"
+           disabled ng-disabled="!model.newAppName">
+  </form>
+  <div ng-if="!user.isLoggedIn" translate>
+    WIDGET.APP-CREATOR.YOU_NEED_TO_LOGIN_TO_CREATE_APPS
+  </div>
+</div>

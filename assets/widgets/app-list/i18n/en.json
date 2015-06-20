@@ -1,19 +1,13 @@
 {
-  "ADD_NEW_APP": "Add new app",
-  "APP_NAME": "App name",
-  "CANNOT_PARSE_DATA_AS_VALID_JSON": "Cannot parse this data as a valid json configuration file: {{data}}",
   "DELETE": "Delete",
   "DESCRIPTION": "Widget which shows list of applications",
-  "ERROR_CREATING_APP": "Error while creating the app {{error}}: {{data}}",
   "ERROR_DELETING_APP": "Error while deleting the app {{error}}: {{data}}",
-  "ERROR_IMPORTING_APP": "Error happened while importing app: {{status}}",
+  "ERROR_RENAMING_APP": "Error happened while renaming app: {{status}}",
   "EXPORT": "Export",
-  "NEW_NAME": "'New name",
+  "NEW_NAME": "New name",
   "RENAME": "Rename",
   "SUBMIT": "Submit",
   "TYPE_APP_NAME_TO_CONFIRM_DELETION": "Type again name of the app to confirm deletion: ",
-  "IMPORT_APP": "Import app",
-  "TO_IMPORT": "Import",
   "VIEW": "View",
   "WRONG_NAME_APP_NOT_DELETED": "Wrong name, app is not deleted!"
 }
