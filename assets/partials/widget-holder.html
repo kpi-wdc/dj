@@ -1,27 +1,9 @@
 <div ng-repeat="widget in holder.widgets" class="widget">
-  <div ng-show="globalConfig.designMode">
-    <div class="widget-design-panel clearfix">
-      <span class="widget-name left" ng-bind="widget.instanceName"></span>
-      <span class="widget-type label radius left" ng-bind="widget.type"></span>
-      <span class="widget-delete-btn right" ng-click="deleteIthWidgetFromHolder(holder, $index)"
-            title="{{'DELETE_THIS_WIDGET' | translate}}">
-        <i class="glyphicon fi-x"></i>
-      </span>
-      <span class="widget-config-btn right" ng-click="openWidgetConfigurationDialog(widget)"
-            title="{{'OPEN_CONFIG_DIALOG_FOR_THIS_WIDGET' | translate}}">
-        <i class="glyphicon fi-wrench"></i>
-      </span>
-      <span class="widget-clone-btn right" ng-click="cloneWidget(holder, widget)"
-            title="{{ 'CLONE_THIS_WIDGET' | translate }}">
-        <i class="glyphicon fi-page-copy"></i>
-      </span>
-    </div>
-  </div>
-  <div ng-include="widgetTemplateUrl(widget.type)"
-       class="widget-contents"
-       ng-class="{'widget-design-mode': globalConfig.designMode}">
+  <widget type="widget.type" config="widget"
+    on-clone="cloneWidget(holder, widget)"
+    on-delete="deleteIthWidgetFromHolder(holder, $index)">
     <translate>LOADING_WIDGET_DOTS</translate>
-  </div>
+  </widget>
 </div>
 <div ng-show="globalConfig.designMode" class="text-center">
   <button class="button radius small" ng-click="addNewWidgetToHolder(holder)">

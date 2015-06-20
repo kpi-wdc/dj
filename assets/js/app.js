@@ -499,17 +499,13 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   };
 });
 
-app.controller('PageController', function ($scope, pageConfig, widgetManager) {
+app.controller('PageController', function ($scope, pageConfig) {
   angular.extend($scope, {
-    config: pageConfig,
-    deleteIthWidgetFromHolder: widgetManager.deleteIthWidgetFromHolder.bind(widgetManager),
-    openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
-    addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager),
-    cloneWidget: widgetManager.cloneWidget.bind(widgetManager)
+    config: pageConfig
   });
 });
 
-app.directive('widgetHolder', function (appUrls) {
+app.directive('widgetHolder', function (appUrls, widgetManager) {
   return {
     restrict: 'E',
     templateUrl: appUrls.widgetHolderHTML,
@@ -523,7 +519,43 @@ app.directive('widgetHolder', function (appUrls) {
         }
       });
 
-      scope.widgetTemplateUrl = appUrls.widgetHTML;
+      angular.extend(scope, {
+        deleteIthWidgetFromHolder: widgetManager.deleteIthWidgetFromHolder.bind(widgetManager),
+        addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager),
+        cloneWidget: widgetManager.cloneWidget.bind(widgetManager)
+      });
+    }
+  };
+});
+
+app.directive('widget', function (appUrls, globalConfig, widgetManager, user) {
+  return {
+    restrict: 'E',
+    templateUrl: '/partials/widget.html',
+    transclude: true,
+    scope: {
+      type: '=',
+      config: '=',
+      onDelete: '&',
+      onClone: '&'
+    },
+    link(scope, element, attrs) {
+      angular.extend(scope, {
+        globalConfig,
+        user,
+        widget: scope.config, // just an (important) alias
+        widgetTemplateUrl: appUrls.widgetHTML(scope.type),
+
+        openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
+
+        deleteWidget() {
+          scope.onDelete();
+        },
+
+        cloneWidget() {
+          scope.onClone();
+        }
+      })
     }
   };
 });
