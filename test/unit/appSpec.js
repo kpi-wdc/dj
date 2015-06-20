@@ -25,8 +25,8 @@ define(['app', 'angular-mocks'], () => {
     $translateProvider = _$translateProvider_;
 
     $provide.factory('unitTestLanguageLoader', ($q) =>
-      (options) => {
-        let deferred = $q.defer();
+      () => {
+        const deferred = $q.defer();
         deferred.resolve({});
         return deferred.promise;
       }
@@ -40,6 +40,18 @@ define(['app', 'angular-mocks'], () => {
     $httpBackend.whenGET('/widgets/widgets.json')
       .respond(JSON.stringify(noWidgetsJson));
   }));
+
+  describe("Test ES6 polyfill/support is present", () => {
+    it("ES6 Map class is present", () => {
+      const q = new Map();
+      expect(q.size).toBe(0);
+      const fn1 = () => 9;
+      const fn2 = () => 15;
+      q.set(fn1, fn2);
+      expect(q.size).toBe(1);
+      expect(q.get(fn1)()).toBe(15);
+    });
+  });
 
   describe("Testing controllers", () => {
     let MainControllerScope;
@@ -71,33 +83,39 @@ define(['app', 'angular-mocks'], () => {
       let APIProvider;
       let APIUser;
       let EventEmitter;
+      let instanceNameToScope;
       beforeEach(inject((_$rootScope_, _widgetSlots_, _APIProvider_,
-                         _APIUser_, _EventEmitter_) => {
+                         _APIUser_, _EventEmitter_, _instanceNameToScope_) => {
         $rootScope = _$rootScope_;
         widgetSlots = _widgetSlots_;
         APIProvider = _APIProvider_;
         APIUser = _APIUser_;
         EventEmitter = _EventEmitter_;
+        instanceNameToScope = _instanceNameToScope_;
+        expect(instanceNameToScope.size).toBe(0);
         scopeA = $rootScope.$new();
         scopeB = $rootScope.$new();
         scopeC = $rootScope.$new();
         scopeA.widget = {instanceName: "a"};
         scopeB.widget = {instanceName: "b"};
         scopeC.widget = {instanceName: "c"};
+
+        expect(instanceNameToScope.size).toBe(0);
       }));
 
       afterEach(() => {
         scopeA.$destroy();
         scopeB.$destroy();
         scopeC.$destroy();
+        expect(instanceNameToScope.size).toBe(0);
       });
 
       it('should correctly clean-up widgetSlots when scope is destroyed', () => {
         const a = new APIProvider(scopeA);
         a.provide('slot', angular.noop);
-        expect(Object.keys(widgetSlots).length).toEqual(1);
+        expect(widgetSlots.size).toEqual(1);
         scopeA.$destroy();
-        expect(Object.keys(widgetSlots).length).toEqual(0);
+        expect(widgetSlots.size).toEqual(0);
       });
 
       it('slot handlers should be called with correct evt object', () => {
@@ -105,7 +123,7 @@ define(['app', 'angular-mocks'], () => {
         const b = new APIProvider(scopeB);
         const slot = jasmine.createSpy('slot');
         b.provide('slot', slot);
-        EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
+        APIProvider.wireSignalWithSlot(scopeA, 'hello', scopeB, 'slot');
         a.emit('hello');
         $rootScope.$digest();
         expect(slot).toHaveBeenCalledWith({
@@ -119,7 +137,7 @@ define(['app', 'angular-mocks'], () => {
         const b = new APIProvider(scopeB);
         const slot = jasmine.createSpy('slot');
         b.provide('slot', slot);
-        EventEmitter.wireSignalWithSlot('a', 'hello', 'b', 'slot');
+        APIProvider.wireSignalWithSlot(scopeA, 'hello', scopeB, 'slot');
         a.emit('hello', 123);
         $rootScope.$digest();
         expect(slot).toHaveBeenCalledWith({
@@ -133,6 +151,7 @@ define(['app', 'angular-mocks'], () => {
         const b = new APIProvider(scopeB);
         const slot = jasmine.createSpy('slot').and.returnValue(1234);
         b.provide('slot', slot);
+        expect(widgetSlots.get(scopeB)[0]).not.toBeUndefined();
         expect(a.invoke('b', 'slot')).toBe(1234);
         expect(slot).toHaveBeenCalledWith({
           emitterName: 'a',
@@ -165,17 +184,17 @@ define(['app', 'angular-mocks'], () => {
         const aProvider = new APIProvider(scopeA);
         const bUser = new APIUser(scopeB);
         const bProvider = new APIProvider(scopeB);
-        const slotB = jasmine.createSpy('slotB').and.returnValue(1);
-        const slotA = jasmine.createSpy('slotA').and.returnValue(2);
+        const slotA = jasmine.createSpy('slotA').and.returnValue(1);
+        const slotB = jasmine.createSpy('slotB').and.returnValue(2);
         const slotOther = jasmine.createSpy('slotOther').and.returnValue(3);
         bProvider.provide('slot', slotB);
-        expect(aUser.invokeAll('slot'));
+        aUser.invokeAll('slot');
         expect(slotB).toHaveBeenCalledWith({
           emitterName: 'a',
           signalName: undefined
         });
         aProvider.provide('slot', slotA);
-        expect(bUser.invokeAll('slot'));
+        bUser.invokeAll('slot');
         expect(slotA).toHaveBeenCalledWith({
           emitterName: 'b',
           signalName: undefined
@@ -188,10 +207,14 @@ define(['app', 'angular-mocks'], () => {
       });
 
       it('ensure getScopeByName works', () => {
+        expect(instanceNameToScope.size).toBe(0);
         const a = new APIUser(scopeA);
+        expect(instanceNameToScope.size).toBe(0);
         new APIProvider(scopeB);
+        expect(instanceNameToScope.size).toBe(1);
         $rootScope.$digest();
         expect(a.getScopeByInstanceName('b')).toBe(scopeB);
+        expect(APIUser.getScopeByInstanceName('b')).toBe(scopeB);
       });
 
       it('ensure getScopeByName works after renaming', () => {
@@ -202,6 +225,21 @@ define(['app', 'angular-mocks'], () => {
         scopeB.widget.instanceName = 'b2';
         scopeB.$digest();
         expect(a.getScopeByInstanceName('b2')).toBe(scopeB);
+        expect(APIUser.getScopeByInstanceName('b2')).toBe(scopeB);
+      });
+
+      it('ensure autoWireSlotWithEvent works', () => {
+        const a = new EventEmitter(scopeA);
+        const b = new APIProvider(scopeB);
+        $rootScope.$digest();
+        const slotB1 = jasmine.createSpy('slotB1');
+        const slotB2 = jasmine.createSpy('slotB2');
+        b.provide('slot-name', slotB1);
+        b.autoWireSlotWithEvent('slot-name', 'signal-name');
+        a.emit('signal-name', 1234);
+        $rootScope.$digest();
+        expect(slotB1).toHaveBeenCalled();
+        expect(slotB2).not.toHaveBeenCalled();
       });
     });
   });
