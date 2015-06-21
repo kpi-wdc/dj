@@ -1,10 +1,20 @@
 <div ng-controller="AppCreatorController">
-  <form ng-submit="createApp()" ng-if="user.isLoggedIn">
-    <label><translate>WIDGET.APP-CREATOR.ADD_NEW_APP</translate>
-      <input
-        placeholder="{{'WIDGET.APP-CREATOR.APP_NAME' | translate }}" name="appName"
-        ng-model="model.newAppName" autocomplete="off">
-    </label><br>
+  <form ng-submit="createApp()" ng-if="user.isLoggedIn" style="max-width: 30rem">
+    <h3 translate>WIDGET.APP-CREATOR.ADD_NEW_APP</h3>
+    <label>
+      <translate>WIDGET.APP-CREATOR.APP_NAME</translate>
+      <input type="text"
+             class="left"
+             placeholder="{{'WIDGET.APP-CREATOR.APP_NAME' | translate }}"
+             name="appName"
+             ng-model="model.newAppName" autocomplete="off">
+    </label>
+    <label>
+      <translate>WIDGET.APP-CREATOR.CHOOSE_SKIN</translate>
+      <select ng-model="model.skinName">
+        <option ng-repeat="skin in skins" value="{{skin.name}}">{{skin.title}}</option>
+      </select>
+    </label>
     <input type="submit"
            translate translate-attr-value="WIDGET.APP-CREATOR.SUBMIT"
            class="button success tiny"

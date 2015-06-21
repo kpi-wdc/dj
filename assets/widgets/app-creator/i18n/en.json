@@ -1,6 +1,7 @@
 {
   "ADD_NEW_APP": "Add new app",
   "APP_NAME": "App name",
+  "CHOOSE_SKIN": "Choose skin",
   "DESCRIPTION": "Widget which allows creating new apps",
   "ERROR_CREATING_APP": "Error while creating the app {{error}}: {{data}}",
   "SUBMIT": "Submit",

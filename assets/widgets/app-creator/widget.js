@@ -8,13 +8,24 @@ appListWidget.controller('AppCreatorController', function ($scope, $http, $trans
   const evtEmitter = new EventEmitter($scope);
 
   angular.extend($scope, {
+    model: {
+      newAppName: "",
+      skinName: "default"
+    },
+    skins: [
+      {
+        name: "default",
+        title: "Default"
+      }
+    ],
     createApp() {
       const app = {
         name: this.model.newAppName,
+        skin: this.model.skinName,
         owner: user
       };
 
-      $http.get(appUrls.api.createApp(app.name))
+      $http.get(appUrls.api.createApp(app.name, app.skin))
         .success(data => {
           app.id = data.id;
           evtEmitter.emit('new-app-created', app);

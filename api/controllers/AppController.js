@@ -38,6 +38,12 @@ module.exports = {
         newApp.isPublished = true;
         newApp.name = req.params.appName;
         newApp.owner = req.user.id;
+
+        console.log(req.param('skinName'))
+        if (req.param('skinName')) {
+          newApp.skinName = req.param('skinName');
+        }
+
         AppConfig.destringifyPages(newApp);
 
         AppConfig.create(newApp).then(function (created) {

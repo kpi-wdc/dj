@@ -30,7 +30,8 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.la
 app.factory('appUrls', function (appId) {
   return {
     api: {
-      createApp: appName => `/api/app/create/${appName}`,
+      createApp: (appName, skinName = 'default') =>
+        `/api/app/create/${appName}?skinName=${skinName}`,
       destroy: appId => `/api/app/destroy/${appId}`,
       'import': '/api/app/import',
       rename: (appId, newAppName) => `/api/app/rename/${appId}/${newAppName}/`
@@ -131,7 +132,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
         if (pageConfig.holders.hasOwnProperty(holderName)) {
           for (let widget of pageConfig.holders[holderName].widgets) {
             widgetTypes.push(widget.type);
-            app.updateEventsOnNameChange(widget);
+            app.updateEventsOnNameChange(widget); // todo: add this for just added widgets
           }
         }
       }
