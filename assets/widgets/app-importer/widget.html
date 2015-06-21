@@ -1,7 +1,19 @@
 <div ng-controller="AppImporterController">
   <form ng-if="user.isLoggedIn">
-    <label><translate>WIDGET.APP-IMPORTER.IMPORT_APP</translate>
-      <input type="file" name="file"
+    <h3 translate>WIDGET.APP-IMPORTER.IMPORT_APP</h3>
+    <label>
+      <translate>WIDGET.APP-IMPORTER.CHOOSE_APP_NAME</translate>
+      <input type="text"
+             class="left"
+             placeholder="{{'WIDGET.APP-CREATOR.APP_NAME' | translate }}"
+             name="appName"
+             ng-model="model.newAppName" autocomplete="off">
+    </label>
+    <label>
+      <translate>WIDGET.APP-IMPORTER.CHOOSE_FILE_FOR_IMPORT</translate>
+      <input type="file"
+             name="file"
+             class="file"
              onchange="angular.element(this).scope().setImportFile(this.files[0])"
              required>
     </label>
@@ -9,7 +21,7 @@
            translate
            translate-attr-value="WIDGET.APP-IMPORTER.TO_IMPORT"
            class="button success tiny"
-           ng-disabled="!importFile"
+           ng-disabled="!importFile || !model.newAppName"
            ng-click="importApp()">
   </form>
   <div ng-if="!user.isLoggedIn" translate>

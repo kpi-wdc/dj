@@ -1,4 +1,6 @@
 {
+  "CHOOSE_APP_NAME": "Choose name for imported app",
+  "CHOOSE_FILE_FOR_IMPORT": "Choose file to import",
   "CANNOT_PARSE_DATA_AS_VALID_JSON": "Cannot parse this data as a valid json configuration file: {{data}}",
   "DESCRIPTION": "Widget which allows creating new apps",
   "ERROR_IMPORTING_APP": "Error happened while importing app: {{status}}",

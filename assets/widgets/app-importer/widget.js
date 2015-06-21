@@ -8,6 +8,9 @@ appListWidget.controller('AppImporterController', function ($scope, $http, $tran
   const evtEmitter = new EventEmitter($scope);
 
   angular.extend($scope, {
+    model: {
+      newAppName: ""
+    },
     setImportFile(file) {
       this.$apply(() => {
         this.importFile = file;
@@ -17,7 +20,7 @@ appListWidget.controller('AppImporterController', function ($scope, $http, $tran
     importApp() {
       const fd = new FormData();
       // Take the first selected file
-      fd.append('file', this.importFile);
+      fd.append('file', this.importFile, this.model.newAppName);
       $http.post(appUrls.api.import, fd, {
         withCredentials: true,
         headers: {'Content-Type': undefined},

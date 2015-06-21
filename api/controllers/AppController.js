@@ -122,6 +122,7 @@ module.exports = {
 
           try {
             var app = JSON.parse(body);
+            app.name = req.file('file')._files[0].stream.filename;
             app.owner = req.user.id;
             app.skinName = app.skinName || 'default';
             AppConfig.create(app).then(function (created) {
