@@ -247,15 +247,18 @@ modals.controller('ShareSettingsModalController', function ($scope, $modalInstan
   });
 });
 
-modals.controller('AppSettingsModalController', function ($scope, $modalInstance, appName, config) {
+modals.controller('AppSettingsModalController', function ($scope, $modalInstance,
+                                                          appName, appSkins, config) {
   angular.extend($scope, {
     settings: {
       isPublished: config.isPublished,
       name: config.name,
+      skinName: config.skinName,
       keywords: config.keywords,
       title: config.title,
       description: config.description
     },
+    skins: appSkins,
 
     ok() {
       $modalInstance.close(this.settings);

@@ -75,6 +75,13 @@ app.constant('globalConfig', {
   debugMode: false
 });
 
+app.constant('appSkins', [
+  {
+    name: "default",
+    title: "Default"
+  }
+]);
+
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
                      $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
                      appName, homePageAppName) {

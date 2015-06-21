@@ -4,6 +4,7 @@ const appListWidget = angular.module('app.widgets.app-creator', []);
 
 appListWidget.controller('AppCreatorController', function ($scope, $http, $translate,
                                                            EventEmitter,
+                                                           appSkins,
                                                            appUrls, prompt, alert, user) {
   const evtEmitter = new EventEmitter($scope);
 
@@ -12,12 +13,7 @@ appListWidget.controller('AppCreatorController', function ($scope, $http, $trans
       newAppName: "",
       skinName: "default"
     },
-    skins: [
-      {
-        name: "default",
-        title: "Default"
-      }
-    ],
+    skins: appSkins,
     createApp() {
       const app = {
         name: this.model.newAppName,

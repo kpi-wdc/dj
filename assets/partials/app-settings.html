@@ -12,6 +12,16 @@
   </div>
   <div class="row">
     <div class="column medium-2">
+      <label for="appSettingsSelectSkin" translate>APP_SKIN</label>
+    </div>
+    <div class="column large-10">
+      <select ng-model="settings.skinName" id="appSettingsSelectSkin">
+        <option ng-repeat="skin in skins" value="{{skin.name}}">{{skin.title}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column medium-2">
       <label for="appSettingsInputKeywords" translate>APP_KEYWORDS</label>
     </div>
     <div class="column large-10">
