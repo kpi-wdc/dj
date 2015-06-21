@@ -139,7 +139,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
         if (pageConfig.holders.hasOwnProperty(holderName)) {
           for (let widget of pageConfig.holders[holderName].widgets) {
             widgetTypes.push(widget.type);
-            app.updateEventsOnNameChange(widget); // todo: add this for just added widgets
+            app.updateEventsOnNameChange(widget);
           }
         }
       }
@@ -369,7 +369,8 @@ app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUr
   };
 });
 
-app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoader, appUrls, app) {
+app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
+                                       widgetLoader, appUrls, app) {
   angular.extend(this, {
     deleteIthWidgetFromHolder(holder, index) {
       const removedWidget = holder.widgets.splice(index, 1)[0];
@@ -427,7 +428,24 @@ app.service('widgetManager', function ($modal, APIUser, APIProvider, widgetLoade
             return holder;
           }
         }
-      });
+      }).result
+        .then(widgetType => {
+          widgetLoader
+            .load(widgetType)
+            .then(() => {
+              const realWidget = {
+                type: widgetType,
+                instanceName: Math.random().toString(36).substring(2)
+              };
+
+              holder.widgets = holder.widgets || [];
+              app.updateEventsOnNameChange(realWidget);
+              holder.widgets.push(realWidget);
+              $timeout(() => this.openWidgetConfigurationDialog(realWidget));
+            }, (error) => {
+              alert.error($translate.instant('CANNOT_ADD_WIDGET', {error}));
+            });
+        });
     },
 
     cloneWidget(holder, widget){

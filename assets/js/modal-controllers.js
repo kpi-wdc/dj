@@ -89,19 +89,7 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
       // checks whether chosen template belongs to the current filter criteria
       $scope.chosenWidget = widget;
 
-      const realWidget = {
-        type: $scope.chosenWidget.type,
-        instanceName: Math.random().toString(36).substring(2)
-      };
-      widgetLoader.load($scope.chosenWidget.type)
-        .then(() => {
-          holder.widgets = holder.widgets || [];
-          holder.widgets.push(realWidget);
-          $timeout(() => widgetManager.openWidgetConfigurationDialog(realWidget));
-        }, (error) => {
-          alert.error($translate.instant('CANNOT_ADD_WIDGET', {error}));
-        });
-      $modalInstance.close();
+      $modalInstance.close($scope.chosenWidget.type);
     },
 
     isSelected(widget) {
