@@ -1,18 +1,40 @@
 <div class="widget-design-panel clearfix design-mode-only">
-  <span class="widget-name left" ng-bind="widget.instanceName"></span>
+
+  <span ng-if="!widgetPanel.editingInstanceName"
+        class="widget-name left"
+        ng-dblclick="widgetPanel.startEditingInstanceName()"
+        onmousedown="return false;"
+        ng-bind="widget.instanceName"
+        title="{{'DOUBLE_CLICK_TO_EDIT' | translate}}">
+  </span>
+  <span ng-if="widgetPanel.editingInstanceName">
+    <input style="width: 10rem; height: 1.7rem; margin: 0" class="left" type="text"
+           ng-model="widgetPanel.newInstanceName">
+    <button class="fi-check left tiny success"
+            style="height: 1.7rem; margin: 0; padding-top: 0.4rem"
+            ng-click="widgetPanel.finishEditingInstanceName()">
+      <span translate>SAVE</span>
+    </button>
+    <button class="fi-x left tiny failure"
+            style="height: 1.7rem; margin: 0; padding-top: 0.4rem"
+            ng-click="widgetPanel.cancelEditingInstanceName()">
+      <span translate>CANCEL</span>
+    </button>
+  </span>
+
   <span class="widget-type label radius left" ng-bind="widget.type"></span>
-    <span class="widget-delete-btn right" ng-click="deleteWidget()"
-          title="{{'DELETE_THIS_WIDGET' | translate}}">
-      <i class="glyphicon fi-x"></i>
-    </span>
-    <span class="widget-config-btn right" ng-click="openWidgetConfigurationDialog(widget)"
-          title="{{'OPEN_CONFIG_DIALOG_FOR_THIS_WIDGET' | translate}}">
-      <i class="glyphicon fi-wrench"></i>
-    </span>
-    <span class="widget-clone-btn right" ng-click="cloneWidget()"
-          title="{{ 'CLONE_THIS_WIDGET' | translate }}">
-      <i class="glyphicon fi-page-copy"></i>
-    </span>
+  <span class="widget-delete-btn right" ng-click="widgetPanel.deleteWidget()"
+        title="{{'DELETE_THIS_WIDGET' | translate}}">
+    <i class="glyphicon fi-x"></i>
+  </span>
+  <span class="widget-config-btn right" ng-click="widgetPanel.openWidgetConfigurationDialog(widget)"
+        title="{{'OPEN_CONFIG_DIALOG_FOR_THIS_WIDGET' | translate}}">
+    <i class="glyphicon fi-wrench"></i>
+  </span>
+  <span class="widget-clone-btn right" ng-click="widgetPanel.cloneWidget()"
+        title="{{ 'CLONE_THIS_WIDGET' | translate }}">
+    <i class="glyphicon fi-page-copy"></i>
+  </span>
 </div>
 <div ng-include="widgetTemplateUrl"
      class="widget-contents"

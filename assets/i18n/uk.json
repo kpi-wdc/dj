@@ -27,6 +27,7 @@
   "DELETE_THIS_WIDGET": "Видалити цей віджет",
   "DESIGN_MODE": "Режим дизайну",
   "DESIGN_PANEL": "Панель дизайну",
+  "DOUBLE_CLICK_TO_EDIT": "Клацніть двічі для редагування",
   "ENTER_NAME_DOTS": "Введіть ім’я...",
   "ERROR_MESSAGE_WITH_TEXT": "Помилка: {{msg}}",
   "ERROR_RENAMING_APP": "Помилка під час перейменування застосунку ${{error}}): {{data}}",

@@ -27,6 +27,7 @@
   "DELETE_THIS_WIDGET": "Delete this widget",
   "DESIGN_MODE": "Design mode",
   "DESIGN_PANEL": "Design panel",
+  "DOUBLE_CLICK_TO_EDIT": "Double click to edit",
   "ENTER_NAME_DOTS": "Enter name...",
   "ERROR_MESSAGE_WITH_TEXT": "Error: {{msg}}",
   "ERROR_RENAMING_APP": "Error while renaming the app ${{error}}): {{data}}",

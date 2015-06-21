@@ -528,14 +528,14 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
   };
 });
 
-app.directive('widget', function (appUrls, globalConfig, widgetManager, user) {
+app.directive('widget', function (appUrls, globalConfig, widgetManager, user, app) {
   return {
     restrict: 'E',
     templateUrl: '/partials/widget.html',
     transclude: true,
     scope: {
       type: '=',
-      config: '=',
+      widget: '=config',
       onDelete: '&',
       onClone: '&'
     },
@@ -543,17 +543,32 @@ app.directive('widget', function (appUrls, globalConfig, widgetManager, user) {
       angular.extend(scope, {
         globalConfig,
         user,
-        widget: scope.config, // just an (important) alias
         widgetTemplateUrl: appUrls.widgetHTML(scope.type),
 
-        openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
+        widgetPanel: {
+          editingInstanceName: false,
+          openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
+          startEditingInstanceName() {
+            scope.widgetPanel.editingInstanceName = true;
+            scope.widgetPanel.newInstanceName = scope.widget.instanceName;
+          },
+          finishEditingInstanceName() {
+            scope.widgetPanel.editingInstanceName = false;
+            if (scope.widget.instanceName !== scope.widgetPanel.newInstanceName) {
+              scope.widget.instanceName = scope.widgetPanel.newInstanceName;
+              app.markModified();
+            }
+          },
+          cancelEditingInstanceName() {
+            scope.widgetPanel.editingInstanceName = false;
+          },
+          deleteWidget() {
+            scope.onDelete();
+          },
 
-        deleteWidget() {
-          scope.onDelete();
-        },
-
-        cloneWidget() {
-          scope.onClone();
+          cloneWidget() {
+            scope.onClone();
+          }
         }
       })
     }
