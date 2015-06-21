@@ -49,7 +49,7 @@ widgetApi.constant('autoWiredSlotsAndEvents', []); // index -> {slotName, signal
 widgetApi.factory('APIProvider', function ($rootScope, $log,
                                            app, APIUser, pageSubscriptions,
                                            widgetSlots, instanceNameToScope,
-                                           autoWiredSlotsAndEvents, eventWires) {
+                                           autoWiredSlotsAndEvents, eventWires, $timeout) {
   /**
    * @class APIProvider
    * @description Injectable class
@@ -185,19 +185,21 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
      * @param subscriptions
      */
     static updatePageSubscriptions() {
-      const subscriptions = pageSubscriptions();
-      eventWires.clear();
+      $timeout(() => {
+        const subscriptions = pageSubscriptions();
+        eventWires.clear();
 
-      if (!subscriptions) {
-        return;
-      }
-      for (let s of subscriptions) {
-        APIProvider.wireSignalWithSlot(
-          APIUser.getScopeByInstanceName(s.emitter),
-          s.signal,
-          APIUser.getScopeByInstanceName(s.receiver),
-          s.slot);
-      }
+        if (!subscriptions) {
+          return;
+        }
+        for (let s of subscriptions) {
+          APIProvider.wireSignalWithSlot(
+            APIUser.getScopeByInstanceName(s.emitter),
+            s.signal,
+            APIUser.getScopeByInstanceName(s.receiver),
+            s.slot);
+        }
+      });
     }
   }
 
