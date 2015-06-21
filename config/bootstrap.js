@@ -41,6 +41,15 @@ var addDefaultAppConfigs = function () {
 
 module.exports.bootstrap = function (cb) {
   sails.services.passport.loadStrategies();
+
+  AppConfig.native(function (err, collection) {
+    collection.createIndex({name: 1 }, { unique: true }, function (err, result) {
+      if (err) {
+        sails.log.error('Error happened while setting up mongo index on appconfig model: ' + err);
+      }
+    });
+  });
+
   addDefaultAppConfigs(); // allow running async, even after bootstrap is finished
 
   // It's very important to trigger this callback method when you are finished
