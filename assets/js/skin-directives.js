@@ -18,17 +18,21 @@ skin.directive('applicationView', () => {
   }
 });
 
-skin.directive('pageListNav', (app, appName, config, globalConfig) => {
+skin.directive('pageListNav', ($translate, app, appName, config, globalConfig, confirm) => {
   // TODO: synchronize css styles on active link after clicking
   return {
     restrict: 'E',
     templateUrl: '/partials/page-list-nav.html',
-    controller($scope) {
-      angular.extend($scope, {
+    link(scope) {
+      angular.extend(scope, {
         appName,
         config,
-        globalConfig,
-        app
+
+        deletePageWithConfirmation(page) {
+          $translate('ARE_YOU_SURE_DELETE_PAGE')
+            .then(confirm)
+            .then((/*ok*/) => app.deletePage(page))
+        }
       });
     }
   }
@@ -41,8 +45,8 @@ skin.directive('languageSelectorNav', ($translate) => {
     scope: {
       "showFlags": "="
     },
-    controller($scope) {
-      angular.extend($scope, {
+    link(scope) {
+      angular.extend(scope, {
         selectLanguage(langKey) {
           $translate.use(langKey);
         },

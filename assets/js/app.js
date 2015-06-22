@@ -231,22 +231,18 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       this.wasModified = true;
     },
 
-    deletePage(index) {
+    deletePage(page) {
       const curPageHref = $stateParams.href;
+      const index = config.pages.indexOf(page);
       const deletedPageHref = config.pages[index].href;
       if (angular.isDefined(config.pages) && angular.isDefined(config.pages[index])) {
         config.pages.splice(index, 1);
         this.markModified(true);
-      }
-      if (curPageHref === deletedPageHref) {
-        $state.go('page', {href: ''});
-      }
-    },
 
-    deletePageWithConfirmation(index) {
-      $translate('ARE_YOU_SURE_DELETE_PAGE')
-        .then(confirm)
-        .then((/*ok*/) => this.deletePage(index))
+        if (curPageHref === deletedPageHref) {
+          $state.go('page', {href: ''});
+        }
+      }
     },
 
     submitToServer(callback) {
