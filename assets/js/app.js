@@ -48,7 +48,7 @@ app.factory('appUrls', function (appId) {
     appSettingsHTML: '/partials/app-settings.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
-    pageModalConfigHTML: '/partials/page-modal-config.html',
+    pageModalConfigHTML: '/partials/new-page-modal-config.html',
     widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
     defaultWidgetIcon: '/widgets/default_widgets_icon.png',
     skinUrl: skinName =>

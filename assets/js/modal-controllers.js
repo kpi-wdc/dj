@@ -132,23 +132,27 @@ modals.controller('AddNewPageModalController', function ($scope, $state, $modalI
       if (!$scope.settings.shortTitle) {
         $scope.titleErr.message = $translate.instant('FIELD_MUSTNT_BE_EMPTY');
         $scope.titleErr.class = 'red';
+        return false;
       }
+      return true;
     },
 
     templateTypes: templateTypesArr,
 
     // add button action
     add() {
-      $scope.settings.checkShortTitle();
+      if (!$scope.settings.checkShortTitle()) {
+        return;
+      }
 
-      // if chosen template isn't in the current filter then show an error
-      //if (!$scope.settings.filteredTemplates.indexOf($scope.chosenTemplate) !== -1) {
-      //  $scope.chosenTemplate = {};
-      //  $scope.templateErr = {};
-      //  $scope.templateErr.message = $translate.instant('CHOOSE_A_TEMPLATE');
-      //  $scope.templateErr.class = 'red';
-      //  return;
-      //}
+       //if chosen template isn't in the current filter then show an error
+      if (!$scope.settings.chosenTemplate) {
+        $scope.chosenTemplate = {};
+        $scope.templateErr = {};
+        $scope.templateErr.message = $translate.instant('CHOOSE_A_TEMPLATE');
+        $scope.templateErr.class = 'red';
+        return;
+      }
 
       const page = {
         shortTitle: $scope.settings.shortTitle,
@@ -184,6 +188,50 @@ modals.controller('AddNewPageModalController', function ($scope, $state, $modalI
       return $scope.settings.chosenTemplate === template;
     }
   };
+});
+
+modals.controller('PageSettingsModalController', function ($scope, $state, $modalInstance,
+                                                           $translate, alert,
+                                                           app, page) {
+  $scope.settings = {
+    href: page.href,
+    shortTitle: page.shortTitle
+  };
+
+  angular.extend($scope, {
+    // check whether shortTitle is correct (isn't empty for now)
+    checkShortTitle() {
+      this.titleErr = {};
+      if (!this.settings.shortTitle) {
+        this.titleErr = true;
+        this.titleErr.message = $translate.instant('FIELD_MUSTNT_BE_EMPTY');
+        this.titleErr.class = 'red';
+        return false;
+      }
+      return true;
+    },
+
+    // add button action
+    save() {
+      if (!this.checkShortTitle()) {
+        return;
+      }
+
+      // if nothing changes - emulate pressing cancel button.
+      for (let prop in this.settings) {
+        if (this.settings[prop] !== page[prop]) {
+          angular.extend(page, $scope.settings);
+          $modalInstance.close();
+          return;
+        }
+      }
+      this.cancel();
+    },
+
+    cancel() {
+      $modalInstance.dismiss();
+    }
+  });
 });
 
 modals.controller('ShareSettingsModalController', function ($scope, $modalInstance, $http, author, appUrls, config) {
