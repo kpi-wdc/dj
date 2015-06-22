@@ -121,6 +121,7 @@ define(['app', 'angular-mocks'], () => {
       it('slot handlers should be called with correct evt object', () => {
         const a = new EventEmitter(scopeA);
         const b = new APIProvider(scopeB);
+        $rootScope.$digest();
         const slot = jasmine.createSpy('slot');
         b.provide('slot', slot);
         APIProvider.wireSignalWithSlot(scopeA, 'hello', scopeB, 'slot');
@@ -135,6 +136,7 @@ define(['app', 'angular-mocks'], () => {
       it('slot handlers should be called with correct arguments', () => {
         const a = new EventEmitter(scopeA);
         const b = new APIProvider(scopeB);
+        $rootScope.$digest();
         const slot = jasmine.createSpy('slot');
         b.provide('slot', slot);
         APIProvider.wireSignalWithSlot(scopeA, 'hello', scopeB, 'slot');

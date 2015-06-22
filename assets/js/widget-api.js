@@ -49,7 +49,7 @@ widgetApi.constant('autoWiredSlotsAndEvents', []); // index -> {slotName, signal
 widgetApi.factory('APIProvider', function ($rootScope, $log,
                                            app, APIUser, pageSubscriptions,
                                            widgetSlots, instanceNameToScope,
-                                           autoWiredSlotsAndEvents, eventWires, $timeout) {
+                                           autoWiredSlotsAndEvents, eventWires) {
   /**
    * @class APIProvider
    * @description Injectable class
@@ -185,7 +185,7 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
      * @param subscriptions
      */
     static updatePageSubscriptions() {
-      $timeout(() => {
+      $rootScope.$evalAsync(() => {
         const subscriptions = pageSubscriptions();
         eventWires.clear();
 
