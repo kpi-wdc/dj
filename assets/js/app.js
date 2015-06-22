@@ -48,7 +48,6 @@ app.factory('appUrls', function (appId) {
     appSettingsHTML: '/partials/app-settings.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
-    pageModalConfigHTML: '/partials/new-page-modal-config.html',
     widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
     defaultWidgetIcon: '/widgets/default_widgets_icon.png',
     skinUrl: skinName =>
@@ -261,19 +260,6 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     addNewPage(page) {
       page.holders = page.holders || {};
       config.pages.push(page);
-    },
-
-    addNewPageInModal() {
-      $modal.open({
-        templateUrl: appUrls.pageModalConfigHTML,
-        controller: 'AddNewPageModalController',
-        backdrop: 'static',
-        resolve: {
-          templateTypes(templateTypesPromise) {
-            return templateTypesPromise;
-          }
-        }
-      }).result.then( () => this.markModified(true) );
     },
 
     openShareSettings() {

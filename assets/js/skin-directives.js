@@ -18,42 +18,10 @@ skin.directive('applicationView', () => {
   }
 });
 
-skin.directive('pageListNav', ($translate, $modal, $state,
-                               app, appName, config, globalConfig, confirm) => {
-  // TODO: synchronize css styles on active link after clicking
+skin.directive('pageListNav', () => {
   return {
     restrict: 'E',
-    templateUrl: '/partials/page-list-nav.html',
-    link(scope) {
-      angular.extend(scope, {
-        appName,
-        config,
-
-        openPageConfig(page) {
-          const thisPage = app.pageConfig().href === page.href;
-          $modal.open({
-            templateUrl: '/partials/page-modal-config.html',
-            controller: 'PageSettingsModalController',
-            backdrop: 'static',
-            resolve: {
-              page: () => page
-            }
-          }).result
-            .then(() => {
-              app.markModified(true);
-              if (thisPage) {
-                $state.go('page', {href: page.href}, {reload: true});
-              }
-            });
-        },
-
-        deletePageWithConfirmation(page) {
-          $translate('ARE_YOU_SURE_DELETE_PAGE')
-            .then(confirm)
-            .then((/*ok*/) => app.deletePage(page))
-        }
-      });
-    }
+    template: `<widget type="page-list" non-configurable></widget>`
   }
 });
 
