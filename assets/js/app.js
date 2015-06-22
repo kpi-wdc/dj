@@ -82,6 +82,8 @@ app.constant('appSkins', [
   }
 ]);
 
+app.constant('randomWidgetName', () => Math.random().toString(36).substring(2));
+
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
                      $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
                      appName, homePageAppName) {
@@ -125,30 +127,22 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
       $injector.get('$window').location.href = $location.url();
     });
 
-  const pageConfig = ($q, alert, app, widgetLoader) => {
-    return $q((resolve, reject) => {
-      const pageConfig = app.pageConfig();
+  const pageConfig = ($q, alert, app) => {
+    const pageConfig = app.pageConfig();
 
-      if (!pageConfig || !pageConfig.holders) {
-        resolve(pageConfig);
-        return;
-      }
+    if (!pageConfig || !pageConfig.holders) {
+      return pageConfig;
+    }
 
-      const widgetTypes = [];
-      for (let holderName in pageConfig.holders) {
-        if (pageConfig.holders.hasOwnProperty(holderName)) {
-          for (let widget of pageConfig.holders[holderName].widgets) {
-            widgetTypes.push(widget.type);
-          }
+    const widgetTypes = [];
+    for (let holderName in pageConfig.holders) {
+      if (pageConfig.holders.hasOwnProperty(holderName)) {
+        for (let widget of pageConfig.holders[holderName].widgets) {
+          widgetTypes.push(widget.type);
         }
       }
-      widgetLoader.load(widgetTypes).then(() => {
-        resolve(pageConfig);
-      }, (err) => {
-        alert.error(`Error loading widget controllers. <br><br> ${err}`);
-        reject(err);
-      });
-    });
+    }
+    return pageConfig;
   };
 
   const templateProvider = ($http, $templateCache, appUrls, app) => {
@@ -345,7 +339,7 @@ app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUr
 });
 
 app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
-                                       widgetLoader, appUrls, app) {
+                                       appUrls, app, randomWidgetName) {
   angular.extend(this, {
     deleteIthWidgetFromHolder(holder, index) {
       const removedWidget = holder.widgets.splice(index, 1)[0];
@@ -396,35 +390,26 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
           widgetTypes(widgetTypesPromise) {
             return widgetTypesPromise;
           },
-          widgetLoader() {
-            return widgetLoader;
-          },
           holder() {
             return holder;
           }
         }
       }).result
         .then(widgetType => {
-          widgetLoader
-            .load(widgetType)
-            .then(() => {
-              const realWidget = {
-                type: widgetType,
-                instanceName: Math.random().toString(36).substring(2)
-              };
+          const realWidget = {
+            type: widgetType,
+            instanceName: randomWidgetName()
+          };
 
-              holder.widgets = holder.widgets || [];
-              holder.widgets.push(realWidget);
-              $timeout(() => this.openWidgetConfigurationDialog(realWidget));
-            }, (error) => {
-              alert.error($translate.instant('CANNOT_ADD_WIDGET', {error}));
-            });
+          holder.widgets = holder.widgets || [];
+          holder.widgets.push(realWidget);
+          $timeout(() => this.openWidgetConfigurationDialog(realWidget));
         });
     },
 
     cloneWidget(holder, widget){
       const newWidget = angular.copy(widget);
-      newWidget.instanceName = Math.random().toString(36).substring(2);
+      newWidget.instanceName = randomWidgetName();
       holder.widgets.push(newWidget);
       app.markModified(true);
     }
@@ -528,8 +513,8 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
   };
 });
 
-app.directive('widget', function ($rootScope, appUrls, globalConfig,
-                                  widgetManager, user, app) {
+app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoader,
+                                  widgetManager, user, app, randomWidgetName) {
   function updateEventsOnNameChange(widget) {
     $rootScope.$watch(() => widget.instanceName, (newName, oldName) => {
       if (newName !== oldName && newName !== undefined) {
@@ -561,10 +546,13 @@ app.directive('widget', function ($rootScope, appUrls, globalConfig,
     link(scope, element, attrs) {
       updateEventsOnNameChange(scope.widget);
 
+      widgetLoader.load(scope.type).then(() => scope.widgetCodeLoaded = true);
+
       angular.extend(scope, {
         globalConfig,
         user,
         widgetTemplateUrl: appUrls.widgetHTML(scope.type),
+        widgetCodeLoaded: false,
 
         widgetPanel: {
           editingInstanceName: false,

@@ -49,8 +49,8 @@ modals.controller('WidgetModalSettingsController', function ($scope, $modalInsta
 
 modals.controller('WidgetModalAddNewController', function ($scope, $modalInstance, $log,
                                                         $timeout, $translate,
-                                                        widgetLoader, holder, appUrls,
-                                                        widgetTypes, widgetManager) {
+                                                        holder, appUrls,
+                                                        widgetTypes) {
   // create array instead of map (easy filtering)
   const widgetTypesArr = [];
 

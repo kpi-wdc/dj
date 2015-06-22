@@ -36,7 +36,8 @@
     <i class="glyphicon fi-page-copy"></i>
   </span>
 </div>
-<div ng-include="widgetTemplateUrl"
+<div ng-if="widgetCodeLoaded"
+     ng-include="widgetTemplateUrl"
      class="widget-contents"
      ng-class="{'widget-design-mode': globalConfig.designMode}">
   <ng-transclude></ng-transclude>
