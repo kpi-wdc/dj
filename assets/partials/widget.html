@@ -23,15 +23,18 @@
   </span>
 
   <span class="widget-type label radius left" ng-bind="widget.type"></span>
-  <span class="widget-delete-btn right" ng-click="widgetPanel.deleteWidget()"
+  <span ng-if="widgetPanel.allowDeleting"
+        class="widget-delete-btn right" ng-click="widgetPanel.deleteWidget()"
         title="{{'DELETE_THIS_WIDGET' | translate}}">
     <i class="glyphicon fi-x"></i>
   </span>
-  <span class="widget-config-btn right" ng-click="widgetPanel.openWidgetConfigurationDialog(widget)"
+  <span ng-if="widgetPanel.allowConfiguring"
+        class="widget-config-btn right" ng-click="widgetPanel.openWidgetConfigurationDialog(widget)"
         title="{{'OPEN_CONFIG_DIALOG_FOR_THIS_WIDGET' | translate}}">
     <i class="glyphicon fi-wrench"></i>
   </span>
-  <span class="widget-clone-btn right" ng-click="widgetPanel.cloneWidget()"
+  <span ng-if="widgetPanel.allowCloning"
+        class="widget-clone-btn right" ng-click="widgetPanel.cloneWidget()"
         title="{{ 'CLONE_THIS_WIDGET' | translate }}">
     <i class="glyphicon fi-page-copy"></i>
   </span>

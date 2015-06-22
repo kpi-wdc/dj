@@ -1,5 +1,5 @@
 <div ng-repeat="widget in holder.widgets" class="widget">
-  <widget type="widget.type" config="widget"
+  <widget type="{{widget.type}}" config="widget"
     on-clone="cloneWidget(holder, widget)"
     on-delete="deleteIthWidgetFromHolder(holder, $index)">
     <translate>LOADING_WIDGET_DOTS</translate>

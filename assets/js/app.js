@@ -538,12 +538,22 @@ app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoade
     templateUrl: '/partials/widget.html',
     transclude: true,
     scope: {
-      type: '=',
+      type: '@',
       widget: '=config',
       onDelete: '&',
       onClone: '&'
     },
     link(scope, element, attrs) {
+      if (!scope.widget) {
+        scope.widget = {
+          type: scope.type,
+          instanceName: randomWidgetName()
+        }
+      }
+      if (attrs.instanceName) {
+        scope.widget.instanceName = attrs.instanceName;
+      }
+
       updateEventsOnNameChange(scope.widget);
 
       widgetLoader.load(scope.type).then(() => scope.widgetCodeLoaded = true);
@@ -553,8 +563,10 @@ app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoade
         user,
         widgetTemplateUrl: appUrls.widgetHTML(scope.type),
         widgetCodeLoaded: false,
-
         widgetPanel: {
+          allowDeleting: !!attrs.onDelete,
+          allowCloning: !!attrs.onClone,
+          allowConfiguring: angular.isUndefined(attrs.nonConfigurable),
           editingInstanceName: false,
           openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
           startEditingInstanceName() {
