@@ -139,7 +139,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
         if (pageConfig.holders.hasOwnProperty(holderName)) {
           for (let widget of pageConfig.holders[holderName].widgets) {
             widgetTypes.push(widget.type);
-            app.updateEventsOnNameChange(widget);
           }
         }
       }
@@ -267,26 +266,6 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
             callback(data);
           }
         });
-    },
-
-    updateEventsOnNameChange(widget) {
-      $rootScope.$watch(() => {
-        return widget.instanceName;
-      }, (newName, oldName) => {
-        if (newName !== oldName && newName !== undefined) {
-          const subscriptions = this.pageConfig().subscriptions;
-          for (let i = 0; i < (subscriptions ? subscriptions.length : 0); i++) {
-            const subscription = subscriptions[i];
-            if (subscription.emitter === oldName) {
-              subscription.emitter = newName;
-            }
-
-            if (subscription.receiver === oldName) {
-              subscription.receiver = newName;
-            }
-          }
-        }
-      });
     },
 
     addNewPage(page) {
@@ -439,7 +418,6 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
               };
 
               holder.widgets = holder.widgets || [];
-              app.updateEventsOnNameChange(realWidget);
               holder.widgets.push(realWidget);
               $timeout(() => this.openWidgetConfigurationDialog(realWidget));
             }, (error) => {
@@ -554,7 +532,26 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
   };
 });
 
-app.directive('widget', function (appUrls, globalConfig, widgetManager, user, app) {
+app.directive('widget', function ($rootScope, appUrls, globalConfig,
+                                  widgetManager, user, app) {
+  function updateEventsOnNameChange(widget) {
+    $rootScope.$watch(() => widget.instanceName, (newName, oldName) => {
+      if (newName !== oldName && newName !== undefined) {
+        const subscriptions = app.pageConfig().subscriptions;
+        for (let i = 0; i < (subscriptions ? subscriptions.length : 0); i++) {
+          const subscription = subscriptions[i];
+          if (subscription.emitter === oldName) {
+            subscription.emitter = newName;
+          }
+
+          if (subscription.receiver === oldName) {
+            subscription.receiver = newName;
+          }
+        }
+      }
+    });
+  }
+
   return {
     restrict: 'E',
     templateUrl: '/partials/widget.html',
@@ -566,6 +563,8 @@ app.directive('widget', function (appUrls, globalConfig, widgetManager, user, ap
       onClone: '&'
     },
     link(scope, element, attrs) {
+      updateEventsOnNameChange(scope.widget);
+
       angular.extend(scope, {
         globalConfig,
         user,
