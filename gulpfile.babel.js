@@ -188,7 +188,8 @@ gulp.task('annotate-js', ['compile-js'], () =>
 
 gulp.task('move-widgets', () =>
   // Move everything except JS-code which is handled separately in build-widgets-js
-  gulp.src(['assets/widgets/**', '!assets/widgets/**/*.js'])
+  // and *.md files in 'help' folders which are handled in build-widgets-help
+  gulp.src(['assets/widgets/**', '!assets/widgets/**/*.js', '!assets/widgets/**/help{,/*}'])
     .pipe(plugins.cached('move-widgets'))
     .pipe(plugins.changed(`${buildPublicDir}/widgets`))
     .pipe(gulp.dest(`${buildPublicDir}/widgets`))
@@ -207,7 +208,16 @@ gulp.task('build-widgets-js', () =>
     .pipe(gulp.dest(`${buildPublicDir}/widgets`))
 );
 
-gulp.task('build-widgets', ['move-widgets', 'build-widgets-js']);
+gulp.task('build-widgets-help', () =>
+    gulp.src('assets/widgets/**/help/*.md')
+      .pipe(plugins.cached('build-widgets-help'))
+      .pipe(plugins.changed(`${buildPublicDir}/widgets`))
+      .pipe(plugins.markdown())
+      .on('error', handleError)
+      .pipe(gulp.dest(`${buildPublicDir}/widgets`))
+);
+
+gulp.task('build-widgets', ['move-widgets', 'build-widgets-js', 'build-widgets-help']);
 
 gulp.task('build-translations', (done) => {
   fs.readdir('assets/i18n', (err, files) => {
