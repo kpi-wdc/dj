@@ -530,15 +530,10 @@ app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoade
       onClone: '&'
     },
     link(scope, element, attrs) {
-      if (!scope.widget) {
-        scope.widget = {
-          type: scope.type,
-          instanceName: randomWidgetName()
-        }
-      }
-      if (attrs.instanceName) {
-        scope.widget.instanceName = attrs.instanceName;
-      }
+      scope.widget = scope.widget || {};
+      scope.widget.type = scope.widget.type || scope.type;
+      scope.widget.instanceName =
+        attrs.instanceName || scope.widget.instanceName || randomWidgetName();
 
       updateEventsOnNameChange(scope.widget);
 
