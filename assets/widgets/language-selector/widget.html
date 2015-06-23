@@ -1,0 +1,8 @@
+<div ng-controller="LanguageSelectorController">
+  <ul class="side-nav language-nav">
+    <li ng-repeat="lang in languages" ng-click="selectLanguage(lang.key)">
+      <img ng-if="widget.showFlags" ng-src="/img/{{lang.key}}.png" class="lang-flag">
+      {{lang.title}}
+    </li>
+  </ul>
+</div>

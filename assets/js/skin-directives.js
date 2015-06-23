@@ -25,24 +25,15 @@ skin.directive('pageListNav', () => {
   }
 });
 
-skin.directive('languageSelectorNav', ($translate) => {
+skin.directive('languageSelectorNav', () => {
   return {
     restrict: 'E',
-    templateUrl: '/partials/language-selector-nav.html',
-    scope: {
-      "showFlags": "="
-    },
+    template: `
+      <widget type="language-selector"
+              config="widget">
+      </widget>`,
     link(scope) {
-      angular.extend(scope, {
-        selectLanguage(langKey) {
-          $translate.use(langKey);
-        },
-        languages: [
-          {key: "en", title: "English"},
-          {key: "uk", title: "Українська"},
-          {key: "ru", title: "Русский"}
-        ]
-      });
+      scope.widget = {showFlags: true}
     }
   }
 });

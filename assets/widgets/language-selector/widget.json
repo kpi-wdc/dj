@@ -1,0 +1,13 @@
+{
+  "noicon": true,
+  "schema": {
+    "type": "object",
+    "title": "Language selector",
+    "properties": {
+      "showFlags": {
+        "title": "Show language flags",
+        "type": "boolean"
+      }
+    }
+  }
+}
