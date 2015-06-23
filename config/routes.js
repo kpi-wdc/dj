@@ -33,6 +33,9 @@ module.exports.routes = {
   'get /app/:appName': 'AppViewController.getView',
   'get /app/:appName/*': 'AppViewController.getView',
 
+  //Help
+  'get /help/:widgetType/:lang': 'HelpController.getHelp',
+
   /*** APIs ***/
   // IMPORTANT! - don't forget to update policies.js!
   // Apps
