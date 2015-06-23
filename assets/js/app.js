@@ -499,7 +499,7 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
   };
 });
 
-app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoader,
+app.directive('widget', function ($rootScope, $translate, $window, appUrls, globalConfig, widgetLoader,
                                   widgetManager, user, app, randomWidgetName) {
   function updateEventsOnNameChange(widget) {
     $rootScope.$watch(() => widget.instanceName, (newName, oldName) => {
@@ -547,6 +547,7 @@ app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoade
         widgetPanel: {
           allowDeleting: !!attrs.onDelete,
           allowCloning: !!attrs.onClone,
+          allowOpenHelp: true,
           allowConfiguring: angular.isUndefined(attrs.nonConfigurable),
           editingInstanceName: false,
           openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
@@ -570,6 +571,12 @@ app.directive('widget', function ($rootScope, appUrls, globalConfig, widgetLoade
 
           cloneWidget() {
             scope.onClone();
+          },
+
+          openHelp() {
+            const lang = $translate.use();
+            const url = '/help/'.concat(scope.type, '/', lang);
+            $window.open(url, '_blank');
           }
         }
       })

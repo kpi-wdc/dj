@@ -38,6 +38,11 @@
         title="{{ 'CLONE_THIS_WIDGET' | translate }}">
     <i class="glyphicon fi-page-copy"></i>
   </span>
+  <span ng-if="widgetPanel.allowOpenHelp"
+        class="widget-help-btn right" ng-click="widgetPanel.openHelp()"
+        title="{{ 'HELP' | translate }}">
+    <i class="glyphicon fi-info"></i>
+  </span>
 </div>
 <div ng-if="widgetCodeLoaded"
      ng-include="widgetTemplateUrl"
