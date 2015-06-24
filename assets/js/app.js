@@ -126,22 +126,30 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
       $injector.get('$window').location.href = $location.url();
     });
 
-  const pageConfig = ($q, alert, app) => {
-    const pageConfig = app.pageConfig();
+  const pageConfig = ($q, alert, app, widgetLoader) => {
+    return $q((resolve, reject) => {
+      const pageConfig = app.pageConfig();
 
-    if (!pageConfig || !pageConfig.holders) {
-      return pageConfig;
-    }
+      if (!pageConfig || !pageConfig.holders) {
+        resolve(pageConfig);
+        return;
+      }
 
-    const widgetTypes = [];
-    for (let holderName in pageConfig.holders) {
-      if (pageConfig.holders.hasOwnProperty(holderName)) {
-        for (let widget of pageConfig.holders[holderName].widgets) {
-          widgetTypes.push(widget.type);
+      const widgetTypes = [];
+      for (let holderName in pageConfig.holders) {
+        if (pageConfig.holders.hasOwnProperty(holderName)) {
+          for (let widget of pageConfig.holders[holderName].widgets) {
+            widgetTypes.push(widget.type);
+          }
         }
       }
-    }
-    return pageConfig;
+      widgetLoader.load(widgetTypes).then(() => {
+        resolve(pageConfig);
+      }, (err) => {
+        alert.error(`Error loading widget controllers. <br><br> ${err}`);
+        reject(err);
+      });
+    });
   };
 
   const templateProvider = ($http, $templateCache, appUrls, app) => {
