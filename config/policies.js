@@ -22,9 +22,15 @@ module.exports.policies = {
   '*': [ 'passport' ],
 
   AppController: {
-    create: ['passport', 'isAuthenticated'],
+    createCloneDefault: ['passport', 'isAuthenticated'],
+    import: ['passport', 'isAuthenticated'],
     update: ['passport', 'isOwnerOrCollaborator'],
     rename: ['passport', 'isOwnerOrCollaborator'],
-    delete: ['passport', 'isOwner']
+    export: ['passport', 'isOwnerOrCollaboratorOrAppPublished'],
+    destroy: ['passport', 'isOwner']
+  },
+
+  AppViewController: {
+    getView: ['passport', 'isOwnerOrCollaboratorOrAppPublished']
   }
 };

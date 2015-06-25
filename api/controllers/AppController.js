@@ -71,27 +71,19 @@ module.exports = {
     AppConfig.findOneById(req.params.appId)
       .populate('owner')
       .then(function (app) {
-        if (!app) throw 'Cannot find app with specified id';
-        var isOwner = AppConfig.isOwner(app, req.user);
-        var isCollaborator = AppConfig.isCollaborator(app, req.user);
-        if (isOwner || isCollaborator || app.isPublished) {
-          res.setHeader('Content-disposition', 'attachment; filename=' + app.name + '.json');
-          AppConfig.destringifyPages(app);
+        res.setHeader('Content-disposition', 'attachment; filename=' + app.name + '.json');
+        AppConfig.destringifyPages(app);
 
-          app.importedFromURL = sails.getBaseurl() + '/app/' + app.name;
-          app.importedFromAuthor = app.owner && app.owner.name;
+        app.importedFromURL = sails.getBaseurl() + '/app/' + app.name;
+        app.importedFromAuthor = app.owner && app.owner.name;
 
-          delete app.id; // New id will be re-assigned when the app is exported
-          delete app.owner; // The owner will change if another person exports this app
-          delete app.collaborations; // We can't re-use this field because collaborator IDs aren't same in other DBs
-          delete app.createdAt;
-          delete app.updatedAt;
+        delete app.id; // New id will be re-assigned when the app is exported
+        delete app.owner; // The owner will change if another person exports this app
+        delete app.collaborations; // We can't re-use this field because collaborator IDs aren't same in other DBs
+        delete app.createdAt;
+        delete app.updatedAt;
 
-          res.send(app);
-        } else {
-          sails.log.silly('App is not published or user is not an owner');
-          res.forbidden();
-        }
+        res.send(app);
       }).catch(function (err) {
         sails.log.silly(err);
         res.notFound();
