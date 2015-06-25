@@ -45,19 +45,7 @@
     angular.module('app.config', [])
       .constant('appId', "<%= app.id %>")
       .constant('appName', "<%= app.name %>")
-      .constant('initialConfig', {
-        id: "<%= app.id %>",
-        name: "<%= app.name %>",
-        skinName: "<%= app.skinName %>",
-        collaborations: <%- JSON.stringify(app.collaborations || []) %>,
-        pages: <%- JSON.stringify(app.pages) || []%>,
-        title: "<%= app.title %>",
-        description: "<%= app.description %>",
-        keywords: "<%= app.keywords %>",
-        importedFromURL: "<%= app.importedFromURL %>",
-        importedFromAuthor: "<%= app.importedFromAuthor %>",
-        isPublished: <%= app.isPublished %>
-      });
+      .constant('initialConfig', <%- JSON.stringify(publicAppConfig) %>);
   });
 
   System.import('app'); // Kick-start the app!

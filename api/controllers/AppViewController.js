@@ -42,6 +42,19 @@ module.exports = {
             email: app.owner.email,
             photo: app.owner.photo,
             exists: true
+          },
+          publicAppConfig: {
+            id: app.id,
+            name: app.name,
+            skinName: app.skinName,
+            collaborations: app.collaborations || [],
+            pages: app.pages || [],
+            title: app.title,
+            description: app.description,
+            keywords: app.keywords,
+            importedFromURL: app.importedFromURL,
+            importedFromAuthor: app.importedFromAuthor,
+            isPublished: app.isPublished
           }
         });
       }).catch(function (err) {
