@@ -45,7 +45,6 @@ module.exports.bootstrap = function (cb) {
   // add default admins; you can add others later on using mongodb console
   for (var i = 0; i < sails.config.admins.length; ++i) {
     var adminEmail = sails.config.admins[i];
-    console.log(adminEmail);
     User.update({email: adminEmail}, {isAdmin: true}).exec(_.noop);
   }
 
