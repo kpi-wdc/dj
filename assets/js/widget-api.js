@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'angular-translate';
 
 /**
  * @ngdoc module
@@ -8,7 +9,7 @@ import angular from 'angular';
  * Services from this module are a public API for all the widget developers.
  * They are documented and are allowed to use.
  */
-const widgetApi = angular.module('app.widgetApi', []);
+const widgetApi = angular.module('app.widgetApi', ['app.i18n']);
 
 /**
  * @ngdoc object
@@ -487,4 +488,36 @@ widgetApi.factory('parentHolder', function (app) {
       }
     }
   };
+});
+
+widgetApi.directive('widgetTranslate', function (translateDirective) {
+  const directive = translateDirective[0];
+  return {
+    restrict: 'AE',
+    scope: true,
+    require: '^widget',
+    compile: (tElement, tAttr) => {
+      const link = directive.compile(tElement, tAttr);
+
+      return (scope, elem, attrs) => {
+        const widgetType = scope.type;
+        const prefix = `WIDGET.${widgetType.toUpperCase()}.`;
+        if (attrs.translate) {
+          const translationId =`${prefix}${attrs.translate.trim()}`
+          attrs.translate = translationId;
+        } else if (elem.html().trim()) {
+          const translationId =`${prefix}${elem.html().trim()}`
+          elem.html(translationId);
+        }
+
+        for (let attr in attrs) {
+          if (/^translateAttr.*/.test(attr) || /^translate-attr-.*/.test(attr)) {
+            attrs[attr] = `${prefix}${attrs[attr]}`;
+          }
+        }
+
+        return link(scope, elem, attrs);
+      }
+    }
+  }
 });

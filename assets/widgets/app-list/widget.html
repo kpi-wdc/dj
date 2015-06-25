@@ -6,20 +6,20 @@
     </span>
     <a href="/app/{{app.name}}/"
        class="button tiny success column small-2"
-       translate>
-      WIDGET.APP-LIST.VIEW
+       widget-translate>
+      VIEW
     </a>
     <input type="button" class="button tiny column small-2"
            ng-disabled="!isOwner(app) && !isCollaborator(app)"
-           translate translate-attr-value="WIDGET.APP-LIST.RENAME"
+           widget-translate translate-attr-value="RENAME"
            ng-click="renameApp(app.id)">
     <a type="button" class="button tiny column small-2" style="background-color: #cdab42"
        target="_blank"
        href="/api/app/export/{{app.id}}"
-       translate>WIDGET.APP-LIST.EXPORT</a>
+       widget-translate>EXPORT</a>
     <input type="button" class="button alert tiny column small-2"
            ng-disabled="!isOwner(app) && !isCollaborator(app)"
-           translate translate-attr-value="WIDGET.APP-LIST.DELETE"
+           widget-translate translate-attr-value="DELETE"
            ng-click="deleteApp(app.id, app.name)">
   </div>
 </div>

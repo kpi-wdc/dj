@@ -1,10 +1,10 @@
 <div ng-controller="AboutAuthorsController">
   <div ng-if="author.name">
-    <translate>WIDGET.ABOUT.APPLICATION_AUTHOR</translate> {{author.name}} &lt;{{author.email}}&gt;
+    <widget-translate>APPLICATION_AUTHOR</widget-translate> {{author.name}} &lt;{{author.email}}&gt;
     <br>
     <img ng-src="{{author.photo}}" style="width: 15rem; height: 15rem;">
   </div>
-  <div ng-if="!author.name" translate>
-    WIDGET.ABOUT.THIS_APP_DOESNT_HAVE_AUTHOR
+  <div ng-if="!author.name" widget-translate>
+    THIS_APP_DOESNT_HAVE_AUTHOR
   </div>
 </div>

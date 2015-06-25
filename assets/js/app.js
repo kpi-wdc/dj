@@ -537,6 +537,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
       onDelete: '&',
       onClone: '&'
     },
+    controller() {}, // needed for require: '^widget' to work in widget-translate directive
     link(scope, element, attrs) {
       scope.widget = scope.widget || {};
       scope.widget.type = scope.widget.type || scope.type;
