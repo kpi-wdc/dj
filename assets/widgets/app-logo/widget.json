@@ -1,0 +1,13 @@
+{
+  "noicon": true,
+  "schema": {
+    "type": "object",
+    "title": "Application logo",
+    "properties": {
+      "logoURL": {
+        "title": "Logo url",
+        "type": "string"
+      }
+    }
+  }
+}

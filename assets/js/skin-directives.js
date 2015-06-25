@@ -32,6 +32,13 @@ skin.directive('languageSelectorNav', () => {
   }
 });
 
+skin.directive('appLogo', () => {
+  return {
+    restrict: 'E',
+    template: `<widget type="app-logo" instanceName="app-logo-widget"></widget>`
+  }
+});
+
 skin.directive('logoutButton', () => {
   return {
     restrict: 'E',

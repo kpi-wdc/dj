@@ -14,6 +14,10 @@
     {
       "type": "page-list",
       "instanceName": "page-list-nav"
+    },
+    {
+      "type": "app-logo",
+      "instanceName": "app-logo-widget"
     }
   ],
   "pages": [
