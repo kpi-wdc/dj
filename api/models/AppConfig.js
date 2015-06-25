@@ -38,6 +38,12 @@ module.exports = {
     collaborations: {
       type: 'array'
     },
+    importedFromURL: {
+      type: 'string'
+    },
+    importedFromAuthor: {
+      type: 'string'
+    },
     isPublished: {
       type: 'boolean',
       required: true

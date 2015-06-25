@@ -39,7 +39,6 @@ module.exports = {
         newApp.name = req.params.appName;
         newApp.owner = req.user.id;
 
-        console.log(req.param('skinName'))
         if (req.param('skinName')) {
           newApp.skinName = req.param('skinName');
         }
@@ -86,11 +85,16 @@ module.exports = {
         if (isOwner || isCollaborator || app.isPublished) {
           res.setHeader('Content-disposition', 'attachment; filename=' + app.name + '.json');
           AppConfig.destringifyPages(app);
+
+          app.importedFromURL = sails.getBaseurl() + '/app/' + app.name;
+          app.importedFromAuthor = app.owner && app.owner.name;
+
           delete app.id; // New id will be re-assigned when the app is exported
           delete app.owner; // The owner will change if another person exports this app
           delete app.collaborations; // We can't re-use this field because collaborator IDs aren't same in other DBs
           delete app.createdAt;
           delete app.updatedAt;
+
           res.send(app);
         } else {
           sails.log.silly('App is not published or user is not an owner');
