@@ -7,7 +7,8 @@ var User = {
     email: { type: 'email',  unique: true, required: true },
     name: {type: 'string', required: true},
     photo: {type: 'string', url: true, required: true},
-    passports : { collection: 'Passport', via: 'user' }
+    passports : { collection: 'Passport', via: 'user' },
+    isAdmin: {type: 'boolean', required: true}
   }
 };
 

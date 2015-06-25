@@ -11,21 +11,23 @@ module.exports = function (req, res, next) {
   // or if this is the last policy, the controller
   sails.log.info('authorizing for app config update');
   if (req.user) {
+    if (req.user.isAdmin) {
+      return next();
+    }
+
     var query;
     if (req.params.appId) {
       query = {id: req.params.appId};
     } else if(req.params.appName) {
       query = {name: req.params.appName};
     } else {
-      return res.forbidden('No appId or appName were passed!');
+      return next();
     }
     AppConfig.findOne(query)
       .populate('owner')
       .then(function (app) {
-        if (AppConfig.isOwner(app, req.user)) {
-          return next();
-        }
-        if (AppConfig.isCollaborator(app, req.user)) {
+        if (AppConfig.isOwner(app, req.user) ||
+            AppConfig.isCollaborator(app, req.user)) {
           return next();
         }
         return res.forbidden();

@@ -8,6 +8,10 @@
  *
  */
 module.exports = function (req, res, next) {
+  if (req.user && req.user.isAdmin) {
+    return next();
+  }
+
   var query;
   if (req.params.appId) {
     query = {id: req.params.appId};

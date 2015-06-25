@@ -67,6 +67,10 @@ passport.connect = function (req, query, profile, next) {
   var user = {}
     , provider;
 
+  // this property should be set to true by hand in mongodb console
+  // or add more admins to config/default-admins.js
+  user.isAdmin = false;
+
   // Get the authentication provider from the query.
   query.provider = req.param('provider');
 
@@ -84,6 +88,15 @@ passport.connect = function (req, query, profile, next) {
   // add it to the user.
   if (profile.hasOwnProperty('emails')) {
     user.email = profile.emails[0].value;
+
+    // add default admins; you can add others later on using mongodb console
+    for (var i = 0; i < sails.config.admins.length; ++i) {
+      var adminEmail = sails.config.admins[i];
+      if (adminEmail === user.email) {
+        user.isAdmin = true;
+        break;
+      }
+    }
   }
 
   // If the profile object contains displayable name, add it to the user.

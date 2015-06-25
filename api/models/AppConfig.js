@@ -85,15 +85,8 @@ module.exports = {
   },
 
   isOwner: function (app, user) {
-    if (!app.owner) {
-      // No owner means every logged user is an owner
-      return true;
-    }
-    if (!user) {
-      // user is not logged in - therefore not an owner
-      return false;
-    }
-    return app.owner.id === user.id;
+    return (user && user.isAdmin) ||
+      (app.owner && app.owner.id === user.id);
   }
 };
 

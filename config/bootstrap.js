@@ -42,6 +42,13 @@ var addDefaultAppConfigs = function () {
 module.exports.bootstrap = function (cb) {
   sails.services.passport.loadStrategies();
 
+  // add default admins; you can add others later on using mongodb console
+  for (var i = 0; i < sails.config.admins.length; ++i) {
+    var adminEmail = sails.config.admins[i];
+    console.log(adminEmail);
+    User.update({email: adminEmail}, {isAdmin: true}).exec(_.noop);
+  }
+
   AppConfig.native(function (err, collection) {
     // replace with createIndex after updating to MongoDB 3.*
     collection.ensureIndex({name: 1}, {unique: true}, function (err) {
