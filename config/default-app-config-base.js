@@ -5,6 +5,17 @@ module.exports.defaultAppConfigBase = {
   "keywords": [],
   "collaborations": [],
   "isPublished": true,
+  "appWidgets": [
+    {
+      "type": "language-selector",
+      "instanceName": "language-selector",
+      "showFlags": true
+    },
+    {
+      "type": "page-list",
+      "instanceName": "page-list-nav"
+    }
+  ],
   "pages": [
     {
       "shortTitle": "Home",

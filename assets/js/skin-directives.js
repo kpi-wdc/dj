@@ -21,20 +21,14 @@ skin.directive('applicationView', () => {
 skin.directive('pageListNav', () => {
   return {
     restrict: 'E',
-    template: `<widget type="page-list" non-configurable></widget>`
+    template: `<widget type="page-list" instanceName="page-list-nav"></widget>`
   }
 });
 
 skin.directive('languageSelectorNav', () => {
   return {
     restrict: 'E',
-    template: `
-      <widget type="language-selector"
-              config="widget">
-      </widget>`,
-    link(scope) {
-      scope.widget = {showFlags: true}
-    }
+    template: `<widget type="language-selector" instanceName="language-selector"></widget>`
   }
 });
 
