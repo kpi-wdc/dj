@@ -32,6 +32,25 @@ module.exports = {
       });
   },
 
+  createWithConfig: function (req, res) {
+    // Clone default application
+    if (!req.param('config')) {
+      sails.log.error('App config not specified for new app in AppController.createWithConfig');
+      res.badRequest();
+    }
+    var newApp = _.cloneDeep(req.param('config'));
+    newApp.owner = req.user.id;
+
+    AppConfig.create(newApp).then(function (created) {
+      res.ok({
+        id: created.id
+      });
+    }).catch(function (err) {
+      sails.log.error('Error while creating app: ' + err);
+      res.serverError();
+    });
+  },
+
   createCloneDefault: function (req, res) {
     // Clone default application
     var newApp = _.cloneDeep(sails.config.defaultAppConfigBase);

@@ -42,6 +42,7 @@ module.exports.routes = {
   'get /api/app/get-list': 'AppController.getList',
   'get /api/app/get-default-config': 'AppController.getDefaultConfig',
   'get /api/app/create/:appName': 'AppController.createCloneDefault',
+  'post /api/app/create/': 'AppController.createWithConfig',
   'put /api/app/config/:appId': 'AppController.update',
   'get /api/app/export/:appId': 'AppController.export',
   'post /api/app/import': 'AppController.import',
