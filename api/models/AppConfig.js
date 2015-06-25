@@ -21,6 +21,9 @@ module.exports = {
       required: 'true',
       notEmpty: 'true'
     },
+    appWidgets: {
+      type: 'array'
+    },
     pages: {
       type: 'array',
       required: true
@@ -53,24 +56,37 @@ module.exports = {
     }
   },
 
-  afterValidate: function (app, cb) {
-    // this is needed because app.pages[i] is a JSON which might contain dots inside it's keys
+  beforeValidate: function (app, cb) {
+    // this is needed because app.pages[i] and app.appWidgets
+    // are JSONs which might contain dots inside it's keys
     // it's not supported by mongodb: see http://stackoverflow.com/questions/12397118/mongodb-dot-in-key-name
     // so we are stringifying it here and a reverse operation when passing data back to the user.
-    if (!app.pages) {
-      cb();
-      return;
+    if (app.pages) {
+      for (var i = 0; i < app.pages.length; ++i) {
+        app.pages[i] = JSON.stringify(app.pages[i]);
+      }
     }
-    for (var i = 0; i < app.pages.length; ++i) {
-      app.pages[i] = JSON.stringify(app.pages[i]);
+
+    if (app.appWidgets) {
+      for (var i = 0; i < app.appWidgets.length; ++i) {
+        app.appWidgets[i] = JSON.stringify(app.appWidgets[i]);
+      }
     }
+
     cb();
   },
 
-  destringifyPages: function (app) {
-    if (!app.pages) return;
-    for (var i = 0; i < app.pages.length; ++i) {
-      app.pages[i] = JSON.parse(app.pages[i]);
+  destringifyConfigs: function (app) {
+    if (app.appWidgets) {
+      for (var i = 0; i < app.appWidgets.length; ++i) {
+        app.appWidgets[i] = JSON.parse(app.appWidgets[i]);
+      }
+    }
+
+    if (app.pages) {
+      for (var i = 0; i < app.pages.length; ++i) {
+        app.pages[i] = JSON.parse(app.pages[i]);
+      }
     }
   },
 

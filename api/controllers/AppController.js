@@ -78,7 +78,7 @@ module.exports = {
       .populate('owner')
       .then(function (app) {
         res.setHeader('Content-disposition', 'attachment; filename=' + app.name + '.json');
-        AppConfig.destringifyPages(app);
+        AppConfig.destringifyConfigs(app);
 
         app.importedFromURL = sails.getBaseurl() + '/app/' + app.name;
         app.importedFromAuthor = app.owner && app.owner.name;

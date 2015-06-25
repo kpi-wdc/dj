@@ -14,7 +14,7 @@ module.exports = {
         var isOwner = AppConfig.isOwner(app, req.user);
         var isCollaborator = AppConfig.isCollaborator(app, req.user);
 
-        AppConfig.destringifyPages(app);
+        AppConfig.destringifyConfigs(app);
 
         var userInfo;
         if (req.user) {
@@ -47,6 +47,7 @@ module.exports = {
             id: app.id,
             name: app.name,
             skinName: app.skinName,
+            appWidgets: app.appWidgets || [],
             collaborations: app.collaborations || [],
             pages: app.pages || [],
             title: app.title,

@@ -508,7 +508,7 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
 });
 
 app.directive('widget', function ($rootScope, $translate, $window, appUrls, globalConfig, widgetLoader,
-                                  widgetManager, user, app, randomWidgetName) {
+                                  config, widgetManager, user, app, randomWidgetName) {
   function updateEventsOnNameChange(widget) {
     $rootScope.$watch(() => widget.instanceName, (newName, oldName) => {
       if (newName !== oldName && newName !== undefined) {
@@ -539,6 +539,24 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
     },
     controller() {}, // needed for require: '^widget' to work in widget-translate directive
     link(scope, element, attrs) {
+      if (!scope.type) {
+        throw "widget directive needs type parameter";
+      }
+
+      if (!scope.widget && attrs.instancename) {
+        config.appWidgets = config.appWidgets || [];
+        var conf = config.appWidgets.find(wgt => wgt.instanceName === attrs.instancename);
+        if (!conf) {
+          conf = {
+            instanceName: attrs.instancename,
+            type: scope.type
+          }
+          config.appWidgets.push(conf);
+        }
+        scope.widget = conf;
+        scope.disallowEditInstanceName = true;
+      }
+
       scope.widget = scope.widget || {};
       scope.widget.type = scope.widget.type || scope.type;
       scope.widget.instanceName =
@@ -561,6 +579,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
           editingInstanceName: false,
           openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
           startEditingInstanceName() {
+            if (scope.disallowEditInstanceName) return;
             scope.widgetPanel.editingInstanceName = true;
             scope.widgetPanel.newInstanceName = scope.widget.instanceName;
           },
