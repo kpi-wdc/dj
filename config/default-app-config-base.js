@@ -1,4 +1,4 @@
-{
+module.exports.defaultAppConfigBase = {
   "skinName": "default",
   "title": "Title",
   "description": "Description",

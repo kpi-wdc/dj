@@ -30,34 +30,26 @@ module.exports = {
       });
   },
 
-  create: function (req, res) {
+  createCloneDefault: function (req, res) {
     // Clone default application
-    AppConfig.findOneByName('default')
-      .then(function (newApp) {
-        delete newApp.id;
-        newApp.isPublished = true;
-        newApp.name = req.params.appName;
-        newApp.owner = req.user.id;
+    var newApp = _.cloneDeep(sails.config.defaultAppConfigBase);
+    delete newApp.id;
+    newApp.isPublished = true;
+    newApp.name = req.params.appName;
+    newApp.owner = req.user.id;
 
-        if (req.param('skinName')) {
-          newApp.skinName = req.param('skinName');
-        }
+    if (req.param('skinName')) {
+      newApp.skinName = req.param('skinName');
+    }
 
-        AppConfig.destringifyPages(newApp);
-
-        AppConfig.create(newApp).then(function (created) {
-          res.ok({
-            id: created.id
-          });
-        }).catch(function (err) {
-          sails.log.error('Error while creating app: ' + err);
-          res.serverError();
-        });
-      })
-      .catch(function (error) {
-        sails.log.warn('Error in AppController.create: ' + error);
-        res.serverError();
+    AppConfig.create(newApp).then(function (created) {
+      res.ok({
+        id: created.id
       });
+    }).catch(function (err) {
+      sails.log.error('Error while creating app: ' + err);
+      res.serverError();
+    });
   },
 
   update: function (req, res) {
