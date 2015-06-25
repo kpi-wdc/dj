@@ -52,6 +52,10 @@ module.exports = {
     });
   },
 
+  getDefaultConfig: function (req, res) {
+    res.ok(sails.config.defaultAppConfigBase);
+  },
+
   update: function (req, res) {
     AppConfig.update({
       id: req.params.appId

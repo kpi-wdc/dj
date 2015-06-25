@@ -23,6 +23,7 @@ module.exports.policies = {
 
   AppController: {
     createCloneDefault: ['passport', 'isAuthenticated'],
+    getDefaultConfig: [], // no need to detect user
     import: ['passport', 'isAuthenticated'],
     update: ['passport', 'isOwnerOrCollaborator'],
     rename: ['passport', 'isOwnerOrCollaborator'],

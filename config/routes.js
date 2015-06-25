@@ -40,6 +40,7 @@ module.exports.routes = {
   // IMPORTANT! - don't forget to update policies.js!
   // Apps
   'get /api/app/get-list': 'AppController.getList',
+  'get /api/app/get-default-config': 'AppController.getDefaultConfig',
   'get /api/app/create/:appName': 'AppController.createCloneDefault',
   'put /api/app/config/:appId': 'AppController.update',
   'get /api/app/export/:appId': 'AppController.export',
