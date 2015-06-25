@@ -43,7 +43,8 @@ module.exports.bootstrap = function (cb) {
   sails.services.passport.loadStrategies();
 
   AppConfig.native(function (err, collection) {
-    collection.createIndex({name: 1 }, { unique: true }, function (err, result) {
+    // replace with createIndex after updating to MongoDB 3.*
+    collection.ensureIndex({name: 1}, {unique: true}, function (err) {
       if (err) {
         sails.log.error('Error happened while setting up mongo index on appconfig model: ' + err);
       }
