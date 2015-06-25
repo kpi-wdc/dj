@@ -21,7 +21,9 @@ module.exports = {
               id: app.owner.id,
               name: app.owner.name,
               email: app.owner.email
-            }
+            },
+            importedFromURL: app.importedFromURL,
+            importedFromAuthor: app.importedFromAuthor
           };
         })
       );

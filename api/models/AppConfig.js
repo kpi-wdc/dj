@@ -75,7 +75,7 @@ module.exports = {
   },
 
   isCollaborator: function (app, user) {
-    if (!user) {
+    if (!user || !app.collaborations) {
       // user is not logged in - therefore not a collaborator
       return false;
     }
