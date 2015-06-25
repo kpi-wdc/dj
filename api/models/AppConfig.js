@@ -102,7 +102,7 @@ module.exports = {
 
   isOwner: function (app, user) {
     return (user && user.isAdmin) ||
-      (app.owner && app.owner.id === user.id);
+      (app.owner && user && app.owner.id === user.id);
   }
 };
 

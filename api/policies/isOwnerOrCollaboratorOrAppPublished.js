@@ -27,8 +27,10 @@ module.exports = function (req, res, next) {
         AppConfig.isOwner(app, req.user) ||
         AppConfig.isCollaborator(app, req.user)) {
         return next();
+      } else {
+        sails.log('isOwnerOrCollaboratorOrAppPublished policy not passed');
+        return res.forbidden();
       }
-      return res.forbidden();
     }).catch(function (err) {
       sails.log.info('isOwnerOrCollaboratorOrAppPublished policy: ' + err);
       res.forbidden();
