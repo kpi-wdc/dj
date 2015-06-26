@@ -47,10 +47,19 @@ widgetApi.constant('instanceNameToScope', new Map()); // name -> scope
  */
 widgetApi.constant('autoWiredSlotsAndEvents', []); // index -> {slotName, signalName, providerScope}
 
+widgetApi.constant('getWidgetDirectiveScopeFromControllerScope', (scope) => {
+  if (scope && scope.$parent && scope.$parent.$parent && scope.$parent.$parent.$parent) {
+    return scope.$parent.$parent.$parent;
+  } else {
+    return scope;
+  }
+});
+
 widgetApi.factory('APIProvider', function ($rootScope, $log,
-                                           app, APIUser, pageSubscriptions,
-                                           widgetSlots, instanceNameToScope,
-                                           autoWiredSlotsAndEvents, eventWires) {
+                                           app,
+                                           widgetSlots,
+                                           autoWiredSlotsAndEvents,
+                                           getWidgetDirectiveScopeFromControllerScope) {
   /**
    * @class APIProvider
    * @description Injectable class
@@ -58,34 +67,8 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
    * @param [scope.widget.instanceName] Widget's unique name
    */
   class APIProvider {
-    constructor(scope) {
-      this.scope = scope;
-      instanceNameToScope.set(scope.widget.instanceName, scope);
-      scope.$watch('widget.instanceName', (newName, oldName) => {
-        if (newName !== oldName) {
-          instanceNameToScope.set(newName, scope);
-          instanceNameToScope.delete(oldName);
-        }
-      });
-
-      widgetSlots.set(scope, []);
-
-      APIProvider.updatePageSubscriptions();
-
-      scope.$on('$destroy', () => {
-        // clean widgetSlots
-        widgetSlots.delete(scope);
-
-        // clean autoWiredSlotsAndEvents
-        for (let i = autoWiredSlotsAndEvents.length - 1; i >= 0; --i) {
-          if (autoWiredSlotsAndEvents[i].providerScope === scope) {
-            autoWiredSlotsAndEvents.splice(i, 1);
-          }
-        }
-
-        // clean instanceNameToScope
-        instanceNameToScope.delete(this.scope.widget.instanceName);
-      });
+    constructor(controllerScope) {
+      this.scope = getWidgetDirectiveScopeFromControllerScope(controllerScope);
     }
 
     /**
@@ -164,44 +147,6 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
       this.provide(APIProvider.REMOVAL_SLOT, slotFn);
       return this;
     }
-
-    /**
-     * @private
-     * @param emitterScope
-     * @param signalName
-     * @param providerScope
-     * @param slotName
-     */
-    static wireSignalWithSlot(emitterScope, signalName, providerScope, slotName) {
-      if (!emitterScope || !providerScope) {
-        return;
-      }
-      const wire = eventWires.get(emitterScope) || [];
-      wire.push({signalName, providerScope, slotName});
-      eventWires.set(emitterScope, wire);
-    }
-
-    /**
-     * @private
-     * @param subscriptions
-     */
-    static updatePageSubscriptions() {
-      $rootScope.$evalAsync(() => {
-        const subscriptions = pageSubscriptions();
-        eventWires.clear();
-
-        if (!subscriptions) {
-          return;
-        }
-        for (let s of subscriptions) {
-          APIProvider.wireSignalWithSlot(
-            APIUser.getScopeByInstanceName(s.emitter),
-            s.signal,
-            APIUser.getScopeByInstanceName(s.receiver),
-            s.slot);
-        }
-      });
-    }
   }
 
   APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
@@ -212,13 +157,13 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
     const pageConf = app.pageConfig();
     return pageConf && pageConf.subscriptions;
   }, () => {
-    APIProvider.updatePageSubscriptions();
+    app.updatePageSubscriptions();
   }, true);
 
   return APIProvider;
 });
 
-widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
+widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope, getWidgetDirectiveScopeFromControllerScope) {
   /**
    * @class APIUser
    * @description Provides a class which allows to consume widget's
@@ -226,8 +171,8 @@ widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
    * @param scope Widget's scope
    */
   class APIUser {
-    constructor(scope) {
-      this.scope = scope;
+    constructor(controllerScope) {
+      this.scope = getWidgetDirectiveScopeFromControllerScope(controllerScope);
     }
 
     /**
@@ -336,21 +281,17 @@ widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope) {
 
 widgetApi.factory('EventEmitter', function ($log, $rootScope,
                                             eventWires, widgetSlots, autoWiredSlotsAndEvents,
-                                            app, APIProvider) {
+                                            getWidgetDirectiveScopeFromControllerScope, app) {
   /**
    * @class EventEmitter
    * @description Provides a class which allows to emit events which, in row, can invoke slots on other widgets
    * using publish/subscribe mechanism
    */
   class EventEmitter {
-    constructor(scope) {
-      this.scope = scope;
+    constructor(controllerScope) {
+      this.scope = getWidgetDirectiveScopeFromControllerScope(controllerScope);
 
-      APIProvider.updatePageSubscriptions();
-
-      scope.$on('$destroy', () => {
-        eventWires.delete(scope);
-      });
+      app.updatePageSubscriptions();
     }
 
     /**
@@ -443,11 +384,7 @@ widgetApi.factory('EventEmitter', function ($log, $rootScope,
  * @returns {Array}
  */
 widgetApi.factory('pageSubscriptions', function (app) {
-  return () => {
-    const pageConf = app.pageConfig() || {};
-    pageConf.subscriptions = pageConf.subscriptions || [];
-    return pageConf.subscriptions;
-  };
+  return app.pageSubscriptions.bind(app);
 });
 
 /**

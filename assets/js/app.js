@@ -194,7 +194,7 @@ app.factory('config', function (initialConfig, $log) {
 });
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
-                             $translate, appUrls, appName, fullReload, confirm) {
+                             $translate, appUrls, appName, fullReload, eventWires, APIUser) {
 
   let pageConf;
 
@@ -302,6 +302,39 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         $log.warn('No config available - non-page routing...');
         pageConf = undefined;
       }
+    },
+
+    wireSignalWithSlot(emitterScope, signalName, providerScope, slotName) {
+      if (!emitterScope || !providerScope) {
+        return;
+      }
+      const wire = eventWires.get(emitterScope) || [];
+      wire.push({signalName, providerScope, slotName});
+      eventWires.set(emitterScope, wire);
+    },
+
+    pageSubscriptions() {
+      const pageConf = this.pageConfig() || {};
+      pageConf.subscriptions = pageConf.subscriptions || [];
+      return pageConf.subscriptions;
+    },
+
+    updatePageSubscriptions() {
+      $rootScope.$evalAsync(() => {
+        const subscriptions = this.pageSubscriptions();
+        eventWires.clear();
+
+        if (!subscriptions) {
+          return;
+        }
+        for (let s of subscriptions) {
+          this.wireSignalWithSlot(
+            APIUser.getScopeByInstanceName(s.emitter),
+            s.signal,
+            APIUser.getScopeByInstanceName(s.receiver),
+            s.slot);
+        }
+      });
     }
   });
 
@@ -508,7 +541,8 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
 });
 
 app.directive('widget', function ($rootScope, $translate, $window, appUrls, globalConfig, widgetLoader,
-                                  config, widgetManager, user, app, randomWidgetName) {
+                                  config, widgetManager, user, app, randomWidgetName,
+                                  instanceNameToScope, widgetSlots, autoWiredSlotsAndEvents, eventWires) {
   function updateEventsOnNameChange(widget) {
     $rootScope.$watch(() => widget.instanceName, (newName, oldName) => {
       if (newName !== oldName && newName !== undefined) {
@@ -545,7 +579,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
 
       if (!scope.widget && attrs.instancename) {
         config.appWidgets = config.appWidgets || [];
-        var conf = config.appWidgets.find(wgt => wgt.instanceName === attrs.instancename);
+        let conf = config.appWidgets.find(wgt => wgt.instanceName === attrs.instancename);
         if (!conf) {
           conf = {
             instanceName: attrs.instancename,
@@ -565,6 +599,40 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
       updateEventsOnNameChange(scope.widget);
 
       widgetLoader.load(scope.type).then(() => scope.widgetCodeLoaded = true);
+
+
+      function registerScope(scope) {
+        instanceNameToScope.set(scope.widget.instanceName, scope);
+        scope.$watch('widget.instanceName', (newName, oldName) => {
+          if (newName !== oldName) {
+            instanceNameToScope.set(newName, scope);
+            instanceNameToScope.delete(oldName);
+          }
+        });
+
+        widgetSlots.set(scope, []);
+
+        app.updatePageSubscriptions();
+
+        scope.$on('$destroy', () => {
+          // clean widgetSlots and eventWires
+          widgetSlots.delete(scope);
+          eventWires.delete(scope);
+
+          // clean autoWiredSlotsAndEvents
+          for (let i = autoWiredSlotsAndEvents.length - 1; i >= 0; --i) {
+            if (autoWiredSlotsAndEvents[i].providerScope === scope) {
+              autoWiredSlotsAndEvents.splice(i, 1);
+            }
+          }
+
+          // clean instanceNameToScope
+          instanceNameToScope.delete(scope.widget.instanceName);
+
+        });
+      }
+
+      registerScope(scope);
 
       angular.extend(scope, {
         globalConfig,
