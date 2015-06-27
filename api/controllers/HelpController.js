@@ -17,16 +17,11 @@ module.exports = {
       if(!exists){
         res.notFound(path);
       } else {
-        fs.stat(path, function(error, stats) {
-          fs.open(path, "r", function(error, fd) {
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-              var data = buffer.toString("utf8", 0, buffer.length);
-              res.send(data);
-              fs.close(fd);
-            });
-          });
+        fs.readFile(path, {
+          encoding: 'utf-8'
+        }, function (err, data) {
+          if (err) sails.log.error('Error reading file: ' + path);
+          else return res.send(data);
         });
       }
     });
