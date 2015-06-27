@@ -15,7 +15,7 @@ module.exports = {
       + widgetType + '/help/' + targetLanguage + '.html';
     fs.exists(path, function(exists){
       if(!exists){
-        res.notFound(path);
+        res.notFound(path, '404(help not found)');
       } else {
         fs.readFile(path, {
           encoding: 'utf-8'
