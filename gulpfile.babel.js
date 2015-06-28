@@ -189,7 +189,7 @@ gulp.task('annotate-js', ['compile-js'], () =>
 gulp.task('move-widgets', () =>
   // Move everything except JS-code which is handled separately in build-widgets-js
   // and *.md files in 'help' folders which are handled in build-widgets-help
-  gulp.src(['assets/widgets/**', '!assets/widgets/**/*.js', '!assets/widgets/**/help{,/*}'])
+  gulp.src(['assets/widgets/**', '!assets/widgets/**/*.js', '!assets/widgets/**/help{,/*.md}'])
     .pipe(plugins.cached('move-widgets'))
     .pipe(plugins.changed(`${buildPublicDir}/widgets`))
     .pipe(gulp.dest(`${buildPublicDir}/widgets`))
