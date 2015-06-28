@@ -63,7 +63,9 @@ app.factory('appUrls', function (appId) {
     widgetHTML: widgetName =>
       `/widgets/${widgetName}/widget.html`,
     widgetIcon: widgetName =>
-      `/widgets/${widgetName}/icon.png`
+      `/widgets/${widgetName}/icon.png`,
+    widgetHelp: (type, lang) =>
+      `/help/widget/${type}/${lang}`
   };
 });
 
@@ -670,8 +672,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
           },
 
           openHelp() {
-            const lang = $translate.use();
-            const url = '/help/'.concat(scope.type, '/', lang);
+            const url = appUrls.widgetHelp(scope.type, $translate.use());
             $window.open(url, '_blank');
           }
         }
