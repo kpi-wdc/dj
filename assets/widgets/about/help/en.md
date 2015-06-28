@@ -72,6 +72,9 @@ It's sometimes handy for breaking things up.
 
 Markdown can also contain images. I'll need to add something here sometime.
 
+![Image 1](/help/widget/about/img/img1.jpg)
+![Image 2](/help/widget/about/img/img2.jpg)
+
 ## Finally
 
 There's actually a lot more to Markdown than this. See the official [introduction][4] and [syntax][5] for more information. However, be aware that this is not using the official implementation, and this might work subtly differently in some of the little things.
