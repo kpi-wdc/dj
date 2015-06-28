@@ -25,5 +25,23 @@ module.exports = {
         });
       }
     });
+  },
+
+  getImage: function(req, res) {
+    const widgetType = req.params.widgetType;
+    const image = req.params.imgName;
+    const path =  sails.config.appPath + '/.tmp/public/widgets/'
+      + widgetType + '/help/' + image;
+    fs.exists(path, function(exists){
+      if(!exists){
+        res.notFound();
+      } else {
+        //res.set('Content-Type', 'image');
+        fs.readFile(path, function (err, data) {
+          if (err) sails.log.error('Error reading file: ' + path);
+          else return res.send(data);
+        });
+      }
+    });
   }
 };

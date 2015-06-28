@@ -35,6 +35,7 @@ module.exports.routes = {
 
   //Help
   'get /help/widget/:widgetType/:lang': 'HelpController.getHelp',
+  'get /help/widget/:widgetType/img/:imgName': 'HelpController.getImage',
 
   /*** APIs ***/
   // IMPORTANT! - don't forget to update policies.js!
