@@ -163,7 +163,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
     const url = appUrls.templateHTML(pageConfig.template);
     return $http.get(url, {cache: $templateCache})
       .then(result => result.data);
-  }
+  };
 
   $stateProvider
     .state('page', {
@@ -178,7 +178,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 
 app.factory('fullReload', function ($window) {
   return (url) => $window.location.href = url;
-})
+});
 
 app.factory('widgetTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.widgetTypes, {cache: true});
@@ -586,7 +586,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
           conf = {
             instanceName: attrs.instancename,
             type: scope.type
-          }
+          };
           config.appWidgets.push(conf);
         }
         scope.widget = conf;
