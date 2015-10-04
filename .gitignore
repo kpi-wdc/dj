@@ -34,5 +34,11 @@ npm-debug.log
 xlsx
 
 # Other
-*.swp # vim
+*.swp
 
+# Visual studio
+bin
+obj
+*.dat
+*.suo
+*.tmp
