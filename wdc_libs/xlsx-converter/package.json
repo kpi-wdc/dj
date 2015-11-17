@@ -1,0 +1,19 @@
+{
+  "name": "xlsx-converter",
+  "version": "0.0.4",
+  "description": "convert wdc-dataset-excel file into wdc-dataset-json",
+  "main": "index.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+    "copy-object": "^1.0.0",
+    "node-xlsx": "^0.5.1",
+    "flat": "0.0.1",
+    "query": "0.0.1",
+    "util": "^0.10.3",
+    "xlsjs": "0.7.5",
+    "xlsx": "0.7.12",
+    "xlsx2json": "0.0.1"
+  }
+}

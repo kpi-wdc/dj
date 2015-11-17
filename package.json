@@ -92,7 +92,11 @@
     "validator": "3.39.0",
     "xlsjs": "0.7.5",
     "xlsx": "0.8.0",
-    "xlsx-json-parser": "file:proc/xlsx2json"
+    "xlsx-json-parser": "file:proc/xlsx2json",
+    "flat": "file:wdc_libs/flat",
+    "query": "file:wdc_libs/query",
+    "xlsx2json": "file:wdc_libs/xlsx2json",
+    "xlsx-converter": "file:wdc_libs/xlsx-converter"
   },
   "jspm": {
     "directories": {

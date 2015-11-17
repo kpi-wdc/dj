@@ -1,5 +1,6 @@
 System.config({
   "baseURL": "/",
+  "transpiler": "traceur",
   "paths": {
     "app": "js/app.js",
     "app-list": "js/app-list.js",

@@ -1,0 +1,12 @@
+{
+  "name": "flat",
+  "version": "0.0.1",
+  "description": "Convert flat object representation to json",
+  "main": "index.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+    "util": "^0.10.3"
+  }
+}
