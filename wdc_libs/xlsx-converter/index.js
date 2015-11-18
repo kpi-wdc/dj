@@ -7,7 +7,6 @@ fs = require("fs");
 PATH = require("path");
 
 exports.parseXLS = function(filename){
-
     var workbook = parser.convert(parser.parseFile(filename));
     
     var metadataSheet = workbook.Sheets['metadata']; 
@@ -88,7 +87,7 @@ exports.parseXLS = function(filename){
         })
     }
     
-
+    
     return {
         metadata:metadata,
         data:data,
@@ -217,4 +216,13 @@ exports.buildXLS = function(dataset){
 
 exports.saveXLS = function(filename , dataset){
       fs.writeFileSync(filename,exports.buildXLS(dataset));
+}   
+
+exports.buildXLSTable = function (table){
+    return simpleXLSX.build(table);
+}
+
+exports.saveXLSTable = function(filename , table){
+    // console.log(table)
+      fs.writeFileSync(filename,table);
 }   

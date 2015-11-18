@@ -200,3 +200,12 @@ var header = product[0].columnes.map(function(col){
   // process.send(product);
   process.exit(0);
 });
+
+
+// {
+// "select":[
+// 	{"dimension":"country","role":"Rows","collection":["AFG","AGO","ALB"]},
+// 	{"dimension":"indicator","role":"Ignore","collection":[]},
+// 	{"dimension":"year","role":"Columns","collection":[]}
+// 	]
+// }	
