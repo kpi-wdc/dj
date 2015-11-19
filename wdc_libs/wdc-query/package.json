@@ -1,5 +1,5 @@
 {
-  "name": "query",
+  "name": "wdc-query",
   "version": "0.0.1",
   "description": "Execute query from data cube",
   "main": "index.js",

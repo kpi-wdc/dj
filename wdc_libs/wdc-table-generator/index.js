@@ -1,5 +1,5 @@
-var query = require("query");
-XLSX = require("xlsx-converter");
+var query = require("wdc-query");
+XLSX = require("node-xlsx");
 var fs = require("fs");
 
 
@@ -108,7 +108,7 @@ splitColumnsDimensions.forEach(function(current){
 	  	return r;
   });
 
-
+console.log(result)
 
 
 var product = [];
@@ -250,11 +250,11 @@ buildXLS = function(dataset,selection){
 	.forEach(function(item){
 		product.data.push(item)				
 	});
-   return XLSX.buildXLSTable([product]);
+   return XLSX.build([product]);
 }
 
 var saveXLS = function(filename,dataset,selection){
-	 XLSX.saveXLSTable(filename, buildXLS(dataset, selection));
+	 fs.writeFileSync(filename, buildXLS(dataset, selection));
 }
 
 

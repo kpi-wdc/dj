@@ -93,10 +93,12 @@
     "xlsjs": "0.7.5",
     "xlsx": "0.8.0",
     "xlsx-json-parser": "file:proc/xlsx2json",
-    "flat": "file:wdc_libs/flat",
-    "query": "file:wdc_libs/query",
-    "xlsx2json": "file:wdc_libs/xlsx2json",
-    "xlsx-converter": "file:wdc_libs/xlsx-converter"
+    "wdc-flat": "file:wdc_libs/wdc-flat",
+    "wdc-query": "file:wdc_libs/wdc-query",
+    "wdc-xlsx2json": "file:wdc_libs/wdc-xlsx2json",
+    "wdc-xlsx-converter": "file:wdc_libs/wdc-xlsx-converter",
+    "wdc-table-generator": "file:wdc_libs/wdc-table-generator",
+    "wdc-i18n": "file:wdc_libs/wdc-i18n"
   },
   "jspm": {
     "directories": {

@@ -1,13 +1,13 @@
 {
-  "name": "xlsx2json",
+  "name": "wdc-i18n",
   "version": "0.0.1",
-  "description": "",
+  "description": "I18n support",
   "main": "index.js",
   "engines": {
     "node": "0.12.x"
   },
   "dependencies": {
-    "xlsx": "0.7.12",
-    "xlsjs": "0.7.5"
+    "wdc-query": "0.0.1",
+    "util": "^0.10.3"
   }
 }

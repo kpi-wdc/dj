@@ -1,7 +1,7 @@
-query = require('query');
+query = require('wdc-query');
 util = require("util");
-parser = require("xlsx2json");
-FO = require("flat");
+parser = require("wdc-xlsx2json");
+FO = require("wdc-flat");
 simpleXLSX = require("node-xlsx");
 fs = require("fs");
 PATH = require("path");
@@ -218,11 +218,4 @@ exports.saveXLS = function(filename , dataset){
       fs.writeFileSync(filename,exports.buildXLS(dataset));
 }   
 
-exports.buildXLSTable = function (table){
-    return simpleXLSX.build(table);
-}
 
-exports.saveXLSTable = function(filename , table){
-    // console.log(table)
-      fs.writeFileSync(filename,table);
-}   

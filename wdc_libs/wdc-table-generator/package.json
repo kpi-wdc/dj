@@ -1,5 +1,5 @@
 {
-  "name": "table-generator",
+  "name": "wdc-table-generator",
   "version": "0.0.1",
   "description": "Generate table and transform to xlsx",
   "main": "index.js",
@@ -7,8 +7,7 @@
     "node": "0.12.x"
   },
   "dependencies": {
-    "copy-object": "^1.0.0",
-    "util": "^0.10.3",
+    "wdc-query": "0.0.1",
     "node-xlsx": "^0.5.1"
   }
 }
