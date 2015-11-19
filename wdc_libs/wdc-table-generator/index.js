@@ -1,44 +1,10 @@
 var query = require("wdc-query");
-XLSX = require("node-xlsx");
+var XLSX = require("node-xlsx");
 var fs = require("fs");
 
 
-var generate = function (dataset,selection){
+var prepare = function (dataset,selection){
 
-  // var params = selection;
-  // var data = dataset.data;
-  // var dsMetadata = dataset.metadata;
-
-// console.log(selection);
-// console.log(dataset.data);
-// console.log(dataset.metadata);
-
-
-// var getIDList = function(data,dimension,items){
-// 		return new query(data)
-// 					.select(function(row){
-// 						if (items.length == 0) return true;
-// 						var r = false;
-// 						items.forEach(function(current){
-// 							if(row["#"+dimension] == current){
-// 								r = true;
-// 								return
-// 							} 
-// 						});
-// 						return r;
-// 					})
-// 					.map(function(row){
-// 						return {
-// 							id : row["#"+dimension],
-// 							label: row[dimension]
-// 						}
-// 					})
-// 					.distinct()
-// 					.orderBy(function(a,b){
-// 						return a.id > b.id
-// 					})
-// 					.get();
-// }
 
 
 var getIDList = function(metadata,selection){
@@ -226,7 +192,7 @@ var header = product[0].columnes.map(function(col){
 
 
 buildXLS = function(dataset,selection){
-	var gen = generate(dataset,selection);
+	var gen = prepare(dataset,selection);
 	var product = {name:"data",data:[]};
 	var dummyHeader = [];
 	for(i in gen.body[0].metadata){dummyHeader.push(null)}
@@ -258,6 +224,6 @@ var saveXLS = function(filename,dataset,selection){
 }
 
 
-exports.generate = generate;
+exports.prepare = prepare;
 exports.buildXLS = buildXLS;
 exports.saveXLS = saveXLS;

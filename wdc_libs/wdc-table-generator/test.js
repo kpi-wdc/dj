@@ -1,5 +1,4 @@
 converter = require("wdc-xlsx-converter");
-generate = require("wdc-table-generator").generate;
 saveXLS = require("wdc-table-generator").saveXLS;
 I18N = require("wdc-i18n");
 
