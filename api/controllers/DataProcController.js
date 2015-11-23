@@ -101,6 +101,8 @@ module.exports = {
     if (needToHash) {
       // response type doesn't matter - we compute every time
       delete tempObj.response_type;
+      // caching property shouldn't matter either
+      delete tempObj.cache;
       var md5 = require('object-hash').MD5(tempObj);
 
       ProcData.findOneByHash(md5).then(function (json) {
