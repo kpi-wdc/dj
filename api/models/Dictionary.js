@@ -14,9 +14,13 @@ module.exports = {
       unique: true
     },
     value: {
-      type: 'json',
+      type: 'string',
+      label: 'string',
+      note: 'string',
+      icon: 'string',
+      url: 'string',
       required: false
-    }  
+    }
   }
 };
 
