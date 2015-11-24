@@ -1,0 +1,13 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Lookup Key Emitter",
+    "properties": {
+      "listeners": {
+        "type": "string",
+        "title": "Listener Names"
+      }
+    }
+  },
+  "noicon": true
+}

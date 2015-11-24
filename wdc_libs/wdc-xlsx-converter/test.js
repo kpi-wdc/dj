@@ -7,7 +7,7 @@ converter = require("xlsx-converter");
 dataset = converter.parseXLS("dataset-example.xlsx");
 
 dict = dataset.dictionary;
-console.log(JSON.stringify(dataset.metadata));
+console.log(JSON.stringify(dict));
 dataset = converter.createDataset(111,dict);
 
 converter.saveXLS("new.xlsx", dataset);
