@@ -33,5 +33,16 @@ module.exports.policies = {
 
   AppViewController: {
     getView: ['passport', 'isOwnerOrCollaboratorOrAppPublished']
+  },
+
+  DictionaryController: {
+    getAllDictionaries: [],
+    uploadDictionary: [] 
+  },
+
+  DatasetController: {
+    createDataset: [],
+    updateDataset:[]
   }
+
 };

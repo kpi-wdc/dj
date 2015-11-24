@@ -25,7 +25,7 @@ angular.module('app.widgets.dm-lookup', ['pascalprecht.translate'])
         
         $scope.key = $scope.key || "#WB";
         if(!$scope.dictionary){
-          $http.get("./data/dictionary_example.json")
+          $http.get("./api/dictionary")
             .success(function (data) {
                 var d = {};
                 for(let i in data){

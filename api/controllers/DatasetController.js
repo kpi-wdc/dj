@@ -6,6 +6,10 @@
  */
 
 converter = require("xlsx-converter");
+mime = require('mime');
+path = require('path');
+uuid = require('uuid');
+
 
 module.exports = {
 
@@ -17,6 +21,10 @@ module.exports = {
       // set commit.author prop
       // create initial commit as HEAD
       // send xlsx file converter.buildXLS() or converter.saveXLS()
+      file = uuid.v1();
+      res.setHeader('Content-disposition', 'attachment; filename=' + file+".xlsx");
+      res.setHeader('Content-type', mime.lookup(path.basename(file+".xlsx")));
+      return res.send(converter.buildXLS(converter.createDataset(file,[])));
   },
 
   updateDataset: function(req, res) {
@@ -27,6 +35,20 @@ module.exports = {
     // remove unused commits
     // create commit as HEAD
     // send operation status
+    // 
+    req.file('file').upload({},
+      function (err, uploadedFiles) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        if (uploadedFiles.length === 0) {
+          return res.badRequest('No file was uploaded');
+        }
+
+        var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+        var dataset = converter.parseXLS(uploadedFileAbsolutePath);
+        return res.send(dataset);
+      });
   },
 
   getMetadataList: function(req, res) {

@@ -60,5 +60,19 @@ module.exports.routes = {
 
   // DataProcessing manipulation URLs
   'post /api/data/process' : 'DataProcController.process',
-  'get /api/data/process/:dataId' : 'DataProcController.getById'
+  'get /api/data/process/:dataId' : 'DataProcController.getById',
+
+// Dictionary manipulation URLs
+  'post /api/dictionary' : 'DictionaryController.getAllDictionaries',
+  'get /api/dictionary' : 'DictionaryController.getAllDictionaries',
+  'post /api/dictionary/update' : 'DictionaryController.uploadDictionary',
+  
+
+// Dataset manipulation URLs
+  'post /api/dataset/create' : 'DatasetController.createDataset',
+  'get /api/dataset/create' : 'DatasetController.createDataset',
+  'post /api/dataset/update' : 'DatasetController.updateDataset'
+  
+
+
 };

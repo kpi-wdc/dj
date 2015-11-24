@@ -34,6 +34,42 @@ module.exports = {
     Dictionary.find({}).then(function (json) {
       return res.send(json);
     });
+  },
+
+  uploadDictionary : function(req,res){
+     req.file('file').upload({},
+      function (err, uploadedFiles) {
+        if (err) {
+          return res.negotiate(err);
+        }
+        if (uploadedFiles.length === 0) {
+          return res.badRequest('No file was uploaded');
+        }
+
+        var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+        var dictionary = converter.parseXLS(uploadedFileAbsolutePath).dictionary;
+        dictionary.forEach(function(item){
+          Dictionary.find({key:item.key}).then(function(result){
+            if(result.length == 0){
+             Dictionary.create(item).then(function(r){sails.log.debug("Create ", r)}); 
+            }else{
+             Dictionary.update(item).then(function(r){sails.log.debug("Update ", r)});;
+            }
+          });
+         //  Dictionary.update(item)
+         //  .then( function (err, obj) {
+         //          // if (err) {
+         //          //   sails.log.error('Error while adding new data source: ' + err);
+         //          //   return res.serverError();
+         //          // } else {
+         //          //   // send back newly created object's id
+         //          //   return res.send(obj.id);
+         //          // }
+         //  });
+         // return res.send(obj);
+         });
+        return res.send({status:"ok"})  
+      });
   }
 
 };
