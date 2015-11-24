@@ -10,11 +10,11 @@ module.exports = {
   attributes: {
     metadata: {
       type: 'json',
-      required: true,
+      required: true
     },
     data: {
       type: 'json',
       required: false
-    }  
+    }
   }
 };

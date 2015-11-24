@@ -8,8 +8,8 @@
 converter = require("xlsx-converter");
 
 module.exports = {
-  
-  createDataset: function(req, res){
+
+  createDataset: function(req, res) {
       // get all dictionary collection
       // generate new dataset ID
       // call converter.createDataset()
@@ -19,7 +19,7 @@ module.exports = {
       // send xlsx file converter.buildXLS() or converter.saveXLS()
   },
 
-  updateDataset: function(req, res){
+  updateDataset: function(req, res) {
     // get uploaded files
     // for each file call converter.parseXlS()
     // update dictionary collection
@@ -29,50 +29,50 @@ module.exports = {
     // send operation status
   },
 
-  getMetadataList: function(req,resp){
+  getMetadataList: function(req, res) {
     // get req.params.filter as array such as [
     // {'metadata_key': [#key1','#key2',...] },
     // {'metadata_key': [#key1','#key2',...] },
     // ...]
     // for example  - {
-    //                  "metadata.dataset.source" : ["#WB"], 
-    //                  "metadata.dataset.topics[]" : ["#GDP","#WDI/#EC/#GDP"] 
+    //                  "metadata.dataset.source" : ["#WB"],
+    //                  "metadata.dataset.topics[]" : ["#GDP","#WDI/#EC/#GDP"]
     //                }
-    // can use module flat (wdc_libs) for object transforms                 
+    // can use module flat (wdc_libs) for object transforms
     // fetch metadata field from dataset collection (use only HEAD commits)
-    // send this list              
+    // send this list
   },
 
-  getCommitList: function(req, resp){
+  getCommitList: function(req, res) {
     // get req.params.datasetID
     // fetch metadata.dataset.commit field from dataset collection where metadata.dataset.id == datasetID
     // order desc by commit.date
-    // send this list 
+    // send this list
   },
 
-  setHead : function(req, resp){
+  setHead: function(req, res) {
     // get req.params.commitID
     // get commit by commitID and get datasetID
     // find HEAD commit for datasetID
     // update this commit set status in noHEAD
-    // update commit with commitID set status in HEAD 
+    // update commit with commitID set status in HEAD
     // send operation status
   },
 
-  getDataset : function(req, resp){
+  getDataset: function(req, res) {
     // get req.commitID
     // find dataset and send this
   },
 
-  downloadDataset: function(req,resp){
+  downloadDataset: function(req, res) {
     // get req.params.commitID
     // get all dictionary collection
     // find dataset and append dictionary
     // convert dataset to xlsx
     // send file
-  }
+  },
 
-  getTopicTree : function(req, resp){
+  getTopicTree: function(req, res) {
     // get all datasets metadata where topics contains classification pathes
     // call query for tree extraction
     // send tree
