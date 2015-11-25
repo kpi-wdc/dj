@@ -137,30 +137,32 @@ json_to_sheet = function(name, json){
 
 exports.buildXLS = function(dataset){
     var result = [] 
-
-   layout = dataset.metadata.layout;
-   dimension = dataset.metadata.dimension;
-   dims = {};
-   for(i in dimension){
-    dims[i] = layout[i].label;
-    dims["#"+i] = layout[i].id;
-   }
-   dims["#value"] = layout.value;
-
-   data = new query()
-        .from(dataset.data)
-        .map(function(item){
-            r = {};
-            for(i in item){
-                r[dims[i]] = item[i]
-            }
-            return r;
-        })
-        .get();
-
-   result.push(json_to_sheet("data",data));
    
+   if(dataset.metadata){
+       console.log(dataset.metadata)
+       layout = dataset.metadata.layout;
+       dimension = dataset.metadata.dimension;
+   
+       dims = {};
+       for(i in dimension){
+        dims[i] = layout[i].label;
+        dims["#"+i] = layout[i].id;
+       }
+       dims["#value"] = layout.value;
 
+       data = new query()
+            .from(dataset.data)
+            .map(function(item){
+                r = {};
+                for(i in item){
+                    r[dims[i]] = item[i]
+                }
+                return r;
+            })
+            .get();
+
+       result.push(json_to_sheet("data",data));
+  
    metadata = new query()
     .from(FO.json2flat(dataset.metadata))
     .map( function(item){
@@ -173,7 +175,9 @@ exports.buildXLS = function(dataset){
 
    
    result.push(json_to_sheet("metadata", metadata));
-   
+  } 
+  
+  if(dataset.dictionary){ 
    dictionary = new query()
     .from(dataset.dictionary)
     .select(function(item){
@@ -208,7 +212,7 @@ exports.buildXLS = function(dataset){
     .get(); 
 
    result.push(json_to_sheet("i18n", i18n));
-   
+   }
 
    result = simpleXLSX.build(result);
    return result;

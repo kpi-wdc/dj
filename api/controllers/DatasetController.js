@@ -5,7 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-converter = require("xlsx-converter");
+converter = require("wdc-xlsx-converter");
+
 mime = require('mime');
 path = require('path');
 uuid = require('uuid');

@@ -5,6 +5,11 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+converter = require("wdc-xlsx-converter");
+mime = require('mime');
+path = require('path');
+uuid = require('uuid');
+query = require('wdc-query')
 
 module.exports = {
 
@@ -53,24 +58,34 @@ module.exports = {
             if(result.length == 0){
              Dictionary.create(item).then(function(r){sails.log.debug("Create ", r)}); 
             }else{
-             Dictionary.update(item).then(function(r){sails.log.debug("Update ", r)});;
+             Dictionary.update({key:item.key}, item).then(function(r){sails.log.debug("Update ", r)});;
             }
           });
-         //  Dictionary.update(item)
-         //  .then( function (err, obj) {
-         //          // if (err) {
-         //          //   sails.log.error('Error while adding new data source: ' + err);
-         //          //   return res.serverError();
-         //          // } else {
-         //          //   // send back newly created object's id
-         //          //   return res.send(obj.id);
-         //          // }
-         //  });
-         // return res.send(obj);
-         });
+        });
         return res.send({status:"ok"})  
       });
-  }
+  },
+
+  downloadDictionary: function(req,res){
+    Dictionary.find({}).then(function(json){
+      sails.log.debug(json);
+      var dict = new query()
+        .from(json)
+        .map(function(item){
+          var tmp =  item.toJSON();
+          delete tmp.createdAt;
+          delete tmp.updatedAt;
+          delete tmp.id;
+          return tmp;
+        })
+        .get();
+
+      file = "dictionary";
+      res.setHeader('Content-disposition', 'attachment; filename=' + file+".xlsx");
+      res.setHeader('Content-type', mime.lookup(path.basename(file+".xlsx")));
+      return res.send(converter.buildXLS({dictionary:dict}));
+    })
+  } 
 
 };
 

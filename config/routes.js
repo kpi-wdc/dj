@@ -66,6 +66,9 @@ module.exports.routes = {
   'post /api/dictionary' : 'DictionaryController.getAllDictionaries',
   'get /api/dictionary' : 'DictionaryController.getAllDictionaries',
   'post /api/dictionary/update' : 'DictionaryController.uploadDictionary',
+  'post /api/dictionary/download' : 'DictionaryController.downloadDictionary',
+  'get /api/dictionary/download' : 'DictionaryController.downloadDictionary',
+  
   
 
 // Dataset manipulation URLs

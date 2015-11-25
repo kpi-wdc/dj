@@ -18,7 +18,7 @@ angular.module('app.widgets.dm-key-emitter', [])
       .config(() => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         console.log($scope.widget);
-        $scope.l = $scope.widget.listeners.split(",");
+        $scope.l = ($scope.widget.listeners) ? $scope.widget.listeners.split(",") : [];
         
         for(var i in $scope.l){
           $scope.l[i] = $scope.l[i].trim();

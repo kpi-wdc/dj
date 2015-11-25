@@ -15,6 +15,7 @@ import 'template-cached-pages';
 import 'app-config';
 import 'author';
 import 'i18n';
+import 'dictionary';
 import 'info';
 import 'modal-controllers';
 import 'skin-directives'
@@ -25,7 +26,7 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.la
   'ngCookies', 'angular-json-editor', 'ui.tree',
   'app.templates',
   'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
-  'app.user', 'app.info', 'app.author', 'app.modals']);
+  'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
 
 app.factory('appUrls', function (appId) {
   return {
