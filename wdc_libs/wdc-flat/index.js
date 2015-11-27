@@ -48,3 +48,25 @@ exports.json2flat = function(object){
 	p(object,[]);
 	return plane;
 }
+
+
+exports.getProperty = function(obj,path){
+  var res = obj;
+  path = path.split(".");
+  if (!res) return undefined;
+  for(var i in path){
+    if(res[path[i]]){
+      res = res[path[i]];
+    }else{
+      return undefined;
+    }
+  }
+  if(util.isObject(res)){
+  	return res;
+  }
+  res = (res.split) ? res.split(",") : res;
+  for(var i in res){
+    res[i] = res[i].trim();
+  }
+  return res;
+}

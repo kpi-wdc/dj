@@ -16,6 +16,8 @@ var staticPath = path.join('.tmp', 'public');
 
 module.exports = {
 
+  hookTimeout: 40000,
+
   blueprints: {
     actions: false,
     shortcuts: false,

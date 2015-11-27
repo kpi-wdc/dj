@@ -9,7 +9,7 @@ converter = require("wdc-xlsx-converter");
 mime = require('mime');
 path = require('path');
 uuid = require('uuid');
-query = require('wdc-query')
+query = require('wdc-query');
 
 module.exports = {
 
@@ -41,6 +41,19 @@ module.exports = {
     });
   },
 
+  updateDictionary : function(dictionary){
+    var promises = [];
+    dictionary.forEach(function(item){
+          Dictionary.find({key:item.key}).then(function(result){
+            if(result.length == 0){
+             Dictionary.create(item).then(function(r){;}); 
+            }else{
+             Dictionary.update({key:item.key}, item).then(function(r){;});
+            }
+          });
+        });
+  },
+
   uploadDictionary : function(req,res){
      req.file('file').upload({},
       function (err, uploadedFiles) {
@@ -53,22 +66,13 @@ module.exports = {
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
         var dictionary = converter.parseXLS(uploadedFileAbsolutePath).dictionary;
-        dictionary.forEach(function(item){
-          Dictionary.find({key:item.key}).then(function(result){
-            if(result.length == 0){
-             Dictionary.create(item).then(function(r){sails.log.debug("Create ", r)}); 
-            }else{
-             Dictionary.update({key:item.key}, item).then(function(r){sails.log.debug("Update ", r)});;
-            }
-          });
-        });
+        module.exports.updateDictionary(dictionary);
         return res.send({status:"ok"})  
       });
   },
 
   downloadDictionary: function(req,res){
     Dictionary.find({}).then(function(json){
-      sails.log.debug(json);
       var dict = new query()
         .from(json)
         .map(function(item){

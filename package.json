@@ -38,6 +38,7 @@
     "avg": "file:proc/avg",
     "babel": "4.7.16",
     "bcryptjs": "2.1.0",
+    "bluebird": "^3.0.5",
     "connect-mongo": "0.8.1",
     "del": "1.1.1",
     "ejs": "2.3.1",

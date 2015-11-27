@@ -72,9 +72,40 @@ module.exports.routes = {
   
 
 // Dataset manipulation URLs
+// 
+  'post /api/dataset/get/:datasetID' : 'DatasetController.getDataset',
+  'get /api/dataset/get/:datasetID' : 'DatasetController.getDataset',
+
+  'post /api/dataset/download/:datasetID' : 'DatasetController.downloadDataset',
+  'get /api/dataset/download/:datasetID' : 'DatasetController.downloadDataset',
+
   'post /api/dataset/create' : 'DatasetController.createDataset',
   'get /api/dataset/create' : 'DatasetController.createDataset',
-  'post /api/dataset/update' : 'DatasetController.updateDataset'
+
+  'post /api/dataset/update' : 'DatasetController.updateDataset',
+
+  'post /api/dataset/commits/:datasetID' : 'DatasetController.getCommitList',
+  'get /api/dataset/commits/:datasetID' : 'DatasetController.getCommitList',
+
+  'post /api/commit/head/:commitID' : 'DatasetController.setHead',
+  'get /api/commit/head/:commitID' : 'DatasetController.setHead',
+
+  'post /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
+  'get /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
+
+  'get /api/metadata/items' : 'DatasetController.getMetadataList',
+  'post /api/metadata/items' : 'DatasetController.getMetadataList',
+
+  'get /api/metadata/tag/items' : 'DatasetController.getTagList',
+  'post /api/metadata/tag/items' : 'DatasetController.getTagList',
+
+  'get /api/metadata/tag/total' : 'DatasetController.getTagTotal',
+  'post /api/metadata/tag/total' : 'DatasetController.getTagTotal',
+
+  'get /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
+  'post /api/metadata/tag/tree' : 'DatasetController.getTopicTree'
+  
+  
   
 
 

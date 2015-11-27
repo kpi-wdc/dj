@@ -139,7 +139,7 @@ exports.buildXLS = function(dataset){
     var result = [] 
    
    if(dataset.metadata){
-       console.log(dataset.metadata)
+       // console.log(dataset.metadata)
        layout = dataset.metadata.layout;
        dimension = dataset.metadata.dimension;
    
