@@ -1,13 +1,23 @@
 {
   "schema": {
     "type": "object",
-    "title": "Key Lookup",
+    "title": "Tag Tree",
     "properties": {
       "title": {
         "type": "string",
         "title": "Title"
       },
-  
+
+      "lookupListeners": {
+        "type": "string",
+        "title": "Lookup Listeners"
+      },   
+
+      "searchListeners": {
+        "type": "string",
+        "title": "Search Listeners"
+      },
+      
       "icon_class":{
         "type": "string",
         "title": "Icon fondation class"

@@ -1,0 +1,44 @@
+<!-- <div  style="border: 1px solid #dfdfdf;
+  padding: 0.5rem;
+  margin: 0 0 0.5rem;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;"
+ --><div   style="border: 0.1rem solid #ddd; margin:0.2rem 0;"
+  ng-controller="DataManagerTagTreeController">
+    <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em;"> 
+      <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
+      {{title}}
+    </h4>
+    <div style=" padding: 0 0.5em 1em;">
+      <div style="border-bottom:0.1rem solid #ddd;">
+        <span>
+          <b  style="font-size:small; color:#888">
+            <widget-translate>PATH</widget-translate>:
+          </b>
+        </span>
+        <span style="font-size:small">
+          <a  ng-repeat="item in breadcrums track by $index"
+              ng-click = "up($index)"
+              style="color:#D20819; font-size:small" >
+          {{ (lookup(item._tag).label) ? lookup(item._tag).label : item._tag | translate}}
+          <!--  {{ item._lookup.label |translate }}
+           -->:</a>
+       <!--    <a>{{tag._lookup.label | translate}}</a>
+        --> </span>
+      </div>
+      <div class="small-block-grid-3 medium-block-grid-6 large-block-grid-8" style="margin:0.5rem">  
+        <div ng-repeat="item in tagList" style="margin:0 0 0.3em 0.3em;">
+          <a  style="font-size: small;" ng-click="down(item)">
+            <img ng-if="lookup(item._tag).icon" src="{{lookup(item._tag).icon}}"/>
+            <i  ng-if="!lookup(item._tag).icon" 
+                class="fi-folder" 
+                style="color:#a0d3e8; font-size:large">
+            </i>
+              {{ (lookup(item._tag).label) ? lookup(item._tag).label : item._tag | translate}}
+           </a>
+        </div>
+      </div> 
+    </div>      
+</div>
+
+ 

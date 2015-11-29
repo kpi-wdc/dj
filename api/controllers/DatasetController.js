@@ -235,6 +235,12 @@ module.exports = {
                   return tmp;
               })
               .select(function(item){return item})
+              .map(function(item){
+                if(item.split){
+                  return item.split("/")
+                }
+                return item
+              })
               .group(function(item){
                   return {key:item,value:item}
               })
@@ -262,6 +268,12 @@ module.exports = {
                   return tmp;
                 })
               .select(function(item){return item})
+              .map(function(item){
+                if(item.split){
+                  return item.split("/")
+                }
+                return item
+              })
               .group(function(item){
                   return {key:item,value:item}
                 })
@@ -354,7 +366,9 @@ module.exports = {
                 var tmp = item.split("/");
                 var r = [];
                 for (var i=1; i<=tmp.length; i++){
-                  r.push({path:tmp.slice(0,i).join(".")+"._path", value:tmp.slice(0,i).join("/")})
+                  var p = tmp.slice(0,i);
+                  r.push({path:tmp.slice(0,i).join(".")+"._path", value:p.join("/")})
+                  r.push({path:tmp.slice(0,i).join(".")+"._tag", value:p.pop()})
                 }
                 return r;
               })

@@ -1,16 +1,16 @@
 {
   "schema": {
     "type": "object",
-    "title": "Key Lookup",
+    "title": "Tags Total",
     "properties": {
       "title": {
         "type": "string",
         "title": "Title"
       },
-  
-      "icon_class":{
+
+      "property": {
         "type": "string",
-        "title": "Icon fondation class"
+        "title": "Tags property"
       }
     }
   },

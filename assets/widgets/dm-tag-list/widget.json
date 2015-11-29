@@ -1,0 +1,33 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Tag List",
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Title"
+      },
+
+      "property": {
+        "type": "string",
+        "title": "Tag property"
+      },
+
+       "lookupListeners": {
+        "type": "string",
+        "title": "Lookup Listeners"
+      },   
+
+      "searchListeners": {
+        "type": "string",
+        "title": "Search Listeners"
+      },
+
+      "icon_class":{
+        "type": "string",
+        "title": "Icon fondation class"
+      }
+    }
+  },
+  "noicon": true
+}
