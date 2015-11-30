@@ -1,5 +1,4 @@
 {
-  "nojs": true,
   "schema": {
     "type": "object",
     "title": "Title widget",
@@ -7,8 +6,16 @@
       "title": {
         "title": "Set title",
         "type": "string"
+      },
+      
+      "level": {
+        "title": "Level",
+        "type": "integer",
+        "default": 2,
+        "enum": [1,2,3,4,5]
       }
     }
   },
+  
   "noicon": true
 }

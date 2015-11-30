@@ -7,7 +7,7 @@
   ng-controller="DataManagerTagListController">
     <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em;"> 
       <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
-      {{title}} &nbsp;({{total}})
+      {{title | translate}} &nbsp;({{total}})
     </h4>
     <div style=" padding: 0 0.5em 1em;">
     <span ng-repeat="item in tagList">

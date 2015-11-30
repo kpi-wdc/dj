@@ -6,16 +6,20 @@ angular.module('app.widgets.dm-tags-total', ['app.dictionary'])
   .controller('DataManagerTagsTotalController', function ($scope, $http, EventEmitter, APIProvider, $lookup) {
     
     new APIProvider($scope)
-      .config(() => {
+      .config( () => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.title = $scope.widget.title;
-        $scope.property = $scope.widget.property || $scope.property;
+        $scope.tags = $scope.widget.tags || [];
+        $scope.icon_class = $scope.widget.icon_class;
+        $scope.tags.forEach(function(item){
           $http.post(
             "./api/metadata/tag/total",
-            {property : $scope.property}
+            {property : item.path}
            ).success(function(resp){
-            $scope.count = resp.count;
+            item.count = resp.count;
           });
+        })  
+          
       })
       .provide('refresh', (evt) => {
         if ($scope.property && $scope.property!==""){

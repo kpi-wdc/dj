@@ -1,14 +1,15 @@
   <div  ng-controller="DataManagerLookupController"> 
     <div style="border: 0.1rem solid #ddd; margin:0.2rem 0;" 
         ng-if="(object !== key)">    
-      <h4 style="color: rgba(0, 0, 0, 0.6); background-color: #efefef; padding: 0 0.5em;">
+      <h4 style="color: rgba(0, 0, 0, 0.6); background-color: #efefef; padding: 0 0.5em; margin:0;">
         <span ng-if="title">
              <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
-            {{title}}
+            {{title | translate}}
         </span>
         <span ng-if="!title">
             <img ng-if="object.icon" src="{{object.icon}}" width="64px" height="64px" />
-            {{object.label | translate}}
+             <i ng-if="!object.icon" class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
+             {{object.label | translate}}
         </span>    
       </h4>
       
@@ -16,10 +17,10 @@
           <img ng-if="object.icon" src="{{object.icon}}" width="64px" height="64px" />
           {{object.label | translate}}
       </h5>
-      <div style="font-size: small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
+      <div ng-if="object.note" style="font-size: small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
         {{object.note | translate}}
       </div>
-      <div style="font-size:small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
+      <div ng-if="object.url" style="font-size:small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
         <a href="{{object.url}}">{{object.url}}</a>
       </div>
 

@@ -1,1 +1,5 @@
-<h2 class="page-title" ng-bind="widget.title"></h2>
+<div ng-controller="TitleController" style="padding:0; margin:0">
+	<h1 class="page-title" style="font-size:{{level}}rem;">
+		{{title | translate}}
+	</h1>
+</div>

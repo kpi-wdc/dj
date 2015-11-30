@@ -1,4 +1,5 @@
-var getProperty = require("wdc-flat").getProperty;
+// var getProperty = require("wdc-flat").getProperty;
+var getProperty = require("./index").getProperty;
 
 var test = {
   "metadata": {
@@ -8968,12 +8969,14 @@ var test = {
 // console.log("dataset.commit.createdAt", getProperty(test.metadata,"dataset.commit.createdAt"));
 // console.log("dataset.note", getProperty(test.metadata,"dataset.note"));
 // console.log("dataset.topics", getProperty(test.metadata,"dataset.topics"));
-// console.log("dataset.commit", getProperty(test.metadata,"dataset.commit"));
+console.log("dataset.commit", getProperty(test.metadata,"dataset.commit"));
 // console.log("dataset", getProperty(test.metadata,"dataset"));
 
 // console.log("dimension.country.values.0.label", getProperty(test.metadata,"dimension.country.values.0.label"));
+console.log("dimension.country.values.*.label", 
+  getProperty(test,"data.*.#value"));//values.*.label"));
 // console.log("dimension.country.values.*.label", getProperty(test.metadata,"dimension.country.values.*.label"));
-console.log("dimension.*.values", JSON.stringify(getProperty(test.metadata,"dimension.*.values.*.label")));
+// console.log("dimension.*.values", JSON.stringify(getProperty(test.metadata,"dimension.*.values.*.label")));
 
 
 

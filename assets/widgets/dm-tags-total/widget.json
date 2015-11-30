@@ -8,11 +8,31 @@
         "title": "Title"
       },
 
-      "property": {
+      "icon_class":{
         "type": "string",
-        "title": "Tags property"
-      }
+        "title": "Icon fondation class"
+      },
+
+      "tags":{
+        "type": "array",
+        "format":"table",
+        "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "title": "Title"
+              },
+
+              "path": {
+                "type": "string",
+                "title": "Path"
+              }
+            }  
+        }
+      }    
     }
   },
+
   "noicon": true
 }

@@ -51,28 +51,18 @@ exports.json2flat = function(object){
 
 
 
-// TODO Full multiple * implementation needed
-// 
-function getProperty (obj,path){
-  if(path === "") {return obj}
+
+function getSimpleProperty (obj,path){
+  if(path === "" || !path) {return obj}
   var res = obj;
   path = path.split(".");
   if (!res) return undefined;
   for(var i in path){
-  	if(path[i] === "*"){
-  		tmpPath = path.slice(i).slice(1);
-  		var buf = []
-  		for( j in res){
-  			buf = buf.concat(getProperty(res[j],tmpPath.join(".")))
-  		}
-  		return buf;
-  	}else{
-	    if(res[path[i]]){
+  	   if(res[path[i]]){
 	      res = res[path[i]];
 	    }else{
 	      return undefined;
 	    }
-	}    
   }
   
   
@@ -85,6 +75,38 @@ function getProperty (obj,path){
     res[i] = res[i].trim();
   }
   return res;
+}
+
+
+function getProperty(obj,path){
+	if(path === "") {return obj}
+  	var buf = [obj];
+    var result;
+
+  	path = path.split("*");
+  	path.forEach(function (p){
+  		result = buf;
+  		buf = [];
+  		result.forEach(function(res){
+	  		if(p.match("."+"$") == "."){
+	  			var mp = p.slice(0,p.length-1);
+	  			mp = (mp.indexOf(".")==0) ? mp.slice(1) : mp;
+	  			var o = getSimpleProperty(res,mp)
+	  			for(var i in o){
+	  				buf.push(getSimpleProperty(o,i))
+	  			}
+	  		}else{
+				var mp = p;
+	  			mp = (mp.indexOf(".")==0) ? mp.slice(1) : mp;
+	  			buf.push(getSimpleProperty(res,mp))
+	  		}
+	    })
+  	})
+  	result = [];
+  	buf.forEach(function(item){
+  		result = result.concat(item);
+  	})
+  	return result;
 }
 
 exports.getProperty = getProperty
