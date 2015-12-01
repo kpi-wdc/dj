@@ -426,8 +426,10 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
         }
       }).result
         .then(widgetType => {
+          
           const realWidget = {
-            type: widgetType,
+            type: widgetType.type,
+            icon: widgetType.icon,
             instanceName: randomWidgetName()
           };
 

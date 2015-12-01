@@ -29,7 +29,7 @@
       <div class="small-block-grid-3 medium-block-grid-6 large-block-grid-8" style="margin:0.5rem">  
         <div ng-repeat="item in tagList" style="margin:0 0 0.3em 0.3em;">
           <a  style="font-size: small;" ng-click="down(item)">
-            <img ng-if="lookup(item._tag).icon" src="{{lookup(item._tag).icon}}"/>
+            <img ng-if="lookup(item._tag).icon" src="{{lookup(item._tag).icon}}" width="32px" height="32px"/>
             <i  ng-if="!lookup(item._tag).icon" 
                 class="fi-folder" 
                 style="color:#a0d3e8; font-size:large">

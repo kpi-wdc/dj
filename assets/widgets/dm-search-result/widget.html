@@ -12,7 +12,7 @@
     <div style=" padding: 0 0.5em 1em;">
       <div ng-repeat="item in result" style="border-bottom: 0.1rem solid #ddd;">
       <h4 style="font-stretch: ultra-condensed;">
-        <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}"/>
+        <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
         <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i> 
         {{item.dataset.label | translate}}
       </h4>

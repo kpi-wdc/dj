@@ -88,8 +88,8 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
     add(widget) {
       // checks whether chosen template belongs to the current filter criteria
       $scope.chosenWidget = widget;
-
-      $modalInstance.close($scope.chosenWidget.type);
+      
+      $modalInstance.close($scope.chosenWidget);
     },
 
     isSelected(widget) {

@@ -1,9 +1,33 @@
-<div ng-controller="I18NController">
-{{enT}}
-<br/>
-{{ukT}}
-<br/>
-{{ruT}}
-<br/>
-
+<div ng-controller="I18NController" ng-show="globalConfig.designMode">
+	<h4 style="color:#888;">i18n</h4>
+		<table>
+			
+			<tr>
+				<td colspan="4">
+					<span style="font-size:small">
+						<b>Filter:</b>
+						<input type="text" 
+							         			ng-model="key"
+							         			style="
+							         				font-size: smaller;
+							         				margin: 0;
+							         				padding: 0.2rem;
+							         				height: inherit;"
+						/>
+					</span>
+				</td>	
+			</tr>
+			<tr>
+				<th style="font-size:smaller; color:#4DAECF;">Key</th>
+				<th style="font-size:smaller;">EN</th>
+				<th style="font-size:smaller;">UA</th>
+				<th style="font-size:smaller;">RU</th>
+			</tr>
+			<tr ng-repeat="item in translations | filter : key">
+				<td style="font-size:smaller; color:#4DAECF;padding:0.1rem 0.5rem;">{{item.key}}</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">{{item.en}}</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">{{item.ua}}</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">{{item.ru}}</td>
+			</tr>
+		</table>
 </div>

@@ -1,5 +1,7 @@
 <div class="widget-design-panel clearfix design-mode-only">
-
+  <span class="widget-name left">
+    <img ng-if="widget.icon" src="{{widget.icon}}" width="24px" height="24px"/>
+  </span>
   <span ng-if="!widgetPanel.editingInstanceName"
         class="widget-name left"
         ng-click="widgetPanel.startEditingInstanceName()"
@@ -21,7 +23,7 @@
       <span translate>CANCEL</span>
     </button>
   </span>
-
+ 
   <span class="widget-type label radius left" ng-bind="type"></span>
   <span ng-if="widgetPanel.allowDeleting"
         class="widget-delete-btn right" ng-click="widgetPanel.deleteWidget()"
