@@ -21,12 +21,13 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate'])
         var enT = {};
         var ukT = {};
         var ruT = {};
-        $scope.translations.forEach(function(item){
-          console.log(item);
-          enT[item.key] = item.en;
-          ukT[item.key] = item.ua;
-          ruT[item.key] = item.ru;
-        }); 
+        if($scope.translations.forEach){
+          $scope.translations.forEach(function(item){
+            enT[item.key] = item.en;
+            ukT[item.key] = item.ua;
+            ruT[item.key] = item.ru;
+          });
+        }   
         console.log(ukT,enT,ruT);
         translateProvider.translations("uk",ukT);
         translateProvider.translations("en",enT);
