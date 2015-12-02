@@ -1,0 +1,126 @@
+
+
+<h3 style="color:#888">Manage Datasets 
+	<span class="right" ng-click="close()">
+	    <i class="glyphicon fi-x"></i>
+  	</span>
+</h3>
+
+<div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+	
+	<button ng-model="files" 
+			ng-file-select 
+			ng-multiple="true" 
+			ng-file-change="fileSelected($files, $event)"
+			class="button radius tiny secondary toolbar right"
+	        style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;"
+	           
+	>		
+	        Update/Upload Dataset
+	</button>
+
+
+     <button 
+             class="button radius tiny secondary toolbar right"
+             style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+            <a href="./api/dataset/create" target="blank">
+              Create New Dataset
+            </a>       
+    </button>
+</div>
+<div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+	<h4 style="font-stretch: ultra-condensed; margin:0;text-align:right; color:#888">{{item.dataset.id}}</h4>
+	<h4 style="font-stretch: ultra-condensed; margin:0;">
+	        <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
+	        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i> 
+	        {{item.dataset.label | translate}}
+	</h4>
+
+	<div style="margin:0 0 0 1.5em;">
+		<div style=" font-size: small; text-align: justify;margin:0 0 1rem 0.1em;">
+		  <b>
+		    NOTE
+		  </b>:&nbsp;&nbsp;{{item.dataset.note | translate}}
+		</div>  
+		<div style=" font-size: small; text-align: justify;">
+		  <b>
+		    SOURCE
+		  </b>:&nbsp;&nbsp;
+		  <a>
+		    {{(lookup(item.dataset.source).label) ? lookup(item.dataset.source).label : item.dataset.source | translate}}
+		  </a>
+		</div>
+		<div style=" font-size: small; text-align: justify;">
+		  <b>
+		    UPDATED AT
+		  </b>:&nbsp;&nbsp;{{item.dataset.commit.createdAt}}  
+		</div>
+		<div style=" font-size: small; text-align: justify;">
+		  <b>
+		    TOPICS
+		  </b>:&nbsp;&nbsp;
+		  <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
+		    <a>
+		      {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
+		    </a>&nbsp;,
+		  </span>
+		</div>
+	</div>	
+</div>
+<h4 style="margin: 1em 0 0 1em; color: #888;">Dataset History</h4>
+<div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+	<center ng-if="!commits">
+		<img src="./img/ajax-loader.gif"/>
+	</center>	
+	
+	<table ng-if="commits">
+		<tr>
+			<th style="font-size:smaller;">&nbsp;</th>
+			<th style="font-size:smaller;">Commit ID</th>
+			<th style="font-size:smaller;">Author</th>
+			<th style="font-size:smaller;">Created At</th>
+			<th style="font-size:smaller;">Note</th>
+			<th style="font-size:smaller;">Operations</th>
+		</tr>
+		<tr ng-repeat="c in commits" ng-style="headRowStyle(c.metadata.dataset.commit.HEAD)"> 
+			<td>
+				<b ng-style="headStyle(c.metadata.dataset.commit.HEAD)">
+					{{(c.metadata.dataset.commit.HEAD==true) ? "HEAD" : "&nbsp;"}}
+				</b>
+			</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;">{{c.metadata.dataset.commit.id}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;">{{c.metadata.dataset.commit.author}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+				{{c.metadata.dataset.commit.createdAt}}
+			</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;">{{c.metadata.dataset.commit.note}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+				<button 
+             		ng-click=""
+              		class="button radius tiny toolbar secondary"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+             		<a href="{{'./api/commit/download/'+c.metadata.dataset.commit.id}}" target="blank">
+            		  Download
+            		</a>  
+		    	</button>
+ 				<button 
+ 					ng-if="c.metadata.dataset.commit.HEAD==false"
+             		ng-click="upToHEAD(c)"
+              		class="button radius tiny toolbar warning"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+            		  Up to HEAD
+		    	</button>
+		    	<button 
+ 					ng-if="c.metadata.dataset.commit.HEAD==false"
+             		ng-click="upToHEAD(c)"
+              		class="button radius tiny toolbar alert"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+            		  Delete
+		    	</button>
+		    	
+			</td>
+		</tr>
+	</table>
+
+
+</div>

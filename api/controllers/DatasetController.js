@@ -324,6 +324,32 @@ module.exports = {
     })
   },
 
+  downloadCommit: function(req, res) {
+    var commitID = req.params.commitID;
+    Dataset.findOne({ 
+      "id":commitID
+    }).then(function(obj){
+        Dictionary.find({}).then(function(json){
+          var dict = new query()
+                .from(json)
+                .map(function(item){
+                  var tmp =  item.toJSON();
+                  delete tmp.createdAt;
+                  delete tmp.updatedAt;
+                  delete tmp.id;
+                  return tmp;
+                })
+                .get();
+          obj = prepareDataset(obj);
+          obj.dictionary = dict;      
+          var file = obj.metadata.dataset.id+"("+obj.id+").xlsx";
+          res.setHeader('Content-disposition', 'attachment; filename=' + file);
+          res.setHeader('Content-type', mime.lookup(path.basename(file)));
+          return res.send(converter.buildXLS(obj));
+        });
+      });
+  },
+
   downloadDataset: function(req, res) {
     var datasetID = req.params.datasetID;
     Dataset.findOne({ 

@@ -10,12 +10,35 @@
       {{title | translate}} &nbsp;({{total}})
     </h4>
     <div style=" padding: 0 0.5em 1em;">
-      <div ng-repeat="item in result" style="border-bottom: 0.1rem solid #ddd;">
-      <h4 style="font-stretch: ultra-condensed;">
+      <div ng-repeat="item in result" style="border-bottom: 0.1rem solid #ddd; margin:0 0 1rem 0;">
+      <h4 style="font-stretch: ultra-condensed; margin:0;">
         <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
         <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i> 
         {{item.dataset.label | translate}}
       </h4>
+      <div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+        <button 
+                 ng-click="openManageDialog(item)"
+                  class="button radius tiny secondary toolbar right"
+                 style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
+                Manage       
+        </button>
+        <button 
+                 ng-click="openQueryDialog(item)"
+                  class="button radius tiny secondary toolbar right"
+                 style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
+                Query       
+        </button>
+        <button 
+                 ng-click="download(item)"
+                  class="button radius tiny secondary toolbar right"
+                 style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+                <a href="{{'./api/dataset/download/'+item.dataset.id}}" target="blank">
+                  Download
+                </a>       
+        </button>
+        <img  class="right" ng-if="item.download" src="./img/ajax-loader.gif" style="margin:0rem 0.1rem 0.3rem 0.1rem;">
+      </div>
       <div style="margin:0 0 0 1.5em;">
         <div style=" font-size: small; text-align: justify;margin:0 0 0 0.1em;">
           <b>
