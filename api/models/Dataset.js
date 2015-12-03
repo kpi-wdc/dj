@@ -23,6 +23,11 @@ module.exports = {
       type:'string',
       required: false
     },
+
+    "dataset/status": {
+      type:'string',
+      required: false
+    },
     
     metadata: {
       type: 'json',
@@ -42,8 +47,9 @@ module.exports = {
 
   beforeCreate: function(values,cb){
     values["dataset/id"] = values.metadata.dataset.id;
+    values["dataset/status"] = values.metadata.dataset.status;
     values["commit/HEAD"] = true;
-    values["commit/author"] = "AAB";
+    values["commit/author"] = values.metadata.dataset.commit.author;
     cb();
   }
 };

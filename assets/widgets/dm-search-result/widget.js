@@ -4,13 +4,31 @@ import 'dictionary';
 
 angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload'])
   .controller('DataManagerSearchResultController', function ($scope, $http, EventEmitter, 
-    APIProvider, pageSubscriptions, $lookup, $translate,$modal) {
+    APIProvider, pageSubscriptions, $lookup, $translate,$modal, user) {
     
 
     const eventEmitter = new EventEmitter($scope);
     $scope.lookup = $lookup;
     $scope.breadcrums = [];
     $scope.tagList = [];
+    $scope.user = user;
+    $scope.total = 0;
+
+    var formatDate = function(date){
+      var locale = $translate.use() || "en";
+      date = new Date(date);
+      date = date.toLocaleString(locale,
+        { year: 'numeric',  
+          month: 'long',  
+          day: 'numeric', 
+          hour: 'numeric',  
+          minute: 'numeric',
+          second: 'numeric'
+        })
+      return date;
+    }
+
+     $scope.formatDate = formatDate;
 
     function addListener(subscription) {
       var subscriptions = pageSubscriptions();
@@ -20,7 +38,6 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
           return;
         }
       }
-      console.log("SUBSCRIPT",subscription);
       subscriptions.push(subscription);
     };
 
@@ -36,13 +53,16 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
     };
 
     var searchDatasets = function(query){
-          console.log("QUERY:", JSON.stringify(query));
-          $http.post("./api/metadata/items", query).success(
-            function(resp){
-              console.log("RESPONSE:", resp)
-              $scope.result = resp;
-              $scope.total = $scope.result.length;
-          });
+          if(query){
+            $scope.total = 0;
+            $scope.query = query;
+            var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
+            $http.post("./api/metadata/items", {"query":query, "status":status}).success(
+              function(resp){
+                $scope.result = resp;
+                $scope.total = $scope.result.length;
+            });
+          }
     }
 
     $scope.download = function(item){
@@ -103,11 +123,19 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         backdrop: 'static',
         resolve: {
           item() {return item },
-          prepareTopics() {return prepareTopics}
+          prepareTopics() {return prepareTopics},
+          formatDate() { return formatDate}
         }  
-      }).result.then(() => {
-        console.log("Close MANAGE DIALOG",item);
-      });
+      }).result.then(
+            () => {
+               console.log("Close MANAGE DIALOG",item);
+               eventEmitter.emit('refresh');
+            },
+            () => {
+               console.log("Cancel MANAGE DIALOG",item);
+               eventEmitter.emit('refresh');
+            }
+      );
     }
 
 
@@ -116,43 +144,73 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.title = $scope.widget.title;
         $scope.icon_class = $scope.widget.icon_class;
-        $scope.query = $scope.widget.query || $scope.query;
+        // $scope.query = $scope.widget.query || $scope.query;
         searchDatasets($scope.query);
 
         $scope.listeners = ($scope.widget.listeners) ? $scope.widget.listeners.split(",") : [];
         for(var i in $scope.listeners){
           $scope.listeners[i] = $scope.listeners[i].trim();
-          console.log($scope.widget.instanceName,$scope.listeners[i]);
+          // console.log($scope.widget.instanceName,$scope.listeners[i]);
           addListener({
                 emitter: $scope.widget.instanceName,
                 receiver: $scope.listeners[i],
                 signal: "setLookupKey",
                 slot: "setLookupKey"
               });
-        }     
+        }
+
+        $scope.rlisteners = ($scope.widget.rlisteners) ? $scope.widget.rlisteners.split(",") : [];
+        for(var i in $scope.rlisteners){
+          $scope.rlisteners[i] = $scope.rlisteners[i].trim();
+          // console.log($scope.widget.instanceName,$scope.rlisteners[i]);
+          addListener({
+                emitter: $scope.widget.instanceName,
+                receiver: $scope.rlisteners[i],
+                signal: "refresh",
+                slot: "refresh"
+              });
+        }          
         
       })
       .provide('searchQuery', (evt, value) => {
+        $scope.query = value;
+        // console.log("SEARCH",evt, $scope.query)
         searchDatasets(value);
+      })
+      .provide('refresh', (evt) => {
+        // console.log("REFRESH", $scope.query);
+        searchDatasets($scope.query);
       })
       
       .removal(() => {
         console.log('Find Result widget is destroyed');
       });
   })
+
+
+
+
+
+
+
+
 .controller("ManageDialogController", function ($scope, $modalInstance,$http, $upload, $timeout,
-                                                item, prepareTopics, $lookup,
-                                                $translate){
+                                                item, prepareTopics,formatDate, $lookup,
+                                                $translate, user){
   
   $scope.item = item;
   $scope.lookup = $lookup;
   $scope.prepareTopics = prepareTopics;
+  $scope.user = user;
+  
+  $scope.formatDate = formatDate;
 
   $scope.fileSelected = function(f,e){
     var files = f;
-    $scope.commits = undefined;
+    
     $scope.formUpload = false;
     if (files != null) {
+        $scope.commits = undefined;
         for (var i = 0; i < files.length; i++) {
           $scope.errorMsg = null;
           (function(file) {
@@ -172,7 +230,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
       file: file,
     })
     .then(function(response) {
-      console.log(response);
+        $lookup.reload();
         $scope.item = response.data.metadata;
         $timeout(function() {
           $scope.getCommitList();
@@ -208,12 +266,43 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
 
   }
 
-  $scope.getCommitList = function(){
-    $http.get("./api/dataset/commits/"+item.dataset.id)
-      .success(function(data){
-        $scope.commits = data;
+  $scope.deleteCommit = function(c){
+    $scope.commits = undefined;
+    $http.get("./api/commit/delete/"+c.metadata.dataset.commit.id)
+      .success(function(){
+        $scope.getCommitList();        
       })
+  }
+
+  $scope.selectDataset = function(d){
+    $scope.item = d;
+    $scope.getCommitList();
+  }
+
+  $scope.showDatasetList = function(){
+    $scope.item = undefined;
+    $scope.getCommitList();
+  }
+  
+ $scope.getAllDatasets = function(){
+    $http.post("./api/metadata/items",{status:"private"})
+      .success(function(resp){
+        $scope.datasets = resp; 
+      })
+  }
+
+  $scope.getCommitList = function(){
+    if($scope.item){
+      $http.get("./api/dataset/commits/"+$scope.item.dataset.id)
+        .success(function(data){
+          $scope.commits = data;
+        })
+    }else{
+      $scope.getAllDatasets();
+    }    
   };
+
+ 
 
   $scope.getCommitList();
   

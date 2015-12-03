@@ -3,7 +3,8 @@ import 'dictionary';
 
 
 angular.module('app.widgets.dm-tags-total', ['app.dictionary'])
-  .controller('DataManagerTagsTotalController', function ($scope, $http, EventEmitter, APIProvider, $lookup) {
+  .controller('DataManagerTagsTotalController', function ($scope, $http, EventEmitter, 
+    APIProvider, $lookup, user) {
     
     new APIProvider($scope)
       .config( () => {
@@ -11,10 +12,11 @@ angular.module('app.widgets.dm-tags-total', ['app.dictionary'])
         $scope.title = $scope.widget.title;
         $scope.tags = $scope.widget.tags || [];
         $scope.icon_class = $scope.widget.icon_class;
+        var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
         $scope.tags.forEach(function(item){
           $http.post(
             "./api/metadata/tag/total",
-            {property : item.path}
+            {property : item.path, "status" :status}
            ).success(function(resp){
             item.count = resp.count;
           });
@@ -22,14 +24,15 @@ angular.module('app.widgets.dm-tags-total', ['app.dictionary'])
           
       })
       .provide('refresh', (evt) => {
-        if ($scope.property && $scope.property!==""){
+        var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
+        $scope.tags.forEach(function(item){
           $http.post(
             "./api/metadata/tag/total",
-            {property : $scope.property}
+             {property : item.path, "status" :status}
            ).success(function(resp){
-            $scope.count = resp.count;
+            item.count = resp.count;
           });
-        }
+        })  
       })
       
       .removal(() => {

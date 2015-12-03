@@ -20,13 +20,16 @@ var prepareCommitInfo = function(obj){
     delete obj.data;
     obj.metadata.dataset.commit.createdAt = obj.createdAt;
     obj.metadata.dataset.commit.id = obj.id;
+    obj.metadata.dataset.commit.author = obj["commit/author"];
     obj.metadata.dataset.commit.HEAD = obj["commit/HEAD"];
+    obj.metadata.dataset.status = obj["dataset/status"];
     delete obj.id;
     delete obj.createdAt;
     delete obj.updatedAt;
     delete obj["dataset/id"];
     delete obj["commit/HEAD"];
     delete obj["commit/author"];
+    delete obj["dataset/status"];
     if (obj.metadata.layout){
       delete obj.metadata.layout;
     }
@@ -43,7 +46,9 @@ var prepareCommitInfo = function(obj){
 var prepareDataset = function(obj){
     obj.metadata.dataset.commit.createdAt = obj.createdAt;
     obj.metadata.dataset.commit.id = obj.id;
+     obj.metadata.dataset.commit.author = obj["commit/author"];
     obj.metadata.dataset.commit.HEAD = obj["commit/HEAD"];
+    obj.metadata.dataset.status = obj["dataset/status"];
     obj.data = obj.data || [];
     delete obj.id;
     delete obj.createdAt;
@@ -51,6 +56,7 @@ var prepareDataset = function(obj){
     delete obj["dataset/id"];
     delete obj["commit/HEAD"];
     delete obj["commit/author"];
+    delete obj["dataset/status"];
     return obj
   }  
 
@@ -69,7 +75,7 @@ module.exports = {
 
   createDataset: function(req, res) {
 
-      sails.log.debug(req.session.user);
+      // sails.log.debug("Current User",req.user);
       Dictionary.find({}).then(function(json){
       var dict = new query()
         .from(json)
@@ -85,6 +91,8 @@ module.exports = {
       var dataset = converter.createDataset(file,dict);
       delete dataset.data;
       dict = dataset.dictionary;
+      dataset.metadata.dataset.status = "private";
+      dataset.metadata.dataset.commit.author = req.user.name;
       // dictionaryController.updateDictionary(dict);
       delete dataset.dictionary;
 
@@ -117,6 +125,7 @@ module.exports = {
 
         dictionaryController.updateDictionary(dict);
         delete dataset.dictionary;
+        dataset.metadata.dataset.commit.author = req.user.name;
         Dataset.findOne(
           { "dataset/id":dataset.metadata.dataset.id,
             "commit/HEAD":true
@@ -145,7 +154,7 @@ module.exports = {
                           return res.serverError();
                         } else {
                           // TODO send operation status
-                          return res.send(obj);
+                          return res.send(prepareCommitInfo(obj));
                         }
                      });
                 });
@@ -156,26 +165,32 @@ module.exports = {
   },
 
   getMetadataList: function(req, res) {
-      var params = req.body;
+    var params = req.body;
+    
+    var mq = {"commit/HEAD":true}; 
+    if(!params || !params.status || params.status == "public"){
+        mq["dataset/status"] = "public";
+    }
+    
    
-      Dataset.find({"commit/HEAD":true})
+      Dataset.find(mq)
         .then(function(obj){
           var r = new query()
               .from(obj)
               .map(function(item){return prepareDataset(item).metadata})
               .get();
-          if(!params){
+          if(!params.query){
             return res.send(r);
           }else{
             r = new query()
                   .from(r)
                   .select(function(data){
                     outerOrC = false;
-                    for(i in params){
+                    for(i in params.query){
                       var andC = true;
-                      for(prop in params[i]){
+                      for(prop in params.query[i]){
                         var values = getProperty(data,prop);
-                        var test = params[i][prop];
+                        var test = params.query[i][prop];
                         var orC = false;
                         values.forEach(function(valuesItem){
                           test.forEach(function(testItem){
@@ -226,7 +241,13 @@ module.exports = {
         return res.send([]);
       }
 
-      Dataset.find({"commit/HEAD":true})
+      var mq = {"commit/HEAD":true}; 
+      if(!params || !params.status || params.status == "public"){
+          mq["dataset/status"] = "public"
+      }
+       
+
+      Dataset.find(mq)
         .then(function(obj){
           var r = new query()
               .from(obj)
@@ -254,9 +275,13 @@ module.exports = {
 
   getTagTotal: function(req,res){
     var params = req.body;
-      
+    
+    var mq = {"commit/HEAD":true}; 
+    if(!params || !params.status || params.status == "public"){
+        mq["dataset/status"] = "public"
+    }
 
-      Dataset.find({"commit/HEAD":true})
+      Dataset.find(mq)
         .then(function(obj){
           if(!params || !params.property){
             return res.send({tag:"dataset", count:obj.length});
@@ -350,6 +375,19 @@ module.exports = {
       });
   },
 
+  deleteCommit: function(req,res){
+    var commitID = req.params.commitID;
+    Dataset.destroy({ 
+      "id":commitID
+    }).exec(function(err,obj){
+      if(err){
+        res.serverError(err);
+      }else{
+        return res.ok();
+      }  
+    });
+  },
+
   downloadDataset: function(req, res) {
     var datasetID = req.params.datasetID;
     Dataset.findOne({ 
@@ -378,7 +416,14 @@ module.exports = {
   },
 
   getTopicTree: function(req, res) {
-    Dataset.find({"commit/HEAD":true})
+    var params = req.body;
+    
+      var mq = {"commit/HEAD":true}; 
+      if(!params || !params.status || params.status == "public"){
+          mq["dataset/status"] = "public"
+      }
+
+    Dataset.find(mq)
         .then(function(obj){
               var tree = new query()
               .from(obj)

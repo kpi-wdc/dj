@@ -4,7 +4,7 @@ import 'dictionary';
 
 angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
   .controller('DataManagerTagTreeController', function ($scope, $http, EventEmitter, 
-    APIProvider, pageSubscriptions, $lookup, $translate) {
+    APIProvider, pageSubscriptions, $lookup, $translate, user) {
     
 
     const eventEmitter = new EventEmitter($scope);
@@ -20,7 +20,6 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
           return;
         }
       }
-      console.log("SUBSCRIPT",subscription);
       subscriptions.push(subscription);
     };
 
@@ -68,7 +67,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
          $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];
         for(var i in $scope.lookupListeners){
           $scope.lookupListeners[i] = $scope.lookupListeners[i].trim();
-          console.log($scope.widget.instanceName,$scope.lookupListeners[i]);
+          // console.log($scope.widget.instanceName,$scope.lookupListeners[i]);
           addListener({
                 emitter: $scope.widget.instanceName,
                 receiver: $scope.lookupListeners[i],
@@ -80,7 +79,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
         $scope.searchListeners = ($scope.widget.searchListeners) ? $scope.widget.searchListeners.split(",") : [];
         for(var i in $scope.searchListeners){
           $scope.searchListeners[i] = $scope.searchListeners[i].trim();
-          console.log($scope.widget.instanceName,$scope.searchListeners[i]);
+          // console.log($scope.widget.instanceName,$scope.searchListeners[i]);
           addListener({
                 emitter: $scope.widget.instanceName,
                 receiver: $scope.searchListeners[i],
@@ -91,24 +90,32 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
 
         $scope.icon_class = $scope.widget.icon_class;
         $scope.property = $scope.widget.property || $scope.property;
-           
-          $http.get("./api/metadata/tag/tree").success(function(resp){
+         var status = (user.isOwner || user.isCollaborator) ? "private" : "public";   
+          $http.post("./api/metadata/tag/tree",{"status":status})
+            .success(function(resp){
               $scope.breadcrums = [];
               $scope.tagList = [];
               resp._tag = $scope.title;
               $scope.result = resp;
-              $scope.down($scope.result);
+              $scope.breadcrums.push($scope.result);
+              prepareList($scope.result);
+              $scope.tag = $scope.result;
+              // $scope.down($scope.result);
           })
       })    
 
       .provide('refresh', (evt) => {
-        $http.post(
-            "./api/metadata/tag/items",
-            {property : $scope.property}
-           ).success(function(resp){
-            $scope.tagList = resp;
-
-          });
+        var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
+        $http.post("./api/metadata/tag/tree",{"status":status})
+          .success(function(resp){
+              $scope.breadcrums = [];
+              $scope.tagList = [];
+              resp._tag = $scope.title;
+              $scope.result = resp;
+              $scope.breadcrums.push($scope.result);
+              prepareList($scope.result);
+              $scope.tag = $scope.result;
+          })
       })
       
       .removal(() => {

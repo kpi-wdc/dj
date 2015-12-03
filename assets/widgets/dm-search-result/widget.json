@@ -15,7 +15,12 @@
 
       "listeners": {
         "type": "string",
-        "title": "Listeners"
+        "title": "Lookup Listeners"
+      },
+
+      "rlisteners": {
+        "type": "string",
+        "title": "Refresh Listeners"
       },   
 
       "icon_class":{

@@ -4,8 +4,11 @@ import 'dictionary';
 
 angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
   .controller('DataManagerTagListController', function ($scope, $http, EventEmitter, 
-    APIProvider, pageSubscriptions, $lookup, $translate) {
+    APIProvider, pageSubscriptions, $lookup, $translate, user) {
+
     
+    
+   
 
     const eventEmitter = new EventEmitter($scope);
     $scope.lookup = $lookup;
@@ -20,7 +23,6 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
           return;
         }
       }
-      console.log("SUBSCRIPT",subscription);
       subscriptions.push(subscription);
     };
 
@@ -41,6 +43,27 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
       tmp[$scope.property.split(".").slice(1).join(".")] = [{includes:key}];
       let query = [tmp];
       eventEmitter.emit('searchQuery', query);
+    }
+
+    $scope.refresh = function(){
+          var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
+
+          $http.post(
+              "./api/metadata/tag/total",
+              {property : $scope.property,"status":status}
+             ).success(function(resp){
+              $scope.total = resp.count;
+          });
+
+          $http.post(
+            "./api/metadata/tag/items",
+            {property : $scope.property,"status":status}
+           ).success(function(resp){
+            resp.forEach(function(item){
+              item.lookup = $lookup(item.tag)
+            }); 
+            $scope.tagList = resp;
+          });
     }
 
     new APIProvider($scope)
@@ -74,30 +97,26 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
               });
         }  
            
-          $http.post(
-              "./api/metadata/tag/total",
-              {property : $scope.property}
-             ).success(function(resp){
-              $scope.total = resp.count;
-          });
+          // $http.post(
+          //     "./api/metadata/tag/total",
+          //     {property : $scope.property}
+          //    ).success(function(resp){
+          //     $scope.total = resp.count;
+          // });
 
-          $http.post(
-            "./api/metadata/tag/items",
-            {property : $scope.property}
-           ).success(function(resp){
-            resp.forEach(function(item){
-              item.lookup = $lookup(item.tag)
-            }); 
-            $scope.tagList = resp;
-          });
+          // $http.post(
+          //   "./api/metadata/tag/items",
+          //   {property : $scope.property}
+          //  ).success(function(resp){
+          //   resp.forEach(function(item){
+          //     item.lookup = $lookup(item.tag)
+          //   }); 
+          //   $scope.tagList = resp;
+          // });
+          $scope.refresh();
         })
       .provide('refresh', (evt) => {
-        $http.post(
-            "./api/metadata/tag/items",
-            {property : $scope.property}
-           ).success(function(resp){
-            $scope.tagList = resp;
-          });
+        $scope.refresh();
       })
       
       .removal(() => {

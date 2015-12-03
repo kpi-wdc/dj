@@ -93,6 +93,10 @@ module.exports.routes = {
   'post /api/commit/download/:commitID' : 'DatasetController.downloadCommit',
   'get /api/commit/download/:commitID' : 'DatasetController.downloadCommit',
 
+  'post /api/commit/delete/:commitID' : 'DatasetController.deleteCommit',
+  'get /api/commit/delete/:commitID' : 'DatasetController.deleteCommit',
+
+
   'post /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
   'get /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
 
