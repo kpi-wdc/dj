@@ -1,0 +1,15 @@
+<widget-holder name="column"></widget-holder>
+<div class="row">
+  <div class="column medium-3 left-column">
+    <widget-holder name="topleft"></widget-holder>
+  </div>
+  <div class="column medium-9 right-column">
+    <widget-holder name="topright"></widget-holder>
+  </div>
+</div>
+<widget-holder name="bottom"></widget-holder>
+
+<div ng-if="globalConfig.debugMode">
+  Config: <br>
+  <pre>{{config | json}}</pre>
+</div>

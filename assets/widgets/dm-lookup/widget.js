@@ -18,7 +18,12 @@ angular.module('app.widgets.dm-lookup', ['app.dictionary'])
       })
       .provide('setLookupKey', (evt, value) => {
         $scope.key = value;
-        $scope.object = $lookup($scope.key);
+        let tmp = $lookup($scope.key);
+        if($scope.key == tmp || tmp.en){
+          $scope.object = {label:$scope.key};
+        }else{
+          $scope.object = tmp;
+        }
       })
       
       .removal(() => {

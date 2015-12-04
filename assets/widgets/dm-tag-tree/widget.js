@@ -12,6 +12,12 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
     $scope.breadcrums = [];
     $scope.tagList = [];
 
+    $scope.collapsed = true;
+
+    $scope.changeState = function(){
+      $scope.collapsed = !$scope.collapsed;      
+    }
+
     function addListener(subscription) {
       var subscriptions = pageSubscriptions();
       for (var i in subscriptions) {

@@ -196,12 +196,13 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
 
 .controller("ManageDialogController", function ($scope, $modalInstance,$http, $upload, $timeout,
                                                 item, prepareTopics,formatDate, $lookup,
-                                                $translate, user){
+                                                $translate, user, confirm){
   
   $scope.item = item;
   $scope.lookup = $lookup;
   $scope.prepareTopics = prepareTopics;
   $scope.user = user;
+  $scope.upload_process = false;
   
   $scope.formatDate = formatDate;
 
@@ -221,6 +222,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
   };
 
   $scope.upload = function (file) {
+    $scope.upload_process = true;
     $upload.upload({
       url: './api/dataset/update',
       method: 'POST',
@@ -230,10 +232,11 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
       file: file,
     })
     .then(function(response) {
+        $scope.upload_process = false;
         $lookup.reload();
         $scope.item = response.data.metadata;
         $timeout(function() {
-          $scope.getCommitList();
+        $scope.getCommitList();
       });
     });
   }
@@ -260,10 +263,19 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
   $scope.upToHEAD = function(c){
     $scope.commits = undefined;
     $http.get("./api/commit/head/"+c.metadata.dataset.commit.id)
-      .success(function(){
+      .success(function(resp){
+        $scope.item = resp.metadata;
         $scope.getCommitList();        
       })
 
+  }
+
+  $scope.setCommitStatus = function(commitID,status){
+    $http.get("./api/commit/"+status+"/"+commitID)
+      .success(function(resp){
+        $scope.item = resp.metadata;
+        $scope.getCommitList();
+      })
   }
 
   $scope.deleteCommit = function(c){
@@ -271,6 +283,14 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
     $http.get("./api/commit/delete/"+c.metadata.dataset.commit.id)
       .success(function(){
         $scope.getCommitList();        
+      })
+  }
+
+  $scope.deleteDataset = function(c){
+    confirm("You will remove the dataset "+c.metadata.dataset.id+". You can download it before removing. Are you sure?")
+      .then(function(){
+        $scope.item = undefined;
+        $scope.deleteCommit(c);
       })
   }
 

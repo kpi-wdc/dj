@@ -14,6 +14,11 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
     $scope.lookup = $lookup;
     $scope.breadcrums = [];
     $scope.tagList = [];
+    $scope.collapsed = true;
+
+    $scope.changeState = function(){
+      $scope.collapsed = !$scope.collapsed;      
+    }
 
     function addListener(subscription) {
       var subscriptions = pageSubscriptions();

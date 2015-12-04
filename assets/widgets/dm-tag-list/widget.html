@@ -5,16 +5,22 @@
   border-radius: 10px;"
  --><div   style="border: 0.1rem solid #ddd; margin:0.2rem 0;"
   ng-controller="DataManagerTagListController">
-    <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em;"> 
+    <h4 ng-click="changeState()"
+        style=" color: rgba(0, 0, 0, 0.6);
+                background-color: #efefef; padding: 0 0.5em; 
+                cursor:pointer;margin:0; font-stretch: semi-condensed;"> 
       <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
       {{title | translate}} &nbsp;({{total}})
+      <span ng-if="collapsed">
+        ...
+      </span>
     </h4>
-    <div style=" padding: 0 0.5em 1em;">
+    <div ng-if="!collapsed" style=" padding: 0.5em 0.5em 1em;">
     <span ng-repeat="item in tagList">
-      <a  style="font-size: smaller;" ng-click="selectItem(item.tag)">
+      <a  style="font-size: smaller;font-stretch: ultra-condensed;" ng-click="selectItem(item.tag)">
       <img ng-if="item.lookup.icon" src="{{item.lookup.icon}}" width="24px" height:"24px"/>
-       {{(item.lookup.label)?item.lookup.label:item.tag | translate}}&nbsp;({{item.count}})
-      </a>,&nbsp;
+       {{(item.lookup.label)?item.lookup.label:item.tag | translate}}({{item.count}})
+      </a>,
      </span>
     </div>      
 </div>

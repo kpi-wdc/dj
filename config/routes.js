@@ -96,7 +96,12 @@ module.exports.routes = {
   'post /api/commit/delete/:commitID' : 'DatasetController.deleteCommit',
   'get /api/commit/delete/:commitID' : 'DatasetController.deleteCommit',
 
+  'post /api/commit/public/:commitID' : 'DatasetController.setPublicStatus',
+  'get /api/commit/public/:commitID' : 'DatasetController.setPublicStatus',
 
+  'post /api/commit/private/:commitID' : 'DatasetController.setPrivateStatus',
+  'get /api/commit/private/:commitID' : 'DatasetController.setPrivateStatus',
+  
   'post /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
   'get /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
 

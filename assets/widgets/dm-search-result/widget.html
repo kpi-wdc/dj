@@ -5,22 +5,23 @@
   border-radius: 10px;"
  --><div ng-controller="DataManagerSearchResultController">
  
+ 
   <div ng-if="(!(user.isOwner || user.isCollaborator) && (total != 0))||(user.isOwner || user.isCollaborator)"
     style="border: 0.1rem solid #ddd; margin:0.2rem 0;">
-    <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em;"> 
+    <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em; margin:0;"> 
       <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
       {{title | translate}} &nbsp;({{total}})
     </h4>
     <div ng-if="user.isOwner || user.isCollaborator"
-      class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+      class="row" style="margin:0.5em 0 0.2em; border-bottom: 0.1rem solid #ddd">
       <button 
                ng-click="openManageDialog()"
-               class="button radius tiny secondary toolbar right"
+               class="button radius tiny toolbar right"
                style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
-              Manage Datasets       
+              <b>Manage Datasets...</b>       
       </button>
     </div>
-    <center ng-if="total == 0">
+    <center ng-if="query && total == 0" >
       <img src="./img/ajax-loader.gif"/>
     </center>
     <div ng-if="total>0" style=" padding: 0 0.5em 1em;">
@@ -49,12 +50,12 @@
                  style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
                 Manage       
         </button>
-        <button 
+       <!--  <button 
                  ng-click="openQueryDialog(item)"
                   class="button radius tiny secondary toolbar right"
                  style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
                 Query       
-        </button>
+        </button> -->
         <button 
                  ng-click="download(item)"
                   class="button radius tiny secondary toolbar right"

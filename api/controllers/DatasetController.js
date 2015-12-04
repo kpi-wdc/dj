@@ -17,13 +17,14 @@ var util = require("util");
 
 
 var prepareCommitInfo = function(obj){
-    delete obj.data;
+    
     obj.metadata.dataset.commit.createdAt = obj.createdAt;
     obj.metadata.dataset.commit.id = obj.id;
     obj.metadata.dataset.commit.author = obj["commit/author"];
     obj.metadata.dataset.commit.HEAD = obj["commit/HEAD"];
     obj.metadata.dataset.status = obj["dataset/status"];
     delete obj.id;
+    delete obj.data;
     delete obj.createdAt;
     delete obj.updatedAt;
     delete obj["dataset/id"];
@@ -137,7 +138,7 @@ module.exports = {
                         return res.serverError();
                       } else {
                         // TODO send operation status
-                        return res.send(obj);
+                        return res.send(prepareCommitInfo(obj));
                       }
               })        
             }else{
@@ -333,12 +334,34 @@ module.exports = {
         .then(function(){
          Dataset.update({id:commitID},{"commit/HEAD":true})
           .then(function(obj){
-            return res.send(obj);
+            return res.send(prepareCommitInfo(obj[0]));
           }) 
         })
       })
   },
 
+  
+  setStatus:function (commitID, status){
+    // sails.log.debug("Commit",commitID)
+    return Dataset.update({"id":commitID},{"dataset/status":status});
+  },
+
+  setPublicStatus:function(req,res){
+    var commitID = req.params.commitID;
+    this.setStatus(commitID,"public").then(function(obj){
+      // sails.log.debug("OBJECT", obj)
+      return res.send(prepareCommitInfo(obj[0]));
+    });
+  },
+
+  setPrivateStatus:function(req,res){
+    var commitID = req.params.commitID;
+    this.setStatus(commitID,"private").then(function(obj){
+      // sails.log.debug("OBJECT", obj)
+      return res.send(prepareCommitInfo(obj[0]));
+    });
+  },    
+  
   getDataset: function(req, res) {
     var datasetID = req.params.datasetID;
     Dataset.findOne({ 

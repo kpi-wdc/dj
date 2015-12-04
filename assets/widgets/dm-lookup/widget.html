@@ -1,7 +1,8 @@
   <div  ng-controller="DataManagerLookupController"> 
     <div style="border: 0.1rem solid #ddd; margin:0.2rem 0;" 
         ng-if="(object !== key)">    
-      <h4 style="color: rgba(0, 0, 0, 0.6); background-color: #efefef; padding: 0.5rem 0.5em; margin:0;">
+      <h4 style="color: rgba(0, 0, 0, 0.6); background-color: #efefef; padding: 0 0.5em;
+    margin: 0;">
         <span ng-if="title">
              <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
             {{title | translate}}
@@ -13,7 +14,7 @@
         </span>    
       </h4>
       
-      <h5 style="color:#888; padding-left:1.5rem;" ng-if="title">
+      <h5 style="color:#888; padding:1em 1.5rem;" ng-if="title">
           <img ng-if="object.icon" src="{{object.icon}}" width="48px" height="48px" />
           {{object.label | translate}}
       </h5>
@@ -21,7 +22,7 @@
         {{object.note | translate}}
       </div>
       <div ng-if="object.url" style="font-size:small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
-        <a href="{{object.url}}">{{object.url}}</a>
+        <a href="{{object.url}}" target="blank">{{object.url}}</a>
       </div>
 
     </div>  

@@ -13,6 +13,25 @@
       "right"
     ]
   },
+
+  "2(3x9)-cols": {
+    "description": "Two-column 3:9 layout",
+    "holders" : [
+      "column",
+      "left",
+      "right"
+    ]
+  },
+
+  "2(9x3)-cols": {
+    "description": "Two-column 9:3 layout",
+    "holders" : [
+      "column",
+      "left",
+      "right"
+    ]
+  },
+
   "2x2": {
     "description": "2-column 2-rows layout",
     "holders" : [
@@ -23,6 +42,7 @@
       "bottomright"
     ]
   },
+
   "left-right-bottom": {
     "description": "Layout with two columns in first row and one column in second row",
     "holders" : [
