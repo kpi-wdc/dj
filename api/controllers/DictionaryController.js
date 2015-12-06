@@ -13,7 +13,7 @@ query = require('wdc-query');
 
 module.exports = {
 
-  getDictionary: function(req, res) {
+  getDictionary: function (req, res) {
     // get req.params.type as array of string
     // fetch data from dictionary collection where type in req.params.type array
     // if req.params.type is undefined or req.params.type == [] fetch all data
@@ -25,37 +25,53 @@ module.exports = {
     }
 
     Dictionary.find({
-      'value.type' : dictionaryTypes
+      'value.type': dictionaryTypes
     }).then(function (json) {
       if (json) {
         return res.send(json);
       } else {
         return res.send([]);
       }
+    }, function (err) {
+      sails.log.error('Error while getting a dictionary of types: ' + dictionaryTypes + err);
+      res.serverError();
     });
   },
 
-  getAllDictionaries: function(req, res) {
+  getAllDictionaries: function (req, res) {
     Dictionary.find({}).then(function (json) {
       return res.send(json);
+    }, function (err) {
+      sails.log.error('Error while getting all dictionaries' + err);
+      res.serverError();
     });
   },
 
-  updateDictionary : function(dictionary){
+  updateDictionary: function (dictionary) {
     var promises = [];
-    dictionary.forEach(function(item){
-          Dictionary.find({key:item.key}).then(function(result){
-            if(result.length == 0){
-             Dictionary.create(item).then(function(r){;}); 
-            }else{
-             Dictionary.update({key:item.key}, item).then(function(r){;});
-            }
+    dictionary.forEach(function (item) {
+      Dictionary.find({key: item.key}).then(function (result) {
+        if (result.length == 0) {
+          Dictionary.create(item).then(function (r) {
+            ;
+          }, function (err) {
+            sails.log.error('Error while creating dictionary' + err);
+            res.serverError();
           });
-        });
+        } else {
+          Dictionary.update({key: item.key}, item).then(function (r) {
+            ;
+          }, function (err) {
+            sails.log.error('Error while updating dictionary' + err);
+            res.serverError();
+          });
+        }
+      });
+    });
   },
 
-  uploadDictionary : function(req,res){
-     req.file('file').upload({},
+  uploadDictionary: function (req, res) {
+    req.file('file').upload({},
       function (err, uploadedFiles) {
         if (err) {
           return res.negotiate(err);
@@ -67,16 +83,16 @@ module.exports = {
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
         var dictionary = converter.parseXLS(uploadedFileAbsolutePath).dictionary;
         module.exports.updateDictionary(dictionary);
-        return res.send({status:"ok"})  
+        return res.send({status: "ok"})
       });
   },
 
-  downloadDictionary: function(req,res){
-    Dictionary.find({}).then(function(json){
+  downloadDictionary: function (req, res) {
+    Dictionary.find({}).then(function (json) {
       var dict = new query()
         .from(json)
-        .map(function(item){
-          var tmp =  item.toJSON();
+        .map(function (item) {
+          var tmp = item.toJSON();
           delete tmp.createdAt;
           delete tmp.updatedAt;
           delete tmp.id;
@@ -85,11 +101,14 @@ module.exports = {
         .get();
 
       file = "dictionary";
-      res.setHeader('Content-disposition', 'attachment; filename=' + file+".xlsx");
-      res.setHeader('Content-type', mime.lookup(path.basename(file+".xlsx")));
-      return res.send(converter.buildXLS({dictionary:dict}));
+      res.setHeader('Content-disposition', 'attachment; filename=' + file + ".xlsx");
+      res.setHeader('Content-type', mime.lookup(path.basename(file + ".xlsx")));
+      return res.send(converter.buildXLS({dictionary: dict}));
+    }, function (err) {
+      sails.log.error('Error while getting a dictionary' + err);
+      res.serverError();
     })
-  } 
+  }
 
 };
 
