@@ -81,28 +81,28 @@
 <div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
 	<!-- <h4 style="margin: 1em 0 0 1em; color: #888;">Dataset</h4> -->
 	<h4 style="font-stretch: ultra-condensed; margin:0; color:#0078a0">
-	<button 
+	<button
  					ng-if="item.dataset.status == 'private'"
  					ng-click="setCommitStatus(item.dataset.commit.id,'public')"
               		class="button radius toolbar warning"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
             		  <b>Private</b>
 	</button>
-	<button 
+	<button
  					ng-if="item.dataset.status == 'public'"
  					ng-click="setCommitStatus(item.dataset.commit.id,'private')"
               		class="button radius toolbar success"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
             		  <b>Public</b>
 	</button>
-			  
+
 		<span>ID:&nbsp;{{item.dataset.id}}</span>
-		
+
 	</h4>
 
 	<h4 style="font-stretch: ultra-condensed; margin:0;">
-	        <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
-	        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i> 
+	        <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
+	        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i>
 	        {{item.dataset.label | translate}}
 	</h4>
 

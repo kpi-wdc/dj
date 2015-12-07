@@ -8,14 +8,14 @@
             {{title | translate}}
         </span>
         <span ng-if="!title">
-            <img ng-if="object.icon" src="{{object.icon}}" width="48px" height="48px" />
-             <i ng-if="!object.icon" class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
+            <img ng-if="object.icon" ng-src="{{object.icon}}" width="48px" height="48px" />
+             <i ng-if="!object.icon" class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i>
              {{object.label | translate}}
         </span>    
       </h4>
       
       <h5 style="color:#888; padding:1em 1.5rem;" ng-if="title">
-          <img ng-if="object.icon" src="{{object.icon}}" width="48px" height="48px" />
+          <img ng-if="object.icon" ng-src="{{object.icon}}" width="48px" height="48px" />
           {{object.label | translate}}
       </h5>
       <div ng-if="object.note" style="font-size: small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">

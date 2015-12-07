@@ -35,19 +35,17 @@
        <!--    <a>{{tag._lookup.label | translate}}</a>
         --> </span>
       </div>
-      <div class="small-block-grid-3 medium-block-grid-6 large-block-grid-8" style="margin:0.5rem">  
+      <div class="small-block-grid-3 medium-block-grid-6 large-block-grid-8" style="margin:0.5rem">
         <div ng-repeat="item in tagList" style="margin:0 0 0.3em 0.3em;">
           <a  style="font-size: small; font-stretch: semi-condensed;" ng-click="down(item)">
-            <img ng-if="lookup(item._tag).icon" src="{{lookup(item._tag).icon}}" width="32px" height="32px"/>
-            <i  ng-if="!lookup(item._tag).icon" 
-                class="fi-folder" 
+            <img ng-if="lookup(item._tag).icon" ng-src="{{lookup(item._tag).icon}}" width="32px" height="32px"/>
+            <i  ng-if="!lookup(item._tag).icon"
+                class="fi-folder"
                 style="color:#a0d3e8; font-size:large">
             </i>
               {{ (lookup(item._tag).label) ? lookup(item._tag).label : item._tag | translate}}
            </a>
         </div>
-      </div> 
-    </div>      
+      </div>
+    </div>
 </div>
-
- 
