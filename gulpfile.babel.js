@@ -144,7 +144,11 @@ gulp.task('build-template-cache', () =>
 );
 
 gulp.task('copy-es6-polyfill', () =>
-  gulp.src('node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js')
+  gulp.src([
+    // depending on the NPM version
+    'node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js',
+    'node_modules/babel-core/browser-polyfill.js'
+    ])
     .pipe(plugins.rename('es6-polyfill.js'))
     .pipe(plugins.changed(`${buildPublicDir}/js`))
     .pipe(gulp.dest(`${buildPublicDir}/js`))
