@@ -6,6 +6,7 @@ langSelector.controller('LanguageSelectorController', function ($scope, $transla
   angular.extend($scope, {
     selectLanguage(langKey) {
       $translate.use(langKey);
+      $translate.refresh();
     },
     languages: [
       {key: "en", title: "English"},

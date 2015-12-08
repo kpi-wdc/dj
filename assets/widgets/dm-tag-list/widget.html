@@ -18,7 +18,7 @@
     <div ng-if="!collapsed" style=" padding: 0.5em 0.5em 1em;">
     <span ng-repeat="item in tagList">
       <a  style="font-size: smaller;font-stretch: ultra-condensed;" ng-click="selectItem(item.tag)">
-      <img ng-if="item.lookup.icon" src="{{item.lookup.icon}}" width="24px" height:"24px"/>
+      <img ng-if="item.lookup.icon" ng-src="{{item.lookup.icon}}" width="24px" height:"24px"/>
        {{(item.lookup.label)?item.lookup.label:item.tag | translate}}({{item.count}})
       </a>,
      </span>

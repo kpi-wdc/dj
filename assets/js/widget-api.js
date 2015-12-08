@@ -198,7 +198,7 @@ widgetApi.factory('APIUser', function (widgetSlots, instanceNameToScope, getWidg
     invoke(providerName, slotName, ...args) {
       const providerScope = APIUser.getScopeByInstanceName(providerName);
       if (!widgetSlots.has(providerScope)) {
-        throw `Provider ${providerName} 434doesn't exist`;
+        throw `Provider ${providerName} doesn't exist`;
       }
       for (let slot of widgetSlots.get(providerScope)) {
         if (slot.slotName === slotName) {

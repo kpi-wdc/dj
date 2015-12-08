@@ -28,8 +28,8 @@
     <div ng-if="total>0" style=" padding: 0 0.5em 1em;">
       <div ng-repeat="item in result" style="border-bottom: 0.1rem solid #ddd; margin:0 0 1rem 0;">
       <h4 style="font-stretch: ultra-condensed; margin:0;">
-        <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
-        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i> 
+        <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
+        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i>
         {{item.dataset.label | translate}}
         <span ng-if="item.dataset.status == 'private'" 
         style="   color: #f04124;

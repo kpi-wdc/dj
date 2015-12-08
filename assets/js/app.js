@@ -426,16 +426,16 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
         }
       }).result
         .then(widgetType => {
-          
+
           const realWidget = {
             type: widgetType.type,
             icon: widgetType.icon,
+            openConfigOnLoad: true,
             instanceName: randomWidgetName()
           };
 
           holder.widgets = holder.widgets || [];
           holder.widgets.push(realWidget);
-          $timeout(() => this.openWidgetConfigurationDialog(realWidget));
         });
     },
 
@@ -603,7 +603,17 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
 
       updateEventsOnNameChange(scope.widget);
 
-      widgetLoader.load(scope.type).then(() => scope.widgetCodeLoaded = true);
+      widgetLoader.load(scope.type).then(() => {
+        scope.widgetCodeLoaded = true;
+
+        if (scope.widget.openConfigOnLoad) {
+          delete scope.widget.openConfigOnLoad;
+
+          scope.$applyAsync(() => {
+            widgetManager.openWidgetConfigurationDialog(scope.widget)
+          });
+        }
+      });
 
 
       function registerScope(scope) {
