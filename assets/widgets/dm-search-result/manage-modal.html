@@ -16,6 +16,7 @@
 	        style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;"
 	           
 	>		
+	        <i class="fi-upload"/>
 	        Update/Upload Dataset
 	</button>
 
@@ -24,7 +25,8 @@
              class="button radius tiny secondary toolbar right"
              style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
             <a href="./api/dataset/create" target="blank">
-              Create New Dataset
+              <i class="fi-burst-new"/>
+	          Create New Dataset
             </a>       
     </button>
     <button ng-click="showDatasetList()"
@@ -32,6 +34,7 @@
 	        style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;"
 	           
 	>		
+	        <i class="fi-results"/>
 	        Show Available Datasets
 	</button>
 
@@ -86,6 +89,7 @@
  					ng-click="setCommitStatus(item.dataset.commit.id,'public')"
               		class="button radius toolbar warning"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		  <i class="fi-power"/>&nbsp;	
             		  <b>Private</b>
 	</button>
 	<button 
@@ -93,6 +97,7 @@
  					ng-click="setCommitStatus(item.dataset.commit.id,'private')"
               		class="button radius toolbar success"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+            		  <i class="fi-power"/>&nbsp;
             		  <b>Public</b>
 	</button>
 			  
@@ -172,6 +177,7 @@
               		class="button radius tiny toolbar secondary"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
              		<a href="{{'./api/commit/download/'+c.metadata.dataset.commit.id}}" target="blank">
+            		  <i class="fi-download"/>
             		  Download
             		</a>  
 		    	</button>
@@ -180,6 +186,7 @@
              		ng-click="upToHEAD(c)"
               		class="button radius tiny toolbar warning"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+            		  <i class="fi-arrow-up"/>&nbsp;
             		  Up to HEAD
 		    	</button>
 		    	<button 
@@ -187,6 +194,7 @@
              		ng-click="deleteCommit(c)"
               		class="button radius tiny toolbar alert"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		  <i class="fi-x"/>&nbsp;
             		  Delete
 		    	</button>
 		    	<button 
@@ -194,6 +202,7 @@
              		ng-click="deleteDataset(c)"
               		class="button radius tiny toolbar alert"
              		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		  <i class="fi-x"/>&nbsp;
             		  Delete Dataset
 		    	</button>
 			</td>

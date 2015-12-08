@@ -74,7 +74,7 @@ splitColumnsDimensions.forEach(function(current){
 	  	return r;
   });
 
-console.log(result)
+// console.log(result)
 
 
 var product = [];
@@ -190,6 +190,49 @@ var header = product[0].columnes.map(function(col){
   return {header:header,body:body};
 }
 
+prepareXLS = function(gen){
+	var product = [{name:"data",data:[]},{name:"metadata", data:[]}];
+	var dummyHeader = [];
+	for(i in gen.body[0].metadata){dummyHeader.push(null)}
+	
+	for(i in gen.header[0].metadata){
+		product[0].data
+			.push( 
+				dummyHeader.concat(
+					new query().
+					from(gen.header)
+					.map(function(item){return item.metadata[i].label})
+					.get()
+				)
+			)
+	}
+
+	gen.body
+	.map(function(item){
+			return item.metadata.map(function(c){return c.label}).concat(item.value)
+	})
+	.forEach(function(item){
+		product[0].data.push(item)				
+	});
+
+	product[1].data.push(["key", "value", "note"]);
+	product[1].data.push(["type", gen.metadata.type, null]);
+	
+	product[1].data.push(["source", gen.metadata.source.dataset.id, gen.metadata.source.dataset.label]);
+	
+	gen.metadata.selection.forEach(function(item){
+		var s ="";
+		var labels = [];
+		item.IDList.forEach(function(c){
+			labels.push(c.label)
+		});
+		s+=item.IDList[0].dimensionLabel+" : "+labels.join(", ")+" as "+item.role;
+		product[1].data.push(["selection", s, null]);
+	});
+	
+
+   return XLSX.build(product);
+}
 
 buildXLS = function(dataset,selection){
 	var gen = prepare(dataset,selection);
@@ -227,3 +270,4 @@ var saveXLS = function(filename,dataset,selection){
 exports.prepare = prepare;
 exports.buildXLS = buildXLS;
 exports.saveXLS = saveXLS;
+exports.prepareXLS = prepareXLS;

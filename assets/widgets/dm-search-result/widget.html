@@ -18,6 +18,7 @@
                ng-click="openManageDialog()"
                class="button radius tiny toolbar right"
                style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
+              <i class="fi-widget"/>&nbsp;
               <b>Manage Datasets...</b>       
       </button>
     </div>
@@ -48,19 +49,22 @@
                  ng-click="openManageDialog(item)"
                   class="button radius tiny secondary toolbar right"
                  style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
-                Manage       
+                <i class="fi-widget"/>
+                Manage...       
         </button>
-       <!--  <button 
+        <button 
                  ng-click="openQueryDialog(item)"
                   class="button radius tiny secondary toolbar right"
                  style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
-                Query       
-        </button> -->
+                <i class="fi-crop"/>
+                Query...       
+        </button>
         <button 
                  ng-click="download(item)"
                   class="button radius tiny secondary toolbar right"
                  style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
                 <a href="{{'./api/dataset/download/'+item.dataset.id}}" target="blank">
+                  <i class="fi-download"/>
                   Download
                 </a>       
         </button>

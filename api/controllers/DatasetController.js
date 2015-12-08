@@ -14,6 +14,10 @@ var dictionaryController = require("./DictionaryController");
 var getProperty = require("wdc-flat").getProperty;
 var flat2json = require("wdc-flat").flat2json;
 var util = require("util");
+var executeQuery = require("wdc-table-generator").prepare;
+var toXLS = require("wdc-table-generator").prepareXLS;
+var I18N = require("wdc-i18n");
+
 
 
 var prepareCommitInfo = function(obj){
@@ -436,6 +440,76 @@ module.exports = {
           return res.send(converter.buildXLS(obj));
         });
       });
+  },
+
+  getQueryResult: function(req,resp){
+    var params = req.body;
+    if(!params){return resp.serverError();}
+    var commitID = params.commitID;
+    var query = params.query;
+    var locale = (params.locale === "uk") ? "ua" : params.locale; //|| "en";
+    // find dataset
+    // sails.log.debug(params)
+    Dataset.findOne({ 
+      "id":commitID
+    }).then(function(obj){
+      if(!obj){return resp.serverError();}
+      //execute query
+      
+      // get dictionary and translate query result
+      Dictionary.find({}).then(function(json){
+          i18n = new I18N(json);
+          obj.data = i18n.translate(obj.data,locale);
+          obj.metadata = i18n.translate(obj.metadata,locale);
+          
+          for(i in obj.metadata.dimension){
+            obj.metadata.dimension[i].label = i18n.translate(obj.metadata.dimension[i].label,locale);
+            obj.metadata.dimension[i].values = 
+              i18n.translate(obj.metadata.dimension[i].values,locale)
+          } 
+          var result = executeQuery(obj,query);
+
+          result.metadata = {
+            type : "Query Result Table",
+            source : obj.metadata,
+            selection : query
+          }
+
+          Table.create({data:result}).then(function (obj){
+            result.id = obj.id;
+            result.createdAt = obj.createdAt;
+            return resp.send(result);  
+          });
+          
+      });          
+    });  
+  },
+
+  downloadTable: function(req,res){
+     var tableID = req.params.tableID;
+     Table.findOne({id:tableID}).then(function(obj){
+        if(obj){
+          var result = toXLS(obj.data);
+          // sails.log.debug("Delete table after download", tableID);
+
+          Table.destroy({id:tableID}).then(function(){
+            var file = tableID+".xlsx";
+            res.setHeader('Content-disposition', 'attachment; filename=' + file);
+            res.setHeader('Content-type', mime.lookup(path.basename(file)));
+            return res.send(result);
+          })
+        }else{
+          return res.notFound();
+        }  
+     })
+  },
+
+  deleteTable: function(req,res){
+     var tableID = req.params.tableID;
+     // sails.log("Delete table", tableID);
+     Table.destroy({id:tableID}).then(function(){
+        res.ok();
+     })
   },
 
   getTopicTree: function(req, res) {

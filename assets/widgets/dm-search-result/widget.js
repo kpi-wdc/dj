@@ -111,9 +111,26 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
           item() {return item },
           prepareTopics() {return prepareTopics}
         }  
-      }).result.then(() => {
-        console.log("Close QUERY DIALOG",item);
-      });
+      }).result.then(
+        (resp) => {
+          // console.log("Close Query DIALOG")
+          if(resp){
+            $http.get("./api/table/delete/"+resp.id)
+              .success(function(){
+                resp = undefined;
+              });
+          }
+        },
+        (resp) => {
+          // console.log("Cancel Query DIALOG",resp)
+          if(resp){
+            $http.get("./api/table/delete/"+resp.id)
+              .success(function(){
+                resp = undefined;
+              });
+          }
+        }
+      );
     }
 
      $scope.openManageDialog = function(item){
@@ -128,11 +145,11 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         }  
       }).result.then(
             () => {
-               console.log("Close MANAGE DIALOG",item);
+               // console.log("Close MANAGE DIALOG",item);
                eventEmitter.emit('refresh');
             },
             () => {
-               console.log("Cancel MANAGE DIALOG",item);
+               // console.log("Cancel MANAGE DIALOG",item);
                eventEmitter.emit('refresh');
             }
       );
@@ -335,12 +352,217 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
   $scope.lookup = $lookup;
   $scope.prepareTopics = prepareTopics;
   $scope.item = item;
+  $scope.floor = Math.floor;
+
+  $scope.getItemStyle = function(obj){
+    if(obj.selected){
+      return {
+        "color":"#FFFFFF",
+        "background-color":"#008CBA"
+      }
+    }else{
+      return {
+        "color":"#008CBA",
+        "background-color":"#FFFFFF"
+      }
+    }
+  } 
+
+  var genSelectionString = function(dim){
+    let buf = [];
+    // let s = "";
+    dim.selectionString = "";
+
+    dim.values.forEach(function(item){
+      if(item.selected){
+        buf.push(item)
+      }
+    })
+    if(buf.length === 0){
+      dim.selectionString = "";
+    }
+
+    for(let i in buf){
+      let k = ($lookup(buf[i].label).label)?$lookup(buf[i].label).label:buf[i].label;
+      $translate(k).then(function(translation){
+        dim.selectionString+=translation+", ";
+        if(dim.selectionString.length >=45){
+          dim.selectionString = dim.selectionString.substring(0,40)+"... ("+buf.length+" items) "
+        }
+      })
+    }
+}
+
+  $scope.tryGetTable = function(){
+    // console.log($scope.item);
+    $scope.requestComplete = $scope.testQuery($scope.item); 
+    if($scope.requestComplete){
+     $scope.request = $scope.makeRequest($scope.item);
+
+     if($scope.table){
+        $http.get("./api/table/delete/"+$scope.table.id)
+          .success(function(){
+            $scope.table = undefined; 
+            $http.post("./api/dataset/query",$scope.request)
+              .success(function(resp){
+              $scope.table = resp;
+            })
+          }) 
+     }else{
+        $scope.table = undefined; 
+        $http.post("./api/dataset/query",$scope.request)
+          .success(function(resp){
+          $scope.table = resp;
+        })
+     }
+     
+    }else{
+      if($scope.table){
+        $http.get("./api/table/delete/"+$scope.table.id)
+          .success(function(){
+            $scope.table = undefined;
+        });
+      }      
+    }
+  };
+
+
+  $scope.range = function(min,max){
+      var result = [];
+      for(var i=min; i<=max; i++) result.push(i)
+  
+      return result;  
+  };
+
+  $scope. getValue = function(value){
+      return (value == null) ? "-" : value;
+  };
+
+  $scope.select= function(dim,item){
+    item.selected = item.selected || false;
+    item.selected = !item.selected;
+    genSelectionString(dim);
+    $scope.tryGetTable();
+  }
+
+  $scope.selectAll= function(dim){
+    dim.values.forEach(function(item){
+      item.selected = true;
+    })
+    genSelectionString(dim);
+    $scope.tryGetTable();
+  }
+
+  $scope.clear= function(dim){
+    dim.values.forEach(function(item){
+      item.selected = false;
+    })
+    genSelectionString(dim);
+    $scope.tryGetTable();
+  }
+  
+  $scope.reverse= function(dim){
+    dim.values.forEach(function(item){
+      item.selected = !item.selected;
+    })
+    genSelectionString(dim);
+    $scope.tryGetTable();
+  }
+
+  $scope.setRole = function(dim,role){
+    dim.role = role;
+    $scope.tryGetTable();   
+  }
+
+
+  $scope.makeRequest = function(item){
+    let req = {};
+    req.commitID = item.dataset.commit.id;
+    req.query = [];
+    req.locale = $translate.use();
+    for(let i in item.dimension){
+      let d = item.dimension[i];
+      let collection = getSelectedItems(d);
+      if (collection.length == d.values.length){
+        collection = [];
+      }else{
+        collection = collection.map(function(item){
+          return item.id;
+        })
+      }
+      req.query.push(
+          {
+            "dimension" : i,
+            "role" : d.role,
+            "collection" : collection 
+          }
+      )
+    }
+    return req   
+  };
+
+    var getSelectedItems = function(d){
+        let buf = [];
+        d.values.forEach(function(item){
+          if(item.selected){
+            buf.push(item)
+          }
+        })
+        return buf;
+    }
+
+    $scope.testQuery = function(item){
+      let columnsAvailable = false;
+      let rowsAvailable = false;
+      let splitColumnsAvailable = true;
+      let splitRowsAvailable = true;
+      for(let i in item.dimension){
+        let d = item.dimension[i];
+        if(d.role == "Columns" && getSelectedItems(d).length>0) columnsAvailable = true;
+        if(d.role == "Rows" && getSelectedItems(d).length>0) rowsAvailable = true;
+        if(d.role == "Split Columns"){
+          if(getSelectedItems(d).length>0){
+            splitColumnsAvailable &= true;
+          }else{
+            splitColumnsAvailable &= false;
+          }
+        }  
+        if(d.role == "Split Rows"){
+          if (getSelectedItems(d).length>0){ 
+            splitRowsAvailable &= true;
+          }else{
+            splitRowsAvailable &= false;
+          }
+        }
+      }
+      return columnsAvailable && rowsAvailable && splitColumnsAvailable && splitRowsAvailable;
+    };
+
+
+
+  $scope.tryGetTable();   
+  
 
   $scope.close = function(){
+    console.log("Close", $scope.table);
+    if($scope.table){
+        $http.get("./api/table/delete/"+$scope.table.id)
+          .success(function(){
+            $scope.table = undefined;
+          });
+    }        
     $modalInstance.close();
   };
+
   $scope.cancel = function(){
-     $modalInstance.dismiss();
+    console.log("Cancel", $scope.table);
+    if($scope.table){
+          $http.get("./api/table/delete/"+$scope.table.id)
+            .success(function(){
+              $scope.table = undefined;
+            });
+    }
+     $modalInstance.dismiss($scope.table);
   };
 })
 

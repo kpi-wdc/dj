@@ -3,7 +3,8 @@ util = require("util");
 
 
 I18N = function(dictionary){
-	this.translations = {}
+	this.translations = {};
+	this.lookup = {};
 	this._key = [];
 	this._result = [];
 	thos = this;
@@ -14,7 +15,16 @@ I18N = function(dictionary){
 		.forEach(function(item){
 			thos.translations[item.key] = item.value;
 		});
-	console.log(this.translations)	
+
+	new query()
+		.from(dictionary)
+		.select(function(item){return item.type != "i18n"})
+		.get()
+		.forEach(function(item){
+			thos.lookup[item.key] = item.value;
+		});	
+	// console.log(this.translations)
+	// console.log(this.lookup)	
 }
 
 I18N.prototype = {
@@ -26,7 +36,8 @@ I18N.prototype = {
 		lang = lang || this.lang;
 		
 		if(util.isString(o)){
-			return (this.translations[o]) ? this.translations[o][lang]: o;
+			var key = (this.lookup[o] && this.lookup[o].label) ? this.lookup[o].label : o;
+			return (this.translations[key]) ? this.translations[key][lang]: key;
 		}
 
 		if(util.isArray(o) || util.isObject(o)){
