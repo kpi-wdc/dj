@@ -2,11 +2,11 @@ import angular from 'angular';
 
 const langSelector = angular.module('app.widgets.language-selector', []);
 
-langSelector.controller('LanguageSelectorController', function ($scope, $translate) {
+langSelector.controller('LanguageSelectorController', function ($scope, $translate,$lookup) {
   angular.extend($scope, {
     selectLanguage(langKey) {
       $translate.use(langKey);
-      $translate.refresh();
+      $translate.refresh().then(() => {$lookup.refresh()});
     },
     languages: [
       {key: "en", title: "English"},

@@ -13,7 +13,7 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate'])
   })
 
   .controller('I18NController', function ($scope, $http, EventEmitter, 
-    APIProvider, APIUser, pageSubscriptions) {
+    APIProvider, APIUser, pageSubscriptions, $lookup) {
     new APIProvider($scope)
       .config(() => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
@@ -28,11 +28,13 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate'])
             ruT[item.key] = item.ru;
           });
         }   
-        console.log(ukT,enT,ruT);
-        translateProvider.translations("uk",ukT);
-        translateProvider.translations("en",enT);
-        translateProvider.translations("ru",ruT);
-        
+        // console.log(ukT,enT,ruT);
+        // translateProvider.translations("uk",ukT);
+        // translateProvider.translations("en",enT);
+        // translateProvider.translations("ru",ruT);
+        $lookup.translations("uk",ukT);
+        $lookup.translations("en",enT);
+        $lookup.translations("ru",ruT);
 
       })
       .removal(() => {
