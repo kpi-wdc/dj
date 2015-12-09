@@ -223,10 +223,13 @@ prepareXLS = function(gen){
 	gen.metadata.selection.forEach(function(item){
 		var s ="";
 		var labels = [];
-		item.IDList.forEach(function(c){
-			labels.push(c.label)
-		});
-		s+=item.IDList[0].dimensionLabel+" : "+labels.join(", ")+" as "+item.role;
+		if(item.IDList){
+			item.IDList.forEach(function(c){
+				labels.push(c.label)
+			});
+			s+=item.IDList[0].dimensionLabel+" : "+labels.join(", ")+" as "+item.role;
+		}
+		s = ("") ? null : s;
 		product[1].data.push(["selection", s, null]);
 	});
 	
