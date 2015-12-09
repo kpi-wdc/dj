@@ -91,6 +91,8 @@ module.exports.routes = {
 
   'get /api/table/download/:tableID' : 'DatasetController.downloadTable',
   'get /api/table/delete/:tableID' : 'DatasetController.deleteTable',
+  'get /api/table' : 'DatasetController.getAllTables',
+  
   
   'post /api/commit/head/:commitID' : 'DatasetController.setHead',
   'get /api/commit/head/:commitID' : 'DatasetController.setHead',

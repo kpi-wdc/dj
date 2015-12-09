@@ -13,6 +13,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
     $scope.tagList = [];
     $scope.user = user;
     $scope.total = 0;
+    $scope.table = undefined;
 
     var formatDate = function(date){
       var locale = $translate.use() || "en";
@@ -109,29 +110,34 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         backdrop: 'static',
         resolve: {
           item() {return item },
-          prepareTopics() {return prepareTopics}
+          prepareTopics() {return prepareTopics},
+          table() {return $scope.table},
+          formatDate() { return formatDate}
         }  
       }).result.then(
-        (resp) => {
+        () => {
           // console.log("Close Query DIALOG")
-          if(resp){
-            $http.get("./api/table/delete/"+resp.id)
+          if(item.tableID){
+            $http.get("./api/table/delete/"+item.tableID)
               .success(function(){
-                resp = undefined;
+                item.tableID = undefined;
               });
           }
         },
-        (resp) => {
+        () => {
           // console.log("Cancel Query DIALOG",resp)
-          if(resp){
-            $http.get("./api/table/delete/"+resp.id)
+          // console.log(item.tableID)
+          if(item.tableID){
+            
+            $http.get("./api/table/delete/"+item.tableID)
               .success(function(){
-                resp = undefined;
+                item.tableID = undefined;
               });
           }
         }
       );
     }
+
 
      $scope.openManageDialog = function(item){
       $modal.open({
@@ -347,12 +353,16 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
     $modalInstance.close();
   };
 })
-.controller("QueryDialogController", function ($scope, $modalInstance,$http, item, prepareTopics, $lookup, $translate){
+.controller("QueryDialogController", function ($scope, $modalInstance,$http, 
+                                                item, prepareTopics, table, formatDate, 
+                                                $lookup, $translate){
   
   $scope.lookup = $lookup;
   $scope.prepareTopics = prepareTopics;
   $scope.item = item;
   $scope.floor = Math.floor;
+  $scope.formatDate = formatDate;
+  $scope.table = table;
 
   $scope.getItemStyle = function(obj){
     if(obj.selected){
@@ -403,16 +413,20 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         $http.get("./api/table/delete/"+$scope.table.id)
           .success(function(){
             $scope.table = undefined; 
+            item.tableID = undefined; 
             $http.post("./api/dataset/query",$scope.request)
               .success(function(resp){
               $scope.table = resp;
+              item.tableID = resp.id;
             })
           }) 
      }else{
-        $scope.table = undefined; 
+        $scope.table = undefined;
+        item.tableID = undefined;
         $http.post("./api/dataset/query",$scope.request)
           .success(function(resp){
           $scope.table = resp;
+          item.tableID = resp.id;
         })
      }
      
@@ -421,6 +435,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         $http.get("./api/table/delete/"+$scope.table.id)
           .success(function(){
             $scope.table = undefined;
+            item.tableID = undefined;
         });
       }      
     }
@@ -544,25 +559,27 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
   
 
   $scope.close = function(){
-    console.log("Close", $scope.table);
+    // console.log("Close", $scope.table);
     if($scope.table){
         $http.get("./api/table/delete/"+$scope.table.id)
           .success(function(){
             $scope.table = undefined;
+            item.tableID = undefined;
           });
     }        
     $modalInstance.close();
   };
 
   $scope.cancel = function(){
-    console.log("Cancel", $scope.table);
+    // console.log("Cancel", $scope.table);
     if($scope.table){
           $http.get("./api/table/delete/"+$scope.table.id)
             .success(function(){
               $scope.table = undefined;
+              item.tableID = undefined;
             });
     }
-     $modalInstance.dismiss($scope.table);
+     $modalInstance.dismiss();
   };
 })
 

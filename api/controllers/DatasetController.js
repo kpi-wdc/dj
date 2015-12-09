@@ -556,6 +556,11 @@ module.exports = {
      })
   },
 
+  getAllTables: function(req,resp){
+    Table.find({}).then(function(obj){return resp.send(obj)})
+  },
+  
+
   getTopicTree: function(req, res) {
 
     var params = req.body;
