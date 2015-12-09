@@ -3,6 +3,7 @@ util = require("util");
 
 
 I18N = function(dictionary){
+	this.lang = "en";
 	this.translations = {};
 	this.lookup = {};
 	this._key = [];
@@ -33,10 +34,22 @@ I18N.prototype = {
 	},
 
 	translate : function(o, lang){
-		lang = lang || this.lang;
+		lang = lang || this.lang || "en";
 		
 		if(util.isString(o)){
 			var key = (this.lookup[o] && this.lookup[o].label) ? this.lookup[o].label : o;
+			if(this.translations[key]){
+				if(this.translations[key][lang]){
+					return this.translations[key][lang]
+				}
+				if(this.translations[key][this.lang]){
+					return this.translations[key][this.lang]
+				}
+				return key; 
+			}else{
+				return key;
+			}
+
 			return (this.translations[key]) ? this.translations[key][lang]: key;
 		}
 
