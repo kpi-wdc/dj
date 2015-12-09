@@ -1,7 +1,9 @@
 <div ng-controller="PageListController">
   <ul class="side-nav view-mode-only">
     <li ng-repeat="page in config.pages" ng-if="page.shortTitle">
-      <a href="/app/{{appName}}/{{page.href}}" ng-bind="page.shortTitle"></a>
+      <a href="/app/{{appName}}/{{page.href}}">
+        {{page.shortTitle | translate}}
+      </a>
     </li>
   </ul>
 
@@ -17,7 +19,7 @@
            onclick="return false;"></i>
 
         <a href="/app/{{appName}}/{{page.href}}">
-          {{page.shortTitle}}
+          {{page.shortTitle | translate}}
         </a>
       </li>
     </ul>
