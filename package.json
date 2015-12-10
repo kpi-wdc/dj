@@ -4,6 +4,7 @@
   "description": "Widget & statistical presentation platform",
   "private": true,
   "scripts": {
+    "preinstall": "npm install wdc_libs/wdc-flat wdc_libs/wdc-i18n wdc_libs/wdc-query wdc_libs/wdc-table-generator wdc_libs/wdc-xlsx-converter wdc_libs/wdc-xlsx2json",
     "postinstall": "jspm install && gulp build",
     "start": "node --harmony ./node_modules/sails/bin/sails lift",
     "debug": "node --harmony debug ./node_modules/sails/bin/sails lift",
