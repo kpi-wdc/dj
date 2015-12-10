@@ -1,13 +1,13 @@
 {
   "name": "wdc-table-generator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate table and transform to xlsx",
   "main": "index.js",
   "engines": {
     "node": "0.12.x"
   },
   "dependencies": {
-    "wdc-query": "0.0.1",
+    "wdc-query": ">0.0.1",
     "node-xlsx": "^0.5.1"
   }
 }

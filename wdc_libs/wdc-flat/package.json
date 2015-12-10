@@ -1,6 +1,6 @@
 {
   "name": "wdc-flat",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Convert flat object representation to json",
   "main": "index.js",
   "engines": {
