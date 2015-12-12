@@ -502,7 +502,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   });
 
   $window.onbeforeunload = (evt) => {
-    const message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING')
+    const message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING');
     if (app.wasModified) {
       if (typeof evt === "undefined") {
         evt = $window.event;
