@@ -15,6 +15,7 @@ modals.controller('WidgetModalSettingsController', function ($scope, $modalInsta
   // and data - everything else, modifiable in json-editor
   delete data.instanceName;
   delete data.type;
+  delete data.icon;
 
   angular.extend($scope, {
     widgetScope,
@@ -23,7 +24,8 @@ modals.controller('WidgetModalSettingsController', function ($scope, $modalInsta
 
     basicProperties: {
       type: widgetConfig.type,
-      instanceName: widgetConfig.instanceName
+      instanceName: widgetConfig.instanceName,
+      icon: widgetConfig.icon
     },
 
     ok() {
