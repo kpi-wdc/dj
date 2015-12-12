@@ -62,6 +62,11 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
               function(resp){
                 $scope.result = resp;
                 $scope.total = $scope.result.length;
+                if($scope.total == 0){
+                   eventEmitter.emit("slaveVisibility",true);
+                 }else{
+                   eventEmitter.emit("slaveVisibility",false);
+                 }
             });
           }
     }

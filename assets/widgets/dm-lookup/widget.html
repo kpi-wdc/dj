@@ -1,6 +1,6 @@
   <div  ng-controller="DataManagerLookupController"> 
     <div style="border: 0.1rem solid #ddd; margin:0.2rem 0;" 
-        ng-if="(object !== key)">    
+        ng-if="object && (object !== key) ">    
       <h4 style="color: rgba(0, 0, 0, 0.6); background-color: #efefef; padding: 0 0.5em;
     margin: 0;">
         <span ng-if="title">

@@ -1,0 +1,17 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Remote HTML Fragment",
+    "properties": {
+      "url": {
+        "type": "string"
+      },
+      "languageSelector":{
+        "type":"string"
+      },
+      "masterWidget":{
+        "type":"string"
+      }  
+    }
+  }  
+}

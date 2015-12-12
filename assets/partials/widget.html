@@ -1,4 +1,4 @@
-<div class="widget-design-panel clearfix design-mode-only">
+<div class="widget-design-panel clearfix design-mode-only" title="{{type}}">
   <span class="widget-name left">
     <img ng-if="widget.icon" ng-src="{{widget.icon}}" width="24px" height="24px"/>
   </span>
@@ -24,7 +24,7 @@
     </button>
   </span>
  
-  <span class="widget-type label radius left" ng-bind="type"></span>
+  <!-- <span class="widget-type label radius left" ng-bind="type"></span> -->
   <span ng-if="widgetPanel.allowDeleting"
         class="widget-delete-btn right" ng-click="widgetPanel.deleteWidget()"
         title="{{'DELETE_THIS_WIDGET' | translate}}">
@@ -45,8 +45,21 @@
         title="{{ 'HELP' | translate }}">
     <i class="glyphicon fi-info"></i>
   </span>
+
+  <span ng-if="!widgetPanel.collapsed" ng-click="widgetPanel.collapsed = true"
+        class="widget-help-btn right" 
+        title="{{ 'Collapse' | translate }}">
+    <i class="glyphicon fi-arrows-in"></i>
+  </span>
+
+  <span ng-if="widgetPanel.collapsed" ng-click="widgetPanel.collapsed = false"
+        class="widget-help-btn right" 
+        title="{{ 'Expand' | translate }}">
+    <i class="glyphicon fi-arrows-out"></i>
+  </span>
+
 </div>
-<div ng-if="widgetCodeLoaded"
+<div ng-if="(widgetCodeLoaded && !globalConfig.designMode) ||(widgetCodeLoaded && globalConfig.designMode && !widgetPanel.collapsed)"
      ng-include="widgetTemplateUrl"
      class="widget-contents"
      ng-class="{'widget-design-mode': globalConfig.designMode}">

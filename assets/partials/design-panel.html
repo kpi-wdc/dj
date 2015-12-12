@@ -1,38 +1,53 @@
-<h3 translate>DESIGN_PANEL</h3>
-<button class="button tiny radius fi-save" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
-        id="submitChangesToServerBtn"
-        disabled
-        style="width: 12em"
-        ng-disabled="app.sendingToServer || !app.wasModified">
-  <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
-  <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
-  <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
-</button>
-<button class="button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn">
-  <i class="fi-lock"></i> <translate>SHARE</translate>
-</button>
-<button class="fi-wrench button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn">
-  <span translate>APP_SETTINGS</span>
-</button>
-<div>
-  <div class="left">
-    <h6 class="left"><translate>DESIGN_MODE</translate>:&nbsp;&nbsp;</h6>
-    <div class="switch tiny left">
-      <input type="checkbox" id="designModeCheckbox"
-             ng-model="globalConfig.designMode">
-      <label for="designModeCheckbox"></label>
+<div class="row" style="padding: 0.5em;
+                        margin: 0.5em 1em;
+                        border: 0.1rem solid #ddd;
+                        background-color: #F7F5DF;">
+ <div class="left">
+  <span class="left" style="margin: 0.2em 0.5em;font-size: x-large;color: #8E8D8D;" translate>DESIGN_PANEL</span>
+  <button class="left button tiny radius fi-save" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
+          id="submitChangesToServerBtn"
+          disabled
+          style="margin:0.7em 0 0 0.5em;"
+          ng-disabled="app.sendingToServer || !app.wasModified">
+    <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
+    <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
+    <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
+  </button>
+  <button class="left button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn"
+   style="margin:0.7em 0 0 0.5em">
+    <i class="fi-lock"></i> <translate>SHARE</translate>
+  </button>
+  <button class="left fi-wrench button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn" style="margin:0.7em 0 0 0.5em"
+  >
+    <span translate>APP_SETTINGS</span>
+  </button>
+</div>
+  <div class="right" style="margin: 0.7em 0 0 0;">
+    <div class="left">
+      <span class="left" style="    font-size: small;
+                                    font-weight: bold;
+                                    color: #7D7D7D;">
+        <translate>DESIGN_MODE</translate>:&nbsp;&nbsp;
+      </span>
+      <div class="switch tiny left" style="margin:0;">
+        <input type="checkbox" id="designModeCheckbox"
+               ng-model="globalConfig.designMode">
+        <label for="designModeCheckbox"></label>
+      </div>
     </div>
-  </div>
-  <div class="left">
-    <h6 class="left">&nbsp;&nbsp;&nbsp;&nbsp;
-      <translate>DEBUG_MODE</translate>:&nbsp;&nbsp;
-    </h6>
-    <div class="switch tiny left">
-      <input type="checkbox" id="debugModeCheckbox"
-             ng-model="globalConfig.debugMode"
-             disabled ng-disabled="globalConfig.designMode">
-      <label for="debugModeCheckbox"></label>
+    <div class="left">
+      <span class="left" style="    font-size: small;
+                                    font-weight: bold;
+                                    color: #7D7D7D;">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+       <translate>DEBUG_MODE</translate>:&nbsp;&nbsp;
+      </span>
+      <div class="switch tiny left" style="margin:0;">
+        <input type="checkbox" id="debugModeCheckbox"
+               ng-model="globalConfig.debugMode"
+               disabled ng-disabled="globalConfig.designMode">
+        <label for="debugModeCheckbox"></label>
+      </div>
     </div>
   </div>
 </div>
-<hr>
