@@ -2,22 +2,6 @@
   "name": "WDC",
   "private": true,
   "version": "0.10.1",
-  "dependencies": [
-    "THIS IS A JSON COMMENT:",
-    "This is not a final bower.json config file",
-    "Final version is built through gulp",
-    "Final version is extended by:",
-    " - widget dependencies",
-    " - resolutions property (copied from dependencies as-is)",
-
-    "Packages which created problems when trying to update to higher versions: ",
-    " - sceditor",
-    " - ng-file-upload",
-    " - oclazyload",
-    " - ngstorage",
-
-    "Be careful when trying to update them!"
-  ],
   "dependencies": {
     "angular": "1.4.8",
     "angular-cookies": "1.4.8",

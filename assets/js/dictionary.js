@@ -44,7 +44,7 @@ dictionaryModule.run(function ($http) {
             });
 });
 
-dictionaryModule.service("$lookup",[ "$http", function($http){
+dictionaryModule.service("$lookup",[ "$http","$translate", function($http,$translate){
   
 
   var lookup = function(key){
@@ -52,7 +52,9 @@ dictionaryModule.service("$lookup",[ "$http", function($http){
   };
 
   var _translations = function (locale,translations){
-    dictionaryModule.translations[locale] = (dictionaryModule.translations[locale]) ? dictionaryModule.translations[locale] : {};
+    dictionaryModule.translations[locale] = (dictionaryModule.translations[locale]) 
+      ? dictionaryModule.translations[locale] 
+      : {};
     for(let i in translations){
       dictionaryModule.translations[locale][i] = translations[i];
     }
@@ -86,6 +88,15 @@ dictionaryModule.service("$lookup",[ "$http", function($http){
     for(let locale in dictionaryModule.translations){
         dictionaryModule.translateProvider.translations(locale,dictionaryModule.translations[locale]);
     } 
+  }
+
+  lookup.removeTranslations = function(locale,translations){
+    console.log(locale,translations)
+    if (!dictionaryModule.translations[locale]) return;
+    for(let i in translations){
+      dictionaryModule.translations[locale][i] = undefined;
+    }
+     $translate.refresh().then(() => {lookup.refresh()});
   }  
 
   return lookup;

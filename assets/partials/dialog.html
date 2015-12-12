@@ -1,0 +1,20 @@
+<form ng-submit="form.close()">
+  <h5 color="#ddd">{{form.title}}</h5>
+  <div class="panel" style="margin: 0; padding: 0.5em;">
+  	<div class="row" ng-repeat="field in form.fields">
+	  	<label class="left">
+		  	<span>{{field.title}}</span>
+		  	<span ng-if="field.required" style="color:#f04124">*</span>
+		  	<span> 
+		  		<input style="float:left;" ng-model="field.value" type="text" ng-disabled="!field.editable">
+		  	</span>	
+	  	</label>
+  	</div>
+	  <div class="row">
+		  <button type="submit" class="button small" ng-disabled="!completed()" translate>OK</button>
+		  <button class="button alert small" ng-click="form.dismiss()"
+		          translate>CANCEL</button>
+	  </div>
+  </div>        
+  <a class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>
+</form>

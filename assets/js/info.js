@@ -43,6 +43,20 @@ info.factory('prompt', function ($modal) {
   };
 });
 
+info.factory('dialog', function ($modal) {
+  return (form) => {
+    return $modal.open({
+      templateUrl: '/partials/dialog.html',
+      controller: 'DialogController',
+      resolve: {
+        form: () => form
+      }
+    }).result;
+  };
+});
+
+
+
 info.controller('PromptController', function ($scope, $modalInstance, text, value) {
   $scope.form = {
     text,
@@ -60,6 +74,40 @@ info.controller('PromptController', function ($scope, $modalInstance, text, valu
     }
   };
 });
+
+info.controller('DialogController', function ($scope, $modalInstance, form) {
+  $scope.form = form;
+  $scope.form.dismissed = false;
+  
+  $scope.completed = function(){
+    var f = true;
+    for(let i in $scope.form.fields){
+      if($scope.form.fields[i].required){
+        if(!$scope.form.fields[i].value){
+          return false;
+        }
+        if($scope.form.fields[i].value.length==0){
+          return false;  
+        }
+      }  
+    }
+    return  true;
+  } 
+
+  $scope.form.close = function() {
+    if (!$scope.form.dismissed) {
+      $modalInstance.close($scope.form);
+    }
+  };
+
+
+  $scope.form.dismiss = function() {
+    $scope.form.dismissed = true;
+    $modalInstance.dismiss();
+  };
+  
+});
+  
 
 info.controller('ConfirmController', function ($scope, $modalInstance, text) {
   $scope.form = {

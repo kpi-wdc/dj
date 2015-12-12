@@ -122,7 +122,20 @@ module.exports.routes = {
   'post /api/metadata/tag/total' : 'DatasetController.getTagTotal',
 
   'get /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
-  'post /api/metadata/tag/tree' : 'DatasetController.getTopicTree'
+  'post /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
+
+  
+  'get /api/resource' : 'ResourceController.getList',
+
+  'post /api/resource/update' : 'ResourceController.update',
+  'post /api/resource/rename' : 'ResourceController.rename',
+
+
+  'get /api/resource/:path' : 'ResourceController.get',
+  'post /api/resource/:path' : 'ResourceController.get',
+  
+  'get /api/resource/delete/:path' : 'ResourceController.delete',
+  'post /api/resource/delete/:path' : 'ResourceController.delete'
   
   
   

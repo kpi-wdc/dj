@@ -1,0 +1,88 @@
+<div ng-controller="ResourceManagerController" ng-show="globalConfig.designMode">
+	
+		<center ng-if="upload_process">
+			<img src="./img/ajax-loader.gif"/>
+		</center>
+		<table ng-if="!upload_process">
+			<tr>
+				<td colspan="6" style="margin:0; padding:0;">
+					<h4 style="color:#888; font-size:large; margin:0;">
+						<img src="./widgets/resource-manager/icon.png" width="32px"/>
+						Resources
+					</h4>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="3">
+					<span style="font-size:small">
+						<b>Filter:</b>
+						<input type="text" 
+							         			ng-model="key"
+							         			style="
+							         				font-size: smaller;
+							         				margin: 0;
+							         				padding: 0.2rem;
+							         				height: inherit;"
+						/>
+					</span>
+				</td>
+				<td colspan="3" style="text-align:right;">
+					<button
+						ng-file-select 
+						ng-multiple="true" 
+						ng-file-change="fileSelected($files, $event)" 
+	 					class="button radius toolbar"
+	             		style="margin:1.5rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-upload"/>&nbsp;
+		            		  Update/Upload...
+	            	</button>
+				</td>	
+			</tr>
+			<tr ng-if="resources.length > 0">
+				<th style="font-size:smaller;">Name</th>
+				<th style="font-size:smaller;">Type</th>
+				<th style="font-size:smaller;">Size</th>
+				<th style="font-size:smaller;">Owner</th>
+				<th style="font-size:smaller;">Updated</th>
+				<th style="font-size:smaller;">Operations</th>
+				
+			</tr>
+			<tr ng-if="resources.length > 0" ng-repeat="resource in resources | filter : key">
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;"><a>{{resource.url}}</a></td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;text-align:center;">
+					{{resource.ext}}
+					<!-- <img src="{{'./components/Free-file-icons/16px/'+resource.ext+'.png'}}"/> -->
+					
+				</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;text-align:right;">{{resource.size}}</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;"><a>{{resource.owner}}</a></td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{formatDate(resource.updatedAt)}}</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button 
+	 					class="button radius tiny toolbar secondary"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  <a href="{{resource.url}}" target="blank">
+		            		  <i class="fi-download"/>&nbsp;
+		            		  View
+	            		  </a>
+		    		</button>
+		    		<button 
+		    			ng-click="renameResource(resource)" 
+	 					class="button radius tiny toolbar warning"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-pencil"/>&nbsp;
+		            		  Rename...
+	            	</button>
+		    		<button
+		    			ng-click="deleteResource(resource)" 
+	 					class="button radius tiny toolbar alert"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-x"/>&nbsp;
+		            		  Delete
+	            	</button>
+		    		
+				</td>
+			</tr>
+		</table>
+</div>
