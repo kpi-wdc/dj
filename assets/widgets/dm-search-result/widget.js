@@ -61,8 +61,9 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
             $http.post("./api/metadata/items", {"query":query, "status":status}).success(
               function(resp){
                 $scope.result = resp;
+                $scope.result.forEach((item) => {item.collapsed=true});
                 $scope.total = $scope.result.length;
-                if($scope.total == 0){
+                if(resp.length == 0){
                    eventEmitter.emit("slaveVisibility",true);
                  }else{
                    eventEmitter.emit("slaveVisibility",false);
@@ -173,7 +174,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         $scope.title = $scope.widget.title;
         $scope.icon_class = $scope.widget.icon_class;
         // $scope.query = $scope.widget.query || $scope.query;
-        searchDatasets($scope.query);
+        // searchDatasets($scope.query);
 
         $scope.listeners = ($scope.widget.listeners) ? $scope.widget.listeners.split(",") : [];
         for(var i in $scope.listeners){

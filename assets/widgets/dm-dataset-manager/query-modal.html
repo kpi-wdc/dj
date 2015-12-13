@@ -1,0 +1,259 @@
+
+<h3 style="color:#888">Query Data 
+	<span class="right" ng-click="close()">
+	    <i class="glyphicon fi-x"></i>
+  	</span>
+</h3>
+
+<h4 style="margin: 1em 0 0 1em; color: #888;">Dataset Info</h4>
+<div class="row" style="margin:0 0 0 2em; border-bottom: 0.1rem solid #ddd">
+	<!-- <h4 style="margin: 1em 0 0 1em; color: #888;">Dataset</h4> -->
+	<h4 style="font-stretch: ultra-condensed; margin:0; color:#0078a0;font-size:medium;">
+		<span>ID:&nbsp;{{item.dataset.id}}</span>
+	</h4>
+
+	<h4 style="font-stretch: ultra-condensed; margin:0;font-size:medium;">
+	        <img ng-if="lookup(item.dataset.source).icon" src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
+	        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i> 
+	        {{item.dataset.label | translate}}
+	</h4>
+
+	<div style="margin:0 0 0 1.5em;">
+		<div style=" font-size: x-small; text-align: justify;margin:0 3.5em 1rem 0.1em;">
+		  <b>
+		    NOTE
+		  </b>:&nbsp;&nbsp;{{item.dataset.note | translate}}
+		</div>  
+		<div style=" font-size: x-small; text-align: justify;">
+		  <b>
+		    SOURCE
+		  </b>:&nbsp;&nbsp;
+		  <a>
+		    {{(lookup(item.dataset.source).label) ? lookup(item.dataset.source).label : item.dataset.source | translate}}
+		  </a>
+		</div>
+		<div style=" font-size: x-small; text-align: justify;">
+		  <b>
+		    UPDATED AT
+		  </b>:&nbsp;&nbsp;{{formatDate(item.dataset.commit.createdAt)}}  
+		</div>
+		<div  style=" font-size: x-small; text-align: justify;margin:0 3.5em 1rem 0.1em;">
+		  <b>
+		    TOPICS
+		  </b>:&nbsp;&nbsp;
+		  <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
+		    <a>
+		      {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
+		    </a>&nbsp;,
+		  </span>
+		</div>
+	</div>	
+</div>
+<h4 style="margin: 1em 0 0 1em; color: #888;">Selection</h4>
+
+<div style="margin:0; border-bottom: 0.1rem solid #ddd">
+	<div class="row" ng-repeat="d in item.dimension" style="margin: 0 0 0 1em;">
+		<div class="row" style="margin: 0 1em 0 1em;">
+			<h5>
+				<span style="float:left;color: #888;">
+					{{d.label | translate}}:&nbsp;
+				</span>	
+				<span style="float:left;font-stretch:ultra-condensed;font-size: medium;color:#008CBA;">
+					{{d.selectionString}}
+				</span>	
+				
+				<button ng-click="setRole(d, 'Ignore')"
+	            		ng-class="{warning : d.role == 'Ignore'}"
+	                    class="button radius secondary tiny right":
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Ignored
+	            </button>
+
+				<button ng-click="setRole(d, 'Split Columns')"
+	            		ng-class="{warning : d.role == 'Split Columns'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Columns Splitter 
+	            </button>
+				
+				<button ng-click="setRole(d, 'Columns')"
+	            		ng-class="{warning : d.role == 'Columns'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Columns
+	            </button>
+
+	            <button ng-click="setRole(d, 'Split Rows')"
+	            		ng-class="{warning : d.role == 'Split Rows'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Rows Splitter 
+	            </button>
+
+	  			<button ng-click="setRole(d, 'Rows')"
+	            		ng-class="{warning : d.role == 'Rows'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Rows
+	            </button>
+
+	            <span style="float:right;color: #888;">
+	            	as&nbsp;&nbsp;
+	            </span>
+	            
+	            
+	            
+	            
+				
+			
+			</h5>
+		</div>
+		<div class="row border" style="margin:0 0 0.2em 1em">
+			<div class="toolbar border left">
+				<button ng-if = "!d.showItemsOption"
+		         		 ng-click="d.showItemsOption = true"
+		         		 class="button radius tiny left"
+	                     style="margin:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Show Items ({{d.values.length}})       
+	            </button>
+	            <button  ng-if = "d.showItemsOption"
+	            		 ng-click="d.showItemsOption = false"
+		         		 class="button radius tiny left"
+	                     style="margin:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Hide Items
+	            </button>
+			</div>
+		</div>	
+	    <div ng-if="d.showItemsOption">
+	        <div class="row border">	
+		     	<div class="toolbar border left" style="margin:0 0 0 1em;">
+					
+			        <div class="left" style="font-size:small; margin:0 0 0 1.5em;">
+			            <b>Filter:</b>
+			        </div>
+			        <div class="left" style="padding:0; margin:0 1em;">
+			            <input class="left"	type="text" 
+			         			ng-model="d.filter"
+			         			style="	height: inherit;
+									    padding: 0.1em;
+									    margin: 0 0 0.3em;"
+											         	/>
+			        </div>
+			        <button 
+			        		 ng-click = "selectAll(d)"	 		
+			         		 class="button radius tiny left"
+		                     style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+		              Select All
+		            </button>
+		            <button 
+			         		 ng-click = "reverse(d)"	 		
+			         		 class="button radius tiny left"
+		                     style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+		              Inverse
+		            </button>
+		            <button  
+		            		 ng-click = "clear(d)"	
+			         		 class="button radius tiny left"
+		                     style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+		              Clear
+		            </button>
+			   	</div>
+			</div>
+			<div class="row" style="margin: 0 1.5em 0 1em;
+								    padding: 0.5em;
+								    border: 0.1rem solid #ddd;
+								    text-align: justify;">
+				<span 	ng-repeat="v in d.values | filter : d.filter" 
+						
+						ng-click = "select(d,v)"
+						>
+					&nbsp;	
+					<a style="font-stretch: ultra-condensed;font-size: small;" ng-style="getItemStyle(v)">
+						
+						<img ng-if="lookup(v.label).icon" src="{{lookup(v.label).icon}}" width="24px" height="24px"/>
+						{{(lookup(v.label).label) ? lookup(v.label).label : v.label | translate}}&nbsp;
+					</a>
+				</span>
+			</div>   	
+		</div>  
+	<!-- showItemsOption:{{d.showItemsOption}}
+	 -->
+
+
+	</div><!--repeat d in dimension-->
+</div>
+<div class="row" ng-if="requestComplete">
+<h4 style="margin: 1em 0 0 1em; color: #888;">
+	Query Result
+	<button  
+    		 ng-click = ""	
+     		 class="button radius secondary right"
+             style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+      <a href="{{'./api/table/download/'+table.id}}" target="blank">
+      	<i class="fi-download"/>
+      	Download
+      </a>
+    </button>
+</h4>
+	<div style="overflow:auto; width:100%">
+		<center>
+			<img ng-if="!table" src="./img/ajax-loader.gif"/>
+			<table ng-if="table" border="1">
+				<tr ng-repeat="hmetaIndex in range(0,table.header[0].metadata.length*2-1)">
+					<th ng-if="hmetaIndex == 0"
+						ng-repeat="tbm in table.body[0].metadata"
+						rowspan="{{table.header[0].metadata.length*2}}"
+						style=" text-align: center;
+							    font-stretch: ultra-condensed;
+							    font-size: medium;
+							    
+							    color: #008CBA;
+							    padding: 0.3em 1em;">
+						{{tbm.dimensionLabel}}
+					</th>
+
+					<th ng-if="(hmetaIndex % 2) == 0"
+						colspan="{{table.header.length}}"
+						style=" text-align: center;
+							    font-stretch: ultra-condensed;
+							    font-size: medium;
+							    
+							    color: #008CBA;
+							    padding: 0.3em 1em;">
+						{{table.header[0].metadata[floor(hmetaIndex/2)].dimensionLabel}}	    
+					</th>		    	
+
+					<th ng-if="(hmetaIndex % 2) == 1" ng-repeat="hcol in table.header"
+						style=" text-align: center;
+							    font-stretch: ultra-condensed;
+							    font-size: small;
+							    font-weight: normal;
+							    color: #008CBA;
+							    padding: 0.3em 1em;">
+						{{hcol.metadata[floor(hmetaIndex/2)].label}}
+					</th>
+				</tr>
+				<tr ng-repeat="brow in table.body">
+					<th ng-repeat="rowMeta in brow.metadata track by $index"
+						style=" text-align: center;
+							    font-stretch: ultra-condensed;
+							    font-size: small;
+							    font-weight: normal;
+							    color: #008CBA;
+							    padding: 0.3em 1em;">
+
+						{{rowMeta.label}}	
+					</th>
+					<td ng-repeat="d in brow.value track by $index"
+						style=" font-stretch: ultra-condensed;
+							    font-size: small;
+							    padding: 0.3em 1em;
+							    text-align:right;">
+
+						{{ getValue(brow.value[$index]) }}
+					</td>
+				</tr>
+			</table>
+		</center>
+	</div>		
+</div>	

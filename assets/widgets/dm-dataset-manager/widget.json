@@ -1,0 +1,12 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Datasets Management",
+    "properties": {
+      "rlisteners": {
+        "type": "string",
+        "title": "Refresh Listeners"
+      }
+    }
+  }
+}

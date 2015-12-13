@@ -1,0 +1,213 @@
+
+
+<h3 style="color:#888">Manage Datasets 
+	<span class="right" ng-click="close()">
+	    <i class="glyphicon fi-x"></i>
+  	</span>
+</h3>
+
+<div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+	
+	<button ng-model="files" 
+			ng-file-select 
+			ng-multiple="true" 
+			ng-file-change="fileSelected($files, $event)"
+			class="button radius tiny secondary toolbar right"
+	        style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;"
+	           
+	>		
+	        <i class="fi-upload"/>
+	        Update/Upload Dataset
+	</button>
+
+
+     <button 
+             class="button radius tiny secondary toolbar right"
+             style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+            <a href="./api/dataset/create" target="blank">
+              <i class="fi-burst-new"/>
+	          Create New Dataset
+            </a>       
+    </button>
+    <button ng-click="showDatasetList()"
+			class="button radius tiny secondary toolbar right"
+	        style="margin:0rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;"
+	           
+	>		
+	        <i class="fi-results"/>
+	        Show Available Datasets
+	</button>
+
+</div>
+<div ng-if="!item">
+	<h4 style="margin: 1em 0 0 1em; color: #888;">Available Datasets</h4>
+	<center style="color: #cf2a0e;" ng-if="datasets.length == 0  && (upload_process == false)">
+		<b>Available datasets are missing. You can upload or create new dataset.</b>
+	</center>
+	<center ng-if="upload_process == true">
+		<img src="./img/ajax-loader.gif"/>
+	</center>
+	
+	<table ng-if="datasets.length > 0">
+		<tr ng-repeat="d in datasets" ng-click="selectDataset(d)">
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;"> 
+			  <span ng-if="d.dataset.status == 'private'" 
+			        style="   color: #f04124;
+			                  background-color: rgb(255, 237, 160);
+			                  font-size: small;
+			                  font-weight: 900;
+			                  padding: 0 0.5em;
+			                  border: 0.1rem solid;
+			                  border-radius: 0.5em;
+			                  margin: 0.3em;"
+			        >
+			          Private
+			  </span>
+			  <span ng-if="d.dataset.status != 'private'">
+			          &nbsp;
+			  </span>
+			</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;"> 
+			  <a>{{d.dataset.id}}</a>
+			</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">
+				<a><b>{{d.dataset.label | translate}}</b></a>
+			</td>
+			<td  style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">
+				<a>{{formatDate(d.dataset.commit.createdAt)}}</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div ng-if="item">
+<div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+	<!-- <h4 style="margin: 1em 0 0 1em; color: #888;">Dataset</h4> -->
+	<h4 style="font-stretch: ultra-condensed; margin:0; color:#0078a0">
+	<button
+ 					ng-if="item.dataset.status == 'private'"
+ 					ng-click="setCommitStatus(item.dataset.commit.id,'public')"
+              		class="button radius toolbar warning"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		  <i class="fi-power"/>&nbsp;	
+            		  <b>Private</b>
+	</button>
+	<button
+ 					ng-if="item.dataset.status == 'public'"
+ 					ng-click="setCommitStatus(item.dataset.commit.id,'private')"
+              		class="button radius toolbar success"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+            		  <i class="fi-power"/>&nbsp;
+            		  <b>Public</b>
+	</button>
+
+		<span>ID:&nbsp;{{item.dataset.id}}</span>
+
+	</h4>
+
+	<h4 style="font-stretch: ultra-condensed; margin:0;">
+	        <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
+	        <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;font-size:x-large;"></i>
+	        {{item.dataset.label | translate}}
+	</h4>
+
+	<div style="margin:0 0 0 1.5em;">
+		<div style=" font-size: small; text-align: justify;margin:0 0 1rem 0.1em;">
+		  <b>
+		    NOTE
+		  </b>:&nbsp;&nbsp;{{item.dataset.note | translate}}
+		</div>  
+		<div style=" font-size: small; text-align: justify;">
+		  <b>
+		    SOURCE
+		  </b>:&nbsp;&nbsp;
+		  <a>
+		    {{(lookup(item.dataset.source).label) ? lookup(item.dataset.source).label : item.dataset.source | translate}}
+		  </a>
+		</div>
+		<div style=" font-size: small; text-align: justify;">
+		  <b>
+		    UPDATED AT
+		  </b>:&nbsp;&nbsp;{{formatDate(item.dataset.commit.createdAt)}}  
+		</div>
+		<div style=" font-size: small; text-align: justify;">
+		  <b>
+		    TOPICS
+		  </b>:&nbsp;&nbsp;
+		  <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
+		    <a>
+		      {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
+		    </a>&nbsp;,
+		  </span>
+		</div>
+	</div>	
+</div>
+<h4 style="margin: 1em 0 0 1em; color: #888;">Dataset History</h4>
+<div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd">
+	<center ng-if="!commits">
+		<img src="./img/ajax-loader.gif"/>
+	</center>	
+	
+	<table ng-if="commits">
+		<tr>
+			<th style="font-size:smaller;">&nbsp;</th>
+			<th style="font-size:smaller;">Commit ID</th>
+			<th style="font-size:smaller;">Status</th>
+			<th style="font-size:smaller;">Author</th>
+			<th style="font-size:smaller;">Created At</th>
+			<th style="font-size:smaller;">Note</th>
+			<th style="font-size:smaller;">Operations</th>
+		</tr>
+		<tr ng-repeat="c in commits" ng-style="headRowStyle(c.metadata.dataset.commit.HEAD)"> 
+			<td>
+				<b ng-style="headStyle(c.metadata.dataset.commit.HEAD)">
+					{{(c.metadata.dataset.commit.HEAD==true) ? "HEAD" : "&nbsp;"}}
+				</b>
+			</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">{{c.metadata.dataset.commit.id}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">{{c.metadata.dataset.status}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">{{c.metadata.dataset.commit.author}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">
+				{{formatDate(c.metadata.dataset.commit.createdAt)}}
+			</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">{{c.metadata.dataset.commit.note}}</td>
+			<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+				<button 
+             		ng-click=""
+              		class="button radius tiny toolbar secondary"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		<a href="{{'./api/commit/download/'+c.metadata.dataset.commit.id}}" target="blank">
+            		  <i class="fi-download"/>
+            		  Download
+            		</a>  
+		    	</button>
+ 				<button 
+ 					ng-if="c.metadata.dataset.commit.HEAD==false"
+             		ng-click="upToHEAD(c)"
+              		class="button radius tiny toolbar warning"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+            		  <i class="fi-arrow-up"/>&nbsp;
+            		  Up to HEAD
+		    	</button>
+		    	<button 
+ 					ng-if="c.metadata.dataset.commit.HEAD==false"
+             		ng-click="deleteCommit(c)"
+              		class="button radius tiny toolbar alert"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		  <i class="fi-x"/>&nbsp;
+            		  Delete
+		    	</button>
+		    	<button 
+ 					ng-if="c.metadata.dataset.commit.HEAD==true && commits.length == 1"
+             		ng-click="deleteDataset(c)"
+              		class="button radius tiny toolbar alert"
+             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+             		  <i class="fi-x"/>&nbsp;
+            		  Delete Dataset
+		    	</button>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</div>

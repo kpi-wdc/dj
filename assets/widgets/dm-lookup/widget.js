@@ -17,10 +17,10 @@ angular.module('app.widgets.dm-lookup', ['app.dictionary'])
         // console.log($scope.key,$lookup($scope.key));
         if($scope.key){
           $scope.object = $lookup($scope.key);
-          eventEmitter.emit("slaveVisibility",false);
+          // eventEmitter.emit("slaveVisibility",false);
         }else{
           $scope.object = undefined;
-          eventEmitter.emit("slaveVisibility",true);
+          // eventEmitter.emit("slaveVisibility",true);
         }
       })
       .provide('setLookupKey', (evt, value) => {
@@ -33,9 +33,9 @@ angular.module('app.widgets.dm-lookup', ['app.dictionary'])
           $scope.object = tmp;
         }
         if(!$scope.object){
-          eventEmitter.emit("slaveVisibility",false);
+          // eventEmitter.emit("slaveVisibility",false);
         }else{
-          eventEmitter.emit("slaveVisibility",true);
+          // eventEmitter.emit("slaveVisibility",true);
         }
       })
       

@@ -3,26 +3,10 @@
                         border: 0.1rem solid #ddd;
                         background-color: #F7F5DF;">
  <div class="left">
-  <span class="left" style="margin: 0.2em 0.5em;font-size: x-large;color: #8E8D8D;" translate>DESIGN_PANEL</span>
-  <button class="left button tiny radius fi-save" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
-          id="submitChangesToServerBtn"
-          disabled
-          style="margin:0.7em 0 0 0.5em;"
-          ng-disabled="app.sendingToServer || !app.wasModified">
-    <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
-    <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
-    <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
-  </button>
-  <button class="left button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn"
-   style="margin:0.7em 0 0 0.5em">
-    <i class="fi-lock"></i> <translate>SHARE</translate>
-  </button>
-  <button class="left fi-wrench button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn" style="margin:0.7em 0 0 0.5em"
-  >
-    <span translate>APP_SETTINGS</span>
-  </button>
-</div>
-  <div class="right" style="margin: 0.7em 0 0 0;">
+  <img src="./img/design-panel.png" width="48px" style="float:left;margin:0 0.5em"/>
+  <!-- <span class="left" style="margin: 0.2em 0.5em;font-size: x-large;color: #8E8D8D;" translate>DESIGN_PANEL</span>
+   -->
+   <div class="left" style="margin: 1em 0 0 1em;">
     <div class="left">
       <span class="left" style="    font-size: small;
                                     font-weight: bold;
@@ -35,7 +19,28 @@
         <label for="designModeCheckbox"></label>
       </div>
     </div>
-    <div class="left">
+   <div ng-if="globalConfig.designMode" class="left"> 
+     <button class="left button tiny radius fi-save" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
+            id="submitChangesToServerBtn"
+            disabled
+            style="margin: 0 0 0 0.5em;padding: 0.6em 1em;"
+            ng-disabled="app.sendingToServer || !app.wasModified">
+      <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
+      <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
+      <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
+    </button>
+    <button class="left button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn"
+     style="margin: 0 0 0 0.5em;padding: 0.6em 1em;">
+      <i class="fi-lock"></i> <translate>SHARE</translate>...
+    </button>
+    <button class="left fi-wrench button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn" style="margin: 0 0 0 0.5em;padding: 0.6em 1em;"
+    >
+      <span translate>APP_SETTINGS</span>...
+    </button>
+  </div>  
+</div>
+  
+<!--     <div class="left">
       <span class="left" style="    font-size: small;
                                     font-weight: bold;
                                     color: #7D7D7D;">
@@ -48,6 +53,22 @@
                disabled ng-disabled="globalConfig.designMode">
         <label for="debugModeCheckbox"></label>
       </div>
-    </div>
+    </div> -->
+  </div>
+  
+  <button class="right button tiny radius" 
+      style="margin:1.3em 0 0 0.5em;padding: 0.6em 1em;">
+      <translate>Log out</translate>
+  </button>
+  
+  <div class="right" style="    font-size: small;
+                                    font-weight: bold;
+                                    color: #7D7D7D; 
+                                    margin: 1.1em 0.5em 0 0">
+    <!-- <span>Logged in as</span> -->
+    <span> {{(user.isAdmin)?'Administrator ':(user.isOwner)?'Owner ':'Collaborator '}}</span>
+    <span style="color: #008CBA;">{{user.name}}</span>
+    <img src="{{user.photo}}" width="24px" style="border: 0.1rem solid #ddd;"/>
+   
   </div>
 </div>
