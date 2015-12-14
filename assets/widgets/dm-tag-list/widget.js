@@ -20,27 +20,34 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
       $scope.collapsed = !$scope.collapsed;      
     }
 
-    function addListener(subscription) {
-      var subscriptions = pageSubscriptions();
-      for (var i in subscriptions) {
-        if (subscriptions[i].emitter === subscription.emitter 
-          && subscriptions[i].receiver === subscription.receiver) {
-          return;
+    var addListener = function(listener){
+        var subscriptions = pageSubscriptions();
+        for (var i in subscriptions) {
+          if (subscriptions[i].emitter === listener.emitter 
+            && subscriptions[i].receiver === listener.receiver
+            && subscriptions[i].signal === listener.signal
+            && subscriptions[i].slot === listener.slot
+            ) {
+            return;
+          }
         }
-      }
-      subscriptions.push(subscription);
-    };
+        subscriptions.push(listener);
+      };
+      
+    var removeListener = function(listener){
+        var subscriptions = pageSubscriptions();
+        for (var i in subscriptions) {
+          if (subscriptions[i].emitter === listener.emitter 
+            && subscriptions[i].receiver === listener.receiver
+            && subscriptions[i].signal === listener.signal
+            && subscriptions[i].slot === listener.slot
+            ) {
+            subscriptions.splice(i, 1);
+            return
+          }
+        }
+      };
 
-    function removeListener(subscription) {
-      var subscriptions = pageSubscriptions();
-      for (var i in subscriptions) {
-        if (subscriptions[i].emitter === subscription.emitter 
-          && subscriptions[i].receiver === subscription.receiver) {
-          subscriptions.splice(i, 1);
-          return;
-        }
-      }
-    };
 
     $scope.selectItem = function(key){
       eventEmitter.emit('setLookupKey', key);

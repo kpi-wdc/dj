@@ -9,14 +9,17 @@
   <!-- <div ng-if="(!(user.isOwner || user.isCollaborator) && (total != 0))||(user.isOwner || user.isCollaborator)"
     style="border: 0.1rem solid #ddd; margin:0.2rem 0;">
    -->  
-    <div ng-if="total != 0"
-    style="border: 0.1rem solid #ddd; margin:0.2rem 0;">
+    <div ng-show="total != 0">
+    <!-- style="border: 0.1rem solid #ddd; margin:0.2rem 0;"> -->
   
 
-    <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em; margin:0;"> 
+    <!-- <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em; margin:0;"> 
       <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
       {{title | translate}} &nbsp;({{total}})
     </h4>
+ -->
+
+
     <!-- <div ng-if="user.isOwner || user.isCollaborator"
       class="row" style="margin:0.5em 0 0.2em; border-bottom: 0.1rem solid #ddd">
       <button 
@@ -29,10 +32,39 @@
   
       </button>
     </div> -->
+
+
+    <div style="border-bottom: 0.1rem solid #ddd;">
+        <h4 style="     color: #888;
+                        font-stretch: ultra-condensed;
+                        font-weight: bold;
+                        padding: 0.2em 1em 0.2em 0;
+                        margin: 0;" ng-if="title">
+            <img ng-if="object.icon" ng-src="{{object.icon}}" width="48px" height="48px" />
+            {{object.label | translate}}
+        </h4>
+        <div ng-if="object.note" style="font-size: small; margin: 0 0.5rem 0.5rem 1.5rem; text-align: justify;">
+          {{object.note | translate}}
+        </div>
+        <div ng-if="object.url" style="font-size:small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
+          <a href="{{object.url}}" target="blank">{{object.url}}</a>
+        </div>
+    </div>
+    
+    <h4 style=" color: #888;
+                font-stretch: ultra-condensed;">
+                <widget-translate>Available_Datasets</widget-translate>&nbsp;({{total}})
+    </h4>
+
     <center ng-if="query && total == 0" >
       <img src="./img/ajax-loader.gif"/>
     </center>
     <div ng-if="total>0" style=" padding: 0.5em 0.5em 1em;">
+      
+
+      
+
+
       <div ng-repeat="item in result" style="margin:0 0 1rem 0;">
       <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
         <span ng-click="item.collapsed = !item.collapsed" style="cursor:pointer;">

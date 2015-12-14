@@ -319,6 +319,9 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     pageSubscriptions() {
       const pageConf = this.pageConfig() || {};
       pageConf.subscriptions = pageConf.subscriptions || [];
+      
+      
+
       return pageConf.subscriptions;
     },
 

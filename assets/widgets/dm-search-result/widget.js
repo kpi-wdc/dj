@@ -14,6 +14,8 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
     $scope.user = user;
     $scope.total = 0;
     $scope.table = undefined;
+    
+    $scope.key = undefined; 
 
     var formatDate = function(date){
       var locale = $translate.use() || "en";
@@ -31,27 +33,33 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
 
      $scope.formatDate = formatDate;
 
-    function addListener(subscription) {
-      var subscriptions = pageSubscriptions();
-      for (var i in subscriptions) {
-        if (subscriptions[i].emitter === subscription.emitter 
-          && subscriptions[i].receiver === subscription.receiver) {
-          return;
+    var addListener = function(listener){
+        var subscriptions = pageSubscriptions();
+        for (var i in subscriptions) {
+          if (subscriptions[i].emitter === listener.emitter 
+            && subscriptions[i].receiver === listener.receiver
+            && subscriptions[i].signal === listener.signal
+            && subscriptions[i].slot === listener.slot
+            ) {
+            return;
+          }
         }
-      }
-      subscriptions.push(subscription);
-    };
-
-    function removeListener(subscription) {
-      var subscriptions = pageSubscriptions();
-      for (var i in subscriptions) {
-        if (subscriptions[i].emitter === subscription.emitter 
-          && subscriptions[i].receiver === subscription.receiver) {
-          subscriptions.splice(i, 1);
-          return;
+        subscriptions.push(listener);
+      };
+      
+    var removeListener = function(listener){
+        var subscriptions = pageSubscriptions();
+        for (var i in subscriptions) {
+          if (subscriptions[i].emitter === listener.emitter 
+            && subscriptions[i].receiver === listener.receiver
+            && subscriptions[i].signal === listener.signal
+            && subscriptions[i].slot === listener.slot
+            ) {
+            subscriptions.splice(i, 1);
+            return
+          }
         }
-      }
-    };
+      };
 
     var searchDatasets = function(query){
           if(query){
@@ -61,7 +69,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
             $http.post("./api/metadata/items", {"query":query, "status":status}).success(
               function(resp){
                 $scope.result = resp;
-                $scope.result.forEach((item) => {item.collapsed=true});
+                $scope.result.forEach((item) => {item.collapsed=false});
                 $scope.total = $scope.result.length;
                 if(resp.length == 0){
                    eventEmitter.emit("slaveVisibility",true);
@@ -175,6 +183,18 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         $scope.icon_class = $scope.widget.icon_class;
         // $scope.query = $scope.widget.query || $scope.query;
         // searchDatasets($scope.query);
+        // 
+        if($scope.total == 0){
+          eventEmitter.emit("slaveVisibility",true);
+        }else{
+          eventEmitter.emit("slaveVisibility",false);
+        }
+
+        if($scope.key){
+          $scope.object = $lookup($scope.key);
+        }else{
+          $scope.object = undefined;
+        }
 
         $scope.listeners = ($scope.widget.listeners) ? $scope.widget.listeners.split(",") : [];
         for(var i in $scope.listeners){
@@ -209,6 +229,18 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
       .provide('refresh', (evt) => {
         // console.log("REFRESH", $scope.query);
         searchDatasets($scope.query);
+      })
+
+      .provide('setLookupKey', (evt, value) => {
+        // console.log("LOOKUP",evt,value)
+        $scope.key = value;
+        let tmp = $lookup($scope.key);
+        if($scope.key == tmp || tmp.en){
+          // $scope.object = undefined;
+          $scope.object = {label:$scope.key};
+        }else{
+          $scope.object = tmp;
+        }
       })
       
       .removal(() => {

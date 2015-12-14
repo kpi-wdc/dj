@@ -4,8 +4,9 @@ import 'dictionary';
 
 angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
   .controller('DataManagerTagTreeController', function ($scope, $http, EventEmitter, 
-    APIProvider, pageSubscriptions, $lookup, $translate, user) {
+    APIProvider, pageSubscriptions, $lookup, $translate, user, app) {
     
+
 
     const eventEmitter = new EventEmitter($scope);
     $scope.lookup = $lookup;
@@ -18,28 +19,35 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
       $scope.collapsed = !$scope.collapsed;      
     }
 
-    function addListener(subscription) {
-      var subscriptions = pageSubscriptions();
-      for (var i in subscriptions) {
-        if (subscriptions[i].emitter === subscription.emitter 
-          && subscriptions[i].receiver === subscription.receiver) {
-          return;
-        }
-      }
-      subscriptions.push(subscription);
-    };
 
-    function removeListener(subscription) {
-      var subscriptions = pageSubscriptions();
-      for (var i in subscriptions) {
-        if (subscriptions[i].emitter === subscription.emitter 
-          && subscriptions[i].receiver === subscription.receiver) {
-          subscriptions.splice(i, 1);
-          return;
+    var addListener = function(listener){
+        var subscriptions = pageSubscriptions();
+        for (var i in subscriptions) {
+          if (subscriptions[i].emitter === listener.emitter 
+            && subscriptions[i].receiver === listener.receiver
+            && subscriptions[i].signal === listener.signal
+            && subscriptions[i].slot === listener.slot
+            ) {
+            return;
+          }
         }
-      }
-    };
-    
+        subscriptions.push(listener);
+      };
+      
+    var removeListener = function(listener){
+        var subscriptions = pageSubscriptions();
+        for (var i in subscriptions) {
+          if (subscriptions[i].emitter === listener.emitter 
+            && subscriptions[i].receiver === listener.receiver
+            && subscriptions[i].signal === listener.signal
+            && subscriptions[i].slot === listener.slot
+            ) {
+            subscriptions.splice(i, 1);
+            return
+          }
+        }
+      };
+
     var prepareList = function(tag){
       $scope.tagList = [];
       for(let item in tag){
@@ -74,7 +82,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
         for(var i in $scope.lookupListeners){
           $scope.lookupListeners[i] = $scope.lookupListeners[i].trim();
           // console.log($scope.widget.instanceName,$scope.lookupListeners[i]);
-          addListener({
+         addListener({
                 emitter: $scope.widget.instanceName,
                 receiver: $scope.lookupListeners[i],
                 signal: "setLookupKey",
@@ -86,7 +94,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
         for(var i in $scope.searchListeners){
           $scope.searchListeners[i] = $scope.searchListeners[i].trim();
           // console.log($scope.widget.instanceName,$scope.searchListeners[i]);
-          addListener({
+         addListener({
                 emitter: $scope.widget.instanceName,
                 receiver: $scope.searchListeners[i],
                 signal: "searchQuery",
