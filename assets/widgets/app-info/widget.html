@@ -1,0 +1,48 @@
+<div 	class="row" 
+		style="padding:1em;" 
+		ng-controller="AppInfoController">
+	<div ng-if="visibility">		
+		<h4 ng-if="config.title" style="margin:0;">
+			<img src="{{config.icon}}" width="48px"/>
+			{{config.title | translate}}
+		</h4>
+		
+		<div ng-if="config.description" style="font-size: small;
+		    		text-align: justify;">
+		    	{{config.description | translate}}
+		</div>
+		<h5 ng-if="config.keywords.length>0" style="margin:0;">
+		<widget-translate>Keywords</widget-translate>&nbsp;:</h5>
+		<div ng-if="config.keywords.length>0" style="font-size: small;
+		    		text-align: justify; color:#008CBA;">
+		    <span ng-repeat="k in config.keywords track by $index">
+		    	{{k | translate}}{{($index < (config.keywords.length-1))?' ,':''}}
+		    </span>		
+		</div>
+		
+		<h5 style="margin:0;"><widget-translate>APPLICATION_AUTHOR</widget-translate>:</h5>
+		
+		<a ng-if="author.email" href="mailto:{{author.email}}" style="font-size: small;">
+		    <img ng-src="{{author.photo}}" style="width: 48px">
+		    {{author.name}}
+		</a>
+		<div ng-if="!author.name" widget-translate style="color:#aa0000;font-size:small;font-weight:bold;">
+		    THIS_APP_DOESNT_HAVE_AUTHOR
+		</div>
+		
+		<h5 ng-if="config.collaborations.length > 0" style="margin:0;">
+		<widget-translate>Collaborators</widget-translate>&nbsp;:</h5>
+		<div>
+			<span 	ng-if="config.collaborations.length > 0" 
+					style="float:left" 
+					ng-repeat="c in config.collaborations track by $index">
+				<a href="mailto:{{c.user.email}}" style="font-size: small;">
+				    {{c.user.name}}
+				</a>
+				{{($index < (config.collaborations.length-1))?' ,':''}}
+			</span>
+		</div>
+	</div>	
+</div>
+
+  

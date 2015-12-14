@@ -1,3 +1,5 @@
+<!-- <input class="class" type="text" readonly="readonly" onclick="this.select();" value=".fi-folder-lock"> -->
+
 <div ng-controller="ResourceManagerController" ng-show="globalConfig.designMode">
 	
 		<center ng-if="upload_process">
@@ -40,7 +42,7 @@
 				</td>	
 			</tr>
 			<tr ng-if="resources.length > 0">
-				<th style="font-size:smaller;">Name</th>
+				<th style="font-size:smaller;color: #008CBA;">URL</th>
 				<th style="font-size:smaller;">Type</th>
 				<th style="font-size:smaller;">Size</th>
 				<th style="font-size:smaller;">Owner</th>
@@ -49,7 +51,16 @@
 				
 			</tr>
 			<tr ng-if="resources.length > 0" ng-repeat="resource in resources | filter : key">
-				<td style="font-size:smaller;padding:0.1rem 0.5rem;"><a>{{resource.url}}</a></td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<input type="text" readonly="readonly" value="{{resource.url}}" 
+					style=" height: 1em;
+						    background-color: inherit;
+						    margin: 0.2em;
+						    font-size: smaller;
+						    font-weight: bold;
+						    color: #008CBA;"/>
+				
+				</td>
 				<td style="font-size:x-small;padding:0.1rem 0.5rem;text-align:center;">
 					{{resource.ext}}
 					<!-- <img src="{{'./components/Free-file-icons/16px/'+resource.ext+'.png'}}"/> -->

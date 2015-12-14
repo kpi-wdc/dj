@@ -28,6 +28,9 @@ module.exports = {
       type: 'array',
       required: true
     },
+    icon: {
+      type: 'string'
+    },
     title: {
       type: 'string',
       required: true

@@ -290,13 +290,21 @@ modals.controller('AppSettingsModalController', function ($scope, $modalInstance
       isPublished: config.isPublished,
       name: config.name,
       skinName: config.skinName,
-      keywords: config.keywords,
+      keywords: config.keywords.join(", "),
       title: config.title,
-      description: config.description
+      description: config.description,
+      icon:config.icon
     },
     skins: appSkins,
 
     ok() {
+      this.settings.keywords = this.settings.keywords.split(",");
+      
+      for(let i in this.settings.keywords){
+        this.settings.keywords[i] = this.settings.keywords[i].trim();  
+      }
+
+      // this.settings.keywords.forEach((item) => {item = item.trim()})
       $modalInstance.close(this.settings);
     },
 

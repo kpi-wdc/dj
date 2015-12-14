@@ -37,14 +37,22 @@
 				</td>	
 			</tr>
 			<tr>
-				<th style="font-size:smaller; color:#4DAECF;">Key</th>
+				<th style="font-size:smaller; color: #008CBA;">Key</th>
 				<th style="font-size:smaller;">EN</th>
 				<th style="font-size:smaller;">UA</th>
 				<th style="font-size:smaller;">RU</th>
 				<th style="font-size:smaller;">Operations</th>
 			</tr>
 			<tr ng-repeat="item in widget.translations | filter : key">
-				<td style="font-size:smaller; color:#4DAECF;padding:0.1rem 0.5rem;">{{item.key}}</td>
+				<td style="font-size:smaller; color:#4DAECF;padding:0.1rem 0.5rem;">
+					<input type="text" readonly="readonly" value="{{item.key}}" 
+					style=" height: 1em;
+						    background-color: inherit;
+						    margin: 0.2em;
+						    font-size: smaller;
+						    font-weight: bold;
+						    color: #008CBA;"/>
+				</td>
 				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.en}}</td>
 				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.ua}}</td>
 				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.ru}}</td>

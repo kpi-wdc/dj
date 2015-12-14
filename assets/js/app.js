@@ -291,6 +291,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         controller: 'AppSettingsModalController',
         backdrop: 'static'
       }).result.then((newSettings) => {
+        console.log(newSettings);
         angular.extend(config, newSettings);
         this.markModified(true);
       });

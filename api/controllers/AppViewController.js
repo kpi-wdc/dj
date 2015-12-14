@@ -50,6 +50,7 @@ module.exports = {
             appWidgets: app.appWidgets || [],
             collaborations: app.collaborations || [],
             pages: app.pages || [],
+            icon: app.icon,
             title: app.title,
             description: app.description,
             keywords: app.keywords,
