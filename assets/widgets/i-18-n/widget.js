@@ -6,15 +6,19 @@ import 'angular-translate-storage-local';
 
 
 var translateProvider = undefined; 
-angular.module('app.widgets.i-18-n', ['pascalprecht.translate'])
+angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboard'])
   
   .config(function ($translateProvider) {
     translateProvider = $translateProvider;
   })
 
   .controller('I18NController', function ($scope, $http, EventEmitter, 
-    APIProvider, APIUser, pageSubscriptions, $lookup, $translate, dialog, app) {
+    APIProvider, APIUser, pageSubscriptions, $lookup, $translate, dialog, app, clipboard) {
 
+
+    $scope.copyToClipboard = function(text){
+      clipboard.copyText(text);
+    }
 
     $scope.update = function(){
         var enT = {};

@@ -4,7 +4,7 @@
 		<table>
 			
 			<tr style="border-bottom:0.1rem solid #ddd">
-				<td colspan="5" style="margin:0; padding:0;">
+				<td colspan="6" style="margin:0; padding:0;">
 					<h4 style="color:#888; font-size:large; margin:0;">
 						<img src="./widgets/i-18-n/icon.png" width="32px"/>
 						Translations
@@ -13,7 +13,7 @@
 			</tr>
 			
 			<tr>
-				<td colspan="3">
+				<td colspan="4">
 					<span style="font-size:small">
 						<b>Filter:</b>
 						<input type="text" 
@@ -32,26 +32,46 @@
 						class="button radius toolbar right"
 	             		style="margin:1.5rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
 	            		  	  <i class="fi-plus"/>&nbsp;
-		            		  Create Translation...
+		            		  Add Translation...
 	            	</button>
 				</td>	
 			</tr>
 			<tr>
 				<th style="font-size:smaller; color: #008CBA;">Key</th>
+				<th style="font-size:smaller; color: #008CBA;">&nbsp;</th>
 				<th style="font-size:smaller;">EN</th>
 				<th style="font-size:smaller;">UA</th>
 				<th style="font-size:smaller;">RU</th>
-				<th style="font-size:smaller;">Operations</th>
+				<th style="font-size:smaller;font-size: smaller;
+    width: 15em;">Operations</th>
 			</tr>
 			<tr ng-repeat="item in widget.translations | filter : key">
 				<td style="font-size:smaller; color:#4DAECF;padding:0.1rem 0.5rem;">
-					<input type="text" readonly="readonly" value="{{item.key}}" 
+					<!-- <input type="text" readonly="readonly" value="{{item.key}}" 
 					style=" height: 1em;
 						    background-color: inherit;
 						    margin: 0.2em;
 						    font-size: smaller;
 						    font-weight: bold;
-						    color: #008CBA;"/>
+						    color: #008CBA;"/> -->
+					<span style="margin: 0.2em;
+						    	font-size: small;
+						    	color: #008CBA;
+						    	font-stretch: ultra-condensed;
+						    	text-align:right;">
+					{{item.key}}
+					</span>	    	    
+				</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button class="button tiny radius toolbar secondary"
+							title="Copy key to clipboard" 
+							ng-click="copyToClipboard(item.key)"
+							style="	padding: 0em 0.3em;
+								    margin: 0;
+								    border: 0.1rem solid #868686;
+								    background-color: initial;">
+					    <img class="clippy" src="./img/clippy.svg" width="13" alt="Copy to clipboard"/>
+					</button>	 
 				</td>
 				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.en}}</td>
 				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.ua}}</td>

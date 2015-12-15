@@ -29,6 +29,7 @@
     "SCEditor": "1.4.4",
     "system.js": "0.17.1",
     "topojson": "1.6.19",
-    "ng-file-upload": "3.3.4"
+    "ng-file-upload": "3.3.4",
+    "angular-clipboard": "~1.2.0"
   }
 }

@@ -7,6 +7,8 @@ import 'angular-json-editor';
 import 'angular-oclazyload';
 import 'angular-ui-router';
 import 'angular-ui-tree';
+import 'angular-clipboard';
+
 import 'file-upload';
 import 'ngstorage';
 import 'sceditor';
@@ -23,7 +25,7 @@ import 'user';
 import 'widget-api';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
-  'ngCookies', 'angular-json-editor', 'ui.tree',
+  'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard',
   'app.templates',
   'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);

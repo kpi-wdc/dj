@@ -2,17 +2,19 @@ import angular from 'angular';
 
 
 
-angular.module('app.widgets.resource-manager', [])
+angular.module('app.widgets.resource-manager', ['angular-clipboard'])
   
   .controller('ResourceManagerController', function ($scope, $http, $upload, EventEmitter, 
-    APIProvider, APIUser, pageSubscriptions, $translate, appName,dialog) {
+    APIProvider, APIUser, pageSubscriptions, $translate, appName,dialog,clipboard) {
     
     $scope.appName = appName;
     $scope.upload_process = true;
         
 
     
-
+    $scope.copyToClipboard = function(text){
+      clipboard.copyText(text);
+    }
 
     $scope.load = function(){
       $http.get("./api/resource")

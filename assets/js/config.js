@@ -23,6 +23,8 @@ System.config({
     "angular-translate-storage-local": "components/angular-translate-storage-local/angular-translate-storage-local.js",
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
+    "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
+    
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
     "angular-foundation": "components/angular-foundation/mm-foundation-tpls.js",
