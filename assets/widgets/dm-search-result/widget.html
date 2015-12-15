@@ -1,46 +1,12 @@
-<!-- <div  style="border: 1px solid #dfdfdf;
-  padding: 0.5rem;
-  margin: 0 0 0.5rem;
-  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;"
- --><div ng-controller="DataManagerSearchResultController">
- 
- 
-  <!-- <div ng-if="(!(user.isOwner || user.isCollaborator) && (total != 0))||(user.isOwner || user.isCollaborator)"
-    style="border: 0.1rem solid #ddd; margin:0.2rem 0;">
-   -->  
-    <div ng-show="total != 0">
-    <!-- style="border: 0.1rem solid #ddd; margin:0.2rem 0;"> -->
-  
-
-    <!-- <h4 style="color: rgba(0, 0, 0, 0.6);background-color: #efefef; padding: 0 0.5em; margin:0;"> 
-      <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
-      {{title | translate}} &nbsp;({{total}})
-    </h4>
- -->
-
-
-    <!-- <div ng-if="user.isOwner || user.isCollaborator"
-      class="row" style="margin:0.5em 0 0.2em; border-bottom: 0.1rem solid #ddd">
-      <button 
-               ng-click="openManageDialog()"
-               class="button radius tiny toolbar right"
-               style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
-              <i class="fi-widget"/>&nbsp;
-              <b>Manage Datasets...</b>       <div ng-if="(!(user.isOwner || user.isCollaborator) && (total != 0))||(user.isOwner || user.isCollaborator)"
-    style="border: 0.1rem solid #ddd; margin:0.2rem 0;">
-  
-      </button>
-    </div> -->
-
-
-    <div style="border-bottom: 0.1rem solid #ddd;">
+<div ng-controller="DataManagerSearchResultController">
+    <div ng-if="total > 0">
+      <div style="border-bottom: 0.1rem solid #ddd;">
         <h4 style="     color: #888;
                         font-stretch: ultra-condensed;
                         font-weight: bold;
                         padding: 0.2em 1em 0.2em 0;
                         margin: 0;" ng-if="title">
-            <img ng-if="object.icon" ng-src="{{object.icon}}" width="48px" height="48px" />
+            <img ng-if="object.icon" ng-src="{{object.icon}}" width="48px" height="48px" >
             {{object.label | translate}}
         </h4>
         <div ng-if="object.note" style="font-size: small; margin: 0 0.5rem 0.5rem 1.5rem; text-align: justify;">
@@ -49,119 +15,85 @@
         <div ng-if="object.url" style="font-size:small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
           <a href="{{object.url}}" target="blank">{{object.url}}</a>
         </div>
-    </div>
+      </div>
     
-    <h4 style=" color: #888;
-                font-stretch: ultra-condensed;">
-                <widget-translate>Available_Datasets</widget-translate>&nbsp;({{total}})
-    </h4>
+      <h4 style=" color: #888;
+                  font-stretch: ultra-condensed;">
+                  <widget-translate>Available_Datasets</widget-translate>&nbsp;({{total}})
+      </h4>
 
-    <center ng-if="query && total == 0" >
-      <img src="./img/ajax-loader.gif"/>
-    </center>
-    <div ng-if="total>0" style=" padding: 0.5em 0.5em 1em;">
-      
-
-      
-
-
-      <div ng-repeat="item in result" style="margin:0 0 1rem 0;">
-      <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
-        <span ng-click="item.collapsed = !item.collapsed" style="cursor:pointer;">
-          <i ng-if="item.dataset.status == 'private'" class="fi-lock" 
-                style=" padding:0 0.3em;
-                        margin:0 0.2em 0 0;
-                        color:#cf2a0e;"/>
-         
-          <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px"/>
-          <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;"></i>
-          {{item.dataset.label | translate}}{{(item.collapsed)?' ...':''}}
-        </span>
-
-
-        <!-- <span ng-if="item.dataset.status == 'private'" 
-        style="   color: #f04124;
-                  background-color: rgb(255, 237, 160);
-                  font-size: medium;
-                  font-weight: 900;
-                  padding: 0 0.5em;
-                  border: 0.1rem solid;
-                  border-radius: 0.5em;
-                  margin: 0.3em;"
-        > -->
-        <!--   Private
-        </span> -->
-      
-      <!-- <div class="row" style="margin:0; border-bottom: 0.1rem solid #ddd"> -->
-        <!-- <button ng-if="user.isOwner || user.isCollaborator" 
-                 ng-click="openManageDialog(item)"
-                  class="button radius tiny secondary toolbar right"
-                 style="margin:0rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
-                <i class="fi-widget"/>
-                Manage...       
-        </button> -->
-        <button 
-                 ng-click="openQueryDialog(item)"
-                  class="button radius tiny secondary toolbar right"
-                 style="margin:0.5rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
-                <i class="fi-crop"/>
-                Query...       
-        </button>
-        <button 
-                 ng-click="download(item)"
-                  class="button radius tiny secondary toolbar right"
-                style="margin:0.5rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
-                <a href="{{'./api/dataset/download/'+item.dataset.id}}" target="blank">
-                  <i class="fi-download"/>
-                  Download
-                </a>       
-        </button>
-      </h5>  
-     <!--    <img  class="right" ng-if="item.download" src="./img/ajax-loader.gif" style="margin:0rem 0.1rem 0.3rem 0.1rem;">
-      --> <!-- </div> -->
-      <div ng-if="!item.collapsed"
-           style="margin: 0.2em 0 0.5em 2.5em;
-                  padding: 0.5em;
-                  border: 0.1rem solid #ddd;
-                  background: #f4f4f4;">
-        <div style=" font-size: small; text-align: justify;margin:0 0 0 0.1em;">
-          <b>
-            <widget-translate>NOTE</widget-translate>
-          </b>:&nbsp;&nbsp;{{item.dataset.note | translate}}
-        </div>  
-        <div style=" font-size: small; text-align: justify;">
-          <b>
-            <widget-translate>SOURCE</widget-translate>
-          </b>:&nbsp;&nbsp;
-          <a ng-click="selectSource(item.dataset.source)">
-            {{(lookup(item.dataset.source).label) ? lookup(item.dataset.source).label : item.dataset.source | translate}}
-          </a>
-        </div>
-        <div style=" font-size: small; text-align: justify;">
-          <b>
-            <widget-translate>LAST_UPDATE</widget-translate>
-          </b>:&nbsp;&nbsp;{{formatDate(item.dataset.commit.createdAt)}}  
-        </div>
-        <div style=" font-size: small; text-align: justify;">
-          <b>
-            <widget-translate>TOPICS</widget-translate>
-          </b>:&nbsp;&nbsp;
-          <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
-            <a ng-click="selectTopic(topic)">
-              {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
-            </a>&nbsp;,
-          </span>
+      <center ng-if="query && total == 0" >
+        <img src="./img/ajax-loader.gif">
+      </center>
+    
+      <div style=" padding: 0.5em 0.5em 1em;">
+        <div ng-repeat="item in result" style="margin:0 0 1rem 0;">
+          <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
+            <span ng-click="item.collapsed = !item.collapsed" style="cursor:pointer;">
+              <i ng-if="item.dataset.status == 'private'" class="fi-lock" 
+                 style=" padding:0 0.3em;
+                          margin:0 0.2em 0 0;
+                          color:#cf2a0e;">
+              </i>
+              <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px">
+              <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;"></i>
+              {{item.dataset.label | translate}}{{(item.collapsed)?' ...':''}}
+            </span>
+            <button 
+                     ng-click="openQueryDialog(item)"
+                      class="button radius tiny secondary toolbar right"
+                     style="margin:0.5rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
+                    <i class="fi-crop"/>
+                    Query...       
+            </button>
+            <button 
+                     ng-click="download(item)"
+                      class="button radius tiny secondary toolbar right"
+                    style="margin:0.5rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+                    <a href="{{'./api/dataset/download/'+item.dataset.id}}" target="blank">
+                      <i class="fi-download"/>
+                      Download
+                    </a>       
+            </button>
+          </h5>  
+    
+          <div ng-if="!item.collapsed"
+               style="margin: 0.2em 0 0.5em 2.5em;
+                      padding: 0.5em;
+                      border: 0.1rem solid #ddd;
+                      background: #f4f4f4;">
+            <div style=" font-size: small; text-align: justify;margin:0 0 0 0.1em;">
+              <b>
+                <widget-translate>NOTE</widget-translate>
+              </b>:&nbsp;&nbsp;{{item.dataset.note | translate}}
+            </div>  
+            <div style=" font-size: small; text-align: justify;">
+              <b>
+                <widget-translate>SOURCE</widget-translate>
+              </b>:&nbsp;&nbsp;
+              <a ng-click="selectSource(item.dataset.source)">
+                {{(lookup(item.dataset.source).label) ? lookup(item.dataset.source).label : item.dataset.source | translate}}
+              </a>
+            </div>
+            <div style=" font-size: small; text-align: justify;">
+              <b>
+                <widget-translate>LAST_UPDATE</widget-translate>
+              </b>:&nbsp;&nbsp;{{formatDate(item.dataset.commit.createdAt)}}  
+            </div>
+            <div style=" font-size: small; text-align: justify;">
+              <b>
+                <widget-translate>TOPICS</widget-translate>
+              </b>:&nbsp;&nbsp;
+              <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
+                <a ng-click="selectTopic(topic)">
+                  {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
+                </a>&nbsp;,
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-
-    <!-- <span ng-repeat="item in tagList">
-      <a  style="font-size: smaller;">
-      <img ng-if="item.lookup.icon" src="{{item.lookup.icon}}"/>
-       {{(item.lookup.label)?item.lookup.label:item.tag | translate}}&nbsp;({{item.count}})
-      </a>,&nbsp;
-     --> <!-- </span> -->
-    </div>
-  </div>        
+    </div>        
 </div>
 
  

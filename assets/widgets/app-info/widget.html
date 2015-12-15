@@ -3,7 +3,7 @@
 		ng-controller="AppInfoController">
 	<div ng-if="visibility">		
 		<h4 ng-if="config.title" style="margin:0;">
-			<img ng-if="{{config.icon}}"src="{{config.icon}}" width="48px"/>
+			<img ng-if="{{config.icon}}"src="{{config.icon}}" width="48px">
 			{{config.title | translate}}
 		</h4>
 		
@@ -22,7 +22,7 @@
 		
 		<h5 style="margin:0;"><widget-translate>APPLICATION_AUTHOR</widget-translate>:</h5>
 		
-		<a ng-if="author.email" href="mailto:{{author.email}}" style="font-size: small;">
+		<a ng-if="author.email" href="mailto:{{author.email}}"  target="blank" style="font-size: small;">
 		     <span style=" background-image: url({{user.photo}});
                   background-size: 48px 48px;
                   border-radius: 50%;
@@ -48,7 +48,7 @@
 			<span 	ng-if="config.collaborations.length > 0" 
 					style="float:left" 
 					ng-repeat="c in config.collaborations track by $index">
-				<a href="mailto:{{c.user.email}}" style="font-size: small;">
+				<a href="mailto:{{c.user.email}}" target="blank" style="font-size: small;">
 				    {{c.user.name}}
 				</a>
 				{{($index < (config.collaborations.length-1))?' ,':''}}
