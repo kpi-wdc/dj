@@ -57,18 +57,34 @@
   </div>
   
   <button class="right button tiny radius" 
-      style="margin:1.3em 0 0 0.5em;padding: 0.6em 1em;">
+      style="margin:1.3em 0 0 0.5em;padding: 0.6em 1em;"
+      ng-click="logOut()">
+      
       <translate>Log out</translate>
   </button>
   
   <div class="right" style="    font-size: small;
                                     font-weight: bold;
                                     color: #7D7D7D; 
-                                    margin: 1.1em 0.5em 0 0">
+                                    margin:0.8em 0.5em 0 0">
     <!-- <span>Logged in as</span> -->
-    <span> {{(user.isAdmin)?'Administrator ':(user.isOwner)?'Owner ':'Collaborator '}}</span>
-    <span style="color: #008CBA;">{{user.name}}</span>
-    <img src="{{user.photo}}" width="24px" style="border: 0.1rem solid #ddd;"/>
+    <div style="margin:0.5em 0.5em 0 0; float:left;">
+      <span style="height: 32px; width: 32px;"> 
+        {{(user.isAdmin)?'Administrator ':(user.isOwner)?'Owner ':'Collaborator '}}
+      </span>
+      <span style="color: #008CBA;height: 32px;width: 32px;">{{user.name}}</span>
+    </div>
+    <span style=" background-image: url({{user.photo}});
+                  background-size: 32px 32px;
+                  border-radius: 50%;
+                  display: block;
+                  overflow: hidden;
+                  position: relative;
+                  height: 32px;
+                  width: 32px;
+                  float: right;
+    "/>
+    <!-- <img src="{{user.photo}}" width="24px" style="border: 0.1rem solid #ddd;"/> -->
    
   </div>
 </div>

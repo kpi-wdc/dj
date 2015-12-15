@@ -4,7 +4,6 @@
   "description": "Widget & statistical presentation platform",
   "private": true,
   "scripts": {
-    "preinstall": "npm install wdc_libs/wdc-flat wdc_libs/wdc-i18n wdc_libs/wdc-query wdc_libs/wdc-table-generator wdc_libs/wdc-xlsx-converter wdc_libs/wdc-xlsx2json",
     "postinstall": "jspm install && gulp build",
     "start": "node --harmony ./node_modules/sails/bin/sails lift",
     "debug": "node --harmony debug ./node_modules/sails/bin/sails lift",
@@ -41,6 +40,7 @@
     "bcryptjs": "2.1.0",
     "bluebird": "^3.0.5",
     "connect-mongo": "0.8.1",
+    "copy-object": "^1.0.0",
     "del": "1.1.1",
     "ejs": "2.3.1",
     "es6-module-loader": "0.16.5",
@@ -80,6 +80,7 @@
     "mime": "^1.3.4",
     "newrelic": "1.18.4",
     "node-linq": "0.0.5",
+    "node-xlsx": "^0.6.0",
     "oauth": "0.9.12",
     "object-hash": "0.5.0",
     "passport": "0.2.1",
@@ -93,17 +94,11 @@
     "sails-mongo": "0.10.6",
     "systemjs": "0.16.9",
     "traceur": "0.0.89",
+    "util": "^0.10.3",
     "uuid": "^2.0.1",
     "validator": "3.39.0",
-    "wdc-flat": "file:wdc_libs/wdc-flat",
-    "wdc-i18n": "file:wdc_libs/wdc-i18n",
-    "wdc-query": "file:wdc_libs/wdc-query",
-    "wdc-table-generator": "file:wdc_libs/wdc-table-generator",
-    "wdc-xlsx-converter": "file:wdc_libs/wdc-xlsx-converter",
-    "wdc-xlsx2json": "file:wdc_libs/wdc-xlsx2json",
-    "xlsjs": "0.7.5",
-    "xlsx": "0.8.0",
-    "xlsx-json-parser": "file:proc/xlsx2json"
+    "xlsjs": "^0.7.5",
+    "xlsx": "^0.8.0"
   },
   "jspm": {
     "directories": {

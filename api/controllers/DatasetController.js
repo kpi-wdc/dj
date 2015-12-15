@@ -5,18 +5,18 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-var converter = require("wdc-xlsx-converter");
+var converter = require("../../wdc_libs/wdc-xlsx-converter");
 var mime = require('mime');
 var path = require('path');
 var uuid = require('uuid');
-var query = require("wdc-query");
+var query = require("../../wdc_libs/wdc-query");
 var dictionaryController = require("./DictionaryController");
-var getProperty = require("wdc-flat").getProperty;
-var flat2json = require("wdc-flat").flat2json;
+var getProperty = require("../../wdc_libs/wdc-flat").getProperty;
+var flat2json = require("../../wdc_libs/wdc-flat").flat2json;
 var util = require("util");
-var executeQuery = require("wdc-table-generator").prepare;
-var toXLS = require("wdc-table-generator").prepareXLS;
-var I18N = require("wdc-i18n");
+var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
+var toXLS = require("../../wdc_libs/wdc-table-generator").prepareXLS;
+var I18N = require("../../wdc_libs/wdc-i18n");
 
 
 

@@ -5,11 +5,11 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-converter = require("wdc-xlsx-converter");
+converter = require("../../wdc_libs/wdc-xlsx-converter");
 mime = require('mime');
 path = require('path');
 uuid = require('uuid');
-query = require('wdc-query');
+query = require('../../wdc_libs/wdc-query');
 
 module.exports = {
 

@@ -3,6 +3,15 @@
 </div>
 
 <div class="row">
+  <!-- <div ng-if="user.isLoggedIn">
+    <logout-button></logout-button>
+    <translate>LOGGED_IN_AS</translate> {{user.name }} ({{user.email}})
+  </div> -->
+  <login-google-button ng-if="!user.isLoggedIn"></login-google-button>
+</div>
+
+
+<div class="row">
   <div class="medium-10 push-2 columns" id="page-view">
     <application-view>
       <translate>LOADING_DOTS</translate>
