@@ -433,7 +433,6 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
 
           const realWidget = {
             type: widgetType.type,
-            icon: widgetType.icon,
             openConfigOnLoad: true,
             instanceName: randomWidgetName()
           };
@@ -507,7 +506,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   });
 
   $window.onbeforeunload = (evt) => {
-    const message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING')
+    const message = $translate.instant('LEAVE_WEBSITE_WITHOUT_SAVING');
     if (app.wasModified) {
       if (typeof evt === "undefined") {
         evt = $window.event;
@@ -551,7 +550,8 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
 
 app.directive('widget', function ($rootScope, $translate, $window, appUrls, globalConfig, widgetLoader,
                                   config, widgetManager, user, app, randomWidgetName,
-                                  instanceNameToScope, widgetSlots, autoWiredSlotsAndEvents, eventWires) {
+                                  instanceNameToScope, widgetSlots, widgetTypesPromise,
+                                  autoWiredSlotsAndEvents, eventWires) {
   function updateEventsOnNameChange(widget) {
     $rootScope.$watch(() => widget.instanceName, (newName, oldName) => {
       if (newName !== oldName && newName !== undefined) {
@@ -604,6 +604,12 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
       scope.widget.type = scope.widget.type || scope.type;
       scope.widget.instanceName =
         attrs.instanceName || scope.widget.instanceName || randomWidgetName();
+
+      widgetTypesPromise.then(w => {
+        if (w.data[scope.widget.type].noicon !== true) {
+          scope.widget.icon = appUrls.widgetIcon(scope.widget.type);
+        }
+      });
 
       updateEventsOnNameChange(scope.widget);
 
