@@ -51,6 +51,7 @@ app.factory('appUrls', function (appId) {
     shareSettingsHTML: '/partials/share-settings.html',
     appSettingsHTML: '/partials/app-settings.html',
     resourceManagerHTML:'/partials/resource-manager.html',
+    translationManagerHTML:'/partials/translation-manager.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
     widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
@@ -309,6 +310,13 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       })
     },
 
+   openTranslationManager() {
+      $modal.open({
+        templateUrl: appUrls.translationManagerHTML,
+        controller: 'TranslationManagerController',
+        backdrop: 'static'
+      })
+    },
 
     onStateChangeStart(evt, toState, toParams) {
       if (toState.name === 'page') {

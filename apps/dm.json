@@ -1,0 +1,415 @@
+{
+  "skinName": "default",
+  "title": "#WDC Datasets Exploration",
+  "description": "Exploration of WDC Datasets is the single page application. You can use it for search and retrieve WDC data.",
+  "keywords": [
+    "#Data Management",
+    "#World Data System",
+    "#Sustainable Development"
+  ],
+  "isPublished": true,
+  "appWidgets": [
+    {
+      "type": "language-selector",
+      "instanceName": "language-selector",
+      "showFlags": true
+    },
+    {
+      "type": "page-list",
+      "instanceName": "page-list-nav"
+    },
+    {
+      "logoURL": "http://localhost:8080/./api/resource/dm-dm-icon.png",
+      "type": "app-logo",
+      "instanceName": "app-logo-widget"
+    }
+  ],
+  "pages": [
+    {
+      "href": "404",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "type": "title",
+              "title": "404 error",
+              "instanceName": "title"
+            },
+            {
+              "type": "htmlwidget",
+              "text": "Page not found",
+              "instanceName": "error-message"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "shortTitle": "#Home",
+      "href": "",
+      "template": "2(3x9)-cols",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "rlisteners": "sources,authors,keywords,topics,search,indicators",
+              "icon": "/widgets/dm-dataset-manager/icon.png",
+              "type": "dm-dataset-manager",
+              "instanceName": "Datasets Management"
+            }
+          ],
+          "width": 1125
+        },
+        "topleft": {
+          "widgets": [
+            {
+              "title": "#Topics",
+              "lookupListeners": "search",
+              "searchListeners": "search",
+              "icon_class": "fi-folder",
+              "icon": "/widgets/dm-tag-tree/icon.png",
+              "type": "dm-tag-tree",
+              "instanceName": "topics"
+            },
+            {
+              "title": "#Indicators",
+              "property": "metadata.dimension.concept.values.*.label",
+              "lookupListeners": "search",
+              "searchListeners": "search",
+              "icon_class": "fi-graph-trend",
+              "icon": "/widgets/dm-tag-list/icon.png",
+              "type": "dm-tag-list",
+              "instanceName": "indicators"
+            },
+            {
+              "title": "#Sources",
+              "property": "metadata.dataset.source",
+              "lookupListeners": "search",
+              "searchListeners": "search",
+              "icon_class": "fi-web",
+              "icon": "/widgets/dm-tag-list/icon.png",
+              "type": "dm-tag-list",
+              "instanceName": "sources"
+            },
+            {
+              "title": "#Authors",
+              "property": "metadata.dataset.commit.author",
+              "lookupListeners": "search",
+              "searchListeners": "search",
+              "icon_class": "fi-torsos-all",
+              "icon": "/widgets/dm-tag-list/icon.png",
+              "type": "dm-tag-list",
+              "instanceName": "authors"
+            },
+            {
+              "title": "#Keywords",
+              "property": "metadata.dataset.topics",
+              "lookupListeners": "search",
+              "searchListeners": "search",
+              "icon_class": "fi-key",
+              "icon": "/widgets/dm-tag-list/icon.png",
+              "type": "dm-tag-list",
+              "instanceName": "keywords"
+            }
+          ],
+          "width": 269
+        },
+        "topright": {
+          "widgets": [
+            {
+              "title": "#Search_Result",
+              "query": "",
+              "listeners": "search",
+              "rlisteners": "sources,authors,keywords,topics,search,indicators",
+              "icon_class": "fi-page-search",
+              "icon": "/widgets/dm-search-result/icon.png",
+              "type": "dm-search-result",
+              "instanceName": "search"
+            },
+            {
+              "url": "#url",
+              "languageSelector": "language-selector",
+              "masterWidget": "search",
+              "type": "remote-html",
+              "instanceName": "DEFAULT VIEW",
+              "icon": "/widgets/remote-html/icon.png"
+            }
+          ],
+          "width": 846
+        },
+        "bottom": {
+          "widgets": [],
+          "width": 1125
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "topics",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "sources",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "authors",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "search",
+          "receiver": "indicators",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "sources",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "search",
+          "receiver": "sources",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "authors",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "search",
+          "receiver": "authors",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "search",
+          "receiver": "totlals",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "topics",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "search",
+          "receiver": "topics",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "search",
+          "receiver": "search",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "keywords",
+          "receiver": "search",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "search",
+          "receiver": "keywords",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "language-selector",
+          "receiver": "Default View",
+          "signal": "selectLanguage",
+          "slot": "selectLanguage"
+        },
+        {
+          "emitter": "Datasets Management",
+          "receiver": "sources",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "Datasets Management",
+          "receiver": "authors",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "Datasets Management",
+          "receiver": "keywords",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "Datasets Management",
+          "receiver": "topics",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "Datasets Management",
+          "receiver": "search",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "Datasets Management",
+          "receiver": "indicators",
+          "signal": "refresh",
+          "slot": "refresh"
+        },
+        {
+          "emitter": "topics",
+          "receiver": "search",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "search",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "sources",
+          "receiver": "search",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "authors",
+          "receiver": "search",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "keywords",
+          "receiver": "search",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "search",
+          "receiver": "search",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "language-selector",
+          "receiver": "DEFAULT VIEW",
+          "signal": "selectLanguage",
+          "slot": "selectLanguage"
+        },
+        {
+          "emitter": "search",
+          "receiver": "DEFAULT VIEW",
+          "signal": "slaveVisibility",
+          "slot": "slaveVisibility"
+        }
+      ]
+    },
+    {
+      "shortTitle": "About",
+      "href": "about",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "masterWidget": "",
+              "icon": "/widgets/app-info/icon.png",
+              "type": "app-info",
+              "instanceName": "prhegrteikv2huxr"
+            }
+          ],
+          "width": 1125
+        }
+      },
+      "subscriptions": []
+    }
+  ],
+  "name": "dm",
+  "importedFromURL": "http://localhost:8080/app/dm",
+  "icon": "./api/resource/dm-dm-icon.png",
+  "importedFromAuthor": "Andrey Boldak",
+  "i18n": {
+    "uk": {
+      "#Search_and_Download _Dataset": "Пошук та завантаження наборів даних",
+      "#Datasets": "Набори даних",
+      "#Sources": "Джерела",
+      "#Authors": "Автори",
+      "#Indicators": "Показники",
+      "#Countries": "Країни",
+      "#Total": "Всього:",
+      "#Topics": "Теми",
+      "#Keywords": "Ключові слова",
+      "#Search_Result": "Результати пошуку",
+      "#Key": "Ключ пошуку",
+      "#url": "./api/resource/dm-dm-default-uk.html",
+      "#Home": "Головна",
+      "#WDC Datasets Exploration": "Розвідка даних СЦД",
+      "#Data Management": "Управління даними",
+      "#World Data System": "Світова система даних",
+      "#Sustainable Development": "Сталий розвиток"
+    },
+    "en": {
+      "#Search_and_Download _Dataset": "Search and Download  Dataset",
+      "#Datasets": "Datasets",
+      "#Sources": "Sources",
+      "#Authors": "Authors",
+      "#Indicators": "Indicators",
+      "#Countries": "Countries",
+      "#Total": "Total:",
+      "#Topics": "Topics",
+      "#Keywords": "Keywords",
+      "#Search_Result": "Search Result",
+      "#Key": "Search Key",
+      "#url": "./api/resource/dm-dm-default-en.html",
+      "#Home": "Home",
+      "#WDC Datasets Exploration": "Exploration of  WDC Datasets",
+      "#Data Management": "Data Management",
+      "#World Data System": "World Data System",
+      "#Sustainable Development": "Sustainable Development"
+    },
+    "ru": {
+      "#Search_and_Download _Dataset": "Поиск и загрузка наборов данных",
+      "#Datasets": "Наборы данных",
+      "#Sources": "Источники",
+      "#Authors": "Авторы",
+      "#Indicators": "Показатели",
+      "#Countries": "Страны",
+      "#Total": "Всего:",
+      "#Topics": "Темы",
+      "#Keywords": "Ключевые слова",
+      "#Search_Result": "Результаты поиска",
+      "#Key": "Ключ поиска",
+      "#url": "./api/resource/dm-dm-default-en.html",
+      "#Home": "Главная",
+      "#Sustainable Development": "Устойчивое развитие"
+    }
+  }
+}

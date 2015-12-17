@@ -51,6 +51,7 @@ module.exports = {
             collaborations: app.collaborations || [],
             pages: app.pages || [],
             icon: app.icon,
+            i18n: app.i18n,
             title: app.title,
             description: app.description,
             keywords: app.keywords,

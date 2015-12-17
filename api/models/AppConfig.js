@@ -31,6 +31,9 @@ module.exports = {
     icon: {
       type: 'string'
     },
+    i18n: {
+      type: 'json'
+    },
     title: {
       type: 'string',
       required: true

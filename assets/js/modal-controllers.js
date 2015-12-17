@@ -317,7 +317,8 @@ modals.controller('AppSettingsModalController', function ($scope, $modalInstance
 });
 
 modals.controller('ResourceManagerController', function (  $scope, $http, $upload, appName,
-                                                            dialog, clipboard, $modalInstance) {
+                                                            dialog, clipboard, 
+                                                            $modalInstance, $translate) {
     
   
     $scope.appName = appName;
@@ -420,3 +421,96 @@ modals.controller('ResourceManagerController', function (  $scope, $http, $uploa
         $scope.load();
 
   });
+
+
+modals.controller('TranslationManagerController', function ($scope, i18n, $translate, 
+                                                            dialog, app, clipboard,
+                                                            config, $modalInstance) {
+
+    $scope.prepareTranslations = function(){
+      
+      // get key collection
+      let keys = [];
+      for(let locale in config.i18n){
+        for (let key in config.i18n[locale]){
+          if(keys.filter((item) =>{return item == key}).length == 0){
+            keys.push(key)
+          }
+        }
+      }
+      //organize table
+      $scope.translations = [];
+      for(let i in keys){
+        let tr = {"key":keys[i]}
+        for(let locale in config.i18n){
+          tr[locale] = config.i18n[locale][keys[i]]
+        }
+        $scope.translations.push(tr);
+      }
+    }
+
+    $scope.prepareTranslations();
+
+    $scope.close= function(){
+       $modalInstance.close();
+    }
+    
+    $scope.copyToClipboard = function(text){
+      clipboard.copyText(text);
+    }
+
+    $scope.deleteTranslation = function(t){
+      i18n.remove([t.key]);
+      $scope.prepareTranslations();
+      app.markModified(true);
+    }
+
+    $scope.createTranslation = function(){
+      dialog({
+        title:"Create translation",
+        fields:{
+          key:{title:"Key",editable:true,required:true},
+          en:{title:"English",editable:true},
+          ua:{title:"Ukrainian",editable:true},
+          ru:{title:"Russian",editable:true}
+        }
+      }).then(function(form){
+        app.markModified(true);
+        let t = {};
+        t[form.fields.key.value] = form.fields.ua.value;
+        i18n.add("uk",t);
+        t[form.fields.key.value] = form.fields.en.value;
+        i18n.add("en",t);
+        t[form.fields.key.value] = form.fields.ru.value;
+        i18n.add("ru",t);
+        $scope.prepareTranslations();
+      })
+    }
+
+    $scope.editTranslation = function(translation){
+     dialog({
+        title:"Edit translation",
+        fields:{
+          key:{title:"Key",editable:true,required:true, value:translation.key},
+          en:{title:"English",editable:true,value:translation.en},
+          uk:{title:"Ukrainian",editable:true,value:translation.uk},
+          ru:{title:"Russian",editable:true,value:translation.ru}
+        }
+      }).then(function(form){
+        app.markModified(true);
+        if(translation.key != form.fields.key.value){
+          $scope.deleteTranslation(translation)
+        }
+        let t = {};
+        t[form.fields.key.value] = form.fields.uk.value;
+        i18n.add("uk",t);
+        t[form.fields.key.value] = form.fields.en.value;
+        i18n.add("en",t);
+        t[form.fields.key.value] = form.fields.ru.value;
+        i18n.add("ru",t);
+        $scope.prepareTranslations();
+      }) 
+    }
+    
+  });
+

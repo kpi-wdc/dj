@@ -6,14 +6,14 @@ import 'angular-translate-storage-local';
 
 
 var translateProvider = undefined; 
-angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboard'])
+angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboard','app.i18n'])
   
   .config(function ($translateProvider) {
     translateProvider = $translateProvider;
   })
 
   .controller('I18NController', function ($scope, $http, EventEmitter, 
-    APIProvider, APIUser, pageSubscriptions, $lookup, $translate, dialog, app, clipboard) {
+    APIProvider, APIUser, pageSubscriptions, $lookup, i18n, $translate, dialog, app, clipboard) {
 
 
     $scope.copyToClipboard = function(text){
@@ -31,9 +31,9 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboar
             ruT[item.key] = item.ru;
           });
         }   
-        $lookup.translations("uk",ukT);
-        $lookup.translations("en",enT);
-        $lookup.translations("ru",ruT);
+        i18n.add("uk",ukT);
+        i18n.add("en",enT);
+        i18n.add("ru",ruT);
 
     }
 
@@ -47,9 +47,9 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboar
       let t = {};
       t[translation.key] = {};
      
-      $lookup.removeTranslations("en",t);
-      $lookup.removeTranslations("ru",t);
-      $lookup.removeTranslations("uk",t);
+      i18n.remove("en",t);
+      i18n.remove("ru",t);
+      i18n.remove("uk",t);
       app.markModified(true);
     }
 
@@ -66,11 +66,11 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboar
         app.markModified(true);
         let t = {};
         t[form.fields.key.value] = form.fields.ua.value;
-        $lookup.translations("uk",t);
+        i18n.add("uk",t);
         t[form.fields.key.value] = form.fields.en.value;
-        $lookup.translations("en",t);
+        i18n.add("en",t);
         t[form.fields.key.value] = form.fields.ru.value;
-        $lookup.translations("ru",t);form.fields.en.value,
+        i18n.add("ru",t);form.fields.en.value,
 
         
         $scope.widget.translations.push(
@@ -99,11 +99,11 @@ angular.module('app.widgets.i-18-n', ['pascalprecht.translate','angular-clipboar
         }
         let t = {};
         t[form.fields.key.value] = form.fields.ua.value;
-        $lookup.translations("uk",t);
+        i18n.add("uk",t);
         t[form.fields.key.value] = form.fields.en.value;
-        $lookup.translations("en",t);
+        i18n.add("en",t);
         t[form.fields.key.value] = form.fields.ru.value;
-        $lookup.translations("ru",t);
+        i18n.add("ru",t);
         
         let i;
         for(i in $scope.widget.translations){

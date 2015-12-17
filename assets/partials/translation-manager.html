@@ -1,0 +1,93 @@
+<div style="margin: -1.8em -1.8em -3em -1.8em;">
+	
+	<!-- <h4 style="color:#888;">i18n</h4> -->
+		<table style="width:100%">
+			
+			<tr style="border-bottom:0.1rem solid #ddd">
+				<td colspan="5" style="margin:0; padding:0;">
+					<h4 style="color:#888; font-size:large; margin:0;">
+						<img src="./img/translations.png" width="32px" style="margin: 0.2em 0 0.2em 1em;">
+						Translations
+					</h4>
+				</td>
+				<td ng-click="close();" style="text-align:right;">
+					<i style="color:#888; font-size:large; margin:0;" class="fi-x"></i>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="4">
+					<span style="font-size:small">
+						<b>Filter:</b>
+						<input type="text" 
+							         			ng-model="key"
+							         			style="
+							         				font-size: smaller;
+							         				margin: 0;
+							         				padding: 0.2rem;
+							         				height: inherit;"
+						/>
+					</span>
+				</td>
+				<td colspan="2">
+					<button
+						ng-click="createTranslation()"
+						class="button radius toolbar right"
+	             		style="margin:1.5rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-plus"/>&nbsp;
+		            		  Add Translation...
+	            	</button>
+				</td>	
+			</tr>
+			<tr>
+				<th style="font-size:smaller; color: #008CBA;">Key</th>
+				<th style="font-size:smaller; color: #008CBA; width:48px;">&nbsp;</th>
+				<th style="font-size:smaller;">EN</th>
+				<th style="font-size:smaller;">UA</th>
+				<th style="font-size:smaller;">RU</th>
+				<th style="font-size:smaller;font-size: smaller;
+    width: 15em;">Operations</th>
+			</tr>
+			<tr ng-repeat="item in translations | filter : key">
+				<td style="font-size:smaller; color:#4DAECF;padding:0.1rem 0.5rem;">
+					<span style="margin: 0.2em;
+						    	font-size: small;
+						    	color: #008CBA;
+						    	font-stretch: ultra-condensed;
+						    	text-align:right;">
+					{{item.key}}
+					</span>	    	    
+				</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button class="button tiny radius toolbar secondary"
+							title="Copy key to clipboard" 
+							ng-click="copyToClipboard(item.key)"
+							style="	padding: 0em 0.3em;
+								    margin: 0;
+								    border: 0.1rem solid #868686;
+								    background-color: initial;">
+					    <img class="clippy" src="./img/clippy.svg" width="13px" alt="Copy to clipboard">
+					</button>	 
+				</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.en}}</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.uk}}</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{item.ru}}</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;">
+					<button
+						ng-click = "editTranslation(item)"
+						class="button radius tiny toolbar warning"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-pencil"/>&nbsp;
+		            		  Edit...
+	            	</button>
+	            	<button
+						ng-click = "deleteTranslation(item)"
+						class="button radius toolbar tiny alert"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-x"/>&nbsp;
+		            		  Delete
+	            	</button>
+				</td>
+			</tr>
+		</table>
+</div>

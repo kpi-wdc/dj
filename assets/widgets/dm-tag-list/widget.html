@@ -3,14 +3,14 @@
   margin: 0 0 0.5rem;
   box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;"
- --><div   style="border: 0.1rem solid #ddd; margin:0.2rem 0;"
+ --><div   style="/*border: 0.1rem solid #ddd;*/ margin:0.2rem 0;"
   ng-controller="DataManagerTagListController">
     <h4 ng-click="changeState()"
         style=" color: rgba(0, 0, 0, 0.6);
-                background-color: #efefef; padding: 0 0.5em; 
+                /*background-color: #efefef;*/ padding: 0 0.5em; 
                 cursor:pointer;margin:0; font-stretch: semi-condensed;"> 
       <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
-      {{title | translate}} &nbsp;({{total}})
+      {{title | translate}} &nbsp;{{(collapsed)?'('+total+')':''}}
       <span ng-if="collapsed">
         ...
       </span>

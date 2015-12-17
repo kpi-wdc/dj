@@ -3,27 +3,15 @@ import 'angular-translate';
 import 'angular-translate-loader-static-files';
 import 'angular-translate-storage-cookie';
 import 'angular-translate-storage-local';
+import 'i18n';
 
-const dictionaryModule = angular.module('app.dictionary', ['pascalprecht.translate']);
+const dictionaryModule = angular.module('app.dictionary', ['pascalprecht.translate','app.i18n']);
 dictionaryModule.dictionary = {};
-dictionaryModule.translations = {};
 
 
 
-dictionaryModule.config(function ($translateProvider) {
-  dictionaryModule.translateProvider = $translateProvider;
-});
-
-dictionaryModule.run(function ($http) {
+dictionaryModule.run(function ($http,i18n) {
   
-  var _translations = function (locale,translations){
-   dictionaryModule.translations[locale] = (dictionaryModule.translations[locale]) ? dictionaryModule.translations[locale] : {};
-    for(let i in translations){
-      dictionaryModule.translations[locale][i] = translations[i];
-    }
-     dictionaryModule.translateProvider.translations(locale,dictionaryModule.translations[locale]);
-  } 
-
   $http.get("./api/dictionary")
             .success(function (data) {
                 var d = {};
@@ -39,65 +27,41 @@ dictionaryModule.run(function ($http) {
                     ten[data[i].key] = data[i].value.en;
                   }
                 }
-               _translations("uk",tua);
-               _translations("en",ten);
+               i18n.add("uk",tua,true);
+               i18n.add("en",ten,true);
             });
 });
 
-dictionaryModule.service("$lookup",[ "$http","$translate", function($http,$translate){
+dictionaryModule.service("$lookup",[ "$http","$translate", "i18n",
+  function($http, $translate, i18n){
   
 
-  var lookup = function(key){
-    return dictionaryModule.dictionary[key] || key
-  };
+    var lookup = function(key){
+      return dictionaryModule.dictionary[key] || key
+    };
 
-  var _translations = function (locale,translations){
-    dictionaryModule.translations[locale] = (dictionaryModule.translations[locale]) 
-      ? dictionaryModule.translations[locale] 
-      : {};
-    for(let i in translations){
-      dictionaryModule.translations[locale][i] = translations[i];
-    }
-     dictionaryModule.translateProvider.translations(locale,dictionaryModule.translations[locale]);
-  } 
+   
 
-  lookup.reload = function(){
-    $http.get("./api/dictionary")
-            .success(function (data) {
-                var d = {};
-                for(let i in data){
-                  d[data[i].key] = data[i].value;
-                }
-                dictionaryModule.dictionary = d;
-                var tua = {};
-                var ten = {};
-                for(let i in data){
-                  if (data[i].type == "i18n") {
-                    tua[data[i].key] = data[i].value.ua;
-                    ten[data[i].key] = data[i].value.en;
+    lookup.reload = function(){
+      $http.get("./api/dictionary")
+              .success(function (data) {
+                  var d = {};
+                  for(let i in data){
+                    d[data[i].key] = data[i].value;
                   }
-                }
-                _translations("uk",tua);
-                _translations("en",ten);
-          });
+                  dictionaryModule.dictionary = d;
+                  var tua = {};
+                  var ten = {};
+                  for(let i in data){
+                    if (data[i].type == "i18n") {
+                      tua[data[i].key] = data[i].value.ua;
+                      ten[data[i].key] = data[i].value.en;
+                    }
+                  }
+                 i18n.add("uk",tua,true);
+                 i18n.add("en",ten,true);
+            });
     }
-  
-  lookup.translations = _translations;
-
-  lookup.refresh = function(){
-    for(let locale in dictionaryModule.translations){
-        dictionaryModule.translateProvider.translations(locale,dictionaryModule.translations[locale]);
-    } 
-  }
-
-  lookup.removeTranslations = function(locale,translations){
-    console.log(locale,translations)
-    if (!dictionaryModule.translations[locale]) return;
-    for(let i in translations){
-      dictionaryModule.translations[locale][i] = undefined;
-    }
-     $translate.refresh().then(() => {lookup.refresh()});
-  }  
 
   return lookup;
 }]);
