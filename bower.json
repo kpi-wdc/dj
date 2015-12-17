@@ -30,6 +30,9 @@
     "system.js": "0.17.1",
     "topojson": "1.6.19",
     "ng-file-upload": "3.3.4",
-    "angular-clipboard": "~1.2.0"
+    "angular-clipboard": "~1.2.0",
+    "mousetrap": "~1.5.2",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.6.0"
+    
   }
 }

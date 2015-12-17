@@ -1,12 +1,44 @@
-import angular from 'angular';
 
 
 
-angular.module('app.widgets.resource-manager', ['angular-clipboard'])
+
+const m = angular.module('app.widgets.resource-manager', [])
   
-  .controller('ResourceManagerController', function ($scope, $http, $upload, EventEmitter, 
-    APIProvider, APIUser, pageSubscriptions, $translate, appName,dialog,clipboard) {
+  m.controller("ResourceManagerInvoker", function($scope, hotkeys, globalConfig, $modal){
+    console.log("ResourceManagerInvoker");
+    $scope.invoke = function(){
+      $modal.open({
+        templateUrl: "./widgets/resource-manager/manager.html",
+        controller: 'ResourceManagerController',
+        backdrop: 'static'
+      })
+    }
+
+    $scope.$watch("globalConfig.designMode", function(value){
+      if(value == true){
+        hotkeys.add({
+          combo: 'alt+r',
+          description: 'Invoke Resources Manager',
+          callback: function(event) {
+            event.preventDefault();
+            $scope.invoke();
+          }
+        });  
+      }else{
+        hotkeys.del('alt+r');
+      }
+    })
+
+  })
+  
+  m.controller('ResourceManagerController', function ( $scope, $http, $upload, EventEmitter, 
+                                                      APIProvider, APIUser, pageSubscriptions, 
+                                                      $translate, appName,dialog,clipboard,
+                                                      $modalInstance) {
     
+    
+    
+
     $scope.appName = appName;
     $scope.upload_process = true;
         
@@ -79,6 +111,10 @@ angular.module('app.widgets.resource-manager', ['angular-clipboard'])
         })
     }
 
+    $scope.close= function(){
+       $modalInstance.close();
+    }
+
     $scope.renameResource = function(resource){
       dialog({
           title:"Enter new resource name",
@@ -99,15 +135,16 @@ angular.module('app.widgets.resource-manager', ['angular-clipboard'])
       })
     } 
 
-
-
-    new APIProvider($scope)
-      .config(() => {
-        console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.upload_process = true;
         $scope.load();
-      })
-      .removal(() => {
-        console.log('Resource Manager widget is destroyed');
-      });
+
+    // new APIProvider($scope)
+    //   .config(() => {
+    //     console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
+    //     $scope.upload_process = true;
+    //     $scope.load();
+    //   })
+    //   .removal(() => {
+    //     console.log('Resource Manager widget is destroyed');
+    //   });
   });

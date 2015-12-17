@@ -2,89 +2,96 @@
                         margin: 0.5em 1em;
                         border: 0.1rem solid #ddd;
                         background-color: #F7F5DF;">
- <div class="left">
-  <img src="./img/design-panel.png" width="48px" style="float:left;margin:0 0.5em"/>
-  <!-- <span class="left" style="margin: 0.2em 0.5em;font-size: x-large;color: #8E8D8D;" translate>DESIGN_PANEL</span>
-   -->
-   <div class="left" style="margin: 1em 0 0 1em;">
-    <div class="left">
-      <span class="left" style="    font-size: small;
-                                    font-weight: bold;
-                                    color: #7D7D7D;">
-        <translate>DESIGN_MODE</translate>:&nbsp;&nbsp;
-      </span>
-      <div class="switch tiny left" style="margin:0;">
-        <input type="checkbox" id="designModeCheckbox"
-               ng-model="globalConfig.designMode">
-        <label for="designModeCheckbox"></label>
+  <div class="left" style="width:100%">
+    <img src="./img/design-panel.png" width="48px" style="float:left;margin:0 0.5em">
+    <div class="left" style="margin: 0.5em 0 0 0;">
+    
+      <button title="Alt+D" 
+              ng-click="globalConfig.designMode = !globalConfig.designMode" 
+              class="left button radius toolbar"
+              ng-class="(globalConfig.designMode)?'success':''"
+              style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+              <img src="{{(!globalConfig.designMode)?'./img/design-mode-icon.png':'./img/presentation-mode-icon1.png'}}" width="24px">
+              <translate>{{(!globalConfig.designMode)?'DESIGN_MODE':'PRESENTATION'}}</translate>
+      </button>    
+
+      <div ng-if="globalConfig.designMode" class="left"> 
+         <button  title="Alt+S"
+                  class="left button radius" 
+                  ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
+                  id="submitChangesToServerBtn"
+                  disabled
+                  style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;"
+                  ng-disabled="app.sendingToServer || !app.wasModified">
+          <img src="./img/save-icon.png" width="24px">      
+          <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
+          <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
+          <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
+        </button>
+
+        <button class="left button radius" ng-click="app.openShareSettings()" id="appShareBtn"
+         style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+          <img src="./img/share-icon.png" width="24px">
+          <translate>SHARE</translate>...
+        </button>
+
+        <button   class="left button radius" 
+                  ng-click="app.openAppSettingsDialog()" 
+                  id="appSettingsBtn" 
+                  style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+          <img src="./img/app-settings-icon.png" width="24px">
+          <span translate>APP_SETTINGS</span>...
+        </button>
+
+        <button title="Alt+R"
+                ng-click="app.openResourceManager()" 
+                class="left button radius toolbar"
+                style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+            <img src="./img/resource-manager-icon.png" width="24px">
+            <translate>RESOURCES</translate>...
+        </button>
+
+        <button title="Alt+T"
+                ng-click="app.openResourceManager()" 
+                class="left button radius toolbar"
+                style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+              <img src="./img/translations-icon.png" width="24px">
+              <translate>TRANSLATIONS</translate>...
+        </button>
       </div>
-    </div>
-   <div ng-if="globalConfig.designMode" class="left"> 
-     <button class="left button tiny radius fi-save" ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
-            id="submitChangesToServerBtn"
-            disabled
-            style="margin: 0 0 0 0.5em;padding: 0.6em 1em;"
-            ng-disabled="app.sendingToServer || !app.wasModified">
-      <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
-      <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
-      <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
-    </button>
-    <button class="left button tiny radius" ng-click="app.openShareSettings()" id="appShareBtn"
-     style="margin: 0 0 0 0.5em;padding: 0.6em 1em;">
-      <i class="fi-lock"></i> <translate>SHARE</translate>...
-    </button>
-    <button class="left fi-wrench button tiny radius" ng-click="app.openAppSettingsDialog()" id="appSettingsBtn" style="margin: 0 0 0 0.5em;padding: 0.6em 1em;"
-    >
-      <span translate>APP_SETTINGS</span>...
-    </button>
-  </div>  
-</div>
-  
-<!--     <div class="left">
-      <span class="left" style="    font-size: small;
-                                    font-weight: bold;
-                                    color: #7D7D7D;">
-        &nbsp;&nbsp;&nbsp;&nbsp;
-       <translate>DEBUG_MODE</translate>:&nbsp;&nbsp;
-      </span>
-      <div class="switch tiny left" style="margin:0;">
-        <input type="checkbox" id="debugModeCheckbox"
-               ng-model="globalConfig.debugMode"
-               disabled ng-disabled="globalConfig.designMode">
-        <label for="debugModeCheckbox"></label>
+    </div>  
+    <div class="right" style="margin: 0.5em 0 0 0;">
+      <div style="  margin: 0;
+                    padding: 0.5em 0.5em 0 0;
+                    float: left;
+                    font-stretch: ultra-condensed;
+                    font-size: small;
+                    font-weight: bold;">
+        <span style="height: 32px; width: 32px; color: #A09C90;"> 
+          {{(user.isAdmin)?'Administrator ':(user.isOwner)?'Owner ':'Collaborator '}}
+        </span>
+        <span style="color: #008CBA;height: 32px;width: 32px;">{{user.name}}</span>
       </div>
-    </div> -->
-  </div>
-  
-  <button class="right button tiny radius" 
-      style="margin:1.3em 0 0 0.5em;padding: 0.6em 1em;"
-      ng-click="logOut()">
-      
-      <translate>Log out</translate>
-  </button>
-  
-  <div class="right" style="    font-size: small;
-                                    font-weight: bold;
-                                    color: #7D7D7D; 
-                                    margin:0.8em 0.5em 0 0">
-    <!-- <span>Logged in as</span> -->
-    <div style="margin:0.5em 0.5em 0 0; float:left;">
-      <span style="height: 32px; width: 32px;"> 
-        {{(user.isAdmin)?'Administrator ':(user.isOwner)?'Owner ':'Collaborator '}}
+      <span style=" background-image: url({{user.photo}});
+                    background-size: 32px 32px;
+                    border-radius: 50%;
+                    display: block;
+                    overflow: hidden;
+                    position: relative;
+                    height: 32px;
+                    width: 32px;
+                    float: left;
+                    margin: 0 0.5em 0 0">
       </span>
-      <span style="color: #008CBA;height: 32px;width: 32px;">{{user.name}}</span>
-    </div>
-    <span style=" background-image: url({{user.photo}});
-                  background-size: 32px 32px;
-                  border-radius: 50%;
-                  display: block;
-                  overflow: hidden;
-                  position: relative;
-                  height: 32px;
-                  width: 32px;
-                  float: right;
-    "></span>
-    <!-- <img src="{{user.photo}}" width="24px" style="border: 0.1rem solid #ddd;"/> -->
-   
+      <button class="right button radius" 
+              style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;"
+              ng-click="logOut()">
+        <img src="./img/logout-icon.png" width="24px">
+        <translate>LOG_OUT</translate>
+      </button>
+    </div>  
   </div>
 </div>
+
+
+  

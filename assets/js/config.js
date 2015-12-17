@@ -24,7 +24,8 @@ System.config({
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
-    
+    "mousetrap":"components/mousetrap/mousetrap.js",
+    "angular-hotkeys": "components/angular-hotkeys/src/hotkeys.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
     "angular-foundation": "components/angular-foundation/mm-foundation-tpls.js",
@@ -117,6 +118,15 @@ System.config({
         "angular"
       ]
     },
+
+    "angular-hotkeys": {
+      "deps": [
+        "mousetrap",
+        "angular"
+      ]
+    },
+
+
     "angular-oclazyload": {
       "deps": [
         "angular"

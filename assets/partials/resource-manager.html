@@ -1,0 +1,123 @@
+<!-- <input class="class" type="text" readonly="readonly" onclick="this.select();" value=".fi-folder-lock"> -->
+
+<!-- <div ng-controller="ResourceManagerController" ng-show="globalConfig.designMode"> -->
+
+<div style="margin: -1.8em -1.8em -3em -1.8em;">
+	
+		<center ng-if="upload_process">
+			<img src="./img/ajax-loader.gif"/>
+		</center>
+		<table ng-if="!upload_process" style="width:100%">
+			<tr style="border-bottom:0.1rem solid #ddd;">
+				<td colspan="6" style="margin:0; padding:0;">
+					<h4 style="color:#888; font-size:large; margin:0;">
+						<img src="./img/resource-manager.png" width="32px" style="margin: 0 0 0 1em;">
+						Resources
+					</h4>
+				</td>
+				<td ng-click="close();" style="text-align:right;">
+					<i style="color:#888; font-size:large; margin:0;" class="fi-x"></i>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="4">
+					<span style="font-size:small">
+						<b>Filter:</b>
+						<input type="text" 
+							         			ng-model="key"
+							         			style="
+							         				font-size: smaller;
+							         				margin: 0;
+							         				padding: 0.2rem;
+							         				height: inherit;"
+						/>
+					</span>
+				</td>
+				<td colspan="3" style="text-align:right;">
+					<button
+						ng-file-select 
+						ng-multiple="true" 
+						ng-file-change="fileSelected($files, $event)" 
+	 					class="button radius toolbar"
+	             		style="margin:1.5rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-upload"/>&nbsp;
+		            		  Update/Upload...
+	            	</button>
+				</td>	
+			</tr>
+			<tr ng-if="resources.length > 0">
+				
+				<th style="font-size:smaller;color: #008CBA;">URL</th>
+				<th style="font-size:smaller;color: #008CBA; width: 48px;">&nbsp;</th>
+				<th style="font-size:smaller;">Type</th>
+				<th style="font-size:smaller;">Size</th>
+				<th style="font-size:smaller;">Owner</th>
+				<th style="font-size:smaller;">Updated</th>
+				<th style="font-size:smaller; width: 22em;">Operations</th>
+				
+			</tr>
+			<tr ng-if="resources.length > 0" ng-repeat="resource in resources | filter : key">
+				
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<!-- <input type="text" readonly="readonly" value="{{resource.url}}" 
+					style=" height: 1em;
+						    background-color: inherit;
+						    margin: 0.2em;
+						    font-size: smaller;
+						    font-weight: bold;
+						    color: #008CBA;"/> -->
+					<span style="margin: 0.2em;
+						    	font-size: small;
+						    	color: #008CBA;
+						    	font-stretch: ultra-condensed;
+						    	text-align:right;">
+					{{resource.url}}
+					</span>	    
+				</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button class="button tiny radius toolbar secondary"
+							title="Copy url to clipboard" 
+							ng-click="copyToClipboard(resource.url)"
+							style="	padding: 0em 0.3em;
+								    margin: 0;
+								    border: 0.1rem solid #868686;
+								    background-color: initial;">
+					    <img style="width:13px;" src="./img/clippy.svg"alt="Copy to clipboard">
+
+					</button>	 
+				</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;text-align:center;">
+					{{resource.ext}}
+				</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;text-align:right;">{{resource.size}}</td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;"><a>{{resource.owner}}</a></td>
+				<td style="font-size:x-small;padding:0.1rem 0.5rem;">{{formatDate(resource.updatedAt)}}</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button 
+	 					class="button radius tiny toolbar secondary"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  <a href="{{resource.url}}" target="blank">
+		            		  <i class="fi-download"/>&nbsp;
+		            		  View
+	            		  </a>
+		    		</button>
+		    		<button 
+		    			ng-click="renameResource(resource)" 
+	 					class="button radius tiny toolbar warning"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-pencil"/>&nbsp;
+		            		  Rename...
+	            	</button>
+		    		<button
+		    			ng-click="deleteResource(resource)" 
+	 					class="button radius tiny toolbar alert"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-x"/>&nbsp;
+		            		  Delete
+	            	</button>
+		    		
+				</td>
+			</tr>
+		</table>
+</div>

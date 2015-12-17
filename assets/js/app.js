@@ -8,6 +8,7 @@ import 'angular-oclazyload';
 import 'angular-ui-router';
 import 'angular-ui-tree';
 import 'angular-clipboard';
+import 'angular-hotkeys';
 
 import 'file-upload';
 import 'ngstorage';
@@ -25,7 +26,7 @@ import 'user';
 import 'widget-api';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
-  'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard',
+  'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard','cfp.hotkeys',
   'app.templates',
   'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
@@ -49,6 +50,7 @@ app.factory('appUrls', function (appId) {
     widgetTypes: '/widgets/widgets.json',
     shareSettingsHTML: '/partials/share-settings.html',
     appSettingsHTML: '/partials/app-settings.html',
+    resourceManagerHTML:'/partials/resource-manager.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
     widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
@@ -199,7 +201,7 @@ app.factory('config', function (initialConfig, $log) {
 });
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
-                             $translate, appUrls, appName, fullReload, eventWires, APIUser) {
+                             $translate, appUrls, appName, fullReload, eventWires, APIUser,hotkeys) {
 
   let pageConf;
 
@@ -298,6 +300,15 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         this.markModified(true);
       });
     },
+
+    openResourceManager() {
+    	$modal.open({
+        templateUrl: appUrls.resourceManagerHTML,
+        controller: 'ResourceManagerController',
+        backdrop: 'static'
+      })
+    },
+
 
     onStateChangeStart(evt, toState, toParams) {
       if (toState.name === 'page') {
