@@ -55,6 +55,18 @@ info.factory('dialog', function ($modal) {
   };
 });
 
+info.factory('splash', function ($modal) {
+  return (form) => {
+    return $modal.open({
+      templateUrl: '/partials/splash.html',
+      controller: 'SplashController',
+      resolve: {
+        form: () => form
+      }
+    }).result;
+  };
+});
+
 
 
 info.controller('PromptController', function ($scope, $modalInstance, text, value) {
@@ -107,6 +119,13 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
   };
   
 });
+
+
+info.controller('SplashController', function ($scope, $modalInstance, form) {
+  $scope.form = form;
+  setTimeout(() => {$modalInstance.dismiss();}, form.wait || 3000);
+});  
+
   
 
 info.controller('ConfirmController', function ($scope, $modalInstance, text) {

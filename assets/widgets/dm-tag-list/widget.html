@@ -9,11 +9,13 @@
         style=" color: rgba(0, 0, 0, 0.6);
                 /*background-color: #efefef;*/ padding: 0 0.5em; 
                 cursor:pointer;margin:0; font-stretch: semi-condensed;"> 
+      <a>
       <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
-      {{title | translate}} &nbsp;{{(collapsed)?'('+total+')':''}}
-      <span ng-if="collapsed">
-        ...
-      </span>
+        {{title | translate}} &nbsp;{{(collapsed)?'('+total+')':''}}
+        <span ng-if="collapsed">
+          ...
+        </span>
+      </a>
     </h4>
     <div ng-if="!collapsed" style=" padding: 0.5em 0.5em 1em;">
     <span ng-repeat="item in tagList">

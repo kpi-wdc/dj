@@ -1,0 +1,8 @@
+  <h5 color="#ddd">
+  <img ng-if="form.icon" src="{{form.icon}}" width="48px">
+  {{form.title}}
+  </h5>
+  <div class="row" ng-repeat="field in form.fields">
+   <b>{{field.key}} :</b> {{field.value}}
+  </div>
+  

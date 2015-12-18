@@ -12,11 +12,13 @@
                 margin:0;    
                 font-stretch: semi-condensed;
                 cursor:pointer;"> 
-      <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
-      {{title | translate}}
-      <span ng-if="collapsed">
-        ...
-      </span>
+      <a>
+        <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
+        {{title | translate}}
+        <span ng-if="collapsed">
+          ...
+        </span>
+      </a>
     </h4>
     <div ng-if="!collapsed" style=" padding: 0.5 0.5em 1em;">
       <div style="border-bottom:0.1rem solid #ddd;">

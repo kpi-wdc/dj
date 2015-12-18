@@ -487,7 +487,61 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 
 app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
                                            alert, app, config, user, appUrls, globalConfig,
-                                           fullReload) {
+                                           fullReload, hotkeys,splash) {
+  
+  if(user.isOwner || user.isCollaborator){
+    console.log("Add hotkeys")
+    
+    hotkeys.add({
+      combo: 'alt+r',
+      description: 'Invoke Resources Manager',
+      callback: function(event) {
+        event.preventDefault();
+        app.openResourceManager();
+      }
+    });
+
+    hotkeys.add({
+      combo: 'alt+t',
+      description: 'Invoke Translations Manager',
+      callback: function(event) {
+        event.preventDefault();
+        app.openTranslationManager();
+      }
+    });
+
+    hotkeys.add({
+      combo: 'alt+d',
+      description: 'Switch mode',
+      callback: function(event) {
+        event.preventDefault();
+        globalConfig.designMode = !globalConfig.designMode;
+      }
+    });
+
+    hotkeys.add({
+      combo: 'alt+s',
+      description: 'Save settings',
+      callback: function(event) {
+        event.preventDefault();
+        app.submitToServer();
+      }
+    });
+    console.log(hotkeys);
+    splash({
+      title:"Hotkeys",
+      icon: config.icon,
+      wait:2000,
+      fields:[
+        {key:"Alt + D",value:"Switch Mode"},
+        {key:"Alt + T",value:"Activate Translation Manager"},
+        {key:"Alt + R",value:"Activate Resource Manager"},
+        {key:"Alt + S",value:"Save Settings"}
+      ]
+    })
+     // hotkeys.toggleHelp();
+  }
+  
   angular.extend($scope, {
     globalConfig,
     app,
