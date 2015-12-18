@@ -1,8 +1,13 @@
-  <h5 color="#ddd">
-  <img ng-if="form.icon" src="{{form.icon}}" width="48px">
-  {{form.title}}
-  </h5>
-  <div class="row" ng-repeat="field in form.fields">
-   <b>{{field.key}} :</b> {{field.value}}
+  <div>
+	  <h5 color="#ddd">
+	  <img ng-if="form.icon" src="{{form.icon}}" width="48px">
+	  {{form.title}}
+	  </h5>
+	  <div class="row" ng-repeat="section in form.sections">
+	  	<h5>{{section.title | translate}}</h5>			
+		  <div class="row" ng-repeat="field in section.fields">
+		   <b>{{field.key | translate}}</b> {{field.value | translate}}
+		  </div>
+	  </div>
   </div>
   

@@ -17,16 +17,17 @@
 
       <div ng-if="globalConfig.designMode" class="left"> 
          <button  title="Alt+S"
-                  class="left button radius" 
+                  class="left button radius"
+                  ng-class="(app.sendingToServer || !app.wasModified) ? 'secondary' : 'warning'" 
                   ng-click="app.submitToServer(alertAppConfigSubmissionFailed)"
                   id="submitChangesToServerBtn"
                   disabled
                   style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;"
                   ng-disabled="app.sendingToServer || !app.wasModified">
           <img src="./img/save-icon.png" width="24px">      
-          <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span>
-          <span ng-if="!app.sendingToServer && !app.wasSavedEver" translate>SAVE</span>
-          <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span>
+          <!-- <span ng-if="app.sendingToServer" translate>SAVING_DOTS</span> -->
+          <span translate>SAVE</span>
+          <!-- <span ng-if="!app.sendingToServer && app.wasSavedEver" translate>SAVED</span> -->
         </button>
 
         <button class="left button radius" ng-click="app.openShareSettings()" id="appShareBtn"

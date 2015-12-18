@@ -56,12 +56,14 @@ info.factory('dialog', function ($modal) {
 });
 
 info.factory('splash', function ($modal) {
-  return (form) => {
+  return (form, wait) => {
     return $modal.open({
       templateUrl: '/partials/splash.html',
       controller: 'SplashController',
+      windowClass: "splash-modal",
       resolve: {
-        form: () => form
+        form: () => form,
+        wait: () => wait
       }
     }).result;
   };
@@ -121,9 +123,11 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
 });
 
 
-info.controller('SplashController', function ($scope, $modalInstance, form) {
+info.controller('SplashController', function ($scope, $modalInstance, form, wait) {
   $scope.form = form;
-  setTimeout(() => {$modalInstance.dismiss();}, form.wait || 3000);
+  if(wait){
+    setTimeout(() => {$modalInstance.dismiss();}, wait);
+  }
 });  
 
   

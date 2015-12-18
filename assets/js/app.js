@@ -201,16 +201,40 @@ app.factory('config', function (initialConfig, $log) {
   return angular.copy(initialConfig);
 });
 
+app.factory('appHotkeysInfo', ['config', (config) => {
+  return {
+    title:"Application Hotkeys",
+    icon: config.icon,
+    sections:[
+      { 
+        fields:[{key:"Alt + H",value:"Show this help"},
+                {key:"Esc",value:"Close"},
+                {key:"Alt + D",value:"Switch Mode"},
+                {key:"Alt + T",value:"Activate Translation Manager"},
+                {key:"Alt + R",value:"Activate Resource Manager"},
+                {key:"Alt + S",value:"Save Settings"}
+        ]
+      }
+    ]    
+  }
+}]);
+
+
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
-                             $translate, appUrls, appName, fullReload, eventWires, APIUser,hotkeys) {
+                             $translate, appUrls, appName, fullReload, eventWires, APIUser,
+                             hotkeys, splash, appHotkeysInfo) {
 
   let pageConf;
+
+  
 
   angular.extend(this, {
     sendingToServer: false,
     wasModified: false,
     wasSavedEver: false,
     currentPageIndex: 0,
+    
+    
 
     isHomePageOpened() {
       return $stateParams.href === '';
@@ -316,6 +340,10 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         controller: 'TranslationManagerController',
         backdrop: 'static'
       })
+    },
+
+    showHotkeys(){
+      splash(appHotkeysInfo)
     },
 
     onStateChangeStart(evt, toState, toParams) {
@@ -487,11 +515,21 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 
 app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
                                            alert, app, config, user, appUrls, globalConfig,
-                                           fullReload, hotkeys,splash) {
+                                           fullReload, hotkeys,splash,appHotkeysInfo) {
   
   if(user.isOwner || user.isCollaborator){
     console.log("Add hotkeys")
     
+
+    hotkeys.add({
+      combo: 'alt+h',
+      description: 'Show hotkeys',
+      callback: function(event) {
+        event.preventDefault();
+        app.showHotkeys();
+      }
+    });
+
     hotkeys.add({
       combo: 'alt+r',
       description: 'Invoke Resources Manager',
@@ -527,18 +565,8 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
         app.submitToServer();
       }
     });
-    console.log(hotkeys);
-    splash({
-      title:"Hotkeys",
-      icon: config.icon,
-      wait:2000,
-      fields:[
-        {key:"Alt + D",value:"Switch Mode"},
-        {key:"Alt + T",value:"Activate Translation Manager"},
-        {key:"Alt + R",value:"Activate Resource Manager"},
-        {key:"Alt + S",value:"Save Settings"}
-      ]
-    })
+    // console.log(hotkeys);
+    splash(appHotkeysInfo,5000);
      // hotkeys.toggleHelp();
   }
   
