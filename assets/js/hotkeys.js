@@ -1,4 +1,4 @@
-import mousetrap;
+import "mousetrap";
 
   angular.module('cfp.hotkeys', []).provider('hotkeys', function($injector) {
 
