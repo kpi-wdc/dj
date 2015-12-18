@@ -1,8 +1,15 @@
-<div ng-controller="LanguageSelectorController">
-  <ul class="side-nav language-nav">
-    <li ng-repeat="lang in languages" ng-click="selectLanguage(lang.key)">
-      <img ng-if="widget.showFlags" ng-src="/img/{{lang.key}}.png" class="lang-flag">
-      {{lang.title}}
-    </li>
-  </ul>
+<div ng-controller="LanguageSelectorController" class="right">
+ 
+	  <ul class="side-nav language-nav" style="margin:0; padding:0;">
+	    <li ng-repeat="lang in languages" 
+	    	ng-click="selectLanguage(lang.key)" 
+	    	class="left" 
+	    	style="margin:0 0 0 0.2em;font-size:x-small;">
+	    	<a>
+		      <img ng-if="widget.showFlags" ng-src="/img/{{lang.key}}.png">
+		      <span ng-if="widget.showTitles"> {{lang.title}}</span>
+	      	</a>
+	    </li>
+	  </ul>
+  
 </div>

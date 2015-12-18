@@ -24,7 +24,7 @@
 			<h5 style="margin:0;"><widget-translate>APPLICATION_AUTHOR</widget-translate>:</h5>
 			
 			<a ng-if="author.email" href="mailto:{{author.email}}"  target="blank" style="font-size: small;">
-			    <!--  <span style=" background-image: url({{user.photo}});
+			     <span style=" background-image: url({{author.photo}});
 	                  background-size: 48px 48px;
 	                  border-radius: 50%;
 	                  display: block;
@@ -32,9 +32,7 @@
 	                  position: relative;
 	                  height: 48px;
 	                  width: 48px;
-	                  float:left;
-	                 
-				"></span> -->
+	                  float:left;"></span>
 				<span style="float:left; margin:1em 0 0 0.5em;">
 			    	{{author.name}}
 			    </span>
@@ -44,17 +42,25 @@
 			</div>
 		</div>
 		
-		<div class="row">
-			<h5 ng-if="config.collaborations.length > 0" style="margin:0;">
+		<div class="row" ng-if="config.collaborations.length >0">
+			<h5 style="margin:0;">
 			<widget-translate>Collaborators</widget-translate>&nbsp;:</h5>
-			<div>
-				<span 	ng-if="config.collaborations.length > 0" 
-						style="float:left" 
-						ng-repeat="c in config.collaborations track by $index">
+			<div class="row" ng-repeat="c in config.collaborations track by $index">
+				
+				<span style=" background-image: url({{c.user.photo}});
+	                  background-size: 48px 48px;
+	                  border-radius: 50%;
+	                  display: block;
+	                  overflow: hidden;
+	                  position: relative;
+	                  height: 48px;
+	                  width: 48px;
+	                  float:left;
+	                  margin:0 0 0 1em"></span>
+				<span style="float:left; margin:1em 0 0 0.5em;">
 					<a href="mailto:{{c.user.email}}" target="blank" style="font-size: small;">
 					    {{c.user.name}}
 					</a>
-					{{($index < (config.collaborations.length-1))?' ,':''}}
 				</span>
 			</div>
 		</div>

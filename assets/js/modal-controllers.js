@@ -260,7 +260,8 @@ modals.controller('ShareSettingsModalController', function ($scope, $modalInstan
         user: {
           id: this.selectedUser.id,
           name: this.selectedUser.name,
-          email: this.selectedUser.email
+          email: this.selectedUser.email,
+          photo: this.selectedUser.photo
         },
         access: undefined // todo: add support for edit/view access rights
       });
