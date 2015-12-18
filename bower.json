@@ -32,7 +32,6 @@
     "ng-file-upload": "3.3.4",
     "angular-clipboard": "~1.2.0",
     "mousetrap": "~1.5.2",
-    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.6.0"
-    
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.6.0"    
   }
 }
