@@ -318,6 +318,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       $modal.open({
         templateUrl: appUrls.appSettingsHTML,
         controller: 'AppSettingsModalController',
+        windowClass: 'app-settings-modal',
         backdrop: 'static'
       }).result.then((newSettings) => {
         console.log(newSettings);
@@ -444,6 +445,7 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
       $modal.open({
         templateUrl: appUrls.widgetModalConfigHTML,
         controller: 'WidgetModalSettingsController',
+        windowClass: 'app-settings-modal',
         backdrop: 'static',
         resolve: {
           widgetScope() {
