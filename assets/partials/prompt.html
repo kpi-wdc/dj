@@ -1,9 +1,11 @@
 <form ng-submit="form.close()">
   <div ng-bind="form.text"></div>
   <input ng-model="form.value" type="text" autofocus>
-  <button type="submit" class="button small" ng-disabled="!form.value"
-          translate>OK</button>
-  <button class="button alert small" ng-click="form.dismiss()"
+  <button class="button alert tiny right seq" ng-click="form.dismiss()"
           translate>CANCEL</button>
+  <button type="submit" class="button tiny right seq" ng-disabled="!form.value"
+          translate>OK</button>
+
   <a class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>
+  
 </form>

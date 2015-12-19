@@ -1,6 +1,18 @@
 <form ng-submit="form.close()">
-  <h5 color="#ddd">{{form.title}}</h5>
-  <div class="panel" style="margin: 0; padding: 0.5em;">
+  	<h5 color="#ddd">{{form.title}}</h5>
+
+	<div class="row" ng-repeat="field in form.fields">
+	    <div class="column medium-2">
+	      <label for="{{field}}">{{field.title}}</label>
+	    </div>
+	    <div class="column large-10">
+	      <input ng-model="field.value" id="{{field}}"
+	             type="text" ng-disabled="!field.editable">
+	    </div>
+  	</div>
+
+
+  <!-- <div class="panel" style="margin: 0; padding: 0.5em;">
   	<div class="row" ng-repeat="field in form.fields">
 	  	<label class="left">
 		  	<span>{{field.title}}</span>
@@ -10,10 +22,11 @@
 		  	</span>	
 	  	</label>
   	</div>
-	  <div class="row">
-		  <button type="submit" class="button small" ng-disabled="!completed()" translate>OK</button>
-		  <button class="button alert small" ng-click="form.dismiss()"
+ -->	  <div class="row">
+		  <button class="button alert tiny right seq" ng-click="form.dismiss()"
 		          translate>CANCEL</button>
+		  <button type="submit" class="button tiny right seq" ng-disabled="!completed()" translate>OK</button>
+		          
 	  </div>
   </div>        
   <a class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>

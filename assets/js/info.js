@@ -7,7 +7,8 @@ info.service('alert', function ($modal, $log) {
   this.message = (msg) => {
     $log.info(msg);
     $modal.open({
-      template: msg
+      template: msg,
+      windowClass: 'info-modal'
     });
   };
 
@@ -24,6 +25,7 @@ info.factory('confirm', function ($modal) {
   return text => $modal.open({
     templateUrl: '/partials/confirm.html',
     controller: 'ConfirmController',
+    windowClass: 'info-modal',
     resolve: {
       text: () => text
     }
@@ -35,6 +37,7 @@ info.factory('prompt', function ($modal) {
     return $modal.open({
       templateUrl: '/partials/prompt.html',
       controller: 'PromptController',
+      windowClass: 'info-modal',
       resolve: {
         text: () => text,
         value: () => value
@@ -48,6 +51,7 @@ info.factory('dialog', function ($modal) {
     return $modal.open({
       templateUrl: '/partials/dialog.html',
       controller: 'DialogController',
+       windowClass: "dialog-modal",
       resolve: {
         form: () => form
       }
