@@ -3,8 +3,9 @@ import 'angular-foundation';
 import 'angular-oclazyload';
 import 'sceditor';
 import 'template-cached-pages';
+import 'file-upload';
 
-const modals = angular.module('app.modals', []);
+const modals = angular.module('app.modals', ['ngFileUpload']);
 
 modals.controller('WidgetModalSettingsController', function ($scope, $modalInstance, $timeout,
                                                           widgetScope, widgetConfig, widgetType,

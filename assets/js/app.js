@@ -222,7 +222,7 @@ app.factory('appHotkeysInfo', ['config', (config) => {
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
                              $translate, appUrls, appName, fullReload, eventWires, APIUser,
-                             hotkeys, splash, appHotkeysInfo) {
+                             hotkeys, splash, appHotkeysInfo,globalConfig) {
 
   let pageConf;
 
@@ -327,6 +327,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
     openResourceManager() {
+      if(!globalConfig.designMode) return;
     	$modal.open({
         templateUrl: appUrls.resourceManagerHTML,
         controller: 'ResourceManagerController',
@@ -335,6 +336,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
    openTranslationManager() {
+      if(!globalConfig.designMode) return;
       $modal.open({
         templateUrl: appUrls.translationManagerHTML,
         controller: 'TranslationManagerController',
