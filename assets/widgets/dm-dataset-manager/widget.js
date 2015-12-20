@@ -224,7 +224,7 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
 
 .controller("DatasetsManagerController", function ($scope, $http, $upload, $timeout,
                                                 $lookup, EventEmitter,APIProvider, pageSubscriptions,
-                                                $translate, user, confirm){
+                                                $translate, user, confirm, alert){
   
   const eventEmitter = new EventEmitter($scope);
 
@@ -314,13 +314,22 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
       file: file,
     })
     .then(function(response) {
+      if(response.data.error){
+         alert.error(["Dataset Commit not created"].concat(response.data.error));
+         $scope.getCommitList();
+      }else{
+        if(response.data.warnings.length>0){
+         alert.message(["Dataset commit is created, but"].concat(response.data.warnings));
+        }
+
         $scope.upload_process = false;
         $lookup.reload();
         $scope.item = response.data.metadata;
         $timeout(function() {
-        $scope.getCommitList();
-        eventEmitter.emit('refresh');
-      });
+          $scope.getCommitList();
+          eventEmitter.emit('refresh');
+        });
+      }  
     });
   }
   

@@ -1,0 +1,13 @@
+  <div>
+	  <h5 class="alert">
+		  <i class="fi-alert" style="margin: 0 0.5em 0 0; font-size: xx-large;"></i>
+		  {{msg[0]}}
+	  </h5>
+	  <div class="row" ng-repeat="m in msg track by $index">
+	  	<div class="row warning" ng-if="$index > 0">
+	   		{{$index}}.{{m}}
+	  	</div>
+	  </div>
+  </div>
+  <a class="close-reveal-modal" ng-click="close()">&#215;</a>
+  

@@ -125,6 +125,12 @@ module.exports = {
         }
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+
+        var validationResult = converter.validate(uploadedFileAbsolutePath);
+        if(validationResult.error){
+          return res.send(validationResult)
+        }
+
         var dataset = converter.parseXLS(uploadedFileAbsolutePath);
         var dict = dataset.dictionary;
 
@@ -143,7 +149,9 @@ module.exports = {
                   return res.serverError();
                 } else {
                   // TODO send operation status
-                  return res.send(prepareCommitInfo(obj));
+                  var result = prepareCommitInfo(obj);
+                  result.warnings = validationResult.warnings;
+                  return res.send(result);
                 }
               })
             } else {
@@ -160,8 +168,9 @@ module.exports = {
                           sails.log.error('Error while adding new data source: ' + err);
                           return res.serverError();
                         } else {
-                          // TODO send operation status
-                          return res.send(prepareCommitInfo(obj));
+                          var result = prepareCommitInfo(obj);
+                          result.warnings = validationResult.warnings;
+                          return res.send(result);
                         }
                       });
                     });

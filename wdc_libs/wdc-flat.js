@@ -6,7 +6,7 @@ exports.flat2json = function(pathes){
 		path = path.split(".");
 		pos = path[path.length-1].indexOf("[]");
 		if(pos>=0){
-			value = value.split(",");
+			value = (value) ? value.split(",") : [];
 			path[path.length-1] = path[path.length-1].substring(0,pos);	
 		}
 		value = (util.isArray(value)) ? value : [value];

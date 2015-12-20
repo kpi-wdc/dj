@@ -1,0 +1,9 @@
+{ warnings: 
+   [ 'Metadata.dataset.commit.note is empty',
+     'Dataset.label is empty',
+     'Dataset.note is empty',
+     'Dataset.source is empty',
+     'Cannot find dimension.country.role',
+     'Cannot find dimension.concept.role',
+     'Cannot find dimension.year.role',
+     'Sheet \'data\' row 0 has undefined value in column \'Value\'' ] }

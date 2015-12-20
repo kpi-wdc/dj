@@ -6,6 +6,104 @@ simpleXLSX = require("node-xlsx");
 fs = require("fs");
 PATH = require("path");
 
+exports.validate = function(filename){
+  var warnings=[];
+  var workbook = parser.convert(parser.parseFile(filename));
+
+  var metadataSheet = workbook.Sheets['metadata'];
+  var dictionarySheet = workbook.Sheets['dictionary'];
+  var i18nSheet = workbook.Sheets['i18n'];
+
+  if(!metadataSheet) return {error:"Cannot find metadata. Metadata sheet must be named 'metadata'"}
+
+  var metadata = FO.flat2json(
+      new query()
+        .from(metadataSheet)
+        .map(function (item) {
+          return {path: item.key, value: item.value}
+        })
+        .get());
+  
+  if(!metadata.dataset.id || metadata.dataset.id =='')
+      return {error:"Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'"}    
+
+  if(!metadata.dataset.commit.note || metadata.dataset.commit.note == '')
+      warnings.push("Metadata.dataset.commit.note is empty");
+
+  if(!metadata.dataset.label || metadata.dataset.label == '')   
+    warnings.push("Dataset.label is empty");
+
+  if(!metadata.dataset.note || metadata.dataset.note == '')   
+    warnings.push("Dataset.note is empty");
+
+  if(!metadata.dataset.source || metadata.dataset.source == '')   
+    warnings.push("Dataset.source is empty");
+
+  if(!metadata.dataset.topics || metadata.dataset.topics.length == 0)   
+    warnings.push("List of topics is empty");
+
+  if(!metadata.dimension) return {error:"Cannot find dataset dimension."}   
+  
+  for(var key in metadata.dimension){
+    if(!metadata.dimension[key].label || metadata.dimension[key].label=='')
+        return {error:"Cannot find dimension."+ key +".label"}
+    if(!metadata.dimension[key].role || metadata.dimension[key].role=='')
+        warnings.push("Cannot find dimension."+ key +".role");
+  }
+  if(!metadata.layout || metadata.layout=='') return {error:"Cannot find metadata.layout"}
+
+  if(!metadata.layout.sheet || !workbook.Sheets[metadata.layout.sheet]) 
+    return {error:"Reference "+metadata.layout.sheet+"to data sheet..."} 
+
+  for(var key in metadata.dimension){
+    if(!metadata.layout[key].label || metadata.layout[key].label == '')
+        return {error:"Cannot find layout."+ key +".label. It must be refered to data sheet column"}
+    if(!metadata.layout[key].id || metadata.layout[key].id =='')
+        warnings.push("Cannot find layout."+ key +".id. It must be refered to data sheet column");
+  }
+  
+  data = workbook.Sheets[metadata.layout.sheet];
+
+  if(!metadata.layout.value || metadata.layout.value == '') 
+    return {error:"Cannot find layout.value. It must be refered to data sheet column"}
+  
+  for(var key in metadata.dimension){
+    for(var row in data){
+      if(!data[row][metadata.layout[key].label]) 
+        return {error:"Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].label+"'"}
+      if(!data[row][metadata.layout[key].id]) 
+        return {error:"Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].id+"'"}
+    }
+  }
+
+  for(var row in data){
+    if(!data[row][metadata.layout.value])
+        warnings.push("Sheet '"+metadata.layout.sheet+"' row "+row + " has undefined value in column '"+metadata.layout.value+"'") 
+  }
+
+
+  if (dictionarySheet != undefined) {
+    var dict = workbook.Sheets['dictionary'];
+    for(var i in dict){
+      if(!dict[i].key)
+        return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'key'"}
+      if(!dict[i]["value.label"])
+        return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'value.label'"}
+    }
+  }
+
+if (i18nSheet != undefined) {
+    var dict = workbook.Sheets['i18n'];
+    for(var i in dict){
+      if(!dict[i].key)
+        return {error:"Sheet 'i18n' row "+i +" has undefined value in column 'key'"}
+    }
+  }
+
+  
+  return {"warnings": warnings}; 
+}
+
 exports.parseXLS = function (filename) {
   var workbook = parser.convert(parser.parseFile(filename));
 

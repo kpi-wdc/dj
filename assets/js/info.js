@@ -5,18 +5,41 @@ const info = angular.module('app.info', ['mm.foundation']);
 
 info.service('alert', function ($modal, $log) {
   this.message = (msg) => {
-    $log.info(msg);
+    if(angular.isArray(msg)){
+      for (let i in msg){
+        $log.info(msg);
+      }
+    }else{
+      $log.info(msg);
+      msg = [msg];  
+    }
     $modal.open({
-      template: msg,
-      windowClass: 'info-modal'
+      templateUrl: '/partials/alert.html',
+      windowClass: 'info-modal',
+      controller: 'AlertController',
+      resolve: {
+        msg: () => msg
+      }
     });
   };
 
   this.error = (msg) => {
-    $log.error(msg);
+    if(angular.isArray(msg)){
+      for (let i in msg){
+        $log.info(msg);
+      }
+    }else{
+      $log.error(msg);
+      msg = [msg]; 
+    }
+    
     $modal.open({
-      template: msg,
-      windowClass: 'error-message'
+      templateUrl: '/partials/alert.html',
+      windowClass: 'info-modal',
+      controller: 'AlertController',
+      resolve: {
+        msg: () => msg
+      }
     });
   };
 });
@@ -74,6 +97,10 @@ info.factory('splash', function ($modal) {
 });
 
 
+info.controller('AlertController', function ($scope, msg, $modalInstance){
+  $scope.msg = msg;
+  $scope.close = () => {$modalInstance.dismiss()}
+});
 
 info.controller('PromptController', function ($scope, $modalInstance, text, value) {
   $scope.form = {
