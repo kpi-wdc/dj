@@ -22,14 +22,14 @@ angular.module('app.widgets.remote-html', [])
 
     new APIProvider($scope)
       .config(() => {
-      	if($scope.widget.languageSelector){
-      		addListener({
-                emitter:$scope.widget.languageSelector,
-                receiver:  $scope.widget.instanceName,
-                signal: "selectLanguage",
-                slot: "selectLanguage"
-            });
-        }
+      	// if($scope.widget.languageSelector){
+      	// 	addListener({
+       //          emitter:$scope.widget.languageSelector,
+       //          receiver:  $scope.widget.instanceName,
+       //          signal: "selectLanguage",
+       //          slot: "selectLanguage"
+       //      });
+       //  }
 
         if($scope.widget.masterWidget){
       		addListener({
@@ -42,6 +42,11 @@ angular.module('app.widgets.remote-html', [])
 
         $translate($scope.widget.url).then((translation) => {$scope.url = translation})
       })
+      .translate(() =>{
+        // console.log("Transtate Remote HTML")
+        $translate($scope.widget.url).then((translation) => {$scope.url = translation});
+      })
+      
       .provide("selectLanguage", (evt, value) => {
       	$translate($scope.widget.url).then((translation) => {$scope.url = translation})
       })

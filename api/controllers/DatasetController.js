@@ -303,6 +303,66 @@ module.exports = {
     })
   },
 
+  getDependencies: function(req,resp){
+    
+    function getTags(datasets,meta,property){
+      sails.log.debug(meta,property)
+      return new query()
+        .from(datasets)
+        .map(function (item) {
+          var tmp = getProperty(item, property);
+          return tmp;
+        })
+        .select(function (item) {
+          return item
+        })
+        .map(function (item) {
+          if (item.split) {
+            return item.split("/")
+          }
+          return item
+        })
+        .group(function (item) {
+          return {key: item, value: item}
+        })
+        .map(function (item) {
+          return {tag: item.key, "meta": meta, count: item.values.length,property:property}
+        })
+        // .group(function(item){
+        //   return {key:"1", value:item}
+        // })
+        // .map(function(item){
+        //   var tmp = {}
+        //   item.values.forEach(function(t){tmp[t.tag] = t})
+        // })
+        .get();
+    }
+    
+
+    var params = req.body;
+    if (!params) {
+      return resp.send([]);
+    }
+
+    var mq = {"commit/HEAD": true};
+    if (!params || !params.status || params.status == "public") {
+      mq["dataset/status"] = "public"
+    }
+
+
+    Dataset.find(mq).then(function (obj) {
+      //obj is public dataset list
+      // sails.log.debug(obj)
+      var tagList = [];
+      for(var i in params.tags){
+        sails.log.debug(params.tags[i])
+        tagList = tagList.concat(getTags(obj, params.tags[i].meta, params.tags[i].property));
+      }
+      return resp.send(tagList);  
+    })
+
+  },
+
   getTagTotal: function (req, res) {
     var params = req.body;
 

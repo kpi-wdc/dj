@@ -6,9 +6,6 @@
       "url": {
         "type": "string"
       },
-      "languageSelector":{
-        "type":"string"
-      },
       "masterWidget":{
         "type":"string"
       }  

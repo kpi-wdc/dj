@@ -123,7 +123,7 @@ module.exports.routes = {
 
   'get /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
   'post /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
-
+  'post /api/metadata/tag/dependencies': 'DatasetController.getDependencies',
   
   'get /api/resource' : 'ResourceController.getList',
 
@@ -136,6 +136,8 @@ module.exports.routes = {
   
   'get /api/resource/delete/:path' : 'ResourceController.delete',
   'post /api/resource/delete/:path' : 'ResourceController.delete'
+
+  
   
   
   

@@ -101,6 +101,11 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
       return this;
     }
 
+    translate(slotFn) {
+      this.provide(APIProvider.TRANSLATE_SLOT, slotFn);
+      return this;
+    }
+
     /**
      * @description Provides a slot which is
      * automatically called when widget config was changed
@@ -109,6 +114,7 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
      */
     reconfig(slotFn) {
       this.provide(APIProvider.RECONFIG_SLOT, slotFn);
+      slotFn();
       return this;
     }
 
@@ -150,6 +156,7 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
   }
 
   APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
+  APIProvider.TRANSLATE_SLOT = 'TRANSLATE_SLOT';
   APIProvider.REMOVAL_SLOT = 'DESTROY_SLOT';
   APIProvider.OPEN_CUSTOM_SETTINGS_SLOT = 'OPEN_CUSTOM_SETTINGS_SLOT';
 

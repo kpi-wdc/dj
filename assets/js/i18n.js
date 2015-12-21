@@ -33,7 +33,7 @@ i18n.run(function ($translate) {
 
 i18n.constant('i18nTemp',{});
   
-i18n.service('i18n',function($translate,config, i18nTemp){
+i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
   
   if(!config.i18n){
     config.i18n = {}
@@ -43,6 +43,9 @@ i18n.service('i18n',function($translate,config, i18nTemp){
     i18n.translateProvider.translations(locale,config.i18n[locale]);
   }
 
+  var user = new APIUser();
+  user.invokeAll(APIProvider.TRANSLATE_SLOT);
+    
   angular.extend(this,{
     
     add: function (locale,translations,nosave){
@@ -53,6 +56,7 @@ i18n.service('i18n',function($translate,config, i18nTemp){
       ? table[locale] : {};
       for(let i in translations){table[locale][i] = translations[i]}
       i18n.translateProvider.translations(locale,table[locale]);
+      user.invokeAll(APIProvider.TRANSLATE_SLOT);
     },
 
     remove: function(keys){
@@ -61,7 +65,10 @@ i18n.service('i18n',function($translate,config, i18nTemp){
           delete config.i18n[locale][keys[i]] 
         }
       }
-       $translate.refresh().then(() => {this.refresh()});
+       $translate.refresh().then(() => {
+          this.refresh();
+      });
+
     },
 
     refresh : function(){
@@ -70,7 +77,9 @@ i18n.service('i18n',function($translate,config, i18nTemp){
       }
       for(let locale in i18nTemp){
           i18n.translateProvider.translations(locale,i18nTemp[locale]);
-      } 
+      }
+      // console.log("BEFORE invokeAll TRANSLATE")
+      user.invokeAll(APIProvider.TRANSLATE_SLOT);
     }
   })
 })  
