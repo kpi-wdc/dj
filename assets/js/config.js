@@ -24,7 +24,7 @@ System.config({
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
-    "mousetrap":"components/mousetrap/mousetrap.js",
+    "mousetrap": "components/mousetrap/mousetrap.js",
     "angular-hotkeys": "js/hotkeys.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
@@ -36,6 +36,7 @@ System.config({
     "leaflet": "components/leaflet/dist/leaflet.js",
     "angular-leaflet": "components/angular-leaflet/dist/angular-leaflet-directive.js",
     "d3": "components/d3/d3.js",
+    "d3.layout.cloud": "components/d3.layout.cloud/build/d3.layout.cloud.js",
     "jsinq": "components/jsinq/source/jsinq.js",
     "jsinq-query": "components/jsinq/source/jsinq-query.js",
     "json-stat": "components/jsonstat/json-stat.max.js",
@@ -118,15 +119,12 @@ System.config({
         "angular"
       ]
     },
-
     "angular-hotkeys": {
       "deps": [
         "mousetrap",
         "angular"
       ]
     },
-
-
     "angular-oclazyload": {
       "deps": [
         "angular"
@@ -178,6 +176,12 @@ System.config({
     },
     "nv.d3": {
       "exports": "nv",
+      "deps": [
+        "d3"
+      ]
+    },
+    "d3.layout.cloud": {
+      "exports": "d3.layout.cloud",
       "deps": [
         "d3"
       ]

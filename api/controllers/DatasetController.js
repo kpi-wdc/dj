@@ -306,7 +306,6 @@ module.exports = {
   getDependencies: function(req,resp){
     
     function getTags(datasets,meta,property){
-      sails.log.debug(meta,property)
       return new query()
         .from(datasets)
         .map(function (item) {
@@ -326,15 +325,8 @@ module.exports = {
           return {key: item, value: item}
         })
         .map(function (item) {
-          return {tag: item.key, "meta": meta, count: item.values.length,property:property}
+          return {"tag": item.key, "meta": meta,property:property}
         })
-        // .group(function(item){
-        //   return {key:"1", value:item}
-        // })
-        // .map(function(item){
-        //   var tmp = {}
-        //   item.values.forEach(function(t){tmp[t.tag] = t})
-        // })
         .get();
     }
     
@@ -351,14 +343,53 @@ module.exports = {
 
 
     Dataset.find(mq).then(function (obj) {
-      //obj is public dataset list
-      // sails.log.debug(obj)
       var tagList = [];
       for(var i in params.tags){
-        sails.log.debug(params.tags[i])
         tagList = tagList.concat(getTags(obj, params.tags[i].meta, params.tags[i].property));
       }
-      return resp.send(tagList);  
+
+      tagList.forEach(function(item, index){item.index=index})
+
+      var keywordMap = [];
+      for(j in obj){
+        var dskw = [];
+        for(var i in params.tags){
+          dskw = dskw.concat(getTags([obj[j]], params.tags[i].meta, params.tags[i].property));
+        }
+        var values = [];
+        tagList.forEach(function(item){
+          values.push(
+            (dskw.filter(function(w){return w.tag == item.tag}).length > 0) ? 1 : 0
+          )
+        })
+        keywordMap.push({dataset:obj[j].id, keywords:values})
+      }
+
+      tagList.forEach(function(item){
+        item.value = keywordMap
+          .map(function(d){return d.keywords[item.index]})
+          .reduce(function(s,d){return s+d}) 
+      })
+
+
+      var links = [];
+      for(var i=0; i<tagList.length-1; i++){
+        for(var j=i+1; j<tagList.length; j++){
+          var v = 0;
+          keywordMap
+                    .map(function(d){return {source:d.keywords[tagList[i].index], target:d.keywords[tagList[j].index]}})
+                    .forEach(function(d){if (d.source == 1 && d.target == 1)  v++})
+          links.push({
+              source:tagList[i].index, 
+              target:tagList[j].index,
+              value: v
+          })      
+        }  
+      }
+     
+      links = links.filter(function(d){return d.value>0})
+
+      return resp.send({"tags":tagList, "links":links, "keywordMap":keywordMap});  
     })
 
   },
