@@ -30,6 +30,13 @@ angular.module('app.widgets.remote-html', [])
        //          slot: "selectLanguage"
        //      });
        //  }
+       //  
+       //  
+
+         pageSubscriptions().removeListeners({
+              receiver:  $scope.widget.instanceName,
+              signal: "slaveVisibility",
+        })
 
         if($scope.widget.masterWidget){
       		addListener({

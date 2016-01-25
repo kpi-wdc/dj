@@ -421,15 +421,32 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.collapsed = true;
         $scope.rlisteners = ($scope.widget.rlisteners) ? $scope.widget.rlisteners.split(",") : [];
-        for(var i in $scope.rlisteners){
-          $scope.rlisteners[i] = $scope.rlisteners[i].trim();
-          addListener({
+
+        pageSubscriptions().removeListeners({
+          emitter: $scope.widget.instanceName,
+          signal: "refresh"
+        })
+
+        pageSubscriptions().addListeners(
+          $scope.rlisteners.map((item) =>{
+            return {
                 emitter: $scope.widget.instanceName,
-                receiver: $scope.rlisteners[i],
+                receiver: item.trim(),
                 signal: "refresh",
                 slot: "refresh"
-              });
-        }        
+            }
+          })
+        );
+
+        // for(var i in $scope.rlisteners){
+        //   $scope.rlisteners[i] = $scope.rlisteners[i].trim();
+        //   addListener({
+        //         emitter: $scope.widget.instanceName,
+        //         receiver: $scope.rlisteners[i],
+        //         signal: "refresh",
+        //         slot: "refresh"
+        //       });
+        // }        
         $scope.getCommitList();
 
       });  

@@ -391,7 +391,7 @@ widgetApi.factory('EventEmitter', function ($log, $rootScope,
  * @returns {Array}
  */
 widgetApi.factory('pageSubscriptions', function (app) {
-  return app.pageSubscriptions.bind(app);
+   return app.pageSubscriptions.bind(app);
 });
 
 /**

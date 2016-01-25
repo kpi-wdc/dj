@@ -318,6 +318,21 @@ modals.controller('AppSettingsModalController', function ($scope, $modalInstance
   });
 });
 
+modals.controller("ViewPageConfigController", function($scope, $modalInstance,
+                                                       app,config){
+  $scope.config = app.pageConfig();
+  $scope.holders = [];
+  for(let i in $scope.config.holders) $scope.holders.push(i);
+  $scope.ok = function() {
+      $modalInstance.close(this.settings);
+    },
+
+  $scope.cancel = function() {
+      $modalInstance.dismiss();
+    }
+
+})
+
 modals.controller('ResourceManagerController', function (  $scope, $http, $upload, appName,
                                                             dialog, clipboard, 
                                                             $modalInstance, $translate) {

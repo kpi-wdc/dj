@@ -55,6 +55,7 @@ app.factory('appUrls', function (appId) {
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
     widgetModalAddNewHTML: '/partials/widget-modal-add-new.html',
+    viewPageConfigHTML : '/partials/view-page-config.html',
     defaultWidgetIcon: '/widgets/default_widgets_icon.png',
     skinUrl: skinName =>
       `/skins/${skinName}.html`,
@@ -212,7 +213,8 @@ app.factory('appHotkeysInfo', ['config', (config) => {
                 {key:"Alt + D",value:"Switch Mode"},
                 {key:"Alt + T",value:"Activate Translation Manager"},
                 {key:"Alt + R",value:"Activate Resource Manager"},
-                {key:"Alt + S",value:"Save Settings"}
+                {key:"Alt + S",value:"Save Settings"},
+                {key:"Alt + C",value:"View Page Config"}
         ]
       }
     ]    
@@ -345,6 +347,16 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       })
     },
 
+    viewPageConfig() {
+      if(!globalConfig.designMode) return;
+      $modal.open({
+        templateUrl: appUrls.viewPageConfigHTML,
+        controller: 'ViewPageConfigController',
+        backdrop: 'static'
+      })
+    },
+
+
     showHotkeys(){
       splash(appHotkeysInfo)
     },
@@ -374,6 +386,44 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       pageConf.subscriptions = pageConf.subscriptions || [];
       
       
+      pageConf.subscriptions.addListeners = function(listeners){
+        for(let j in listeners){
+          let exists = false;
+          let listener = listeners[j];
+          for (var i in pageConf.subscriptions) {
+            if (pageConf.subscriptions[i].emitter === listener.emitter 
+              && pageConf.subscriptions[i].receiver === listener.receiver
+              && pageConf.subscriptions[i].signal === listener.signal
+              && pageConf.subscriptions[i].slot === listener.slot
+              ) {
+              exists = true;
+            }
+          }
+          if (!exists) { pageConf.subscriptions.push(listener);}
+        }
+      };
+
+      pageConf.subscriptions.addListener = function(listener){
+        pageConf.subscriptions.addListeners([listener]);        
+      };
+
+
+      pageConf.subscriptions.removeListeners = function(listener){
+       for (var i in pageConf.subscriptions) {
+          if (
+            (pageConf.subscriptions[i].emitter === listener.emitter || angular.isUndefined(listener.emitter)) 
+            && 
+            (pageConf.subscriptions[i].receiver === listener.receiver || angular.isUndefined(listener.receiver))
+            && 
+            (pageConf.subscriptions[i].signal === listener.signal || angular.isUndefined(listener.signal))
+            && 
+            (pageConf.subscriptions[i].slot === listener.slot || angular.isUndefined(listener.slot))
+            ) {
+            pageConf.subscriptions.splice(i, 1);
+            return
+          }
+        }
+      };
 
       return pageConf.subscriptions;
     },
@@ -558,6 +608,15 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
       callback: function(event) {
         event.preventDefault();
         globalConfig.designMode = !globalConfig.designMode;
+      }
+    });
+
+    hotkeys.add({
+      combo: 'alt+c',
+      description: 'View Page Config',
+      callback: function(event) {
+        event.preventDefault();
+        app.viewPageConfig();
       }
     });
 

@@ -197,29 +197,42 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
         }
 
         $scope.listeners = ($scope.widget.listeners) ? $scope.widget.listeners.split(",") : [];
-        for(var i in $scope.listeners){
-          $scope.listeners[i] = $scope.listeners[i].trim();
-          // console.log($scope.widget.instanceName,$scope.listeners[i]);
-          addListener({
+        
+        pageSubscriptions().removeListeners({
+          emitter: $scope.widget.instanceName,
+          signal: "setLookupKey"
+        })
+
+        pageSubscriptions().addListeners(
+          $scope.listeners.map((item) =>{
+            return {
                 emitter: $scope.widget.instanceName,
-                receiver: $scope.listeners[i],
+                receiver: item.trim(),
                 signal: "setLookupKey",
                 slot: "setLookupKey"
-              });
-        }
+            }
+          })
+        );
+        
 
         $scope.rlisteners = ($scope.widget.rlisteners) ? $scope.widget.rlisteners.split(",") : [];
-        for(var i in $scope.rlisteners){
-          $scope.rlisteners[i] = $scope.rlisteners[i].trim();
-          // console.log($scope.widget.instanceName,$scope.rlisteners[i]);
-          addListener({
+        
+        pageSubscriptions().removeListeners({
+          emitter: $scope.widget.instanceName,
+          signal: "refresh"
+        })
+        
+        pageSubscriptions().addListeners(
+          $scope.rlisteners.map((item) =>{
+            return {
                 emitter: $scope.widget.instanceName,
-                receiver: $scope.rlisteners[i],
+                receiver: item.trim(),
                 signal: "refresh",
                 slot: "refresh"
-              });
-        }          
-        
+            }
+          })
+        );
+       
       })
       .provide('searchQuery', (evt, value) => {
         $scope.query = value;

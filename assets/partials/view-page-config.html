@@ -1,0 +1,48 @@
+<div>
+  <h5 color="#ddd">
+  	Page Layout
+  </h5>
+  <div class="row" ng-repeat="holder in config.holders track by $index">
+  	<h5>{{holders[$index]}}</h5>
+  	<div ng-repeat = "widget in holder.widgets" 
+  		style="font-size: small;
+    	margin: 0 0 0 2em;">
+  	<img src="{{widget.icon}}" width="24px">
+  	{{widget.type}}&nbsp;<b>{{widget.instanceName}}</b>
+  	</div> 
+  </div>
+  <h5 color="#ddd">
+  	Events
+  </h5>
+
+  <table style="width:100%">
+  	<tr style="border-bottom:0.1rem solid #ddd">
+		<th style="margin:0; padding:0;">
+			Emitter
+		</th>
+		<th style="margin:0; padding:0;">
+			Signal
+		</th>
+		<th style="margin:0; padding:0;">
+			Listener
+		</th>
+		<th style="margin:0; padding:0;">
+			Slot
+		</th>
+	</tr>
+	<tr ng-repeat="s in config.subscriptions | orderBy : ['emitter', 'signal', 'receiver', 'slot']">
+		<td style="margin:0; padding:0 0 0 0.2em; font-size:small;">
+			{{s.emitter}}
+		</td>
+		<td style="margin:0; padding:0 0 0 0.2em; font-size:small;">
+			{{s.signal}}
+		</td>
+		<td style="margin:0; padding:0 0 0 0.2em; font-size:small;">
+			{{s.receiver}}
+		</td>
+		<td style="margin:0; padding:0 0 0 0.2em; font-size:small;">
+			{{s.slot}}
+		</td>
+	</tr>
+  </table>
+</div>

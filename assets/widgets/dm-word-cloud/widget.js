@@ -677,27 +677,67 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
 
           $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];
-          for(var i in $scope.lookupListeners){
-            $scope.lookupListeners[i] = $scope.lookupListeners[i].trim();
-            // console.log($scope.widget.instanceName,$scope.lookupListeners[i]);
-            addListener({
-                  emitter: $scope.widget.instanceName,
-                  receiver: $scope.lookupListeners[i],
-                  signal: "setLookupKey",
-                  slot: "setLookupKey"
-                });
-          }
+          
+         pageSubscriptions().removeListeners({
+              emitter: $scope.widget.instanceName,
+              signal: "setLookupKey"
+          })
+
+            pageSubscriptions().addListeners(
+              $scope.lookupListeners.map((item) =>{
+                return {
+                    emitter: $scope.widget.instanceName,
+                    receiver: item.trim(),
+                    signal: "setLookupKey",
+                    slot: "setLookupKey"
+                }
+              })
+            );
+ 
+
+          // for(var i in $scope.lookupListeners){
+          //   $scope.lookupListeners[i] = $scope.lookupListeners[i].trim();
+          //   // console.log($scope.widget.instanceName,$scope.lookupListeners[i]);
+          //   addListener({
+          //         emitter: $scope.widget.instanceName,
+          //         receiver: $scope.lookupListeners[i],
+          //         signal: "setLookupKey",
+          //         slot: "setLookupKey"
+          //       });
+          // }
 
           $scope.searchListeners = ($scope.widget.searchListeners) ? $scope.widget.searchListeners.split(",") : [];
-          for(var i in $scope.searchListeners){
-            $scope.searchListeners[i] = $scope.searchListeners[i].trim();
-            // console.log($scope.widget.instanceName,$scope.searchListeners[i]);
-            addListener({
-                  emitter: $scope.widget.instanceName,
-                  receiver: $scope.searchListeners[i],
-                  signal: "searchQuery",
-                  slot: "searchQuery"
-                });
+          
+          pageSubscriptions().removeListeners({
+              emitter: $scope.widget.instanceName,
+              signal: "searchQuery"
+          })
+
+            pageSubscriptions().addListeners(
+              $scope.searchListeners.map((item) =>{
+                return {
+                    emitter: $scope.widget.instanceName,
+                    receiver: item.trim(),
+                    signal: "searchQuery",
+                    slot: "searchQuery"
+                }
+              })
+            );
+          
+          // for(var i in $scope.searchListeners){
+          //   $scope.searchListeners[i] = $scope.searchListeners[i].trim();
+          //   // console.log($scope.widget.instanceName,$scope.searchListeners[i]);
+          //   addListener({
+          //         emitter: $scope.widget.instanceName,
+          //         receiver: $scope.searchListeners[i],
+          //         signal: "searchQuery",
+          //         slot: "searchQuery"
+          //       });
+
+           pageSubscriptions().removeListeners({
+              receiver:  $scope.widget.instanceName,
+              signal: "slaveVisibility",
+          })
 
           if($scope.widget.masterWidget){
             addListener({
