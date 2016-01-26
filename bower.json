@@ -33,6 +33,7 @@
     "angular-clipboard": "~1.2.0",
     "mousetrap": "~1.5.2",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.6.0",
-    "d3.layout.cloud": "~1.2.1"
+    "d3.layout.cloud": "~1.2.1",
+    "react": "~0.14.6"
   }
 }

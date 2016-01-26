@@ -747,7 +747,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
                   slot: "slaveVisibility"
               });
           }   
-        }  
+        // }  
 
 
         load();
