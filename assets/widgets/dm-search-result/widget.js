@@ -33,33 +33,33 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
 
      $scope.formatDate = formatDate;
 
-    var addListener = function(listener){
-        var subscriptions = pageSubscriptions();
-        for (var i in subscriptions) {
-          if (subscriptions[i].emitter === listener.emitter 
-            && subscriptions[i].receiver === listener.receiver
-            && subscriptions[i].signal === listener.signal
-            && subscriptions[i].slot === listener.slot
-            ) {
-            return;
-          }
-        }
-        subscriptions.push(listener);
-      };
+    // var addListener = function(listener){
+    //     var subscriptions = pageSubscriptions();
+    //     for (var i in subscriptions) {
+    //       if (subscriptions[i].emitter === listener.emitter 
+    //         && subscriptions[i].receiver === listener.receiver
+    //         && subscriptions[i].signal === listener.signal
+    //         && subscriptions[i].slot === listener.slot
+    //         ) {
+    //         return;
+    //       }
+    //     }
+    //     subscriptions.push(listener);
+    //   };
       
-    var removeListener = function(listener){
-        var subscriptions = pageSubscriptions();
-        for (var i in subscriptions) {
-          if (subscriptions[i].emitter === listener.emitter 
-            && subscriptions[i].receiver === listener.receiver
-            && subscriptions[i].signal === listener.signal
-            && subscriptions[i].slot === listener.slot
-            ) {
-            subscriptions.splice(i, 1);
-            return
-          }
-        }
-      };
+    // var removeListener = function(listener){
+    //     var subscriptions = pageSubscriptions();
+    //     for (var i in subscriptions) {
+    //       if (subscriptions[i].emitter === listener.emitter 
+    //         && subscriptions[i].receiver === listener.receiver
+    //         && subscriptions[i].signal === listener.signal
+    //         && subscriptions[i].slot === listener.slot
+    //         ) {
+    //         subscriptions.splice(i, 1);
+    //         return
+    //       }
+    //     }
+    //   };
 
     var searchDatasets = function(query){
           if(query){
@@ -406,7 +406,7 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
 })
 .controller("QueryDialogController", function ($scope, $modalInstance,$http, 
                                                 item, prepareTopics, table, formatDate, 
-                                                $lookup, $translate){
+                                                $lookup, $translate,$q){
   
   $scope.lookup = $lookup;
   $scope.prepareTopics = prepareTopics;
@@ -414,6 +414,9 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
   $scope.floor = Math.floor;
   $scope.formatDate = formatDate;
   $scope.table = table;
+  $scope.pending = false;
+  $scope.canceler = undefined;
+ 
 
   $scope.getItemStyle = function(obj){
     if(obj.selected){
@@ -459,22 +462,31 @@ angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFileUpload']
     $scope.requestComplete = $scope.testQuery($scope.item); 
     if($scope.requestComplete){
      $scope.request = $scope.makeRequest($scope.item);
+     
+    if($scope.canceler){
+      $scope.canceler.resolve();
+    }
+                                                  
+    $scope.canceler = $q.defer();
 
      if($scope.table){
         $http.get("./api/table/delete/"+$scope.table.id)
           .success(function(){
             $scope.table = undefined; 
-            item.tableID = undefined; 
-            $http.post("./api/dataset/query",$scope.request)
+            item.tableID = undefined;
+            
+            $http.post("./api/dataset/query",$scope.request,{timeout:$scope.canceler.promise})
               .success(function(resp){
               $scope.table = resp;
               item.tableID = resp.id;
+              // $scope.canceler.resolve();
+              // $scope.canceler = undefined;
             })
           }) 
      }else{
         $scope.table = undefined;
         item.tableID = undefined;
-        $http.post("./api/dataset/query",$scope.request)
+        $http.post("./api/dataset/query",$scope.request,{timeout:$scope.canceler.promise})
           .success(function(resp){
           $scope.table = resp;
           item.tableID = resp.id;

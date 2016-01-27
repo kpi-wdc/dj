@@ -560,6 +560,10 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
     }
     
     
+
+
+
+
     
     $scope.refresh = function(){
       load();
@@ -747,7 +751,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
                   slot: "slaveVisibility"
               });
           }   
-        }  
+          
 
 
         load();
@@ -759,6 +763,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
       })
       .translate( () => {translate()})
       .removal( () => { console.log('Tag Cloud widget is destroyed')});
+
   });
 
 
