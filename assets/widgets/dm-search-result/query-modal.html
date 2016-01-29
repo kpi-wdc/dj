@@ -200,6 +200,7 @@
 		<center>
 			<img ng-if="!table" src="./img/ajax-loader.gif"/>
 			<table ng-if="table" border="1">
+				<thead>
 				<tr ng-repeat="hmetaIndex in range(0,table.header[0].metadata.length*2-1)">
 					<th ng-if="hmetaIndex == 0"
 						ng-repeat="tbm in table.body[0].metadata"
@@ -207,7 +208,6 @@
 						style=" text-align: center;
 							    font-stretch: ultra-condensed;
 							    font-size: medium;
-							    
 							    color: #008CBA;
 							    padding: 0.3em 1em;">
 						{{tbm.dimensionLabel}}
@@ -218,7 +218,6 @@
 						style=" text-align: center;
 							    font-stretch: ultra-condensed;
 							    font-size: medium;
-							    
 							    color: #008CBA;
 							    padding: 0.3em 1em;">
 						{{table.header[0].metadata[floor(hmetaIndex/2)].dimensionLabel}}	    
@@ -234,6 +233,8 @@
 						{{hcol.metadata[floor(hmetaIndex/2)].label}}
 					</th>
 				</tr>
+				</thead>
+				
 				<tr ng-repeat="brow in table.body">
 					<th ng-repeat="rowMeta in brow.metadata track by $index"
 						style=" text-align: center;
@@ -255,6 +256,7 @@
 					</td>
 				</tr>
 			</table>
+			<my-table table="table" ng-if="table"/>
 		</center>
 	</div>		
 </div>	
