@@ -9,6 +9,8 @@ import 'angular-ui-router';
 import 'angular-ui-tree';
 import 'angular-clipboard';
 import 'angular-hotkeys';
+import 'ngReact';
+
 
 import 'file-upload';
 import 'ngstorage';
@@ -27,7 +29,7 @@ import 'widget-api';
 
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard','cfp.hotkeys',
-  'app.templates',
+  'app.templates', 'react',
   'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
 
@@ -220,6 +222,7 @@ app.factory('appHotkeysInfo', ['config', (config) => {
     ]    
   }
 }]);
+
 
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,

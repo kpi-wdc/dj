@@ -175,6 +175,7 @@ gulp.task('compile-js', () =>
     .pipe(plugins.changed(`${buildPublicDir}/js`))
     .pipe(plugins.plumber())
     .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.react({ harmony: false, es6module: true }))
     .pipe(plugins.babel())
     .on('error', handleError)
     .pipe(plugins.sourcemaps.write('.'))
@@ -205,6 +206,7 @@ gulp.task('build-widgets-js', () =>
     .pipe(plugins.changed(`${buildPublicDir}/widgets`))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.plumber())
+    .pipe(plugins.react({ harmony: false, es6module: true }))
     .pipe(plugins.babel())
     .pipe(plugins.ngAnnotate())
     .on('error', handleError)
@@ -346,6 +348,7 @@ if (!npmProduction) {
   gulp.task('build-e2e-test', () =>
     gulp.src('test/e2e/**/*.js')
       .pipe(plugins.changed(`${buildDir}test/e2e`))
+      .pipe(plugins.react({ harmony: false, es6module: true }))
       .pipe(plugins.babel())
       .on('error', handleError)
       .pipe(gulp.dest(`${buildDir}/test/e2e`))
