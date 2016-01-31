@@ -21,21 +21,21 @@ skin.directive('applicationView', () => {
 skin.directive('pageListNav', () => {
   return {
     restrict: 'E',
-    template: `<widget type="page-list" instanceName="page-list-nav"></widget>`
-  }
+    template: `<widget type="page-list" instanceName="page-list-nav" skin="true"></widget>`
+ }
 });
 
 skin.directive('languageSelectorNav', () => {
   return {
     restrict: 'E',
-    template: `<widget type="language-selector" instanceName="language-selector"></widget>`
+    template: `<widget type="language-selector" instanceName="language-selector" skin="true"></widget>`
   }
 });
 
 skin.directive('appLogo', () => {
   return {
     restrict: 'E',
-    template: `<widget type="app-logo" instanceName="app-logo-widget"></widget>`
+    template: `<widget type="app-logo" instanceName="app-logo-widget" skin="true"></widget>`
   }
 });
 
@@ -52,3 +52,4 @@ skin.directive('loginGoogleButton', () => {
     templateUrl: '/partials/login-google-button.html'
   }
 });
+

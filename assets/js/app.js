@@ -85,6 +85,8 @@ app.constant('globalConfig', {
   debugMode: false
 });
 
+app.constant('selectedHolder',null);
+
 app.constant('appSkins', [
   {
     name: "default",
@@ -188,6 +190,20 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 app.factory('fullReload', function ($window) {
   return (url) => $window.location.href = url;
 });
+
+app.factory('selectHolder', function (selectedHolder) {
+  return (holderScope) => {
+    // console.log("Selected holder", selectedHolder, "Event Holder", holderScope)
+    if(selectedHolder && selectedHolder != null){
+      selectedHolder.acceptDrop = ""; 
+    }
+    selectedHolder = holderScope;
+    if(selectedHolder && selectedHolder != null){
+      selectedHolder.acceptDrop = "accept-drop"; 
+    }
+  };
+});
+
 
 app.factory('widgetTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.widgetTypes, {cache: true});
@@ -694,7 +710,7 @@ app.controller('PageController', function ($scope, pageConfig) {
   });
 });
 
-app.directive('widgetHolder', function (appUrls, widgetManager) {
+app.directive('widgetHolder', function (appUrls, widgetManager, app, selectHolder) {
   return {
     restrict: 'E',
     templateUrl: appUrls.widgetHolderHTML,
@@ -711,7 +727,24 @@ app.directive('widgetHolder', function (appUrls, widgetManager) {
       angular.extend(scope, {
         deleteIthWidgetFromHolder: widgetManager.deleteIthWidgetFromHolder.bind(widgetManager),
         addNewWidgetToHolder: widgetManager.addNewWidgetToHolder.bind(widgetManager),
-        cloneWidget: widgetManager.cloneWidget.bind(widgetManager)
+        cloneWidget: widgetManager.cloneWidget.bind(widgetManager),
+        // collapsed:false,
+        treeOptions:{
+          dropped:(event)=>{
+            event.source.nodeScope.$$childHead.drag = false;
+            selectHolder(null);
+            app.markModified()
+          },
+          dragStart:(event)=>{
+              event.source.nodeScope.$$childHead.drag = true;
+          },
+          accept(sourceNodeScope, destNodesScope, destIndex){
+            selectHolder(destNodesScope.$treeScope.$parent.$parent);
+            // console.log(scope, destNodesScope.$treeScope.$parent.$parent);
+            return true;
+          }
+        }
+
       });
     }
   };
@@ -754,6 +787,9 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
       if (!scope.type) {
         throw "widget directive needs type parameter";
       }
+
+      scope.skin = attrs.skin;
+      // console.log(scope.type+" "+attrs.instancename+" "+attrs.skin);
 
       if (!scope.widget && attrs.instancename) {
         config.appWidgets = config.appWidgets || [];

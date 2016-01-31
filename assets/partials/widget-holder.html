@@ -1,10 +1,27 @@
-<div ng-repeat="widget in holder.widgets" class="widget">
+
+<div ng-if="globalConfig.designMode">
+
+  <div  ui-tree="treeOptions"  ng-class="acceptDrop">
+    <div ui-tree-nodes ng-model="holder.widgets"> 
+      <widget ng-repeat="widget in holder.widgets" ui-tree-node type="{{widget.type}}" config="widget"
+        on-clone="cloneWidget(holder, widget)"
+        on-delete="deleteIthWidgetFromHolder(holder, $index)">
+        <translate>LOADING_WIDGET_DOTS</translate>
+      </widget>
+    </div>
+  </div>
+</div>
+
+
+
+<div ng-if="!globalConfig.designMode" ng-repeat="widget in holder.widgets" class="widget">
   <widget type="{{widget.type}}" config="widget"
     on-clone="cloneWidget(holder, widget)"
     on-delete="deleteIthWidgetFromHolder(holder, $index)">
     <translate>LOADING_WIDGET_DOTS</translate>
   </widget>
 </div>
+
 <div ng-show="globalConfig.designMode" class="text-center">
   <button 	class="button radius small" ng-click="addNewWidgetToHolder(holder)" 
   			style="padding: 0.5em;font-stretch: ultra-condensed;">
