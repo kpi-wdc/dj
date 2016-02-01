@@ -1,172 +1,139 @@
-<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
-	<div ng-repeat="section in step.sections track by $index">
-		 <div class="row">
-		  	<div class="toolbar border left">
-				<div class="left" style="padding:0 0.3rem">
-		            Dimension: <b>{{section.dimension.label}}.</b>&nbsp;
-		            Selected:&nbsp;{{step.getSelectedItems(section).length}}&nbsp;from&nbsp; 
-		            {{section.items.length}}&nbsp;items. 
-		         </div>
-		         <button 
-		         		 ng-click="step.selectAll(section)"
-		         		 class="button radius toolbar left"
-	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Select All       
-	            </button>
-		         <button ng-if = "!section.showItemsOptions"
-		         		 ng-click="section.showItemsOptions = true"
-		         		 class="button radius toolbar left"
-	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Show Items       
-	            </button>
-	            <button  ng-if = "section.showItemsOptions"
-	            		 ng-click="section.showItemsOptions = false"
-		         		 class="button radius toolbar left"
-	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Hide Items
+
+<div style="margin:0; border-bottom: 0.1rem solid #ddd">
+	<div class="row" ng-repeat="d in step.dataset.dimension" style="margin: 0 0 0 1em;">
+		<div class="row" style="margin: 0 1em 0 1em;">
+			<h5>
+				<span style="float:left;color: #888;">
+					{{d.label | translate}}:&nbsp;
+				</span>	
+				<span style="float:left;font-stretch:ultra-condensed;font-size: medium;color:#008CBA;">
+					{{d.selectionString}}
+				</span>	
+				
+				<button ng-click="step.setRole(d, 'Ignore')"
+	            		ng-class="{warning : d.role == 'Ignore'}"
+	                    class="button radius secondary tiny right":
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Ignored
 	            </button>
 
-	        </div> 
-	         <div class="toolbar border right">
-	            <div class="left" style="padding:0 0.3rem">
-	            	Role:
-	            </div>
-	            <button ng-click="step.setRole(section, 'Rows')"
-	            		ng-class="{warning : section.dimension.role == 'Rows'}"
-	                    class="button radius secondary toolbar left"
-	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Rows
+				<button ng-click="step.setRole(d, 'Split Columns')"
+	            		ng-class="{warning : d.role == 'Split Columns'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Columns Splitter 
 	            </button>
-	            
-	            <button ng-click="step.setRole(section, 'Split Rows')"
-	            		ng-class="{warning : section.dimension.role == 'Split Rows'}"
-	                    class="button radius secondary toolbar left"
-	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Split Rows
-	            </button>
-	            
-	            <button ng-click="step.setRole(section, 'Columns')"
-	            		ng-class="{warning : section.dimension.role == 'Columns'}"
-	                    class="button radius secondary toolbar left"
-	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+				
+				<button ng-click="step.setRole(d, 'Columns')"
+	            		ng-class="{warning : d.role == 'Columns'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
 	              Columns
 	            </button>
 
-	            <button ng-click="step.setRole(section, 'Split Columns')"
-	            		ng-class="{warning : section.dimension.role == 'Split Columns'}"
-	                    class="button radius secondary toolbar left"
-	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Split Columns
-	            </button>
-				
-				<button ng-click="step.setRole(section, 'Ignore')"
-	            		ng-class="{warning : section.dimension.role == 'Ignore'}"
-	                    class="button radius secondary toolbar left"
-	                    style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Ignore
+	            <button ng-click="step.setRole(d, 'Split Rows')"
+	            		ng-class="{warning : d.role == 'Split Rows'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Rows Splitter 
 	            </button>
 
-	          </div>
-          </div>
-
-        <div class="row" ng-if="section.showItemsOptions">
-        	
-         	<div class="toolbar border right">
-				<div class="left" style="padding:0 0.3rem">
-		            Selection:
-		         </div>
-		         <button 
-		        		 ng-click = "step.selectAll(section)"	 		
-		         		 class="button radius toolbar left"
-	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Select All
-	            </button>
-	            <button 
-		         		 ng-click = "step.inverseSelection(section)"	 		
-		         		 class="button radius toolbar left"
-	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Inverse
-	            </button>
-	            <button  
-	            		 ng-click = "step.clearSelection(section)"	
-		         		 class="button radius toolbar left"
-	                     style="margin-bottom:0;padding-top:0.2rem; padding-bottom:0.2rem;">
-	              Clear
+	  			<button ng-click="step.setRole(d, 'Rows')"
+	            		ng-class="{warning : d.role == 'Rows'}"
+	                    class="button radius secondary tiny right"
+	                    style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Rows
 	            </button>
 
-	        </div> 
-
-	        <div class="toolbar border right">
-				<div class="left" style="padding:0 0.3rem">
-		            Filter:
-		        </div>
-		        
-		        <div class="left" style="padding:0 0.1rem 0 0.3rem">
-		            ID
-		        </div>
-		        
-		        <div class="left" style="padding:0">
-	             	<input type="text" 
-	         			ng-model="section.filter.id"
-	         			style="
-	         				font-size: smaller;
-	         				margin: 0;
-	         				padding: 0.2rem;
-	         				height: inherit;"
-		         	/>
-		        </div>
-		        
-		        <div class="left" style="padding:0 0.2rem 0 0.3rem">
-		            Label
-		        </div>
-		        
-		        <div class="left" style="padding:0">
-		            <input class="left"	type="text" 
-		         			ng-model="section.filter.label"
-		         			style="
-		         				font-size: smaller;
-		         				margin: 0;
-		         				padding: 0.2rem;
-		         				height: inherit;"
-		         	/>
-		        </div>
-		   </div>
-	    </div>  
-
-         <div 	class="row border" 
-         		style="height:150px; overflow:auto"
-         		ng-if="section.showItemsOptions"
-         >
-	         
-         	<table cellpadding="0" cellspacing="0">
-         		<tr>
-         			<th>ID</th>
-         			<th>Label</th>
-         		</tr>
-         		<tr 
-         			ng-click="step.select(item)"
-         			ng-repeat="item in section.items | filter : section.filter" 
-         			ng-class="{selected : item.selected}"
-         			style="cursor:pointer;"
-         		>
-	         		<td ng-class="{selected : item.selected}">{{item.id}}</td>
-	         		<td ng-class="{selected : item.selected}">{{item.label}}</td>
-         		</tr>
-         	</table>
-         	<!--	
-	         <div ng-repeat="item in section.items" ng-class="{selected : item.selected}">
-	         	{{item.id}}&nbsp;{{item.label}}
-	         </div>
-	        --> 
-         </div>   
-	</div>
+	            <span style="float:right;color: #888;">
+	            	as&nbsp;&nbsp;
+	            </span>
+			</h5>
+		</div>
 	
-	<div class="row" ng-if="step.query">
-		{{step.query}}
-	</div>
-	<div class="row" ng-if="!step.query">
-		Query not complete
-	</div>
+		<div class="row" style="margin:0 0 0.2em 1em">
+			<div class="toolbar left">
+				<button ng-if = "!d.showItemsOption"
+		         		 ng-click="d.showItemsOption = true"
+		         		 class="button radius tiny left"
+	                     style="margin:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Show Items ({{d.values.length}})       
+	            </button>
+	            <button  ng-if = "d.showItemsOption"
+	            		 ng-click="d.showItemsOption = false"
+		         		 class="button radius tiny left"
+	                     style="margin:0;padding-top:0.2rem; padding-bottom:0.2rem;">
+	              Hide Items
+	            </button>
+			</div>
+		</div>	
+	    <div ng-if="d.showItemsOption">
+	        <div class="row">	
+		     	<div class="toolbar left" style="margin:0 0 0 1em;">
+					
+			        <div class="left" style="font-size:small; margin:0 0 0 1.5em;">
+			            <b>Filter:</b>
+			        </div>
+			        <div class="left" style="padding:0; margin:0 1em;">
+			            <input class="left"	type="text" 
+			         			ng-model="d.filter"
+			         			style="	height: inherit;
+									    padding: 0.1em;
+									    margin: 0 0 0.3em;"
+											         	/>
+			        </div>
+			        <button 
+			        		 ng-click = "step.selectAll(d)"	 		
+			         		 class="button radius tiny left"
+		                     style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+		              Select All
+		            </button>
+		            <button 
+			         		 ng-click = "step.reverse(d)"	 		
+			         		 class="button radius tiny left"
+		                     style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+		              Inverse
+		            </button>
+		            <button  
+		            		 ng-click = "step.clear(d)"	
+			         		 class="button radius tiny left"
+		                     style="margin:0.1em;padding-top:0.2rem; padding-bottom:0.2rem;">
+		              Clear
+		            </button>
+			   	</div>
+			</div>
+			<div class="row" style="margin: 0 1.5em 0 1em;
+								    padding: 0.5em;
+								    border: 0.1rem solid #ddd;
+								    text-align: justify;">
+				<span 	ng-repeat="v in d.values | filter : d.filter" 
+						
+						ng-click = "step.select(d,v)"
+						>
+					&nbsp;	
+					<a style="font-stretch: ultra-condensed;font-size: small;" ng-style="step.getItemStyle(v)">
+						
+						<img ng-if="step.lookup(v.label).icon" src="{{step.lookup(v.label).icon}}" width="24px" height="24px"/>
+						{{(step.lookup(v.label).label) ? step.lookup(v.label).label : v.label | translate}}&nbsp;
+					</a>
+				</span>
+			</div>   	
+		</div>  
+	<!-- showItemsOption:{{d.showItemsOption}}
+	 -->
 
 
+	</div><!--repeat d in dimension-->
 </div>
+<div class="row" ng-if="step.requestComplete">
+	<h4 style="margin: 1em 0 0 1em; color: #888;">
+		Query Result
+	</h4>
+	{{step.request}}
+	<div style="overflow:auto; width:100%">
+		<center>
+			<img ng-if="!step.table" src="./img/ajax-loader.gif"/>
+			<wdc-table table="step.table" ng-if="step.table"/>
+		</center>
+	</div>
+</div>			

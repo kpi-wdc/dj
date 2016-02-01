@@ -69,6 +69,7 @@ m.factory("BarChartWizard",["$http",
 	            }
 	            if(step.title == "Query"){
 	              wizard.conf.query = step.query;
+	              wizard.conf.table = step.table;
 	              wizard.enable(step.index+1);
 	            }
 	            if(step.title == "Postprocessing"){
@@ -90,6 +91,7 @@ m.factory("BarChartWizard",["$http",
 	            if(step.title == "Query"){
 	             wizard.conf.postprocessSettings = undefined;
 	             wizard.conf.serieRequest = undefined;
+	             wizard.conf.table = undefined;
 	             wizard.disable(wizard.getAboveIndexes(step));
 	            }
 	            if(step.title == "Postprocessing"){

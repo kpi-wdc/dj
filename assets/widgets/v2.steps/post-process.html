@@ -47,12 +47,12 @@
 
 		    <accordion-group heading="Include Column Metadata">
 		        <div class="row wizard setting">
-					<div ng-repeat="item in step.response.data.header[0].metadata track by $index" style="clear:both;">
+					<div ng-repeat="item in step.table.header[0].metadata track by $index" style="clear:both;">
 						<label class="wizard left">
 							{{item.dimensionLabel}}
 						</label>
 						
-					 	<div class="switch tiny right">
+					 	<div class="switch tiny right" style="margin:0;">
 				          <input type="checkbox"
 				                 id="{{'hmeta'+$index}}"
 				                 ng-model="step.postprocessSettings.useColumnMetadata[$index]"
@@ -68,12 +68,12 @@
 
 			<accordion-group heading="Include Row Metadata">
 				<div class="row wizard setting">
-					<div ng-repeat="item in step.response.data.body[0].metadata track by $index" style="clear:both;">
+					<div ng-repeat="item in step.table.body[0].metadata track by $index" style="clear:both;">
 						<label class="wizard left">
 							{{item.dimensionLabel}}
 						</label>
 						
-					 	<div class="switch tiny right">
+					 	<div class="switch tiny right" style="margin:0;">
 				          <input type="checkbox"
 				                 id="{{'rmeta'+$index}}"
 				                 ng-model="step.postprocessSettings.useRowMetadata[$index]"
@@ -89,14 +89,18 @@
 		</accordion>		
 
 	    <button class="button radius right toolbar apply" style="margin:0.3rem" ng-click="step.apply()">Apply</button>
-
+	    
 	</div>
 
 	<div class="column medium-9 left">
 	<h5>Query result</h5>
+
+	{{step.postprocessSettings}}
+
 	<div class="row wizard setting" style="overflow:auto; background:#ffffff;">
-		<img ng-if="!step.response" src="./img/ajax-loader.gif"/>
-		<table ng-if="step.response">
+		<img ng-if="!step.table" src="./img/ajax-loader.gif"/>
+		<wdc-table table="step.table" ng-if="step.table"/>
+		<!-- <table ng-if="step.response">
 			<tr ng-repeat="hmetaIndex in step.range(0,step.response.data.header[0].metadata.length-1)">
 				<th ng-if="hmetaIndex == 0"
 					colspan="{{step.response.data.body[0].metadata.length}}" 
@@ -121,7 +125,7 @@
 					{{ step.getValue(brow.value[$index]) }}
 				</td>
 			</tr>
-		</table>
+		</table> -->
 	</div>
 	</div>
 </div>

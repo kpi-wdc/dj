@@ -1,8 +1,9 @@
 import angular from 'angular';
 import 'widgets/data-util/dps';
+import 'custom-react-directives';
 
 
-var m = angular.module("app.widgets.v2.steps.post-process",["app.widgets.data-util.dps"]);
+var m = angular.module("app.widgets.v2.steps.post-process",["app.widgets.data-util.dps",'custom-react-directives']);
 
 m.factory("PostProcess",["$http","Requestor", function($http, Requestor){
 	return {
@@ -76,6 +77,7 @@ m.factory("PostProcess",["$http","Requestor", function($http, Requestor){
     activate : function(wizard){
       this.wizard.process(this)
       this.query = wizard.conf.query;
+      this.table = wizard.conf.table;
       this.postprocessSettings = wizard.conf.postprocessSettings;
 
       if(angular.isUndefined(this.postprocessSettings)){
@@ -87,47 +89,47 @@ m.factory("PostProcess",["$http","Requestor", function($http, Requestor){
       // console.log(this.query);
       this.response = undefined;
 
-      new Requestor()
-        .push("getQueryResult",function(requestor,value){
-            $http
-              .post("./api/data/process/",thos.query)
-              .success(function (data) {
-                  // thos.response = data;
-                  thos.queryResultId = data.data_id;
-                  // thos.postprocessSettings.useColumnMetadata = data.data.header[0].metadata.map(function(item){return true});
-                  // thos.postprocessSettings.useRowMetadata = data.data.body[0].metadata.map(function(item){return true});
-                  requestor.resolve(thos.queryResultId)
-              })
-        })
-        .push("postProcess",function(requestor,data_id){
-            $http
-            .post("./api/data/process/",
-              {
-                "data_id": data_id,
-                "params": 
-                {
-                  "normalized" : thos.postprocessSettings.normalize || false, 
-                  "mode" : thos.postprocessSettings.mode,
-                  "direction" : thos.postprocessSettings.direction,
-                  "precision" : thos.postprocessSettings.precision
-                },
-                "proc_name": "post-process",
-                "response_type": "data"
-              }    
-            )
-            .success(function (data) {
-                thos.response = data;
-                thos.postprocessDataId = data.data_id;
-                thos.postprocessSettings.useColumnMetadata = (thos.postprocessSettings.useColumnMetadata.length == 0)?
-                  thos.response.data.header[0].metadata.map(function(item){return true}) : thos.postprocessSettings.useColumnMetadata;
-                thos.postprocessSettings.useRowMetadata = (thos.postprocessSettings.useRowMetadata.length == 0)?
-                  thos.response.data.body[0].metadata.map(function(item){return true}):thos.postprocessSettings.useRowMetadata;
-                requestor.resolve()
-          })
-        })
-        .execute(null,function(data){
-          thos.wizard.complete(thos);
-        })      
+      // new Requestor()
+      //   .push("getQueryResult",function(requestor,value){
+      //       $http
+      //         .post("./api/data/process/",thos.query)
+      //         .success(function (data) {
+      //             // thos.response = data;
+      //             thos.queryResultId = data.data_id;
+      //             // thos.postprocessSettings.useColumnMetadata = data.data.header[0].metadata.map(function(item){return true});
+      //             // thos.postprocessSettings.useRowMetadata = data.data.body[0].metadata.map(function(item){return true});
+      //             requestor.resolve(thos.queryResultId)
+      //         })
+      //   })
+      //   .push("postProcess",function(requestor,data_id){
+      //       $http
+      //       .post("./api/data/process/",
+      //         {
+      //           "data_id": data_id,
+      //           "params": 
+      //           {
+      //             "normalized" : thos.postprocessSettings.normalize || false, 
+      //             "mode" : thos.postprocessSettings.mode,
+      //             "direction" : thos.postprocessSettings.direction,
+      //             "precision" : thos.postprocessSettings.precision
+      //           },
+      //           "proc_name": "post-process",
+      //           "response_type": "data"
+      //         }    
+      //       )
+      //       .success(function (data) {
+      //           thos.response = data;
+      //           thos.postprocessDataId = data.data_id;
+      //           thos.postprocessSettings.useColumnMetadata = (thos.postprocessSettings.useColumnMetadata.length == 0)?
+      //             thos.response.data.header[0].metadata.map(function(item){return true}) : thos.postprocessSettings.useColumnMetadata;
+      //           thos.postprocessSettings.useRowMetadata = (thos.postprocessSettings.useRowMetadata.length == 0)?
+      //             thos.response.data.body[0].metadata.map(function(item){return true}):thos.postprocessSettings.useRowMetadata;
+      //           requestor.resolve()
+      //     })
+      //   })
+      //   .execute(null,function(data){
+      //     thos.wizard.complete(thos);
+      //   })      
         
     },
 
