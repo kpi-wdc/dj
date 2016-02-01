@@ -199,7 +199,7 @@
 	<div style="overflow:auto; width:100%">
 		<center>
 			<img ng-if="!table" src="./img/ajax-loader.gif"/>
-			<table ng-if="table" border="1">
+	<!-- 		<table ng-if="table" border="1">
 				<thead>
 				<tr ng-repeat="hmetaIndex in range(0,table.header[0].metadata.length*2-1)">
 					<th ng-if="hmetaIndex == 0"
@@ -255,8 +255,8 @@
 						{{ getValue(brow.value[$index]) }}
 					</td>
 				</tr>
-			</table>
-			<my-table table="table" ng-if="table"/>
+			</table> -->
+			<wdc-table table="table" ng-if="table"/>
 		</center>
 	</div>		
 </div>	

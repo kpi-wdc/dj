@@ -1,12 +1,4 @@
 <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
-  <button class="button radius toolbar"
-              ng-file-select 
-              ng-model="step.files" 
-              ng-multiple="true"
-              style="font-size:small; margin: 1rem 0 0">
-              Upload Dataset
-  </button>
-
 
   <div class="medium container-top" ng-if = "step.selectedDataset" 
 
@@ -17,11 +9,34 @@
             margin: 0.3rem;"
     >
     <label style="color: #008CBA;">
-    <b>Current selection :</b> 
-      <b>{{step.selectedDataset.metadata.label}}</b> &nbsp;
-      <i>{{step.selectedDataset.metadata.note}}</i>   &nbsp;
-      Source: {{step.selectedDataset.metadata.source}} &nbsp;
-      Updated: {{step.selectedDataset.metadata.updated}}
+    <b>Current selection : </b>{{step.selectedDataset.dataset.id}}
+    <br/> 
+      <b>
+      {{
+            (step.lookup(step.selectedDataset.dataset.label).label) ? 
+              step.lookup(step.selectedDataset.dataset.label).label : 
+              step.selectedDataset.dataset.label
+              | translate
+      }}
+      </b> &nbsp;
+      <i>
+      {{
+            (step.lookup(step.selectedDataset.dataset.note).label) ? 
+              step.lookup(step.selectedDataset.dataset.note).label : 
+              step.selectedDataset.dataset.note
+              | translate
+      }}
+      </i><br/>
+      Source:
+      {{
+            (step.lookup(step.selectedDataset.dataset.source).label) ? 
+              step.lookup(step.selectedDataset.dataset.source).label : 
+              step.selectedDataset.dataset.source
+              | translate
+      }} 
+      
+      &nbsp;
+      Updated: {{step.formatDate(step.selectedDataset.dataset.commit.createdAt)}} 
     </label>
   </div>
 
@@ -29,7 +44,71 @@
   <h5>
     Available Datasets:
   </h5>
-  <div ng-show="step.uploaded">
+  <div style=" padding: 0.5em 0.5em 1em;">
+    <div ng-repeat="item in  step.datasets" style="margin:0 0 1rem 0;">
+      <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
+        <span ng-click="step.select(item)" style="cursor:pointer; "ng-class="{selected : item.selected}">
+          {{
+            (step.lookup(item.dataset.label).label) ? 
+              step.lookup(item.dataset.label).label : 
+              item.dataset.label
+              | translate
+          }}
+        </span>
+      </h5>  
+
+      <div ng-if="!item.collapsed"
+           style="margin: 0.2em 0 0.5em 2.5em;
+                  padding: 0.5em;
+                  border: 0.1rem solid #ddd;
+                  background: #f4f4f4;">
+        <div style=" font-size: small; text-align: justify;margin:0 0 0 0.1em;">
+          <b>
+            NOTE
+          </b>:&nbsp;&nbsp;
+          {{
+            (step.lookup(item.dataset.note).label) ? 
+              step.lookup(item.dataset.note).label : 
+              item.dataset.note
+              | translate
+          }}
+        </div>  
+        <div style=" font-size: small; text-align: justify;">
+          <b>
+            SOURCE
+          </b>:&nbsp;&nbsp;
+         {{
+            (step.lookup(item.dataset.source).label) ? 
+              step.lookup(item.dataset.source).label : 
+              item.dataset.source
+              | translate
+          }}
+        </div>
+        <div style=" font-size: small; text-align: justify;">
+          <b>
+            LAST UPDATE
+          </b>:&nbsp;&nbsp;{{step.formatDate(item.dataset.commit.createdAt)}}  
+        </div>
+        <!-- <div style=" font-size: small; text-align: justify;">
+          <b>
+            TOPICS
+          </b>:&nbsp;&nbsp;
+          <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
+            <a ng-click="selectTopic(topic)">
+              {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
+            </a>&nbsp;,
+          </span>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+<!--   <div ng-show="step.uploaded">
     <center><img src="./img/ajax-loader.gif"/></center>
   </div>
   <div ng-show="!step.uploaded" style="overflow:auto; height:250px;">
@@ -53,5 +132,5 @@
         </tr>  
       </tbody>
     </table>
-  </div>
+  </div> -->
 </div>

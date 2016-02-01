@@ -7,6 +7,7 @@ System.config({
     "info": "js/info.js",
     "i18n": "js/i18n.js",
     "dictionary": "js/dictionary.js",
+    "custom-react-directives": "js/custom-react-directives.js",
     "modal-controllers": "js/modal-controllers.js",
     "widget-api": "js/widget-api.js",
     "skin-directives": "js/skin-directives.js",
@@ -133,6 +134,13 @@ System.config({
       "deps": [
         "react",
         "react-dom"
+      ]
+    },
+
+    "custom-react-directives": {
+      "deps": [
+        "angular",
+        "ngReact"
       ]
     },
 

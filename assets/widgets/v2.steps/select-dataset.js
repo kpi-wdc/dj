@@ -2,7 +2,9 @@ import angular from 'angular';
 
 var m = angular.module("app.widgets.v2.steps.select-dataset",["ngFileUpload"]);
 
-m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $http, $timeout){
+m.factory("SelectDataset",["$upload", '$http', '$timeout', "$lookup", "$translate",
+
+  function($upload, $http, $timeout, $lookup, $translate){
 	return {
 		
 		title : "Dataset",
@@ -11,11 +13,28 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $ht
         
     html : "./widgets/v2.steps/select-dataset.html",
 
+    formatDate: function(date){
+      var locale = $translate.use() || "en";
+      date = new Date(date);
+      date = date.toLocaleString(locale,
+        { year: 'numeric',  
+          month: 'long',  
+          day: 'numeric', 
+          hour: 'numeric',  
+          minute: 'numeric',
+          second: 'numeric'
+        })
+      return date;
+    },
+
+    lookup: $lookup,
+
 
     onStartWizard: function(wizard){
       this.wizard = wizard;
     	var scope = wizard.parentScope;
     	this.datasetID = wizard.conf.datasetID;
+     
     	
       if( angular.isUndefined(this.datasetID)){
         this.selectedDataset = undefined;
@@ -45,13 +64,16 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $ht
 
     updateDatasetList: function(){
     	var thos = this;
-    	$http.get("./api/data/dataSources/")
+    	$http.post("./api/metadata/items")
     	.success(function (data) {
-      		thos.datasets = data.reverse();
+          console.log("DatasetList",data)
+      		thos.datasets = data;//.reverse();
+
       		var selectedDS;
       		if(angular.isDefined(thos.datasetID)){
       			selectedDS = thos.datasets.filter(function(item){
-        			return item.id == thos.datasetID;
+              console.log(item.dataset.source,thos.lookup(item.dataset.source))
+        			return item.dataset.commit.id == thos.datasetID;
       			});	
       		}
       	if (selectedDS && selectedDS.length > 0){
@@ -99,11 +121,11 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', function($upload, $ht
         	if(!this.datasets) return;
         	var thos = this;
         	this.datasets.forEach(function(item){
-          		if(item.id == dataset.id){
+          		if(item.dataset.commit.id == dataset.dataset.commit.id){
                 if (!item.selected){
               		item.selected = true;
               		thos.selectedDataset = dataset;
-              		thos.datasetID = dataset.id;
+              		thos.datasetID = dataset.dataset.commit.id;
               		thos.wizard.complete(thos);
             		}
           		}else{
