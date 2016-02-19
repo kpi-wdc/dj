@@ -1,0 +1,30 @@
+<div class="contain-to-grid sticky" ng-controller="TopBarController">
+  <top-bar scrolltop="false">
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">
+          <img src="./widgets/v2.query-manager/icon.png"/>     
+          {{config.title | translate}}
+          </a>
+        </h1>
+      </li>
+      <li toggle-top-bar class="menu-icon">
+      <a href="#">Menu</a>
+      </li>
+    </ul>
+
+    <top-bar-section>
+      <ul class="right">
+        <li><a href="#getting_started">Getting started</a></li>
+        <li has-dropdown>
+          <a href="#">Directives</a>
+          <ul id="directives-list" top-bar-dropdown>
+            <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#interchange">Interchange</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#popover">Popover</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#rating">Rating</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#tooltip">Tooltip</a></li><li><a href="#topbar">Topbar</a></li><li><a href="#tour">Tour</a></li><li><a href="#typeahead">Typeahead</a></li>
+          </ul>
+        </li>
+        <li><a href="#animations">Animations</a></li>
+      </ul>
+    </top-bar-section>
+  </topbar>
+</div>

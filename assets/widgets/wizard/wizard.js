@@ -43,6 +43,10 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 			return result;	
 		},
 
+		getSteps : function(callback){
+			return this.steps.filter((item) => callback(item))
+		},
+
 		setContext : function(context){
 			this.context = context;
 			return this;
@@ -51,12 +55,18 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 		setTitle : function(title){
 			this.title = title;
 			return this;
-		}, 
+		},
+
+		setIcon : function(icon){
+			this.icon = icon;
+			return this;
+		},  
 		
 		push : function (step){
 			step.enabled = true;
 			step.active = false;
-			step.index = this.steps.length; 
+			step.index = this.steps.length;
+			step.activationCount = 0; 
 			this.steps.push(step);
 
 			return this;
@@ -108,6 +118,7 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 					
 					this.currentStepIndex = stepIndex;
 					this.steps[stepIndex].active = true;
+					this.steps[stepIndex].activationCount++;
 					if (this.steps[stepIndex].activate) this.steps[stepIndex].activate(this);
 			
 			}
@@ -161,6 +172,7 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 			
 			this.activate(0);
 			
+			
 			var s = this.parentScope;
 	        this.modalInstance.open({
 	          templateUrl: 'widgets/wizard/wizard.html',
@@ -208,5 +220,4 @@ m.controller('WizardController', function ($scope, $modalInstance, widgetScope) 
   	$scope.wizard.cancel();
     $modalInstance.dismiss();
   };
- 
-});
+ });

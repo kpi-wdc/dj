@@ -1,0 +1,11 @@
+{
+ "schema": {
+    "type": "object",
+    "title": "Data Preparation",
+    "properties": {
+      "masterWidget":{
+        "type":"string"
+      }  
+    }
+  }  
+}

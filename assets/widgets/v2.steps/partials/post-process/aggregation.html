@@ -1,0 +1,39 @@
+<div class="row wizard setting">
+					<div class="row wizard setting">
+						<label class="wizard left">
+							Enable
+						</label>
+						<div class="switch tiny right" style="margin:0;">
+				          <input type="checkbox"
+				                 id="aggCheckBox"
+				                 ng-model="step.conf.postprocessSettings.aggregation.enable"
+				           >
+				          <label for="aggCheckBox"></label>
+				        </div>
+			        </div>
+			        <div class="row wizard setting" ng-if="step.conf.postprocessSettings.aggregation.enable">
+			         	<label class="wizard left"> 
+				        	Direction:
+				        </label>
+				        <select ng-model="step.conf.postprocessSettings.aggregation.direction" 
+				        		class="wizard">
+				          <option>Rows</option>
+				          <option>Columns</option>
+				        </select>
+
+						<div class="row wizard setting" ng-repeat="a in step.avaibleAggregations track by $index">
+							<label class="wizard left">
+								{{a.v}}
+							</label>
+							<div class="switch tiny right" style="margin:0;">
+					          <input type="checkbox"
+					                 id="{{'a'+$index}}"
+					                 ng-model="step.avaibleAggregations[$index].enable"
+					                 ng-change = "step.selectAggregation()"
+					           >
+					          <label for="{{'a'+$index}}"></label>
+			       			</div>
+						</div>
+
+					</div>    
+				</div>

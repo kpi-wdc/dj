@@ -1,0 +1,161 @@
+$primary-color: #ef4523;
+ 
+/*
+   HEADER SECTION
+   ========================================================================== */
+.header-section {
+    -webkit-box-shadow: 0 0 5px 0 rgba(0,0,0,0.4);
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.4);
+    position: fixed;
+    z-index: 999;
+    min-width: 100%;
+}
+ 
+.contain-to-grid {
+    background-color: rgba(255, 255, 255, 0.97);
+}
+ 
+// FILL USED FOR HEADER
+.header-fill {
+    background: #fff;
+    height: 135px;
+    .tablet-mobile-logo img {
+        padding-top: 30px;
+    }
+}
+ 
+// USED FOR JQUERY ACTION
+.padding-on-my-header {
+    padding: 17px 0.9375rem 62px 0.9375rem;
+    ul.title-area img {
+        margin: -5px 0 0 0;
+    }
+}
+ 
+.full-width {
+    min-width: 100%;
+}
+ 
+p {
+    line-height: 3rem;
+    padding-bottom: 30px;
+}
+ 
+ 
+/*
+   CONTENT SECTION
+   ========================================================================== */
+ 
+ 
+.content-section {
+    .main-content {
+        margin-top: 35px;
+    }
+}
+ 
+ 
+/*
+   FOOTER SECTION
+   ========================================================================== */
+ 
+.footer-section {
+    background: #333;
+    min-height: 100px;
+    p {
+        color: #fff;
+        margin-top: 50px;
+    }
+}
+
+
+
+/*
+   TOPBAR NAVGATION
+   ========================================================================== */
+
+
+.top-bar
+{
+    background: none;
+    padding: 45px 0.9375rem 90px 0.9375rem;
+    transition: all 0.5s ease 0.1s;
+    // LOGO ADJUSTMENT
+    ul.title-area a img {
+        margin: -10px 0 0 0;
+        width:32px;
+        height:32px;
+    }
+
+    ul.title-area a {
+        color: #a0d3e8;
+        display: block;
+        /* font-weight: bold; */
+        font-size: xx-large;
+        font-stretch: ultra-condensed;
+        padding: 0 0.9375rem;
+        /*width: 75%*/;
+    }
+
+    .top-bar-section ul {
+        background: none;
+        // MENU ITEM STYLES
+        li a:not(.button), li.active a:not(.button) {
+            background: none;
+            line-height: 30px;
+            font-size: 12px;
+            padding: 0;
+            margin: 5px 0 0 0;
+            text-transform: uppercase;
+        }
+        // MENU ITEM HOVERS
+        li a:not(.button):hover {
+            background: none;
+            border-bottom: 2px solid $primary-color;
+            color: #222;
+        }
+        // MENU ITEM ACTIVE
+        li.active a:not(.button) {
+            border-bottom: 2px solid $primary-color;
+            color: #222;
+            &:hover {
+                background: none;
+            }
+        }
+        li {
+            margin-left: 30px;
+            background: transparent;
+            a {
+                color: #888;
+            }
+        }
+    }
+    // DROPDOWN MENU
+    .top-bar-section ul li:hover:not(.has-form) > a {
+        color: #333;
+    }
+    .top-bar-section li ul.dropdown {
+        background: #fff;
+        border: 1px solid #ddd;
+        color: #888;
+        li {
+            border-bottom: 1px solid #ddd;
+            margin: 0;
+            padding: 5px 15px 5px 15px;
+        }
+    }
+    .top-bar-section li ul.dropdown li a:not(.button):hover, .top-bar-section li ul.dropdown li a:not(.button) {
+        background: none;
+        color: #222;
+        border-bottom: none;
+        padding: 20px -4px 40px 45px;
+    }
+    .top-bar-section ul.dropdown li:hover:not(.has-form) > a:not(.button) {
+        background: none;
+        color: #222;
+    }
+    // DROPDOWN ARROW
+    .has-dropdown > a:after {
+        border-color: rgba(0, 0, 0, 0.5) transparent transparent;
+        margin-top: -5px;
+    }
+}

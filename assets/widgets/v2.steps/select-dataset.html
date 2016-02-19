@@ -1,6 +1,7 @@
+<h5 class="section-title"> Current selection: </h5>
 <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
 
-  <div class="medium container-top" ng-if = "step.selectedDataset" 
+  <div class="medium container-top" ng-if = "step.conf.dataset" 
 
     style="font-size: small;
             color: #008CBA;
@@ -9,42 +10,50 @@
             margin: 0.3rem;"
     >
     <label style="color: #008CBA;">
-    <b>Current selection : </b>{{step.selectedDataset.dataset.id}}
+    <b>ID: </b>{{step.conf.dataset.dataset.id}}
     <br/> 
       <b>
       {{
-            (step.lookup(step.selectedDataset.dataset.label).label) ? 
-              step.lookup(step.selectedDataset.dataset.label).label : 
-              step.selectedDataset.dataset.label
+            (step.lookup(step.conf.dataset.dataset.label).label) ? 
+              step.lookup(step.conf.dataset.dataset.label).label : 
+              step.conf.dataset.dataset.label
               | translate
       }}
       </b> &nbsp;
       <i>
       {{
-            (step.lookup(step.selectedDataset.dataset.note).label) ? 
-              step.lookup(step.selectedDataset.dataset.note).label : 
-              step.selectedDataset.dataset.note
+            (step.lookup(step.conf.dataset.dataset.note).label) ? 
+              step.lookup(step.conf.dataset.dataset.note).label : 
+              step.conf.dataset.dataset.note
               | translate
       }}
       </i><br/>
       Source:
       {{
-            (step.lookup(step.selectedDataset.dataset.source).label) ? 
-              step.lookup(step.selectedDataset.dataset.source).label : 
-              step.selectedDataset.dataset.source
+            (step.lookup(step.conf.dataset.dataset.source).label) ? 
+              step.lookup(step.conf.dataset.dataset.source).label : 
+              step.conf.dataset.dataset.source
               | translate
       }} 
       
       &nbsp;
-      Updated: {{step.formatDate(step.selectedDataset.dataset.commit.createdAt)}} 
+      Updated: {{step.formatDate(step.conf.dataset.dataset.commit.createdAt)}} 
     </label>
   </div>
 
   
-  <h5>
+  <h5 class="section-title">
     Available Datasets:
   </h5>
-  <div style=" padding: 0.5em 0.5em 1em;">
+  <div ng-if="step.pending">
+    <center><img src="./img/ajax-loader.gif"/></center>
+  </div>
+
+  <div style="    padding: 0.5em 0.5em 1em;
+                  overflow: auto;
+                  height: 20em;
+                  border: 0.1rem solid #ddd;">
+                  
     <div ng-repeat="item in  step.datasets" style="margin:0 0 1rem 0;">
       <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
         <span ng-click="step.select(item)" style="cursor:pointer; "ng-class="{selected : item.selected}">

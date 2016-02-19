@@ -1,0 +1,32 @@
+<div class="row wizard setting">
+			
+	<label class="wizard left">
+		Enable
+	</label>
+		
+ 	<div class="switch tiny right" style="margin: 0;">
+      <input type="checkbox"
+             id="reduceCheckbox"
+             ng-model="step.conf.postprocessSettings.reduce.enable"
+       >
+      <label for="reduceCheckbox"></label>
+    </div>
+
+    <div class="row wizard setting" ng-if="step.conf.postprocessSettings.reduce.enable" style="clear:both;">
+        <label class="wizard left">
+        	Mode:
+        </label>
+        <select ng-model="step.conf.postprocessSettings.reduce.mode" class="wizard">
+          <option>Has Null</option>
+          <option>All Nulls</option>
+        </select>
+		<br/>
+        <label class="wizard left"> 
+        	Direction:
+        </label>
+        <select ng-model="step.conf.postprocessSettings.reduce.direction" class="wizard">
+          <option>Rows</option>
+          <option>Columns</option>
+        </select>
+     </div>   
+</div>

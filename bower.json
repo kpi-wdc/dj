@@ -35,6 +35,8 @@
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.6.0",
     "d3.layout.cloud": "~1.2.1",
     "react": "~0.14.6",
-    "ngReact": "~0.2.0"
+    "ngReact": "~0.2.0",
+    "ng-json-explorer": "*",
+    "md5":"blueimp/JavaScript-MD5"
   }
 }

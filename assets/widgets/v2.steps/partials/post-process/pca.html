@@ -1,0 +1,35 @@
+
+	<div class="row wizard setting">
+
+		<label class="wizard left">
+			Enable
+		</label>
+			
+	 	<div class="switch tiny right" style="margin: 0;">
+          <input type="checkbox"
+                 id="pcaCheckbox"
+                 ng-model="step.conf.postprocessSettings.pca.enable"
+           >
+          <label for="pcaCheckbox"></label>
+        </div>
+
+        <div ng-if="step.conf.postprocessSettings.pca.enable" style="clear:both;">
+	        <div class="row wizard setting">
+		        <label class="wizard left">
+		        	Mode:
+		        </label>
+		        <select ng-model="step.conf.postprocessSettings.pca.result" class="wizard">
+		          <option>Scores</option>
+		          <option>Eigen Values</option>
+		        </select>
+				<br/>
+		        <label class="wizard left"> 
+		        	Direction:
+		        </label>
+		        <select ng-model="step.conf.postprocessSettings.pca.direction" class="wizard">
+		          <option>Rows</option>
+		          <option>Columns</option>
+		        </select>
+		    </div>    
+	    </div>
+ 	</div>

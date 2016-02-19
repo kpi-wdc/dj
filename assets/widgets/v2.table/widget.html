@@ -1,0 +1,20 @@
+<div class="widget" ng-controller="TableCtrl">
+  <div ng-if="widget.dataID"> 
+    <div class="table caption" ng-if="widget.decoration.caption">{{widget.decoration.caption}}</div>
+    <div class="table title" ng-if="widget.decoration.title">{{widget.decoration.title}}</div>
+    <center>
+    <img ng-if="pending" src="./img/ajax-loader.gif"/>
+    <div ng-if="table" style="
+        overflow:auto; 
+        margin:0 0 0.5em 0;
+        {{(widget.decoration.scroll) ? 'height:'+widget.decoration.height+'px; border:0.1rem solid #ddd;':''}}">
+      <wdc-table data="settings"></wdc-table>
+    </div>
+    <center>
+
+    <div class="table subtitle" ng-if="widget.decoration.subtitle">{{widget.decoration.subtitle}}</div>
+  </div>
+  <h1 ng-if="!widget.dataID" style="color:#eeeeee; text-align: center;">
+    Widget Not Configured
+  </h1>
+</div>

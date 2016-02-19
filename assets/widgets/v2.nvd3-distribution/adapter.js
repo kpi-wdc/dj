@@ -22,7 +22,7 @@ m.service('DistributionAdapter', function () {
       options.chart.color = (decoration.color) ? decoration.color : null;
 
       options.chart.lines.label = (decoration.showLabels) ? function (d) {
-        return d.y
+       return d.y
       } : undefined;
 
 

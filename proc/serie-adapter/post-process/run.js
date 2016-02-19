@@ -2,6 +2,7 @@ var generate = require("../index").PostProcess;
 
 
 process.on('message', function (json) {
+	
   delete json.hash;
   delete json.isDataSource;
   delete json.id;

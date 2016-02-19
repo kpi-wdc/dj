@@ -28,13 +28,14 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
   var m = angular.module("app.widgets.v2.nvd3-widget", ["oc.lazyLoad", "nvd3",  "app.widgets.data-util.dps"]);
 
 
-  m.factory("NVD3WidgetV2", [ "$http", 
+  m.factory("NVD3WidgetV2", [ "$http",
+                              "$q", 
                               "$ocLazyLoad", 
                               "APIProvider", 
                               "APIUser",
                               "Requestor", 
                                
-  function ($http, $ocLazyLoad, APIProvider, APIUser, Requestor) {
+  function ($http, $q, $ocLazyLoad, APIProvider, APIUser, Requestor) {
     
     $ocLazyLoad.load({
       files: [
@@ -65,36 +66,42 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
         $scope.completed = false;
       }
 
+      
       $scope.updateChart = function(){
-        if($scope.widget.serieRequest){
-          $scope.configured = true;
-          $scope.process();
-          new Requestor()
-            .push("getOptions",function(requestor){
-              if(angular.isDefined($scope.options)){
+        
+        if(!$scope.widget.serieDataId){
+          $scope.configured = false;
+          return;  
+        }
+
+        $scope.configured = true;
+        $scope.process();
+        
+        function loadOptions(){
+          return $http.get(params.optionsURL);
+        }
+
+        function loadData(){
+          return $http.get("./api/data/process/"+$scope.widget.serieDataId)
+        }
+
+        $q.all([
+            loadOptions().then( (resp) =>{
+                $scope.options = resp.data;
+
                 if($scope.widget.decoration){
-                  $scope.decorationAdapter.applyDecoration($scope.options,$scope.widget.decoration)
-                }else{
-                  $scope.widget.decoration = $scope.decorationAdapter.getDecoration($scope.options);
-                }
-                requestor.resolve()
-              }else{
-                console.log("options", params.optionsURL)
-                $http.get(params.optionsURL)
-                .success(function(data){
-                   $scope.options = data;
-
-
+                    $scope.decorationAdapter.applyDecoration($scope.options,$scope.widget.decoration)
+                  }else{
+                    $scope.widget.decoration = $scope.decorationAdapter.getDecoration($scope.options);
+                  }
+                  
                    for (var i in params.serieAdapter) {
                       $scope.options.chart[i] = params.serieAdapter[i];
                    }
 
                     
-                  if($scope.widget.decoration){
-                    $scope.decorationAdapter.applyDecoration($scope.options,$scope.widget.decoration)
-                  }else{
-                    $scope.widget.decoration = $scope.decorationAdapter.getDecoration($scope.options);
-                  }
+                  
+                  
                   if(angular.isDefined(params.serieAdapter)){
                     if (params.serieAdapter.getX) {
                       $scope.options.chart.x = params.serieAdapter.getX;
@@ -106,53 +113,43 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
 
                     $scope.options.chart.label = params.serieAdapter.getLabel;
 
-                    if ($scope.options.chart.scatter) {
-                      $scope.options.chart.scatter.label = params.serieAdapter.getLabel;
-                    }
-                    if ($scope.options.chart.lines) {
-                      $scope.options.chart.lines.label = params.serieAdapter.getLabel;
-                    }
-                    if ($scope.options.chart.stacked && angular.isObject($scope.options.chart.stacked)) {
-
+                    // if ($scope.options.chart.scatter) {
+                    //   $scope.options.chart.scatter.label = params.serieAdapter.getLabel;
+                    // }
+                    
+                    // if ($scope.options.chart.lines) {
+                    //   $scope.options.chart.lines.label = params.serieAdapter.getLabel;
+                    // }
+                    
+                    if (  $scope.options.chart.stacked 
+                          && angular.isObject($scope.options.chart.stacked)) {
                       $scope.options.chart.stacked.label = params.serieAdapter.getLabel;
                     }
-                  }   
-                  requestor.resolve();
-                })
-              }                  
+                  }  
+            }),
+            loadData().then( (resp) =>{
+                $scope.data = (params.serieAdapter.getSeries) ? 
+                    params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
             })
-            .push("generateSeries",function(requestor){
-              if(angular.isUndefined($scope.data) || thos.serieRequest!= $scope.widget.serieRequest){
-                thos.serieRequest = $scope.widget.serieRequest;
-                $http
-                .post("./api/data/process/",
-                  $scope.widget.serieRequest    
-                )
-                .success(function (data) {
-                    $scope.data = (params.serieAdapter.getSeries) ? params.serieAdapter.getSeries(data.data) : data.data;
-                    requestor.resolve()
-                })
-              }else{
-                $scope.configured = false;
-                requestor.resolve();
-              }  
-             })
-            .execute(this.queryResultId,function(){
-              $scope.settings = {
+        ]).then( () =>{
+            // console.log("NVD3 options", $scope.options)
+            // console.log("NVD3 data", $scope.data)
+              
+          
+            $scope.settings = {
                 options : angular.copy($scope.options), 
                 data : angular.copy($scope.data)
-              }
-              $scope.complete();
-             });
-          } 
+            }
+            $scope.complete();
+        });
       };
 
       
-      // $scope.updateChart(); 
 
       $scope.APIProvider
         
         .config(function () {
+          // console.log("NVD3 config", $scope.widget)
           $scope.updateChart();  
         }, true)
         

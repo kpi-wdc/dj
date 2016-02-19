@@ -1,0 +1,38 @@
+
+	<div class="row wizard setting">
+
+		<label class="wizard left">
+			Enable
+		</label>
+			
+	 	<div class="switch tiny right" style="margin: 0;">
+          <input type="checkbox"
+                 id="normCheckbox"
+                 ng-model="step.conf.postprocessSettings.normalization.enable"
+           >
+          <label for="normCheckbox"></label>
+        </div>
+
+        <div ng-if="step.conf.postprocessSettings.normalization.enable" style="clear:both;">
+	        <div class="row wizard setting">
+		        <label class="wizard left">
+		        	Mode:
+		        </label>
+		        <select ng-model="step.conf.postprocessSettings.normalization.mode" class="wizard">
+		          <option>Range to [0,1]</option>
+		          <option>Standartization</option>
+		          <option>Logistic</option>
+		        </select>
+				<br/>
+		        <label class="wizard left"> 
+		        	Direction:
+		        </label>
+		        <select ng-model="step.conf.postprocessSettings.normalization.direction" class="wizard">
+		          <option>Rows</option>
+		          <option>Columns</option>
+		        </select>
+		    </div>    
+	     
+        </div>
+         
+	</div>

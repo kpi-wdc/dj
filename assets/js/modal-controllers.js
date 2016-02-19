@@ -323,6 +323,7 @@ modals.controller("ViewPageConfigController", function($scope, $modalInstance,
   $scope.config = app.pageConfig();
   $scope.holders = [];
   for(let i in $scope.config.holders) $scope.holders.push(i);
+  $scope.keys = function(obj){return Object.keys(obj)}
   $scope.ok = function() {
       $modalInstance.close(this.settings);
     },

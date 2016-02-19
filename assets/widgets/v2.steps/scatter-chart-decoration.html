@@ -1,0 +1,233 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div class="column medium-3 left">
+	<h5>Decoration</h5>
+		
+	<accordion class="wizard">		
+
+		<accordion-group heading="Input Data">
+			<div class="row wizard setting">
+				<select ng-model="step.inputQuery" ng-change="step.selectInputData()" class="wizard">
+		          <option ng-repeat="item in step.queries">{{item.$title}}</option>
+		        </select>
+			</div>
+		</accordion-group>
+		
+		<accordion-group heading = "Titles">
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Title
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.title">
+			    
+			    <label class="wizard left">
+					Subtitle
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.subtitle">
+			    
+			    <label class="wizard left">
+					Caption
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.caption">
+				 <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+			</div>
+		</accordion-group>
+		<accordion-group heading="X Axis">
+		
+				<div class="row wizard setting">
+				 <label class="wizard left">
+		        	Column:
+		        </label>
+		        <select ng-model="step.axisXColumn" ng-change="step.selectAxisX()" class="wizard">
+		          <option ng-repeat="item in step.axisXList">{{item.label}}</option>
+		        </select>
+
+				<label class="wizard left">
+					Title
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.xAxisName">
+				
+
+				<label class="wizard left">
+					Stagger Labels
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="staggerLabelsCheckbox"
+		                 ng-model="step.conf.decoration.staggerLabels"
+		           >
+		          <label for="staggerLabelsCheckbox"></label>
+		        </div>
+
+				<label class="wizard left">
+					Reduce Labels
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="reduceXTicksCheckbox"
+		                 ng-model="step.conf.decoration.reduceXTicks"
+		           >
+		          <label for="reduceXTicksCheckbox"></label>
+		        </div>
+		        
+				<label class="wizard left">
+					Label Rotation
+				</label>	
+				<input type="number" ng-model="step.conf.decoration.xAxisAngle" class="wizard">
+				 <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+			</div>	
+		
+		</accordion-group>
+		
+		<accordion-group heading = "Y Axis">	
+			<div class="row wizard setting">
+
+				<label class="wizard section">
+					Y Axis
+				</label>
+				
+				<label class="wizard left">
+					Title
+			    </label>
+			    <input type="text" class="wizard" ng-model="step.conf.decoration.yAxisName">
+			     <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>	
+			</div>
+		</accordion-group>
+		
+		<!-- <accordion-group heading="Interpolation">
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Mode:
+		        </label>
+		        <select ng-model="step.conf.decoration.interpolation" class="wizard">
+		          <option>linear</option>
+		          <option>step</option>
+		          <option>step-before</option>
+		          <option>step-after</option>
+		          <option>basis</option>
+		          <option>bundle</option>
+		          <option>cardinal</option>
+		          <option>monotone</option>
+		        </select>
+		        <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+		    </div>    
+		</accordion-group>
+ -->
+			
+		<accordion-group heading="Show Point Labels">
+		
+				<div class="row wizard setting">
+
+				<label class="wizard left">
+					Enable
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="showPointsCheckbox"
+		                 ng-model="step.conf.decoration.showLabels"
+		           >
+		          <label for="showPointsCheckbox"></label>
+		        </div>
+		        
+		        <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+			</div>	
+		
+		</accordion-group>
+		
+		<!-- <accordion-group heading = "Fill Area">	
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Enable
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="fillAreaCheckbox"
+		                 ng-model="step.conf.decoration.isArea"
+		           >
+		          <label for="fillAreaCheckbox"></label>
+		        </div>
+				<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>	
+			</div>
+		</accordion-group> -->
+
+		<accordion-group heading = "Chart Height">
+		    <div class="row wizard setting">
+				<input type="number" ng-model="step.conf.decoration.height" class="wizard">
+        		<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+        	</div>
+        </accordion-group>
+        
+        <accordion-group heading="Palette">	
+
+			<div class="row wizard setting">
+				
+				<a class="second dropdown tiny left"
+					ng-if="step.conf.decoration.color" 
+					dropdown-toggle="#dropdown-example-3" 
+					style="margin: 0 0 0 0.3rem;
+					padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+				>
+              		<div 	class="button tiny left"
+              				ng-repeat="color in  step.conf.decoration.color"
+                   			style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
+                		&nbsp;
+              		</div>
+            	</a>
+            	<a class="second dropdown tiny left"
+					ng-if="!step.conf.decoration.color" 
+					dropdown-toggle="#dropdown-example-3" 
+					style="margin: 0 0 0 0.3rem;
+					padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+				>
+              		Select Palette
+            	</a>
+
+            	
+
+            	<fast-palette-peacker 
+            		dest="step.conf.decoration" 
+            		setter="step.conf.decoration.setColor" 
+            		watch-depth="reference">
+            	</fast-palette-peacker>
+
+
+				<label class="wizard left" style="clear:left">
+					Reverse
+				</label>
+				
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="reversePaletteCheckbox"
+		                 ng-model="step.conf.decoration.reversePalette"
+		                 ng-change = "step.reversePalette()"
+		           >
+		          <label for="reversePaletteCheckbox"></label>
+		        </div>
+ 				
+ 				<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+
+        	</div>
+        </accordion-group>
+        </accordion>	
+	</div>
+
+	<div class="column medium-9 left">
+		<h5 class="section-title">
+			<img src="./widgets/v2.query-manager/preparation.png" style="width: 32px;margin: 0 0.3em;"/>
+			{{step.inputQuery}}
+		</h5>
+		<div class="row wizard setting" style="    overflow: auto;
+	    background: #ffffff;
+	    max-height: 15em;
+	    border: 0.1rem solid #ddd;">
+			<wdc-table data="{table:step.wizard.context.postprocessedTable, decoration:{}}"></wdc-table>
+		</div>
+		
+		<h5 class="section-title">Chart Preview</h5>
+		<div class="row wizard setting" style="overflow:auto;background:#ffffff">
+			<img ng-if="!step.data || !step.options" src="./img/ajax-loader.gif"/>
+			<div class="border" style="width:{{step.conf.decoration.width}}px;background:#ffffff;">
+				<div nvd3 settings="step.settings"></div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -21,5 +21,5 @@ module.exports.models = {
   connection: 'mongodbServer',
 
   // WARNING: all the data will be dropped in development mode!
-  migrate: 'drop'
+  migrate: 'safe'//'drop'
 };

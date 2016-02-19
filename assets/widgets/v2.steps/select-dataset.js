@@ -6,6 +6,8 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', "$lookup", "$translat
 
   function($upload, $http, $timeout, $lookup, $translate){
 	return {
+
+    id: "SelectDataset",
 		
 		title : "Dataset",
 		
@@ -31,111 +33,60 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', "$lookup", "$translat
 
 
     onStartWizard: function(wizard){
-      this.wizard = wizard;
-    	var scope = wizard.parentScope;
-    	this.datasetID = wizard.conf.datasetID;
-     
-    	
-      if( angular.isUndefined(this.datasetID)){
-        this.selectedDataset = undefined;
-      		wizard.process(this);
-      	}
-        
-  		 	var thos = this;     	
-
-      this.updateDatasetList();
-  		
-      scope.$watch('wizard.steps['+thos.index+'].files', function(files) {
-        		scope.formUpload = false;
-        		if (files != null) {
-          			for (var i = 0; i < files.length; i++) {
-            			scope.errorMsg = null;
-            			(function(file) {
-              				thos.upload(file);
-            			})(files[i]);
-          			}
-        		}
-      		});
+      this.wizard = wizard
+      this.conf = {};
+      wizard.process(this);
+     //  this.wizard = wizard;
+      
+     //  this.conf = (wizard.conf) ? {
+     //      datasetID : wizard.conf.datasetID,
+     //      dataset : wizard.conf.dataset 
+     //    } : {}
+      
+     //  wizard.context.datasetID = this.conf.datasetID;
+     //  wizard.context.dataset = this.conf.dataset;
+      
+    	// if( angular.isUndefined(this.conf.dataset)){
+     //  		wizard.process(this);
+     //  	}else{
+     //      wizard.complete(this);
+     //    }
       },
 
-      onFinishWizard: function(wizard){
-        wizard.conf.datasetID  =  this.datasetID;
-      },
+    onFinishWizard: function(wizard){
+      // wizard.conf.datasetID = this.conf.datasetID;
+      // this.conf = {};
+    },
 
     updateDatasetList: function(){
     	var thos = this;
-    	$http.post("./api/metadata/items")
+    	this.pending = true;
+      $http.post("./api/metadata/items")
     	.success(function (data) {
-          console.log("DatasetList",data)
-      		thos.datasets = data;//.reverse();
-
-      		var selectedDS;
-      		if(angular.isDefined(thos.datasetID)){
-      			selectedDS = thos.datasets.filter(function(item){
-              console.log(item.dataset.source,thos.lookup(item.dataset.source))
-        			return item.dataset.commit.id == thos.datasetID;
-      			});	
-      		}
-      	if (selectedDS && selectedDS.length > 0){
-            thos.select(selectedDS[0])
-        }
-        thos.uploaded = false;  
+        thos.datasets = data;
+        thos.pending = false;  
     	})
     	.error(function (data, status) {
       		$window.alert("$http error " + status + " - cannot load data");
     	});
   	},
 
-		upload: function (file) {
-      this.uploaded = true;
-			var thos = this;
-
-			file.upload = $upload.upload({
-				url: './api/data/dataSource',
-				method: 'POST',
-				headers: {
-				  'my-header' : 'my-header-value'
-				},
-				file: file,
-			});
-
-			file.upload.then(function(response) {
-					$timeout(function() {
-					 thos.updateDatasetList();
-				});
-			}, function(response) {
-				if (response.status > 0)
-				thos.scope.errorMsg = response.status + ': ' + response.data;
-			});
-
-			file.upload.progress(function(evt) {
-			file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-			});
-
-			file.upload.xhr(function(xhr) {
-			});
-		},
-
-
 		select: function(dataset){
-        	if(!this.datasets) return;
-        	var thos = this;
-        	this.datasets.forEach(function(item){
-          		if(item.dataset.commit.id == dataset.dataset.commit.id){
-                if (!item.selected){
-              		item.selected = true;
-              		thos.selectedDataset = dataset;
-              		thos.datasetID = dataset.dataset.commit.id;
-              		thos.wizard.complete(thos);
-            		}
-          		}else{
-            		item.selected = false;
-          		}
-        	})
+          console.log("SELECT", this.wizard);
+        	if(!this.datasets || !dataset) return;
+          this.datasets.forEach((item) =>{item.selected = false});
+          dataset.selected = true;
+          this.conf.dataset = dataset;
+          this.conf.datasetID = dataset.dataset.commit.id;
+          this.wizard.context.datasetID = this.conf.datasetID;
+          this.wizard.context.dataset = this.conf.dataset;
+          this.wizard.complete(this);
       	},
 
 
     activate : function(wizard){
+      this.conf.dataset = wizard.context.dataset;
+      this.updateDatasetList();
     }	
 	}
 }]);	

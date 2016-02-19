@@ -1,0 +1,51 @@
+<div class="row" style="margin: 0; padding: 0 0 0 1em;" ng-controller="QueryManagerController"
+ng-show="globalConfig.designMode">
+ 	
+ 	<div class="row">
+	 
+		<h5>Queries</h5>
+		
+		<div class="row" style="margin:0;">	
+			<button class="button radius toolbar apply" ng-click="invokeAddProjectionWizard()">
+	 			+ Projection
+		 	</button>
+		 	<button class="button radius toolbar apply" ng-click="invokeAddPreparationWizard()">
+		 		+ Preparation
+		 	</button>
+		</div> 	
+
+		<div style="border:0.1em solid #ddd; padding:0.2em; max-height: 10em; overflow: auto;    margin: 0.5em 1em 0.5em 0;"> 	
+			<div class="row" ng-repeat="q in widget.queries"
+				style="
+				{{((q == selected) ? 'background-color: #e7e7e7;':'')+'font-size:small; 
+				margin:0.2em;'}}"
+			>
+				<div class="left" ng-click="select(q)">
+					
+					<a style="font-weight: bold;color: #0078a0;" >
+						<img src="./widgets/v2.query-manager/preparation.png" style="width:16px"/>
+						{{q.$title}}
+					</a> 
+					
+					<!-- <span ng-if="q.$listeners == 0" style="color: #f04124;"> &nbsp;not used</span> -->
+				</div>
+				<div class="right" ng-if="q == selected">
+						<a class="fi-x" ng-click="del(q)" style="color:#CF2A0E;">&nbsp; Delete &nbsp;</a>
+				</div>
+			</div>	
+		</div>	
+	</div>
+	<div class="row" >
+		<div ng-if="selected">
+			<h5> {{(selected.$title) ? selected.$title : "Preview"}}</h5>
+			<div style="border:0.1em solid #ddd; padding:0.2em; max-height: 10em; overflow: auto;margin: 0.5em 1em 0.5em 0;">
+				<img ng-if="!preview" src="./img/ajax-loader.gif"/> 
+				<wdc-table ng-if="preview" data="{table:preview, decoration:{}}"></wdc-table>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+  

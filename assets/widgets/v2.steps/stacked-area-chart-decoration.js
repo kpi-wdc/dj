@@ -1,12 +1,12 @@
 import angular from 'angular';
 import "widgets/v2.steps/palettes";
-import 'widgets/nvd3-widget/nvd3-widget';
+import 'widgets/v2.nvd3-widget/nvd3-widget';
 import 'widgets/data-util/dps';
 import "widgets/v2.nvd3-stacked-area/adapter";
 
 var m = angular.module("app.widgets.v2.steps.stacked-area-chart-decoration",[
 	"app.widgets.palettes",  
-	'app.widgets.nvd3-widget',
+	'app.widgets.v2.nvd3-widget',
     "app.widgets.data-util.dps",
     "app.widgets.v2.stacked-area-chart-adapter"]);
 

@@ -5,6 +5,54 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
+var I18N = require("../../wdc_libs/wdc-i18n");
+
+
+var getQueryResult = function(query,proc,proc_params){
+    //sails.log.debug(query);
+    var params = query;
+    if(!params){return null}
+    var commitID = params.commitID;
+    var query = params.query;
+    var locale = (params.locale === "uk") ? "ua" : params.locale; //|| "en";
+    // find dataset
+    // sails.log.debug(params)
+    Dataset.findOne({ 
+      "id":commitID
+    }).then(function(obj){
+      if(!obj){return null}
+      //execute query
+      
+      // get dictionary and translate query result
+      Dictionary.find({}).then(function(json){
+          i18n = new I18N(json);
+          obj.data = i18n.translate(obj.data,locale);
+          obj.metadata = i18n.translate(obj.metadata,locale);
+          
+          for(i in obj.metadata.dimension){
+            obj.metadata.dimension[i].label = i18n.translate(obj.metadata.dimension[i].label,locale);
+            obj.metadata.dimension[i].values = 
+              i18n.translate(obj.metadata.dimension[i].values,locale)
+          } 
+          var result = executeQuery(obj,query);
+
+          result.metadata = {
+            type : "Query Result Table",
+            source : obj.metadata,
+            selection : query
+          }
+
+          result.createdAt = obj.createdAt;
+          // sails.log.debug(result);
+          //   obj_to_process.data = data;//req.body.data;
+        //   sails.log.debug("RESULT ",obj_to_process.data);
+        //   obj_to_process.params = req.body.params;
+          proc.send({data:result,'params':proc_params});  
+      });          
+    }); 
+  };
+
 module.exports = {
   /**
    * `DataProcController.process()`
@@ -19,10 +67,15 @@ module.exports = {
       var launchingFilePath = sails.config.executables[req.body.proc_name];
       var child = require('child_process').fork(launchingFilePath, [], {silent: true});
       var parent_proc = "";
-      if (req.body.data) {
-        obj_to_process.data = req.body.data;
-        obj_to_process.params = req.body.params;
-        child.send(obj_to_process);
+      if (req.body.data_query) {
+        getQueryResult(req.body.data_query, child, req.body.params);
+        // .then(function(data){
+        //   obj_to_process.data = data;//req.body.data;
+        //   sails.log.debug("RESULT ",obj_to_process.data);
+        //   obj_to_process.params = req.body.params;
+        //   child.send(obj_to_process);  
+        // })
+        
       } else if (req.body.data_id) {
         ProcData.findOne({
           id: req.body.data_id
@@ -131,6 +184,10 @@ module.exports = {
       prepareResponse(req, res);
     }
   },
+
+
+  
+
 
   /**
    * `DataProcController.getById()`

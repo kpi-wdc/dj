@@ -1,0 +1,51 @@
+<div class="row wizard setting">
+					<div class="row wizard setting">
+						<label class="wizard left">
+							Enable
+						</label>
+						<div class="switch tiny right" style="margin:0;">
+				          <input type="checkbox"
+				                 id="rankCheckBox"
+				                 ng-model="step.conf.postprocessSettings.rank.enable"
+				           >
+				          <label for="rankCheckBox"></label>
+				        </div>
+			        </div>
+			        <div class="row wizard setting" ng-if="step.conf.postprocessSettings.rank.enable">
+			         	<label class="wizard left"> 
+				        	Direction:
+				        </label>
+				        <select ng-model="step.conf.postprocessSettings.rank.direction" 
+				        		ng-change="step.selectRankDirection()"
+				        		class="wizard">
+				          <option>Rows</option>
+				          <option>Columns</option>
+				        </select>
+				        <br/>
+				        <label class="wizard left"> 
+				        	Order:
+				        </label>
+				        <select ng-model="step.conf.postprocessSettings.rank.asc" class="wizard">
+				          <option>A-Z</option>
+				          <option>Z-A</option>
+				        </select>
+				        <br/>
+				        <div class="row wizard setting" ng-repeat="r in step.rankAlt track by $index">
+							<label class="wizard left">
+								{{r.label}}
+							</label>
+							<div class="switch tiny right" style="margin:0;">
+					          <input type="checkbox"
+					                 id="{{'alt'+$index}}"
+					                 ng-model="r.enable"
+					                 ng-change="step.selectRankAlt()"
+					           >
+					          <label for="{{'alt'+$index}}"></label>
+					        </div>
+				        </div>
+
+
+
+
+				     </div>
+				</div>

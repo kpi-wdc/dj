@@ -5,6 +5,8 @@ var m = angular.module("app.widgets.v2.steps.edit-widget-id",[]);
 m.factory("EditWidgetID",function(){
 	return {
 		
+		id: "EditWidgetID",
+		
 		title : "Widget ID",
 		
 		description : "Edit widget ID if needed",
@@ -16,7 +18,8 @@ m.factory("EditWidgetID",function(){
         },
 
         onFinishWizard: function(wizard){
-        	wizard.conf.instanceName = this.instanceName;	
+        	wizard.conf.instanceName = this.instanceName;
+        	// this.instanceName = undefined;	
         }
 	}
 });	

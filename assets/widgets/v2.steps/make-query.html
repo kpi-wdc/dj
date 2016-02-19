@@ -1,6 +1,9 @@
-
+<h5 class="section-title" style="margin: 1em 0 0 1em;">
+		Select Items
+</h5>
+	
 <div style="margin:0; border-bottom: 0.1rem solid #ddd">
-	<div class="row" ng-repeat="d in step.dataset.dimension" style="margin: 0 0 0 1em;">
+	<div class="row" ng-repeat="d in step.conf.dataset.dimension" style="margin: 0 0 0 1em;">
 		<div class="row" style="margin: 0 1em 0 1em;">
 			<h5>
 				<span style="float:left;color: #888;">
@@ -126,14 +129,19 @@
 	</div><!--repeat d in dimension-->
 </div>
 <div class="row" ng-if="step.requestComplete">
-	<h4 style="margin: 1em 0 0 1em; color: #888;">
+	<h5 class="section-title" style="margin: 1em 0 0 1em;">
 		Query Result
-	</h4>
-	{{step.request}}
-	<div style="overflow:auto; width:100%">
+	   <button ng-click="step.addQuery()"
+	           class="button radius tiny right success"
+               style="margin:0 2em;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Add to Data Query Manager
+       </button>
+	</h5>
+	
+	<div style="overflow:auto; margin: 0 1em 0 1em; border: 0.1rem solid #ddd;">
 		<center>
-			<img ng-if="!step.table" src="./img/ajax-loader.gif"/>
-			<wdc-table table="step.table" ng-if="step.table"/>
+			<img ng-if="!step.wizard.context.table" src="./img/ajax-loader.gif"/>
+			<wdc-table data="{table:step.wizard.context.table, decoration:{}}" ng-if="step.wizard.context.table"/>
 		</center>
 	</div>
 </div>			

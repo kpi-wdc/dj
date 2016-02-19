@@ -1,0 +1,70 @@
+<div class="row" style="margin: 0; padding: 0 0 0 1em;" 
+		ng-controller="AppInfoController">
+	<div ng-if="visibility">		
+		<div class="row">
+			<h4 ng-if="config.title" style="margin:0;">
+				<img ng-if="config.icon" src="{{config.icon}}" width="48px">
+				{{config.title | translate}}
+			</h4>
+			
+			<div ng-if="config.description" style="font-size: small;
+			    		text-align: justify;">
+			    	{{config.description | translate}}
+			</div>
+			<h5 ng-if="config.keywords.length > 0" style="margin:0;">
+			<widget-translate>Keywords</widget-translate>&nbsp;:</h5>
+			<div ng-if="config.keywords.length>0" style="font-size: small;
+			    		text-align: justify; color:#008CBA;">
+			    <span ng-repeat="k in config.keywords track by $index">
+			    	{{k | translate}}{{($index < (config.keywords.length-1))?' ,':''}}
+			    </span>		
+			</div>
+		</div>	
+		<div class="row">
+			<h5 style="margin:0;"><widget-translate>APPLICATION_AUTHOR</widget-translate>:</h5>
+			
+			<a ng-if="author.email" href="mailto:{{author.email}}"  target="blank" style="font-size: small;">
+			     <span style=" background-image: url({{author.photo}});
+	                  background-size: 48px 48px;
+	                  border-radius: 50%;
+	                  display: block;
+	                  overflow: hidden;
+	                  position: relative;
+	                  height: 48px;
+	                  width: 48px;
+	                  float:left;"></span>
+				<span style="float:left; margin:1em 0 0 0.5em;">
+			    	{{author.name}}
+			    </span>
+			</a>
+			<div ng-if="!author.name" widget-translate style="color:#aa0000;font-size:small;font-weight:bold;">
+			    THIS_APP_DOESNT_HAVE_AUTHOR
+			</div>
+		</div>
+		
+		<div class="row" ng-if="config.collaborations.length >0">
+			<h5 style="margin:0;">
+			<widget-translate>Collaborators</widget-translate>&nbsp;:</h5>
+			<div class="row" ng-repeat="c in config.collaborations track by $index">
+				
+				<span style=" background-image: url({{c.user.photo}});
+	                  background-size: 48px 48px;
+	                  border-radius: 50%;
+	                  display: block;
+	                  overflow: hidden;
+	                  position: relative;
+	                  height: 48px;
+	                  width: 48px;
+	                  float:left;
+	                  margin:0 0 0 1em"></span>
+				<span style="float:left; margin:1em 0 0 0.5em;">
+					<a href="mailto:{{c.user.email}}" target="blank" style="font-size: small;">
+					    {{c.user.name}}
+					</a>
+				</span>
+			</div>
+		</div>
+	</div>	
+</div>
+
+  

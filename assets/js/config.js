@@ -25,14 +25,13 @@ System.config({
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
-    
-    "react":"components/react/react.js",
-    "react-dom":"components/react/react-dom.js",
-    "ngReact":"components/ngReact/ngReact.js",
-    
+    "react": "components/react/react.js",
+    "react-dom": "components/react/react-dom.js",
+    "ngReact": "components/ngReact/ngReact.js",
     "mousetrap": "components/mousetrap/mousetrap.js",
     "angular-hotkeys": "js/hotkeys.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
+    'ng-json-explorer':"components/ng-json-explorer/src/angular-json-explorer.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
     "angular-foundation": "components/angular-foundation/mm-foundation-tpls.js",
     "angular-json-editor": "components/angular-json-editor/src/angular-json-editor.js",
@@ -47,6 +46,8 @@ System.config({
     "jsinq-query": "components/jsinq/source/jsinq-query.js",
     "json-stat": "components/jsonstat/json-stat.max.js",
     "nv.d3": "components/nvd3/nv.d3.js",
+    "wizard-directives": "widgets/v2.steps/wizard-directives.js",
+    "md5":"components/md5/js/md5.js",
     "*": "*.js",
     "github:*": "../../jspm_packages/github/*.js"
   }
@@ -125,26 +126,36 @@ System.config({
         "angular"
       ]
     },
-
+    'ng-json-explorer':{
+      "deps": [
+        "angular"
+      ]
+    },
     "react": {
       "exports": "React"
     },
-    
     "ngReact": {
       "deps": [
         "react",
         "react-dom"
       ]
     },
-
     "custom-react-directives": {
       "deps": [
         "angular",
         "ngReact"
       ]
     },
+    "wizard-directives": {
+      "deps": [
+        "angular",
+        "ngReact"
+      ]
+    },
 
-
+    "md5": {
+      "exports": "md5"
+    },
     "angular-hotkeys": {
       "deps": [
         "mousetrap",

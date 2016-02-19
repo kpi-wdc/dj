@@ -1,13 +1,14 @@
 var Query = require("./lib/query").Query,
 	STAT = require("./lib/stat"),
 	PCA = require("./lib/pca").PCA,
-	CLUSTER = require("./lib/cluster").CLUSTER;
+	CLUSTER = require("./lib/cluster").CLUSTER,
+	UTIL = require("util");
 
 	
 var concatLabels = function(list,usage){
 	var result = "";
 	var data;
-	if( usage==null || usage == undefined || (usage.length && usage.length == 0)){
+	if( usage == null || usage == undefined || (usage.length && usage.length == 0)){
 		data = list
 	}else{
 		data = list
@@ -36,23 +37,41 @@ exports.FormatValues = function(table,params){
 }
 
 
+exports.dependencySerie = function(table,params){
+	return table.body.map(function(row){
+		var serie = {
+			key: row.metadata.map(function(item){ return item.label}).join(", "),
+			values: row.value.map(function(item,index){
+				return {
+					label:table.header[index].metadata.map(function(item){ return item.label}).join(", "),
+					value:item
+				}
+			})
+		}
+		return serie;
+	})
+}
 
 exports.CorrelationMatrix = function(table,params){
-	var series = exports.BarChartSerie(table);
-	series.forEach(function(item){
-		item.values = item.values.map(function (current) {
-          return current.value;
-        });
-	});
-	var result = [];
-      for (var i = 0; i < series.length; i++) {
-        var row = [];
-        for (var j = 0; j < series.length; j++) {
-          row.push({ label: series[j].key, value: STAT.corr(series[i].values, series[j].values) });
-        }
-        result.push({ key: series[i].key, values: row });
-      }
-	return result;
+	return exports.dependencySerie(table,params);
+
+
+	
+	// var series = exports.BarChartSerie(table);
+	// series.forEach(function(item){
+	// 	item.values = item.values.map(function (current) {
+ //          return current.value;
+ //        });
+	// });
+	// var result = [];
+ //      for (var i = 0; i < series.length; i++) {
+ //        var row = [];
+ //        for (var j = 0; j < series.length; j++) {
+ //          row.push({ label: series[j].key, value: STAT.corr(series[i].values, series[j].values) });
+ //        }
+ //        result.push({ key: series[i].key, values: row });
+ //      }
+	// return result;
 };
 
 exports.CorrelationTable = function (table,params) {
@@ -130,10 +149,13 @@ exports.MapSerie = function (table, grad) {
 
 
 exports.Normalize = function (table, params) {
+  if(!params.normalization) return table;
+  if(!params.normalization.enable) return table;
 
-  var normalizeMode = params.mode || "Range to [0,1]"; 
-  var normalizeArea = params.direction || "Columns";
-  var precision = params.precision || null; 
+
+  var normalizeMode = params.normalization.mode || "Range to [0,1]"; 
+  var normalizeArea = params.normalization.direction || "Columns";
+  var precision = params.normalization.precision || null; 
 
   if(normalizeArea == "Columns"){
   	table.header.forEach(function(currentColumn,columnIndex){
@@ -183,8 +205,10 @@ exports.Normalize = function (table, params) {
 }
 
 exports.ReduceNull = function(table,params){
-	var direction = params.direction || "Rows"; // "Columns"
-	var mode = params.mode || "Has Null"; // "All Nulls"
+	if(!params.reduce) return table;
+	if(!params.reduce.enable) return table;
+	var direction = params.reduce.direction || "Rows"; // "Columns"
+	var mode = params.reduce.mode || "Has Null"; // "All Nulls"
 
 	
 	var	hasNull = function(data){
@@ -240,13 +264,529 @@ exports.ReduceNull = function(table,params){
 	
 }
 
+
+exports.orderTable = function(table,params){
+	
+	if(!params.order.enable) return table;
+
+	var direction = (params.order.direction) ? params.order.direction : "Rows";//"Columns"
+	var asc = (params.order.asc) ? params.order.asc : "A-Z"; //"Z-A"
+	var index = (params.order.index) ? params.order.index : 0;
+
+	if(direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+
+	table.body.sort(function(a,b){
+		if(index < 0){
+			var j = -index-1;
+			return (asc == "A-Z") ? (a.metadata[j].label - b.metadata[j].label) : (b.metadata[j].label - a.metadata[j].label)
+ 		}else{
+			return (asc == "A-Z") ? (a.value[index] - b.value[index]) : (b.value[index] - a.value[index])
+ 		}
+
+	})
+
+	if(direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+
+	return table;
+
+}
+
+
+exports.transposeTable = function(table,params){
+	if (!params.transpose) return table;
+	var tBody = table.header;
+	var values = [];
+	table.body.forEach(function(row){
+		values.push(row.value)
+	})
+
+	table.inValues = values;
+
+
+	tValues = [];
+	for(var i=0; i < values[0].length; i++){
+		tValues.push(
+			values.map(function(item){
+				return item[i]
+			})
+		)
+	}
+
+	var tHeader = table.body;
+	tHeader.forEach(function(item){
+		item.value = undefined;
+	})
+	// .map(function(item){
+	// 	return item.metadata;
+	// });
+	tBody.forEach(function(item,index){
+		item.value = tValues[index]
+	})
+
+	table.body = tBody;
+	table.header = tHeader;
+	
+	table.trValues = tValues;
+
+
+	return table;	 
+
+}
+
+// exports.addNumbers= function(table,params){
+// 	if(!params.numbers) return table;
+// 	if(!params.numbers.enable) return table;
+
+// 	if(params.numbers.direction == "Columns") table = table.transposeTable(table,{transpose:true});
+	
+// 	table.body.forEach(function(row,index){
+// 		row.metadata.push({
+// 			{id: (index+1), label: (index+1), dimension: "number", dimensionLabel: "number"}
+// 		})
+// 	})
+
+// 	if(params.numbers.direction == "Columns") table = table.transposeTable(table,{transpose:true});
+
+// 	return table;
+
+// }
+
+// params = {
+
+// rank:{
+// 	enable:false,
+// 	direction:"Rows",
+// 	asc:"A-Z",
+// 	indexes:[]
+// }
+
+
+
+exports.addRanks = function(table,params){
+	if(!params.rank) return table;
+	if(!params.rank.enable) return table;
+	
+	var rank = params.rank;
+	if(rank.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	
+	var b = [];
+
+
+
+	table.body.forEach(function(row,index){
+
+		var foundedIndex = (function(num,list){
+			return list.filter(function(item){return item == num})[0]
+		})(index,rank.indexes)
+		
+		if(foundedIndex >= 0){
+			var rankList = STAT.rank(row.value);
+			if(rank.asc == "Z-A"){
+				var max = STAT.max(rankList);
+				rankList = rankList.map(function(item){return max+1-item})
+			}
+			var rankRow = {
+				metadata:row.metadata.map(function(item){return item}),
+				value: rankList
+			}
+
+			rankRow.metadata.push({
+				dimension:"type",
+				dimensionLabel:"Type",
+				id:"rank",
+				label:"Rank"
+			}) 
+			b.push(rankRow)
+		}
+		row.metadata.push({
+			dimension:"type",
+			dimensionLabel:"Type",
+			id:"value",
+			label:"Value"
+		})
+		b.push(row);
+
+	})
+
+
+	table.body = b;
+
+	if(rank.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	return table;
+}
+
+
+
+exports.addAggregations = function(table,params){
+
+// 	aggregation:{
+// 		enable:true,
+// 		direction:"Rows",
+// 		data:["max","min","avg","std","sum"]
+// 	}
+
+
+
+	if(!params.aggregation) return table;
+	if(!params.aggregation.enable) return table;
+	
+	var aggregation = params.aggregation;
+
+	if(aggregation.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+
+	aggregation.data
+		.forEach(function(item){
+			var hmetaTemplate = table.header[0].metadata
+			.map(function(m,index){
+				return {
+					dimension : m.dimension,
+					dimensionLabel : m.dimensionLabel,
+					id : "",
+					label : ""
+				}
+			});
+			var lastMeta = hmetaTemplate[hmetaTemplate.length-1];
+	   		lastMeta.id = item;
+			lastMeta.label = item;
+			table.header.push({metadata:hmetaTemplate});
+		})
+
+	table.body
+		.forEach(function(row){
+			var v = row.value;
+			var additional = [];
+			aggregation.data
+				.forEach(function(item){
+					if(item == "min"){
+						additional.push(STAT.min(v))
+					}
+					if(item == "max"){
+						additional.push(STAT.max(v))
+					}
+					if(item == "avg"){
+						additional.push(STAT.mean(v))
+					}
+					if(item == "std"){
+						additional.push(STAT.std(v))
+					}
+					if(item == "sum"){
+						additional.push(STAT.sum(v))
+					}
+			})
+			row.value = row.value.concat(additional);	
+		})	
+		
+
+	if(aggregation.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	
+	return table;	
+}
+
+exports.limit = function(table,params){
+
+	if(!params.limit) return table;
+	if(!params.limit.enable) return table;
+	
+	var limit = params.limit;
+	table.body = table.body.filter(function(item,index){
+		return ((index+1) >= limit.start) && ((index+1) < (limit.start+limit.length))
+	})
+
+	return table;
+}
+
+exports.histogram = function(table,params){
+	if(!params.histogram) return table;
+	if(!params.histogram.enable) return table;
+	
+	var histogram= params.histogram;
+
+	if(histogram.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	
+	var globalMax = STAT.max(table.body.map(function(row){return STAT.max(row.value)}));
+	var globalMin = STAT.min(table.body.map(function(row){return STAT.min(row.value)}));
+	
+	var histTable = {
+		metadata:table.metadata,
+		header:[],
+		body:[]
+	}
+
+	var step = (globalMax - globalMin) / histogram.beans;
+
+	for (var j = 0; j < histogram.beans; j++) {
+	  histTable.header.push({ metadata:[{
+	  	dimension:"bean",
+	  	dimensionLabel:"Bean",
+	  	id:((globalMin+(j) * step).toFixed(3)+" - "+ (globalMin+(j+1) * step).toFixed(3)),
+	  	label:((globalMin+(j) * step).toFixed(3)+" - "+ (globalMin+(j+1) * step).toFixed(3))
+	  }]})
+	}
+
+	table.body.forEach(function(row){
+		histTable.body.push({
+
+			metadata: row.metadata.map(function(item){return item}),
+			value:(
+				function(data){
+					var h = histTable.header.map(function(item){return 0});
+					data.forEach(function(item){
+						if(item !=null){
+							var index = 
+								Math.floor((item - globalMin) / (globalMax - globalMin) * histogram.beans);
+							index = (index ==histogram.beans) ? index - 1 : index;
+							h[index]++;
+						}
+					})
+					if (histogram.cumulate){
+						var s = 0;
+						h.forEach(function (val) {
+							val.y = s += val.y;
+						});
+					}
+					h = h.map(function(item){return item/data.length})
+					return h;
+			})(row.value)
+		})
+	})
+
+	
+
+
+	// if(histogram.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	
+	return histTable;
+}
+
+
+exports.correlationMatrix = function(table,params){
+	if(!params.correlation) return table;
+	if(!params.correlation.enable) return table;
+	
+	var correlation= params.correlation;
+
+	if(correlation.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+
+	table.header = table.body.map(function(row){return {metadata:row.metadata}});
+	var values = [];
+	for(var i=0; i<table.body.length; i++){
+		var v = [];
+		for(var j=0; j<table.body.length; j++){
+			v.push(STAT.corr(table.body[i].value,table.body[j].value))
+		}
+		values.push(v);
+	}
+	table.body.forEach(function(row,index){
+		row.value = values[index]
+	})
+	
+	return table;
+}
+
+exports.pca = function(table,params){
+	if(!params.pca) return table;
+	if(!params.pca.enable) return table;
+	var pca= params.pca;
+	if(pca.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	
+	var result = {
+		header:[],
+		body:[],
+		metadata:table.metadata
+	}
+
+	table = exports.ReduceNull(table,{
+		reduce:{
+			enable:true,
+			direction:"Rows", 
+			mode:"Has Null"
+		}	
+	});
+
+	
+
+	if(table.body.length < table.header.length) return result;
+
+	var data = PCA(table);
+
+	if (pca.result == "Scores"){
+		var values = data.scores;
+		result.header = values[0].map(function(item,index){
+			return {
+				metadata:[{
+					dimension:"pc",
+					dimensionLabel:"Principal Component",
+					id:"index",
+					label:("PC"+(index+1))
+				}]
+			}
+		})
+		table.body.forEach(function(row,index){
+			result.body.push({
+				metadata : row.metadata.map(function(item){return item})
+				.concat({
+					dimension:"type",
+					dimensionLabel:"Type",
+					id:"o",
+					label:"Object"
+				}),
+				value : values[index].map(function(item){return item})
+			})
+		})
+
+		table.header.forEach(function(col,index){
+			result.body.push({
+				metadata : col.metadata.map(function(item){return item})
+				.concat({
+					dimension:"type",
+					dimensionLabel:"Type",
+					id:"o",
+					label:"Eigen Vector"
+				}),
+				value : data.eigenVectors[index].map(function(item){return item})
+			})
+		})
+
+		result.body.push({
+				metadata : table.header[0].metadata.map(function(item){return item})
+				.concat({
+					dimension:"type",
+					dimensionLabel:"Type",
+					id:"o",
+					label:"Origin"
+				}),
+				value : data.eigenVectors[0].map(function(item){return 0})
+			})
+
+		if(pca.direction == "Columns") result = exports.transposeTable(result,{transpose:true});
+		return result;
+	}
+
+	if(pca.result == "Eigen Values"){
+		var values = data.eigenValues;
+
+		result.header = values[0].map(function(item,index){
+			return {
+				metadata:[{
+					dimension:"ev",
+					dimensionLabel:"Value",
+					id:"index",
+					label:("EV"+(index+1))
+				}]
+			}
+		})
+
+		result.body.push({
+			metadata:[{
+				dimension:"evs",
+				dimensionLabel:"Eigen Values",
+				id:"evs",
+				label:"Eigen Values"	
+			}],
+			value : values.map(function(row,index){
+				return row[index]
+			})
+		})
+		return result;
+	}
+
+	// if(pca.result == "Eigen Vectors"){
+	// 	var values = data.eigenVectors;
+
+	// }
+
+
+	// return data;
+
+}
+
+exports.clusters = function(table,params){
+	if(!params.cluster) return table;
+	if(!params.cluster.enable) return table;
+	
+	var cluster= params.cluster;
+
+	if(cluster.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+
+	var clusterList = CLUSTER.kmeans(
+							cluster.count, 
+							table.body.map(function (row) { return row.value})
+						);
+
+	 table = exports.transposeTable(table,{transpose:true});
+	 table.body.push(
+	 	{
+	 		metadata:table.body[0].metadata.map(function(item){
+	 			return {
+	 				dimension : item.dimension,
+	 				dimensionLabel : item.dimensionLabel,
+	 				id: item.id,
+	 				label: item.label
+	 			}	
+	 		}),
+	 		value: clusterList.assignments.map(function(item){return item+1})
+	 	}
+	 )
+	 table.body[table.body.length-1].metadata.forEach(function(item,index){
+	 		if(index<table.body[table.body.length-1].metadata.length-1){
+	 			item.id = "";
+	 			item.label = "";
+	 		}else{
+	 			item.id = "cls";
+	 			item.label = "Cluster Index";
+	 		}
+	 })		
+	 table = exports.transposeTable(table,{transpose:true});
+	
+
+	if(cluster.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	return table;
+
+}
+
+
+
 exports.PostProcess = function(table,params){
 	var useColumnMetadata = params.useColumnMetadata || [];
 	var useRowMetadata = params.useRowMetadata || [];
-	var normalize = params.normalized || false;
+	var normalize = params.normalization;
+	var reduce = params.reduce;
 	var precision = params.precision || null;
-	if (normalize) table = exports.Normalize(table,params);
+	var transpose = params.transpose;
+	var order = (params.order) ? params.order : {enable:false}; 
+	// var numbers = (params.numbers) ? params.numbers : {enable:false}; 
+	var aggregation = (params.aggregation) ? params.aggregation : {enable:false};
+	var rank = (params.rank) ? params.rank : {enable:false};
+	var histogram = (params.histogram) ? params.histogram : {enable:false};
+	var correlation = (params.correlation) ? params.correlation : {enable:false};
+	var limit = (params.limit) ? params.limit : {enable:false};
+	var cluster = (params.cluster) ? params.cluster : {enable:false};
+
+	var pca = (params.pca) ? params.pca : {enable:false};
+   
+
+	table = exports.convertMetadata(table,params);
 	
+	if (reduce) table = exports.ReduceNull(table,params);
+	if (normalize) table = exports.Normalize(table,params);
+	if (pca) table = exports.pca(table,params);
+	if (cluster) table = exports.clusters(table,params);
+
+	// if (category) table = exports.categorize(table,params);
+
+	if (histogram) table = exports.histogram(table,params);
+	if (correlation) table = exports.correlationMatrix(table,params);
+
+	if(order.enable) table = exports.orderTable(table,params);
+	
+	if(rank.enable) table = exports.addRanks(table,params);
+
+	if(aggregation.enable) table = exports.addAggregations(table,params);
+	if(transpose) table = exports.transposeTable(table,params) 
+	if(limit) table = exports.limit(table,params) 
+
+	
+
 	if (precision !=null){
 		table.body.forEach(function(currentRow){
 			currentRow.value = currentRow.value.map(function(v){
@@ -256,25 +796,93 @@ exports.PostProcess = function(table,params){
 		})
 	}
 
+
+	
+	table.processed = "PostProcess"
+	table.postProcess = (params) ? params : "undef";
+
 	return table; 		
 	  
 }
 
+
+exports.convertMetadata = function(table,params){
+  var useColumnMetadata = params.useColumnMetadata || [];
+  var useRowMetadata = params.useRowMetadata || [];
+
+  var concatMeta = function(list,usage){
+	var meta_result = {
+		id: "", 
+		label: "", 
+		dimension: "", 
+		dimensionLabel: ""
+	};
+	
+	var data;
+	if( usage == null || usage == undefined || (usage.length && usage.length == 0)){
+		data = list
+	}else{
+		data = list
+				.filter(function(item,index){
+					return usage[index];
+				});
+	}
+	
+	data.forEach(function(item,index){
+
+		meta_result.id += item.id;
+		meta_result.id += (index < data.length-1) ? ", " : "";
+
+		meta_result.label += item.label;
+		meta_result.label += (index < data.length-1) ? ", " : "";
+
+		meta_result.dimension += "Concatenated Meta" 
+		
+		meta_result.dimensionLabel += item.dimensionLabel;
+		meta_result.dimensionLabel += (index < data.length-1) ? ", " : "";
+
+	})
+	return meta_result;
+  }
+
+  var allFalse = function(list){
+  	return list.filter(function(item){return item == false}).length == list.length;
+  }
+
+
+  	if(useRowMetadata.length >0 && !allFalse(useRowMetadata)){
+      table.body.forEach(function(row){
+      	row.metadata = [concatMeta(row.metadata,useRowMetadata)];
+	  });
+	}  
+
+	if(useColumnMetadata.length >0 && !allFalse(useColumnMetadata)){
+      table.header.forEach(function(col){
+      	 	col.metadata = [concatMeta(col.metadata,useColumnMetadata)]
+      });
+    }  
+
+      
+      return table;
+	
+}
+
+
 exports.BarChartSerie = function(table,params){
 	  
-	  var useColumnMetadata = params.useColumnMetadata || [];
-	  var useRowMetadata = params.useRowMetadata || [];
-	  var normalize = params.normalized || false;
-	  var precision = params.precision || null; 		
-	  if (normalize) table = exports.Normalize(table,params)
+	  // var useColumnMetadata = params.useColumnMetadata || [];
+	  // var useRowMetadata = params.useRowMetadata || [];
+	  // var normalize = params.normalized || false;
+	  // var precision = params.precision || null; 		
+	  // if (normalize) table = exports.Normalize(table,params)
 	  
 	  var result = [];
       table.body.forEach(function(serieData){
-      	var currentSerie = {key:concatLabels(serieData.metadata, useRowMetadata), values:[]}
+      	var currentSerie = {key:serieData.metadata[0].label,values:[]}
       	table.header.forEach(function(currentColumn,index){
       		currentSerie.values.push(
       				{
-      					label : concatLabels(currentColumn.metadata,useColumnMetadata),
+      					label : currentColumn.metadata[0].label,
       					value : serieData.value[index]
       				}
       			)
@@ -445,6 +1053,227 @@ exports.PCAResults = function (table,params){
 	}
 	
 	return result;
+}
+
+
+exports.categorize = function(table,params){
+	if(!params.category) return table;
+	if(!params.category.enable) return table;
+	
+	var category= params.category;
+
+	if(category.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+	 
+	var categories; 
+
+	table = exports.transposeTable(table,{transpose:true});
+
+	if( category.index >= 0 ){
+	 	categories = table.body[category.index].value.map(function(item){
+	 		return item
+	 	})
+	 } else {
+	 	categories = table.header.map(function(row){
+	 		return row.metadata[-category.index-1].label
+	 	});
+	} 
+
+
+
+	table = exports.transposeTable(table,{transpose:true});
+	
+
+	var categories = categories
+		.sort(function(a,b){
+		if(!isNaN(new Number(a)) && !isNaN(new Number(b))){
+			return a-b
+		}else{
+			return b<a
+		}
+	})
+	var catList = [];
+	categories.forEach(function(cat){
+		if (catList.indexOf(cat) < 0) catList.push(cat)
+	})	
+
+
+	var b = [];
+	catList.forEach(function(cat){
+		b.push({
+			"category" : cat,
+			"rows" : table.body.filter(function(row){
+				return row.value[category.index] == cat
+			})
+		}) 
+	})
+
+	return b;
+}
+
+
+
+exports.scatter_serie = function(table,params){
+
+
+	var axisXIndex = params.axisX || 0;
+	var xValues = [];
+	var categories = [];
+	var base;
+	var result = [];
+
+	if ( !params.index ) return {};
+	if ( params.index.length == 0 ) return {};
+
+
+	table = exports.ReduceNull(table,{
+		reduce:{
+			enable:true,
+			direction:"Rows",
+			mode:"Has Null"
+		}
+	})
+
+	table = exports.transposeTable(table,{transpose:true});
+
+	
+	if( params.category >= 0 ){
+	 	categories = table.body[params.category].value.map(function(item){
+	 		return item
+	 	})
+	 }
+
+	if( params.category < 0 ){
+	 	categories = table.header.map(function(row){
+	 		return row.metadata[-params.category-1].label
+	 	});
+	}
+
+	var cats = categories
+	// 	.sort(function(a,b){
+	// 	if(!isNaN(new Number(a)) && !isNaN(new Number(b))){
+	// 		return a-b
+	// 	}else{
+	// 		return b<a
+	// 	}
+	// })
+
+	var catList = [];
+	cats.forEach(function(cat){
+		if (catList.indexOf(cat) < 0) catList.push(cat)
+	})	
+
+	
+
+	if( axisXIndex>=0 ){
+	 	xValues = table.body[axisXIndex].value.map(function(item){
+	 		return item
+	 	});
+	 	base = table.body[axisXIndex].metadata.map(function(item){ return item.label}).join(", ")
+	} else {
+	 	xValues = table.header.map(function(row){
+	 		return row.metadata[-axisXIndex-1].label
+	 	});
+	 	base = table.header[0].metadata[-axisXIndex-1].dimensionLabel
+	}
+
+	xValues = xValues.map(function(item){return new Number(item)})
+
+	var isNumbers = true;
+ 	isNumbers= xValues.reduce(function(isNumbers,item){ 
+ 		return isNumbers && (!isNaN(item))
+ 	})
+
+ 	if(!isNumbers){
+ 		base += "(Row Index)";
+ 		xValues = xValues.map(function(item,index){
+ 			return index
+ 		})
+ 	}
+
+ 	if(catList.length == 0){
+ 		catList = [0];
+ 		categories = [];
+ 		table.body[0].value.forEach(function(item){
+ 			categories.push(0)
+ 		})
+ 	}
+ 	
+ 	 table.body.forEach(function(row,index){
+ 	 	if(params.index.indexOf(index) >= 0){
+	 	 	
+ 	 		catList.forEach(function(cat, catIndex){
+ 	 			result.push({
+ 	 				"category" : cat,
+		 	 		"key" : ((params.category) ? ("Category: "+cat+", ") : "")
+		 	 			+row.metadata.map(function(item){ return item.label}).join(", "),
+					"base" : base,
+					"values": row.value.map(function(item,j){
+						return {
+							"category" : categories[j],
+							"x" : xValues[j],
+							"y" : item,
+							"label" : 
+								row.metadata.map(function(item){ return item.label}).concat(
+								table.header[j].metadata.map(function(item){ return item.label})).join(", ") 
+						}
+					})
+	 	 		})	
+ 	 		})
+	 	} 	
+ 	 })
+
+ 	 result.forEach(function(serie){
+ 	 	serie.values = serie.values.filter(function(item){return item.category == serie.category})
+ 	 })
+
+
+	// if( axisXIndex>=0 ){
+	//  	xValues = table.body.map(function(row){
+	//  		return row.value[axisXIndex]
+	//  	});
+	//  	base = table.header[axisXIndex].metadata.map(function(item){ return item.label}).join(", ")
+	// } else {
+	//  	xValues = table.body.map(function(row){
+	//  		return row.metadata[-axisXIndex-1].label
+	//  	});
+	//  	base = table.body[0].metadata[-axisXIndex-1].label
+	// }
+ 	
+ // 	var isNumbers = true;
+ // 	isNumbers= xValues.reduce(function(isNumbers,item){ 
+ // 		return isNumbers && UTIL.isNumber(item)
+ // 	})
+ // 	if(!isNumbers){
+ // 		xValues = xValues.map(function(item,index){return index})
+ // 	}
+
+ // 	var result = [];
+
+ // 	table.header.forEach(function(col,index){
+ // 		if(index != axisXIndex){
+ // 			var values = [];
+ // 			table.body.forEach(function(row,j){
+ // 				if(!UTIL.isUndefined(row.value[j]) && !UTIL.isNull(row.value[j]) && !isNaN(row.value[j]))
+ // 				values.push(
+ // 					{
+ // 						"label": row.metadata.map(function(item){ return item.label}).join(", "),
+ // 						"x": xValues[j],
+ // 						"y": row.value[index],
+ // 						"j":j,
+ // 						"index":index
+ // 					} 
+ // 				)
+ // 			}) 
+ // 			result.push(
+ // 			{
+ // 				"key" : col.metadata.map(function(item){ return item.label}).join(", "),
+ // 				"base" : base,
+ // 				"values": values
+ // 			})
+ // 		}
+ // 	})
+	
+	return result; 
 }	
 
 // Generate Scatter Series
@@ -462,13 +1291,14 @@ exports.PCAResults = function (table,params){
 // precision 			see exports.FormatValues params 	(default null)
 
 exports.ScatterSerie = function (table,params){
+	return exports.scatter_serie(table,params)
 	 
 	 var axisXIndex = params.axisX || 0;
  	 var normalize = params.normalized || false;
 	 var pca = params.pca || false;
 	 var precision = params.precision || null;
-	 var useColumnMetadata = params.useColumnMetadata || [];
-	 var useRowMetadata = params.useRowMetadata || [];
+	 var useColumnMetadata = params.useColumnMetadata || [true];
+	 var useRowMetadata = params.useRowMetadata || [true];
 	  
 
 	 // table = exports.ReduceNull(table,{direction:"Rows",mode:"Has Null"});
@@ -531,6 +1361,8 @@ exports.ScatterSerie = function (table,params){
   return result
 }
 
+
+
 // Generate Statistical Distributions as Scatter Series
 // Parameters:
 // normalized 			true/false 													(default false)
@@ -544,7 +1376,7 @@ exports.Distribution = function(table,params){
 	var beans = params.beans || 5;
 	var normalize = params.normalized || false;
 	var direction = params.direction || "Columns";
-	var precision = params.precision || null;
+	var precision = params.precision || 2;
 	var cumulate = params.cumulate || false;
 	var useColumnMetadata = params.useColumnMetadata || [];
 	var useRowMetadata = params.useRowMetadata || [];
@@ -579,7 +1411,7 @@ exports.Distribution = function(table,params){
 			for (var j = 0; j < beans; j++) {
 			  serie.values.push({
 			    label: (gMin+(j) * step).toFixed(3)+" - "+ (gMin+(j+1) * step).toFixed(3),
-			    x: gMin+(j + 0.5) * step,
+			    x: new Number((gMin+(j + 0.5) * step).toFixed(3)),
 			    y: 0
 			  });
 			}
@@ -608,9 +1440,11 @@ exports.Distribution = function(table,params){
 			var l = values.filter(function(item){return item != null}).length;
 			serie.values = serie.values.map(function (item) {
 				return { 
-					label: /*(precision != null) ? item.label.toFixed(precision) :*/ item.label, 
-					x: (precision != null) ? new Number(item.x.toFixed(precision)) : item.x, 
-					y: (precision != null) ? new Number((item.y/l).toFixed(precision)) : item.y/l};
+					label: /*(precision != null) ? item.label.toFixed(precision) :*/ "Bean: "+item.label, 
+					x: new Number((item.x*1).toFixed(3)), 
+					// y: (precision != null) ? new Number((item.y/l).toFixed(precision)) : item.y/l};
+					y: new Number((item.y/l).toFixed(3))
+				}	
 			});
 		return serie;	
 	}

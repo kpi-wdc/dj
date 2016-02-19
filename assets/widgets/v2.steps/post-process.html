@@ -1,131 +1,331 @@
 <div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
 	<div class="column medium-3 left">
-	<h5>Postprocess Settings</h5>
-		
-		<accordion close-others="false">
-			<accordion-group heading="Data Normalization">
-				<div class="row wizard setting">
-			
-					<label class="wizard left">
-						Enable
-					</label>
+	<h5 class="section-title">Input Data</h5>
+	<div class="row wizard setting">
+		<select ng-model="step.inputQuery" ng-change="step.selectInputData()" class="wizard">
+          <option ng-repeat="item in step.queries">{{item.$title}}</option>
+        </select>
+	</div>
+	<div ng-if="step.wizard.context.table">
+		<div class="row wizard setting">
+			<h5 class="section-title">
+				Settings
+			</h5>
+		</div>	
+
+
 						
-				 	<div class="switch tiny right">
-			          <input type="checkbox"
-			                 id="normCheckbox"
-			                 ng-model="step.postprocessSettings.normalize"
-			           >
-			          <label for="normCheckbox"></label>
-			        </div>
+			<accordion close-others="false">
+				<accordion-group is-open="isopen_0">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.reduce.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.reduce.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Reduce Nulls {{(step.conf.postprocessSettings.reduce.enable && !isopen_0) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/reduce-nulls.html'">
+						</div>
+				</accordion-group>
+				
+				<accordion-group is-open="isopen_200">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.pca.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.pca.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Principal Components {{(step.conf.postprocessSettings.pca.enable && !isopen_200) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/pca.html'">
+						</div>
+				</accordion-group>
 
-			        <div ng-if="step.postprocessSettings.normalize" style="clear:both;">
-				        <label class="wizard left">
-				        	Mode:
-				        </label>
-				        <select ng-model="step.postprocessSettings.mode" class="wizard">
-				          <option>Range to [0,1]</option>
-				          <option>Standartization</option>
-				          <option>Logistic</option>
-				        </select>
-						<br/>
-				        <label class="wizard left"> 
-				        	Direction:
-				        </label>
-				        <select ng-model="step.postprocessSettings.direction" class="wizard">
-				          <option>Rows</option>
-				          <option>Columns</option>
-				        </select>
-			        </div>
-		    	</div>
-	    	</accordion-group>	    
-			
-			<accordion-group heading="Data Precision">
-				<div class="row wizard setting">
-					<input type="number" min="2" max="10" ng-model="step.postprocessSettings.precision" class="wizard">
-		        </div>
-		    </accordion-group>
+				<accordion-group is-open="isopen_100">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.cluster.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.cluster.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Clusters {{(step.conf.postprocessSettings.cluster.enable && !isopen_100) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/cluster.html'">
+						</div>
+				</accordion-group>
 
-		    <accordion-group heading="Include Column Metadata">
-		        <div class="row wizard setting">
-					<div ng-repeat="item in step.table.header[0].metadata track by $index" style="clear:both;">
-						<label class="wizard left">
-							{{item.dimensionLabel}}
-						</label>
-						
-					 	<div class="switch tiny right" style="margin:0;">
-				          <input type="checkbox"
-				                 id="{{'hmeta'+$index}}"
-				                 ng-model="step.postprocessSettings.useColumnMetadata[$index]"
-				                 ng-disabled = "(step.getSelectedItemsCount(step.postprocessSettings.useColumnMetadata) <= 1)&&
-				                 (step.postprocessSettings.useColumnMetadata[$index] == true)"
-				           >
-				          <label for="{{'hmeta'+$index}}"></label>
-				        </div>
+				
+				<accordion-group is-open="isopen_2">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.histogram.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.histogram.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Histogram {{(step.conf.postprocessSettings.histogram.enable && !isopen_2) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/histogram.html'">
+						</div>
+				</accordion-group>
 
-					</div>
-		        </div>
-			</accordion-group>
+				<accordion-group is-open="isopen_3">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.correlation.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.correlation.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Correlation Matrix {{(step.conf.postprocessSettings.correlation.enable
+						 		&& !isopen_3) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/correlation-matrix.html'">
+						</div>
+				</accordion-group>
 
-			<accordion-group heading="Include Row Metadata">
-				<div class="row wizard setting">
-					<div ng-repeat="item in step.table.body[0].metadata track by $index" style="clear:both;">
-						<label class="wizard left">
-							{{item.dimensionLabel}}
-						</label>
-						
-					 	<div class="switch tiny right" style="margin:0;">
-				          <input type="checkbox"
-				                 id="{{'rmeta'+$index}}"
-				                 ng-model="step.postprocessSettings.useRowMetadata[$index]"
-				                 ng-disabled = "(step.getSelectedItemsCount(step.postprocessSettings.useRowMetadata) <= 1)&&
-				                 (step.postprocessSettings.useRowMetadata[$index] == true)"
-				           >
-				          <label for="{{'rmeta'+$index}}"></label>
-				        </div>
-						
-					</div>    
-				</div>
-			</accordion-group>
-		</accordion>		
+				<accordion-group is-open="isopen_1">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.normalization.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.normalization.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Normalization {{(step.conf.postprocessSettings.normalization.enable && !isopen_1) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/normalization.html'">
+						</div>
+				</accordion-group>
 
-	    <button class="button radius right toolbar apply" style="margin:0.3rem" ng-click="step.apply()">Apply</button>
-	    
+				<accordion-group is-open="isopen_4">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.aggregation.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.aggregation.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Aggregations {{(step.conf.postprocessSettings.aggregation.enable && !isopen_4) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/aggregation.html'">
+						</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_5">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.rank.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.rank.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Ranks {{(step.conf.postprocessSettings.rank.enable && !isopen_5) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/rank.html'">
+						</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_6">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.precision" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.precision)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Number Format {{(step.conf.postprocessSettings.precision && !isopen_6) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div class="row wizard setting">
+							<input type="number" min="0" max="10" ng-model="step.conf.postprocessSettings.precision" class="wizard">
+			         	</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_7">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.transpose" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.transpose)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Transpose {{(step.conf.postprocessSettings.transpose && !isopen_7) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div class="row wizard setting">
+							<label class="wizard left">
+								Enable
+							</label>
+							<div class="switch tiny right" style="margin:0;">
+					          <input type="checkbox"
+					                 id="transposeCheckBox"
+					                 ng-model="step.conf.postprocessSettings.transpose"
+					                
+					           >
+					          <label for="transposeCheckBox"></label>
+					        </div>
+						</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_8">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.order.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.order.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Order {{(step.conf.postprocessSettings.order.enable && !isopen_8) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/order.html'">
+						</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_9">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.useRowMetadata.length>0" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.useRowMetadata.length>0)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Row Metadata {{((step.conf.postprocessSettings.useRowMetadata.length>0) && !isopen_9) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/row-metadata.html'">
+						</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_10">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.useColumnMetadata.lenght>0" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.useColumnMetadata.lenght>0)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Column Metadata {{((step.conf.postprocessSettings.useColumnMetadata.lenght>0) && !isopen_10) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/column-metadata.html'">
+						</div>
+				</accordion-group>
+
+				<accordion-group is-open="isopen_11">
+						 <accordion-heading>
+						 	<i ng-if="step.conf.postprocessSettings.limit.enable" 
+						 	 	class="fi-check">
+						 	</i> 
+						 	<span
+						 		style="{{(step.conf.postprocessSettings.limit.enable)?
+						 		'font-weight:bold;font-size: medium;font-stretch: ultra-condensed;':
+						 		'font-weight:normal'}}"
+						 	>
+						 		Limit Row Count {{(step.conf.postprocessSettings.limit.enable && !isopen_11) ? '...':''}}
+						 	</span>
+						 </accordion-heading>
+						 <div  
+						 	ng-include="'./widgets/v2.steps/partials/post-process/limit-row-count.html'">
+						</div>
+				</accordion-group>
+
+
+			</accordion>		
+
+		   
+		    
+		</div>
+	</div>
+	<div class="column medium-9 left" ng-if="step.wizard.context.table">
+	<h5 class="section-title">{{step.inputQuery}}</h5>
+
+	<div class="row wizard setting" style="    overflow: auto;
+    background: #ffffff;
+    max-height: 20em;
+    border: 0.1rem solid #ddd;">
+		<center>
+		<img ng-if="!step.wizard.context.table" src="./img/ajax-loader.gif"/>
+		<wdc-table data="{table:step.wizard.context.table, decoration:{}}" ng-if="step.wizard.context.table" style="padding:1em;"/>
+		</center>
+	</div>
+	
+
+	<div  class="row setting wizard">
+		<button 
+				ng-if="step.wizard.context.table"
+				ng-click="step.apply()"
+	            class="button radius tiny left"
+                style="margin:0 2em;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Apply Preparation Settings
+       </button>
+		<button ng-if="step.wizard.context.postprocessedTable"
+				ng-click="step.addQuery()"
+	            class="button radius tiny right success"
+                style="margin:0 2em;padding-top:0.2rem; padding-bottom:0.2rem;">
+              Add to Data Query Manager
+       </button>
 	</div>
 
-	<div class="column medium-9 left">
-	<h5>Query result</h5>
-
-	{{step.postprocessSettings}}
-
-	<div class="row wizard setting" style="overflow:auto; background:#ffffff;">
-		<img ng-if="!step.table" src="./img/ajax-loader.gif"/>
-		<wdc-table table="step.table" ng-if="step.table"/>
-		<!-- <table ng-if="step.response">
-			<tr ng-repeat="hmetaIndex in step.range(0,step.response.data.header[0].metadata.length-1)">
-				<th ng-if="hmetaIndex == 0"
-					colspan="{{step.response.data.body[0].metadata.length}}" 
-					rowspan="{{step.response.data.header[0].metadata.length}}"
-					style="text-align:center">
-					Row Metadata
-				</th>
-				<th ng-repeat="hcol in step.response.data.header"
-					style="text-align:center"
-					ng-class = "{selected : step.postprocessSettings.useColumnMetadata[hmetaIndex] == true}">
-					{{hcol.metadata[hmetaIndex].label}}
-				</th>
-			</tr>
-			<tr ng-repeat="brow in step.response.data.body">
-				<th ng-repeat="rowMeta in brow.metadata track by $index"
-						style="text-align:center"
-						ng-class = "{selected : step.postprocessSettings.useRowMetadata[$index] == true}">
-					{{rowMeta.label}}	
-				</th>
-				<td ng-repeat="data in brow.value track by $index"
-						style="text-align:right">
-					{{ step.getValue(brow.value[$index]) }}
-				</td>
-			</tr>
-		</table> -->
+	<div class="row wizard setting" style="    overflow: auto;
+    background: #ffffff;
+    max-height: 20em;
+    border: 0.1rem solid #ddd;">
+    <center>
+		<img ng-if="!step.wizard.context.postprocessedTable" src="./img/ajax-loader.gif"/>
+		<wdc-table data="{table:step.wizard.context.postprocessedTable, decoration:{}}" ng-if="step.wizard.context.postprocessedTable" style="padding:1em;"/>
+	</center>	
 	</div>
+	
 	</div>
 </div>

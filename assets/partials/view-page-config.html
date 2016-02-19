@@ -9,6 +9,8 @@
     	margin: 0 0 0 2em;">
   	<img src="{{widget.icon}}" width="24px">
   	{{widget.type}}&nbsp;<b>{{widget.instanceName}}</b>
+  	<div style="margin:0 0 0 1em;" ng-repeat="p in widget track by $index">
+  		<b style="color:#004">{{keys(widget)[$index]}}:</b> {{p}}
   	</div> 
   </div>
   <h5 color="#ddd">

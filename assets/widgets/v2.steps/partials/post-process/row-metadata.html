@@ -1,0 +1,18 @@
+<div class="row wizard setting">
+	<div ng-repeat="item in step.wizard.context.table.body[0].metadata track by $index" style="clear:both;">
+		<label class="wizard left">
+			{{item.dimensionLabel}}
+		</label>
+		
+	 	<div class="switch tiny right" style="margin:0;">
+          <input type="checkbox"
+                 id="{{'rmeta'+$index}}"
+                 ng-model="step.conf.postprocessSettings.useRowMetadata[$index]"
+                
+           >
+          <label for="{{'rmeta'+$index}}"></label>
+        </div>
+		
+	</div>
+	  
+</div>

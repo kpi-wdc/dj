@@ -1,0 +1,35 @@
+<div class="row wizard setting">
+	<div class="row wizard setting">
+		<label class="wizard left">
+			Enable
+		</label>
+		<div class="switch tiny right" style="margin:0;">
+          <input type="checkbox"
+                 id="clusterCheckBox"
+                 ng-model="step.conf.postprocessSettings.cluster.enable"
+           >
+          <label for="clusterCheckBox"></label>
+        </div>
+    </div>
+    <div class="row wizard setting" ng-if="step.conf.postprocessSettings.cluster.enable">
+     	<label class="wizard left"> 
+        	Direction:
+        </label>
+        <select ng-model="step.conf.postprocessSettings.cluster.direction" 
+        		ng-change="step.selectRankDirection()"
+        		class="wizard">
+          <option>Rows</option>
+          <option>Columns</option>
+        </select>
+        <br/>
+
+        <label class="wizard left"> 
+        	Count:
+        </label>
+        <div class="row wizard setting">
+			<input type="number" min="0" max="10" ng-model="step.conf.postprocessSettings.cluster.count" class="wizard">
+     	</div>
+        
+
+     </div>
+</div>

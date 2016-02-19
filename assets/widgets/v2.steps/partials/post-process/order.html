@@ -1,0 +1,46 @@
+	<div class="row wizard setting">
+					<label class="wizard left">
+						Enable
+					</label>
+					<div class="switch tiny right" style="margin:0;">
+			          <input type="checkbox"
+			                 id="orderCheckBox"
+			                 ng-model="step.conf.postprocessSettings.order.enable"
+			                
+			           >
+			          <label for="orderCheckBox"></label>
+			        </div>
+			        <div ng-if="step.conf.postprocessSettings.order.enable">
+			            <label class="wizard left"> 
+				        	Direction:
+				        </label>
+				        <select ng-model="step.conf.postprocessSettings.order.direction" 
+				        		ng-change="step.selectOrderDirection()"	
+				        		class="wizard">
+				          <option>Rows</option>
+				          <option>Columns</option>
+				        </select>
+						<br/>
+						
+						<label class="wizard left"> 
+				        	Order:
+				        </label>
+				        <select ng-model="step.conf.postprocessSettings.order.asc" class="wizard">
+				          <option>A-Z</option>
+				          <option>Z-A</option>
+				        </select>
+						<br/>
+
+						<label class="wizard left"> 
+				        	{{(step.conf.postprocessSettings.order.direction == "Rows")?"Criteria Row": "Criteria Column"}}
+				        </label>
+
+				         <select ng-model="step.criteriaLabel" 
+				        		ng-change="step.selectOrderCriteria()"	
+				        		class="wizard">
+				          <option ng-repeat="c in step.orderCriteriaList">{{c.label}}</option>
+				        </select>
+
+
+					</div>    
+				</div>

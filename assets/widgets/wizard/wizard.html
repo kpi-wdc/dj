@@ -1,4 +1,7 @@
-<h4>{{wizard.title}}</h4>
+<h3 class="wizard-title">
+  <img src="{{wizard.icon}}" ng-if="wizard.icon" width="48px"/>
+  {{wizard.title}}
+ </h3>
 
 <div class="border" style="padding: 0.2rem">
   <div class="toolbar left">Steps:</div>
@@ -14,20 +17,19 @@
 
 <h5 class="wizard note">{{wizard.steps[wizard.currentStepIndex].description}}</h5>
 
-<div id="stepsHolder" class="border" 
+<div id="stepsHolder" class="" 
 	style="	margin-top:0; 
 			margin-bottom:0; 
 			padding-bottom:0;
 			padding-top:0; 
-			
-			style="font-size:small;"
+			style=font-size:small;"
 >
 	<div
 		ng-repeat = "step in wizard.steps track by $index"
 		ng-show = "step.active"
 	>
 		
-		<div  class="row" ng-include="step.html"/>
+		<div  ng-if=" step.activationCount > 0" class="row" ng-include="step.html"/>
 	</div>
 </div> 
 

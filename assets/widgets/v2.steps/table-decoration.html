@@ -1,0 +1,177 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div class="column medium-3 left">
+	<h5 class="section-title">Decoration</h5>
+		
+	<accordion class="wizard">		
+		<!-- <titles-control></titles-control> -->
+
+		<accordion close-others="false">
+			<accordion-group heading="Input Data">
+				<div class="row wizard setting">
+					<select ng-model="step.inputQuery" ng-change="step.selectInputData()" class="wizard">
+			          <option ng-repeat="item in step.queries">{{item.$title}}</option>
+			        </select>
+				</div>
+			</accordion-group>
+		</accordion>		
+		
+		<accordion-group heading = "Titles">
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Title
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.title">
+			    
+			    <label class="wizard left">
+					Subtitle
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.subtitle">
+			    
+			    <label class="wizard left">
+					Caption
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.caption">
+				 <!-- <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button> -->
+			</div>
+		</accordion-group>
+
+		<accordion-group heading = "Table Height">
+		    <div class="row wizard setting">
+		    	<label class="wizard left" style="clear:left">
+					Use Scroll
+				</label>
+				
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="scrollCheckbox"
+		                 ng-model="step.conf.decoration.scroll"
+		           >
+		          <label for="scrollCheckbox"></label>
+		        </div>
+
+		        <label class="wizard left" style="clear:left">
+					Height
+				</label>
+				<input type="number" ng-model="step.conf.decoration.height" class="wizard">
+        		<!-- <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button> -->
+        	</div>
+        </accordion-group>
+        
+        <accordion-group heading="Palette">	
+
+			<div class="row wizard setting">
+				
+				<label class="wizard left" style="clear:left">
+					Use Colors
+				</label>
+				
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="colorizeCheckbox"
+		                 ng-model="step.conf.decoration.colorize"
+		           >
+		          <label for="colorizeCheckbox"></label>
+		        </div>
+
+		        <label class="wizard left"  style="clear:left"> 
+				        	Ranges in:
+				</label>
+		        <select ng-model="step.conf.decoration.direction" class="wizard">
+		          <option>Rows</option>
+		          <option>Columns</option>
+		          <option>All</option>
+		        </select>
+
+		        <label class="wizard left"> 
+				        	Color opacity:
+				</label>
+		        <div class="row wizard setting">
+					<input type="number" min="0" max="1" step="0.1" ng-model="step.conf.decoration.opacity" class="wizard">
+		        </div>
+
+				<a class="second dropdown tiny left"
+					ng-if="step.conf.decoration.color" 
+					dropdown-toggle="#dropdown-example-3" 
+					style="margin: 0 0 0 0.3rem;
+					padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+				>
+              		<div 	class="button tiny left"
+              				ng-repeat="color in  step.conf.decoration.color"
+                   			style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
+                		&nbsp;
+              		</div>
+            	</a>
+            	<a class="second dropdown tiny left"
+					ng-if="!step.conf.decoration.color" 
+					dropdown-toggle="#dropdown-example-3" 
+					style="margin: 0 0 0 0.3rem;
+					padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+				>
+              		Select Palette
+            	</a>
+
+            	
+            	<fast-palette-peacker 
+            		dest="step.conf.decoration" 
+            		setter="step.conf.decoration.setColor" 
+            		watch-depth="reference">
+            	</fast-palette-peacker>
+
+            	
+				<label class="wizard left" style="clear:left">
+					Reverse
+				</label>
+				
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="reversePaletteCheckbox"
+		                 ng-model="step.conf.decoration.reversePalette"
+		                 ng-change = "step.reversePalette()"
+		           >
+		          <label for="reversePaletteCheckbox"></label>
+		        </div>
+ 				
+ 				<!-- <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button> -->
+
+        	</div>
+        </accordion-group>
+        </accordion>	
+	</div>
+
+	<div class="column medium-9 left">
+	<h5 class="section-title">
+		<img src="./widgets/v2.query-manager/preparation.png" style="width: 32px;margin: 0 0.3em;"/>
+		{{step.inputQuery}}
+	</h5>
+	<div class="row wizard setting" style="    overflow: auto;
+    background: #ffffff;
+    max-height: 15em;
+    border: 0.1rem solid #ddd;">
+		<wdc-table data="{table:step.wizard.context.postprocessedTable,decoration:conf.decoration}"></wdc-table>
+	</div>
+	
+	<h5 class="section-title">Table Preview</h5>
+	<div class="row wizard setting" style="overflow:auto;background:#ffffff">
+		<div class="border" style="width:{{step.conf.decoration.width}}px;background:#ffffff;">
+			
+		    <div class="table caption" ng-if="step.conf.decoration.caption">{{step.conf.decoration.caption}}</div>
+		    
+		    <div class="table title" ng-if="step.conf.decoration.title">{{step.conf.decoration.title}}</div>
+		    
+		    <center>
+			    <div ng-if="step.table" style="
+			    	overflow:auto; 
+			    	margin:0 0 0.5em 0;
+			    	{{(step.conf.decoration.scroll) ? 'height:'+step.conf.decoration.height+'px; border:0.1rem solid #ddd;':''}}"
+			    >
+			      <wdc-table data="{table:step.table, decoration:step.conf.decoration}"></wdc-table>
+			    </div>
+		    <center>
+		    
+
+		    <div class="table subtitle" ng-if="step.conf.decoration.subtitle">{{step.conf.decoration.subtitle}}</div>
+		
+		</div>
+	</div>
+	</div>
+</div>

@@ -18,8 +18,9 @@
     "description": "Two-column 3:9 layout",
     "holders" : [
       "column",
-      "left",
-      "right"
+      "topleft",
+      "topright",
+      "bottom"
     ]
   },
 
@@ -27,8 +28,9 @@
     "description": "Two-column 9:3 layout",
     "holders" : [
       "column",
-      "left",
-      "right"
+      "topleft",
+      "topright",
+      "bottom"
     ]
   },
 

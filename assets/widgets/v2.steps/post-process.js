@@ -1,173 +1,246 @@
 import angular from 'angular';
-import 'widgets/data-util/dps';
 import 'custom-react-directives';
 
 
-var m = angular.module("app.widgets.v2.steps.post-process",["app.widgets.data-util.dps",'custom-react-directives']);
+var m = angular.module("app.widgets.v2.steps.post-process",['custom-react-directives']);
 
-m.factory("PostProcess",["$http","Requestor", function($http, Requestor){
+m.factory("PostProcess",["$http", "dialog", "alert", function($http, dialog, alert){
 	return {
-		
-		title : "Postprocessing",
+		id: "PostProcess",
+
+		title : "Data Preparation",
 
 		
-		description : "View data and setup data postprocessing",
+		description : "Select input data and set preparation settings",
         
     html : "./widgets/v2.steps/post-process.html",
 
+    defaultSettings : {
+      useColumnMetadata : [],  
+      useRowMetadata : [],
+      normalization : {
+        "enable" : false,
+        "mode" : "Range to [0,1]",
+        "direction" : "Columns"
+      },
+      reduce : {
+        "enable" : false,
+        "mode" : "Has Null",
+        "direction" : "Columns"
+      },
+      transpose:false,
+      
+      order:{
+        enable    :false,
+        direction :"Rows",
+        asc       :"A-Z",
+        index     : 0
+      },
+
+      cluster:{
+        enable    :false,
+        direction :"Rows",
+        count     : 2
+      },
+      
+      aggregation : {
+        "enable" : false,
+        "direction" : "Rows",
+        "data" : []
+      },
+
+      rank : {
+        "enable" : false,
+        "direction" : "Rows",
+        "asc":"A-Z",
+        "indexes" : []
+      },
+
+      limit : {
+        "enable" : false,
+        "start" : 1,
+        "length":10
+      },
+
+      histogram : {
+        "enable" : false,
+        "direction" : "Rows",
+        "cumulate" : false,
+        "beans" : 5
+      },
+
+      correlation : {
+        "enable" : false,
+        "direction" : "Rows"
+      },
+
+      pca : {
+        "enable" : false,
+        "direction" : "Rows",
+        "result" : "Scores"
+      }              
+
+    },
+
+    avaibleAggregations:[
+      {v:"min",enable:false},
+      {v:"max",enable:false},
+      {v:"avg",enable:false},
+      {v:"std",enable:false},
+      {v:"sum",enable:false}
+    ],
+
+    selectAggregation: function(){
+      this.conf.postprocessSettings.aggregation.data = this.avaibleAggregations
+      .filter((item) => item.enable)
+      .map((item) => item.v);
+    },
+
     onStartWizard: function(wizard){
       this.wizard = wizard;
-      this.postprocessSettings = wizard.conf.postprocessSettings;
-      if(angular.isUndefined(this.postprocessSettings)){
-        this._initSettings();
-        this.wizard.process(this);
-        return;
+      this.queries = wizard.parentScope.getQueries();
+      this.inputQuery = undefined;
+      this.conf = {
+        postprocessSettings: this.defaultSettings,
       }
-      this.wizard.complete(this);
     },
 
-    onFinishWizard: function(wizard){
-      wizard.conf.postprocessSettings = this.postprocessSettings;
-      wizard.conf.postprocess =  {
-                "data_id": this.queryResultId,
-                "params": 
-                {
-                  "normalized" : this.postprocessSettings.normalize, 
-                  "mode" : this.postprocessSettings.mode,
-                  "direction" : this.postprocessSettings.direction,
-                  "precision" : this.postprocessSettings.precision
-                },
-                "proc_name": "normalizer",
-                "response_type": "data"
-              };
-    },
-
-    range: function(min,max){
-      var result = [];
-      for(var i=min; i<=max; i++) result.push(i)
-  
-      return result;  
-    },
-
-    getValue: function(value){
-      return (value == null) ? "-" : value;
-    },
-
-    enable: function(wizard){
-      // console.log("Enable Postprocess")
-    },
-
-    disable: function(wizard){
-      wizard.postprocessSettings = undefined;
-    },
-
-    _initSettings: function(){
-      // console.log("BEFORE INIT", this.wizard.postprocessSettings)
-      this.postprocessSettings = {};
-      this.postprocessSettings.normalize = false;
-      this.postprocessSettings.direction = "Columns";
-      this.postprocessSettings.mode = "Range to [0,1]";
-      this.postprocessSettings.precision = 2;
-      this.postprocessSettings.useColumnMetadata = [];
-      this.postprocessSettings.useRowMetadata = [];
+    selectInputData: function(){
       
-      // console.log("INIT", this.postprocessSettings)
-     },
+      this.avaibleAggregations.forEach((item) =>{item.enable = false});
+
+      let thos = this;
+      let iq = this.queries.filter((item) => item.$title == thos.inputQuery)[0];
+      
+      this.conf.postprocessSettings =  angular.copy(this.defaultSettings);
+      this.conf.query = iq.context; 
+      $http
+        .get("./api/data/process/"+iq.context.queryResultId)
+        .success(function (resp) {
+            thos.wizard.context.table = resp.value;
+            thos.conf.inputQueryResultId = resp.id;
+            thos.makeLabelList(thos.wizard.context.table);
+            thos.selectRankDirection(thos.wizard.context.table);
+            thos.apply();
+        })
+    },
 
     activate : function(wizard){
-      this.wizard.process(this)
-      this.query = wizard.conf.query;
-      this.table = wizard.conf.table;
-      this.postprocessSettings = wizard.conf.postprocessSettings;
-
-      if(angular.isUndefined(this.postprocessSettings)){
-        this._initSettings();
-        this.wizard.process(this);
-      }
-      
-      var thos = this;
-      // console.log(this.query);
-      this.response = undefined;
-
-      // new Requestor()
-      //   .push("getQueryResult",function(requestor,value){
-      //       $http
-      //         .post("./api/data/process/",thos.query)
-      //         .success(function (data) {
-      //             // thos.response = data;
-      //             thos.queryResultId = data.data_id;
-      //             // thos.postprocessSettings.useColumnMetadata = data.data.header[0].metadata.map(function(item){return true});
-      //             // thos.postprocessSettings.useRowMetadata = data.data.body[0].metadata.map(function(item){return true});
-      //             requestor.resolve(thos.queryResultId)
-      //         })
-      //   })
-      //   .push("postProcess",function(requestor,data_id){
-      //       $http
-      //       .post("./api/data/process/",
-      //         {
-      //           "data_id": data_id,
-      //           "params": 
-      //           {
-      //             "normalized" : thos.postprocessSettings.normalize || false, 
-      //             "mode" : thos.postprocessSettings.mode,
-      //             "direction" : thos.postprocessSettings.direction,
-      //             "precision" : thos.postprocessSettings.precision
-      //           },
-      //           "proc_name": "post-process",
-      //           "response_type": "data"
-      //         }    
-      //       )
-      //       .success(function (data) {
-      //           thos.response = data;
-      //           thos.postprocessDataId = data.data_id;
-      //           thos.postprocessSettings.useColumnMetadata = (thos.postprocessSettings.useColumnMetadata.length == 0)?
-      //             thos.response.data.header[0].metadata.map(function(item){return true}) : thos.postprocessSettings.useColumnMetadata;
-      //           thos.postprocessSettings.useRowMetadata = (thos.postprocessSettings.useRowMetadata.length == 0)?
-      //             thos.response.data.body[0].metadata.map(function(item){return true}):thos.postprocessSettings.useRowMetadata;
-      //           requestor.resolve()
-      //     })
-      //   })
-      //   .execute(null,function(data){
-      //     thos.wizard.complete(thos);
-      //   })      
-        
+      this.queries = wizard.parentScope.getQueries();
     },
 
     getSelectedItemsCount:function(collection){
        return collection.filter(function (item){return item == true}).length;
     }, 
 
-    apply : function (){
-      this.wizard.process(this)
-      // console.log(this.postprocessSettings)
-
-      if (this.postprocessSettings.normalize == true){
-        this.response = undefined;
-        var thos = this;
-        $http
-            .post("./api/data/process/",
-              {
-                "data_id": this.queryResultId,
-                "params": 
-                {
-                  "normalized" : this.postprocessSettings.normalize || false, 
-                  "mode" : this.postprocessSettings.mode,
-                  "direction" : this.postprocessSettings.direction,
-                  "precision" : this.postprocessSettings.precision
-                },
-                "proc_name": "post-process",
-                "response_type": "data"
-              }    
-            )
-            .success(function (data) {
-                thos.response = data;
-                thos.postprocessDataId = data.data_id;
-                thos.wizard.complete(thos);
-          })
+    addQuery: function(){
+      let q = this.wizard.parentScope.getQuery(this.conf);
+      if(!q){
+        let thos = this;
+        dialog({
+            title:"Enter Data Preparation Title",
+            fields:{
+              title:{title:"Title",value:"",editable:true,required:true}
+            } 
+        })
+        .then(function(form){
+           thos.wizard.parentScope.addPreparation(thos.conf,form.fields.title.value);
+        })
       }else{
-        this.activate(this.wizard);
-      }      
-    }
+        alert.message(["Doublicate of Preparation",("This preparation exists with title: "+q.$title)]);
+      }
+    },
 
+    
+    makeRowLabelList: function(table){
+      let metas = table.header[0].metadata.map((m,index) => {
+          return { "label" : m.dimensionLabel, "index": (-index-1)}
+      })
+
+      let rows = table.body.map((item,index) => {
+        return { "label" : item.metadata.map((m) => m.label).join("."), "index" : index }
+      })
+
+      this.rowLabelList = metas.concat(rows)
+
+    },
+
+    makeColLabelList: function(table){
+      
+      let metas = table.body[0].metadata.map((m,index) => {
+         return { "label" : m.dimensionLabel, "index": (-index-1)}
+      })
+
+      let cols = table.header.map((item,index) => {
+        return { "label" : item.metadata.map((m) => m.label).join("."), "index" : index }
+      })
+
+      this.colLabelList = metas.concat(cols)
+
+    },
+
+    makeLabelList: function(table){
+      this.makeRowLabelList(table);
+      this.makeColLabelList(table);
+      this.selectOrderDirection()
+    },
+
+    selectOrderDirection: function(){
+      this.criteriaLabel = undefined;
+      if(this.conf.postprocessSettings.order.direction == "Rows"){
+        this.orderCriteriaList = this.colLabelList
+      }else{
+        this.orderCriteriaList = this.rowLabelList
+      }
+    },
+
+    selectOrderCriteria: function(){
+      let thos = this;
+      this.conf.postprocessSettings.order.index = this.orderCriteriaList
+        .filter((item) => thos.criteriaLabel == item.label)[0].index;
+    },
+
+    selectRankDirection: function(){
+      let table = this.wizard.context.table;
+      if(this.conf.postprocessSettings.rank.direction == "Rows"){
+       
+        this.rankAlt =  table.body.map((item,index) => {
+          return { "label" : item.metadata.map((m) => m.label).join("."), "index" : index, enable:false }
+        })
+ 
+      }else{
+        this.rankAlt = table.header.map((item,index) => {
+          return { "label" : item.metadata.map((m) => m.label).join("."), "index" : index, enable:false}
+        })        
+      }
+
+    },
+
+    selectRankAlt: function(){
+      this.conf.postprocessSettings.rank.indexes = this.rankAlt
+        .filter((item) => item.enable == true)
+        .map((item) => item.index);
+    },
+
+
+    apply : function (){
+      var thos = this;
+      thos.wizard.context.postprocessedTable = undefined;
+      $http
+          .post("./api/data/process/",
+            {
+              "cache": false,
+              "data_id": this.conf.inputQueryResultId,
+              "params": this.conf.postprocessSettings,
+              "proc_name": "post-process",
+              "response_type": "data"
+            }    
+          )
+          .success(function (resp) {
+              thos.conf.queryResultId = resp.data_id;
+              thos.wizard.context.postprocessedTable = resp.data;
+              
+          })
+    }
 	}
 }]);	

@@ -9,7 +9,7 @@ System.config({
   }
 });
 
-
+var Palettes;
 define(['angular', 'colors'], function (angular, colorbrewer) {
   const result = [];
   for (var i in colorbrewer) {
@@ -17,6 +17,6 @@ define(['angular', 'colors'], function (angular, colorbrewer) {
       result.push(colorbrewer[i][j]);
     }
   }
-
+  Palettes =  result;
   angular.module('app.widgets.palettes', []).constant('Palettes', result);
 });

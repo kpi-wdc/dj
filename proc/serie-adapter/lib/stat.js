@@ -1,4 +1,14 @@
 
+function sum(a) {
+  var n = a.length;
+  var s = a[0];
+  for (var i = 1; i < n; ++i) {
+      s += a[i];
+  }
+  return s;
+};
+
+
 function min(a) {
   var n = a.length;
   var s = a[0];
@@ -643,7 +653,7 @@ function lstsq(m, n, A, b) {
 
 
 
-
+exports.sum = sum;
 exports.min = min;
 exports.max = max;
 exports.range = range;
@@ -712,8 +722,12 @@ function logNormalize(data) {
   })
 };
 
-
+function rank(data){
+  var sorted = _clear(data).slice().sort(function(a,b){return b-a})
+  return data.slice().map(function(v){ return (v == null) ? null : sorted.indexOf(v)+1 });
+}
 
 exports.normalize = normalize;
 exports.standardize = standardize;
-exports.logNormalize = logNormalize; 
+exports.logNormalize = logNormalize;
+exports.rank = rank; 

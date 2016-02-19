@@ -1,0 +1,70 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div class="column medium-3 left">
+	<h5 class="section-title">Decoration</h5>
+		
+	<accordion class="wizard">		
+		<!-- <titles-control></titles-control> -->
+
+
+		<accordion close-others="false">
+			<accordion-group heading="Input Data">
+				<div class="row wizard setting">
+					<select ng-model="step.inputQuery" ng-change="step.selectInputData()" class="wizard">
+			          <option ng-repeat="item in step.queries">{{item.$title}}</option>
+			        </select>
+				</div>
+			</accordion-group>
+		</accordion>	
+
+		<accordion-group heading = "Titles">
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Title
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.title">
+			    
+			    <label class="wizard left">
+					Subtitle
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.subtitle">
+			    
+			    <label class="wizard left">
+					Caption
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.caption">
+				 <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+			</div>
+		</accordion-group>
+			
+
+		<accordion-group heading = "Chart Height">
+		    <div class="row wizard setting">
+				<input type="number" ng-model="step.conf.decoration.height" class="wizard">
+        		<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+        	</div>
+        </accordion-group>
+        
+        </accordion>	
+	</div>
+
+	<div class="column medium-9 left">
+	<h5 class="section-title">
+		<img src="./widgets/v2.query-manager/preparation.png" style="width: 32px;margin: 0 0.3em;"/>
+		{{step.inputQuery}}
+	</h5>
+	<div class="row wizard setting" style="    overflow: auto;
+    background: #ffffff;
+    max-height: 15em;
+    border: 0.1rem solid #ddd;">
+		<wdc-table data="{table:step.wizard.context.postprocessedTable, decoration:{}}"></wdc-table>
+	</div>
+	
+	<h5 class="section-title">Chart Preview</h5>
+	<div class="row wizard setting" style="overflow:auto;background:#ffffff">
+		<img ng-if="!step.data || !step.options" src="./img/ajax-loader.gif"/>
+		<div class="border" style="width:{{step.conf.decoration.width}}px;background:#ffffff;">
+			<div nvd3 settings="step.settings"></div>
+		</div>
+	</div>
+	</div>
+</div>
