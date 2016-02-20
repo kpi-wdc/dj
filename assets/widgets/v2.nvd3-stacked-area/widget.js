@@ -19,15 +19,15 @@ m.controller('Nvd3StackedAreaChartCtrlV2', function ($scope, NVD3WidgetV2, Stack
         {
           wizard: StackedAreaChartWizard,
           decorationAdapter: StackedAreaAdapter,
-          optionsURL: "/widgets/v2.nvd3-stacked-area/options.json",
-          serieAdapter: {
-            getX: function (d) {
-              return d.x
-            },
-            getY: function (d) {
-              return d.y
-            }
-          }
+          optionsURL: "/widgets/v2.nvd3-stacked-area/options.json"//,
+          // serieAdapter: {
+          //   getX: function (d) {
+          //     return d.x
+          //   },
+          //   getY: function (d) {
+          //     return d.y
+          //   }
+          // }
         }
   );
 });

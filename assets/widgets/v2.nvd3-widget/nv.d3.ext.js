@@ -212,6 +212,7 @@ d3.geo.tile = function () {
         getLabel = undefined //function(d) {return (d.label) ? d.label : ''}
     ,
         getSize = function (d) {
+          // console.log("GETsIZE", d.size)
       return d.size || 1;
     } // accessor to get the point size
     ,
@@ -260,6 +261,7 @@ d3.geo.tile = function () {
         singlePoint = false,
         dispatch = d3.dispatch("elementClick", "elementMouseover", "elementMouseout"),
         useVoronoi = true,
+        showPoints = true,
         showRadiusVector = true;
 
     //============================================================
@@ -363,7 +365,9 @@ d3.geo.tile = function () {
 
         defsEnter.append("clipPath").attr("id", "nv-edge-clip-" + id).append("rect");
 
-        wrap.select("#nv-edge-clip-" + id + " rect").attr("width", availableWidth).attr("height", availableHeight > 0 ? availableHeight : 0);
+        wrap.select("#nv-edge-clip-" + id + " rect")
+          .attr("width", availableWidth)
+          .attr("height", availableHeight > 0 ? availableHeight : 0);
 
         g.attr("clip-path", clipEdge ? "url(#nv-edge-clip-" + id + ")" : "");
 
@@ -578,19 +582,20 @@ d3.geo.tile = function () {
               return d.color;
             }).style("stroke-width", "1px").style("opacity", 0.3);
           }
-
-          points.enter().append("circle").style("fill", function (d, i) {
-            return d.color;
-          }).style("stroke", function (d, i) {
-            return d.color;
-          }).attr("cx", function (d, i) {
-            return nv.utils.NaNtoZero(x0(getX(d, i)));
-          }).attr("cy", function (d, i) {
-            return nv.utils.NaNtoZero(y0(getY(d, i)));
-          }).attr("r", function (d, i) {
-            return Math.sqrt(z(getSize(d, i)) / Math.PI);
-          });
-          points.exit().remove();
+          if( showPoints ){
+            points.enter().append("circle").style("fill", function (d, i) {
+              return d.color;
+            }).style("stroke", function (d, i) {
+              return d.color;
+            }).attr("cx", function (d, i) {
+              return nv.utils.NaNtoZero(x0(getX(d, i)));
+            }).attr("cy", function (d, i) {
+              return nv.utils.NaNtoZero(y0(getY(d, i)));
+            }).attr("r", function (d, i) {
+              return Math.sqrt(z(getSize(d, i)) / Math.PI);
+            });
+            points.exit().remove();
+          }
           labels.enter().append("text").style("fill", function (d, i) {
             return d.color;
           }).style("text-anchor", "start").attr("x", function (d, i) {
@@ -608,19 +613,23 @@ d3.geo.tile = function () {
           }).attr("cy", function (d, i) {
             return nv.utils.NaNtoZero(y(getY(d, i)));
           }).remove();
-          points.each(function (d, i) {
-            d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
-          });
+          if( showPoints ){
+            points.each(function (d, i) {
+              d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
+            });
+          } 
           labels.each(function (d, i) {
             d3.select(this).classed("nv-label", true);
           });
-          points.transition().attr("cx", function (d, i) {
-            return nv.utils.NaNtoZero(x(getX(d, i)));
-          }).attr("cy", function (d, i) {
-            return nv.utils.NaNtoZero(y(getY(d, i)));
-          }).attr("r", function (d, i) {
-            return Math.sqrt(z(getSize(d, i)) / Math.PI);
-          });
+          if (showPoints){
+            points.transition().attr("cx", function (d, i) {
+              return nv.utils.NaNtoZero(x(getX(d, i)));
+            }).attr("cy", function (d, i) {
+              return nv.utils.NaNtoZero(y(getY(d, i)));
+            }).attr("r", function (d, i) {
+              return Math.sqrt(z(getSize(d, i)) / Math.PI);
+            });
+          } 
           labels.transition().attr("x", function (d, i) {
             return nv.utils.NaNtoZero(x(getX(d, i)));
           }).attr("y", function (d, i) {
@@ -638,31 +647,35 @@ d3.geo.tile = function () {
             }).style("opacity", 0.8);
           }
         } else {
-          var points = groups.selectAll("path.nv-point").data(function (d) {
-            return d.values;
-          });
-          points.enter().append("path").style("fill", function (d, i) {
-            return d.color;
-          }).style("stroke", function (d, i) {
-            return d.color;
-          }).attr("transform", function (d, i) {
-            return "translate(" + x0(getX(d, i)) + "," + y0(getY(d, i)) + ")";
-          }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
-            return z(getSize(d, i));
-          }));
-          points.exit().remove();
+          if(showPoints){
+            var points = groups.selectAll("path.nv-point").data(function (d) {
+              return d.values;
+            });
+            points.enter().append("path").style("fill", function (d, i) {
+              return d.color;
+            }).style("stroke", function (d, i) {
+              return d.color;
+            }).attr("transform", function (d, i) {
+              return "translate(" + x0(getX(d, i)) + "," + y0(getY(d, i)) + ")";
+            }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
+              return z(getSize(d, i));
+            }));
+            points.exit().remove();
+          }
           groups.exit().selectAll("path.nv-point").transition().attr("transform", function (d, i) {
             return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
           }).remove();
-          points.each(function (d, i) {
-            d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
-          });
-          points.transition().attr("transform", function (d, i) {
-            //nv.log(d,i,getX(d,i), x(getX(d,i)));
-            return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
-          }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
-            return z(getSize(d, i));
-          }));
+          if( showPoints ){
+            points.each(function (d, i) {
+              d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
+            });
+            points.transition().attr("transform", function (d, i) {
+              //nv.log(d,i,getX(d,i), x(getX(d,i)));
+              return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
+            }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
+              return z(getSize(d, i));
+            }));
+          }
         }
 
 
@@ -749,11 +762,6 @@ d3.geo.tile = function () {
       return chart;
     };
 
-    chart.size = function (_) {
-      if (!arguments.length) return getSize;
-      getSize = d3.functor(_);
-      return chart;
-    };
 
     chart.margin = function (_) {
       if (!arguments.length) return margin;
@@ -812,6 +820,13 @@ d3.geo.tile = function () {
       return chart;
     };
 
+
+    chart.size = function (_) {
+      if (!arguments.length) return getSize;
+      getSize =  d3.functor(_);
+      return chart;
+    };
+    
     chart.xRange = function (_) {
       if (!arguments.length) return xRange;
       xRange = _;
@@ -902,6 +917,13 @@ d3.geo.tile = function () {
     chart.showRadiusVector = function (_) {
       if (!arguments.length) return showRadiusVector;
       showRadiusVector = _;
+      return chart;
+    };
+
+    chart.showPoints = function (_) {
+      // console.log("Ste show points", _)
+      if (!arguments.length) return showPoints;
+      showPoints = _;
       return chart;
     };
 
@@ -3335,6 +3357,13 @@ d3.geo.tile = function () {
       return chart;
     };
 
+    chart.showPoints = function (_) {
+      // console.log("Set ShowPoints for", stacked.scatter)
+      if (!arguments.length) return lines.scatter.showPoints;
+      lines.scatter.showPoints(_);
+      return chart;
+    };
+
     //============================================================
 
 
@@ -3378,8 +3407,8 @@ d3.geo.tile = function () {
         scatter = nv.models.scatter(),
         dispatch = d3.dispatch("tooltipShow", "tooltipHide", "areaClick", "areaMouseover", "areaMouseout");
 
-    scatter.size(2.2) // default size
-    .sizeDomain([2.2, 2.2]);
+    scatter.size(1.2) // default size
+    .sizeDomain([1.2, 1.2]);
 
     /************************************
      * offset:
@@ -3454,11 +3483,13 @@ d3.geo.tile = function () {
         //------------------------------------------------------------
 
 
-        scatter.width(availableWidth).height(availableHeight).x(getX).y(function (d) {
-          return d.display.y + d.display.y0;
-        }).forceY([0]).color(data.map(function (d, i) {
-          return d.color || color(d, d.seriesIndex);
-        }));
+        scatter
+          .width(availableWidth)
+          .height(availableHeight)
+          .x(getX)
+          .y(function (d) {return d.display.y + d.display.y0;})
+          .forceY([0])
+          .color(data.map(function (d, i) {return d.color || color(d, d.seriesIndex)}));
 
 
         var scatterWrap = g.select(".nv-scatterWrap").datum(data);
@@ -3627,6 +3658,12 @@ d3.geo.tile = function () {
       if (!arguments.length) return getLabel;
       getLabel = _;
       scatter.label(_);
+      return chart;
+    };
+
+     chart.size = function (_) {
+      if (!arguments.length) return scatter.size;
+      scatter.size(_);
       return chart;
     };
 
@@ -4188,10 +4225,23 @@ d3.geo.tile = function () {
       return chart;
     };
 
+    chart.showPoints = function (_) {
+      // console.log("Set ShowPoints for", stacked.scatter)
+      if (!arguments.length) return stacked.scatter.showPoints;
+      stacked.scatter.showPoints(_);
+      return chart;
+    };
+
     chart.label = function (_) {
       //console.log("SA CHART", _)
       if (!arguments.length) return stacked.label;
       stacked.label(_);
+      return chart;
+    };
+
+     chart.size = function (_) {
+      if (!arguments.length) return stacked.size;
+      stacked.size(_);
       return chart;
     };
 

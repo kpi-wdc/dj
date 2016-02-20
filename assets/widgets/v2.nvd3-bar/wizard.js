@@ -1,13 +1,13 @@
 import angular from 'angular';
-import 'widgets/nvd3-widget/nvd3-widget';
+// import 'widgets/v2.nvd3-widget/nvd3-widget';
 import "widgets/wizard/wizard";
 import "widgets/v2.steps/edit-widget-id";
-import "widgets/v2.steps/bar-chart-decoration";
+import "widgets/v2.nvd3-bar/bar-chart-decoration";
 import "widgets/v2.nvd3-bar/adapter";
 
 
 const m = angular.module('app.widgets.v2.bar-chart-wizard', [
-  'app.widgets.nvd3-widget',
+  // 'app.widgets.v2.nvd3-widget',
   "app.widgets.wizard",
   "app.widgets.v2.steps.edit-widget-id",
   "app.widgets.v2.steps.bar-chart-decoration",
@@ -17,7 +17,7 @@ m._wizard = undefined;
 
 m.factory("BarChartWizard",["$http",
 							"$modal", 
-							"NVD3Widget", 
+							// "NVD3WidgetV2", 
                             "Wizard",
                             "EditWidgetID",
                             "BarChartDecoration",
@@ -25,7 +25,7 @@ m.factory("BarChartWizard",["$http",
                             "BarChartAdapter",
     function (	$http,
     			$modal, 
-				NVD3Widget, 
+				// NVD3WidgetV2, 
                 Wizard,
                 EditWidgetID,
                 BarChartDecoration,

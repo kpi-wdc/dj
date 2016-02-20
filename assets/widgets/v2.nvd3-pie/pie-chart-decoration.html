@@ -1,0 +1,168 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div class="column medium-3 left">
+	<h5>Decoration</h5>
+		
+	<accordion class="wizard">	
+		
+		<accordion-group heading="Input Data">
+			<div class="row wizard setting">
+				<select ng-model="step.inputQuery" ng-change="step.selectInputData()" class="wizard">
+		          <option ng-repeat="item in step.queries">{{item.$title}}</option>
+		        </select>
+			</div>
+		</accordion-group>
+		
+		<accordion-group heading = "Titles">
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Title
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.title">
+			    
+			    <label class="wizard left">
+					Subtitle
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.subtitle">
+			    
+			    <label class="wizard left">
+					Caption
+			    </label>
+			    <input class="wizard" type="text" ng-model="step.conf.decoration.caption">
+				 <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+			</div>
+		</accordion-group>
+			
+		<accordion-group heading="Labels">
+		
+				<div class="row wizard setting">
+
+				<label class="wizard left">
+					Show Values
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="showValuesCheckbox"
+		                 ng-model="step.conf.decoration.valueAsLabel"
+		           >
+		          <label for="showValuesCheckbox"></label>
+		        </div>
+
+				<label class="wizard left" style="clear:left">
+					Outside
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="outsideCheckbox"
+		                 ng-model="step.conf.decoration.labelsOutside"
+		           >
+		          <label for="outsideCheckbox"></label>
+		        </div>
+		        
+		        <button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+			</div>	
+		
+		</accordion-group>
+		
+		<accordion-group heading = "Donut">	
+			<div class="row wizard setting">
+				<label class="wizard left">
+					Enable
+				</label>
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="donutCheckbox"
+		                 ng-model="step.conf.decoration.donut"
+		           >
+		          <label for="donutCheckbox"></label>
+		        </div>
+				<label class="wizard left" style="clear:left">
+					Ratio
+				</label>	
+				<input type="number" min="0" max="1" step="0.1" ng-model="step.conf.decoration.donutRatio" class="wizard">
+				<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>	
+			</div>
+		</accordion-group>
+		
+		<accordion-group heading = "Chart Height">
+		    <div class="row wizard setting">
+				<input type="number" ng-model="step.conf.decoration.height" class="wizard">
+        		<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+        	</div>
+        </accordion-group>
+        
+        <accordion-group heading="Palette">	
+
+			<div class="row wizard setting">
+				
+				<a class="second dropdown tiny left"
+					ng-if="step.conf.decoration.color" 
+					dropdown-toggle="#dropdown-example-3" 
+					style="margin: 0 0 0 0.3rem;
+					padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+				>
+              		<div 	class="button tiny left"
+              				ng-repeat="color in  step.conf.decoration.color"
+                   			style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
+                		&nbsp;
+              		</div>
+            	</a>
+            	<a class="second dropdown tiny left"
+					ng-if="!step.conf.decoration.color" 
+					dropdown-toggle="#dropdown-example-3" 
+					style="margin: 0 0 0 0.3rem;
+					padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+				>
+              		Select Palette
+            	</a>
+
+            	
+
+            	
+            	<fast-palette-peacker 
+            		dest="step.conf.decoration" 
+            		setter="step.conf.decoration.setColor" 
+            		watch-depth="reference">
+            	</fast-palette-peacker>
+
+
+				<label class="wizard left" style="clear:left">
+					Reverse
+				</label>
+				
+			 	<div class="switch tiny right">
+		          <input type="checkbox"
+		                 id="reversePaletteCheckbox"
+		                 ng-model="step.conf.decoration.reversePalette"
+		                 ng-change = "step.reversePalette()"
+		           >
+		          <label for="reversePaletteCheckbox"></label>
+		        </div>
+ 				
+ 				<button class="button radius right toolbar apply" ng-click="step.apply()">Apply</button>
+
+        	</div>
+        </accordion-group>
+        </accordion>	
+	</div>
+
+	<div class="column medium-9 left">
+	<h5 class="section-title">
+		<img src="./widgets/v2.query-manager/preparation.png" style="width: 32px;margin: 0 0.3em;"/>
+		{{step.inputQuery}}
+	</h5>
+	<div class="row wizard setting" style="    overflow: auto;
+    background: #ffffff;
+    max-height: 15em;
+    border: 0.1rem solid #ddd;">
+		<wdc-table data="{table:step.wizard.context.postprocessedTable, decoration:{}}"></wdc-table>
+	</div>
+	
+	<h5 class="section-title">Chart Preview</h5>
+	<div class="row wizard setting" style="overflow:auto;background:#ffffff">
+		<img ng-if="!step.data || !step.options" src="./img/ajax-loader.gif"/>
+		<div class="border" style="width:{{step.conf.decoration.width}}px;background:#ffffff;">
+			<div nvd3 settings="step.settings"></div>
+		</div>
+	</div>
+	</div>
+</div>

@@ -1,12 +1,12 @@
 import angular from 'angular';
-import 'widgets/nvd3-widget/nvd3-widget';
+// import 'widgets/v2.nvd3-widget/nvd3-widget';
 import "widgets/wizard/wizard";
 import "widgets/v2.steps/edit-widget-id";
-import "widgets/v2.steps/pie-chart-decoration";
+import "widgets/v2.nvd3-pie/pie-chart-decoration";
 import "widgets/v2.nvd3-pie/adapter";
 
 const m = angular.module('app.widgets.v2.pie-chart-wizard', [
-  'app.widgets.nvd3-widget',
+  // 'app.widgets.v2.nvd3-widget',
   "app.widgets.wizard",
   "app.widgets.v2.steps.edit-widget-id",
   "app.widgets.v2.steps.pie-chart-decoration",
@@ -17,7 +17,7 @@ m._wizard = undefined;
 
 m.factory("PieChartWizard",["$http",
 							"$modal", 
-							"NVD3Widget", 
+							// "NVD3WidgetV2", 
                             "Wizard",
                             "EditWidgetID",
                             "PieChartDecoration",
@@ -25,7 +25,7 @@ m.factory("PieChartWizard",["$http",
                             "PieChartAdapter",
     function (	$http,
     			$modal, 
-				NVD3Widget, 
+				// NVD3WidgetV2, 
                 Wizard,
                 EditWidgetID,
                 PieChartDecoration,

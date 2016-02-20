@@ -16,6 +16,8 @@ m.service('LineChartAdapter', function () {
       options.chart.rotateLabels = decoration.xAxisAngle;
       options.chart.reduceXTicks = decoration.reduceXTicks;
       options.chart.isArea = decoration.isArea;
+      options.chart.showPoints = 
+        (angular.isDefined(decoration.showPoints)) ? decoration.showPoints : true;
 
       options.chart.interpolate = decoration.interpolation;
 
@@ -46,6 +48,7 @@ m.service('LineChartAdapter', function () {
       decoration.isArea = options.chart.isArea;
       decoration.color = options.chart.color;
       decoration.interpolation = options.chart.interpolate;
+      decoration.showPoints = options.chart.showPoints;
 
 
       decoration.showLabels = angular.isDefined(options.chart.lines.label);

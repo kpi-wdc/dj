@@ -6,6 +6,9 @@ const m = angular.module('app.widgets.v2.stacked-area-chart-adapter', []);
 m.service('StackedAreaAdapter', function () {
   this.applyDecoration = function (options, decoration) {
     if (angular.isDefined(decoration) && angular.isDefined(options)) {
+      options.chart.x = (d) => d.x;
+      options.chart.y = (d) => d.y;
+      
       options.chart.height = decoration.height;
       options.title.text = decoration.title;
       options.subtitle.text = decoration.subtitle;
@@ -21,8 +24,14 @@ m.service('StackedAreaAdapter', function () {
       options.chart.label = (decoration.showLabels) ? function (d) {
         return d.y.toFixed(2)
       } : undefined;
+      options.chart.showPoints = 
+        (angular.isDefined(decoration.showPoints)) ? decoration.showPoints : true;
+      options.chart.stacked.label = (decoration.showLabels) ? function (d) {
+        return d.y.toFixed(2)
+      } : undefined; 
 
     }
+      
     return options;
   }
 
@@ -42,6 +51,7 @@ m.service('StackedAreaAdapter', function () {
       decoration.color = options.chart.color;
       decoration.showLabels = angular.isDefined(options.chart.label);
       decoration.interpolation = options.chart.interpolate;
+      decoration.showPoints = options.chart.showPoints;
       return decoration;
     }
   }

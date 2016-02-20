@@ -121,14 +121,14 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
                     //   $scope.options.chart.lines.label = params.serieAdapter.getLabel;
                     // }
                     
-                    if (  $scope.options.chart.stacked 
-                          && angular.isObject($scope.options.chart.stacked)) {
-                      $scope.options.chart.stacked.label = params.serieAdapter.getLabel;
-                    }
+                    // if (  $scope.options.chart.stacked 
+                    //       && angular.isObject($scope.options.chart.stacked)) {
+                    //   $scope.options.chart.stacked.label = params.serieAdapter.getLabel;
+                    // }
                   }  
             }),
             loadData().then( (resp) =>{
-                $scope.data = (params.serieAdapter.getSeries) ? 
+                $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
                     params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
             })
         ]).then( () =>{

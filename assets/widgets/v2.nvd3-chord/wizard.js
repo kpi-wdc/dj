@@ -1,13 +1,13 @@
 import angular from 'angular';
-import 'widgets/nvd3-widget/nvd3-widget';
+// import 'widgets/nvd3-widget/nvd3-widget';
 import "widgets/wizard/wizard";
 import "widgets/v2.steps/edit-widget-id";
-import "widgets/v2.steps/chord-chart-decoration";
+import "widgets/v2.nvd3-chord/chord-chart-decoration";
 import "widgets/v2.nvd3-chord/adapter";
 
 
 const m = angular.module('app.widgets.v2.chord-chart-wizard', [
-  'app.widgets.v2.nvd3-widget',
+  // 'app.widgets.v2.nvd3-widget',
   "app.widgets.wizard",
   "app.widgets.v2.steps.edit-widget-id",
   "app.widgets.v2.steps.chord-chart-decoration",
@@ -17,7 +17,7 @@ m._wizard = undefined;
 
 m.factory("ChordChartWizard",["$http",
 							"$modal", 
-							"NVD3Widget", 
+							// "NVD3Widget", 
                             "Wizard",
                             "EditWidgetID",
                             "ChordChartDecoration",
@@ -25,7 +25,7 @@ m.factory("ChordChartWizard",["$http",
                             "NVD3ChordAdapter",
     function (	$http,
     			$modal, 
-				NVD3Widget, 
+				// NVD3Widget, 
                 Wizard,
                 EditWidgetID,
                 ChordChartDecoration,
