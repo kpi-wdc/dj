@@ -45,6 +45,14 @@
         </button>
 
         <button title="Alt+R"
+                ng-click="app.openPageManager()" 
+                class="left button radius toolbar"
+                style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+            <img src="./img/pages-icon.png" width="24px">
+            <translate>PAGES</translate>...
+        </button>
+
+        <button title="Alt+R"
                 ng-click="app.openResourceManager()" 
                 class="left button radius toolbar"
                 style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
@@ -62,7 +70,7 @@
       </div>
     </div>  
     <div class="right" style="margin: 0.5em 0 0 0;">
-      <div style="  margin: 0;
+      <!-- <div style="  margin: 0;
                     padding: 0.5em 0.5em 0 0;
                     float: left;
                     font-stretch: ultra-condensed;
@@ -83,7 +91,7 @@
                     width: 32px;
                     float: left;
                     margin: 0 0.5em 0 0">
-      </span>
+      </span> -->
       <button class="right button radius" 
               style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;"
               ng-click="logOut()">

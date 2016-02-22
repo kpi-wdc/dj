@@ -3,26 +3,31 @@
 </div>
 
 <div class="row">
-  <login-google-button ng-if="!user.isLoggedIn"></login-google-button>
+  <!-- <login-google-button ng-if="!user.isLoggedIn"></login-google-button> -->
+  <widget type="v2.topbar" instanceName="AppTopbar" skin="true"></widget>
 </div>
 
-<div class="row"  style="border-bottom:0.1rem solid #ddd; width:100%; margin:0 0 1em 0;">
+<!-- <div class="row"  style="border-bottom:0.1rem solid #ddd; width:100%; margin:0 0 1em 0;">
   <language-selector-nav show-flags="true" show-titles="true"></language-selector-nav>
 </div>
+ -->
+<!-- <div class="row">
+  <widget-holder name="app"></widget-holder>
+</div> -->
 
 <div class="row">
-  <div class="medium-10 push-2 columns" id="page-view">
+  <div id="page-view" style="margin:1em;">
     <application-view>
       <translate>LOADING_DOTS</translate>
     </application-view>
   </div>
 
-  <nav class="medium-2 pull-10 columns">
-    <app-logo></app-logo>
-    <page-list-nav></page-list-nav>
+  <!-- <nav class="medium-2 pull-10 columns"> -->
+    <!-- <app-logo></app-logo> -->
+    <!-- <page-list-nav></page-list-nav> -->
     <!-- <b style="font-size: 14px" translate>LANGUAGE</b> -->
     <!-- <language-selector-nav show-flags="true"></language-selector-nav> -->
-  </nav>
+  <!-- </nav> -->
 </div>
 
 <footer class="row">

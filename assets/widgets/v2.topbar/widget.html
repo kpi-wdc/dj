@@ -4,7 +4,7 @@
       <li class="name">
         <h1>
           <a href="#">
-          <img src="./widgets/v2.query-manager/icon.png"/>     
+          <img ng-if="config.icon" src="{{config.icon}}" style="height:48px;"/>  
           {{config.title | translate}}
           </a>
         </h1>
@@ -14,17 +14,135 @@
       </li>
     </ul>
 
-    <top-bar-section>
+    
+
+    <top-bar-section ng-if="widget.decoration.languageSelector.enable">
       <ul class="right">
-        <li><a href="#getting_started">Getting started</a></li>
         <li has-dropdown>
-          <a href="#">Directives</a>
-          <ul id="directives-list" top-bar-dropdown>
-            <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#interchange">Interchange</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#popover">Popover</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#rating">Rating</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#tooltip">Tooltip</a></li><li><a href="#topbar">Topbar</a></li><li><a href="#tour">Tour</a></li><li><a href="#typeahead">Typeahead</a></li>
-          </ul>
+            <a>
+              <span class="left"
+                    ng-if = "widget.decoration.languageSelector.showFlag"
+                    style=" background-image: url(/img/{{currentLang.key}}.png);
+                    background-size: 20px 16px;
+                    line-height: 2.8125rem;
+                    overflow: hidden;
+                    height: 16px;
+                    width: 20px;
+                    margin: 1.2em 0.5em 0 0">
+              </span>
+               <span  ng-if = "widget.decoration.languageSelector.showTitle" 
+                style="font-size:x-small; line-height: 1em;">
+                {{currentLang.title}}
+              </span>  
+            </a>
+            <ul top-bar-dropdown>
+              <li ng-repeat="lang in languages">
+                <a ng-click="selectLanguage(lang.key)" >
+                  <span 
+                  ng-if = "widget.decoration.languageSelector.showFlag"
+                  style=" background-image: url(/img/{{lang.key}}.png);
+                    background-size: 20px 16px;
+                    display: block;
+                    overflow: hidden;
+                    position: relative;
+                    height: 16px;
+                    width: 20px;
+                    float: left;
+                    margin: 1.2em 0.5em 0 0">
+                  </span>
+                  <span  
+                    ng-if = "widget.decoration.languageSelector.showTitle" 
+                    style="font-size:x-small; line-height: 1em;">
+                    {{lang.title}}
+                  </span>  
+                  
+                </a>
+              </li>
+            </ul>
         </li>
-        <li><a href="#animations">Animations</a></li>
+      </ul>  
+    </top-bar-section>
+
+
+
+
+    <top-bar-section ng-if="widget.decoration.loginButton && !user.isLoggedIn">
+      <ul class="right">
+        <li>
+          <a title="Login with Google..." ng-click="logIn()">
+            <img src="./img/google.png" style="height: 18px; width: 14px;"/>
+          </a>  
+        </li>
+      </ul>  
+    </top-bar-section>
+
+    <top-bar-section ng-if="widget.decoration.loginButton && user.isLoggedIn">
+      <ul class="right">
+         <span style=" background-image: url({{user.photo}});
+                        background-size: 24px 24px;
+                        border-radius: 50%;
+                        display: block;
+                        overflow: hidden;
+                        position: relative;
+                        height: 24px;
+                        width: 24px;
+                        float: left;
+                        margin: 0.75em 0 0 0;"
+                title=" {{((user.isAdmin)?'Administrator ':(user.isOwner)?'Owner ':'Collaborator ')+user.name}}"    
+         >       
+        </span>
       </ul>
     </top-bar-section>
-  </topbar>
+
+    <top-bar-section ng-if="widget.decoration.gotoApps">
+      <ul class="right">
+        <li>
+          <a href="./" target="blank" title="Other Apps...">
+            <img src="./img/apps-icon.png" style="height: 18px; width: 18px;"/>
+         </a>  
+        </li>
+      </ul>  
+    </top-bar-section>
+    
+    <top-bar-section>
+      <ul class="right">
+        <li class="divider"></li>
+      </ul>
+    </top-bar-section>  
+   
+    <top-bar-section ng-repeat="item in widget.content">
+      <ul class="right">
+        <li ng-if="!item.content">
+          <a href="{{item.href}}">
+            {{item.title}}
+          </a>
+        </li>
+        <li ng-if="item.content" has-dropdown>
+          <a>
+            {{item.title}}
+          </a>
+          <ul ng-if="item.content" top-bar-dropdown>
+            <li ng-repeat="p in item.content">
+              <a href="{{p.title}}">
+                  {{p.title}}
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- li><a href="#getting_started">Getting started</a></li>
+        <li has-dropdown>
+          <a href="#">Pages</a>
+          <ul id="directives-list" top-bar-dropdown>
+            <li ng-repeat="page in config.pages">
+              <a href="/app/{{appName}}/{{page.href}}">
+                  {{page.shortTitle | translate}}
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#animations">Animations</a></li> -->
+      </ul>
+    </top-bar-section>
+ </topbar>
 </div>

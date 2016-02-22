@@ -588,7 +588,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
         })
       }) 
       
-      $scope.ontology.tags.forEach((item) =>{
+      $scope.ontology.tags.forEach((item) => {
         let obj = $lookup(item.tag); 
         $scope.nodes.push({
           tag: (obj.label) ? obj.label : item.tag,
@@ -603,7 +603,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
       let translatePromises = [];
       
       $scope.nodes.forEach((item) => {  
-          translatePromises.push($translate(item.tag).then((translation) => {item.tag=translation}))
+          translatePromises.push($translate(item.tag).then((translation) => {item.tag = translation}))
       })
 
       $q.all(translatePromises).then(() => {

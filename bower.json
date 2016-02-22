@@ -37,6 +37,7 @@
     "react": "~0.14.6",
     "ngReact": "~0.2.0",
     "ng-json-explorer": "*",
-    "md5":"blueimp/JavaScript-MD5"
+    "md5": "blueimp/JavaScript-MD5",
+    "angular-google-chart": "~0.1.0"
   }
 }

@@ -1,0 +1,235 @@
+<h3 class="wizard-title">
+  <!-- <img src="{{wizard.icon}}" ng-if="wizard.icon" width="48px"/> -->
+  Topbar Settings
+</h3>
+
+<h5>
+	Content
+</h5>
+
+<div class="row">
+
+
+	<table style="width:100%">
+		<thead>
+		<tr>
+			<!-- <th style="font-size:smaller; width:10%;">Key</th> -->
+			<th style="font-size:smaller; color: #008CBA; width:60%">Title</th>
+			<th style="font-size:smaller;width:31%">Reference</th>
+			<th style="font-size:smaller;">Ops...</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in content">
+				<!-- <td style="{{(item.content)? 'font-weight:bold;':'font-weight:normal;'}}">
+					{{item.key}}
+				</td> -->
+				<td>
+					<span style="font-size: small; font-weight: bold;color: #007095;">
+						{{(item.content)?"Section: ":""}}{{item.title}}
+					</span>
+
+					<table width="100%" ng-if="item.content" style="margin-bottom:0.3em;">
+						<thead>
+						<tr>
+							<!-- <th style="font-size:smaller;">Key</th> -->
+							<th style="font-size:smaller; color: #008CBA; width:45%">Title</th>
+							<th style="font-size:smaller;width:40%">Reference</th>
+							<th style="font-size:smaller;">Ops...</th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="p in item.content">
+					<!-- 			<td>
+									{{p.key}}
+								</td> -->
+								<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+									{{p.title}}
+								</td>
+								<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+									{{p.href}}
+								</td>
+								<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+									<button
+										class="button radius tiny toolbar success"
+					             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+					            		  	  <i class="fi-arrow-up"/>
+					            	</button>
+									<button
+
+										class="button radius tiny toolbar warning"
+					             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+					            		  	 <i class="fi-pencil"/>
+					            	</button>
+					            	<button
+					            		ng-click="deleteItem(p,item)"
+										class="button radius toolbar tiny alert"
+					             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+					            		  	 <i class="fi-x"/>
+					            	</button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="font-size:smaller;padding:0.1rem 0.5rem;">
+									<button
+										ng-click = "addItem(item)"
+										class="button radius tiny toolbar right"
+					             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+					            		  	  <i class="fi-plus"/>&nbsp;
+						            		  Add Item...
+					            	</button>
+								</td>	
+							</tr>
+						</tbody>	
+					</table>	
+				</td>
+				<td ng-if="!item.content" style="font-size:smaller;padding:0.1rem 0.5rem;">
+					{{item.href}}
+				</td>
+				<td ng-if="item.content" style="font-size:smaller;padding:0.1rem 0.5rem;">
+					&nbsp;
+				</td>
+				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button
+						class="button radius tiny toolbar success"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+					     <i class="fi-arrow-up"/>
+	            	</button>
+					<button
+						class="button radius tiny toolbar warning"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+					    <i class="fi-pencil"/>
+	            	</button>
+	            	<button ng-if="!item.content"
+	            		ng-click="deleteItem(item)"
+						class="button radius toolbar tiny alert"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+	            		 <i class="fi-x"/>
+	            	</button>
+	            	<button ng-if="item.content"
+	            		ng-click="deleteSection(item)"
+						class="button radius toolbar tiny alert"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+	            		 <i class="fi-x"/>
+	            	</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="font-size:smaller;padding:0.1rem 0.5rem;">
+					<button
+						ng-click="addItem()"
+						class="button radius tiny toolbar right"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-plus"/>&nbsp;
+		            		  Add Item...
+	            	</button>
+	            	<button
+	            		ng-click="addSection()"
+						class="button radius tiny toolbar right"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
+	            		  	  <i class="fi-plus"/>&nbsp;
+		            		  Add Section...
+	            	</button>
+				</td>	
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<h5>
+	Languages Selector
+</h5>
+<div class="row wizard setting">
+	<div class="column medium-3 left">
+		<label class="wizard left section">
+			Enable
+		</label>
+	 	<div class="switch tiny right" style="margin:0;">
+	      <input type="checkbox"
+	             id="LSEnableLabelsCheckbox"
+	             ng-model="decoration.languageSelector.enable"
+	       >
+	      <label for="LSEnableLabelsCheckbox"></label>
+	    </div>
+	</div>    
+</div>
+<div class="row wizard setting" ng-if="decoration.languageSelector.enable">
+	<div class="column medium-3 left">
+		<label class="wizard left section">
+			Show Flag
+		</label>
+	 	<div class="switch tiny right" style="margin:0;">
+	      <input type="checkbox"
+	             id="SFEnableLabelsCheckbox"
+	             ng-model="decoration.languageSelector.showFlag"
+	       >
+	      <label for="SFEnableLabelsCheckbox"></label>
+	    </div>
+	</div>    
+</div>
+<div class="row wizard setting" ng-if="decoration.languageSelector.enable">
+	<div class="column medium-3 left">
+		<label class="wizard left section">
+			Show Title
+		</label>
+	 	<div class="switch tiny right" style="margin:0;">
+	      <input type="checkbox"
+	             id="STEnableLabelsCheckbox"
+	             ng-model="decoration.languageSelector.showTitle"
+	       >
+	      <label for="STEnableLabelsCheckbox"></label>
+	    </div>
+	</div>    
+</div>
+
+<h5>
+	Portal Home Button
+</h5>
+<div class="row wizard setting">
+	<div class="column medium-3 left">
+		<label class="wizard left section">
+			Show Button
+		</label>
+	 	<div class="switch tiny right" style="margin:0;">
+	      <input type="checkbox"
+	             id="GAEnableLabelsCheckbox"
+	             ng-model="decoration.gotoApps"
+	       >
+	      <label for="GAEnableLabelsCheckbox"></label>
+	    </div>
+	</div>    
+</div>
+
+<h5>
+	Login Button
+</h5>
+<div class="row wizard setting">
+	<div class="column medium-3 left">
+		<label class="wizard left section">
+			Show Login Button
+		</label>
+	 	<div class="switch tiny right" style="margin:0;">
+	      <input type="checkbox"
+	             id="SLBEnableLabelsCheckbox"
+	             ng-model="decoration.loginButton"
+	       >
+	      <label for="SLBEnableLabelsCheckbox"></label>
+	    </div>
+	</div>    
+</div>
+
+
+<div class="row" style="margin-top:0.5rem; margin-bottom:0; padding-bottom: 0;padding-top: 0; font-size: small;">
+
+      <button 
+      	class="button alert radius right toolbar tiny"
+      	ng-click="cancel()">
+      		Cancel
+      </button>
+      
+      <button class="button radius right toolbar tiny" 
+      	style="margin:0 0 0 0.785rem" 
+      	ng-click="close()">
+      		Ok
+      </button>
+</div>      

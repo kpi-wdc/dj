@@ -53,6 +53,7 @@ app.factory('appUrls', function (appId) {
     shareSettingsHTML: '/partials/share-settings.html',
     appSettingsHTML: '/partials/app-settings.html',
     resourceManagerHTML:'/partials/resource-manager.html',
+    pageManagerHTML: '/partials/page-manager.html',
     translationManagerHTML:'/partials/translation-manager.html',
     widgetHolderHTML: '/partials/widget-holder.html',
     widgetModalConfigHTML: '/partials/widget-modal-config.html',
@@ -229,6 +230,7 @@ app.factory('appHotkeysInfo', ['config', (config) => {
         fields:[{key:"Alt + H",value:"Show this help"},
                 {key:"Esc",value:"Close"},
                 {key:"Alt + D",value:"Switch Mode"},
+                {key:"Alt + P",value:"Activate Page Manager"},
                 {key:"Alt + T",value:"Activate Translation Manager"},
                 {key:"Alt + R",value:"Activate Resource Manager"},
                 {key:"Alt + S",value:"Save Settings"},
@@ -366,6 +368,15 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       })
     },
 
+    openPageManager() {
+      if(!globalConfig.designMode) return;
+      $modal.open({
+        templateUrl: appUrls.pageManagerHTML,
+        controller: 'PageManagerController',
+        backdrop: 'static'
+      })
+    },
+
     viewPageConfig() {
       if(!globalConfig.designMode) return;
       $modal.open({
@@ -469,6 +480,14 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
   pageConf = config.pages[this.pageIndexByHref($stateParams.href || '')];
 
   $rootScope.$on('$stateChangeStart', this.onStateChangeStart.bind(this));
+});
+
+
+app.service("logIn", function($cookies, $location,fullReload,appUrls){
+   return () => {
+      $cookies.put('redirectToUrl', $location.url());
+      fullReload(appUrls.googleAuth);
+    }
 });
 
 app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
@@ -604,6 +623,15 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     });
 
     hotkeys.add({
+      combo: 'alt+p',
+      description: 'Invoke Page Manager',
+      callback: function(event) {
+        event.preventDefault();
+        app.openPageManager();
+      }
+    });
+
+    hotkeys.add({
       combo: 'alt+r',
       description: 'Invoke Resources Manager',
       callback: function(event) {
@@ -663,6 +691,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     },
 
     logIn() {
+      console.log("LOGIN")
       $cookies.put('redirectToUrl', $location.url());
       fullReload(appUrls.googleAuth);
     },
