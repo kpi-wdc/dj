@@ -114,17 +114,17 @@
       <ul class="right">
         <li ng-if="!item.content">
           <a href="{{item.href}}">
-            {{item.title}}
+            {{item.title | translate}}
           </a>
         </li>
         <li ng-if="item.content" has-dropdown>
           <a>
-            {{item.title}}
+            {{item.title | translate}}
           </a>
           <ul ng-if="item.content" top-bar-dropdown>
             <li ng-repeat="p in item.content">
               <a href="{{p.title}}">
-                  {{p.title}}
+                  {{p.title | translate}}
               </a>
             </li>
           </ul>

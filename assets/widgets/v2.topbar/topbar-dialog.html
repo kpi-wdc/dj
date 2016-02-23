@@ -51,12 +51,13 @@
 								</td>
 								<td style="font-size:smaller;padding:0.1rem 0.5rem;">
 									<button
+										ng-click="upItem(p,item)"
 										class="button radius tiny toolbar success"
 					             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
 					            		  	  <i class="fi-arrow-up"/>
 					            	</button>
 									<button
-
+										ng-click = "editItem(p)"
 										class="button radius tiny toolbar warning"
 					             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
 					            		  	 <i class="fi-pencil"/>
@@ -91,15 +92,27 @@
 				</td>
 				<td style="font-size:smaller;padding:0.1rem 0.5rem;">
 					<button
+						ng-click="upItem(item)"
 						class="button radius tiny toolbar success"
 	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
 					     <i class="fi-arrow-up"/>
 	            	</button>
-					<button
+
+					<button  ng-if="!item.content"
+						ng-click = "editItem(item)"
 						class="button radius tiny toolbar warning"
 	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
 					    <i class="fi-pencil"/>
 	            	</button>
+					
+					<button  ng-if="item.content"
+						ng-click = "editSection(item)"
+						class="button radius tiny toolbar warning"
+	             		style="margin:0.1rem 0.1rem 0.3rem 0rem; padding:0.2rem 0.3rem;">
+					    <i class="fi-pencil"/>
+	            	</button>
+
+
 	            	<button ng-if="!item.content"
 	            		ng-click="deleteItem(item)"
 						class="button radius toolbar tiny alert"

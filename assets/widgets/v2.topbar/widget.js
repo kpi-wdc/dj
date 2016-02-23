@@ -55,6 +55,22 @@ m.controller("TopBarDialogController", function(
       }
     },
 
+    editSection(section){
+      let s = $scope.content.filter((item) =>  item.key == section.key )[0]
+      if(s){
+        dialog({
+            title:"Edit Section",
+            fields:{ 
+              title:{
+                title:"Section Title",value:s.title,editable:true,required:true
+              }
+            } 
+        }).then(function(form){
+          s.title = form.fields.title.value; 
+        })
+      }  
+    },
+
     addItem(section){
       if(section){
         let s = $scope.content.filter((item) =>  item.key == section.key )[0]
@@ -113,8 +129,38 @@ m.controller("TopBarDialogController", function(
           })
         }
       }  
-    }
+    },
+
+    upItem(item, section){
+      let list = (section)? section.content : $scope.content;
+      let it = list
+        .map((item,index) => {return {"index":index,"item":item}})
+        .filter((p) =>  p.item.key == item.key)[0]
+      let index = (it)? it.index : -1;
+      if(index > 0){
+        let buf = list[index-1];
+        list[index-1] = list[index];
+        list[index] = buf;
+      }  
+    },
+
+    editItem(item){
+      dialog({
+          title:"Edit Item",
+          fields:{ 
+            title:{title:"Item Title",value:item.title,editable:true,required:true},
+            href:{title:"Item Reference",value:item.href,editable:true,required:true}
+          } 
+      })
+      .then(function(form){
+        
+          item.title = form.fields.title.value;
+          item.href = form.fields.href.value;
+      })
+    }  
   });
+
+  
 
 });
 
@@ -167,43 +213,44 @@ m.controller('TopBarController', function (
             showFlag:false,
             showTitle:true
           },
-          loginButton:true
+          loginButton:true,
+          gotoApps : true
         };
-      $scope.widget.content = ($scope.widget.content) ? $scope.widget.content :
-        [ {
-             key:randomItemID(),
-            title: "Getting Started",
-            href: "#Getting",
-            content: [{
-               key: randomItemID(),
-                title: "Page 1",
-                href: "#p1"  
-              },{
-                 key: randomItemID(),
-                title: "Page 2",
-                href: "#p2"  
-              }
-            ]
-          },
-          {
-             key:randomItemID(),
-            title: "Pages",
-            content: [{
-               key: randomItemID(),
-                title: "Page 1",
-                href: "#p1"  
-              },{
-                 key: randomItemID(),
-                title: "Page 2",
-                href: "#p2"  
-              }
-            ]
-          },{
-             key: randomItemID(),
-            title: "About",
-            href: "#Getting"
-          }          
-      ];
+      $scope.widget.content = ($scope.widget.content) ? $scope.widget.content : [];
+      //   [ {
+      //        key:randomItemID(),
+      //       title: "Getting Started",
+      //       href: "#Getting",
+      //       content: [{
+      //          key: randomItemID(),
+      //           title: "Page 1",
+      //           href: "#p1"  
+      //         },{
+      //            key: randomItemID(),
+      //           title: "Page 2",
+      //           href: "#p2"  
+      //         }
+      //       ]
+      //     },
+      //     {
+      //        key:randomItemID(),
+      //       title: "Pages",
+      //       content: [{
+      //          key: randomItemID(),
+      //           title: "Page 1",
+      //           href: "#p1"  
+      //         },{
+      //            key: randomItemID(),
+      //           title: "Page 2",
+      //           href: "#p2"  
+      //         }
+      //       ]
+      //     },{
+      //        key: randomItemID(),
+      //       title: "About",
+      //       href: "#Getting"
+      //     }          
+      // ];
       // $scope.widget.content = $scope.widget.content.reverse();
 
     })

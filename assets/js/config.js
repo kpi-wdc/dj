@@ -31,7 +31,7 @@ System.config({
     "mousetrap": "components/mousetrap/mousetrap.js",
     "angular-hotkeys": "js/hotkeys.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
-    'ng-json-explorer':"components/ng-json-explorer/src/angular-json-explorer.js",
+    "ng-json-explorer": "components/ng-json-explorer/src/angular-json-explorer.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
     "angular-foundation": "components/angular-foundation/mm-foundation-tpls.js",
     "angular-json-editor": "components/angular-json-editor/src/angular-json-editor.js",
@@ -47,7 +47,7 @@ System.config({
     "json-stat": "components/jsonstat/json-stat.max.js",
     "nv.d3": "components/nvd3/nv.d3.js",
     "wizard-directives": "widgets/v2.steps/wizard-directives.js",
-    "md5":"components/md5/js/md5.js",
+    "md5": "components/md5/js/md5.js",
     "*": "*.js",
     "github:*": "../../jspm_packages/github/*.js"
   }
@@ -126,7 +126,7 @@ System.config({
         "angular"
       ]
     },
-    'ng-json-explorer':{
+    "ng-json-explorer": {
       "deps": [
         "angular"
       ]
@@ -152,7 +152,6 @@ System.config({
         "ngReact"
       ]
     },
-
     "md5": {
       "exports": "md5"
     },
