@@ -132,7 +132,10 @@ exports.parseXLS = function (filename) {
         dims[i].values = new query()
           .from(rawData)
           .map(function (item) {
-            return {id: item[layout[i].id], label: item[layout[i].label]}
+            return {
+              id: item[layout[i].id], 
+              label: item[layout[i].label]
+            }
           })
           .distinct()
           .orderBy(function (a, b) {

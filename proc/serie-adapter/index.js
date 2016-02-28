@@ -1363,6 +1363,68 @@ exports.ScatterSerie = function (table,params){
 
 
 
+var getGeoCode = require("./geo-coding").getCode;
+var copyObject = require('copy-object');
+
+exports.GeoChartSerie = function(table,params){
+
+	if(!params) return {};
+	
+	params.direction = (params.direction) ? params.direction : "Rows";
+	params.colorDataIndex = (UTIL.isUndefined(params.colorDataIndex)) ? 0 : params.colorDataIndex;
+	
+	if(params.direction == "Columns") table = exports.transposeTable(table,{transpose:true});
+
+	if(table.body.length == 0) return {};
+		
+	var rowIndex = -1;
+	table.body[0].metadata.forEach(
+			function(item,index){
+				if (item.role == "geo") {rowIndex = index}
+			})
+
+	if(rowIndex<0) return {};
+
+	//create data table for geoChart
+	var result = []; 
+
+	if(UTIL.isUndefined(params.radiusDataIndex)){
+		result.push([
+			"code",
+			"text",
+			table.header[params.colorDataIndex].metadata.map(function(item){return item.label}).join(", ")
+		]);
+		table.body.forEach(function(row){
+			result.push([
+				getGeoCode(row.metadata[rowIndex].id),
+				row.metadata.map(function(item){return item.label}).join(", "),
+				row.value[params.colorDataIndex]
+			])
+		})
+	}else{
+		result.push([
+			"code",
+			"text",
+			table.header[params.colorDataIndex].metadata.map(function(item){return item.label}).join(", "),
+			table.header[params.radiusDataIndex].metadata.map(function(item){return item.label}).join(", "),
+		])
+		table.body.forEach(function(row){
+			result.push([
+				getGeoCode(row.metadata[rowIndex].id),
+				row.metadata.map(function(item){return item.label}).join(", "),
+				row.value[params.colorDataIndex],
+				row.value[params.radiusDataIndex]
+			])
+		})
+	}
+
+
+
+
+	return result;
+};
+
+
 // Generate Statistical Distributions as Scatter Series
 // Parameters:
 // normalized 			true/false 													(default false)

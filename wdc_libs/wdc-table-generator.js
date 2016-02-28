@@ -83,7 +83,7 @@ rowsDimension.IDList.forEach(function(row){
 	var metadata = row;
 	metadata.dimension = rowsDimension.dimension;
 	metadata.dimensionLabel = dataset.metadata.dimension[metadata.dimension].label;
-	 
+	metadata.role = dataset.metadata.dimension[metadata.dimension].role; 
 	var resultRow = {metadata:[metadata], value:[]};
 	var rowData = new query()
 		.from(result)
@@ -104,7 +104,7 @@ var splitRow = function(data,dimension){
 			var m = current;
 			m.dimension = dimension.dimension;
 			m.dimensionLabel = dataset.metadata.dimension[m.dimension].label; 
-			
+			m.role = dataset.metadata.dimension[m.dimension].role; 
 			var c = {metadata:rowset.metadata.map(function(item){return item})};
 			c.metadata.push(m);
 			c.data = new query()
@@ -126,6 +126,7 @@ var splitColumns = function(data,dimension){
 			var m = current;
 			m.dimension = dimension.dimension;
 			m.dimensionLabel = dataset.metadata.dimension[m.dimension].label;  
+			m.role = dataset.metadata.dimension[m.dimension].role; 
 			
 			var c = {metadata:colset.metadata.map(function(item){return item})};
 			c.metadata.push(m);
@@ -152,6 +153,7 @@ product.forEach(function(row){
 		var m = currentColumnSet;
 		m.dimension = columnsDimension.dimension;
 		m.dimensionLabel = dataset.metadata.dimension[m.dimension].label;  
+		m.role = dataset.metadata.dimension[m.dimension].role; 
 		columnes.push(
 			{
 				metadata:[m],

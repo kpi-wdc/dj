@@ -17,6 +17,14 @@ module.exports = {
           return {
             id: app.id,
             name: app.name,
+            description:app.description,
+            title:app.title,
+            keywords: app.keywords,
+            collaborations: app.collaborations,
+            i18n: app.i18n,
+            icon:app.icon,
+            createdAt: app.createdAt,
+            updatedAt: app.updatedAt,
             owner: app.owner && {
               id: app.owner.id,
               name: app.owner.name,
@@ -31,6 +39,19 @@ module.exports = {
         res.serverError();
       });
   },
+  // 
+  // getList: function (req, res) {
+  //   AppConfig
+  //     .find()
+  //     .sort('name')
+  //     .populate('owner')
+  //     .then(function (apps) {
+  //       res.ok(apps)
+  //     })
+  //     .catch(function () {
+  //       res.serverError();
+  //     });
+  // },
 
   createWithConfig: function (req, res) {
     // Clone default application

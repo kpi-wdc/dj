@@ -1,0 +1,20 @@
+<div class="row">
+
+<widget-holder name="column"></widget-holder>
+</div>
+
+<div class="row">
+  <div class="column medium-4 left-column">
+    <widget-holder name="left"></widget-holder>
+  </div>
+   <div ng-class="{'medium-push-4': !globalConfig.designMode}" class="column medium-4 left-column" style="padding-left: 0.3em;">
+    <widget-holder name="middle"></widget-holder>
+  </div>
+  <div class="column medium-4 right-column">
+    <widget-holder name="right"></widget-holder>
+  </div>
+</div>
+
+<div class="row">
+  <widget-holder name="bottom"></widget-holder>
+</div>

@@ -1,0 +1,11 @@
+{
+  "name": "geochartserie",
+  "version": "0.0.1",
+  "description": "Prepare Google GeoChart Series",
+  "main": "run.js",
+  "engines": {
+    "node": "0.12.x"
+  },
+  "dependencies": {
+  }
+}

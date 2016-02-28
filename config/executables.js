@@ -15,5 +15,7 @@ module.exports.executables = {
   'reduce-null'		: './proc/serie-adapter/reduce-null/run.js',
   'scatter-serie'	: './proc/serie-adapter/scatter-serie/run.js',
   'distribution'	: './proc/serie-adapter/distribution/run.js',
-  'post-process'  : './proc/serie-adapter/post-process/run.js'
+  'post-process'  : './proc/serie-adapter/post-process/run.js',
+  'geochart-serie': './proc/serie-adapter/geochart-serie/run.js'
+  
 };

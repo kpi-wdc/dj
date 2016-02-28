@@ -1,0 +1,12 @@
+{
+ "schema": {
+    "type": "object",
+    "title": "Application Description",
+    "properties": {
+      "appWidget":{
+        "type":"string",
+        "title":"Application Navigator Widget"
+      }
+    }
+  }  
+}

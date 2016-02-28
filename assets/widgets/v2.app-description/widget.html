@@ -1,0 +1,213 @@
+<div class="row" style="    margin: 0;
+    padding: 2em;
+    border: 1px solid #ddd;" 
+		ng-controller="AppDescController">
+	<div class="row" ng-if="!app">
+		<center>
+			<h4 style="color:#eee">
+				<widget-translate>NO_INFO_AVAILABLE</widget-translate>
+			</h4>
+		</center>	
+	</div>	
+	<div ng-if="app">		
+		<div class="row">
+			<h4 style="margin:0;">
+				<img ng-if="app.icon" src="{{app.icon}}" width="48px">
+				<img ng-if="!app.icon" src="./img/default-app-icon.png" width="48px">
+				
+				{{app.name | translate}}
+			</h4>
+			<div class="row" style="
+				font-size:x-small;
+				border-bottom:1px solid #ddd;
+				padding:0.2em;
+				margin:0.5em 0.5em 1em 0.5em;
+			">
+				
+				<button
+					ng-if="isOwner(app)"
+					ng-click="deleteApp(app)" 
+			        class="button radius right tiny toolbar alert" 
+			        style="margin:0 0.2em; padding: 0.3em 1em;"
+			    >
+			      <widget-translate>DELETE</widget-translate>
+			    </button>
+
+			    <button
+			     	ng-if="user.isLoggedIn"
+					class="button radius right tiny toolbar success" 
+			        style="margin:0 0.2em; padding: 0.3em 1em;"
+			    >
+			    	<a 	class="right"
+					style="padding:0;color:#ffffff"
+					target="_blank"
+       				href="/api/app/export/{{app.id}}"
+					>
+			      		<widget-translate>EXPORT</widget-translate>
+			      	</a>	
+			    </button>
+			    
+				<button
+					ng-if="isOwner(app) || isCollaborator(app)"
+					ng-click="renameApp(app)" 
+			        class="button radius right tiny toolbar warning" 
+			        style="margin:0 0.2em; padding: 0.3em 1em;"
+			    >
+			      <widget-translate>RENAME</widget-translate>
+			    </button>
+
+			    <button
+					class="button radius right tiny toolbar apply" 
+			        style="margin:0 0.2em; padding: 0.3em 1em;"
+			    >
+			    	<a class="right"
+			    	style="padding:0;color:#ffffff"
+					href="{{'./app/'+app.name}}"
+					target = "{{'blank'+app.name}}"
+					>
+			      		<widget-translate>VIEW</widget-translate>
+			      	</a>	
+			    </button>
+
+
+
+
+<!-- 				<a ng-click="deleteApp(app)"class="right" style="padding-left:2em;">
+					Delete
+				</a>
+				<a 	class="right"
+					style="padding-left:2em;"
+					target="_blank"
+       				href="/api/app/export/{{app.id}}"
+				>
+					Export
+				</a>
+				
+				<a ng-click="renameApp(app)" class="right" style="padding-left:2em;">
+					Rename
+				</a>
+				
+				<a class="right"style="padding-left:2em;"
+					href="{{'./app/'+app.name}}"
+					target = "{{'blank'+app.name}}"
+				>
+					View
+				</a>
+ -->			</div>
+			
+			<h4 ng-if="app.title" style="margin:0;">
+				{{app.title | translate}}
+			</h4>
+			<div ng-if="app.description" style="font-size: small;
+			    		text-align: justify;">
+			    	{{app.description | translate}}
+			</div>
+			<h5 ng-if="app.keywords.length > 0" style="margin:0;">
+			<widget-translate>Keywords</widget-translate>&nbsp;:</h5>
+			<div ng-if="app.keywords.length>0" style="font-size: small;
+			    		text-align: justify; color:#008CBA;">
+			    <span ng-repeat="k in app.keywords track by $index">
+			    	{{k | translate}}{{($index < (app.keywords.length-1))?' ,':''}}
+			    </span>		
+			</div>
+		</div>	
+		<div class="row">
+			<h5 style="margin:0;"><widget-translate>APPLICATION_AUTHOR</widget-translate>:</h5>
+			
+			<a ng-if="author.email" href="mailto:{{author.email}}"  target="blank" style="font-size: small;">
+			     <span style=" background-image: url({{author.photo}});
+	                  background-size: 48px 48px;
+	                  border-radius: 50%;
+	                  display: block;
+	                  overflow: hidden;
+	                  position: relative;
+	                  height: 48px;
+	                  width: 48px;
+	                  float:left;"></span>
+				<span style="float:left; margin:1em 0 0 0.5em;">
+			    	{{author.name}}
+			    </span>
+			</a>
+			<div ng-if="!author.name" widget-translate style="color:#aa0000;font-size:small;font-weight:bold;">
+			    THIS_APP_DOESNT_HAVE_AUTHOR
+			</div>
+		</div>
+		
+		<div class="row" ng-if="app.collaborations.length >0">
+			<h5 style="margin:0;">
+			<widget-translate>Collaborators</widget-translate>&nbsp;:</h5>
+			<div class="row" ng-repeat="c in app.collaborations track by $index">
+				
+				<span style=" background-image: url({{c.user.photo}});
+	                  background-size: 48px 48px;
+	                  border-radius: 50%;
+	                  display: block;
+	                  overflow: hidden;
+	                  position: relative;
+	                  height: 48px;
+	                  width: 48px;
+	                  float:left;
+	                  margin:0 0 0 1em"></span>
+				<span style="float:left; margin:1em 0 0 0.5em;">
+					<a href="mailto:{{c.user.email}}" target="blank" style="font-size: small;">
+					    {{c.user.name}}
+					</a>
+				</span>
+			</div>
+		</div>
+
+		<div class="row">
+			<span class="left" 
+			style="
+						font-size:1.125rem;
+						color:#222222;
+						font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
+						font-style: normal;
+    					font-weight: normal;
+						"
+			widget-translate>
+				CreatedAt
+			</span>
+			<span 	class="left" 		
+					style="font-size: small; margin: 0.35em 0.5em;"
+			>
+				{{formatDate(app.createdAt)}}
+			</span>
+		</div>
+		<div class="row">
+			<span 	class="left" 
+					style="
+						font-size:1.125rem;
+						color:#222222;
+						font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
+						font-style: normal;
+    					font-weight: normal;
+						"
+					widget-translate
+			>
+				UpdatedAt
+			</span>
+			<span 	class="left"
+					style="font-size: small; margin: 0.35em 0.5em;"
+			>{{formatDate(app.updatedAt)}}</span>
+		</div>
+		
+		<div 	class="row" 
+				style="	font-size: small;
+    					border-top: 1px solid #bbb;
+    					margin: 2em 0em;
+    					padding: 1em;" 
+    			ng-if="app.importedFromURL">
+    			
+			<widget-translate>BASED_ON</widget-translate>
+			<a href="{{app.importedFromURL}}" target="_blank">
+				{{app.importedFromURL}}
+			</a>
+			<widget-translate>FROM</widget-translate>
+			<b>{{app.importedFromAuthor}}</b>	
+		</div>
+
+	</div>	
+</div>
+
+  

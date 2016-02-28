@@ -47,6 +47,21 @@ i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
   user.invokeAll(APIProvider.TRANSLATE_SLOT);
     
   angular.extend(this,{
+
+    formatDate : function(date){
+      var locale = $translate.use() || "en";
+      date = new Date(date);
+      date = date.toLocaleString(locale,
+        { year: 'numeric',  
+          month: 'long',  
+          day: 'numeric', 
+          hour: 'numeric',  
+          minute: 'numeric',
+          second: 'numeric'
+        })
+      return date;
+    },
+
     
     add: function (locale,translations,nosave){
 

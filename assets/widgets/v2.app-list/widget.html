@@ -1,0 +1,57 @@
+<div  class="row" ng-controller="AppListController" style="margin:0 3em;">
+
+  <div class="row"  ng-if="user.isLoggedIn">
+    <button 
+        class="button radius right tiny toolbar apply" 
+        ng-click="openImportAppDialog()"
+        style="margin: 1em 0.2em; padding: 0.3em 1em;"
+    >
+      <widget-translate>IMPORT_APP</widget-translate>
+    </button>
+
+    <button 
+        class="button radius right tiny toolbar apply" 
+        ng-click="openCreateAppDialog()"
+        style="margin: 1em 0.2em; padding: 0.3em 1em;"
+    >
+      <widget-translate>ADD_NEW_APP</widget-translate>
+    </button> 
+     
+  </div>
+
+  <div class = "row">
+
+    <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
+      <li ng-repeat="app in apps | orderBy: 'name'"
+          style="{{(app.selected)?'border:1px solid #ddd':''}}"
+          >
+          <a 
+            ng-click="select(app)"
+            tooltip="{{app.description | translate}}"
+            tooltip-placement="bottom"
+            tooltip-popup-delay='1000'
+            class="has-tip"
+          >
+            <center>
+              <img src="{{(app.icon)?app.icon:'./img/default-app-icon.png'}}" style="width:48px;"/>
+              <div style="font-size:small">
+                {{app.name}}
+              </div>  
+            </center>
+          </a>
+      </li>
+    </ul>
+  </div>  
+<!-- 
+
+
+  <div ng-repeat="app in apps | orderBy: 'name'" class="column large-2 medium-3 small-4 left">
+      <center>
+        <img src="{{(app.icon)?app.icon:'./img/default-app-icon.png'}}" style="width:48px;"/>
+        <h5>
+          {{app.name}}
+        </h5>  
+        <span ng-if="app.owner.name">({{app.owner.name}})</span>
+      </center>
+  </div> -->
+</div>

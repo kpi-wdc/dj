@@ -1,33 +1,43 @@
 <form ng-submit="form.close()">
   	<h5 color="#ddd">{{form.title}}</h5>
 
-	<div class="row" ng-repeat="field in form.fields">
+	<div class="row" ng-repeat="field in form.fields track by $index">
 	    <div class="column medium-2">
-	      <label for="{{field}}">{{field.title}}</label>
+	      <label for="{{field.id}}">{{field.title}}</label>
 	    </div>
-	    <div class="column large-10">
-	      <input ng-model="field.value" id="{{field}}"
+
+	    <div class="column large-10" ng-if="!field.type || field.type=='text'">
+	      <input ng-model="field.value" id="{{field.id}}"
 	             type="text" ng-disabled="!field.editable">
 	    </div>
+	    <div class="column large-10" ng-if="field.type == 'select'">
+	    	<select ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable">
+        		<option ng-repeat="option in field.options" value="{{option.value}}">
+        			{{option.title}}
+        		</option>
+      		</select>
+	    </div>
+
+	    <div class="column large-10" ng-if="field.type=='file'">
+	    	<input type="file"
+	    	 style="font-size: small; margin: 0 1em;" 	
+	    	 id="{{field.id}}"
+	    	 ng-disabled="!field.editable"	
+             onchange="angular.element(this).scope().setImportFile(
+             	this.files[0], this)"
+             >
+	    </div>
+	    
   	</div>
 
 
-  <!-- <div class="panel" style="margin: 0; padding: 0.5em;">
-  	<div class="row" ng-repeat="field in form.fields">
-	  	<label class="left">
-		  	<span>{{field.title}}</span>
-		  	<span ng-if="field.required" style="color:#f04124">*</span>
-		  	<span> 
-		  		<input style="float:left;" ng-model="field.value" type="text" ng-disabled="!field.editable">
-		  	</span>	
-	  	</label>
-  	</div>
- -->	  <div class="row">
+	  <div class="row">
 		  <button class="button alert tiny right seq" ng-click="form.dismiss()"
 		          translate>CANCEL</button>
 		  <button type="submit" class="button tiny right seq" ng-disabled="!completed()" translate>OK</button>
 		          
 	  </div>
+  
   </div>        
   <a class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>
 </form>

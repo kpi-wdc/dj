@@ -1,7 +1,8 @@
 import angular from 'angular';
 import 'angular-foundation';
+import 'file-upload';
 
-const info = angular.module('app.info', ['mm.foundation']);
+const info = angular.module('app.info', ['mm.foundation','ngFileUpload']);
 
 info.service('alert', function ($modal, $log) {
   this.message = (msg) => {
@@ -121,9 +122,27 @@ info.controller('PromptController', function ($scope, $modalInstance, text, valu
 });
 
 info.controller('DialogController', function ($scope, $modalInstance, form) {
+  
   $scope.form = form;
+  for(let i in form.fields){
+    form.fields[i].id = Math.random().toString(36).substring(2);
+  }
+  
+  $scope.getFieldByID = function(id){
+    for(let i in form.fields){
+      if(form.fields[i].id == id) return form.fields[i];
+    }  
+  }
+
+
   $scope.form.dismissed = false;
   
+  $scope.setImportFile = function(file,node) {
+      this.$apply(() => {
+        $scope.getFieldByID(node.id).value = file;
+      });
+  };
+
   $scope.completed = function(){
     var f = true;
     for(let i in $scope.form.fields){
@@ -137,8 +156,9 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
       }  
     }
     return  true;
-  } 
+  }
 
+ 
   $scope.form.close = function() {
     if (!$scope.form.dismissed) {
       $modalInstance.close($scope.form);
@@ -147,6 +167,7 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
 
 
   $scope.form.dismiss = function() {
+    console.log($scope.form)
     $scope.form.dismissed = true;
     $modalInstance.dismiss();
   };

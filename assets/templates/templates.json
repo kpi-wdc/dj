@@ -34,6 +34,29 @@
     ]
   },
 
+  "3x6x3": {
+    "description": "Three-column 3:6:3 layout",
+    "holders" : [
+      "column",
+      "left",
+      "middle",
+      "right",
+      "bottom"
+    ]
+  },
+  
+  
+  "4x4x4": {
+    "description": "Three-column 4:4:4 layout",
+    "holders" : [
+      "column",
+      "left",
+      "middle",
+      "right",
+      "bottom"
+    ]
+  },
+
   "2x2": {
     "description": "2-column 2-rows layout",
     "holders" : [
