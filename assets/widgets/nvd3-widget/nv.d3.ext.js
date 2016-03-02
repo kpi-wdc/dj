@@ -3806,7 +3806,10 @@ d3.geo.tile = function () {
           var key;
           defaultState = {};
           for (key in state) {
-            if (state[key] instanceof Array) defaultState[key] = state[key].slice(0);else defaultState[key] = state[key];
+            if (state[key] instanceof Array) 
+                defaultState[key] = state[key].slice(0);
+            else 
+                defaultState[key] = state[key];
           }
         }
 
@@ -5124,9 +5127,11 @@ d3.geo.tile = function () {
     var margin = { top: 5, right: 0, bottom: 5, left: 0 },
         width = 400,
         height = 20,
+        
         getKey = function (d) {
-      return d.key;
-    },
+          return d.key;
+        },
+
         color = nv.utils.defaultColor(),
         align = true,
         rightAlign = true,
@@ -5142,6 +5147,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
+        console.log("Legend model data",data)
         var availableWidth = width - margin.left - margin.right,
             container = d3.select(this);
 
@@ -5160,6 +5166,7 @@ d3.geo.tile = function () {
         var bg = gEnter.selectAll("rect.nv-series-bg").data([0]);
 
         var series = g.selectAll(".nv-series").data(function (d) {
+          console.log("Form series",d);
           return d;
         });
 
@@ -5219,20 +5226,34 @@ d3.geo.tile = function () {
 
 
 
-        seriesEnter.append("circle").style("stroke-width", 2).attr("class", "nv-legend-symbol").attr("r", 5);
-        seriesEnter.append("text").attr("text-anchor", "start").attr("class", "nv-legend-text").attr("dy", ".32em").attr("dx", "8");
+        seriesEnter.append("circle")
+          .style("stroke-width", 2)
+          .attr("class", "nv-legend-symbol")
+          .attr("r", 5);
+
+        seriesEnter.append("text")
+          .attr("text-anchor", "start")
+          .attr("class", "nv-legend-text")
+          .attr("dy", ".32em")
+          .attr("dx", "8");
+
         series.classed("disabled", function (d) {
           return d.disabled;
         });
+        
         bg.exit().remove();
         series.exit().remove();
 
-        series.select("circle").style("fill", function (d, i) {
-          return d.color || color(d, i);
-        }).style("stroke", function (d, i) {
-          return d.color || color(d, i);
-        });
-        series.select("text").text(getKey);
+        series
+          .select("circle")
+          .style("fill", function (d, i) {
+            return d.color || color(d, i);
+          })
+          .style("stroke", function (d, i) {
+            return d.color || color(d, i);
+          });
+        series.select("text")
+          .text(getKey);
 
 
         //TODO: implement fixed-width and max-width options (max-width is especially useful with the align option)
@@ -5406,228 +5427,228 @@ d3.geo.tile = function () {
     return chart;
   };
 
-  nv.models.colorScheme = function () {
-    "use strict";
-    //============================================================
-    // Public Variables with Default Settings
-    //------------------------------------------------------------
+  // nv.models.colorScheme = function () {
+  //   "use strict";
+  //   //============================================================
+  //   // Public Variables with Default Settings
+  //   //------------------------------------------------------------
 
-    var margin = { top: 5, right: 0, bottom: 5, left: 0 },
-        width = 400,
-        height = 20
-    //, getKey = function (d) {
-    //  return d.key
-    //}
-    ,
-        color = nv.utils.defaultColor(),
-        align = true,
-        rightAlign = true
-    //, updateState = true   //If true, legend will update data.disabled and trigger a 'stateChange' dispatch.
-    //, radioButtonMode = false   //If true, clicking legend items will cause it to behave like a radio button. (only one can be selected at a time)
-    //, dispatch = d3.dispatch('legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange')
-    //, minEnabledSeries
+  //   var margin = { top: 5, right: 0, bottom: 5, left: 0 },
+  //       width = 400,
+  //       height = 20
+  //   //, getKey = function (d) {
+  //   //  return d.key
+  //   //}
+  //   ,
+  //       color = nv.utils.defaultColor(),
+  //       align = true,
+  //       rightAlign = true
+  //   //, updateState = true   //If true, legend will update data.disabled and trigger a 'stateChange' dispatch.
+  //   //, radioButtonMode = false   //If true, clicking legend items will cause it to behave like a radio button. (only one can be selected at a time)
+  //   //, dispatch = d3.dispatch('legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange')
+  //   //, minEnabledSeries
     
 
 
-    ;
+  //   ;
 
-    //============================================================
-
-
-    function chart(selection) {
-      selection.each(function (data) {
-        // prepare data
-        var data1 = data.filter(function (item) {
-          return !item.disabled != undefined && item.disabled == false;
-        })[0];
-        var key;
-        if (data1) {
-          key = data1.key;
-          data1 = data1.boundaries;
-        } else {
-          key = data[0].key;
-          data1 = data[0].boundaries;
-        }
-        //data1 = data1 ? data1.boundaries : data[0].boundaries;
-        //console.log("colorScheme", data1);
-        //
-        var availableWidth = width - margin.left - margin.right,
-            container = d3.select(this);
+  //   //============================================================
 
 
-        //------------------------------------------------------------
-        // Setup containers and skeleton of chart
-
-        var wrap = container.selectAll("g.nv-colorScheme").data([data]);
-        var gEnter = wrap.enter().append("g").attr("class", "nvd3 nv-colorScheme").append("g");
-        var g = wrap.select("g");
-
-        wrap.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        //------------------------------------------------------------
-
-
-        //var series = g.selectAll('.nv-series')
-        //  .data(function (d) {
-        //    return d
-        //  });
-        //var rects = new Array();
-        //for(var i=0;i<data1.length-1;i++) rects.push(i);
-        //
-        var bg = g.selectAll(".nv-color-bg").data([0]);
-        var title = g.selectAll(".nv-color-title").data([0]);
-
-        var colors = g.selectAll(".nv-color").data(data1);
-        var rectWidth = availableWidth / 2 / data1.length;
-        //console.log("rectWidth", rectWidth, availableWidth);
-        //var seriesEnter = series.enter().append('g').attr('class', 'nv-series');
-        var colorsEnter = colors.enter().append("g").attr("class", "nv-color");
-
-        bg.exit().remove();
-        title.exit().remove();
-
-        colors.exit().remove();
-
-        colorsEnter.append("rect").style("stroke-width", 1).style("stroke-opacity", 0).style("fill-opacity", 0.5).style("fill", "#ffffff").attr("class", "nv-color-bg").attr("transform", "translate(-10,-25)");
-
-        colorsEnter.append("text").attr("class", "nv-color-title").attr("text-anchor", "start").style("stroke-opacity", 0).style("font", "bold 0.75rem Arial").style("fill", "#777").attr("transform", "translate(-7,-15)");
+  //   function chart(selection) {
+  //     selection.each(function (data) {
+  //       // prepare data
+  //       var data1 = data.filter(function (item) {
+  //         return !item.disabled != undefined && item.disabled == false;
+  //       })[0];
+  //       var key;
+  //       if (data1) {
+  //         key = data1.key;
+  //         data1 = data1.boundaries;
+  //       } else {
+  //         key = data[0].key;
+  //         data1 = data[0].boundaries;
+  //       }
+  //       //data1 = data1 ? data1.boundaries : data[0].boundaries;
+  //       //console.log("colorScheme", data1);
+  //       //
+  //       var availableWidth = width - margin.left - margin.right,
+  //           container = d3.select(this);
 
 
+  //       //------------------------------------------------------------
+  //       // Setup containers and skeleton of chart
 
-        colorsEnter.append("rect").style("stroke-width", 1).style("stroke", "#a0a0a0")
-        //.attr('class', 'nv-color')
-        .attr("width", rectWidth).attr("height", 5);
+  //       var wrap = container.selectAll("g.nv-colorScheme").data([data]);
+  //       var gEnter = wrap.enter().append("g").attr("class", "nvd3 nv-colorScheme").append("g");
+  //       var g = wrap.select("g");
 
-        colorsEnter.append("text").attr("text-anchor", "start").attr("class", "nv-legend-text").attr("dy", "-.7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "normal 0.5rem Arial").style("fill", "#777");
+  //       wrap.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        //seriesEnter.append('text')
-        //  .attr('text-anchor', 'start')
-        //  .attr('class', 'nv-legend-text')
-        //  .attr('dy', '.32em')
-        //  .attr('dx', '8');
+  //       //------------------------------------------------------------
 
 
-        colors //.select('rect')
-        .style("fill", function (d, i) {
-          if (i == data1.length - 1) return "#f0f0f0";
-          return d.color || color(d, i);
-        }).style("stroke", "#a0a0a0");
-        //.attr('transform', function (d, i) {
-        //  var x = rectWidth*i+5;
-        //  return 'translate(' + x + ',' + 0 + ')';
-        //});
+  //       //var series = g.selectAll('.nv-series')
+  //       //  .data(function (d) {
+  //       //    return d
+  //       //  });
+  //       //var rects = new Array();
+  //       //for(var i=0;i<data1.length-1;i++) rects.push(i);
+  //       //
+  //       var bg = g.selectAll(".nv-color-bg").data([0]);
+  //       var title = g.selectAll(".nv-color-title").data([0]);
 
-        colors //.select('rect')
-        .transition()
-        //.style('fill', function (d, i) {
-        //  return d.color || color(d, i)
-        //})
-        //.style('stroke',  "#a0a0a0")
-        .attr("transform", function (d, i) {
-          //console.log(d, i, rectWidth);
-          var x = rectWidth * i + 10;
-          return "translate(" + x + "," + 0 + ")";
-        });
+  //       var colors = g.selectAll(".nv-color").data(data1);
+  //       var rectWidth = availableWidth / 2 / data1.length;
+  //       //console.log("rectWidth", rectWidth, availableWidth);
+  //       //var seriesEnter = series.enter().append('g').attr('class', 'nv-series');
+  //       var colorsEnter = colors.enter().append("g").attr("class", "nv-color");
 
-        colors.select("text.nv-legend-text").transition().text(function (d) {
-          return d;
-        });
+  //       bg.exit().remove();
+  //       title.exit().remove();
 
-        wrap.select("rect.nv-color-bg") //.select('rect')
-        .transition().attr("width", availableWidth / 2 + 25).attr("height", 40);
+  //       colors.exit().remove();
 
-        wrap.select("text.nv-color-title") //.select('rect')
-        .transition().text(key);
+  //       colorsEnter.append("rect").style("stroke-width", 1).style("stroke-opacity", 0).style("fill-opacity", 0.5).style("fill", "#ffffff").attr("class", "nv-color-bg").attr("transform", "translate(-10,-25)");
+
+  //       colorsEnter.append("text").attr("class", "nv-color-title").attr("text-anchor", "start").style("stroke-opacity", 0).style("font", "bold 0.75rem Arial").style("fill", "#777").attr("transform", "translate(-7,-15)");
 
 
-        //position legend as far right as possible within the total width
-        //g.attr('transform', 'translate(' + (width - margin.right - maxwidth) + ',' + margin.top + ')');
 
-        height = margin.top + margin.bottom + 15;
+  //       colorsEnter.append("rect").style("stroke-width", 1).style("stroke", "#a0a0a0")
+  //       //.attr('class', 'nv-color')
+  //       .attr("width", rectWidth).attr("height", 5);
 
-        //}
-      });
+  //       colorsEnter.append("text").attr("text-anchor", "start").attr("class", "nv-legend-text").attr("dy", "-.7em").style("text-anchor", "middle").style("stroke-opacity", 0).style("font", "normal 0.5rem Arial").style("fill", "#777");
 
-      return chart;
-    }
-
-
-    //============================================================
-    // Expose Public Variables
-    //------------------------------------------------------------
-
-    //chart.dispatch = dispatch;
-    chart.options = nv.utils.optionsFunc.bind(chart);
-
-    chart.margin = function (_) {
-      if (!arguments.length) return margin;
-      margin.top = typeof _.top != "undefined" ? _.top : margin.top;
-      margin.right = typeof _.right != "undefined" ? _.right : margin.right;
-      margin.bottom = typeof _.bottom != "undefined" ? _.bottom : margin.bottom;
-      margin.left = typeof _.left != "undefined" ? _.left : margin.left;
-      return chart;
-    };
-
-    chart.width = function (_) {
-      if (!arguments.length) return width;
-      width = _;
-      return chart;
-    };
-
-    chart.height = function (_) {
-      if (!arguments.length) return height;
-      height = _;
-      return chart;
-    };
-
-    //chart.key = function (_) {
-    //  if (!arguments.length) return getKey;
-    //  getKey = _;
-    //  return chart;
-    //};
-
-    //chart.min = function (_) {
-    //  if (!arguments.length) return minEnabledSeries;
-    //  minEnabledSeries = _;
-    //  return chart;
-    //};
-
-    chart.color = function (_) {
-      if (!arguments.length) return color;
-      color = nv.utils.getColor(_);
-      return chart;
-    };
-
-    chart.align = function (_) {
-      if (!arguments.length) return align;
-      align = _;
-      return chart;
-    };
-
-    chart.rightAlign = function (_) {
-      if (!arguments.length) return rightAlign;
-      rightAlign = _;
-      return chart;
-    };
-
-    //chart.updateState = function (_) {
-    //  if (!arguments.length) return updateState;
-    //  updateState = _;
-    //  return chart;
-    //};
-
-    //chart.radioButtonMode = function (_) {
-    //  if (!arguments.length) return radioButtonMode;
-    //  console.log("set radio mode",_)
-    //  radioButtonMode = _;
-    //  return chart;
-    //};
-
-    //============================================================
+  //       //seriesEnter.append('text')
+  //       //  .attr('text-anchor', 'start')
+  //       //  .attr('class', 'nv-legend-text')
+  //       //  .attr('dy', '.32em')
+  //       //  .attr('dx', '8');
 
 
-    return chart;
-  };
+  //       colors //.select('rect')
+  //       .style("fill", function (d, i) {
+  //         if (i == data1.length - 1) return "#f0f0f0";
+  //         return d.color || color(d, i);
+  //       }).style("stroke", "#a0a0a0");
+  //       //.attr('transform', function (d, i) {
+  //       //  var x = rectWidth*i+5;
+  //       //  return 'translate(' + x + ',' + 0 + ')';
+  //       //});
+
+  //       colors //.select('rect')
+  //       .transition()
+  //       //.style('fill', function (d, i) {
+  //       //  return d.color || color(d, i)
+  //       //})
+  //       //.style('stroke',  "#a0a0a0")
+  //       .attr("transform", function (d, i) {
+  //         //console.log(d, i, rectWidth);
+  //         var x = rectWidth * i + 10;
+  //         return "translate(" + x + "," + 0 + ")";
+  //       });
+
+  //       colors.select("text.nv-legend-text").transition().text(function (d) {
+  //         return d;
+  //       });
+
+  //       wrap.select("rect.nv-color-bg") //.select('rect')
+  //       .transition().attr("width", availableWidth / 2 + 25).attr("height", 40);
+
+  //       wrap.select("text.nv-color-title") //.select('rect')
+  //       .transition().text(key);
+
+
+  //       //position legend as far right as possible within the total width
+  //       //g.attr('transform', 'translate(' + (width - margin.right - maxwidth) + ',' + margin.top + ')');
+
+  //       height = margin.top + margin.bottom + 15;
+
+  //       //}
+  //     });
+
+  //     return chart;
+  //   }
+
+
+  //   //============================================================
+  //   // Expose Public Variables
+  //   //------------------------------------------------------------
+
+  //   //chart.dispatch = dispatch;
+  //   chart.options = nv.utils.optionsFunc.bind(chart);
+
+  //   chart.margin = function (_) {
+  //     if (!arguments.length) return margin;
+  //     margin.top = typeof _.top != "undefined" ? _.top : margin.top;
+  //     margin.right = typeof _.right != "undefined" ? _.right : margin.right;
+  //     margin.bottom = typeof _.bottom != "undefined" ? _.bottom : margin.bottom;
+  //     margin.left = typeof _.left != "undefined" ? _.left : margin.left;
+  //     return chart;
+  //   };
+
+  //   chart.width = function (_) {
+  //     if (!arguments.length) return width;
+  //     width = _;
+  //     return chart;
+  //   };
+
+  //   chart.height = function (_) {
+  //     if (!arguments.length) return height;
+  //     height = _;
+  //     return chart;
+  //   };
+
+  //   //chart.key = function (_) {
+  //   //  if (!arguments.length) return getKey;
+  //   //  getKey = _;
+  //   //  return chart;
+  //   //};
+
+  //   //chart.min = function (_) {
+  //   //  if (!arguments.length) return minEnabledSeries;
+  //   //  minEnabledSeries = _;
+  //   //  return chart;
+  //   //};
+
+  //   chart.color = function (_) {
+  //     if (!arguments.length) return color;
+  //     color = nv.utils.getColor(_);
+  //     return chart;
+  //   };
+
+  //   chart.align = function (_) {
+  //     if (!arguments.length) return align;
+  //     align = _;
+  //     return chart;
+  //   };
+
+  //   chart.rightAlign = function (_) {
+  //     if (!arguments.length) return rightAlign;
+  //     rightAlign = _;
+  //     return chart;
+  //   };
+
+  //   //chart.updateState = function (_) {
+  //   //  if (!arguments.length) return updateState;
+  //   //  updateState = _;
+  //   //  return chart;
+  //   //};
+
+  //   //chart.radioButtonMode = function (_) {
+  //   //  if (!arguments.length) return radioButtonMode;
+  //   //  console.log("set radio mode",_)
+  //   //  radioButtonMode = _;
+  //   //  return chart;
+  //   //};
+
+  //   //============================================================
+
+
+  //   return chart;
+  // };
 
   nv.models.axis = function () {
     "use strict";
@@ -7443,14 +7464,34 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-              var data1 = data[0].filter(function (item) {
-          return !item.disabled != undefined && item.disabled == false;
-        })[0];
-        
-        if (!data1) {
-          data1 = data[0][0];
-        }
+        console.log("Map model data", data)
 
+        // find index of active serie
+        var valueIndex = -1;
+        data[0].series.forEach(function(item,index){
+          console.log("test",item)
+          if(!item.disabled != undefined && item.disabled == false){
+            valueIndex = index;
+          }
+        })
+
+        
+        valueIndex = (valueIndex == -1) ? 0 : valueIndex;
+
+        var getValueIndex = function(){ return valueIndex }
+
+        console.log("valueIndex", valueIndex)
+
+// // ------------->
+//               var data1 = data[0].filter(function (item) {
+//           return !item.disabled != undefined && item.disabled == false;
+//         })[0];
+        
+//         if (!data1) {
+//           data1 = data[0][0];
+//         }
+// // <------------
+// // 
         var availableWidth = width - margin.left - margin.right,
             availableHeight = height - margin.top - margin.bottom,
             container = d3.select(this);
@@ -7475,32 +7516,43 @@ d3.geo.tile = function () {
 
         wrapEnter.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var geoData = topojson.feature(worldTopo, worldTopo.objects.world).features.filter(function (feature) {
-          return feature.id !== "ATA";
-        });
+        // var geoData = topojson.feature(worldTopo, worldTopo.objects.world).features.filter(function (feature) {
+        //   return feature.id !== "ATA";
+        // });
 
-        geoData.forEach(function (item, index) {
-          var d = data1.values.filter(function (d) {
-            return item.id == d.id;
-          })[0];
-          item.properties.category = d && d.category != null ? d.category : null;
-          item.properties.value = d && d.value != null ? d.value.toPrecision(3) : null;
-          item.properties.key = data1.key;
-         });
+        // geoData.forEach(function (item, index) {
+        //   var d = data1.values.filter(function (d) {
+        //     return item.id == d.id;
+        //   })[0];
+        //   item.properties.category = d && d.category != null ? d.category : null;
+        //   item.properties.value = d && d.value != null ? d.value.toPrecision(3) : null;
+        //   item.properties.key = data1.key;
+        //  });
 
         
+        // get geojson from input data
+        var geoData = data[0].features
+        // .filter(function (feature) {
+        //   return feature.id !== "ATA";
+        // });
+
         var tr = zoom.translate();
         
         if (tr[0] == 0 && tr[1] == 0) {
           
           projection.scale(1).translate([0,0]);
+          
+// Auto zoom and pane
           var selectionBounds;
           
           geoData.forEach(function (item, index) {
-            var d = data1.values.filter(function (d) {
-              return item.id == d.id;
-            })[0];
-            if ( d ) { selectionBounds = mergeBounds(selectionBounds,path.bounds(item)) };
+            item.properties["valueIndex"] = valueIndex;
+            // var d = data1.values.filter(function (d) {
+            //   return item.id == d.id;
+            // })[0];
+            // if ( d ) { 
+              selectionBounds = mergeBounds(selectionBounds,path.bounds(item)) 
+            // };
           });          
           
            var  dx = selectionBounds[1][0] - selectionBounds[0][0],
@@ -7511,6 +7563,7 @@ d3.geo.tile = function () {
            translate = [(width/2-(scale*x/2/Math.PI)), (height/2-(scale*y/2/Math.PI))];
            zoom.scale(scale).translate(translate);
         }
+//--------------------------------------------- 
 
         var geo = g.select(".nv-map").selectAll("path.map-subunit").data(geoData);
         var labels = g.select(".nv-map").selectAll("text.nv-map-label").data(geoData);
@@ -7525,54 +7578,69 @@ d3.geo.tile = function () {
           .on("mouseover", function (d, i) {
               if (lockHighLight) return;
               d3.select(this)
-              .transition()
-              .style("stroke", function (d) {
-              return d.properties.category == null ? defaultStroke : complementedColor(color(d, d.properties.category));
-            })
-          .style("stroke-opacity", defaultStrokeOpacity)
-          .style("stroke-width", selectedStrokeWidth);
-            dispatch.mapMouseover({
-              point: d,
-              series: d.key,
-              pos: [d3.event.pageX, d3.event.pageY]
-            });
+                .transition()
+                .style("stroke", function (d) {
+                  return (d.properties.values[valueIndex].c == null) ? 
+                    defaultStroke : 
+                    complementedColor(color(d, d.properties.values[valueIndex].c));
+                })
+                .style("stroke-opacity", defaultStrokeOpacity)
+                .style("stroke-width", selectedStrokeWidth);
+              console.log("getValueIndex",d,getValueIndex)
+              dispatch.mapMouseover({
+                point: d,
+                index : getValueIndex,
+                props: d.properties,
+                pos: [d3.event.pageX, d3.event.pageY]
+              });
           })
           .on("mouseout", function (d, i) {
             if (lockHighLight) return;
-            d3.select(this).transition()
-            .style("stroke", defaultStroke)
-            .style("stroke-opacity", defaultStrokeOpacity)
-            .style("stroke-width", defaultStrokeWidth);
+            d3.select(this)
+              .transition()
+              .style("stroke", defaultStroke)
+              .style("stroke-opacity", defaultStrokeOpacity)
+              .style("stroke-width", defaultStrokeWidth);
+              console.log("getValueIndex",d,getValueIndex)
             dispatch.mapMouseout({
               point: d,
-              series: d.key,
+              index : getValueIndex,
+              props: d.properties,
               pos: [d3.event.pageX, d3.event.pageY]
             });
           });
 
      
-        geo.transition()
-        .attr("class", function (d, i) {
-          return "map-subunit subunit-id-" + i;
-        })
-        .style("fill", function (d) {
-          return d.properties.category == null ? defaultFill : color(d, d.properties.category);
-        })
-        .style("fill-opacity", function (d) {
-          return d.properties.category == null ? defaultFillOpacity : selectedFillOpacity;
-        })
-        .style("stroke-width", defaultStrokeWidth)
-        .style("stroke", defaultStroke);
+        geo
+          .transition()
+          .attr("class", function (d, i) {
+            return "map-subunit subunit-id-" + i;
+          })
+          .style("fill", function (d) {
+            console.log("FILL",valueIndex)
+            return (d.properties.values[valueIndex].c == null) ? 
+              defaultFill : 
+              color(d, d.properties.values[valueIndex].c);
+          })
+          .style("fill-opacity", function (d) {
+            return ((d.properties.values) && (d.properties.values[valueIndex].c >=0) ) ? 
+              selectedFillOpacity : 
+              defaultFillOpacity;
+          })
+          .style("stroke-width", defaultStrokeWidth)
+          .style("stroke", defaultStroke);
+
 
         var highlightSubunit = function (d, i) {
           g.select(".nv-map").selectAll("path.subunit-id-" + i)
           .transition()
           .style("stroke", function (d) {
-            return d.properties.category == null ? defaultStroke : complementedColor(color(d, d.properties.category));
+            return ((d.properties.values) && (d.properties.values[valueIndex].c >=0) ) ? 
+              complementedColor(color(d, d.properties.values[valueIndex].c)) : defaultStroke;
           })
           .style("stroke-opacity", defaultStrokeOpacity)
           .style("stroke-width", selectedStrokeWidth);
-        };
+        }
 
         var clearSubunit = function (d, i) {
           g.select(".nv-map").selectAll("path.subunit-id-" + i)
@@ -7586,9 +7654,10 @@ d3.geo.tile = function () {
         if(showLabels){  
           labels.enter()
             .append("text")
-            .text(function (d) {
-              return d.properties.name;
-            })
+            // .text(function (d) {
+            //   //todo show in locale
+            //   return d.properties.name.en;
+            // })
             .attr("text-anchor", "middle")
             .attr("class", "nv-map-label")
             .attr("dy", "-.5em")
@@ -7599,23 +7668,59 @@ d3.geo.tile = function () {
             .style("stroke", "#ffffff")
             .style("stroke-opacity", 0.25)
             .style("stroke-width", 3)
+
+            .attr("transform", function (d) {
+              var position = path.centroid(d);
+              return "translate(" + position[0] + "," + position[1] + ")";
+            })
+            .text(function (d, i) {
+              var fontSize = getFontSize(labels[0][i], d);
+              //fontSize = (fontSize > 10) ? fontSize : 10;
+              var w = approximateLength(d.properties.name.en, fontSize);
+              var bounds = path.bounds(d);
+              if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
+                return d.properties.geocode[0];
+              } else {
+                return d.properties.name.en;
+              }
+            })
+            .style("font-size", function (d, i) {
+              var fontSize = getFontSize(labels[0][i], d);
+              //fontSize = (fontSize > 8) ? fontSize : 8;
+              //var w = approximateLength(d.properties.name, fontSize);
+              //var bounds = path.bounds(d);
+              //if(w * 1.5 > bounds[1][0] - bounds[0][0]) {
+              //  return 2*fontSize+"px"
+              //}
+              return fontSize + "px";
+            })
+            .style("opacity", function (d, i) {
+              var bounds = path.bounds(d);
+              var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+              opct = getFontSize(labels[0][i], d) < 10 ? 0 : opct;
+              return opct;
+            })  
+
+
             .on("mouseover", function (d, i) {
               if (lockHighLight) return;
               highlightSubunit(d, i);
-
+              console.log("getValueIndex",d,getValueIndex)
               dispatch.mapMouseover({
                 point: d,
-                series: d.key,
-                //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
+                index : getValueIndex,
+                props: d.properties,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             })
             .on("mouseout", function (d, i) {
               if (lockHighLight) return;
               clearSubunit(d, i);
+              console.log("getValueIndex",d,getValueIndex)
               dispatch.mapMouseout({
                 point: d,
-                series: d.key,
+                index : getValueIndex,
+                props: d.properties,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             });
@@ -7625,9 +7730,9 @@ d3.geo.tile = function () {
           values
             .enter()
             .append("text")
-            .text(function (d) {
-              return d.properties.value;
-            })
+            // .text(function (d) {
+            //   return d.properties.values[valueIndex].v;
+            // })
             .attr("text-anchor", "middle")
             .attr("class", "nv-map-value")
             .attr("dy", ".7em")
@@ -7641,26 +7746,49 @@ d3.geo.tile = function () {
             .style("stroke-opacity", 0.15)
             .style("stroke-width", 3)
             .style("opacity", 0)
+
+            .text(function (d) {
+              return d.properties.values[valueIndex].v;
+            })
+            .style("font-size", function (d, i) {
+              return getFontSize(labels[0][i], d) + "px";
+            })
+            .attr("transform", function (d) {
+              var position = path.centroid(d);
+              return "translate(" + position[0] + "," + position[1] + ")";
+            })
+            .style("opacity", function (d, i) {
+              var bounds = path.bounds(d);
+              var opct = labels[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+              opct = getFontSize(labels[0][i], d) < 12 ? 0 : opct;
+              return opct;
+            })
+
             .on("mouseover", function (d, i) {
               if (lockHighLight) return;
               highlightSubunit(d, i);
+              console.log("getValueIndex",d,getValueIndex)
               dispatch.mapMouseover({
                 point: d,
-                series: d.key,
-                //pos: [d3.event.pageX-d3.event.offsetX, d3.event.pageY-d3.event.offsetY]
+                index : getValueIndex,
+                props: d.properties,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             })
             .on("mouseout", function (d, i) {
               if (lockHighLight) return;
               clearSubunit(d, i);
+              console.log("getValueIndex",d,getValueIndex)
               dispatch.mapMouseout({
                 point: d,
-                series: d.key,
+                index : getValueIndex,
+                props: d.properties,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             });
         }    
+
+   
 
 
 
@@ -7684,13 +7812,19 @@ d3.geo.tile = function () {
             .transition()
             .attr("d", path)
             .style("fill-opacity", function (d) {
-              return d.properties.category == null ? defaultFillOpacity : selectedFillOpacity;
+              return ((d.properties.values) && (d.properties.values[valueIndex].c >=0) ) ? 
+                     selectedFillOpacity : 
+                     defaultFillOpacity; 
             })
             .style("stroke-width", defaultStrokeWidth)
             .style("fill", function (d) {
-              if (d.properties.category == null || d.properties.category == undefined) return defaultFill;
-              if (isNaN(d.properties.category)) return color(d, 0)
-              return color(d, d.properties.category);
+              if ((d.properties.values) && (d.properties.values[valueIndex].c >=0)){
+                return color(d, d.properties.values[valueIndex].c);  
+              }
+              return defaultFill;
+              // if (d.properties.category == null || d.properties.category == undefined) return defaultFill;
+              // if (isNaN(d.properties.category)) return color(d, 0)
+              // return color(d, d.properties.category);
             });
 
           if ( showLabels ) { 
@@ -7700,12 +7834,12 @@ d3.geo.tile = function () {
             }).text(function (d, i) {
               var fontSize = getFontSize(labels[0][i], d);
               //fontSize = (fontSize > 10) ? fontSize : 10;
-              var w = approximateLength(d.properties.name, fontSize);
+              var w = approximateLength(d.properties.name.en, fontSize);
               var bounds = path.bounds(d);
               if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
-                return d.id;
+                return d.properties.geocode[0];
               } else {
-                return d.properties.name;
+                return d.properties.name.en;
               }
             }).style("font-size", function (d, i) {
               var fontSize = getFontSize(labels[0][i], d);
@@ -7726,7 +7860,7 @@ d3.geo.tile = function () {
 
           if ( showValues ){
             values.transition().text(function (d) {
-              return d.properties.value;
+              return d.properties.values[valueIndex].v;
             }).style("font-size", function (d, i) {
               return getFontSize(labels[0][i], d) + "px";
             }).attr("transform", function (d) {
@@ -7988,8 +8122,8 @@ d3.geo.tile = function () {
     //------------------------------------------------------------
     //console.log('mapChart ', topojson);
     var map = nv.models.map(),
-        legend = nv.models.legend(),
-        colorScheme = nv.models.colorScheme();
+        legend = nv.models.legend();
+        // colorScheme = nv.models.colorScheme();
     legend.radioButtonMode(true);
 
     var margin = { top: 30, right: 20, bottom: 20, left: 20 },
@@ -8037,7 +8171,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-        // console.log("MAP CHART", data);
+        console.log("MAP CHART", data);
 
 
         var container = d3.select(this),
@@ -8110,14 +8244,15 @@ d3.geo.tile = function () {
             return "#238443";
           });
 
-          wrap.select(".nv-legendWrap").datum(data).call(legend);
+          wrap.select(".nv-legendWrap").datum(data[0].series).call(legend);
 
           if (margin.top != legend.height()) {
             margin.top = legend.height();
             availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
           }
-
-          wrap.select(".nv-legendWrap").attr("transform", "translate(0," + -margin.top + ")");
+          // wrap.select(".nv-legendWrap").attr("transform", "translate(0," + -margin.top + ")");
+        
+          wrap.select(".nv-legendWrap").attr("transform", "translate(0,0)");
         }
 
         //------------------------------------------------------------
@@ -8125,28 +8260,28 @@ d3.geo.tile = function () {
         // Color Scheme
 
         //if (showLegend) {
-        colorScheme.width(availableWidth)
-        //.key(function (d) {
-        //  return d.key;
-        //})
-        //.min(2)
-        .color(color);
+        // colorScheme.width(availableWidth)
+        // //.key(function (d) {
+        // //  return d.key;
+        // //})
+        // //.min(2)
+        // .color(color);
 
-        wrap.select(".nv-colorsWrap").datum(data).call(colorScheme);
+        //  wrap.select(".nv-colorsWrap").datum(data).call(colorScheme);
 
-        //if (margin.top != legend.height()) {
-        //  margin.top = legend.height();
-        //  availableHeight = (height || parseInt(container.style('height')) || 400)
-        //  - margin.top - margin.bottom;
-        //}
-        var h = height || parseInt(container.style("height")) || 400;
-        // console.log("Chart height", h);
-        wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (h - 75) + ")");
-        //}
+        // //if (margin.top != legend.height()) {
+        // //  margin.top = legend.height();
+        // //  availableHeight = (height || parseInt(container.style('height')) || 400)
+        // //  - margin.top - margin.bottom;
+        // //}
+        // var h = height || parseInt(container.style("height")) || 400;
+        // // console.log("Chart height", h);
+        // wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (h - 75) + ")");
+        // //}
 
-        //------------------------------------------------------------
+        // //------------------------------------------------------------
 
-        wrap.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // wrap.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
         //------------------------------------------------------------
@@ -8161,7 +8296,7 @@ d3.geo.tile = function () {
         //mapWrap
         wrap.select(".nv-mapWrap")
         //.attr('transform', 'translate(0,' + (legend.height()+margin.top) + ')')
-        .datum([data]).call(map);
+        .datum(data).call(map);
 
 
 
@@ -8188,7 +8323,7 @@ d3.geo.tile = function () {
         // Update chart from a state object passed to event handler
         dispatch.on("changeState", function (e) {
           if (typeof e.disabled !== "undefined") {
-            data.forEach(function (series, i) {
+            data.series.forEach(function (series, i) {
               series.disabled = e.disabled[i];
             });
 
@@ -8199,7 +8334,7 @@ d3.geo.tile = function () {
         });
 
         dispatch.on("tooltipShow", function (e) {
-          // console.log("tooltipShow", e);
+          console.log("tooltipShow", e);
 
           if (tooltips) showTooltip(e);
         });
@@ -8214,7 +8349,7 @@ d3.geo.tile = function () {
     //------------------------------------------------------------
     //console.log("MAP DISPATCH",map.dispatch.on)
     map.dispatch.on("mapMouseover", function (e) {
-      // console.log("mapMouseover", e);
+      console.log("mapMouseover", e);
       e.pos = [e.pos[0] + margin.left, e.pos[1] + margin.top];
       dispatch.tooltipShow(e);
     });

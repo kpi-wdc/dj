@@ -10,7 +10,7 @@
 			</div>
 			
 			<img ng-if="!chart" src="./img/ajax-loader.gif"/>
-			<!-- <div google-chart chart="chart" agc-on-ready="fixGoogleCharts(chartWrapper)"></div> -->
+			<div google-chart chart="chart" agc-on-ready="fixGoogleCharts(chartWrapper)"></div>
 			<table ng-if="chart && chart.data.length > 0">
 				<tr ng-repeat="r in chart.data">
 					<td ng-repeat="c in r track by $index">

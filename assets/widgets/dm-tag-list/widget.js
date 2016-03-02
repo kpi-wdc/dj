@@ -18,6 +18,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
 
     $scope.changeState = function(){
       $scope.collapsed = !$scope.collapsed;      
+
     }
 
     var addListener = function(listener){
@@ -59,18 +60,19 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
 
     $scope.refresh = function(){
           var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
-
-          $http.post(
-              "./api/metadata/tag/total",
-              {property : $scope.property,"status":status}
-             ).success(function(resp){
-              $scope.total = resp.count;
-          });
+          status = "public";
+          // $http.post(
+          //     "./api/metadata/tag/total",
+          //     {property : $scope.property,"status":status}
+          //    ).success(function(resp){
+          //     $scope.total = resp.count;
+          // });
 
           $http.post(
             "./api/metadata/tag/items",
             {property : $scope.property,"status":status}
            ).success(function(resp){
+            $scope.total = resp.length;
             resp.forEach(function(item){
               item.lookup = $lookup(item.tag)
             }); 

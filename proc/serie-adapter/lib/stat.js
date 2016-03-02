@@ -727,7 +727,39 @@ function rank(data){
   return data.slice().map(function(v){ return (v == null) ? null : sorted.indexOf(v)+1 });
 }
 
+function granulate(data,bins){
+  
+  minValue = min(data);
+  maxValue = max(data);
+  var res = [];
+
+  data.forEach(function(item){
+            if(item !=null){
+              var index = 
+                Math.floor((item - minValue) / (maxValue - minValue) * bins);
+              index = (index == bins) ? index - 1 : index;
+              res.push(index);
+            }
+          })
+  
+   return result;
+}
+
+
+var util = require("util");
+var Ordinal = function(minValue,maxValue,bins){
+  return function(value){
+    if(!util.isUndefined(value)){
+              var index = Math.floor((value - minValue) / (maxValue - minValue) * bins);
+              index = (index == bins) ? index - 1 : index;
+              return index;
+        }      
+  }
+}
+
+exports.Ordinal = Ordinal;
 exports.normalize = normalize;
 exports.standardize = standardize;
 exports.logNormalize = logNormalize;
 exports.rank = rank; 
+exports.granulate = granulate; 

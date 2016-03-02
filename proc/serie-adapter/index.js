@@ -1425,6 +1425,93 @@ exports.GeoChartSerie = function(table,params){
 };
 
 
+var intersect = require("./lib/arrays").intersect;
+var fs = require("fs");
+
+exports.geojson = function(table,params){
+
+	if(!params) return {};
+	
+	params.direction = (params.direction) ? params.direction : "Rows";
+	params.dataIndex = (UTIL.isUndefined(params.dataIndex)) ? [0] : params.dataIndex;
+	params.bins = (params.bins)? params.bins : 1; 
+	if(params.direction == "Rows") table = exports.transposeTable(table,{transpose:true});
+
+	if(table.body.length == 0) return {};
+		
+	var geoIndex = -1;
+	table.header[0].metadata.forEach(
+			function(item,index){
+				if (item.role == "geo") {geoIndex = index}
+			})
+
+	if(geoIndex<0) return {};
+
+	//create data table for geoChart
+	var geodata = require("../../wdc_libs/wdc-geojson.js").geodata;
+
+	var dataIndex = params.dataIndex.sort(function(a,b){return a-b});
+	
+	dataIndex = dataIndex.map(function(item){
+			return {
+				index : item,
+				label : table.body[item].metadata.map(function(item){return item.label}).join(", "),
+				values : table.body[item].value,
+				ordinal : STAT.Ordinal(STAT.max(table.body[item].value),STAT.min(table.body[item].value),params.bins)
+			}
+		});
+
+	var series = dataIndex.map(function(item){
+		return {key: item.label}
+	}) 
+
+	var attrs = [];
+	for(var i=0; i<table.body[0].value.length; i++){
+		attrs.push({
+			geocode: table.header[i].metadata[geoIndex].id,
+			values: (function(index){
+				var temp = [];
+				dataIndex.forEach(function(di){
+					temp.push({
+						l : di.label,
+						v : di.values[index],
+						c : di.ordinal(di.values[index])
+					})
+				})
+				return temp;
+			})(i)
+		})
+	}
+
+
+	var geocodes = attrs.map(function (item){return item.geocode});
+
+	var geojs = geodata
+		.filter(function(item){
+			return intersect(item.properties.geocode, geocodes).length > 0
+		})
+	
+	var res = [];
+	attrs.forEach(function(a){
+		var g = geojs.filter(function(item){ return item.properties.geocode.indexOf(a.geocode)>=0})[0];
+		if(g){
+			g.properties.values = a.values;
+			res.push(g);
+		}
+	})
+
+	
+	if(res.length == 0) res = {}
+
+	var path= "/data/"+Math.random().toString(36).substring(2)+".json"
+	var filename = "./.tmp/public"+path;
+
+	
+	fs.writeFileSync(filename, JSON.stringify({"series":series, features:res}));
+	return path;
+	 
+}
+
 // Generate Statistical Distributions as Scatter Series
 // Parameters:
 // normalized 			true/false 													(default false)

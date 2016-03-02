@@ -210,7 +210,9 @@
 					</div>
 					
 					<img ng-if="!step.chart" src="./img/ajax-loader.gif"/>
-					<!-- <div google-chart chart="chart" agc-on-ready="fixGoogleCharts(chartWrapper)"></div> -->
+
+					<div google-chart chart="step.chart" agc-on-ready="fixGoogleCharts(chartWrapper)"></div>
+					
 					<table ng-if="step.chart.data.length > 0">
 						<tr ng-repeat="r in step.chart.data">
 							<td ng-repeat="c in r track by $index">

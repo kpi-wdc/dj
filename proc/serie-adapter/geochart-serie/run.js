@@ -1,4 +1,4 @@
-var generate = require("../index").GeoChartSerie;
+var generate = require("../index").geojson;
 
 
 process.on('message', function (json) {

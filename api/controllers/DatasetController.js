@@ -17,6 +17,7 @@ var util = require("util");
 var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
 var toXLS = require("../../wdc_libs/wdc-table-generator").prepareXLS;
 var I18N = require("../../wdc_libs/wdc-i18n");
+var Cache = require("./Cache");
 
 
 
@@ -151,7 +152,10 @@ module.exports = {
                   // TODO send operation status
                   var result = prepareCommitInfo(obj);
                   result.warnings = validationResult.warnings;
-                  return res.send(result);
+                  Cache.clear("dsm")
+                    .then(function(){
+                      return res.send(result);    
+                    })
                 }
               })
             } else {
@@ -170,7 +174,10 @@ module.exports = {
                         } else {
                           var result = prepareCommitInfo(obj);
                           result.warnings = validationResult.warnings;
-                          return res.send(result);
+                          Cache.clear("dsm")
+                            .then(function(){
+                              return res.send(result);    
+                            })
                         }
                       });
                     });
@@ -191,61 +198,133 @@ module.exports = {
       mq["dataset/status"] = "public";
     }
 
+    params.$url = req.url;
 
-    Dataset.find(mq).then(function (obj) {
-      var r = new query()
-        .from(obj)
-        .map(function (item) {
-          return prepareDataset(item).metadata
-        })
-        .get();
-      if (!params.query) {
-        return res.send(r);
-      } else {
-        r = new query()
-          .from(r)
-          .select(function (data) {
-            outerOrC = false;
-            for (i in params.query) {
-              var andC = true;
-              for (prop in params.query[i]) {
-                var values = getProperty(data, prop);
-                var test = params.query[i][prop];
-                var orC = false;
-                values.forEach(function (valuesItem) {
-                  test.forEach(function (testItem) {
-                    testItem = (util.isString(testItem)) ? {equals: testItem} : testItem;
-                    if (testItem.equals) {
-                      orC |= valuesItem === testItem.equals;
-                    }
-                    if (testItem.notEquals) {
-                      orC |= valuesItem !== testItem.notEquals;
-                    }
-                    if (testItem.startsWith) {
-                      orC |= valuesItem.indexOf(testItem.startsWith) === 0;
-                    }
-                    if (testItem.endsWith) {
-                      orC |= valuesItem.match(testItem.endsWith + "$") == testItem.endsWith;
-                    }
-                    if (testItem.includes) {
-                      orC |= valuesItem.indexOf(testItem.includes) >= 0;
-                    }
-                  })
+    Cache.get(params)
+      .then(function(cachedResult){
+        if(cachedResult){
+          res.send(cachedResult.value)
+        }else{
+          // no cached result avaible to do make request
+              Dataset.find(mq).then(function (obj) {
+              var r = new query()
+                .from(obj)
+                .map(function (item) {
+                  return prepareDataset(item).metadata
                 })
-                andC &= orC;
-              }
-              outerOrC |= andC;
-            }
-            return outerOrC;
-          })
-          .get();
+                .get();
+              if (!params.query) {
+                Cache.save("dsm",params,r)
+                  .then(function(){
+                    return res.send(r);    
+                  })
+              } else {
+                r = new query()
+                  .from(r)
+                  .select(function (data) {
+                    outerOrC = false;
+                    for (i in params.query) {
+                      var andC = true;
+                      for (prop in params.query[i]) {
+                        var values = getProperty(data, prop);
+                        var test = params.query[i][prop];
+                        var orC = false;
+                        values.forEach(function (valuesItem) {
+                          test.forEach(function (testItem) {
+                            testItem = (util.isString(testItem)) ? {equals: testItem} : testItem;
+                            if (testItem.equals) {
+                              orC |= valuesItem === testItem.equals;
+                            }
+                            if (testItem.notEquals) {
+                              orC |= valuesItem !== testItem.notEquals;
+                            }
+                            if (testItem.startsWith) {
+                              orC |= valuesItem.indexOf(testItem.startsWith) === 0;
+                            }
+                            if (testItem.endsWith) {
+                              orC |= valuesItem.match(testItem.endsWith + "$") == testItem.endsWith;
+                            }
+                            if (testItem.includes) {
+                              orC |= valuesItem.indexOf(testItem.includes) >= 0;
+                            }
+                          })
+                        })
+                        andC &= orC;
+                      }
+                      outerOrC |= andC;
+                    }
+                    return outerOrC;
+                  })
+                  .get();
 
-        return res.send(r);
-      }
-    }, function (err) {
-      sails.log.error('Error while getting a metadata list: ' + err);
-      res.serverError();
-    })
+                Cache.save("dsm",params,r)
+                  .then(function(){
+                    return res.send(r);    
+                  })    
+              }
+            }, function (err) {
+              sails.log.error('Error while getting a metadata list: ' + err);
+              res.serverError();
+            })
+
+          //
+        }
+      })
+
+    // Dataset.find(mq).then(function (obj) {
+    //   var r = new query()
+    //     .from(obj)
+    //     .map(function (item) {
+    //       return prepareDataset(item).metadata
+    //     })
+    //     .get();
+    //   if (!params.query) {
+    //     return res.send(r);
+    //   } else {
+    //     r = new query()
+    //       .from(r)
+    //       .select(function (data) {
+    //         outerOrC = false;
+    //         for (i in params.query) {
+    //           var andC = true;
+    //           for (prop in params.query[i]) {
+    //             var values = getProperty(data, prop);
+    //             var test = params.query[i][prop];
+    //             var orC = false;
+    //             values.forEach(function (valuesItem) {
+    //               test.forEach(function (testItem) {
+    //                 testItem = (util.isString(testItem)) ? {equals: testItem} : testItem;
+    //                 if (testItem.equals) {
+    //                   orC |= valuesItem === testItem.equals;
+    //                 }
+    //                 if (testItem.notEquals) {
+    //                   orC |= valuesItem !== testItem.notEquals;
+    //                 }
+    //                 if (testItem.startsWith) {
+    //                   orC |= valuesItem.indexOf(testItem.startsWith) === 0;
+    //                 }
+    //                 if (testItem.endsWith) {
+    //                   orC |= valuesItem.match(testItem.endsWith + "$") == testItem.endsWith;
+    //                 }
+    //                 if (testItem.includes) {
+    //                   orC |= valuesItem.indexOf(testItem.includes) >= 0;
+    //                 }
+    //               })
+    //             })
+    //             andC &= orC;
+    //           }
+    //           outerOrC |= andC;
+    //         }
+    //         return outerOrC;
+    //       })
+    //       .get();
+
+    //     return res.send(r);
+    //   }
+    // }, function (err) {
+    //   sails.log.error('Error while getting a metadata list: ' + err);
+    //   res.serverError();
+    // })
   },
 
   getMetadata: function (req, res) {
@@ -267,40 +346,86 @@ module.exports = {
       return res.send([]);
     }
 
+
     var mq = {"commit/HEAD": true};
     if (!params || !params.status || params.status == "public") {
       mq["dataset/status"] = "public"
     }
 
+    params.$url = req.url;
+    
 
-    Dataset.find(mq).then(function (obj) {
-      var r = new query()
-        .from(obj)
-        .map(function (item) {
-          var tmp = getProperty(item, params.property);
-          return tmp;
-        })
-        .select(function (item) {
-          return item
-        })
-        .map(function (item) {
-          if (item.split) {
-            return item.split("/")
-          }
-          return item
-        })
-        .group(function (item) {
-          return {key: item, value: item}
-        })
-        .map(function (item) {
-          return {tag: item.key, count: item.values.length}
-        })
-        .get();
-      return res.send(r);
-    }, function (err) {
-      sails.log.error('Error while getting a tag list' + err);
-      res.serverError();
-    })
+    Cache.get(params)
+      .then(function(cachedResult){
+        if(cachedResult){
+          return res.send(cachedResult.value)
+        }else{
+
+           Dataset.find(mq).then(function (obj) {
+                var r = new query()
+                  .from(obj)
+                  .map(function (item) {
+                    var tmp = getProperty(item, params.property);
+                    return tmp;
+                  })
+                  .select(function (item) {
+                    return item
+                  })
+                  .map(function (item) {
+                    if (item.split) {
+                      return item.split("/")
+                    }
+                    return item
+                  })
+                  .group(function (item) {
+                    return {key: item, value: item}
+                  })
+                  .map(function (item) {
+                    return {tag: item.key, count: item.values.length}
+                  })
+                  .get();
+
+                Cache.save("dsm",params,r)
+                  .then(function(){
+                    return res.send(r);    
+                  })  
+                
+              }, function (err) {
+                sails.log.error('Error while getting a tag list' + err);
+                res.serverError();
+              })
+
+        }
+      })
+
+    // Dataset.find(mq).then(function (obj) {
+    //   var r = new query()
+    //     .from(obj)
+    //     .map(function (item) {
+    //       var tmp = getProperty(item, params.property);
+    //       return tmp;
+    //     })
+    //     .select(function (item) {
+    //       return item
+    //     })
+    //     .map(function (item) {
+    //       if (item.split) {
+    //         return item.split("/")
+    //       }
+    //       return item
+    //     })
+    //     .group(function (item) {
+    //       return {key: item, value: item}
+    //     })
+    //     .map(function (item) {
+    //       return {tag: item.key, count: item.values.length}
+    //     })
+    //     .get();
+    //   return res.send(r);
+    // }, function (err) {
+    //   sails.log.error('Error while getting a tag list' + err);
+    //   res.serverError();
+    // })
   },
 
   getDependencies: function(req,resp){
@@ -341,56 +466,123 @@ module.exports = {
       mq["dataset/status"] = "public"
     }
 
+    params.$url = req.url;
+    
 
-    Dataset.find(mq).then(function (obj) {
-      var tagList = [];
-      for(var i in params.tags){
-        tagList = tagList.concat(getTags(obj, params.tags[i].meta, params.tags[i].property));
-      }
+    Cache.get(params)
+      .then(function(cachedResult){
+        if(cachedResult){
+          return resp.send(cachedResult.value)
+        }else{
 
-      tagList.forEach(function(item, index){item.index=index})
+          Dataset.find(mq).then(function (obj) {
+            var tagList = [];
+            for(var i in params.tags){
+              tagList = tagList.concat(getTags(obj, params.tags[i].meta, params.tags[i].property));
+            }
 
-      var keywordMap = [];
-      for(j in obj){
-        var dskw = [];
-        for(var i in params.tags){
-          dskw = dskw.concat(getTags([obj[j]], params.tags[i].meta, params.tags[i].property));
+            tagList.forEach(function(item, index){item.index=index})
+
+            var keywordMap = [];
+            for(j in obj){
+              var dskw = [];
+              for(var i in params.tags){
+                dskw = dskw.concat(getTags([obj[j]], params.tags[i].meta, params.tags[i].property));
+              }
+              var values = [];
+              tagList.forEach(function(item){
+                values.push(
+                  (dskw.filter(function(w){return w.tag == item.tag}).length > 0) ? 1 : 0
+                )
+              })
+              keywordMap.push({dataset:obj[j].id, keywords:values})
+            }
+
+            tagList.forEach(function(item){
+              item.value = keywordMap
+                .map(function(d){return d.keywords[item.index]})
+                .reduce(function(s,d){return s+d}) 
+            })
+
+
+            var links = [];
+            for(var i=0; i<tagList.length-1; i++){
+              for(var j=i+1; j<tagList.length; j++){
+                var v = 0;
+                keywordMap
+                          .map(function(d){return {source:d.keywords[tagList[i].index], target:d.keywords[tagList[j].index]}})
+                          .forEach(function(d){if (d.source == 1 && d.target == 1)  v++})
+                links.push({
+                    source:tagList[i].index, 
+                    target:tagList[j].index,
+                    value: v
+                })      
+              }  
+            }
+           
+            links = links.filter(function(d){return d.value>0})
+
+            var responsedObject = {"tags":tagList, "links":links, "keywordMap":keywordMap};
+
+            Cache.save("dsm", params, responsedObject)
+              .then(function(){
+                return resp.send(responsedObject)
+              })
+  
+          })
+
         }
-        var values = [];
-        tagList.forEach(function(item){
-          values.push(
-            (dskw.filter(function(w){return w.tag == item.tag}).length > 0) ? 1 : 0
-          )
-        })
-        keywordMap.push({dataset:obj[j].id, keywords:values})
-      }
-
-      tagList.forEach(function(item){
-        item.value = keywordMap
-          .map(function(d){return d.keywords[item.index]})
-          .reduce(function(s,d){return s+d}) 
       })
 
+    // Dataset.find(mq).then(function (obj) {
+    //   var tagList = [];
+    //   for(var i in params.tags){
+    //     tagList = tagList.concat(getTags(obj, params.tags[i].meta, params.tags[i].property));
+    //   }
 
-      var links = [];
-      for(var i=0; i<tagList.length-1; i++){
-        for(var j=i+1; j<tagList.length; j++){
-          var v = 0;
-          keywordMap
-                    .map(function(d){return {source:d.keywords[tagList[i].index], target:d.keywords[tagList[j].index]}})
-                    .forEach(function(d){if (d.source == 1 && d.target == 1)  v++})
-          links.push({
-              source:tagList[i].index, 
-              target:tagList[j].index,
-              value: v
-          })      
-        }  
-      }
+    //   tagList.forEach(function(item, index){item.index=index})
+
+    //   var keywordMap = [];
+    //   for(j in obj){
+    //     var dskw = [];
+    //     for(var i in params.tags){
+    //       dskw = dskw.concat(getTags([obj[j]], params.tags[i].meta, params.tags[i].property));
+    //     }
+    //     var values = [];
+    //     tagList.forEach(function(item){
+    //       values.push(
+    //         (dskw.filter(function(w){return w.tag == item.tag}).length > 0) ? 1 : 0
+    //       )
+    //     })
+    //     keywordMap.push({dataset:obj[j].id, keywords:values})
+    //   }
+
+    //   tagList.forEach(function(item){
+    //     item.value = keywordMap
+    //       .map(function(d){return d.keywords[item.index]})
+    //       .reduce(function(s,d){return s+d}) 
+    //   })
+
+
+    //   var links = [];
+    //   for(var i=0; i<tagList.length-1; i++){
+    //     for(var j=i+1; j<tagList.length; j++){
+    //       var v = 0;
+    //       keywordMap
+    //                 .map(function(d){return {source:d.keywords[tagList[i].index], target:d.keywords[tagList[j].index]}})
+    //                 .forEach(function(d){if (d.source == 1 && d.target == 1)  v++})
+    //       links.push({
+    //           source:tagList[i].index, 
+    //           target:tagList[j].index,
+    //           value: v
+    //       })      
+    //     }  
+    //   }
      
-      links = links.filter(function(d){return d.value>0})
+    //   links = links.filter(function(d){return d.value>0})
 
-      return resp.send({"tags":tagList, "links":links, "keywordMap":keywordMap});  
-    })
+    //   return resp.send({"tags":tagList, "links":links, "keywordMap":keywordMap});  
+    // })
 
   },
 
@@ -402,38 +594,90 @@ module.exports = {
       mq["dataset/status"] = "public"
     }
 
-    Dataset.find(mq).then(function (obj) {
-      if (!params || !params.property) {
-        return res.send({tag: "dataset", count: obj.length});
-      }
-      var r = new query()
-        .from(obj)
-        .map(function (item) {
-          var tmp = getProperty(item, params.property);
-          return tmp;
-        })
-        .select(function (item) {
-          return item
-        })
-        .map(function (item) {
-          if (item.split) {
-            return item.split("/")
-          }
-          return item
-        })
-        .group(function (item) {
-          return {key: item, value: item}
-        })
-        .map(function (item) {
-          return {tag: item.key, count: item.values.length}
-        })
-        .length();
+    params.$url = req.url;
+    
 
-      return res.send({tag: params.property, count: r});
-    }, function (err) {
-      sails.log.error('Error while getting a total count of tags: ' + err);
-      res.serverError();
-    })
+    Cache.get(params)
+      .then(function(cachedResult){
+        if(cachedResult){
+          return res.send(cachedResult.value)
+        }else{
+           Dataset.find(mq).then(function (obj) {
+            if (!params || !params.property) {
+              return res.send({tag: "dataset", count: obj.length});
+            }
+            var r = new query()
+              .from(obj)
+              .map(function (item) {
+                var tmp = getProperty(item, params.property);
+                return tmp;
+              })
+              .select(function (item) {
+                return item
+              })
+              .map(function (item) {
+                if (item.split) {
+                  return item.split("/")
+                }
+                return item
+              })
+              .group(function (item) {
+                return {key: item, value: item}
+              })
+              .map(function (item) {
+                return {tag: item.key, count: item.values.length}
+              })
+              .length();
+
+            var responsedObject = {tag: params.property, count: r};
+            
+            Cache.save("dsm", params, responsedObject)
+              .then(function(){
+                return res.send({r:responsedObject})
+              })   
+
+          }, function (err) {
+            sails.log.error('Error while getting a total count of tags: ' + err);
+            res.serverError();
+          })
+
+
+        }
+
+      })
+
+    // Dataset.find(mq).then(function (obj) {
+    //   if (!params || !params.property) {
+    //     return res.send({tag: "dataset", count: obj.length});
+    //   }
+    //   var r = new query()
+    //     .from(obj)
+    //     .map(function (item) {
+    //       var tmp = getProperty(item, params.property);
+    //       return tmp;
+    //     })
+    //     .select(function (item) {
+    //       return item
+    //     })
+    //     .map(function (item) {
+    //       if (item.split) {
+    //         return item.split("/")
+    //       }
+    //       return item
+    //     })
+    //     .group(function (item) {
+    //       return {key: item, value: item}
+    //     })
+    //     .map(function (item) {
+    //       return {tag: item.key, count: item.values.length}
+    //     })
+    //     .length();
+
+    //   return res.send({tag: params.property, count: r});
+    // }, function (err) {
+    //   sails.log.error('Error while getting a total count of tags: ' + err);
+    //   res.serverError();
+    // })
   },
 
   getCommitList: function (req, res) {
@@ -463,7 +707,10 @@ module.exports = {
         .then(function () {
           Dataset.update({id: commitID}, {"commit/HEAD": true})
             .then(function (obj) {
-              return res.send(prepareCommitInfo(obj[0]));
+              Cache.clear("dsm")
+                .then(function(){
+                  return res.send(prepareCommitInfo(obj[0]));    
+                })
             })
         })
     }, function (err) {
@@ -475,14 +722,18 @@ module.exports = {
 
   setStatus: function (commitID, status) {
     // sails.log.debug("Commit",commitID)
-    return Dataset.update({"id": commitID}, {"dataset/status": status});
+           return Dataset.update({"id": commitID}, {"dataset/status": status});
   },
 
   setPublicStatus: function (req, res) {
     var commitID = req.params.commitID;
     this.setStatus(commitID, "public").then(function (obj) {
       // sails.log.debug("OBJECT", obj)
-      return res.send(prepareCommitInfo(obj[0]));
+      Cache.clear("dsm")
+        .then(function(){
+          return res.send(prepareCommitInfo(obj[0]));    
+        })
+      
     }, function (err) {
       sails.log.error('Error while setting a public status: ' + err);
       res.serverError();
@@ -493,7 +744,11 @@ module.exports = {
     var commitID = req.params.commitID;
     this.setStatus(commitID, "private").then(function (obj) {
       // sails.log.debug("OBJECT", obj)
-      return res.send(prepareCommitInfo(obj[0]));
+      Cache.clear("dsm")
+        .then(function(){
+          return res.send(prepareCommitInfo(obj[0]));    
+        })
+      
     }, function (err) {
       sails.log.error('Error while setting a private status: ' + err);
       res.serverError();
@@ -550,7 +805,11 @@ module.exports = {
       if (err) {
         res.serverError(err);
       } else {
-        return res.ok();
+        Cache.clear("dsm")
+        .then(function(){
+          return res.ok();    
+        })
+        
       }
     });
   },
@@ -670,32 +929,78 @@ module.exports = {
       mq["dataset/status"] = "public"
     }
 
-    Dataset.find(mq).then(function (obj) {
-      var tree = new query()
-        .from(obj)
-        .map(function (item) {
-          return item.metadata.dataset.topics
-        })
-        .select(function (item) {
-          return item.indexOf("/") >= 0;
-        })
-        .map(function (item) {
-          var tmp = item.split("/");
-          var r = [];
-          for (var i = 1; i <= tmp.length; i++) {
-            var p = tmp.slice(0, i);
-            r.push({path: tmp.slice(0, i).join(".") + "._path", value: p.join("/")})
-            r.push({path: tmp.slice(0, i).join(".") + "._tag", value: p.pop()})
-          }
-          return r;
-        })
-        .get();
+    var temp = {
+      query:"getTopicTree", 
+      $url:req.url
+    }
 
-      return res.send(flat2json(tree));
-    }, function (err) {
-      sails.log.error('Error while getting a topic tree: ' + err);
-      res.serverError();
-    })
+     Cache.get(temp)
+      .then(function(cachedResult){
+        if(cachedResult){
+          return res.send(cachedResult.value)
+        }else{
+
+            Dataset.find(mq).then(function (obj) {
+              var tree = new query()
+                .from(obj)
+                .map(function (item) {
+                  return item.metadata.dataset.topics
+                })
+                .select(function (item) {
+                  return item.indexOf("/") >= 0;
+                })
+                .map(function (item) {
+                  var tmp = item.split("/");
+                  var r = [];
+                  for (var i = 1; i <= tmp.length; i++) {
+                    var p = tmp.slice(0, i);
+                    r.push({path: tmp.slice(0, i).join(".") + "._path", value: p.join("/")})
+                    r.push({path: tmp.slice(0, i).join(".") + "._tag", value: p.pop()})
+                  }
+                  return r;
+                })
+                .get();
+
+              var responseObject = flat2json(tree);
+              Cache.save("dsm", temp ,responseObject)
+                .then(function(){
+                  return res.send(responseObject)    
+                })  
+            }, function (err) {
+              sails.log.error('Error while getting a topic tree: ' + err);
+              res.serverError();
+            })
+
+        }
+      })    
+
+
+  //   Dataset.find(mq).then(function (obj) {
+  //     var tree = new query()
+  //       .from(obj)
+  //       .map(function (item) {
+  //         return item.metadata.dataset.topics
+  //       })
+  //       .select(function (item) {
+  //         return item.indexOf("/") >= 0;
+  //       })
+  //       .map(function (item) {
+  //         var tmp = item.split("/");
+  //         var r = [];
+  //         for (var i = 1; i <= tmp.length; i++) {
+  //           var p = tmp.slice(0, i);
+  //           r.push({path: tmp.slice(0, i).join(".") + "._path", value: p.join("/")})
+  //           r.push({path: tmp.slice(0, i).join(".") + "._tag", value: p.pop()})
+  //         }
+  //         return r;
+  //       })
+  //       .get();
+
+  //     return res.send(flat2json(tree));
+  //   }, function (err) {
+  //     sails.log.error('Error while getting a topic tree: ' + err);
+  //     res.serverError();
+  //   })
   }
 
 };

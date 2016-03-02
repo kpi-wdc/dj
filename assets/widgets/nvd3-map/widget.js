@@ -79,7 +79,7 @@ m.controller("Nvd3MapCtrl", ["$scope", "MapChartDialog", "NVD3MapAdapter", "NVD3
           return result;
         }
       },
-      serieGenerator: MapSerieGenerator
+      // serieGenerator: MapSerieGenerator
     });
   }]);
 //console.log("Loaded")

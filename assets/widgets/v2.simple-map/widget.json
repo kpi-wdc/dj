@@ -1,0 +1,12 @@
+{
+ "schema": {
+    "type": "object",
+    "title": "Simple Map",
+    "properties": {
+      "serieID":{
+        "type":"string",
+        "title":"Serie ID"
+      }
+    }
+  }  
+}

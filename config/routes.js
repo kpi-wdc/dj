@@ -138,7 +138,16 @@ module.exports.routes = {
   'post /api/resource/delete/:path' : 'ResourceController.delete'
 
   
-  
+  ,
+   'get /api/test/get/:id' : 'TestCacheController.getID',
+   'post /api/test/get' : 'TestCacheController.getQuery',
+   'post /api/test/set' : 'TestCacheController.save',
+   'get /api/test/clear' : 'TestCacheController.clear',
+   'get /api/test/list' : 'TestCacheController.list'
+   
+   
+   
+    
   
   
 
