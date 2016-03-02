@@ -31,7 +31,7 @@ m.service("NVD3MapAdapter", function () {
     }
 
        options.chart.tooltipContent = function (serie, x, y, s) {
-        console.log("Tooltip",serie, x, y);
+        // console.log("Tooltip",serie, x, y);
           var result = "<center><b>" + serie.properties.name.en + "</center></b>";
           if (serie.properties.values && serie.properties.values[y.index()].c>=0) {
             result += "<div style=\"font-size:smaller;padding: 0 0.5em;\"> " + 
@@ -55,7 +55,7 @@ m.service("NVD3MapAdapter", function () {
     if (angular.isDefined(options)) {
 
        options.chart.tooltipContent = function (serie, x, y, s) {
-        console.log("Tooltip",serie, x, y);
+        // console.log("Tooltip",serie, x, y);
           var result = "<center><b>" + serie.properties.name.en + "</center></b>";
           if (serie.properties.values && serie.properties.values[y.index()].c>=0) {
             result += "<div style=\"font-size:smaller;padding: 0 0.5em;\"> " + 

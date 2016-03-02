@@ -1457,12 +1457,24 @@ exports.geojson = function(table,params){
 				index : item,
 				label : table.body[item].metadata.map(function(item){return item.label}).join(", "),
 				values : table.body[item].value,
-				ordinal : STAT.Ordinal(STAT.max(table.body[item].value),STAT.min(table.body[item].value),params.bins)
+				max : STAT.max(table.body[item].value),
+				min : STAT.min(table.body[item].value),
+				categories : 	params.bins,
+				ordinal : STAT.Ordinal(
+					STAT.max(table.body[item].value),
+					STAT.min(table.body[item].value),
+					params.bins
+				)
 			}
 		});
 
 	var series = dataIndex.map(function(item){
-		return {key: item.label}
+		return {
+			key: item.label,
+			min : item.min,
+			max: item.max,
+			cats : item.categories 
+		}
 	}) 
 
 	var attrs = [];
