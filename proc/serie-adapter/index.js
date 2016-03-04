@@ -1434,7 +1434,8 @@ exports.geojson = function(table,params){
 	
 	params.direction = (params.direction) ? params.direction : "Rows";
 	params.dataIndex = (UTIL.isUndefined(params.dataIndex)) ? [0] : params.dataIndex;
-	params.bins = (params.bins)? params.bins : 1; 
+	params.bins = (params.bins)? params.bins : 1;
+	params.scope = (params.scope) ? (params.scope) : "none"; 
 	if(params.direction == "Rows") table = exports.transposeTable(table,{transpose:true});
 
 	if(table.body.length == 0) return {};
@@ -1485,7 +1486,7 @@ exports.geojson = function(table,params){
 				var temp = [];
 				dataIndex.forEach(function(di){
 					temp.push({
-						l : di.label,
+						// l : di.label,
 						v : di.values[index],
 						c : di.ordinal(di.values[index])
 					})
@@ -1497,12 +1498,19 @@ exports.geojson = function(table,params){
 
 
 	var geocodes = attrs.map(function (item){return item.geocode});
+	// return geodata[0].properties;
 
 	var geojs = geodata
 		.filter(function(item){
+			if(!item.properties) return false
+			if(!item.properties.geocode) return false
+				
 			return intersect(item.properties.geocode, geocodes).length > 0
 		})
 	
+
+
+
 	var res = [];
 	attrs.forEach(function(a){
 		var g = geojs.filter(function(item){ return item.properties.geocode.indexOf(a.geocode)>=0})[0];
@@ -1512,8 +1520,28 @@ exports.geojson = function(table,params){
 		}
 	})
 
+	var geoScope = (params.scope == "none") ? [] :
+		geodata
+			.filter(function(item){
+				if(!item.properties) return false
+				if(!item.properties.geocode) return false	
+				return (intersect(item.properties.geocode, geocodes).length == 0) &&
+					    (item.properties.scope.indexOf(params.scope)>=0)
+			})	
+
+
 	
-	if(res.length == 0) res = {}
+	if(res.length == 0) {
+			res = {}
+	} else{
+		res = res.concat(geoScope);
+
+	}
+
+	res.forEach(function(item){
+		item.properties.geocode = item.properties.geocode[0];
+		item.properties.scope = undefined; 
+	})			
 
 	var path= "/data/"+Math.random().toString(36).substring(2)+".json"
 	var filename = "./.tmp/public"+path;

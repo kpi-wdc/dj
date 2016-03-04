@@ -6111,6 +6111,8 @@ d3.geo.tile = function () {
 
       showTiles = true,
 
+      locale = "en",
+
       selectedTiles = mapId["mapbox.outdoors"],
 
       interactive = true,
@@ -6345,6 +6347,14 @@ d3.geo.tile = function () {
           zoom.scale(scale).translate(translate);
         }
 
+// remove scope outlines if tiles shows
+// 
+        if ( d3.geo.tileServerEnable && showTiles ) {
+          geoData = geoData.filter(function(item){return (item.properties.values) ? true : false})
+        }
+
+
+
 // render regions
         var geo = g
           .select(".nv-map")
@@ -6360,20 +6370,20 @@ d3.geo.tile = function () {
           .append("path")
           .on("mouseover", function (d, i) {
               if (lockHighLight) return;
-              
+              if(!d.properties.values) return;
               d3.select(this)
                 .transition()
                 .style("stroke", function (d) {
-                  return (d.properties.values[valueIndex].c == null) ? 
-                    defaultStroke : 
-                    complementedColor(color(d, d.properties.values[valueIndex].c));
+                  return (d.properties.values) ? 
+                    complementedColor(color(d, d.properties.values[valueIndex].c)) :
+                    defaultStroke;
                 })
                 .style("stroke-opacity", defaultStrokeOpacity)
                 .style("stroke-width", selectedStrokeWidth);
               dispatch.mapMouseover({
                 point: d,
                 index : getValueIndex,
-                props: d.properties,
+                series: data[0].series,
                 pos: [d3.event.pageX, d3.event.pageY]
               });
           })
@@ -6387,7 +6397,7 @@ d3.geo.tile = function () {
             dispatch.mapMouseout({
               point: d,
               index : getValueIndex,
-              props: d.properties,
+              series: data[0].series,
               pos: [d3.event.pageX, d3.event.pageY]
             });
           });
@@ -6399,12 +6409,13 @@ d3.geo.tile = function () {
             return "map-subunit subunit-id-" + i;
           })
           .style("fill", function (d) {
-            return (d.properties.values[valueIndex].c == null) ? 
-              defaultFill : 
-              color(d, d.properties.values[valueIndex].c);
+            return (d.properties.values) ? 
+              color(d, d.properties.values[valueIndex].c) :
+              defaultFill; 
+              
           })
           .style("fill-opacity", function (d) {
-            return ((d.properties.values) && (d.properties.values[valueIndex].c >=0) ) ? 
+            return (d.properties.values) ? 
               selectedFillOpacity : 
               defaultFillOpacity;
           })
@@ -6417,8 +6428,9 @@ d3.geo.tile = function () {
           g.select(".nv-map").selectAll("path.subunit-id-" + i)
           .transition()
           .style("stroke", function (d) {
-            return ((d.properties.values) && (d.properties.values[valueIndex].c >=0) ) ? 
-              complementedColor(color(d, d.properties.values[valueIndex].c)) : defaultStroke;
+            return (d.properties.values) ? 
+              complementedColor(color(d, d.properties.values[valueIndex].c)) : 
+              defaultStroke;
           })
           .style("stroke-opacity", defaultStrokeOpacity)
           .style("stroke-width", selectedStrokeWidth);
@@ -6460,11 +6472,12 @@ d3.geo.tile = function () {
             .style("stroke-width", 3)
             .on("mouseover", function (d, i) {
               if (lockHighLight) return;
+              if(!d.properties.values) return;
               highlightSubunit(d, i);
               dispatch.mapMouseover({
                 point: d,
                 index : getValueIndex,
-                props: d.properties,
+                series: data[0].series,
                 pos: [d3.event.pageX, d3.event.pageY] 
               });
             })
@@ -6474,7 +6487,7 @@ d3.geo.tile = function () {
               dispatch.mapMouseout({
                 point: d,
                 index : getValueIndex,
-                props: d.properties,
+                series: data[0].series,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             });
@@ -6488,12 +6501,12 @@ d3.geo.tile = function () {
             .text(function (d, i) {
               
               var fontSize = getFontSize(labels[0][i], d);
-              var w = approximateLength(d.properties.name.en, fontSize);
+              var w = approximateLength(d.properties.name[locale], fontSize);
               var bounds = path.bounds(d);
               if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
-                return d.properties.geocode[0];
+                return d.properties.geocode;
               } else {
-                return d.properties.name.en;
+                return d.properties.name[locale];
               }
             })
             .style("font-size", function (d, i) {
@@ -6543,11 +6556,12 @@ d3.geo.tile = function () {
             .style("opacity", 0)
             .on("mouseover", function (d, i) {
               if (lockHighLight) return;
+              if(!d.properties.values) return;
               highlightSubunit(d, i);
               dispatch.mapMouseover({
                 point: d,
                 index : getValueIndex,
-                props: d.properties,
+                series: data[0].series,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             })
@@ -6557,7 +6571,7 @@ d3.geo.tile = function () {
               dispatch.mapMouseout({
                 point: d,
                 index : getValueIndex,
-                props: d.properties,
+                series: data[0].series,
                 pos: [d3.event.pageX, d3.event.pageY] //,
               });
             });
@@ -6565,7 +6579,9 @@ d3.geo.tile = function () {
           values
             .transition()
             .text(function (d) {
-              return d.properties.values[valueIndex].v.toFixed(2);
+              return (d.properties.values) ?
+                new Number(d.properties.values[valueIndex].v).toFixed(2) : 
+                ""
             })
             .style("font-size", function (d, i) {
               return getFontSize(values[0][i], d) + "px";
@@ -6575,10 +6591,11 @@ d3.geo.tile = function () {
               return "translate(" + position[0] + "," + position[1] + ")";
             })
             .style("opacity", function (d, i) {
-              var bounds = path.bounds(d);
-              var opct = values[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
-              opct = getFontSize(values[0][i], d) < 12 ? 0 : opct;
-              return opct;
+              // var bounds = path.bounds(d);
+              // var opct = values[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+              // opct = getFontSize(values[0][i], d) < 12 ? 0 : opct;
+              // return opct;
+              return 1;
             })
 
             
@@ -6608,16 +6625,15 @@ d3.geo.tile = function () {
             .transition()
             .attr("d", path)
             .style("fill-opacity", function (d) {
-              return ((d.properties.values) && (d.properties.values[valueIndex].c >=0) ) ? 
+              return (d.properties.values) ? 
                      selectedFillOpacity : 
                      defaultFillOpacity; 
             })
             .style("stroke-width", defaultStrokeWidth)
             .style("fill", function (d) {
-              if ((d.properties.values) && (d.properties.values[valueIndex].c >=0)){
-                return color(d, d.properties.values[valueIndex].c);  
-              }
-              return defaultFill;
+              return (d.properties.values) ? 
+                     color(d, d.properties.values[valueIndex].c) : 
+                     defaultFill; 
             });
 
           if ( showLabels ) { 
@@ -6629,12 +6645,12 @@ d3.geo.tile = function () {
             })
             .text(function (d, i) {
               var fontSize = getFontSize(labels[0][i], d);
-              var w = approximateLength(d.properties.name.en, fontSize);
+              var w = approximateLength(d.properties.name[locale], fontSize);
               var bounds = path.bounds(d);
               if (w * 1.2 > bounds[1][0] - bounds[0][0]) {
-                return d.properties.geocode[0];
+                return d.properties.geocode
               } else {
-                return d.properties.name.en;
+                return d.properties.name[locale];
               }
             })
             .style("font-size", function (d, i) {
@@ -6654,7 +6670,9 @@ d3.geo.tile = function () {
             values
             .transition()
             .text(function (d) {
-              return d.properties.values[valueIndex].v;
+              return (d.properties.values) ? 
+               new Number(d.properties.values[valueIndex].v).toFixed(2) :
+                ""
             })
             .style("font-size", function (d, i) {
               return getFontSize(values[0][i], d) + "px";
@@ -6664,10 +6682,11 @@ d3.geo.tile = function () {
               return "translate(" + position[0] + "," + position[1] + ")";
             })
             .style("opacity", function (d, i) {
-              var bounds = path.bounds(d);
-              var opct = values[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
-              opct = getFontSize(values[0][i], d) < 12 ? 0 : opct;
-              return opct;
+              // var bounds = path.bounds(d);
+              // var opct = values[0][i].clientWidth * 2 > bounds[1][0] - bounds[0][0] ? 0 : 1;
+              // opct = getFontSize(values[0][i], d) < 12 ? 0 : opct;
+              // return opct;
+              return 1;
             })
           }
           if ( d3.geo.tileServerEnable && showTiles ) updateTiles(g.select("g.tileLayer"),zoom,width,height);
@@ -6714,6 +6733,13 @@ d3.geo.tile = function () {
     chart.height = function (_) {
       if (!arguments.length) return height;
       height = _;
+      return chart;
+    };
+
+    chart.locale = function (_) {
+      if (!arguments.length) return locale;
+      console.log("Map set Locale", _)
+      locale = _;
       return chart;
     };
 
@@ -6825,6 +6851,7 @@ d3.geo.tile = function () {
     //console.log('mapChart ', topojson);
     var map = nv.models.map(),
         legend = nv.models.legend(),
+        locale = "en",
         colorScheme = nv.models.colorScheme();
     
     legend.radioButtonMode(true);
@@ -7131,6 +7158,14 @@ d3.geo.tile = function () {
       color = nv.utils.getColor(_);
       legend.color(color);
       map.color(color);
+      return chart;
+    };
+
+    chart.locale = function (_) {
+      if (!arguments.length) return locale;
+      console.log("Map Chart set Locale", _)
+      locale = _;
+      map.locale(locale);
       return chart;
     };
 

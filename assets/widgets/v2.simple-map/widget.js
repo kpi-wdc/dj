@@ -27,15 +27,16 @@ m.service("NVD3MapAdapter", function () {
       options.chart.defaultStrokeOpacity = decoration.defaultStrokeOpacity;
       options.chart.selectedFillOpacity = decoration.selectedFillOpacity;
       options.chart.selectedStrokeWidth = decoration.selectedStrokeWidth;
+      options.chart.locale = "uk";
            
     }
 
        options.chart.tooltipContent = function (serie, x, y, s) {
-        // console.log("Tooltip",serie, x, y);
+        console.log("Tooltip",serie, x, y);
           var result = "<center><b>" + serie.properties.name.en + "</center></b>";
           if (serie.properties.values && serie.properties.values[y.index()].c>=0) {
             result += "<div style=\"font-size:smaller;padding: 0 0.5em;\"> " + 
-                      serie.properties.values[y.index()].l + 
+                     y.series[y.index()].key + 
                       " : " + 
                       serie.properties.values[y.index()].v + "</div>";
           }
@@ -43,9 +44,9 @@ m.service("NVD3MapAdapter", function () {
           // console.log("Tooltip",serie, x, y);
           // return "TOOLTIP"
         }
-     options.chart.showTiles = false;
+     // options.chart.showTiles = false;
 
-     options.chart.showTiles = false;
+     // options.chart.showTiles = false;
 
     return options;
   };
@@ -54,12 +55,12 @@ m.service("NVD3MapAdapter", function () {
     // console.log(options)
     if (angular.isDefined(options)) {
 
-       options.chart.tooltipContent = function (serie, x, y, s) {
-        // console.log("Tooltip",serie, x, y);
+      options.chart.tooltipContent = function (serie, x, y, s) {
+        console.log("Tooltip",serie, x, y);
           var result = "<center><b>" + serie.properties.name.en + "</center></b>";
           if (serie.properties.values && serie.properties.values[y.index()].c>=0) {
             result += "<div style=\"font-size:smaller;padding: 0 0.5em;\"> " + 
-                      serie.properties.values[y.index()].l + 
+                      y.series[y.index()].key + 
                       " : " + 
                       serie.properties.values[y.index()].v + "</div>";
           }
@@ -67,7 +68,6 @@ m.service("NVD3MapAdapter", function () {
           // console.log("Tooltip",serie, x, y);
           // return "TOOLTIP"
         }
-     options.chart.showTiles = false;
 
 
 
