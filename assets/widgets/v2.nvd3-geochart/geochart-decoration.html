@@ -1,0 +1,326 @@
+<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+	<div class="column medium-3 left">
+	<h5>Input Data</h5>	
+		
+		<div class="row wizard setting">
+			<select ng-model="step.inputQuery" ng-change="step.selectInputData()" class="wizard">
+	          <option ng-repeat="item in step.queries">{{item.$title}}</option>
+	        </select>
+		</div>
+
+		<div class="row wizard setting" ng-if="step.wizard.context.postprocessedTable">
+			<h5>Decoration</h5>
+				
+			<accordion class="wizard" close-others="false">		
+
+				<accordion-group heading = "Titles">
+					<div class="row wizard setting">
+						<label class="wizard left">
+							Title
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.title">
+					    
+					    <label class="wizard left">
+							Subtitle
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.subtitle">
+					    
+					    <label class="wizard left">
+							Caption
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.caption">
+						
+					</div>
+				</accordion-group>
+					
+				<accordion-group heading="Direction">
+						<div class="row wizard setting">
+							<label class="wizard left"> 
+						    	Direction:
+					        </label>
+					        <select ng-model="step.conf.direction" class="wizard" ng-change="step.setDirection()">
+					          <option>Rows</option>
+					          <option>Columns</option>
+					        </select>	
+						</div>
+				</accordion-group>
+
+				<accordion-group heading="Series">
+						<div class="row wizard setting">
+							
+							<div class="row wizard setting">
+								<label class="wizard left section">
+									Include Series				    
+								</label>
+						    	
+							    <div class="row wizard setting" ng-repeat="item in step.indexList track by $index">
+									<label class="wizard left">
+										{{item.label}}
+									</label>
+									<div class="switch tiny right" style="margin:0;">
+							          <input type="checkbox"
+							                 id="{{'ind'+$index}}"
+							                 ng-model="item.enable"
+							                 ng-change="step.selectSerie()"
+							           >
+							          <label for="{{'ind'+$index}}"></label>
+							        </div>
+						        </div>
+						    </div>    
+						</div>
+				</accordion-group>
+
+				<accordion-group heading="Scope">
+						<div class="row wizard setting">
+							<label class="wizard left section">
+									Scope				    
+							</label>
+							 <select ng-model="step.conf.scope" class="wizard" >
+						        <option>none</option>
+						        <option>World</option>
+						        <option>Ukraine</option>
+						        <option>Africa</option>
+								<option>Europe</option>
+								<option>Americas</option>
+								<option>Asia</option>
+								<option>Oceania</option>
+								<option>Northern Africa</option>
+								<option>Western Africa</option>
+								<option>Middle Africa</option>
+								<option>Eastern Africa</option>
+								<option>Southern Africa</option>
+								<option>Northern Europe</option>
+								<option>Western Europe</option>
+								<option>Eastern Europe</option>
+								<option>Southern Europe</option>
+								<option>Northern America</option>
+								<option>Caribbean</option>
+								<option>Central America</option>
+								<option>South America</option>
+								<option>Central Asia</option>
+								<option>Eastern Asia</option>
+								<option>Southern Asia</option>
+								<option>South-Eastern Asia</option>
+								<option>Western Asia</option>
+								<option>Australia and New Zealand</option>
+								<option>Melanesia</option>
+								<option>Micronesia</option>
+								<option>Polynesia</option>
+					        </select>	
+
+						</div>
+				</accordion-group>		
+
+				<accordion-group heading="Tiles">
+						<div class="row wizard setting">
+							<div class="row wizard setting">
+								<label class="wizard left">
+									Enable
+								</label>
+								
+							 	<div class="switch tiny right" style="margin:0;">
+						          <input type="checkbox"
+						                 id="tilesEnableCheckbox"
+						                 ng-model="step.conf.decoration.showTiles"
+						           >
+						          <label for="tilesEnableCheckbox"></label>
+						        </div>
+							</div>
+							
+							<div ng-if="step.conf.decoration.showTiles" class="row wizard setting">
+								<label class="wizard left">
+									Tiles
+								</label>
+								<select ng-model="step.conf.decoration.selectedTiles">
+						            <option>mapbox.outdoors</option>
+						            <option>mapbox.light</option>
+						            <option>mapbox.dark</option>
+						            <option>mapbox.satellite</option>
+						            <option>mapbox.streets-satellite</option>
+						         </select>
+							</div>
+						</div>
+				</accordion-group>
+
+				<accordion-group heading="Notation">
+					<div class="row wizard setting">
+						<div class="row wizard setting">
+							
+								<label class="wizard left">
+									Label
+								</label>
+								
+							 	<div class="switch tiny right" style="margin:0;">
+						          <input type="checkbox"
+						                 id="labelEnableCheckbox"
+						                 ng-model="step.conf.decoration.showLabels"
+						           >
+						          <label for="labelEnableCheckbox"></label>
+						        </div>
+							
+						</div>
+						<div class="row wizard setting">	
+							
+								<label class="wizard left">
+									Value
+								</label>
+								
+							 	<div class="switch tiny right" style="margin:0;">
+						          <input type="checkbox"
+						                 id="valueEnableCheckbox"
+						                 ng-model="step.conf.decoration.showValues"
+						           >
+						          <label for="valueEnableCheckbox"></label>
+						        </div>
+							
+						</div>	
+							
+					</div>
+				</accordion-group>
+
+				<accordion-group heading="Stroke, Fill">
+					<div class="row wizard setting">
+						<label class="wizard left section">
+							Default Stroke
+						</label>
+						<div class="row wizard setting">
+								<label class="wizard">
+									 Color
+								</label>
+								<input type="text" ng-model="step.conf.decoration.defaultStroke" class="wizard">
+						</div>
+						<div class="row wizard setting">
+								<label class="wizard">
+									Opacity
+								</label>
+								<input type="text" ng-model="step.conf.decoration.defaultStrokeOpacity" class="wizard">
+						</div>
+						<div class="row wizard setting">
+								<label class="wizard">
+									Width
+								</label>
+								<input type="text" ng-model="step.conf.decoration.defaultStrokeWidth" class="wizard">
+						</div>
+
+						<label class="wizard left section">
+							Selected Stroke
+						</label>
+						<div class="row wizard setting">
+								<label class="wizard">
+									Width
+								</label>
+								<input type="text" ng-model="step.conf.decoration.selectedStrokeWidth" class="wizard">
+						</div>
+
+						<label class="wizard left section">
+							Default Fill
+						</label>
+						<div class="row wizard setting">
+								<label class="wizard">
+									 Color
+								</label>
+								<input type="text" ng-model="step.conf.decoration.defaultFill" class="wizard">
+						</div>
+						<div class="row wizard setting">
+								<label class="wizard">
+									Opacity
+								</label>
+								<input type="text" ng-model="step.conf.decoration.defaultFillOpacity" class="wizard">
+						</div>
+
+						<label class="wizard left section">
+							Selected Fill
+						</label>
+						
+						<div class="row wizard setting">
+								<label class="wizard">
+									Opacity
+								</label>
+								<input type="text" ng-model="step.conf.decoration.selectedFillOpacity" class="wizard">
+						</div>
+					</div>	
+				</accordion-group>
+
+				
+				<accordion-group heading = "Chart Height">
+				    <div class="row wizard setting">
+						<input type="number" ng-model="step.conf.decoration.height" class="wizard">
+		        	</div>
+		        </accordion-group>
+		        
+		        <accordion-group heading="Palette">	
+
+					<div class="row wizard setting">
+						
+						<a class="second dropdown tiny left"
+							ng-if="step.conf.decoration.color" 
+							dropdown-toggle="#dropdown-example-3" 
+							style="margin: 0 0 0 0.3rem;
+							padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+						>
+		              		<div 	class="button tiny left"
+		              				ng-repeat="color in  step.conf.decoration.color"
+		                   			style="background-color: {{color}};width:10px;display: inline-block; margin:0;padding:0 0.2rem 0 0.2rem;border:1px solid #afafaf;">
+		                		&nbsp;
+		              		</div>
+		            	</a>
+		            	<a class="second dropdown tiny left"
+							ng-if="!step.conf.decoration.color" 
+							dropdown-toggle="#dropdown-example-3" 
+							style="margin: 0 0 0 0.3rem;
+							padding: 0.3rem 2.5rem 0.3rem 0.5rem;"
+						>
+		              		Select Palette
+		            	</a>
+
+		            	
+		            	<fast-palette-peacker 
+		            		dest="step.conf.decoration" 
+		            		setter="step.conf.decoration.setColor" 
+		            		watch-depth="reference">
+		            	</fast-palette-peacker>
+
+		            	
+						<label class="wizard left" style="clear:left">
+							Reverse
+						</label>
+						
+					 	<div class="switch tiny right">
+				          <input type="checkbox"
+				                 id="reversePaletteCheckbox"
+				                 ng-model="step.conf.decoration.reversePalette"
+				                 ng-change = "step.reversePalette()"
+				           >
+				          <label for="reversePaletteCheckbox"></label>
+				        </div>
+		 				
+
+		        	</div>
+		        </accordion-group>
+	        </accordion>
+        </div>
+	</div>
+
+	<div class="column medium-9 left">
+	<h5 class="section-title">
+		<img src="./widgets/v2.query-manager/preparation.png" style="width: 32px;margin: 0 0.3em;"/>
+		{{step.inputQuery}}
+	</h5>
+	<div class="row wizard setting" style="    overflow: auto;
+    background: #ffffff;
+    max-height: 15em;
+    border: 0.1rem solid #ddd;">
+		<wdc-table data="{table:step.wizard.context.postprocessedTable, decoration:{}}"></wdc-table>
+	</div>
+	 
+	 <button class="button radiustoolbar apply" ng-click="step.apply()">Apply Decoration</button>
+
+	<h5 class="section-title">Chart Preview</h5>
+	<div class="row wizard setting" style="overflow:auto;background:#ffffff">
+		<img ng-if="!step.data || !step.options" src="./img/ajax-loader.gif"/>
+		<div class="border" style="width:{{step.conf.decoration.width}}px;background:#ffffff;">
+			<div nvd3 settings="step.settings"></div>
+		</div>
+	</div>
+	</div>
+</div>

@@ -6135,6 +6135,8 @@ d3.geo.tile = function () {
 
       getValueIndex = function(){ return valueIndex },
 
+      
+
 
 
       dispatch = d3.dispatch( 

@@ -48,6 +48,10 @@ i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
     
   angular.extend(this,{
 
+    locale : function(){
+      return $translate.use() || "en";
+    },
+
     formatDate : function(date){
       var locale = $translate.use() || "en";
       date = new Date(date);

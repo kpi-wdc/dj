@@ -1462,8 +1462,8 @@ exports.geojson = function(table,params){
 				min : STAT.min(table.body[item].value),
 				categories : 	params.bins,
 				ordinal : STAT.Ordinal(
-					STAT.max(table.body[item].value),
 					STAT.min(table.body[item].value),
+					STAT.max(table.body[item].value),
 					params.bins
 				)
 			}
@@ -1543,12 +1543,13 @@ exports.geojson = function(table,params){
 		item.properties.scope = undefined; 
 	})			
 
-	var path= "/data/"+Math.random().toString(36).substring(2)+".json"
-	var filename = "./.tmp/public"+path;
+	// var path= "/data/"+Math.random().toString(36).substring(2)+".json"
+	// var filename = "./.tmp/public"+path;
 
 	
-	fs.writeFileSync(filename, JSON.stringify({"series":series, features:res}));
-	return path;
+	// fs.writeFileSync(filename, JSON.stringify({"series":series, features:res}));
+	// return path;
+	return [{"series":series, features:res}] 
 	 
 }
 

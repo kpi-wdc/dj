@@ -4,8 +4,7 @@ System.config({
   paths: {
     'topojson': 'widgets/v2.nvd3-widget/topojson.js',
     'nv.d3.ext': 'widgets/v2.nvd3-widget/nv.d3.ext.js',
-    'angular-nvd3': 'widgets/v2.nvd3-widget/angular-nvd3-ext.js',
-    "dps" : "widgets/data-util/dps.js"
+    'angular-nvd3': 'widgets/v2.nvd3-widget/angular-nvd3-ext.js'
   },
   meta: {
     'topojson': {
@@ -22,10 +21,13 @@ System.config({
 });
 
 
-define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angular) {
+define(["angular", "angular-oclazyload", "angular-nvd3"], function (angular) {
 
 
-  var m = angular.module("app.widgets.v2.nvd3-widget", ["oc.lazyLoad", "nvd3",  "app.widgets.data-util.dps"]);
+  var m = angular.module("app.widgets.v2.nvd3-widget", [
+      "oc.lazyLoad", 
+      "nvd3"
+  ]);
 
 
   m.factory("NVD3WidgetV2", [ "$http",
@@ -33,9 +35,9 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
                               "$ocLazyLoad", 
                               "APIProvider", 
                               "APIUser",
-                              "Requestor", 
+                              "i18n", 
                                
-  function ($http, $q, $ocLazyLoad, APIProvider, APIUser, Requestor) {
+  function ($http, $q, $ocLazyLoad, APIProvider, APIUser, i18n) {
     
     $ocLazyLoad.load({
       files: [
@@ -100,7 +102,10 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
                    }
 
                     
-                  
+                  if ($scope.options.locale){
+                    $scope.options.locale = i18n.locale();
+                  }
+
                   
                   if(angular.isDefined(params.serieAdapter)){
                     if (params.serieAdapter.getX) {
@@ -112,6 +117,8 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
                     }
 
                     $scope.options.chart.label = params.serieAdapter.getLabel;
+
+
 
                     // if ($scope.options.chart.scatter) {
                     //   $scope.options.chart.scatter.label = params.serieAdapter.getLabel;
@@ -144,7 +151,17 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
         });
       };
 
-      
+      $scope.translate = function(){
+        console.log("TRANSLATE HANDLER", i18n.locale(), $scope.options)
+        if($scope.options.chart.locale){
+          $scope.options.chart.locale = i18n.locale();
+          console.log("TRANSLATE Options", i18n.locale(), $scope.options)
+          $scope.settings = {
+                  options : angular.copy($scope.options), 
+                  data : angular.copy($scope.data)
+          }
+        }
+      };
 
       $scope.APIProvider
         
@@ -156,6 +173,9 @@ define(["angular", "angular-oclazyload", "angular-nvd3", "dps"], function (angul
         .openCustomSettings(function () {
           $scope.wizard = params.wizard;
           $scope.wizard.start($scope);
+        })
+        .translate(function(){
+          $scope.translate();
         })
     };
 
