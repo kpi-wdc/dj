@@ -1686,6 +1686,7 @@ d3.geo.tile = function () {
       //console.log("Selection",selection)
 
       selection.each(function (data) {
+        console.log("RADAR",data)
         serieCount = data.length;
         serieLength = data[0].values.length;
         max = data[0].values[0].value;
@@ -1775,11 +1776,12 @@ d3.geo.tile = function () {
         grid.attr("clip-path", clipEdge ? "url(#nv-edge-clip-" + scatter.id() + ")" : "");
 
 
-        var groups = wrap.select(".nv-groups").selectAll(".nv-group").data(function (d) {
-          return d;
-        }, function (d) {
-          return d.key;
-        });
+        var groups = wrap.select(".nv-groups").selectAll(".nv-group").data(data)
+        // .data(function (d) {
+        //   return d;
+        // }, function (d) {
+        //   return d.key;
+        // });
         groups.enter().append("g").style("stroke-opacity", 0.000001).style("fill-opacity", 0.000001);
 
         groups.exit().remove();
@@ -2385,9 +2387,11 @@ d3.geo.tile = function () {
         }));
 
 
-        var linesWrap = g.select(".nv-linesWrap").datum(data.filter(function (d) {
+        var linesWrap = g.select(".nv-linesWrap").datum(data.filter(function (d,i) {
+          console.log( "linesWrap",i,d)
           return !d.disabled;
         }));
+
 
         linesWrap.transition().call(lines);
 
@@ -2421,8 +2425,13 @@ d3.geo.tile = function () {
         //------------------------------------------------------------
 
         legend.dispatch.on("stateChange", function (newState) {
+          console.log("state change legent event", newState)
           state = newState;
-          dispatch.stateChange(state);
+          // dispatch.changeState(state);
+          data.forEach(function (series, i) {
+              series.disabled = state.disabled[i];
+            });
+
           chart.update();
         });
 
@@ -2482,7 +2491,8 @@ d3.geo.tile = function () {
         });
 
 
-        dispatch.on("changeState", function (e) {
+        dispatch.on("stateChange", function (e) {
+          console.log("stateChange",e)
           if (typeof e.disabled !== "undefined" && data.length === e.disabled.length) {
             data.forEach(function (series, i) {
               series.disabled = e.disabled[i];
@@ -2532,7 +2542,28 @@ d3.geo.tile = function () {
     chart.yAxis = yAxis;
     chart.interactiveLayer = interactiveLayer;
 
-    d3.rebind(chart, lines, "defined", "isArea", "x", "y", "size", "xScale", "yScale", "xDomain", "yDomain", "xRange", "yRange", "forceX", "forceY", "interactive", "clipEdge", "clipVoronoi", "useVoronoi", "id", "interpolate");
+    d3.rebind(
+      chart, 
+      lines, 
+      "defined", 
+      "isArea", 
+      "x", 
+      "y", 
+      "size", 
+      "xScale", 
+      "yScale", 
+      "xDomain", 
+      "yDomain", 
+      "xRange", 
+      "yRange", 
+      "forceX", 
+      "forceY", 
+      "interactive", 
+      "clipEdge", 
+      "clipVoronoi", 
+      "useVoronoi", 
+      "id", 
+      "interpolate");
 
     chart.options = nv.utils.optionsFunc.bind(chart);
 
@@ -5164,16 +5195,19 @@ d3.geo.tile = function () {
         //------------------------------------------------------------
 
         var bg = gEnter.selectAll("rect.nv-series-bg").data([0]);
-        var c = 0;
-        data.forEach(function(d){
-          if(d.disabled == undefined){
-            d.disabled = true;
-            c++;
+        
+        if(radioButtonMode){   
+          var c = 0;
+          data.forEach(function(d){
+            if(d.disabled == undefined){
+              d.disabled = true;
+              c++;
+            }
+          })
+          if(c==data.length){
+            data[0].disabled = false;
           }
-        })
-        if(c==data.length){
-          data[0].disabled = 0;
-        }
+        }  
 
         var series = g.selectAll(".nv-series").data(function (d) {
           // console.log("Form series",d);

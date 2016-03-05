@@ -10,7 +10,8 @@ const m = angular.module('app.widgets.v2.pie-chart-wizard', [
   "app.widgets.wizard",
   "app.widgets.v2.steps.edit-widget-id",
   "app.widgets.v2.steps.pie-chart-decoration",
-  "app.widgets.v2.hbar-chart-adapter"]);
+  // "app.widgets.v2.pie-chart-adapter"
+  ]);
 
 
 m._wizard = undefined;
@@ -22,15 +23,16 @@ m.factory("PieChartWizard",["$http",
                             "EditWidgetID",
                             "PieChartDecoration",
                             "parentHolder",
-                            "PieChartAdapter",
+                            // "PieChartAdapter",
     function (	$http,
     			$modal, 
 				// NVD3WidgetV2, 
                 Wizard,
                 EditWidgetID,
                 PieChartDecoration,
-                parentHolder,
-                PieChartAdapter 
+                parentHolder
+                // ,
+                // PieChartAdapter 
                 ) {
     	if (!m._wizard){
 	    	m._wizard = 

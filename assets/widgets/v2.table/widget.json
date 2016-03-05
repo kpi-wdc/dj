@@ -1,13 +1,4 @@
 
 {
-  "schema": {
-    "type": "object",
-    "properties": {
-      "dataID": {
-        "title": "Data ID",
-        "type": "string",
-        "description": "Set data ID"
-      }
-    }
-  }
+  
 }
