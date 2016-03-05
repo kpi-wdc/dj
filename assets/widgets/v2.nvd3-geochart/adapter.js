@@ -13,6 +13,7 @@ m.service("GeochartAdapter", [
   this.applyDecoration = function (options, decoration) {
     if (angular.isDefined(decoration) && angular.isDefined(options)) {
       options.chart.height = decoration.height;
+      // options.chart.width = decoration.width;
       options.title.text = decoration.title;
       options.subtitle.text = decoration.subtitle;
       options.caption.text = decoration.caption;
@@ -30,6 +31,8 @@ m.service("GeochartAdapter", [
       options.chart.defaultStrokeOpacity = decoration.defaultStrokeOpacity;
       options.chart.selectedFillOpacity = decoration.selectedFillOpacity;
       options.chart.selectedStrokeWidth = decoration.selectedStrokeWidth;
+      options.chart.boundary = decoration.boundary;
+      
       options.chart.locale = i18n.locale();
            
     }
@@ -40,6 +43,9 @@ m.service("GeochartAdapter", [
     if (angular.isDefined(options)) {
       var decoration = {};
       decoration.height = options.chart.height;
+
+      // decoration.width = options.chart.width;
+
       decoration.title = options.title.text;
       decoration.subtitle = options.subtitle.text;
       decoration.caption = options.caption.text;
@@ -57,6 +63,7 @@ m.service("GeochartAdapter", [
       decoration.defaultStrokeOpacity = options.chart.defaultStrokeOpacity;
       decoration.selectedFillOpacity = options.chart.selectedFillOpacity;
       decoration.selectedStrokeWidth = options.chart.selectedStrokeWidth;
+      decoration.boundary = options.chart.boundary;
       return decoration;
     }
   };

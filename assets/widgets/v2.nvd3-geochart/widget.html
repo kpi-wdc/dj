@@ -1,5 +1,5 @@
 <div class="widget border" ng-controller="Nvd3GeochartCtrlV2" style="overflow:auto;">
-  <div nvd3 settings="settings" ng-if="completed"></div>
+  <div nvd3 settings="settings" api="chartAPI" ng-if="completed"></div>
   <h1 ng-if="!completed && configured" style="color:#eeeeee; text-align: center;">
     <center><img src="./img/ajax-loader.gif"/></center>
   </h1>

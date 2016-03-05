@@ -142,7 +142,7 @@ define(["angular", "angular-oclazyload", "angular-nvd3"], function (angular) {
             // console.log("NVD3 options", $scope.options)
             // console.log("NVD3 data", $scope.data)
               
-          
+          // console.log("NVD3 WIDGET",$scope.options,$scope.widget)
             $scope.settings = {
                 options : angular.copy($scope.options), 
                 data : angular.copy($scope.data)

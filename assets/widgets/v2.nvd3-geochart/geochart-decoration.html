@@ -73,6 +73,26 @@
 				<accordion-group heading="Scope">
 						<div class="row wizard setting">
 							<label class="wizard left section">
+									Initial Scope				    
+							</label>
+
+						 	<div class="switch tiny right" style="margin:0;">
+					          <input type="checkbox"
+					                 id="initialScopeEnableCheckbox"
+					                 ng-model="step.conf.decoration.initialScope"
+					                 ng-change = "step.fixBoundary()"
+					           >
+					          <label for="initialScopeEnableCheckbox"></label>
+					        </div>
+					         <button ng-if="step.conf.decoration.initialScope"
+					         class="button radius toolbar tiny apply right" 
+					         ng-click="step.fixBoundary()">
+					         Fix Boundary
+					         </button>
+						
+						</div>
+						<div class="row wizard setting">
+							<label class="wizard left section">
 									Scope				    
 							</label>
 							 <select ng-model="step.conf.scope" class="wizard" >
@@ -313,13 +333,16 @@
 		<wdc-table data="{table:step.wizard.context.postprocessedTable, decoration:{}}"></wdc-table>
 	</div>
 	 
-	 <button class="button radiustoolbar apply" ng-click="step.apply()">Apply Decoration</button>
+	 <button class="button radius toolbar tiny apply" ng-click="step.apply()">Apply Decoration</button>
 
 	<h5 class="section-title">Chart Preview</h5>
 	<div class="row wizard setting" style="overflow:auto;background:#ffffff">
-		<img ng-if="!step.data || !step.options" src="./img/ajax-loader.gif"/>
-		<div class="border" style="width:{{step.conf.decoration.width}}px;background:#ffffff;">
-			<div nvd3 settings="step.settings"></div>
+		<img ng-if="!step.complete" src="./img/ajax-loader.gif"/>
+		<div ng-show  = "step.complete" 
+			class="border" 
+			style="width:{{step.conf.decoration.width}}px;background:#ffffff;"
+		>
+			<div nvd3 settings="step.settings" api = "step.chartAPI"></div>
 		</div>
 	</div>
 	</div>

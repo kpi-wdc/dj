@@ -52,7 +52,7 @@ topology.objects.world.geometries.forEach(function(item){
 
 // var topodata = JSON.parse(data)
  var geom = topojson.feature(topology, topology.objects.world);
-console.log("exports.world_geojson = \"+JSON.stringify(geom))
+console.log("exports.world_geojson = "+JSON.stringify(geom))
 
 // var outData = geom.features.map(function(item){
 // 	return {

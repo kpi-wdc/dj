@@ -23,6 +23,7 @@
         "selectedFillOpacity": 0.5,
         "selectedStrokeWidth": 3,
         "locale":"en",
+        "boundary":{},
 
 
 

@@ -40,8 +40,8 @@ m.factory("GeochartDecoration",[
 
 	    			direction : (wizard.conf.direction) ? wizard.conf.direction : "Rows",
 		            dataIndex : (wizard.conf.dataIndex) ? wizard.conf.dataIndex : [0],
-	            	bins : (this.wizard.bins) ? wizard.conf.bins : 2,
-	            	scope : (this.wizard.scope) ? wizard.conf.scope : "none",
+	            	bins : (this.wizard.conf.bins) ? wizard.conf.bins : 2,
+	            	scope : (this.wizard.conf.scope) ? wizard.conf.scope : "none",
 
 	    			decoration : wizard.conf.decoration,
 	    			dataID : wizard.conf.dataID,
@@ -61,7 +61,10 @@ m.factory("GeochartDecoration",[
 	    		if(this.conf.queryID){
 	    			let thos = this;
 	    			this.inputQuery = this.queries.filter((item) => item.$id == this.conf.queryID)[0].$title;
-	    		}	
+	    		}else{
+	    			this.inputQuery = undefined;
+	    		}
+	    		this.complete = false;	
 	    	},
 
 	    	onFinishWizard:  function(wizard){
@@ -113,6 +116,7 @@ m.factory("GeochartDecoration",[
 		    },
 
 		    selectSerie: function(){
+		    	
 		      this.conf.dataIndex = 
 		      this.indexList
 		        .filter((item) => item.enable == true)
@@ -122,6 +126,14 @@ m.factory("GeochartDecoration",[
 		      	this.indexList[0].enable=true;
 		      	this.conf.dataIndex = [0];
 		      }  
+		    },
+
+		    fixBoundary: function(){
+		    	if(this.conf.decoration.initialScope == true){
+		    		this.conf.decoration.boundary = this.chartAPI.chart().boundary()
+		    	}else{
+		    		this.conf.decoration.boundary = {}
+		    	}
 		    },
 
 		    setDirection: function(){
@@ -155,6 +167,7 @@ m.factory("GeochartDecoration",[
 
 			loadData: function(){
 				let thos = this;
+				this.complete = false;
 
 				if(!this.wizard.context.postprocessedTable){
 					$http
@@ -201,6 +214,7 @@ m.factory("GeochartDecoration",[
 				            }
 		                
 
+
 		    //             thos.conf.decoration.title = thos.dataset.dataset.label;
 						// thos.conf.decoration.subtitle = thos.dataset.dataset.source;
 						// thos.conf.decoration.caption = 'Note:'+ thos.dataset.dataset.note;
@@ -215,8 +229,11 @@ m.factory("GeochartDecoration",[
 		            });
 
 				$q.all([this.optionsLoaded, this.dataLoaded]).then(() => {
+					this.complete = true;
 					thos.conf.decoration.width = parentHolder(thos.wizard.conf).width;
+					thos.options.chart.width = thos.conf.decoration.width;
 					GeochartAdapter.applyDecoration(thos.options,thos.conf.decoration);
+					// console.log(thos.options,thos.conf.decoration)
 					thos.settings = {options:angular.copy(thos.options), data:angular.copy(thos.data)};
 					// thos.apply()
 				});

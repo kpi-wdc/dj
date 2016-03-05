@@ -26,6 +26,9 @@
 
         //directive global api
         scope.api = {
+          chart: function(){
+            return scope.chart;
+          },
           // Fully refresh directive
           refresh: function () {
             // console.log("Refresh",scope.settings)

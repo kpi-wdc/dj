@@ -5147,7 +5147,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-        console.log("Legend model data",data)
+        // console.log("Legend model data",data)
         var availableWidth = width - margin.left - margin.right,
             container = d3.select(this);
 
@@ -5176,7 +5176,7 @@ d3.geo.tile = function () {
         }
 
         var series = g.selectAll(".nv-series").data(function (d) {
-          console.log("Form series",d);
+          // console.log("Form series",d);
           return d;
         });
 
@@ -5481,7 +5481,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-        console.log("Colors", data)
+        // console.log("Colors", data)
         // prepare data
         var data1 = data.filter(function (item) {
           return item.disabled !== true;
@@ -5575,6 +5575,9 @@ d3.geo.tile = function () {
           .attr("width", rectWidth)
           .attr("fill", color)
           .attr("opacity", 1)
+          .style("stroke", "#777")
+          .style("stroke-opacity", 0.7)
+          .style("stroke-width", 0.3) 
           .attr("transform", function (d, i) {
             var x = rectWidth * i + 20;
             return "translate(" + x + "," + 0 + ")";
@@ -6042,6 +6045,8 @@ d3.geo.tile = function () {
         zoom = d3.behavior.zoom(),
     
         tile = d3.geo.tile(),
+
+        boundary,
     
         tileServerConnection = false,
     
@@ -6220,7 +6225,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-        console.log("Map model data", data)
+        // console.log("Map model data", data)
 
         // find index of active serie
         valueIndex = -1;
@@ -6235,7 +6240,7 @@ d3.geo.tile = function () {
 
         
 
-        console.log("valueIndex", valueIndex)
+        // console.log("valueIndex", valueIndex)
 
         var availableWidth = width - margin.left - margin.right,
             availableHeight = height - margin.top - margin.bottom,
@@ -6282,24 +6287,31 @@ d3.geo.tile = function () {
         
         if (tr[0] == 0 && tr[1] == 0) {
           projection.scale(1).translate([0,0]);
-          var selectionBounds;
-          geoData.forEach(function (item, index) {
-              selectionBounds = mergeBounds(selectionBounds,path.bounds(item)) 
-          });          
+
+          // console.log("NV.MODEL", boundary)
+          if(boundary && boundary.scale && boundary.translate ){
+              zoom.scale(boundary.scale).translate(boundary.translate);
+            
+          }else{
+            var selectionBounds;
+            geoData.forEach(function (item, index) {
+                selectionBounds = mergeBounds(selectionBounds,path.bounds(item)) 
+            });          
           
-          var   dx = selectionBounds[1][0] - selectionBounds[0][0],
-                
-                dy = selectionBounds[1][1] - selectionBounds[0][1],
-                
-                x = (selectionBounds[0][0] + selectionBounds[1][0]) / 2,
-                
-                y = (selectionBounds[0][1] + selectionBounds[1][1]) / 2,
-                
-                scale =2*Math.PI*Math.min(width/dx, height/dy),
-           
-                translate = [(width/2-(scale*x/2/Math.PI)), (height/2-(scale*y/2/Math.PI))];
-           
-          zoom.scale(scale).translate(translate);
+            var   dx = selectionBounds[1][0] - selectionBounds[0][0],
+                  
+                  dy = selectionBounds[1][1] - selectionBounds[0][1],
+                  
+                  x = (selectionBounds[0][0] + selectionBounds[1][0]) / 2,
+                  
+                  y = (selectionBounds[0][1] + selectionBounds[1][1]) / 2,
+                  
+                  scale =2*Math.PI*Math.min(width/dx, height/dy),
+             
+                  translate = [(width/2-(scale*x/2/Math.PI)), (height/2-(scale*y/2/Math.PI))];
+             
+            zoom.scale(scale).translate(translate);
+          }
         }
 
 // remove scope outlines if tiles shows
@@ -6364,7 +6376,6 @@ d3.geo.tile = function () {
             return "map-subunit subunit-id-" + i;
           })
           .style("fill", function (d) {
-            console.log("fill",d,valueIndex,d.properties.values[valueIndex].c,color(d, d.properties.values[valueIndex].c))
             return (d.properties.values) ? 
               color(d, d.properties.values[valueIndex].c) :
               defaultFill; 
@@ -6579,6 +6590,14 @@ d3.geo.tile = function () {
         };
 
         var afterZoom = function () {
+         
+         boundary = {
+            scale : zoom.scale(),
+            translate : zoom.translate()
+         } 
+         
+         // console.log("NV.MODEL boundary after zoom", boundary)
+         
          projection.scale(zoom.scale() / 2 / Math.PI).translate(zoom.translate());
  
           geo
@@ -6794,6 +6813,12 @@ d3.geo.tile = function () {
       return chart;
     };
 
+    chart.boundary = function (_) {
+      if (!arguments.length) return boundary;
+      boundary = _;
+      return chart;
+    };
+
   
     //============================================================
 
@@ -6861,7 +6886,7 @@ d3.geo.tile = function () {
     function chart(selection) {
       selection.each(function (data) {
         if(!data.length || data.length == 0) return;
-        console.log("MAP CHART", data);
+        // console.log("MAP CHART", data);
 
 
         var container = d3.select(this),
@@ -6929,7 +6954,7 @@ d3.geo.tile = function () {
 
         //------------------------------------------------------------
         // Legend
-
+        showLegend = showLegend && data[0].series.length > 1;
         if (showLegend) {
           legend.width(availableWidth).key(function (d) {
             return d.key;
@@ -6952,67 +6977,40 @@ d3.geo.tile = function () {
             .select(".nvd3 .nv-legend")
             .select("g")
             .attr("transform", "translate(20,"+(10-margin.top)+")");
-          gEnter.attr("transform", "translate(0,"+margin.top+")");
+          
         }
+        gEnter.attr("transform", "translate(0,"+margin.top+")");
 
         //------------------------------------------------------------
         //------------------------------------------------------------
         // Color Scheme
-
-        colorScheme
-          .width(availableWidth)
-          .color(color);
+        var colorSchemeEnable = data[0].features.filter(function(item){ 
+            return (item.properties.values) ? true : false
+          }).length>1;  
         
-        wrap
-          .select(".nv-colorsWrap")
-          .datum(data[0].series)
-          .call(colorScheme);
-
+        if(colorSchemeEnable){
+          colorScheme
+            .width(availableWidth)
+            .color(color);
+          
+          wrap
+            .select(".nv-colorsWrap")
+            .datum(data[0].series)
+            .call(colorScheme);
+        }    
+        
         var h = height || parseInt(container.style("height")) || 400;
-        wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (h - 75) + ")");  
-
-        //if (showLegend) {
-        // colorScheme.width(availableWidth)
-        // //.key(function (d) {
-        // //  return d.key;
-        // //})
-        // //.min(2)
-        // .color(color);
-
-        //  wrap.select(".nv-colorsWrap").datum(data).call(colorScheme);
-
-        // //if (margin.top != legend.height()) {
-        // //  margin.top = legend.height();
-        // //  availableHeight = (height || parseInt(container.style('height')) || 400)
-        // //  - margin.top - margin.bottom;
-        // //}
-        // var h = height || parseInt(container.style("height")) || 400;
-        // // console.log("Chart height", h);
-        // wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (h - 75) + ")");
-        // //}
-
-        // //------------------------------------------------------------
-
-        // wrap.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-        //------------------------------------------------------------
-        // Main Chart Component(s)
-
+        if(colorSchemeEnable){
+          wrap.select(".nv-colorsWrap").attr("transform", "translate(" + 0 + "," + (h - 75) + ")");  
+        }
+          
+        
         map.width(availableWidth - margin.left)
-        //.height(availableHeight-legend.height() - margin.bottom - margin.top);
         .height(availableHeight);
-
-        //console.log(margin,legend.height(),map.height());
-
-        //mapWrap
+        
         wrap.select(".nv-mapWrap")
-        //.attr('transform', 'translate(0,' + (legend.height()+margin.top) + ')')
         .datum(data).call(map);
 
-
-
-        //d3.transition(mapWrap).call(map);
 
         //------------------------------------------------------------
 
@@ -7026,11 +7024,6 @@ d3.geo.tile = function () {
           dispatch.stateChange(state);
           chart.update();
         });
-
-        //chord.dispatch.on('elementMouseout.tooltip', function(e) {
-        //    dispatch.tooltipHide(e);
-        //});
-
 
         // Update chart from a state object passed to event handler
         dispatch.on("changeState", function (e) {
@@ -7118,6 +7111,12 @@ d3.geo.tile = function () {
       color = nv.utils.getColor(_);
       legend.color(color);
       map.color(color);
+      return chart;
+    };
+
+    chart.boundary = function (_) {
+      if (!arguments.length) return map.boundary();
+      map.boundary(_);
       return chart;
     };
 
