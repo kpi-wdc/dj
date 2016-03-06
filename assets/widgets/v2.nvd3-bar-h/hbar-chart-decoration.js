@@ -32,7 +32,7 @@ m.factory("HBarChartDecoration",[
 			
 			description : "Setup chart decoration options",
 	        
-	    	html : "./widgets/v2.steps/hbar-chart-decoration.html",
+	    	html : "./widgets/v2.nvd3-bar-h/hbar-chart-decoration.html",
 
 
 	    	onStartWizard: function(wizard){

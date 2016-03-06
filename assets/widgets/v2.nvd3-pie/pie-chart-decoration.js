@@ -31,7 +31,7 @@ m.factory("PieChartDecoration",[
 			
 			description : "Setup chart decoration options",
 	        
-	    	html : "./widgets/v2.steps/pie-chart-decoration.html",
+	    	html : "./widgets/v2.nvd3-pie/pie-chart-decoration.html",
 
 	    	onStartWizard: function(wizard){
 	    		this.wizard = wizard;

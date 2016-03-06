@@ -18,6 +18,10 @@ m.service('StackedAreaAdapter', function () {
       options.chart.xAxis.staggerLabels = decoration.staggerLabels;
       options.chart.rotateLabels = decoration.xAxisAngle;
       options.chart.reduceXTicks = decoration.reduceXTicks;
+      options.chart.state.style = decoration.style;
+      options.chart.style = decoration.style;
+
+      options.chart.showControls = decoration.showControls;
       options.chart.isArea = decoration.isArea;
       options.chart.color = (decoration.color) ? decoration.color : null;
       options.chart.interpolate = decoration.interpolation;
@@ -49,9 +53,11 @@ m.service('StackedAreaAdapter', function () {
       decoration.staggerLabels = options.chart.xAxis.staggerLabels;
       decoration.isArea = options.chart.isArea;
       decoration.color = options.chart.color;
+      decoration.showControls = options.chart.showControls; 
       decoration.showLabels = angular.isDefined(options.chart.label);
       decoration.interpolation = options.chart.interpolate;
       decoration.showPoints = options.chart.showPoints;
+      decoration.style = options.chart.style;
       return decoration;
     }
   }

@@ -160,7 +160,41 @@
 				    </div>    
 				</accordion-group>
 		
-					
+				<accordion-group heading="Show Controls">	    
+					<div class="row wizard setting">
+
+						<div class="row wizard setting">
+
+							
+							<label class="wizard left">
+								Enable
+							</label>
+							
+						 	<div class="switch tiny right">
+					          <input type="checkbox"
+					                 id="showControlsCheckbox"
+					                 ng-model="step.conf.decoration.showControls"
+					           >
+					          <label for="showControlsCheckbox"></label>
+					        </div>
+			 				
+					    </div>
+					</div>
+					<div class="row wizard setting">
+						<label class="wizard left">
+							Chart Mode
+						</label>
+						<select ng-model="step.conf.decoration.style" class="wizard">
+				          <option value="stack">Stacked</option>
+				          <option value="stream">Stream</option>
+				          <option value="expand">Expanded</option>
+				          
+				          
+				        </select>	
+							
+					</div>	
+					     
+				</accordion-group>    	
 				<accordion-group heading="Point Options">
 				
 					<div class="row wizard setting">
@@ -204,6 +238,8 @@
 				        </div>
 					</div>
 				</accordion-group>
+
+
 
 				<accordion-group heading = "Chart Height">
 				    <div class="row wizard setting">

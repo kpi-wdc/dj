@@ -29,7 +29,7 @@ m.factory("BarChartDecoration",[
 			
 			description : "Setup chart decoration options",
 	        
-	    	html : "./widgets/v2.steps/bar-chart-decoration.html",
+	    	html : "./widgets/v2.nvd3-bar/bar-chart-decoration.html",
 
 	    	onStartWizard: function(wizard){
 	    		this.wizard = wizard;

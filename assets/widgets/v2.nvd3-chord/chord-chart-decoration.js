@@ -32,7 +32,7 @@ m.factory("ChordChartDecoration",[
 			
 			description : "Setup chart decoration options",
 	        
-	    	html : "./widgets/v2.steps/chord-chart-decoration.html",
+	    	html : "./widgets/v2.nvd3-chord/chord-chart-decoration.html",
 
 
 	    	onStartWizard: function(wizard){

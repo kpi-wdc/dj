@@ -31,7 +31,7 @@ m.factory("RadarChartDecoration",[
 			
 			description : "Setup chart decoration options",
 	        
-	    	html : "./widgets/v2.steps/radar-chart-decoration.html",
+	    	html : "./widgets/v2.nvd3-radar/radar-chart-decoration.html",
 
 	    	onStartWizard: function(wizard){
 	    		this.wizard = wizard;
