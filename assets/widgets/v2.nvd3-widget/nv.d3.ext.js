@@ -2476,7 +2476,7 @@ d3.geo.tile = function () {
 
           var xValue = xAxis.tickFormat()(chart.x()(singlePoint, pointIndex));
           interactiveLayer.tooltip.position({ left: pointXLocation + margin.left, top: e.mouseY + margin.top }).chartContainer(that.parentNode).enabled(tooltips).valueFormatter(function (d, i) {
-            return yAxis.tickFormat()(d);
+            return new Number(yAxis.tickFormat()(d)).toFixed(2);
           }).data({
             value: xValue,
             series: allData
@@ -2975,6 +2975,7 @@ d3.geo.tile = function () {
         showYAxis = true,
         rightAlignYAxis = false,
         useInteractiveGuideline = false,
+        label = function(d,i){return d.label},
         tooltips = true,
         tooltip = function (key, x, y, e, graph) {
       return "<h3>" + key + "</h3>" + "<p>" + y + " at " + x + "</p>";
@@ -3003,7 +3004,7 @@ d3.geo.tile = function () {
           x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
           y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
           content = tooltip(e.series.key, x, y, e, chart);
-
+          console.log(e)
       nv.tooltip.show([left, top], content, null, null, offsetElement);
     };
 
@@ -3200,12 +3201,35 @@ d3.geo.tile = function () {
           }
 
           var xValue = xAxis.tickFormat()(chart.x()(singlePoint, pointIndex));
-          interactiveLayer.tooltip.position({ left: pointXLocation + margin.left, top: e.mouseY + margin.top }).chartContainer(that.parentNode).enabled(tooltips).valueFormatter(function (d, i) {
-            return yAxis.tickFormat()(d);
-          }).data({
-            value: xValue,
-            series: allData
-          })();
+          // ,
+          //   label : chart.label()(singlePoint, pointIndex)
+          // };
+          interactiveLayer
+            .tooltip.position({ left: pointXLocation + margin.left, top: e.mouseY + margin.top })
+            .chartContainer(that.parentNode)
+            .enabled(tooltips)
+            .valueFormatter(function (d, i) {
+              // console.log("VAlue Formatter", d,i)
+              return yAxis.tickFormat()(d);
+            })
+            .headerFormatter(function(d){
+              return d;
+              // console.log("Header Formatter", d,i)
+              // var v = xAxis.tickFormat()(d);
+              // if(new Number((v).toFixed(0)) == v){
+              //   v = new Number(v.toFixed(0));
+              //   return v//d.label
+              // }else{
+              //   return v.toFixed(2)
+              // }
+               // v = (new Number((v).toFixed(0)) == v) ? v.toFixed(0) : v.toFixed(2);
+               // return v;
+              // return (xAxis.tickFormat()(d)).toFixed(2);
+            })
+            .data({
+              value: xValue,
+              series: allData
+            })();
 
           interactiveLayer.renderGuideLine(pointXLocation);
         });
@@ -3216,6 +3240,7 @@ d3.geo.tile = function () {
         });
 
         dispatch.on("tooltipShow", function (e) {
+          console.log(" dispath tooltipShow",tooltips,e)
           if (tooltips) showTooltip(e, that.parentNode);
         });
 
@@ -3270,8 +3295,9 @@ d3.geo.tile = function () {
     chart.xAxis = xAxis;
     chart.yAxis = yAxis;
     chart.interactiveLayer = interactiveLayer;
+    chart.label = label;
 
-    d3.rebind(chart, lines, "defined", "isArea", "x", "y", "size", "xScale", "yScale", "xDomain", "yDomain", "xRange", "yRange", "forceX", "forceY", "interactive", "clipEdge", "clipVoronoi", "useVoronoi", "id", "interpolate");
+    d3.rebind(chart, lines, "defined", "isArea", "x", "y", "size", "xScale", "yScale", "xDomain", "yDomain", "xRange", "yRange", "forceX", "forceY", "interactive", "clipEdge", "clipVoronoi", "useVoronoi", "id", "interpolate","label");
 
     chart.options = nv.utils.optionsFunc.bind(chart);
 
@@ -3757,6 +3783,603 @@ d3.geo.tile = function () {
   };
 
 
+  // nv.models.stackedAreaChart = function () {
+  //   "use strict";
+  //   //============================================================
+  //   // Public Variables with Default Settings
+  //   //------------------------------------------------------------
+
+  //   var stacked = nv.models.stackedArea(),
+  //       xAxis = nv.models.axis(),
+  //       yAxis = nv.models.axis(),
+  //       legend = nv.models.legend(),
+  //       controls = nv.models.legend(),
+  //       interactiveLayer = nv.interactiveGuideline();
+
+  //   var margin = { top: 30, right: 25, bottom: 50, left: 60 },
+  //       width = null,
+  //       height = null,
+  //       color = nv.utils.defaultColor() // a function that takes in d, i and returns color
+  //   ,
+  //       showControls = true,
+  //       showLegend = true,
+  //       showXAxis = true,
+  //       showYAxis = true,
+  //       rightAlignYAxis = false,
+  //       useInteractiveGuideline = false,
+  //       tooltips = true,
+  //       tooltip = function (key, x, y, e, graph) {
+  //     return "<h3>" + key + "</h3>" + "<p>" + y + " on " + x + "</p>";
+  //   },
+  //       x //can be accessed via chart.xScale()
+  //   ,
+  //       y //can be accessed via chart.yScale()
+  //   ,
+  //       yAxisTickFormat = d3.format(".2f"),
+  //       state = { style: stacked.style() },
+  //       defaultState = null,
+  //       noData = "No Data Available.",
+  //       dispatch = d3.dispatch("tooltipShow", "tooltipHide", "stateChange", "changeState"),
+  //       controlWidth = 250,
+  //       cData = ["Stacked", "Stream", "Expanded"],
+  //       controlLabels = {},
+  //       transitionDuration = 250;
+
+  //   xAxis.orient("bottom").tickPadding(7);
+  //   yAxis.orient(rightAlignYAxis ? "right" : "left");
+
+  //   controls.updateState(false);
+  //   //============================================================
+
+
+  //   //============================================================
+  //   // Private Variables
+  //   //------------------------------------------------------------
+
+  //   var showTooltip = function (e, offsetElement) {
+  //     var left = e.pos[0] + (offsetElement.offsetLeft || 0),
+  //         top = e.pos[1] + (offsetElement.offsetTop || 0),
+  //         x = xAxis.tickFormat()(stacked.x()(e.point, e.pointIndex)),
+  //         y = yAxis.tickFormat()(stacked.y()(e.point, e.pointIndex)),
+  //         content = tooltip(e.series.key, x, y, e, chart);
+
+  //     nv.tooltip.show([left, top], content, e.value < 0 ? "n" : "s", null, offsetElement);
+  //   };
+
+  //   //============================================================
+
+
+  //   function chart(selection) {
+  //     selection.each(function (data) {
+  //       var container = d3.select(this),
+  //           that = this;
+
+  //       var availableWidth = (width || parseInt(container.style("width")) || 960) - margin.left - margin.right,
+  //           availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
+
+  //       chart.update = function () {
+  //         container.transition().duration(transitionDuration).call(chart);
+  //       };
+  //       chart.container = this;
+
+  //       //set state.disabled
+  //       state.disabled = data.map(function (d) {
+  //         return !!d.disabled;
+  //       });
+
+  //       if (!defaultState) {
+  //         var key;
+  //         defaultState = {};
+  //         for (key in state) {
+  //           if (state[key] instanceof Array) 
+  //               defaultState[key] = state[key].slice(0);
+  //           else 
+  //               defaultState[key] = state[key];
+  //         }
+  //       }
+
+  //       //------------------------------------------------------------
+  //       // Display No Data message if there's nothing to show.
+
+  //       if (!data || !data.length || !data.filter(function (d) {
+  //         return d.values.length;
+  //       }).length) {
+  //         var noDataText = container.selectAll(".nv-noData").data([noData]);
+
+  //         noDataText.enter().append("text").attr("class", "nvd3 nv-noData").attr("dy", "-.7em").style("text-anchor", "middle");
+
+  //         noDataText.attr("x", margin.left + availableWidth / 2).attr("y", margin.top + availableHeight / 2).text(function (d) {
+  //           return d;
+  //         });
+
+  //         return chart;
+  //       } else {
+  //         container.selectAll(".nv-noData").remove();
+  //       }
+
+  //       //------------------------------------------------------------
+
+
+  //       //------------------------------------------------------------
+  //       // Setup Scales
+
+  //       x = stacked.xScale();
+  //       y = stacked.yScale();
+
+  //       //------------------------------------------------------------
+
+
+  //       //------------------------------------------------------------
+  //       // Setup containers and skeleton of chart
+
+  //       var wrap = container.selectAll("g.nv-wrap.nv-stackedAreaChart").data([data]);
+  //       var gEnter = wrap.enter().append("g").attr("class", "nvd3 nv-wrap nv-stackedAreaChart").append("g");
+  //       var g = wrap.select("g");
+
+  //       gEnter.append("rect").style("opacity", 0);
+  //       gEnter.append("g").attr("class", "nv-x nv-axis");
+  //       gEnter.append("g").attr("class", "nv-y nv-axis");
+  //       gEnter.append("g").attr("class", "nv-stackedWrap");
+  //       gEnter.append("g").attr("class", "nv-legendWrap");
+  //       gEnter.append("g").attr("class", "nv-controlsWrap");
+  //       gEnter.append("g").attr("class", "nv-interactive");
+
+  //       g.select("rect").attr("width", availableWidth).attr("height", availableHeight);
+  //       //------------------------------------------------------------
+  //       // Legend
+        
+  //        showLegend = showLegend && data.length > 1;
+
+
+  //       if (showLegend) {
+  //         var legendWidth = showControls ? availableWidth - controlWidth : availableWidth;
+  //         legend.width(legendWidth);
+
+  //         g.select(".nv-legendWrap").datum(data).call(legend);
+
+  //         if (margin.top != legend.height()) {
+  //           margin.top = legend.height();
+  //           availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
+  //         }
+
+  //         g.select(".nv-legendWrap").attr("transform", "translate(" + (availableWidth - legendWidth) + "," + -margin.top + ")");
+  //       }
+
+  //       //------------------------------------------------------------
+
+
+  //       //------------------------------------------------------------
+  //       // Controls
+
+  //       if (showControls) {
+  //         var controlsData = [{
+  //           key: controlLabels.stacked || "Stacked",
+  //           metaKey: "Stacked",
+  //           disabled: stacked.style() != "stack",
+  //           style: "stack"
+  //         }, {
+  //           key: controlLabels.stream || "Stream",
+  //           metaKey: "Stream",
+  //           disabled: stacked.style() != "stream",
+  //           style: "stream"
+  //         }, {
+  //           key: controlLabels.expanded || "Expanded",
+  //           metaKey: "Expanded",
+  //           disabled: stacked.style() != "expand",
+  //           style: "expand"
+  //         }, {
+  //           key: controlLabels.stack_percent || "Stack %",
+  //           metaKey: "Stack_Percent",
+  //           disabled: stacked.style() != "stack_percent",
+  //           style: "stack_percent"
+  //         }];
+
+  //         controlWidth = cData.length / 3 * 260;
+
+  //         controlsData = controlsData.filter(function (d) {
+  //           return cData.indexOf(d.metaKey) !== -1;
+  //         });
+
+  //         controls.width(controlWidth).color(["#444", "#444", "#444"]);
+
+  //         g.select(".nv-controlsWrap").datum(controlsData).call(controls);
+
+
+  //         if (margin.top != Math.max(controls.height(), legend.height())) {
+  //           margin.top = Math.max(controls.height(), legend.height());
+  //           availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
+  //         }
+
+
+  //         g.select(".nv-controlsWrap").attr("transform", "translate(0," + -margin.top + ")");
+  //       }
+
+  //       //------------------------------------------------------------
+
+
+  //       wrap.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  //       if (rightAlignYAxis) {
+  //         g.select(".nv-y.nv-axis").attr("transform", "translate(" + availableWidth + ",0)");
+  //       }
+
+  //       //------------------------------------------------------------
+  //       // Main Chart Component(s)
+
+  //       //------------------------------------------------------------
+  //       //Set up interactive layer
+  //       if (useInteractiveGuideline) {
+  //         interactiveLayer.width(availableWidth).height(availableHeight).margin({ left: margin.left, top: margin.top }).svgContainer(container).xScale(x);
+  //         wrap.select(".nv-interactive").call(interactiveLayer);
+  //       }
+
+  //       stacked.width(availableWidth).height(availableHeight);
+
+  //       var stackedWrap = g.select(".nv-stackedWrap").datum(data);
+
+  //       stackedWrap.transition().call(stacked);
+
+  //       //------------------------------------------------------------
+
+
+  //       //------------------------------------------------------------
+  //       // Setup Axes
+
+  //       if (showXAxis) {
+  //         xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
+
+  //         g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (availableHeight + 10) + ")");
+
+  //         g.select(".nv-x.nv-axis").transition().duration(0).call(xAxis);
+  //       }
+
+  //       if (showYAxis) {
+  //         yAxis.scale(y)
+  //           .ticks(stacked.offset() == "wiggle" ? 0 : 
+  //             availableHeight / 36).tickSize(-availableWidth, 0)
+  //           // .setTickFormat(yAxisTickFormat);
+  //           .setTickFormat(stacked.style() == "expand" || stacked.style() == "stack_percent" ? 
+  //             d3.format("%") : yAxisTickFormat);
+
+  //         g.select(".nv-y.nv-axis").attr("transform", "translate(0," + 10 + ")").transition().duration(0).call(yAxis);
+  //       }
+
+  //       //------------------------------------------------------------
+
+
+  //       //============================================================
+  //       // Event Handling/Dispatching (in chart's scope)
+  //       //------------------------------------------------------------
+
+  //       stacked.dispatch.on("areaClick.toggle", function (e) {
+  //         if (data.filter(function (d) {
+  //           return !d.disabled;
+  //         }).length === 1) data.forEach(function (d) {
+  //           d.disabled = false;
+  //         });else data.forEach(function (d, i) {
+  //           d.disabled = i != e.seriesIndex;
+  //         });
+
+  //         state.disabled = data.map(function (d) {
+  //           return !!d.disabled;
+  //         });
+  //         dispatch.stateChange(state);
+
+  //         chart.update();
+  //       });
+
+  //       legend.dispatch.on("stateChange", function (newState) {
+  //         state.disabled = newState.disabled;
+  //         dispatch.stateChange(state);
+  //         chart.update();
+  //       });
+
+  //       controls.dispatch.on("legendClick", function (d, i) {
+  //         if (!d.disabled) return;
+
+  //         controlsData = controlsData.map(function (s) {
+  //           s.disabled = true;
+  //           return s;
+  //         });
+  //         d.disabled = false;
+
+  //         stacked.style(d.style);
+
+
+  //         state.style = stacked.style();
+  //         dispatch.stateChange(state);
+
+  //         chart.update();
+  //       });
+
+
+  //       interactiveLayer.dispatch.on("elementMousemove", function (e) {
+  //         stacked.clearHighlights();
+  //         var singlePoint,
+  //             pointIndex,
+  //             pointXLocation,
+  //             allData = [];
+  //         data.filter(function (series, i) {
+  //           series.seriesIndex = i;
+  //           return !series.disabled;
+  //         }).forEach(function (series, i) {
+  //           pointIndex = nv.interactiveBisect(series.values, e.pointXValue, chart.x());
+  //           stacked.highlightPoint(i, pointIndex, true);
+  //           var point = series.values[pointIndex];
+  //           if (typeof point === "undefined") return;
+  //           if (typeof singlePoint === "undefined") singlePoint = point;
+  //           if (typeof pointXLocation === "undefined") pointXLocation = chart.xScale()(chart.x()(point, pointIndex));
+
+  //           //If we are in 'expand' mode, use the stacked percent value instead of raw value.
+  //           var tooltipValue = stacked.style() == "expand" ? point.display.y : chart.y()(point, pointIndex);
+  //           allData.push({
+  //             key: series.key,
+  //             value: tooltipValue,
+  //             color: color(series, series.seriesIndex),
+  //             stackedValue: point.display
+  //           });
+  //         });
+
+  //         allData.reverse();
+
+  //         //Highlight the tooltip entry based on which stack the mouse is closest to.
+  //         if (allData.length > 2) {
+  //           var yValue = chart.yScale().invert(e.mouseY);
+  //           var yDistMax = Infinity,
+  //               indexToHighlight = null;
+  //           allData.forEach(function (series, i) {
+  //             //To handle situation where the stacked area chart is negative, we need to use absolute values
+  //             //when checking if the mouse Y value is within the stack area.
+  //             yValue = Math.abs(yValue);
+  //             var stackedY0 = Math.abs(series.stackedValue.y0);
+  //             var stackedY = Math.abs(series.stackedValue.y);
+  //             if (yValue >= stackedY0 && yValue <= stackedY + stackedY0) {
+  //               indexToHighlight = i;
+  //               return;
+  //             }
+  //           });
+  //           if (indexToHighlight != null) allData[indexToHighlight].highlight = true;
+  //         }
+
+  //         var xValue = xAxis.tickFormat()(chart.x()(singlePoint, pointIndex));
+
+  //         //If we are in 'expand' mode, force the format to be a percentage.
+  //         var valueFormatter = stacked.style() == "expand" ? function (d, i) {
+  //           return d3.format(".1%")(d);
+  //         } : function (d, i) {
+  //           return new Number(yAxis.tickFormat()(d)).toFixed(2);
+  //         };
+  //         interactiveLayer.tooltip.position({ left: pointXLocation + margin.left, top: e.mouseY + margin.top }).chartContainer(that.parentNode).enabled(tooltips).valueFormatter(valueFormatter).data({
+  //           value: xValue,
+  //           series: allData
+  //         })();
+
+  //         interactiveLayer.renderGuideLine(pointXLocation);
+  //       });
+
+  //       interactiveLayer.dispatch.on("elementMouseout", function (e) {
+  //         dispatch.tooltipHide();
+  //         stacked.clearHighlights();
+  //       });
+
+
+  //       dispatch.on("tooltipShow", function (e) {
+  //         if (tooltips) showTooltip(e, that.parentNode);
+  //       });
+
+  //       // Update chart from a state object passed to event handler
+  //       dispatch.on("changeState", function (e) {
+  //         if (typeof e.disabled !== "undefined" && data.length === e.disabled.length) {
+  //           data.forEach(function (series, i) {
+  //             series.disabled = e.disabled[i];
+  //           });
+
+  //           state.disabled = e.disabled;
+  //         }
+
+  //         if (typeof e.style !== "undefined") {
+  //           stacked.style(e.style);
+  //         }
+
+  //         chart.update();
+  //       });
+  //     });
+
+
+  //     return chart;
+  //   }
+
+
+  //   //============================================================
+  //   // Event Handling/Dispatching (out of chart's scope)
+  //   //------------------------------------------------------------
+
+  //   stacked.dispatch.on("tooltipShow", function (e) {
+  //     //disable tooltips when value ~= 0
+  //     //// TODO: consider removing points from voronoi that have 0 value instead of this hack
+  //     /*
+  //      if (!Math.round(stacked.y()(e.point) * 100)) {  // 100 will not be good for very small numbers... will have to think about making this valu dynamic, based on data range
+  //      setTimeout(function() { d3.selectAll('.point.hover').classed('hover', false) }, 0);
+  //      return false;
+  //      }
+  //      */
+
+  //     e.pos = [e.pos[0] + margin.left, e.pos[1] + margin.top], dispatch.tooltipShow(e);
+  //   });
+
+  //   stacked.dispatch.on("tooltipHide", function (e) {
+  //     dispatch.tooltipHide(e);
+  //   });
+
+  //   dispatch.on("tooltipHide", function () {
+  //     if (tooltips) nv.tooltip.cleanup();
+  //   });
+
+  //   //============================================================
+
+
+  //   //============================================================
+  //   // Expose Public Variables
+  //   //------------------------------------------------------------
+
+  //   // expose chart's sub-components
+  //   chart.dispatch = dispatch;
+  //   chart.stacked = stacked;
+  //   chart.legend = legend;
+  //   chart.controls = controls;
+  //   chart.xAxis = xAxis;
+  //   chart.yAxis = yAxis;
+  //   chart.interactiveLayer = interactiveLayer;
+
+  //   d3.rebind(chart, stacked, "x", "y", "size", "xScale", "yScale", "xDomain", "yDomain", "xRange", "yRange", "sizeDomain", "interactive", "useVoronoi", "offset", "order", "style", "clipEdge", "forceX", "forceY", "forceSize", "interpolate");
+
+  //   chart.options = nv.utils.optionsFunc.bind(chart);
+
+  //   chart.margin = function (_) {
+  //     if (!arguments.length) return margin;
+  //     margin.top = typeof _.top != "undefined" ? _.top : margin.top;
+  //     margin.right = typeof _.right != "undefined" ? _.right : margin.right;
+  //     margin.bottom = typeof _.bottom != "undefined" ? _.bottom : margin.bottom;
+  //     margin.left = typeof _.left != "undefined" ? _.left : margin.left;
+  //     return chart;
+  //   };
+
+  //   chart.width = function (_) {
+  //     if (!arguments.length) return width;
+  //     width = _;
+  //     return chart;
+  //   };
+
+  //   chart.height = function (_) {
+  //     if (!arguments.length) return height;
+  //     height = _;
+  //     return chart;
+  //   };
+
+  //   chart.color = function (_) {
+  //     if (!arguments.length) return color;
+  //     color = nv.utils.getColor(_);
+  //     legend.color(color);
+  //     stacked.color(color);
+  //     return chart;
+  //   };
+
+  //   chart.label = function (_) {
+  //     //console.log("SA CHART", _)
+  //     if (!arguments.length) return stacked.label;
+  //     stacked.label(_);
+  //     return chart;
+  //   };
+
+  //   chart.showControls = function (_) {
+  //     if (!arguments.length) return showControls;
+  //     showControls = _;
+  //     return chart;
+  //   };
+
+  //   chart.showLegend = function (_) {
+  //     if (!arguments.length) return showLegend;
+  //     showLegend = _;
+  //     return chart;
+  //   };
+
+  //   chart.showXAxis = function (_) {
+  //     if (!arguments.length) return showXAxis;
+  //     showXAxis = _;
+  //     return chart;
+  //   };
+
+  //   chart.showYAxis = function (_) {
+  //     if (!arguments.length) return showYAxis;
+  //     showYAxis = _;
+  //     return chart;
+  //   };
+
+  //   chart.rightAlignYAxis = function (_) {
+  //     if (!arguments.length) return rightAlignYAxis;
+  //     rightAlignYAxis = _;
+  //     yAxis.orient(_ ? "right" : "left");
+  //     return chart;
+  //   };
+
+  //   chart.useInteractiveGuideline = function (_) {
+  //     if (!arguments.length) return useInteractiveGuideline;
+  //     useInteractiveGuideline = _;
+  //     if (_ === true) {
+  //       chart.interactive(false);
+  //       chart.useVoronoi(false);
+  //     }
+  //     return chart;
+  //   };
+
+  //   chart.tooltip = function (_) {
+  //     if (!arguments.length) return tooltip;
+  //     tooltip = _;
+  //     return chart;
+  //   };
+
+  //   chart.tooltips = function (_) {
+  //     if (!arguments.length) return tooltips;
+  //     tooltips = _;
+  //     return chart;
+  //   };
+
+  //   chart.tooltipContent = function (_) {
+  //     if (!arguments.length) return tooltip;
+  //     tooltip = _;
+  //     return chart;
+  //   };
+
+  //   chart.state = function (_) {
+  //     if (!arguments.length) return state;
+  //     state = _;
+  //     return chart;
+  //   };
+
+  //   chart.defaultState = function (_) {
+  //     if (!arguments.length) return defaultState;
+  //     defaultState = _;
+  //     return chart;
+  //   };
+
+  //   chart.noData = function (_) {
+  //     if (!arguments.length) return noData;
+  //     noData = _;
+  //     return chart;
+  //   };
+
+  //   chart.transitionDuration = function (_) {
+  //     if (!arguments.length) return transitionDuration;
+  //     transitionDuration = _;
+  //     return chart;
+  //   };
+
+  //   chart.controlsData = function (_) {
+  //     if (!arguments.length) return cData;
+  //     cData = _;
+  //     return chart;
+  //   };
+
+  //   chart.controlLabels = function (_) {
+  //     if (!arguments.length) return controlLabels;
+  //     if (typeof _ !== "object") return controlLabels;
+  //     controlLabels = _;
+  //     return chart;
+  //   };
+
+  //   yAxis.setTickFormat = yAxis.tickFormat;
+
+  //   yAxis.tickFormat = function (_) {
+  //     if (!arguments.length) return yAxisTickFormat;
+  //     yAxisTickFormat = _;
+  //     return yAxis;
+  //   };
+
+
+  //   //============================================================
+
+  //   return chart;
+  // };
   nv.models.stackedAreaChart = function () {
     "use strict";
     //============================================================
@@ -3789,7 +4412,7 @@ d3.geo.tile = function () {
     ,
         y //can be accessed via chart.yScale()
     ,
-        yAxisTickFormat = d3.format(",.2f"),
+        yAxisTickFormat = yAxis.tickFormat(), //d3.format(",.2f"),
         state = { style: stacked.style() },
         defaultState = null,
         noData = "No Data Available.",
@@ -3845,10 +4468,7 @@ d3.geo.tile = function () {
           var key;
           defaultState = {};
           for (key in state) {
-            if (state[key] instanceof Array) 
-                defaultState[key] = state[key].slice(0);
-            else 
-                defaultState[key] = state[key];
+            if (state[key] instanceof Array) defaultState[key] = state[key].slice(0);else defaultState[key] = state[key];
           }
         }
 
@@ -3901,9 +4521,9 @@ d3.geo.tile = function () {
         g.select("rect").attr("width", availableWidth).attr("height", availableHeight);
         //------------------------------------------------------------
         // Legend
+        // 
         
-         showLegend = showLegend && data.length > 1;
-
+        showLegend = showLegend && data.length > 1;
 
         if (showLegend) {
           var legendWidth = showControls ? availableWidth - controlWidth : availableWidth;
@@ -4008,7 +4628,12 @@ d3.geo.tile = function () {
         }
 
         if (showYAxis) {
-          yAxis.scale(y).ticks(stacked.offset() == "wiggle" ? 0 : availableHeight / 36).tickSize(-availableWidth, 0).setTickFormat(stacked.style() == "expand" || stacked.style() == "stack_percent" ? d3.format("%") : yAxisTickFormat);
+          yAxis.scale(y)
+            .ticks(stacked.offset() == "wiggle" ? 0 : availableHeight / 36)
+            .tickSize(-availableWidth, 0)
+            .setTickFormat(stacked.style() == "expand" || stacked.style() == "stack_percent" 
+              ? d3.format("%") 
+              : yAxisTickFormat);
 
           g.select(".nv-y.nv-axis").attr("transform", "translate(0," + 10 + ")").transition().duration(0).call(yAxis);
         }
@@ -4349,6 +4974,8 @@ d3.geo.tile = function () {
 
     return chart;
   };
+
+
 
   nv.models.chord = function () {
     "use strict";
@@ -5705,7 +6332,380 @@ d3.geo.tile = function () {
     return chart;
   };
 
-  nv.models.axis = function () {
+  // nv.models.axis = function () {
+  //   "use strict";
+  //   //============================================================
+  //   // Public Variables with Default Settings
+  //   //------------------------------------------------------------
+
+  //   var axis = d3.svg.axis();
+
+  //   var margin = { top: 0, right: 0, bottom: 0, left: 0 },
+  //       width = 75 //only used for tickLabel currently
+  //   ,
+  //       height = 60 //only used for tickLabel currently
+  //   ,
+  //       scale = d3.scale.linear(),
+  //       axisLabelText = null,
+  //       showMaxMin = true //TODO: showMaxMin should be disabled on all ordinal scaled axes
+  //   ,
+  //       highlightZero = true,
+  //       rotateLabels = 0,
+  //       rotateYLabel = true,
+  //       staggerLabels = false,
+  //       isOrdinal = false,
+  //       ticks = null,
+  //       axisLabelDistance = 12 //The larger this number is, the closer the axis label is to the axis.
+  //   ;
+
+  //   axis.scale(scale).orient("bottom").tickFormat(function (d) {
+  //     return d;
+  //   });
+
+  //   //============================================================
+
+
+  //   //============================================================
+  //   // Private Variables
+  //   //------------------------------------------------------------
+
+  //   var scale0;
+
+  //   //============================================================
+
+
+  //   function chart(selection) {
+  //     selection.each(function (data) {
+  //       var container = d3.select(this);
+
+
+  //       //------------------------------------------------------------
+  //       // Setup containers and skeleton of chart
+
+  //       var wrap = container.selectAll("g.nv-wrap.nv-axis").data([data]);
+  //       var wrapEnter = wrap.enter().append("g").attr("class", "nvd3 nv-wrap nv-axis");
+  //       var gEnter = wrapEnter.append("g");
+  //       var g = wrap.select("g");
+
+  //       //------------------------------------------------------------
+
+
+  //       if (ticks !== null) axis.ticks(ticks);else if (axis.orient() == "top" || axis.orient() == "bottom") axis.ticks(Math.abs(scale.range()[1] - scale.range()[0]) / 100);
+
+
+  //       //TODO: consider calculating width/height based on whether or not label is added, for reference in charts using this component
+
+
+  //       g.transition().call(axis);
+
+  //       scale0 = scale0 || axis.scale();
+
+  //       var fmt = axis.tickFormat();
+  //       if (fmt == null) {
+  //         fmt = scale0.tickFormat();
+  //       }
+
+  //       var axisLabel = g.selectAll("text.nv-axislabel").data([axisLabelText || null]);
+  //       axisLabel.exit().remove();
+  //       switch (axis.orient()) {
+  //         case "top":
+  //           axisLabel.enter().append("text").attr("class", "nv-axislabel");
+  //           var w = scale.range().length == 2 ? scale.range()[1] : scale.range()[scale.range().length - 1] + (scale.range()[1] - scale.range()[0]);
+  //           axisLabel.attr("text-anchor", "middle").attr("y", 0).attr("x", w / 2);
+  //           if (showMaxMin) {
+  //             var axisMaxMin = wrap.selectAll("g.nv-axisMaxMin").data(scale.domain());
+  //             axisMaxMin.enter().append("g").attr("class", "nv-axisMaxMin").append("text");
+  //             axisMaxMin.exit().remove();
+  //             axisMaxMin.attr("transform", function (d, i) {
+  //               return "translate(" + scale(d) + ",0)";
+  //             }).select("text")
+  //               .attr("dy", "-0.5em")
+  //               .attr("y", -axis.tickPadding())
+  //               .attr("text-anchor", "middle")
+  //               .style("font-stretch", "extra-condensed")
+  //               .text(function (d, i) {
+  //               var v = fmt(d);
+  //               return ("" + v).match("NaN") ? "" : new Number(v).toFixed(2);
+  //             });
+  //             axisMaxMin.transition().attr("transform", function (d, i) {
+  //               return "translate(" + scale.range()[i] + ",0)";
+  //             });
+  //           }
+  //           break;
+  //         case "bottom":
+  //           var xLabelMargin = 30;
+  //           var maxTextWidth = 30;
+  //           var xTicks = g.selectAll("g").select("text");
+  //           if (rotateLabels % 360) {
+  //             //Calculate the longest xTick width
+  //             xTicks.each(function (d, i) {
+  //               var width = this.getBBox().width;
+  //               if (width > maxTextWidth) maxTextWidth = width;
+  //             });
+  //             //Convert to radians before calculating sin. Add 30 to margin for healthy padding.
+  //             var sin = Math.abs(Math.sin(rotateLabels * Math.PI / 180));
+  //             var xLabelMargin = (sin ? sin * maxTextWidth : maxTextWidth) + 30;
+  //             //Rotate all xTicks
+  //             xTicks.attr("transform", function (d, i, j) {
+  //               return "rotate(" + rotateLabels + " 0,0)";
+  //             }).style("text-anchor", rotateLabels % 360 > 0 ? "start" : "end");
+  //           }
+  //           axisLabel.enter().append("text").attr("class", "nv-axislabel");
+  //           var w = scale.range().length == 2 ? scale.range()[1] : scale.range()[scale.range().length - 1] + (scale.range()[1] - scale.range()[0]);
+  //           axisLabel.attr("text-anchor", "middle").attr("y", xLabelMargin).attr("x", w / 2);
+  //           if (showMaxMin) {
+  //             //if (showMaxMin && !isOrdinal) {
+  //             var axisMaxMin = wrap.selectAll("g.nv-axisMaxMin")
+  //             //.data(scale.domain())
+  //             .data([scale.domain()[0], scale.domain()[scale.domain().length - 1]]);
+  //             axisMaxMin.enter().append("g").attr("class", "nv-axisMaxMin").append("text");
+  //             axisMaxMin.exit().remove();
+  //             axisMaxMin.attr("transform", function (d, i) {
+  //               return "translate(" + (scale(d) + (isOrdinal ? scale.rangeBand() / 2 : 0)) + ",0)";
+  //             }).select("text").attr("dy", ".71em").attr("y", axis.tickPadding()).attr("transform", function (d, i, j) {
+  //               return "rotate(" + rotateLabels + " 0,0)";
+  //             }).style("text-anchor", rotateLabels ? rotateLabels % 360 > 0 ? "start" : "end" : "middle")
+  //               .style("font-stretch", "extra-condensed")
+  //               .text(function (d, i) {
+  //               var v = fmt(d);
+  //               return ("" + v).match("NaN") ? "" :new Number(v).toFixed(2);
+
+  //             });
+  //             axisMaxMin.transition().attr("transform", function (d, i) {
+  //               //return 'translate(' + scale.range()[i] + ',0)'
+  //               //return 'translate(' + scale(d) + ',0)'
+  //               return "translate(" + (scale(d) + (isOrdinal ? scale.rangeBand() / 2 : 0)) + ",0)";
+  //             });
+  //           }
+  //           if (staggerLabels) xTicks.attr("transform", function (d, i) {
+  //             return "translate(0," + (i % 2 == 0 ? "0" : "12") + ")";
+  //           });
+
+  //           break;
+  //         case "right":
+  //           axisLabel.enter().append("text").attr("class", "nv-axislabel");
+  //           axisLabel.style("text-anchor", rotateYLabel ? "middle" : "begin").attr("transform", rotateYLabel ? "rotate(90)" : "").attr("y", rotateYLabel ? -Math.max(margin.right, width) + 12 : -10) //TODO: consider calculating this based on largest tick width... OR at least expose this on chart
+  //           .attr("x", rotateYLabel ? scale.range()[0] / 2 : axis.tickPadding());
+  //           if (showMaxMin) {
+  //             var axisMaxMin = wrap.selectAll("g.nv-axisMaxMin").data(scale.domain());
+  //             axisMaxMin.enter().append("g").attr("class", "nv-axisMaxMin").append("text").style("opacity", 0);
+  //             axisMaxMin.exit().remove();
+  //             axisMaxMin.attr("transform", function (d, i) {
+  //               return "translate(0," + scale(d) + ")";
+  //             }).select("text").attr("dy", ".32em").attr("y", 0).attr("x", axis.tickPadding())
+  //               .style("text-anchor", "start")
+  //               .style("font-stretch", "extra-condensed")
+  //               .text(function (d, i) {
+  //               var v = fmt(d);
+  //               return ("" + v).match("NaN") ? "" : new Number(v).toFixed(2);
+
+  //             });
+  //             axisMaxMin.transition().attr("transform", function (d, i) {
+  //               return "translate(0," + scale.range()[i] + ")";
+  //             }).select("text").style("opacity", 1);
+  //           }
+  //           break;
+  //         case "left":
+  //           /*
+  //            //For dynamically placing the label. Can be used with dynamically-sized chart axis margins
+  //            var yTicks = g.selectAll('g').select("text");
+  //            yTicks.each(function(d,i){
+  //            var labelPadding = this.getBBox().width + axis.tickPadding() + 16;
+  //            if(labelPadding > width) width = labelPadding;
+  //            });
+  //            */
+  //           axisLabel.enter().append("text").attr("class", "nv-axislabel");
+  //           axisLabel.style("text-anchor", rotateYLabel ? "middle" : "end").attr("transform", rotateYLabel ? "rotate(-90)" : "").attr("y", rotateYLabel ? -Math.max(margin.left, width) + axisLabelDistance : -10) //TODO: consider calculating this based on largest tick width... OR at least expose this on chart
+  //           .attr("x", rotateYLabel ? -scale.range()[0] / 2 : -axis.tickPadding());
+  //           if (showMaxMin) {
+  //             var axisMaxMin = wrap.selectAll("g.nv-axisMaxMin").data(scale.domain());
+  //             axisMaxMin.enter().append("g").attr("class", "nv-axisMaxMin").append("text").style("opacity", 0);
+  //             axisMaxMin.exit().remove();
+  //             axisMaxMin.attr("transform", function (d, i) {
+  //               return "translate(0," + scale0(d) + ")";
+  //             }).select("text")
+  //               .attr("dy", ".32em")
+  //               .attr("y", 0)
+  //               .attr("x", -axis.tickPadding())
+  //               .attr("text-anchor", "end")
+  //               .style("font-stretch", "extra-condensed")
+  //               .text(function (d, i) {
+  //                 // /////////////////////////////////
+  //                 var v = fmt(d);
+  //                 if(("" + v).match("NaN")){
+  //                   return ""
+  //                 }else{
+  //                   return new Number(v).toFixed(2);
+
+  //                 }
+  //                 // return ("" + v).match("NaN") ? "" : v;
+  //               });
+              
+  //             axisMaxMin.transition().attr("transform", function (d, i) {
+  //               return "translate(0," + scale.range()[i] + ")";
+  //             }).select("text").style("opacity", 1);
+  //           }
+  //           break;
+  //       }
+  //       axisLabel.text(function (d) {
+  //         return d;
+  //       });
+
+
+  //       if (showMaxMin && (axis.orient() === "left" || axis.orient() === "right")) {
+  //         //check if max and min overlap other values, if so, hide the values that overlap
+  //         g.selectAll("g") // the g's wrapping each tick
+  //         .each(function (d, i) {
+  //           d3.select(this).select("text").attr("opacity", 1);
+  //           if (scale(d) < scale.range()[1] + 10 || scale(d) > scale.range()[0] - 10) {
+  //             // 10 is assuming text height is 16... if d is 0, leave it!
+  //             if (d > 1e-10 || d < -1e-10) // accounts for minor floating point errors... though could be problematic if the scale is EXTREMELY SMALL
+  //               d3.select(this).attr("opacity", 0);
+
+  //             d3.select(this).select("text").attr("opacity", 0); // Don't remove the ZERO line!!
+  //           }
+  //         });
+
+  //         //if Max and Min = 0 only show min, Issue #281
+  //         if (scale.domain()[0] == scale.domain()[1] && scale.domain()[0] == 0) wrap.selectAll("g.nv-axisMaxMin").style("opacity", function (d, i) {
+  //           return !i ? 1 : 0;
+  //         });
+  //       }
+
+  //       if (showMaxMin && (axis.orient() === "top" || axis.orient() === "bottom")) {
+  //         var maxMinRange = [];
+  //         wrap.selectAll("g.nv-axisMaxMin").each(function (d, i) {
+  //           try {
+  //             if (i) // i== 1, max position
+  //               maxMinRange.push(scale(d) - this.getBBox().width - 4);else // i==0, min position
+  //               maxMinRange.push(scale(d) + this.getBBox().width + 4);
+  //           } catch (err) {
+  //             if (i) // i== 1, max position
+  //               maxMinRange.push(scale(d) - 4);else // i==0, min position
+  //               maxMinRange.push(scale(d) + 4);
+  //           }
+  //         });
+  //         g.selectAll("g") // the g's wrapping each tick
+  //         .each(function (d, i) {
+  //           if (scale(d) < maxMinRange[0] || scale(d) > maxMinRange[1]) {
+  //             if (d > 1e-10 || d < -1e-10) // accounts for minor floating point errors... though could be problematic if the scale is EXTREMELY SMALL
+  //               d3.select(this).remove();else d3.select(this).select("text").remove(); // Don't remove the ZERO line!!
+  //           }
+  //         });
+  //       }
+
+
+  //       //highlight zero line ... Maybe should not be an option and should just be in CSS?
+  //       if (highlightZero) g.selectAll(".tick").filter(function (d) {
+  //         return !parseFloat(Math.round(d.__data__ * 100000) / 1000000) && d.__data__ !== undefined;
+  //       }) //this is because sometimes the 0 tick is a very small fraction, TODO: think of cleaner technique
+  //       .classed("zero", true);
+
+  //       //store old scales for use in transitions on update
+  //       scale0 = scale.copy();
+  //     });
+
+  //     return chart;
+  //   }
+
+
+  //   //============================================================
+  //   // Expose Public Variables
+  //   //------------------------------------------------------------
+
+  //   // expose chart's sub-components
+  //   chart.axis = axis;
+
+  //   d3.rebind(chart, axis, "orient", "tickValues", "tickSubdivide", "tickSize", "tickPadding", "tickFormat");
+  //   d3.rebind(chart, scale, "domain", "range", "rangeBand", "rangeBands"); //these are also accessible by chart.scale(), but added common ones directly for ease of use
+
+  //   chart.options = nv.utils.optionsFunc.bind(chart);
+
+  //   chart.margin = function (_) {
+  //     if (!arguments.length) return margin;
+  //     margin.top = typeof _.top != "undefined" ? _.top : margin.top;
+  //     margin.right = typeof _.right != "undefined" ? _.right : margin.right;
+  //     margin.bottom = typeof _.bottom != "undefined" ? _.bottom : margin.bottom;
+  //     margin.left = typeof _.left != "undefined" ? _.left : margin.left;
+  //     return chart;
+  //   };
+
+  //   chart.width = function (_) {
+  //     if (!arguments.length) return width;
+  //     width = _;
+  //     return chart;
+  //   };
+
+  //   chart.ticks = function (_) {
+  //     if (!arguments.length) return ticks;
+  //     ticks = _;
+  //     return chart;
+  //   };
+
+  //   chart.height = function (_) {
+  //     if (!arguments.length) return height;
+  //     height = _;
+  //     return chart;
+  //   };
+
+  //   chart.axisLabel = function (_) {
+  //     if (!arguments.length) return axisLabelText;
+  //     axisLabelText = _;
+  //     return chart;
+  //   };
+
+  //   chart.showMaxMin = function (_) {
+  //     if (!arguments.length) return showMaxMin;
+  //     showMaxMin = _;
+  //     return chart;
+  //   };
+
+  //   chart.highlightZero = function (_) {
+  //     if (!arguments.length) return highlightZero;
+  //     highlightZero = _;
+  //     return chart;
+  //   };
+
+  //   chart.scale = function (_) {
+  //     if (!arguments.length) return scale;
+  //     scale = _;
+  //     axis.scale(scale);
+  //     isOrdinal = typeof scale.rangeBands === "function";
+  //     d3.rebind(chart, scale, "domain", "range", "rangeBand", "rangeBands");
+  //     return chart;
+  //   };
+
+  //   chart.rotateYLabel = function (_) {
+  //     if (!arguments.length) return rotateYLabel;
+  //     rotateYLabel = _;
+  //     return chart;
+  //   };
+
+  //   chart.rotateLabels = function (_) {
+  //     if (!arguments.length) return rotateLabels;
+  //     rotateLabels = _;
+  //     return chart;
+  //   };
+
+  //   chart.staggerLabels = function (_) {
+  //     if (!arguments.length) return staggerLabels;
+  //     staggerLabels = _;
+  //     return chart;
+  //   };
+
+  //   chart.axisLabelDistance = function (_) {
+  //     if (!arguments.length) return axisLabelDistance;
+  //     axisLabelDistance = _;
+  //     return chart;
+  //   };
+
+  //   //============================================================
+
+
+  //   return chart;
+  // };
+
+nv.models.axis = function () {
     "use strict";
     //============================================================
     // Public Variables with Default Settings
@@ -5731,9 +6731,27 @@ d3.geo.tile = function () {
         axisLabelDistance = 12 //The larger this number is, the closer the axis label is to the axis.
     ;
 
-    axis.scale(scale).orient("bottom").tickFormat(function (d) {
-      return d;
-    });
+    axis.scale(scale).orient("bottom").tickFormat(
+      // d3.format("e")
+      function (d) {
+        if(isNaN(new Number(d))) return d;
+        // var power = 0;
+        var m = new Number(d);
+        // while(m>10){power++; m =m/10}
+        if(m<9999){
+
+          if(isNaN(new Number(d))) return d;
+          m = new Number(d)
+          console.log(d,m,new Number(m.toFixed(0)))
+          
+          return (Math.abs(new Number(m.toFixed(0))-m) < 0.001 )? m.toFixed(0) : m.toFixed(2)
+        }
+        if(m<9999999){return (d/1000).toFixed(2)+"K"}
+        if(m<9999999999){return (d/1000000).toFixed(2)+"M"}
+        return  (d/1000000000).toFixed(2)+"G" 
+        // return d;
+      }
+    );
 
     //============================================================
 
@@ -5795,10 +6813,9 @@ d3.geo.tile = function () {
                 .attr("dy", "-0.5em")
                 .attr("y", -axis.tickPadding())
                 .attr("text-anchor", "middle")
-                .style("font-stretch", "extra-condensed")
                 .text(function (d, i) {
                 var v = fmt(d);
-                return ("" + v).match("NaN") ? "" : v.toFixed(2);
+                return ("" + v).match("NaN") ? "" : v;
               });
               axisMaxMin.transition().attr("transform", function (d, i) {
                 return "translate(" + scale.range()[i] + ",0)";
@@ -5837,11 +6854,9 @@ d3.geo.tile = function () {
                 return "translate(" + (scale(d) + (isOrdinal ? scale.rangeBand() / 2 : 0)) + ",0)";
               }).select("text").attr("dy", ".71em").attr("y", axis.tickPadding()).attr("transform", function (d, i, j) {
                 return "rotate(" + rotateLabels + " 0,0)";
-              }).style("text-anchor", rotateLabels ? rotateLabels % 360 > 0 ? "start" : "end" : "middle")
-                .style("font-stretch", "extra-condensed")
-                .text(function (d, i) {
+              }).style("text-anchor", rotateLabels ? rotateLabels % 360 > 0 ? "start" : "end" : "middle").text(function (d, i) {
                 var v = fmt(d);
-                return ("" + v).match("NaN") ? "" : v.toFixed(2);
+                return ("" + v).match("NaN") ? "" : v;
               });
               axisMaxMin.transition().attr("transform", function (d, i) {
                 //return 'translate(' + scale.range()[i] + ',0)'
@@ -5864,12 +6879,9 @@ d3.geo.tile = function () {
               axisMaxMin.exit().remove();
               axisMaxMin.attr("transform", function (d, i) {
                 return "translate(0," + scale(d) + ")";
-              }).select("text").attr("dy", ".32em").attr("y", 0).attr("x", axis.tickPadding())
-                .style("text-anchor", "start")
-                .style("font-stretch", "extra-condensed")
-                .text(function (d, i) {
+              }).select("text").attr("dy", ".32em").attr("y", 0).attr("x", axis.tickPadding()).style("text-anchor", "start").text(function (d, i) {
                 var v = fmt(d);
-                return ("" + v).match("NaN") ? "" : v.toFixed(2);
+                return ("" + v).match("NaN") ? "" : v;
               });
               axisMaxMin.transition().attr("transform", function (d, i) {
                 return "translate(0," + scale.range()[i] + ")";
@@ -5894,23 +6906,10 @@ d3.geo.tile = function () {
               axisMaxMin.exit().remove();
               axisMaxMin.attr("transform", function (d, i) {
                 return "translate(0," + scale0(d) + ")";
-              }).select("text")
-                .attr("dy", ".32em")
-                .attr("y", 0)
-                .attr("x", -axis.tickPadding())
-                .attr("text-anchor", "end")
-                .style("font-stretch", "extra-condensed")
-                .text(function (d, i) {
-                  // /////////////////////////////////
-                  var v = fmt(d);
-                  if(("" + v).match("NaN")){
-                    return ""
-                  }else{
-                    return v.toFixed(2)
-                  }
-                  // return ("" + v).match("NaN") ? "" : v;
-                });
-              
+              }).select("text").attr("dy", ".32em").attr("y", 0).attr("x", -axis.tickPadding()).attr("text-anchor", "end").text(function (d, i) {
+                var v = fmt(d);
+                return ("" + v).match("NaN") ? "" : v;
+              });
               axisMaxMin.transition().attr("transform", function (d, i) {
                 return "translate(0," + scale.range()[i] + ")";
               }).select("text").style("opacity", 1);
@@ -6074,6 +7073,7 @@ d3.geo.tile = function () {
 
     return chart;
   };
+
 
 
 

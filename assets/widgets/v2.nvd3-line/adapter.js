@@ -24,7 +24,7 @@ m.service('LineChartAdapter', function () {
       options.chart.color = (decoration.color) ? decoration.color : null;
 
       options.chart.lines.label = (decoration.showLabels) ? function (d) {
-        return d.y.toFixed(2)
+        return d.label// return d.y.toFixed(2)
       } : undefined;
 
 
