@@ -1,0 +1,279 @@
+{
+  "skinName": "default",
+  "title": "Apps",
+  "description": "\"Doggy Jam\" portal provide user frendly online builder for SPA based on widgets.",
+  "keywords": [
+    "Widget",
+    "Single Page App",
+    "Angular"
+  ],
+  "isPublished": true,
+  "appWidgets": [
+    {
+      "type": "language-selector",
+      "instanceName": "language-selector",
+      "showFlags": true
+    },
+    {
+      "type": "page-list",
+      "instanceName": "page-list-nav"
+    },
+    {
+      "instanceName": "AppTopbar",
+      "type": "v2.topbar",
+      "icon": "/widgets/v2.topbar/icon.png",
+      "decoration": {
+        "languageSelector": {
+          "enable": true,
+          "showFlag": true,
+          "showTitle": true
+        },
+        "loginButton": true,
+        "gotoApps": false
+      },
+      "content": [
+        {
+          "key": "32mwlhd0fzxs9k9",
+          "title": "About DJ",
+          "href": "/app/Apps/about"
+        },
+        {
+          "key": "pctdoq7onescq5mi",
+          "title": "DJ Apps",
+          "href": "/app/Apps/"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "shortTitle": "About",
+      "href": "about",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "title": "About DJ",
+              "level": 2,
+              "type": "title",
+              "instanceName": "vh6qacvlcg39dx6r",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "masterWidget": "",
+              "type": "app-info",
+              "instanceName": "6boek2kxbfjn61or",
+              "icon": "/widgets/app-info/icon.png"
+            },
+            {
+              "text": "<p class=\"MsoListParagraphCxSpLast\" style=\"box-sizing: inherit; margin-bottom: 1.25rem; margin-left: 21.3pt; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; text-rendering: optimizeLegibility; color: rgb(34, 34, 34); text-align: justify; background-color: rgb(255, 255, 255);\"><span class=\"apple-style-span\" style=\"box-sizing: inherit;\">Технологічний процес інтелектуального опрацювання данихможна розділити на стадії попередньої обробки, аналізу та пост-обробки даних, на кожній з яких вирішуються специфічні задачі з використанням методів багатовимірного статистичного аналізу, статистично-експертних методів, тощо.<span style=\"box-sizing: inherit; line-height: 20.8px;\"><br style=\"box-sizing: inherit;\"></span></span></p><p class=\"MsoListParagraphCxSpLast\" style=\"box-sizing: inherit; margin-bottom: 1.25rem; margin-left: 21.3pt; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; text-rendering: optimizeLegibility; color: rgb(34, 34, 34); text-align: justify; background-color: rgb(255, 255, 255);\"><span class=\"apple-style-span\" style=\"box-sizing: inherit;\">Одні й ті самі методи можуть використовуватися для вирішення різних задач, а також одна й та ж само задача може вирішуватися різними методами. У відповідності до цього є доцільним виділення програмних засобів, які реалізують статистичні та експертні методи незалежно від контексту їх застосування для вирішення конкретних задач обробки даних. Ці програмні засоби можуть організовуватись як універсальні програмні бібліотеки, що використовуються при реалізації тих програм, які відповідають за вирішення задач обробки даних в межах загального процесу.&nbsp;Така організація програмних ресурсів при наявності достатнього спектру засобів дозволяє фактично реалізувати концепцію «швидкої» розробки додатків для вирішення різноманітних задач інтелектуального опрацювання даних.<span style=\"box-sizing: inherit; font-size: 12pt; line-height: 20.8px; font-family: 'Times New Roman', serif;\"><br style=\"box-sizing: inherit;\"></span></span></p><p class=\"MsoListParagraphCxSpLast\" style=\"box-sizing: inherit; margin-bottom: 1.25rem; margin-left: 21.3pt; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; text-rendering: optimizeLegibility; color: rgb(34, 34, 34); text-align: justify; background-color: rgb(255, 255, 255);\"><span class=\"apple-style-span\" style=\"box-sizing: inherit;\">Однією з реалізацій викладеної концепції є проект&nbsp;\"<b style=\"box-sizing: inherit; line-height: inherit;\">doggy JAM\"</b>,<b style=\"box-sizing: inherit; line-height: inherit;\">&nbsp;</b>&nbsp;який є WEB-сервісом, що надає низку інструментів для швидкого створення тематичних інтерактивних звітів та презентацій з використанням результатіів моделювання сталого розвитку в глобальному та регіональному контексті, а також для аналізу даних з використанням методів багатовимірного статистичного аналізу. &nbsp;</span></p>",
+              "type": "htmlwidget",
+              "instanceName": "aewsu0799eoy9zfr",
+              "icon": "/widgets/htmlwidget/icon.png"
+            }
+          ],
+          "width": 1318
+        }
+      },
+      "subscriptions": []
+    },
+    {
+      "href": "404",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "type": "title",
+              "title": "404 error",
+              "instanceName": "title"
+            },
+            {
+              "type": "htmlwidget",
+              "text": "Page not found",
+              "instanceName": "error-message"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "shortTitle": "main",
+      "href": "",
+      "template": "left-right-bottom",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "title": "DJ Apps",
+              "level": 2,
+              "type": "title",
+              "instanceName": "3vll8mmz9ofxbt9",
+              "icon": "/widgets/title/icon.png"
+            }
+          ],
+          "width": 1318
+        },
+        "topleft": {
+          "widgets": [
+            {
+              "title": "#apps",
+              "level": 2,
+              "type": "title",
+              "instanceName": "nhec2p6hju6ry66r",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "appWidget": "",
+              "type": "v2.app-list",
+              "instanceName": "apps",
+              "icon": "/widgets/v2.app-list/icon.png"
+            }
+          ],
+          "width": 654
+        },
+        "topright": {
+          "widgets": [
+            {
+              "title": "#info",
+              "level": 2,
+              "type": "title",
+              "instanceName": "bp038jo3xgodpldi",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "appWidget": "apps",
+              "type": "v2.app-description",
+              "instanceName": "ibo1h5qh9f0cc8fr",
+              "icon": "/widgets/v2.app-description/icon.png",
+              "appListeners": [
+                "apps"
+              ]
+            }
+          ],
+          "width": 654
+        },
+        "bottom": {
+          "widgets": [],
+          "width": 1318
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "apps",
+          "receiver": "ibo1h5qh9f0cc8fr",
+          "signal": "setApplication",
+          "slot": "setApplication"
+        },
+        {
+          "emitter": "ibo1h5qh9f0cc8fr",
+          "receiver": "apps",
+          "signal": "refresh",
+          "slot": "refresh"
+        }
+      ]
+    }
+  ],
+  "name": "Apps",
+  "i18n": {
+    "uk": {
+      "#aaa": "Uuu",
+      "#about": "Про зфстосунок",
+      "#pages": "Сторінки",
+      "#Search_and_Download _Dataset": "Пошук та завантаження наборів даних",
+      "#Datasets": "Набори даних",
+      "#Sources": "Джерела",
+      "#Authors": "Автори",
+      "#Indicators": "Показники",
+      "#Countries": "Країни",
+      "#Total": "Всього:",
+      "#Topics": "Теми",
+      "#Keywords": "Ключові слова",
+      "#Search_Result": "Результати пошуку",
+      "#Key": "Ключ пошуку",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-uk.html",
+      "#Home": "Головна",
+      "#WDC Datasets Exploration": "Розвідка даних СЦД",
+      "#Data Management": "Управління даними",
+      "#World Data System": "Світова система даних",
+      "#Sustainable Development": "Сталий розвиток",
+      "#WDC description": "\"Розвідка даних СЦД\" це застосунок, який допоможе знайти, вибрати та завантажити наші дані.",
+      "#apps": "Доступні застосунки",
+      "#info": "Інформація про застосунок",
+      "#AvDS": "Доступні набори даних:",
+      "#topics": "Теми",
+      "#sources": "Джерела",
+      "#countries": "Країни",
+      "#ukraine": "Регіони України",
+      "#keywords": "Ключові слова",
+      "#title": "Досліди наші дані",
+      "#description": "Портал \"Doggy Jam\" надає дружній  WEB интерфейс для дослідження даних",
+      "#AvailableDatasets": "Доступні набори даних:"
+    },
+    "en": {
+      "#aaa": "Aaa",
+      "#about": "About",
+      "#pages": "Pages",
+      "#Search_and_Download _Dataset": "Search and Download  Dataset",
+      "#Datasets": "Datasets",
+      "#Sources": "Sources",
+      "#Authors": "Authors",
+      "#Indicators": "Indicators",
+      "#Countries": "Countries",
+      "#Total": "Total:",
+      "#Topics": "Topics",
+      "#Keywords": "Keywords",
+      "#Search_Result": "Search Result",
+      "#Key": "Search Key",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-en.html",
+      "#Home": "Home",
+      "#WDC Datasets Exploration": "Exploration of  WDC Datasets",
+      "#Data Management": "Data Management",
+      "#World Data System": "World Data System",
+      "#Sustainable Development": "Sustainable Development",
+      "#WDC description": "Exploration of WDC Datasets is the single page application. You can use it for search and retrieve WDC data.",
+      "#apps": "Available Applications",
+      "#info": "About App",
+      "#AvDS": "Available Datasets:",
+      "#topics": "Topics",
+      "#sources": "Sources",
+      "#countries": "Countries",
+      "#ukraine": "Ukraine",
+      "#keywords": "Keywords",
+      "#title": "Explore our data",
+      "#description": "\"Doggy Jam\" portal provide user frendly WEB interface for data exploration",
+      "#AvailableDatasets": "Available datasets:"
+    },
+    "ru": {
+      "#aaa": "Rrr",
+      "#Search_and_Download _Dataset": "Поиск и загрузка наборов данных",
+      "#Datasets": "Наборы данных",
+      "#Sources": "Источники",
+      "#Authors": "Авторы",
+      "#Indicators": "Показатели",
+      "#Countries": "Страны",
+      "#Total": "Всего:",
+      "#Topics": "Темы",
+      "#Keywords": "Ключевые слова",
+      "#Search_Result": "Результаты поиска",
+      "#Key": "Ключ поиска",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-en.html",
+      "#Home": "Главная",
+      "#Sustainable Development": "Устойчивое развитие",
+      "#AvDS": "Доступные наборы данных:",
+      "#topics": "Темы",
+      "#sources": "Источники",
+      "#countries": "Страны",
+      "#ukraine": "Регионы Украины",
+      "#keywords": "Ключевые слова",
+      "#about": "Про  DJ Data",
+      "#title": "Исследуй наши данные",
+      "#description": "Портал \"Doggy Jam\" предоставляет дружественный  WEB интерфейс для исследования данных",
+      "#AvailableDatasets": "Доступные наборы данных:"
+    }
+  },
+  "icon": "./api/resource/Apps-default-app-icon.png",
+  "importedFromURL": "http://localhost:8080/app/Apps",
+  "importedFromAuthor": "Andrey Boldak"
+}

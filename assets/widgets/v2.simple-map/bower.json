@@ -1,7 +1,0 @@
-{
-  "name": "nvd3-map",
-  "private": true,
-  "dependencies": {
-    "d3-tile": "https://raw.githubusercontent.com/d3/d3-plugins/master/geo/tile/tile.js"
-  }
-}

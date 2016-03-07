@@ -607,9 +607,12 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
       })
 
       $q.all(translatePromises).then(() => {
-        $scope.resp = $scope.nodes
-        updateChart($scope.widget.instanceName, {tags:$scope.nodes, links:$scope.links})
-        $scope.visibility = true;
+        $scope.resp = $scope.nodes;
+         $scope.visibility = true;
+        setTimeout(function(){
+            updateChart($scope.cloudContainerID, {tags:$scope.nodes, links:$scope.links})
+        },0);    
+       
       })
     }
 
@@ -679,6 +682,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
     new APIProvider($scope)
       .config(() => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
+          $scope.cloudContainerID ="cloud-"+$scope.widget.instanceName;
 
           $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];
           
