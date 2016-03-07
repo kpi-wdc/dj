@@ -72,6 +72,11 @@ let m = angular.module('app.widgets.dm-search-result', ['app.dictionary','ngFile
             $http.post("./api/metadata/items", {"query":query, "status":status}).success(
               function(resp){
                 $scope.result = resp;
+                if(!$scope.result.forEach){
+                  $scope.query = undefined;
+
+                  return;
+                } 
                 $scope.result.forEach((item) => {item.collapsed=false});
                 $scope.total = $scope.result.length;
                 if(resp.length == 0){

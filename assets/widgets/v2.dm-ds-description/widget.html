@@ -1,0 +1,135 @@
+
+
+
+ <div 
+    ng-controller="DataManagerDSInfoController">
+ <!--  <div class="row" ng-if="!ds">
+    <center>
+      <h4 style="color:#eee">
+        <widget-translate>NO_INFO_AVAILABLE</widget-translate>
+      </h4>
+    </center> 
+  </div>   -->
+  <div ng-if="ds" class="row" style="    margin: 0;
+    padding: 2em;
+    border: 1px solid #ddd;" >   
+    <div class="row">
+      <h4 style="margin:0;">
+        <img 
+                src="./img/default-ds-icon.png" style="width:48px;"/>
+
+              <!-- <img ng-if="lookup(ds.dataset.source).icon" ng-src="{{lookup(ds.dataset.source).icon}}" width="48px" height="48px">
+
+              <img  ng-if="!lookup(ds.dataset.source).icon"
+                src="./img/default-app-icon.png" style="width:48px;"/>
+               -->
+        {{ds.dataset.label | translate}}
+      </h4>
+      <div class="row" style="
+        font-size:x-small;
+        border-bottom:1px solid #ddd;
+        padding:0.2em;
+        margin:0.5em 0.5em 1em 0.5em;
+      ">
+        
+        
+        <button
+          class="button radius right tiny toolbar success" 
+              style="margin:0 0.2em; padding: 0.3em 1em;"
+          >
+            <a  class="right"
+          style="padding:0;color:#ffffff"
+          target="_blank"
+              href="./api/dataset/download/{{ds.dataset.id}}"
+          >
+                <widget-translate>DOWNLOAD</widget-translate>
+              </a>  
+          </button>
+        
+      </div>
+      
+     
+      <div style="font-size: small;
+              text-align: justify;">
+            {{ds.dataset.note | translate}}
+      </div>
+
+      <h5 ng-if="topics.length > 0" style="margin:0.5em 0 0 0;">
+      <widget-translate>Data</widget-translate>
+      </h5>
+      <div ng-repeat="d in ds.dimension" style="font-size: small; margin:0 0 0 1em;">
+       <b>{{d.label | translate}}</b> (<i>
+        <widget-translate ng-if="d.role=='geo'">geo</widget-translate>
+        <widget-translate ng-if="d.role=='time'">time</widget-translate>
+        <widget-translate ng-if="d.role=='metric'">metric</widget-translate>
+        <widget-translate ng-if="d.role=='category'">category</widget-translate>
+       </i>) : {{d.values.length}} <widget-translate>items</widget-translate>.
+      </div>
+
+
+      <h5 ng-if="topics.length > 0" style="margin:0.5em 0 0 0;">
+      <widget-translate>Keywords</widget-translate>
+      </h5>
+      <div ng-if="topics.length>0" style="font-size: small;
+              text-align: justify; color:#008CBA;">
+
+          <a ng-repeat="k in topics track by $index" ng-click="selectTopic(k)">
+                  {{(lookup(k).label) ? lookup(k).label : k | translate}}
+                  {{($index < (topics.length-1))?', ':''}}
+          </a>    
+          
+      </div>
+    
+
+    <div class="row" style="margin:0.5em 0 0 0;">
+      <span   class="left" 
+          style="
+            font-size:1.125rem;
+            color:#222222;
+            font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
+            font-style: normal;
+              font-weight: normal;
+            "
+          widget-translate
+      >
+        SOURCE
+      </span>
+      <span   class="left"
+          style="font-size: small; margin: 0.35em 0.5em;"
+      >
+
+        <a ng-click="selectSource(ds.dataset.source)">
+                {{(lookup(ds.dataset.source).label) 
+                  ? lookup(ds.dataset.source).label : ds.dataset.source | translate}}
+        </a>
+      </span>
+    </div>
+
+    
+ 
+
+
+    <div class="row" style="margin:0.5em 0 0 0;">
+      <span   class="left" 
+          style="
+            font-size:1.125rem;
+            color:#222222;
+            font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
+            font-style: normal;
+              font-weight: normal;
+            "
+          widget-translate
+      >
+        UpdatedAt
+      </span>
+      <span   class="left"
+          style="font-size: small; margin: 0.35em 0.5em;"
+      >{{formatDate(ds.dataset.commit.createdAt)}}</span>
+    </div>
+    
+  </div>
+
+  </div>  
+</div>
+
+  

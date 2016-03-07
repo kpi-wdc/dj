@@ -1690,7 +1690,7 @@ d3.geo.tile = function () {
       //console.log("Selection",selection)
 
       selection.each(function (data) {
-        console.log("RADAR",data)
+        // console.log("RADAR",data)
         serieCount = data.length;
         serieLength = data[0].values.length;
         max = data[0].values[0].value;
@@ -2394,7 +2394,7 @@ d3.geo.tile = function () {
 
 
         var linesWrap = g.select(".nv-linesWrap").datum(data.filter(function (d,i) {
-          console.log( "linesWrap",i,d)
+          // console.log( "linesWrap",i,d)
           return !d.disabled;
         }));
 
@@ -2431,7 +2431,7 @@ d3.geo.tile = function () {
         //------------------------------------------------------------
 
         legend.dispatch.on("stateChange", function (newState) {
-          console.log("state change legent event", newState)
+          // console.log("state change legent event", newState)
           state = newState;
           // dispatch.changeState(state);
           data.forEach(function (series, i) {
@@ -2498,7 +2498,7 @@ d3.geo.tile = function () {
 
 
         dispatch.on("stateChange", function (e) {
-          console.log("stateChange",e)
+          // console.log("stateChange",e)
           if (typeof e.disabled !== "undefined" && data.length === e.disabled.length) {
             data.forEach(function (series, i) {
               series.disabled = e.disabled[i];
@@ -3004,7 +3004,7 @@ d3.geo.tile = function () {
           x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
           y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
           content = tooltip(e.series.key, x, y, e, chart);
-          console.log(e)
+          // console.log(e)
       nv.tooltip.show([left, top], content, null, null, offsetElement);
     };
 
@@ -3240,7 +3240,7 @@ d3.geo.tile = function () {
         });
 
         dispatch.on("tooltipShow", function (e) {
-          console.log(" dispath tooltipShow",tooltips,e)
+          // console.log(" dispath tooltipShow",tooltips,e)
           if (tooltips) showTooltip(e, that.parentNode);
         });
 
@@ -6159,7 +6159,7 @@ d3.geo.tile = function () {
           return item.disabled !== true;
         })[0];
         
-        console.log("Colors select serie", data1)
+        // console.log("Colors select serie", data1)
 
         data1 = (data1) ? data1 : data[0]; 
         
@@ -6742,7 +6742,7 @@ nv.models.axis = function () {
 
           if(isNaN(new Number(d))) return d;
           m = new Number(d)
-          console.log(d,m,new Number(m.toFixed(0)))
+          // console.log(d,m,new Number(m.toFixed(0)))
           
           return (Math.abs(new Number(m.toFixed(0))-m) < 0.001 )? m.toFixed(0) : m.toFixed(2)
         }

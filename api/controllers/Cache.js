@@ -1,5 +1,6 @@
 var MD5 = require('object-hash').MD5;
 var Promise = require('bluebird');
+var util = require("util");
 
 
 module.exports = {
@@ -13,6 +14,8 @@ module.exports = {
 
 
 	_save: function(tag, query, json,resolve){
+			if(util.isArray(json) && json.length == 0 ) json = {};
+
 				this.get(query)
 					.then(function(obj){
 						if (obj){
