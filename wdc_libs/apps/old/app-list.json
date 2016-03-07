@@ -1,0 +1,53 @@
+{
+  "skinName": "app-list",
+  "title": "Main page",
+  "description": "Main page description",
+  "keywords": [],
+  "collaborations": [],
+  "isPublished": true,
+  "appWidgets": [
+    {
+      "type": "language-selector",
+      "instanceName": "language-selector",
+      "showFlags": true
+    },
+    {
+      "type": "page-list",
+      "instanceName": "page-list-nav"
+    },
+    {
+      "type": "app-logo",
+      "instanceName": "app-logo-widget"
+    }
+  ],
+  "pages": [
+    {
+      "shortTitle": "List of apps",
+      "href": "",
+      "template": "1-col",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "type": "title",
+              "title": "List of apps",
+              "instanceName": "title-widget"
+            },
+            {
+              "type": "app-list",
+              "instanceName": "app-list"
+            },
+            {
+              "type": "app-creator",
+              "instanceName": "app-creator"
+            },
+            {
+              "type": "app-importer",
+              "instanceName": "app-importer"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
