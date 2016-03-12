@@ -94,16 +94,16 @@ m.factory("ProjectionWizard",[
             .push(MakeQuery)
             .onStart(function(wizard){
               wizard.context = {};
-              console.log("Start");
+              // console.log("Start");
             })
             .onCompleteStep( function(wizard,step){
-              console.log("complete",step.title, wizard.context);
+              // console.log("complete",step.title, wizard.context);
               if(step.title == "Dataset"){
                 wizard.enable(step.index+1);
               }
             })
             .onProcessStep( function(wizard,step){
-              console.log("process",step.title, wizard.context);
+              // console.log("process",step.title, wizard.context);
               
               if(step.title == "Dataset"){
                 wizard.disable(wizard.getAboveIndexes(step));
@@ -137,13 +137,13 @@ m.factory("PreparationWizard",[
             .push(PostProcess)
             .onStart(function(wizard){
               wizard.context = {};
-              console.log("Start");
+              // console.log("Start");
             })
             .onCompleteStep( function(wizard,step){
-              console.log("complete",step.title, wizard.context);
+              // console.log("complete",step.title, wizard.context);
             })
             .onProcessStep( function(wizard,step){
-              console.log("process",step.title, wizard.context);
+              // console.log("process",step.title, wizard.context);
             })
       }      
 
@@ -165,12 +165,12 @@ m.controller('QueryManagerController', function (
     confirm){
 
     $scope.addProjection = (context,title) => {
-      Queries.add(context, "projection", title);
+      Queries.add(angular.copy(context), "projection", title);
       app.markModified();
     }
 
     $scope.addPreparation = (context,title) => {
-      Queries.add(context, "preparation", title);
+      Queries.add(angular.copy(context), "preparation", title);
       app.markModified();
     }
 
@@ -210,7 +210,7 @@ m.controller('QueryManagerController', function (
 
     new APIProvider($scope)
       .config(() => {
-        console.log("Configure Data Query Manager");
+        // console.log("Configure Data Query Manager");
         Queries.init($scope)
       })
   });

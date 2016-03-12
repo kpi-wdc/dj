@@ -181,9 +181,13 @@ product.forEach(function(row){
 
 
 
-var body = product.map(function(row){
-	return {metadata:row.metadata, value:row.value}
-});
+var body = product
+	.filter(function(row){
+		return row.value.filter(function(item){return item ==null}).length < row.value.length
+	})
+	.map(function(row){
+		return {metadata:row.metadata, value:row.value}
+	});
 
 var header = product[0].columnes.map(function(col){
 	return {metadata:col.metadata}

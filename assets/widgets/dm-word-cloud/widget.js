@@ -608,7 +608,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
 
       $q.all(translatePromises).then(() => {
         $scope.resp = $scope.nodes;
-         $scope.visibility = true;
+         // $scope.visibility = true;
         setTimeout(function(){
             updateChart($scope.cloudContainerID, {tags:$scope.nodes, links:$scope.links})
         },0);    
@@ -627,10 +627,10 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
                     "meta":"indicator",
                       "property":"metadata.dimension.concept.values.*.label"
                   },
-                  {
-                    "meta":"author",
-                      "property":"metadata.dataset.commit.author"
-                  },
+                  // {
+                  //   "meta":"author",
+                  //     "property":"metadata.dataset.commit.author"
+                  // },
                   {
                     "meta":"topic",
                       "property":"metadata.dataset.topics"

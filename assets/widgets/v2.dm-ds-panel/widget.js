@@ -27,7 +27,7 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUp
 
                 if(!$scope.result.forEach){
                   $scope.query = undefined;
-
+                  eventEmitter.emit("slaveVisibility",true);
                   return;
                 } 
                 $scope.result.forEach((item) => {item.collapsed=false});
@@ -55,11 +55,6 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUp
       .config(() => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         
-        if($scope.total == 0){
-          eventEmitter.emit("slaveVisibility",true);
-        }else{
-          eventEmitter.emit("slaveVisibility",false);
-        }
 
         if($scope.key){
           $scope.object = $lookup($scope.key);
@@ -83,6 +78,7 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUp
                 slot: "setLookupKey"
             }
           })
+
         );
         
 
@@ -121,7 +117,13 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUp
             }
           })
         );
-       
+        
+        if($scope.total == 0){
+          eventEmitter.emit("slaveVisibility",true);
+        }else{
+          eventEmitter.emit("slaveVisibility",false);
+        }
+        
       })
 
       .provide('searchQuery', (evt, value) => {
@@ -135,6 +137,7 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUp
       .provide('refresh', (evt) => {
         searchDatasets($scope.query);
       })
+      .translate(() => {  eventEmitter.emit("slaveVisibility", $scope.total == 0 )})
 
       .removal(() => {
         console.log('Find Result widget is destroyed');
