@@ -9,11 +9,11 @@
     </center> 
   </div>   -->
   <div ng-if="object && (object !== key) && visibility" class="row" style="    margin: 0;
-    padding: 0 1em;>
+    padding: 0 1em;">
    
     <div class="row">
       <h4 style="margin:0 0 0.5em;">
-        <img ng-if="object.icon" ng-src="object.icon" width="48px" height="48px" />
+        <img ng-if="object.icon" src="{{object.icon}}" width="48px" height="48px" />
         <img ng-if="!object.icon" src="./img/default-info-icon.png" width="48px">
         {{object.label | translate}}
       </h4>
