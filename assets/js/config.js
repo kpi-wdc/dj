@@ -25,7 +25,7 @@ System.config({
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
-    "angular-google-chart":"components/angular-google-chart/ng-google-chart.js",
+    "angular-google-chart": "components/angular-google-chart/ng-google-chart.js",
     "react": "components/react/react.js",
     "react-dom": "components/react/react-dom.js",
     "ngReact": "components/ngReact/ngReact.js",
@@ -122,14 +122,11 @@ System.config({
         "angular"
       ]
     },
-
-
     "angular-google-chart": {
       "deps": [
         "angular"
       ]
     },
-
     "ngstorage": {
       "deps": [
         "angular"

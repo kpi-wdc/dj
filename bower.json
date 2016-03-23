@@ -40,6 +40,7 @@
     "md5": "blueimp/JavaScript-MD5",
     "angular-google-chart": "~0.1.0",
     "angular-openlayers-directive": "~1.9.2",
+    "angular-file-saver" : "~1.0.0",
     "simplify-js": "mourner/simplify-js"
   }
 }

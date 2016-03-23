@@ -331,3 +331,98 @@ exports.saveXLS = function (filename, dataset) {
 };
 
 
+
+exports.parseXLSTimeline = function (filename) {
+  
+  var workbook = parser.convert(parser.parseFile(filename));
+
+  var metadataSheet = workbook.Sheets['metadata'];
+  var dictionarySheet = workbook.Sheets['dictionary'];
+  var i18nSheet = workbook.Sheets['i18n'];
+
+  var metadata, data, dictionary;
+
+  if (metadataSheet != undefined) {
+    metadata = FO.flat2json(
+      new query()
+        .from(metadataSheet)
+        .map(function (item) {
+          return {path: item.key, value: item.value}
+        })
+        .get());
+
+    var rawData = workbook.Sheets[metadata.layout.sheet]
+
+    if (rawData != undefined) {
+      
+      data = rawData.map(function(item){
+        var res = FO.json2flat({
+          "id" : item[metadata.layout.id],
+          "title" : item[metadata.layout.title],
+          "start" : item[metadata.layout.start],
+          "end" : item[metadata.layout.end],
+          "income" : item[metadata.layout.income],
+          "expenditure" : item[metadata.layout.expenditure],
+          "causes" : item[metadata.layout.causes],
+          "note" : item[metadata.layout.note]
+        });
+
+        // var i = 0;
+        // while(i<res.length){
+        //   if(res[i] == undefined){
+        //     res.splice(i,1)
+        //   }else{
+        //     i++
+        //   }
+        // } 
+        
+        return FO.flat2json(res)
+      }); 
+    }    
+  } else {
+    throw new Error('No metadata sheet found in the document');
+  }
+
+    if (dictionarySheet != undefined) {
+      var dict = workbook.Sheets['dictionary'];
+      dictionary = [];
+
+      dict.forEach(function (item) {
+        pathes = [];
+        for (i in item) {
+          if (i.indexOf("__") != 0 && item[i] != undefined && item[i] != null) {
+            pathes.push({path: i, value: item[i]})
+          }
+        }
+        dictionary.push(FO.flat2json(pathes));
+      })
+    } else {
+      throw new Error('No dictionary sheet found in the document');
+    }
+
+    if (i18nSheet != undefined) {
+
+      dictionary = dictionary || [];
+
+      i18nSheet.forEach(function (item) {
+        pathes = [];
+        for (i in item) {
+          if (i.indexOf("__") != 0 && item[i] != undefined && item[i] != null) {
+            pathes.push({path: i, value: item[i]})
+          }
+        }
+        tmp = FO.flat2json(pathes);
+        tmp.type = "i18n";
+        dictionary.push(tmp);
+      })
+    } else {
+      throw new Error('No i18n sheet found in the document');
+    }
+
+    return {
+      metadata: metadata,
+      data: data,
+      dictionary: dictionary
+    }
+};
+

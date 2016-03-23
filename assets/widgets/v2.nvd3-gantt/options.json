@@ -1,0 +1,44 @@
+{
+  "chart": {
+    "type": "gantt",
+    "height": 750,
+    
+    "margin": {
+      "top": 20,
+      "right": 40,
+      "bottom": 40,
+      "left": 20
+    }
+  },
+  "title": {
+    "enable": true,
+    "text": "Write Your Title",
+    "class": "chartTitle",
+    "css": {
+      "width": "nullpx",
+      "textAlign": "center"
+    }
+  },
+  "subtitle": {
+    "enable": true,
+    "text": "Write Your Subtitle",
+    "class": "chartSubTitle"
+  },
+  "caption": {
+    "enable": true,
+    "text": "Figure 1. Write Your Caption text.",
+    "class": "chartCaption"
+  },
+  "styles": {
+    "classes": {
+      "with-3d-shadow": true,
+      "with-transitions": true,
+      "gallery": false
+    },
+    "css": {
+    }
+  }
+}  
+
+
+

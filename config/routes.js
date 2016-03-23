@@ -124,6 +124,8 @@ module.exports.routes = {
   'get /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
   'post /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
   'post /api/metadata/tag/dependencies': 'DatasetController.getDependencies',
+
+  'post /api/timeline/create': "DatasetController.createTimeline",
   
   'get /api/resource' : 'ResourceController.getList',
 
@@ -135,10 +137,8 @@ module.exports.routes = {
   'post /api/resource/:path' : 'ResourceController.get',
   
   'get /api/resource/delete/:path' : 'ResourceController.delete',
-  'post /api/resource/delete/:path' : 'ResourceController.delete'
+  'post /api/resource/delete/:path' : 'ResourceController.delete',
 
-  
-  ,
    'get /api/test/get/:id' : 'TestCacheController.getID',
    'post /api/test/get' : 'TestCacheController.getQuery',
    'post /api/test/set' : 'TestCacheController.save',

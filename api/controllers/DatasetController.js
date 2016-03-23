@@ -15,6 +15,7 @@ var getProperty = require("../../wdc_libs/wdc-flat").getProperty;
 var flat2json = require("../../wdc_libs/wdc-flat").flat2json;
 var util = require("util");
 var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
+var prepareTimeline = require("../../wdc_libs/wdc-timeline").createSerie;
 var toXLS = require("../../wdc_libs/wdc-table-generator").prepareXLS;
 var I18N = require("../../wdc_libs/wdc-i18n");
 var Cache = require("./Cache");
@@ -113,6 +114,9 @@ module.exports = {
     });
   },
 
+
+
+
   updateDataset: function (req, res) {
     req.file('file').upload({},
       function (err, uploadedFiles) {
@@ -188,6 +192,38 @@ module.exports = {
             res.serverError();
           })
       });
+  },
+
+
+  createTimeline: function (req, res) {
+    req.file('file').upload({},
+      function (err, uploadedFiles) {
+
+        if (err) {
+          return res.negotiate(err);
+        }
+
+        if (uploadedFiles.length === 0) {
+          return res.badRequest('No file was uploaded');
+        }
+
+        var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+        var dataset = converter.parseXLSTimeline(uploadedFileAbsolutePath)
+        var result = prepareTimeline(dataset.data,"","",dataset.metadata.timeDomain);
+        var obj_to_save = {
+            value: result,
+          };
+          
+        ProcData
+          .create(obj_to_save)
+          .then(function(obj){
+            ProcData.findOne({id:obj.id})
+            .then(function(founded){
+              return res.json(founded)
+            })
+            // return res.json(obj);
+          })
+      })  
   },
 
   getMetadataList: function (req, res) {

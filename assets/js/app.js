@@ -48,6 +48,7 @@ app.factory('appUrls', function (appId) {
     googleAuth: `/auth/google`,
     logout: `/logout`,
     usersList: `/api/users/list`,
+    createTimeline: '/api/timeline/create',
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
     shareSettingsHTML: '/partials/share-settings.html',
@@ -809,13 +810,20 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
       type: '@',
       widget: '=config',
       onDelete: '&',
-      onClone: '&'
+      onClone: '&',
+      container: "=?"
     },
     controller() {}, // needed for require: '^widget' to work in widget-translate directive
     link(scope, element, attrs) {
       if (!scope.type) {
         throw "widget directive needs type parameter";
       }
+
+      scope.container = {
+          getScope: function(){ return scope; },
+
+          getElement: function(){ return element; }
+      }    
 
       scope.skin = attrs.skin;
       // console.log(scope.type+" "+attrs.instancename+" "+attrs.skin);
@@ -831,6 +839,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
           config.appWidgets.push(conf);
         }
         scope.widget = conf;
+        scope.element = element;
         scope.disallowEditInstanceName = true;
       }
 

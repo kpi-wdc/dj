@@ -199,7 +199,7 @@ module.exports = {
         if (found) {
           if (!found.parent) delete found.parent;
           delete found.hash;
-          res.send(found);
+          res.json(found);
         } else {
           res.forbidden();
         }

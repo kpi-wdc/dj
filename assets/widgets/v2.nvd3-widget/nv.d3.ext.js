@@ -10274,5 +10274,741 @@ nv.models.multiBarHorizontalChart = function() {
 
 
 
+  nv.models.gantt = function () {
+    "use strict";
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var margin = { top: 5, right: 40, bottom: 5, left: 20 },
+        width = null,
+        height = null,
+        xAxis = nv.models.axis(),
+        transitionDuration = 250,
+        interpolate ="cardinal",//"step-after",
+        getX = function (d, i) {
+          return d.x;
+        } // accessor to get the x value from a data point
+        ,
+        getY = function (d, i) {
+          return d.y;
+        } // accessor to get the y value from a data point
+        ,
+        // getLabel = undefined //function(d) { return d.y }
+        // ,
+        defined = function (d, i) {
+          return !isNaN(getY(d, i)) && getY(d, i) !== null;
+        } // allows a line to be not continuous when it is not defined
+        ,
+        xScale = d3.scale.linear(),
+        yScale = d3.scale.ordinal()//.domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
+    
+    ;
+
+   
+    //============================================================
+    function distinct(array){
+
+      array.sort(function(a,b){return ((a.x-b.x)==0)? (a.task-b.task):(a.x-b.x)})
+      var i = 0;
+      while(i < array.length){
+        if( (i>0) 
+              && (array[i].x == array[i-1].x) 
+              && (array[i].task == array[i-1].task)
+              && (array[i].type == array[i-1].type)
+          ){
+          array.splice(i,1)
+        }else{
+          i++
+        }
+      }
+      return array;
+    }
+
+    function causeColor(d){
+      if(!d.type) return "#555555";
+      if(d.type == "") return "#555555";
+      if(d.type == "+") return "#43AC6A";
+      if(d.type == "-") return "#F04124";
+      if(d.type == "") return "#555555";
+    }
+
+    function causeWidth(d){
+      if(!d.type) return 1;
+      if(d.type == "") return 1;
+      if(d.type == "+") return 8;
+      if(d.type == "-") return 8;
+      if(d.type == "") return 1;
+    }
+
+    function causeOpacity(d){
+      if(!d.type) return 0.7;
+      if(d.type == "") return 0.7;
+      if(d.type == "+") return 0.4;
+      if(d.type == "-") return 0.4;
+      if(d.type == "") return 0.7;
+    }
+
+
+
+    function nodeToNodePath(d) {
+      var deltaX = Math.abs(0.7*(-d.source.x + d.target.x));
+       
+      var amx = []
+        amx.push({x:d.source.x+deltaX,y:d.source.y})
+        amx.push({x:d.target.x-deltaX,y:d.target.y})
+      
+      return "M" + d.source.x + "," + d.source.y
+           + "C" + amx[0].x + "," + amx[0].y
+           + " " + amx[1].x + "," + amx[1].y
+           + " " + d.target.x + "," + d.target.y;
+    }
+
+    function arrowPath(d){
+
+      d.width = (d.width) ? d.width : 1;
+      var x = d.x;
+      var dx = d.width;
+      var y = d.y;
+      var dy = d.width;
+
+
+
+      var values = [
+        { "x":x-dx*2.5, "y":y-dy },
+        { "x":x, "y":y   }, 
+        { "x":x-dx*2.5, "y":y+dy }
+      ]
+
+      return d3.svg.area()
+            .interpolate("linear-closed")
+            .defined(defined)
+            .x(function (p, i) {
+                  return p.x;
+            })
+            .y0(function (p, i) {
+                  return p.y;
+            })
+            .y1(function (p, i) {
+                  return d.y;
+            })
+            .apply(this, [values]);
+    } 
+
+    function arrowLength(d){
+      var width = causeWidth(d);
+      width = (width < 4) ? 4 : width;
+      return width*2.5;
+    }
+
+
+    function textWrap(text, width) {
+      text.each(function() {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            y = text.attr("y"),
+            dy = parseFloat(text.attr("dy")),
+            x = text.attr("x"),
+            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+          line.push(word);
+          tspan.text(line.join(" "));
+          if (tspan.node().getComputedTextLength() > width) {
+            line.pop();
+            tspan.text(line.join(" "));
+            line = [word];
+            tspan = text
+              .append("tspan")
+              .attr("x", x)
+              .attr("y", y)
+              .attr("dy", ++lineNumber * lineHeight + dy + "em")
+              .text(word);
+          }
+        }
+        // TODO correct dy calculation for positive shift
+        text
+          .selectAll("tspan")
+          .attr("dy", function(d){ return lineNumber-- * lineHeight*Math.sign(dy) + dy + "em"})
+
+      });
+    }   
+
+    function chart(selection) {
+      selection.each(function (data) {
+        console.log("gantt", data)
+        if(data.length == 0) return;
+        // prepare data
+        var data = data.filter(function (item) {
+          return item.disabled !== true;
+        });
+
+        var markersData = [];
+        
+        data
+          .filter(function(d){return d.expenditure !== undefined})
+          .map(function(d){
+            return d.expenditure.filter(function(p){return p.marker!==undefined})
+          })
+          .concat(
+            data
+              .filter(function(d){return d.income !== undefined})
+              .map(function(d){
+                return d.income.filter(function(p){return p.marker!==undefined})
+              })
+          )
+          .forEach(function(d){
+            markersData = markersData.concat(d) 
+          });
+
+
+         var linksData = [];
+         data
+            .filter(function(d){return d.causes !== undefined})
+            .map(function(d){return d.causes})
+            .forEach(function(d){
+              linksData = linksData.concat(d); 
+            })
+
+         var sourcesData = distinct(
+                          linksData
+                            .map(function(item){return item.src})
+                       );       
+
+         var targetsData = distinct(
+                          linksData
+                            .map(function(item){return item.target})
+                       );
+
+        var xDomain = data[0].timeDomain;
+        var yDomain = [0, data[0].childs.length+1];
+
+        var availableWidth = width - margin.left - margin.right;
+        var availableHeight = height - margin.top - margin.bottom;
+
+
+
+        xScale.domain(xDomain).range([0, availableWidth]);
+        yScale
+          .domain(data.map(function(item){return item.index}))
+          .rangeRoundBands([ 0, availableHeight], .1);
+
+         var barWidth = yScale.rangeBand()-11;
+         barWidth = (barWidth > 15) ? 15 : barWidth;
+         barWidth = (barWidth < 8) ? 8 : barWidth;
+         var barMargin = 7;
+
+        data.forEach(function(d){
+          if(d.expenditure !== undefined){
+            var values = d.expenditure;
+            var yValues = values.map(function(item){return item.y})
+
+            d.expenditureScale = d3.scale
+                             .linear()
+                             .domain([d3.max(yValues),d3.min(yValues)])
+                             .range([4, yScale.rangeBand()-7]);
+          }
+
+          if(d.income !== undefined){
+            var values = d.income;
+            var yValues = values.map(function(item){return item.y})
+
+            d.incomeScale = d3.scale
+                             .linear()
+                             .domain([d3.max(yValues),d3.min(yValues)])
+                             .range([4, yScale.rangeBand()-7]);
+          }
+        })  
+
+        
+        var container = d3.select(this);
+
+        xAxis
+          .orient("bottom")
+          .scale(xScale)
+          .showMaxMin(false)
+          .ticks( availableWidth / 100 )
+          .tickSize(-availableHeight, 0)
+          .tickPadding(2)
+
+        //------------------------------------------------------------
+        // Setup containers and skeleton of chart
+        
+         chart.update = function () {
+          container.transition().duration(transitionDuration).call(chart);
+        };
+
+        
+        container.selectAll("g").remove();
+
+        var wrap = container
+          .append("g")
+          .attr("class", "nvd3 nv-gantt")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        wrap
+          .append("g")
+          .attr("class", "nv-x nv-axis")
+          .attr("transform","translate(" + margin.left + "," + availableHeight + ")")
+       
+        wrap  
+          .select(".nv-x.nv-axis")
+          .call(xAxis);  
+          
+        var series =  wrap.selectAll("g.nv-gantt")
+                  .data(data);
+
+       
+
+        var sources = wrap.selectAll("g.nv-gantt")
+                  .data(sourcesData);
+
+        var targets = wrap.selectAll("g.nv-gantt")
+                  .data(targetsData);
+
+        var links = wrap.selectAll("g.nv-gantt")
+                  .data(linksData);          
+        
+        var markers = wrap.selectAll("g.nv-gantt")
+                  .data(markersData);
+
+        series.exit().remove(); 
+       
+        links.exit().remove();
+        sources.exit().remove();
+        targets.exit().remove();
+        markers.exit().remove();
+
+      
+       
+
+
+        
+       
+      links
+          .enter()
+          .append("g")
+          .attr("class", "nvd3 nv-gantt-link")
+          .attr("transform", function(d){ return "translate(" +margin.left+"," + 0 + ")"});
+       
+      links
+        .append("path")
+        .attr("class", "nv-area")
+        .attr("d", function (d) {  
+
+                var source = {
+                  x: xScale(d.src.x),
+                  y: yScale(d.src.task)+barWidth/2+barMargin//7
+                };
+
+                var target = {
+                  x: xScale(d.target.x)-arrowLength(d),
+                  y: yScale(d.target.task)+barWidth/2+barMargin//7
+                }
+
+                return nodeToNodePath({"source":source, "target":target})
+
+         })
+         .style("stroke", causeColor) 
+         .style("fill-opacity",0)
+         .style("stroke-width",causeWidth)
+         .style("stroke-opacity",causeOpacity)
+
+
+
+
+        series  
+          .enter()
+          .append("g")
+          .attr("class", "nvd3 nv-gantt-task")
+          .attr("transform", function(d){ return "translate(" +margin.left+"," + yScale(d.index) + ")"});
+        
+        // bar implementation 
+         // series
+         //  .append("rect")
+         //  .attr("x", function(d){return xScale(d.start)})
+         //  .attr("y", function(d){return 5})
+         //  .attr("width",function (d) {
+         //        // return 30
+         //        var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+         //         return xScale(end)- xScale(d.start)
+         //  })
+         //  .attr("height", 20)
+         //  .style("fill-opacity",0.7)
+         //  .style("fill",function(d){return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+        // bar implementation  
+      
+      // rect implementation
+        // series
+        //   .append("path")
+        //   .attr("class", "nv-area")
+        //   .attr("d", function (d) {
+
+                
+        //         var end = (d.end) ? d.end : xScale.domain()[1];
+
+                
+        //         var values = [
+        //           {x:xScale(end),y:5},
+        //           {x:xScale(d.start), y:5}, 
+        //           {x:xScale(d.start), y:25},
+        //           {x:xScale(end), y:25},
+        //         ]
+        //        if (!d.isOpen){
+        //           return d3.svg.area()
+        //                 .interpolate("linear-closed")
+        //                 .defined(defined)
+        //                 .x(function (p, i) {
+        //                       return p.x;
+        //                 })
+        //                 .y(function (p, i) {
+        //                       return p.y;
+        //                 })
+        //                 .apply(this, [values]);
+        //        }else{
+        //           return d3.svg.area()
+        //                 .interpolate("linear")
+        //                 .defined(defined)
+        //                 .x(function (p, i) {
+        //                       return p.x;
+        //                 })
+        //                 .y(function (p, i) {
+        //                       return p.y;
+        //                 })
+        //                 .apply(this, [values]);
+        //        } 
+               
+        //   })
+        //   .style("fill","#e7e7e7")
+        //   .style("fill-opacity","0.7")
+        //   .style("stroke",function(d){return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+        //   .style("stroke-width",function(d){return (d.childs.length==0) ? "3px" : "1px"})
+        //   .style("stroke-opacity", function(d){return(d.childs.length>0 && (d.expenditure || d.income))? 0 : 1 })
+      // rect implementation    
+      
+      
+      //line implementation
+        series
+          .append("svg:line")
+          .attr("x1", function (d, i) {
+            return xScale(d.start);
+          })
+          .attr("y1", function (d, i) {
+            return barWidth/2+barMargin;
+          })
+          .attr("x2", function (d, i) {
+            var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+            return xScale(end)
+          })
+          .attr("y2", function (d, i) {
+            return barWidth/2+barMargin;
+          })
+          .style("stroke",function(d) { return "url("+document.location.href+"#gradient-" + d.id + "-" + d.index + ")"; })
+          .style("stroke-width", barWidth+"px")
+          .style("stroke-opacity", function(d){return (d.expenditure || d.income) ? 0 : 1 })
+
+        var gradient = series.append("linearGradient")
+          .attr("id", function(d) { return "gradient-" + d.id + "-" + d.index; })
+          .attr("x1", function (d, i) {
+            return xScale(d.start);
+          })
+          .attr("y1", function (d, i) {
+            barWidth/2+barMargin;
+          })
+          .attr("x2", function (d, i) {
+            var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+            return xScale(end)
+          })
+          .attr("y2", function (d, i) {
+            barWidth/2+barMargin;
+          })
+          .attr("gradientUnits", "userSpaceOnUse")
+          .attr("spreadMethod", "pad");
+
+        gradient.append("svg:stop")
+            .attr("offset", "0%")
+            .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+            .attr("stop-opacity", 1);
+
+        gradient.append("svg:stop")
+            .attr("offset", function(d){
+              var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+              return 400/(xScale(end)-xScale(d.start))+"%"
+            })
+            .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+            .attr("stop-opacity", function(d) { return (d.isOpen) ? 0.5 : 0.2});    
+        
+        gradient.append("svg:stop")
+            .attr("offset", function(d){
+              var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+              return ( 100 - 400/(xScale(end)-xScale(d.start)))+"%"
+            })
+            .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+            .attr("stop-opacity",function(d) { return (d.isOpen) ? 0 : 0.2});      
+        
+        gradient.append("svg:stop")
+            .attr("offset", "100%")
+            .attr("stop-color", function(d) { return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+            .attr("stop-opacity",function(d) { return (d.isOpen) ? 0 : 1});  
+          
+
+
+      // line implementation 
+
+        series
+          .append("text")
+          .style("text-anchor", "start")
+          .attr("x", function(d){
+            return (d.childs.length>0)?xScale(xScale.domain()[0]):xScale(d.start)
+          })
+          .attr("dx",function(d){return (d.childs.length>0)?"2em":"1em"})
+          .classed("nv-label", true)
+          .text(function (d, i) {
+            return d.id+"."+d.title;
+          })
+          .style("font-weight", function(d){return (d.childs.length>0)?"bold":"normal"})
+          .style("font-size", function(d){return (d.childs.length>0)?"medium":"small"})
+          .style("fill","#ffffff")
+          .style("stroke","#ffffff")
+          .style("stroke-width",5)
+          .style("stroke-opacity",0.8)
+          
+
+
+        series
+          .append("text")
+          .style("text-anchor", "start")
+          .attr("x", function(d){
+            return (d.childs.length>0)?xScale(xScale.domain()[0]):xScale(d.start)
+          })
+          .attr("dx",function(d){return (d.childs.length>0)?"2em":"1em"})
+          .classed("nv-label", true)
+          .text(function (d, i) {
+            return d.id+"."+d.title;
+          })
+          .style("font-weight", function(d){return (d.childs.length>0)?"bold":"normal"})
+          .style("font-size", function(d){return (d.childs.length>0)?"medium":"small"})
+          .style("fill","#555555")  
+
+        series
+          .filter(function(d){return d.expenditure !== undefined})
+          .append("path")
+          .attr("class", "nv-area")
+          .attr("d", function (d) {
+               
+                return d3.svg.area()
+                        .interpolate(interpolate)
+                        .defined(defined)
+                        .x(function (p, i) {
+                              return nv.utils.NaNtoZero(xScale(getX(p, i)));
+                        })
+                        .y0(function (p, i) {
+                              return nv.utils.NaNtoZero(d.expenditureScale(getY(p, i)));
+                        })
+                        .y1(function (p, i) {
+                              return d.expenditureScale( d.expenditureScale.domain()[1]
+                              );
+                        })
+                        .apply(this, [d.expenditure]);
+          })
+          .style("fill-opacity",0.2)
+          .style("fill","#F04124");
+
+        series
+          .filter(function(d){return d.expenditure !== undefined})
+          .append("path")
+          .attr("class", "nv-area")
+          .attr("d", function (d) {
+                return d3.svg.line()
+                        .interpolate(interpolate)
+                        .defined(defined)
+                        .x(function (p, i) {
+                              return nv.utils.NaNtoZero(xScale(getX(p, i)));
+                        })
+                        .y(function (p, i) {
+                              return nv.utils.NaNtoZero(d.expenditureScale(getY(p, i)));
+                        })
+                        .apply(this, [d.expenditure]);
+          })
+          .style("fill-opacity",0)
+          .style("stroke","#F04124");//#43AC6A
+
+        series
+          .filter(function(d){return d.income !== undefined})
+          .append("path")
+          .attr("class", "nv-area")
+          .attr("d", function (d) {
+               
+                return d3.svg.area()
+                        .interpolate(interpolate)
+                        .defined(defined)
+                        .x(function (p, i) {
+                              return nv.utils.NaNtoZero(xScale(getX(p, i)));
+                        })
+                        .y0(function (p, i) {
+                              return nv.utils.NaNtoZero(d.incomeScale(getY(p, i)));
+                        })
+                        .y1(function (p, i) {
+                              return d.incomeScale( d.incomeScale.domain()[1]
+                              );
+                        })
+                        .apply(this, [d.income]);
+          })
+          .style("fill-opacity",0.2)
+          .style("fill","#43AC6A");
+
+        series
+          .filter(function(d){return d.income !== undefined})
+          .append("path")
+          .attr("class", "nv-area")
+          .attr("d", function (d) {
+                return d3.svg.line()
+                        .interpolate(interpolate)
+                        .defined(defined)
+                        .x(function (p, i) {
+                              return nv.utils.NaNtoZero(xScale(getX(p, i)));
+                        })
+                        .y(function (p, i) {
+                              return nv.utils.NaNtoZero(d.incomeScale(getY(p, i)));
+                        })
+                        .apply(this, [d.income]);
+          })
+          .style("fill-opacity",0)
+          .style("stroke","#43AC6A");//#43AC6A
+
+        // sources
+        //   .enter()
+        //   .append("g")
+        //   .attr("class", "nvd3 nv-gantt-source")
+        //   .attr("transform", function(d){ return "translate(" +margin.left+"," + yScale(d.task) + ")"});
+
+        // sources
+        //   .append("circle")
+        //   .attr("r",8)
+        //   .attr("cx", function(d){return xScale(d.x)})
+        //   .attr("cy", 14)
+        //   .style("fill",causeColor)
+        //   .style("fill-opacity",0.5)
+          
+        targets
+        .enter()
+        .append("g")
+        .attr("class", "nvd3 nv-gantt-target")
+        .attr("transform", function(d){ return "translate(" +margin.left+"," + yScale(d.task) + ")"});
+
+        targets
+          .append("path")
+          .attr("d", function(d){
+            var width = causeWidth(d);
+            width = (width < 4) ? 4 : width;
+            return arrowPath({x:xScale(d.x), y:+barWidth/2+barMargin, "width":width})//7})
+          })
+          .style("stroke-opacity",0)
+          .style("stroke", causeColor)
+          .style("fill",causeColor)
+          .style("fill-opacity",causeOpacity)
+
+
+        markers
+          .enter()
+          .append("g")
+          .attr("class", "nvd3 nv-gantt-marker")
+          .attr("transform", function(d){ return "translate(" +margin.left+"," + yScale(d.index) + ")"});
+
+        markers
+          .append("circle")
+          .attr("r",2)
+          .attr("cx", function(d){return xScale(d.x)})
+          .attr("cy", function(d){
+            var s = (d.type == "expenditure") ? data[d.index].expenditureScale : data[d.index].incomeScale
+            return s(d.y)
+          })
+          .style("fill",function(d){return (d.type == "expenditure")?"#F04124":"#43AC6A"});
+            
+         markers
+          .append("text")
+          .text(function(d){return d.marker})
+          .style("text-anchor", "middle")
+          .attr("x", function(d){
+              return xScale(d.x)
+          })
+          .attr("y", function(d){
+            var s = (d.type == "expenditure") ? data[d.index].expenditureScale : data[d.index].incomeScale
+            return s(d.y)
+          })
+          .attr("dy", "-0.5em")
+          .style("font-size","xx-small")
+          .style("font-weight","bold")
+          .style("fill","#ffffff")
+          .style("stroke","#ffffff")
+          .style("stroke-width",3)
+          .style("stroke-opacity",0.3)
+
+
+        markers
+          .append("text")
+          .text(function(d){return d.marker})
+          .style("text-anchor", "middle")
+          .attr("x", function(d){
+              return xScale(d.x)
+          })
+          .attr("y", function(d){
+            var s = (d.type == "expenditure") ? data[d.index].expenditureScale : data[d.index].incomeScale
+            return s(d.y)
+          })
+          .attr("dy", "-0.5em")
+          .style("font-size","xx-small")
+          .style("font-weight","bold")
+          .style("fill",function(d){return (d.type == "expenditure")?"#F04124":"#43AC6A"});  
+
+        wrap
+        .selectAll(".nv-gantt-marker text")
+        .call(textWrap, 2 * (xScale(xScale.domain()[1])-xScale(xScale.domain()[0]))/xScale.ticks().length);  
+          
+
+      })    
+      return chart;
+    
+  }  
+
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    //chart.dispatch = dispatch;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    chart.margin = function (_) {
+      if (!arguments.length) return margin;
+      margin.top = typeof _.top != "undefined" ? _.top : margin.top;
+      margin.right = typeof _.right != "undefined" ? _.right : margin.right;
+      margin.bottom = typeof _.bottom != "undefined" ? _.bottom : margin.bottom;
+      margin.left = typeof _.left != "undefined" ? _.left : margin.left;
+      return chart;
+    };
+
+    chart.width = function (_) {
+      if (!arguments.length) return width;
+      width = _;
+      return chart;
+    };
+
+    chart.height = function (_) {
+      if (!arguments.length) return height;
+      height = _;
+      return chart;
+    };
+
+    
+    //============================================================
+    return chart;
+  };
+
 
 })();
+
+

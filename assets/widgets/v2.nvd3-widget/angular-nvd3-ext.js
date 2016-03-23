@@ -1,3 +1,5 @@
+
+
 "use strict";
 
 /**************************************************************************
@@ -26,9 +28,16 @@
 
         //directive global api
         scope.api = {
-          chart: function(){
-            return scope.chart;
-          },
+          getScope: function(){ return scope; },
+
+          getElement: function(){ return element; },
+
+          getSVG: function(){
+            var selection = d3.select(element[0]).select("svg");  
+            return (selection.length == 0) ? undefined : selection[0][0]
+          },//.select("svg")},
+
+          chart: function(){return scope.chart;},
           // Fully refresh directive
           refresh: function () {
             // console.log("Refresh",scope.settings)
