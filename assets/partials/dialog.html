@@ -1,16 +1,68 @@
 <form ng-submit="form.close()">
   	<h5 color="#ddd">{{form.title}}</h5>
+  	<div style="    margin: 1em;
+				    padding: 0.5em;
+				    font-size: small;
+				    font-style: italic;
+				    border-bottom: 1px solid #ddd;">
+  		{{form.note}}
+  	</div>
 
-	<div class="row" ng-repeat="field in form.fields track by $index">
-	    <div class="column medium-2">
+	<div class="row" style="margin: 0.5em 0 0 0;"
+		ng-repeat="field in form.fields track by $index">
+	    
+	    <div class="column medium-3">
 	      <label for="{{field.id}}">{{field.title}}</label>
 	    </div>
 
-	    <div class="column large-10" ng-if="!field.type || field.type=='text'">
+	    <div class="column large-9" ng-if="!field.type || field.type=='text'">
 	      <input ng-model="field.value" id="{{field.id}}"
 	             type="text" ng-disabled="!field.editable">
 	    </div>
-	    <div class="column large-10" ng-if="field.type == 'select'">
+
+	    <div class="column large-9" ng-if="field.type=='number'">
+	      <input 	ng-model="field.value" 
+	      			id="{{field.id}}"
+	             	type="number"
+	             	min = "{{field.min}}"
+	             	max = "{{field.max}}" 
+	             	ng-disabled="!field.editable"
+	      >
+	    </div>
+	    
+	    <div class="column large-9"  ng-if="field.type=='checkgroup'">
+		    <div class="row" style="margin:0;padding:1em; border:1px solid #ddd">
+		    	<div class="row" style="margin:0;" ng-repeat="c in field.value track by $index">
+		    		<label class="wizard left">
+						{{c.title}}
+					</label>
+		    		<div class="switch tiny right" style="margin: 0;">
+			          <input type="checkbox"
+			                 id="{{field.id+'.'+$index}}"
+			                 ng-model="c.value"
+			           >
+			          <label for="{{field.id+'.'+$index}}"></label>
+			        </div>
+		    	</div>
+		    </div>
+		</div>    
+
+		<div class="column large-9"  ng-if="field.type=='checkbox'">
+	    		<div class="row" style="margin:0;">
+		    		<label class="left">
+					</label>
+		    		<div class="switch tiny left" style="margin: 0;">
+			          <input type="checkbox"
+			                 id="{{field.id}}"
+			                 ng-model="field.value"
+			           >
+			          <label for="{{field.id}}"></label>
+			        </div>
+		    	</div>
+	    </div>
+	    
+
+	    <div class="column large-9" ng-if="field.type == 'select'">
 	    	<select ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable">
         		<option ng-repeat="option in field.options" value="{{option.value}}">
         			{{option.title}}
@@ -18,7 +70,7 @@
       		</select>
 	    </div>
 
-	    <div class="column large-10" ng-if="field.type=='file'">
+	    <div class="column large-9" ng-if="field.type=='file'">
 	    	<input type="file"
 	    	 style="font-size: small; margin: 0 1em;" 	
 	    	 id="{{field.id}}"
@@ -35,7 +87,7 @@
 	  <div class="row">
 		  <button class="button alert tiny right seq" ng-click="form.dismiss()"
 		          translate>CANCEL</button>
-		  <button type="submit" class="button tiny right seq" ng-disabled="!completed()" translate>OK</button>
+		  <button type="submit" class="button tiny right seq" ng-disabled="!completed(form)" translate>OK</button>
 		          
 	  </div>
   

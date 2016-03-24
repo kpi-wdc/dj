@@ -1,0 +1,42 @@
+<!-- <div ng-controller="PreparationDialogController"> -->
+	<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+		<!-- Left column -->
+		<div class="column medium-3 left">
+
+		<a ng-click="addOp()">Add Operation...</a>
+
+			<h5 class="section-title">Script</h5>
+			<div ng-repeat="o in script track by $index"
+				ng-click="moveCursor($index)"
+				style="{{($index<cursor)?'cursor:pointer':($index == cursor)?'color:#fff;cursor:pointer; background-color:#007095;':'color:#ddd;cursor:pointer;'}}"
+			>
+			 {{o}}
+			</div>
+
+			
+
+		</div>
+		<!-- Left column -->
+		<!-- Right column -->
+		<div class="column medium-9 left">
+
+			<div class="row wizard setting" style="    overflow: auto;
+		    background: #ffffff;
+		    max-height: 20em;
+		    border: 0.1rem solid #ddd;">
+			    <center>
+					<img ng-if="!resultTable" src="./img/ajax-loader.gif"/>
+					<wdc-table data="{table:resultTable, decoration:{}}" ng-if="resultTable" style="padding:1em;"/>
+				</center>	
+			</div>
+			
+		</div>
+		<!-- Right column -->
+		<div class="row">
+		  <button class="button alert tiny right seq" ng-click="close()"
+		          translate>CANCEL</button>
+		  <button type="submit" class="button tiny right seq" ng-click="addPreparation()"  translate>SAVE</button>
+		          
+	  	</div>
+	</div>		
+<!-- </div> -->

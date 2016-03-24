@@ -214,7 +214,7 @@ exports.ReduceNull = function(table,params){
 	var	hasNull = function(data){
 		var result = false;
 		data.forEach(function(item){
-			if (item == null){
+			if (item == null || isNaN(new Number(item))){
 				result = true;
 			}
 		});
@@ -224,7 +224,7 @@ exports.ReduceNull = function(table,params){
 	var	allNulls = function(data){
 		var result = 0;
 		data.forEach(function(item){
-			if (item == null){
+			if (item == null || isNaN(new Number(item))){
 				result++
 			}
 		});
@@ -259,6 +259,7 @@ exports.ReduceNull = function(table,params){
 				columnIndex++;
 			}
 		}
+		table.reduced = true;
 		return table;	
 	}
 	
@@ -278,7 +279,7 @@ exports.orderTable = function(table,params){
 	table.body.sort(function(a,b){
 		if(index < 0){
 			var j = -index-1;
-			return (asc == "A-Z") ? (a.metadata[j].label - b.metadata[j].label) : (b.metadata[j].label - a.metadata[j].label)
+			return (asc == "A-Z") ? (a.metadata[j].label > b.metadata[j].label) : (b.metadata[j].label > a.metadata[j].label)
  		}else{
 			return (asc == "A-Z") ? (a.value[index] - b.value[index]) : (b.value[index] - a.value[index])
  		}
@@ -300,7 +301,7 @@ exports.transposeTable = function(table,params){
 		values.push(row.value)
 	})
 
-	table.inValues = values;
+	// table.inValues = values;
 
 
 	tValues = [];
@@ -326,7 +327,7 @@ exports.transposeTable = function(table,params){
 	table.body = tBody;
 	table.header = tHeader;
 	
-	table.trValues = tValues;
+	// table.trValues = tValues;
 
 
 	return table;	 
@@ -745,13 +746,12 @@ exports.clusters = function(table,params){
 }
 
 
-
-exports.PostProcess = function(table,params){
+var executeStep = function (table,params){
 	var useColumnMetadata = params.useColumnMetadata || [];
 	var useRowMetadata = params.useRowMetadata || [];
 	var normalize = params.normalization;
 	var reduce = params.reduce;
-	var precision = params.precision || null;
+	var precision = params.precision || -1;
 	var transpose = params.transpose;
 	var order = (params.order) ? params.order : {enable:false}; 
 	// var numbers = (params.numbers) ? params.numbers : {enable:false}; 
@@ -766,6 +766,7 @@ exports.PostProcess = function(table,params){
    
 
 	table = exports.convertMetadata(table,params);
+
 	
 	if (reduce) table = exports.ReduceNull(table,params);
 	if (normalize) table = exports.Normalize(table,params);
@@ -787,7 +788,7 @@ exports.PostProcess = function(table,params){
 
 	
 
-	if (precision !=null){
+	if (precision >=0 ){
 		table.body.forEach(function(currentRow){
 			currentRow.value = currentRow.value.map(function(v){
 				return 	(v == null)? 	null : 
@@ -798,11 +799,22 @@ exports.PostProcess = function(table,params){
 
 
 	
-	table.processed = "PostProcess"
-	table.postProcess = (params) ? params : "undef";
+	// table.processed = "PostProcess"
+	// table.postProcess = (params) ? params : "undef";
 
 	return table; 		
-	  
+}
+
+exports.PostProcess = function(table,params){
+	 var script = (params.script) ? params.script : [params];
+	 var currentTable = table;
+	 script.forEach(function(operation){
+	 	currentTable = executeStep(currentTable, operation)
+	 })
+
+	 currentTable.postProcess = script;
+
+	 return currentTable;
 }
 
 
@@ -1729,3 +1741,48 @@ exports.Distribution = function(table,params){
 
 	return {response : "No Execution"}		
 }
+
+
+
+
+// {
+// 	"cache":false,
+//     "data_id":"56daffd0d7620c1056ef460a",
+//     "params":{
+//     	"script":[
+// 	    	{
+// 	    		"useColumnMetadata":[],
+// 	        	"useRowMetadata":[],
+// 	        	"normalization":{"enable":false,"mode":"Range to [0,1]","direction":"Columns"},
+// 	        	"reduce":{"enable":false,"mode":"Has Null","direction":"Columns"},
+// 	        	"transpose":false,
+// 	        	"order":{"enable":false,"direction":"Rows","asc":"A-Z","index":0},
+// 	        	"cluster":{"enable":false,"direction":"Rows","count":2},
+// 	        	"aggregation":{"enable":false,"direction":"Columns","data":["min","max"]},
+// 	        	"rank":{"enable":false,"direction":"Rows","asc":"A-Z","indexes":[]},
+// 	        	"limit":{"enable":false,"start":1,"length":10},
+// 	        	"histogram":{"enable":false,"direction":"Rows","cumulate":false,"beans":5},
+// 	        	"correlation":{"enable":false,"direction":"Rows"},
+// 	        	"pca":{"enable":false,"direction":"Rows","result":"Scores"}
+// 	     	},
+// 	     	{
+// 	    		"useColumnMetadata":[],
+// 	        	"useRowMetadata":[],
+// 	        	"normalization":{"enable":false,"mode":"Range to [0,1]","direction":"Columns"},
+// 	        	"reduce":{"enable":false,"mode":"Has Null","direction":"Columns"},
+// 	        	"transpose":false,
+// 	        	"order":{"enable":false,"direction":"Rows","asc":"A-Z","index":0},
+// 	        	"cluster":{"enable":false,"direction":"Rows","count":2},
+// 	        	"aggregation":{"enable":true,"direction":"Columns","data":["min","max"]},
+// 	        	"rank":{"enable":false,"direction":"Rows","asc":"A-Z","indexes":[]},
+// 	        	"limit":{"enable":false,"start":1,"length":10},
+// 	        	"histogram":{"enable":false,"direction":"Rows","cumulate":false,"beans":5},
+// 	        	"correlation":{"enable":false,"direction":"Rows"},
+// 	        	"pca":{"enable":false,"direction":"Rows","result":"Scores"},
+// 	            "precision":2
+// 	     	}
+//         ]
+//      },
+//      "proc_name":"post-process",
+//      "response_type":"data"
+// }

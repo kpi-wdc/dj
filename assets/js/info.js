@@ -75,7 +75,7 @@ info.factory('dialog', function ($modal) {
     return $modal.open({
       templateUrl: '/partials/dialog.html',
       controller: 'DialogController',
-       windowClass: "dialog-modal",
+      windowClass: "dialog-modal",
       resolve: {
         form: () => form
       }
@@ -126,6 +126,34 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
   $scope.form = form;
   for(let i in form.fields){
     form.fields[i].id = Math.random().toString(36).substring(2);
+    form.fields[i].editable = (angular.isDefined(form.fields[i].editable)) ? form.fields[i].editable : true; 
+    form.fields[i].required = (angular.isDefined(form.fields[i].required)) ? form.fields[i].required : true;
+    
+    if(form.fields[i].type == "select"){
+      form.fields[i].options = form.fields[i].options.map(
+        (item,index) => {
+          return (angular.isDefined(item.title)) 
+                  ?(angular.isDefined(item.value)) 
+                    ? item 
+                    : {"title":item.title, "value":item.title}
+                  :(angular.isDefined(item.value)) 
+                    ? {"title":item.value, "value":item.value} 
+                    : {"title":item, "value":item}
+      }) 
+    }
+
+    if(form.fields[i].type == "checkgroup"){
+      form.fields[i].value = form.fields[i].value.map(
+        (item,index) => {
+          return (angular.isDefined(item.title)) 
+                  ?(angular.isDefined(item.value)) 
+                    ? item 
+                    : {"title":item.title, "value":false}
+                  :(angular.isDefined(item.value)) 
+                    ? {"title":index, "value":item.value} 
+                    : {"title":item, "value":false}
+      }) 
+    }
   }
   
   $scope.getFieldByID = function(id){
@@ -143,20 +171,23 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
       });
   };
 
-  $scope.completed = function(){
-    var f = true;
-    for(let i in $scope.form.fields){
-      if($scope.form.fields[i].required){
-        if(!$scope.form.fields[i].value){
-          return false;
-        }
-        if($scope.form.fields[i].value.length==0){
-          return false;  
-        }
-      }  
+  $scope.completed = ($scope.form.validate) ? $scope.form.validate :
+    function(form){
+      var f = true;
+      for(let i in $scope.form.fields){
+        if( $scope.form.fields[i].required 
+            && $scope.form.fields[i].type != "checkbox"
+          ){
+          if(angular.isUndefined($scope.form.fields[i].value)){
+            return false;
+          }
+          if($scope.form.fields[i].value.length==0){
+            return false;  
+          }
+        }  
+      }
+      return  true;
     }
-    return  true;
-  }
 
  
   $scope.form.close = function() {
