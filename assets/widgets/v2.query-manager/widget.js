@@ -217,7 +217,7 @@ m.controller("PreparationDialogController", function (
         Queries.add(
           angular.copy({
             queryResultId: $scope.data_id, 
-            postprocess:$scope.script
+            script:$scope.script
            }), "preparation", form.fields.name.value);
         app.markModified();
         $modalInstance.close();  
@@ -257,6 +257,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
+            shortName: "Reduce Columns ("+form.fields.mode.value+")",
             reduce : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -285,6 +286,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
+            shortName: "Reduce Rows ("+form.fields.mode.value+")",
             reduce : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -310,6 +312,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
+            shortName: "PCA ("+form.fields.mode.value+") from Rows",
             pca : {
               "enable" : true,
               "direction" : "Rows",
@@ -335,6 +338,7 @@ m.controller("PreparationDialogController", function (
             }
           }).then((form) => {
             $scope.pushOp({
+              shortName: "PCA ("+form.fields.mode.value+") from Columns",
               pca : {
                 "enable" : true,
                 "direction" : "Columns",
@@ -362,6 +366,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form)=>{
           $scope.pushOp({
+            shortName: "Clusters ("+form.fields.count.value+") for Rows",
             cluster:{
               enable    :true,
               direction :"Rows",
@@ -389,6 +394,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form)=>{
           $scope.pushOp({
+            shortName: "Clusters ("+form.fields.count.value+") for Columns",
             cluster:{
               enable    :true,
               direction :"Columns",
@@ -422,6 +428,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
+              shortName: ((form.fields.cumulate.value)? "Cumulate ": "")+"Histogram for Rows ("+form.fields.beans.value+" beans)",
               histogram : {
                 "enable" : true,
                 "direction" : "Rows",
@@ -455,6 +462,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
+              shortName: ((form.fields.cumulate.value)? "Cumulate ": "")+"Histogram for Columns ("+form.fields.beans.value+" beans)",
               histogram : {
                 "enable" : true,
                 "direction" : "Columns",
@@ -471,6 +479,7 @@ m.controller("PreparationDialogController", function (
       title:"Correlations for Rows",
       action: () => {
         $scope.pushOp({
+          shortName: "Correlations for Rows",
           correlation : {
             "enable" : true,
             "direction" : "Rows"
@@ -483,6 +492,7 @@ m.controller("PreparationDialogController", function (
       title:"Correlations for Columns",
       action: () => {
         $scope.pushOp({
+          shortName: "Correlations for Columns",
           correlation : {
             "enable" : true,
             "direction" : "Columns"
@@ -507,6 +517,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
+            shortName: "Normalize Rows("+form.fields.mode.value+")",
             normalization : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -533,6 +544,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
+            shortName: "Normalize Columns("+form.fields.mode.value+")",
             normalization : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -567,6 +579,7 @@ m.controller("PreparationDialogController", function (
             .filter( (item,index) => form.fields.agg.value[index].value)
             .map((item) => item.title)
           $scope.pushOp({
+            shortName: "Aggregate Rows("+aggs.join(",")+")",
             aggregation : {
               "enable" : true,
               "direction" : "Rows",
@@ -601,6 +614,7 @@ m.controller("PreparationDialogController", function (
             .filter( (item,index) => form.fields.agg.value[index].value)
             .map((item) => item.title)
           $scope.pushOp({
+            shortName: "Aggregate Columns("+aggs.join(",")+")",
             aggregation : {
               "enable" : true,
               "direction" : "Columns",
@@ -645,6 +659,12 @@ m.controller("PreparationDialogController", function (
         }).then((form) => {
           let indexes; 
           $scope.pushOp({
+            shortName: "Rank "+form.fields.asc.value+" for Rows("+
+              form.fields.rows.value
+                  .map((item,index) => (item.value) ? item.title : "")
+                  .filter((item) => item.length > 0)
+                  .join(",")
+              +")",
             rank : {
               "enable" : true,
               "direction" : "Columns",
@@ -692,6 +712,12 @@ m.controller("PreparationDialogController", function (
         }).then((form) => {
           let indexes; 
           $scope.pushOp({
+            shortName: "Rank "+form.fields.asc.value+" for Columns("+
+              form.fields.rows.value
+                  .map((item,index) => (item.value) ? item.title : "")
+                  .filter((item) => item.length > 0)
+                  .join(",")
+              +")",
             rank : {
               "enable" : true,
               "direction" : "Rows",
@@ -720,7 +746,10 @@ m.controller("PreparationDialogController", function (
             }
           }
         }).then((form) => {
-           $scope.pushOp({precision:form.fields.precision.value})
+          $scope.pushOp({
+            shortName:"Number precision: "+form.fields.precision.value,
+            precision:form.fields.precision.value
+          })
         })
 
       }
@@ -729,7 +758,10 @@ m.controller("PreparationDialogController", function (
     $scope.operations.push({
       title:"Transpose Table",
       action: () => {
-        $scope.pushOp({transpose:true})
+        $scope.pushOp({
+          shortName:"Transpose",
+          transpose:true
+        })
       }
     }); 
 
@@ -764,6 +796,8 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
+            shortName:"Sort Rows "+form.fields.asc.value+" order by "
+              +criterias.filter((item) => { return (item.value - form.fields.index.value) == 0 })[0].title,
             order:{
               enable    :true,
               direction :"Rows",
@@ -807,6 +841,8 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
+            shortName:"Sort Columns "+form.fields.asc.value+" order by "
+              +criterias.filter((item) => item.value == form.fields.index.value)[0].title,
             order:{
               enable    :true,
               direction :"Columns",
@@ -845,6 +881,12 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
+              shortName:"Use Row Metadata("+
+                form.fields.rows.value
+                .filter((item) => item.value)
+                .map((item) => item.title)
+                .join(",")
+                +")",
               useRowMetadata : form.fields.rows.value.map((item) => item.value)
            }) 
         })
@@ -878,6 +920,12 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
+              shortName:"Use Column Metadata("+
+                form.fields.rows.value
+                .filter((item) => item.value)
+                .map((item) => item.title)
+                .join(",")
+                +")",
               useColumnMetadata : form.fields.rows.value.map((item) => item.value)
            }) 
         })
@@ -908,6 +956,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
+              shortName:"Start with "+form.fields.start.value+" limit "+ form.fields.length.value,
               limit : {
                 "enable" : true,
                 "start" : form.fields.start.value,
@@ -925,7 +974,12 @@ m.controller("PreparationDialogController", function (
           $scope.resultTable = resp.value;
           $scope.data_id = resp.data_id;
           // $scope.resultTable = angular.copy($scope.sourceTable)
-          $scope.pushOp({select:{"source":source.$title}})
+          $scope.pushOp({
+            shortName:"Select "+source.$title+"("+ source.context.queryResultId +")",
+            select:{
+              "source":source.$title
+            }
+          })
           
     });
 
@@ -1047,6 +1101,12 @@ m.controller('QueryManagerController', function (
     $scope.select = (query) => {
         $scope.preview = undefined;
         $scope.selected = query;
+        $scope.selectedScript = (query.context.script)
+          ? "Script: "+ query.context.script
+              .map((item) => item.shortName).join(". ")
+              +". Data ID: "
+              +query.context.queryResultId
+          : "Data ID: "+query.context.queryResultId; 
        
        $http
         .get("./api/data/process/"+query.context.queryResultId)

@@ -1,7 +1,7 @@
 <div class="row" style="margin: 0; padding: 0 0 0 1em;" ng-controller="QueryManagerController"
 ng-show="globalConfig.designMode">
  	
- 	<div class="row">
+ 	<div class="column medium-3 left">
 	 
 		<h5>Queries</h5>
 		
@@ -35,9 +35,12 @@ ng-show="globalConfig.designMode">
 			</div>	
 		</div>	
 	</div>
-	<div class="row" >
+	<div class="column medium-9 right">
 		<div ng-if="selected">
 			<h5> {{(selected.$title) ? selected.$title : "Preview"}}</h5>
+			<div style="font-size:small;">
+				{{selectedScript}}
+			</div>
 			<div style="border:0.1em solid #ddd; padding:0.2em; max-height: 10em; overflow: auto;margin: 0.5em 1em 0.5em 0;">
 				<img ng-if="!preview" src="./img/ajax-loader.gif"/> 
 				<wdc-table ng-if="preview" data="{table:preview, decoration:{}}"></wdc-table>
