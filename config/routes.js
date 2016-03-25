@@ -39,6 +39,15 @@ module.exports.routes = {
 
   /*** APIs ***/
   // IMPORTANT! - don't forget to update policies.js!
+  // 
+  
+  //Portal
+   'get /api/app/config/get': 'PortalConfigController.getConfig',
+   'post /api/app/config/get': 'PortalConfigController.getConfig',
+   'post /api/app/config/set': 'PortalConfigController.setConfig',
+    
+  
+
   // Apps
   'get /api/app/get-list': 'AppController.getList',
   'get /api/app/get-default-config': 'AppController.getDefaultConfig',

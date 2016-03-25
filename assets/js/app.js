@@ -33,6 +33,13 @@ const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.la
   'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
 
+app.constant("portal", {
+        api:{
+          setConfig: "/api/app/config/set",
+          getConfig:"/api/app/config/get"
+        }
+});        
+
 app.factory('appUrls', function (appId) {
   return {
     api: {
@@ -80,7 +87,7 @@ app.factory('appUrls', function (appId) {
   };
 });
 
-app.constant('homePageAppName', 'app-list');
+// app.constant('homePageAppName', defaultApp);
 
 app.constant('globalConfig', {
   designMode: false,
@@ -100,7 +107,7 @@ app.constant('randomWidgetName', () => Math.random().toString(36).substring(2));
 
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
                      $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
-                     appName, homePageAppName) {
+                     appName, defaultApp) {
 
   $ocLazyLoadProvider.config({
     loadedModules: ['app'],
@@ -180,7 +187,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 
   $stateProvider
     .state('page', {
-      url: appName !== homePageAppName ? `/app/${appName}/:href` : '/:href',
+      url: appName !== defaultApp ? `/app/${appName}/:href` : '/:href',
       resolve: {
         pageConfig
       },
@@ -246,7 +253,7 @@ app.factory('appHotkeysInfo', ['config', (config) => {
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
                              $translate, appUrls, appName, fullReload, eventWires, APIUser,
-                             hotkeys, splash, appHotkeysInfo,globalConfig) {
+                             hotkeys, splash, appHotkeysInfo,globalConfig,dialog,portal) {
 
   let pageConf;
 
@@ -376,6 +383,35 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         controller: 'PageManagerController',
         backdrop: 'static'
       })
+    },
+
+    openPortalConfigDialog(){
+      $http
+        .get(portal.api.getConfig)
+        .then((resp) => {
+          console.log("Portal Config",resp.data)
+          let fields = [];
+          for(let key in resp.data){
+            fields.push({title:key,value:resp.data[key]})
+          }
+          dialog({
+            title:`${$translate.instant('PORTAL_CONFIGURATION')}`,
+            "fields":fields
+          }).then((form) => {
+            let conf = {};
+            form.fields.forEach((item) => {conf[item.title] = item.value})
+            $http
+              .post(portal.api.setConfig,{config:conf})
+              .then(() => {
+                splash({
+                  title:`${$translate.instant('PORTAL_CONFIGURATION')}`
+                    +": "+`${$translate.instant('SAVED')}`
+                  },
+                  1000  
+                )
+              })
+          })
+        })
     },
 
     viewPageConfig() {

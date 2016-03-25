@@ -39,6 +39,20 @@ var addDefaultAppConfigs = function () {
   });
 };
 
+var addDefaultPortalConfig = function(){
+  PortalConfig.find({})
+    .then(function(config){
+      if(config.length>0){
+        sails.log.debug("Portal Config: "+JSON.stringify(config[0].value))  
+      }else{
+          PortalConfig.create({value:{"defaultApp":"app-list"}})
+            .then(function(conf){
+              sails.log.debug("Create default portal config:"+JSON.stringify(conf.value))
+          })
+      }
+    })
+} 
+
 module.exports.bootstrap = function (cb) {
   sails.services.passport.loadStrategies();
 
@@ -58,7 +72,7 @@ module.exports.bootstrap = function (cb) {
   });
 
   addDefaultAppConfigs(); // allow running async, even after bootstrap is finished
-
+  addDefaultPortalConfig();
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   cb();

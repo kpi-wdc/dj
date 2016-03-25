@@ -43,6 +43,7 @@
 
   define('app-config', ['angular'], function (angular) {
     angular.module('app.config', [])
+      .constant('defaultApp', "<%= app.defaultApp %>")
       .constant('appId', "<%= app.id %>")
       .constant('appName', "<%= app.name %>")
       .constant('initialConfig', <%- JSON.stringify(publicAppConfig) %>);

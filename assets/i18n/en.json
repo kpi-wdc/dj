@@ -51,6 +51,8 @@
   "OWNER": "Owner",
   "PAGES": "Pages",
   "PEOPLE": "People",
+  "PORTAL":"Portal",
+  "PORTAL_CONFIGURATION":"Portal Configuration",
   "PRESENTATION":"Presentation",
   "RENAME": "Rename",
   "RESOURCES":"Resources",
