@@ -15,6 +15,7 @@
       "dispatch": {},
       "width": 400,
       "height": 20,
+      
       "align": true,
       "rightAlign": true,
       "updateState": true,
