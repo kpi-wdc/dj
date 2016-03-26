@@ -9407,6 +9407,8 @@ nv.models.multiBarHorizontal = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+
+
       var availableWidth = width - margin.left - margin.right,
           availableHeight = height - margin.top - margin.bottom,
           container = d3.select(this);
@@ -9448,8 +9450,18 @@ nv.models.multiBarHorizontal = function() {
           });
         });
 
+      // calc real left margin
+      // 
 
+      console.log("HBAR DATA",data)
+      // var leftMargin;
 
+      // data.forEach(function(serie){
+      //   var current = serie.values.map(function(item){return nv.utils.calcApproxTextWidth})
+      //   leftMargin
+      // })
+            
+      
       //------------------------------------------------------------
       // Setup Scales
 
@@ -9955,6 +9967,52 @@ nv.models.multiBarHorizontalChart = function() {
       gEnter.append('g').attr('class', 'nv-barsWrap');
       gEnter.append('g').attr('class', 'nv-legendWrap');
       gEnter.append('g').attr('class', 'nv-controlsWrap');
+      
+      // calculate real left margin
+      gEnter.append('g')
+        .attr('class', 'nv-temp nv-axis')
+        .style('opacity',0);
+
+
+
+      var seriesData = data.map(function(d) {
+              return d.values.map(function(d,i) {
+                return d.label
+              })
+            });
+
+      var temp = g
+                  .select('.nv-temp.nv-axis')
+                  .selectAll('g')
+                  .data(d3.merge(seriesData))
+
+      temp.exit().remove();            
+                  
+      var tempTicks = temp
+        .enter()
+        .append('g')
+        .attr('class','tick')
+        .append('text')
+        .text(function(d){return d})   
+
+
+setTimeout(
+  function(){
+
+        margin.left = 0;
+        g
+          .select('.nv-temp.nv-axis')
+          .selectAll('text')
+          .each(function(d){
+            margin.left = d3.max([margin.left,this.getComputedTextLength()])
+          })   
+
+        margin.left*=1.1;
+
+        availableWidth = (width  || parseInt(container.style('width')) || 960)
+                             - margin.left - margin.right,
+        availableHeight = (height || parseInt(container.style('height')) || 400)
+                             - margin.top - margin.bottom;        
 
       //------------------------------------------------------------
 
@@ -10048,6 +10106,21 @@ nv.models.multiBarHorizontalChart = function() {
 
           xTicks
               .selectAll('line, text');
+
+         // console.log("xTicks",xTicks)
+         var realLeftMargin = 0;     
+        //  setTimeout(function(){
+        //  xTicks
+        //   .selectAll("text")
+        //   .each(function(d){
+        //       var current = this.getComputedTextLength();
+        //       // console.log(this,current,realLeftMargin);
+        //       realLeftMargin = (realLeftMargin< current)?current : realLeftMargin;
+        //   })
+
+        //   realLeftMargin *= 1.1;
+        //    wrap.transition().attr('transform', 'translate(' + realLeftMargin + ',' + margin.top + ')');
+        // },0);   
       }
 
       if (showYAxis) {
@@ -10130,9 +10203,11 @@ nv.models.multiBarHorizontalChart = function() {
         chart.update();
       });
       //============================================================
-
+},0);
 
     });
+
+
 
     return chart;
   }
