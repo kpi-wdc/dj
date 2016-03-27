@@ -23,6 +23,6 @@ module.exports = {
       .then(function(updatedConfig){
         return res.send(updatedConfig[0].value)
       })
-  }  
-};
+  }
 
+};

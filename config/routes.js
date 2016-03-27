@@ -45,7 +45,7 @@ module.exports.routes = {
    'get /api/app/config/get': 'PortalConfigController.getConfig',
    'post /api/app/config/get': 'PortalConfigController.getConfig',
    'post /api/app/config/set': 'PortalConfigController.setConfig',
-    
+     
   
 
   // Apps

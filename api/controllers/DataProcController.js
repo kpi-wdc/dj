@@ -7,6 +7,7 @@
 
 var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
 var I18N = require("../../wdc_libs/wdc-i18n");
+var util = require("util");
 
 
 var getQueryResult = function(query,proc,proc_params){
@@ -77,27 +78,70 @@ module.exports = {
         // })
         
       } else if (req.body.data_id) {
-        ProcData.findOne({
-          id: req.body.data_id
-        }, function (err, found) {
-          if (!err) {
-            if (found) {
+        
+
+        (function(dataID){
+          if(util.isArray(dataID)) return ProcData.findByIdIn(dataID)
+          return  ProcData.findOneById(dataID) 
+        })(req.body.data_id)
+        .then( function(found){
+          if (found) {
               if (found.isDataSource) {
                 obj_to_process = found;
                 obj_to_process.params = req.body.params;
               } else {
-                obj_to_process.data = found.value;
+
+                if(util.isArray(found)){
+                  obj_to_process.data = [];
+                  req.body.data_id.forEach(function(item){
+                    obj_to_process.data.push(
+                      found.filter(function(d){return d.id == item})[0].value
+                    )
+                  }) 
+                }else{
+                  obj_to_process.data = found.value;
+                }
+
                 obj_to_process.params = req.body.params;
+              
+
               }
               parent_proc = found.id;
               child.send(obj_to_process);
             } else {
               return res.forbidden('No data was found for the specified id: ' + req.body.data_id);
             }
-          } else {
-            return res.serverError();
-          }
-        })
+        })  
+
+
+
+        // ProcData.findOne({
+        //   id: req.body.data_id
+        // }, 
+        // function (err, found) {
+        //   if (!err) {
+        //     if (found) {
+        //       if (found.isDataSource) {
+        //         obj_to_process = found;
+        //         obj_to_process.params = req.body.params;
+        //       } else {
+        //         obj_to_process.data = found.value;
+        //         obj_to_process.params = req.body.params;
+        //       }
+        //       parent_proc = found.id;
+        //       child.send(obj_to_process);
+        //     } else {
+        //       return res.forbidden('No data was found for the specified id: ' + req.body.data_id);
+        //     }
+        //   } else {
+        //     return res.serverError();
+        //   }
+        // })
+
+
+
+
+
       } else {
         return res.badRequest('Request must contain either data or data_id field');
       }

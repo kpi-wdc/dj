@@ -173,7 +173,7 @@ Query.prototype = {
               }
             });
             if(!f){thos.result.push(newItem)};
-            
+            // thos.result.push(newItem)
         });
         this.data = this.result;
         return this;
@@ -185,10 +185,10 @@ Query.prototype = {
         this.data.forEach(function(item,index){
             data.forEach(function(element, index){
                 var newItem = copyObject(item);
-              if(criteria(item,element)){
-                newItem = copyObject(newItem,element)
-                thos.result.push(newItem); 
-              }
+                if(criteria(item,element)){
+                  newItem = copyObject(newItem,element)
+                  thos.result.push(newItem); 
+                }
             });
         });
         this.data = this.result;

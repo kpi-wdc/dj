@@ -1,4 +1,4 @@
-var Query = require("./lib/query").Query,
+var Query = require("../../wdc_libs/wdc-query"),
 	STAT = require("./lib/stat"),
 	PCA = require("./lib/pca").PCA,
 	CLUSTER = require("./lib/cluster").CLUSTER,
@@ -805,7 +805,93 @@ var executeStep = function (table,params){
 	return table; 		
 }
 
+
+exports.joinTables = function(tables,params){
+
+	if(!params.join) return tables;
+	if(!params.join.enable) return tables;
+	
+	var direction = params.join.direction || "Rows";
+	var joinMode = params.join.mode || "left join"; // "inner"
+	var metaTest = params.join.test || []; // [t1.metadataindex. t2metadataindex]
+	var table1 = tables[0];
+	var table2 = tables[1];
+	var result = {};
+	result.header = table1.header
+						.map(function(item){return item})
+						.concat(
+							table2.header
+								.map(function(item){return item})
+						);
+
+	var equalsMetas = function (m1,m2,test){
+
+		var f = test.length>0;
+		test.forEach(function(t){
+			f &= (m1[t[0]].dimension == m2[t[1]].dimension) && (m1[t[0]].id == m2[t[1]].id)
+		})
+		return f;
+	}
+
+	var nulls = function(count){
+		var _r = [];
+		while(count-- > 0) _r.push(null)
+		return _r;	
+	}
+
+	if(joinMode == "left join"){
+		result.body = new Query()
+			.from(table1.body)
+			.wrap("a")
+			.leftJoin(
+				new Query()
+					.from(table2.body)
+					.wrap("b")
+					.get(),
+				function(r1,r2){
+					return equalsMetas(r1.a.metadata,r2.b.metadata,metaTest)
+				}	
+			)
+			.map(function(row){
+				return {
+					metadata:row.a.metadata,
+					value: row.a.value.concat((row.b) ? row.b.value : nulls(table2.header.length))
+				}
+			})
+			.distinct()
+			.get()
+	} else {
+		result.body = new Query()
+			.from(table1.body)
+			.wrap("a")
+			.innerJoin(
+				new Query()
+					.from(table2.body)
+					.wrap("b")
+					.get(),
+				function(r1,r2){
+					return equalsMetas(r1.a.metadata,r2.b.metadata,metaTest)
+				}	
+			)
+			.map(function(row){
+				return {
+					metadata:row.a.metadata,
+					value: row.a.value.concat((row.b) ? row.b.value : nulls(table2.header.length))
+				}
+			})
+			.distinct()
+			.get()
+	}		
+
+	return result;	 	
+}
+
 exports.PostProcess = function(table,params){
+	if(params.join && params.join.enable){
+		var currentTable = exports.joinTables(table,params)
+		currentTable.postProcess = params;
+		return currentTable;
+	}	
 	 var script = (params.script) ? params.script : [params];
 	 var currentTable = table;
 	 script.forEach(function(operation){
