@@ -1,20 +1,16 @@
 import angular from 'angular';
-// import "ng-json-explorer";
 import "widgets/wizard/wizard";
 import "widgets/v2.steps/select-dataset";
 import "widgets/v2.steps/make-query";
-// import "widgets/v2.steps/post-process";
 import "md5";
 import "custom-react-directives";
 
 
 let m = angular.module('app.widgets.v2.query-manager', [
   "custom-react-directives",
-  // 'ngJsonExplorer',
   "app.widgets.wizard",
   "app.widgets.v2.steps.select-dataset",
-  "app.widgets.v2.steps.make-query",
-  // "app.widgets.v2.steps.post-process"
+  "app.widgets.v2.steps.make-query"
 ]);
 
 m.service("md5", function(){return md5});
@@ -96,17 +92,13 @@ m.factory("ProjectionWizard",[
             .push(MakeQuery)
             .onStart(function(wizard){
               wizard.context = {};
-              // console.log("Start");
             })
             .onCompleteStep( function(wizard,step){
-              // console.log("complete",step.title, wizard.context);
               if(step.title == "Dataset"){
                 wizard.enable(step.index+1);
               }
             })
             .onProcessStep( function(wizard,step){
-              // console.log("process",step.title, wizard.context);
-              
               if(step.title == "Dataset"){
                 wizard.disable(wizard.getAboveIndexes(step));
               }
@@ -118,42 +110,7 @@ m.factory("ProjectionWizard",[
 }]);
 
 
-// m._preparationWizard = undefined;
 
-// m.factory("PreparationWizard",[
-//   "$http",
-//   "$modal", 
-//   "Wizard",
-//   "PostProcess",
-//     function (  
-//           $http,
-//           $modal, 
-//           Wizard,
-//           PostProcess) {
-      
-//       if (!m._preparationWizard){
-//         m._preparationWizard = 
-//          new Wizard($modal)
-//             .setTitle("Data Preparation Wizard")
-//             .setIcon("./widgets/v2.query-manager/preparation.png")
-//             .push(PostProcess)
-//             .onStart(function(wizard){
-//               wizard.context = {};
-//               // console.log("Start");
-//             })
-//             .onCompleteStep( function(wizard,step){
-//               // console.log("complete",step.title, wizard.context);
-//             })
-//             .onProcessStep( function(wizard,step){
-//               // console.log("process",step.title, wizard.context);
-//             })
-//       }      
-
-//       return m._preparationWizard;  
-
-// }]);
-// 
-// 
 
 m.controller("PreparationDialogController", function (
     $scope,
@@ -177,8 +134,8 @@ m.controller("PreparationDialogController", function (
         $scope.script.splice($scope.cursor+1,$scope.script.length - $scope.cursor-1)
       }
       $scope.script.push(o);
-      $scope.cursor = $scope.script.length-1; 
-      $scope.runScript(); 
+      $scope.cursor = $scope.script.length-1;
+      if(!o.send) $scope.runScript(); 
     }
 
     $scope.moveCursor = (value) => {
@@ -239,6 +196,15 @@ m.controller("PreparationDialogController", function (
         {title:"sum",value:false}
     ];
     
+
+    $scope.operations.push({
+      title:"Query data",
+      action: () => {
+      }
+    });
+
+   
+
     $scope.operations.push({
       title:"Reduce Nulls in Columns",
       action: () => {
@@ -860,7 +826,6 @@ m.controller("PreparationDialogController", function (
      
       action: () => {
 
-        // let rows = $scope.resultTable.body[0].metadata.map((item) => item.dimensionLabel);
         
         dialog({
           title:"Reduce Row Metadata",
@@ -899,7 +864,6 @@ m.controller("PreparationDialogController", function (
      
       action: () => {
 
-        // let rows = $scope.resultTable.body[0].metadata.map((item) => item.dimensionLabel);
         
         dialog({
           title:"Reduce Column Metadata",
@@ -973,7 +937,6 @@ m.controller("PreparationDialogController", function (
       .success(function (resp) {
           $scope.resultTable = resp.value;
           $scope.data_id = resp.data_id;
-          // $scope.resultTable = angular.copy($scope.sourceTable)
           $scope.pushOp({
             shortName:"Select "+source.$title+"("+ source.context.queryResultId +")",
             select:{
@@ -1021,6 +984,205 @@ m.controller("PreparationDialogController", function (
 })
 
 
+m.controller("JoinDialogController", function(
+  $scope, 
+  $modalInstance,
+  $http,
+  pageWidgets,
+  source,
+  dialog,
+  Queries,
+  app){
+
+    $scope.queries = [];
+
+    pageWidgets()
+      .filter((item) => item.type =="v2.query-manager")
+      .map((item) => item.queries)
+      .forEach((item) => {$scope.queries = $scope.queries.concat(item)})
+
+    $scope.t1_data_id = source.context.queryResultId;
+    $scope.t1_title = source.$title;
+
+    $http
+        .get("./api/data/process/"+$scope.t1_data_id)
+        .success(function (resp) {
+            $scope.t1 = resp.value;
+            $scope.t1_data_id = resp.id;
+            $scope.t1_meta = ($scope.t1.body.length>0) 
+              ? $scope.t1.body[0].metadata.map((item,index)=>{return {
+                title:item.dimensionLabel,
+                value:index
+              }})
+              : [];
+        })    
+
+    
+    function _init(){
+      $scope.test = [];
+      $scope.t2_title = undefined;
+      $scope.t2 = undefined;
+      $scope.t2_data_id = undefined;
+    }  
+
+    _init();
+
+
+    var queryTest = () => {
+      
+      if(!$scope.t2_title) {
+        $scope.complete = false;
+        return
+      }  
+      if(!$scope.mode){
+        $scope.complete = false;
+        return
+      }
+      if(!$scope.t1_data_id){
+        $scope.complete = false;
+        return
+      }
+      if(!$scope.t2_data_id){
+        $scope.complete = false;
+        return
+      }
+      $scope.complete = true;
+      $scope.getJoin();
+    }
+
+
+      
+    $scope.selectQuery = (q) => {
+      _init();
+
+      $scope.t2_title = q.$title;
+
+      $http
+        .get("./api/data/process/"+q.context.queryResultId)
+        .success(function (resp) {
+            $scope.t2 = resp.value;
+            $scope.t2_data_id = resp.id;
+            $scope.t2_meta = ($scope.t2.body.length>0) 
+              ? $scope.t2.body[0].metadata.map((item,index)=>{return {
+                title:item.dimensionLabel,
+                value:index
+              }})
+              : [];
+             queryTest()    
+        })
+         
+    } 
+
+    $scope.addRowTest = () => {
+      dialog({
+        title:"Add Row Test",
+        fields:{
+          t1:{
+            title:"Table 1 Row Meta",
+            type:"select",
+            value:'',
+            options:$scope.t1_meta
+          },
+          t2:{
+            title:"Table 2 Row Meta",
+            type:"select",
+            value:'',
+            options:$scope.t2_meta
+          }
+        }
+      }).then((form) => {
+        $scope.test.push([form.fields.t1.value, form.fields.t2.value])
+        queryTest()
+      })
+    } 
+
+    $scope.deleteRowTest = (index) => {
+      $scope.test.splice(index,1)
+      queryTest()
+    }
+
+    $scope.selectMode = (m) => {
+      $scope.mode = m;
+      queryTest();
+    }
+
+    $scope.condition = () => {
+      return $scope.test.map((t) => {
+        return  "( "
+                +$scope.t1_title
+                +"."
+                +$scope.t1_meta[t[0]].title
+                +" = "
+                +$scope.t2_title
+                +"."
+                +$scope.t2_meta[t[1]].title
+                +" )"
+      }).join(" AND ");
+    }
+
+
+    $scope.getJoin = () => {
+
+      $scope.resultTable = undefined;
+      $scope.loaded = true;
+
+      $http
+          .post("./api/data/process/",
+            {
+              "cache": false,
+              "data_id": [$scope.t1_data_id,$scope.t2_data_id],
+              "params": {
+                join:{
+                  enable : true,
+                  mode : $scope.mode,
+                  test:$scope.test
+                }  
+              },
+              "proc_name": "post-process",
+              "response_type": "data"
+            }    
+          )
+          .success(function (resp) {
+              $scope.resultTable = resp.data;
+              $scope.loaded = false;
+              $scope.data_id = resp.data_id;
+          })
+
+    }
+
+    $scope.save = () => {
+
+      dialog({
+        title:"Enter Table Name",
+        fields:{
+          name:{
+            title:"Table Name",
+            type:"text",
+            value:""
+          }
+        },
+        validate: (form) => {
+          let f1 = form.fields.name.value.length > 0;
+          let f2 = $scope.queries.map((item) => item.$title).indexOf(form.fields.name.value) == -1;
+          return (f1&&f2)
+        }
+
+      }).then((form) => {
+
+        Queries.add(
+          angular.copy({
+            queryResultId: $scope.data_id, 
+            }), "preparation", form.fields.name.value);
+        app.markModified();
+        $modalInstance.close();  
+      })
+    }
+
+    $scope.cancel = () => {$modalInstance.close()}
+})
+
+
+
 
 m.controller('QueryManagerController', function (
     $scope,
@@ -1030,7 +1192,6 @@ m.controller('QueryManagerController', function (
     EventEmitter,
     pageSubscriptions,
     Queries,
-    // PreparationCtrl,
     app,
     confirm,
     dialog,
@@ -1055,6 +1216,40 @@ m.controller('QueryManagerController', function (
       $scope.wizard.start($scope);
     }
 
+
+    
+     $scope.invokeAddJoinWizard = () => {
+      
+      let queries = [];
+
+          pageWidgets()
+            .filter((item) => item.type =="v2.query-manager")
+            .map((item) => item.queries)
+            .forEach((item) => {queries = queries.concat(item)})
+
+      dialog({
+        title:"Select Join Source",
+        note:"One from available sources shuld be selected", 
+        fields:{
+          source:{
+            title:"Source",
+            type:"select",
+            options: queries.map((item,index) => {return {title:item.$title,value:index}})
+          }
+        }
+      }).then((form) =>{
+        $modal.open({
+          templateUrl: '/widgets/v2.query-manager/join-dialog.html',
+          // windowClass: 'dialog-modal',
+          backdrop: 'static',
+          controller: 'JoinDialogController',
+          resolve: {
+            source: () => queries[form.fields.source.value]
+          }
+        })
+      })
+    }   
+
     $scope.invokeAddPreparationWizard = () => {
       
       let queries = [];
@@ -1075,8 +1270,7 @@ m.controller('QueryManagerController', function (
           }
         }
       }).then((form) =>{
-        // console.log("Select", form.fields.source.value)
-
+       
         $modal.open({
             templateUrl: 'widgets/v2.query-manager/preparation-dialog.html',
             controller: 'PreparationDialogController',
@@ -1091,11 +1285,6 @@ m.controller('QueryManagerController', function (
 
           });
       })
-
-
-
-      // $scope.wizard = PreparationWizard;
-      // $scope.wizard.start($scope);
     }
 
     $scope.select = (query) => {
@@ -1129,7 +1318,6 @@ m.controller('QueryManagerController', function (
 
     new APIProvider($scope)
       .config(() => {
-        // console.log("Configure Data Query Manager");
         Queries.init($scope)
       })
   });

@@ -1,0 +1,90 @@
+	<h5 color="#ddd">Join Tables</h5>
+	<div class="row" style="font-size:smaller; padding:0 1rem 0 1rem; margin:0;">
+		<div class="column medium-3">
+			<label class="wizard section">
+				Table 2
+			</label>
+			<select class="wizard" 
+					ng-model="sQ" 
+					ng-options="q.$title for q in queries" 
+					ng-change="selectQuery(sQ)">
+	    	</select>
+	    	<label class="wizard section">
+				Join Mode
+			</label>
+			<select class="wizard" 
+					ng-model="joinMode" 
+					ng-change="selectMode(joinMode)">
+	    		<option>left join</option>
+	    		<option>inner join</option>
+	    	</select>
+	    	
+	    	<div class="row wizard setting" ng-if="sQ.$title" style="margin: 1em 0 0 0;">
+		    	<label class="wizard left section">
+					Row Test
+				</label>
+				<button class="right tiny toolbar" ng-click="addRowTest()" style="margin:0 .3em;">
+					 Add...
+				</button>
+			</div>
+				
+	    	<div class="row" 
+	    		ng-repeat="t in test track by $index" 
+	    		style="margin: 0.3em 0;
+					   border: 1px solid #ddd;
+					   padding: 0 .5em;"
+				>
+	    		<span class="left">
+	    		{{t1_title}}:{{t1_meta[t[0]].title}} 
+	    		== 
+	    		{{sQ.$title}}:{{t2_meta[t[1]].title}}
+	    		</span>
+	    		<a class="right" ng-click="deleteRowTest($index)">Delete</a>
+	    	</div>
+		</div>
+		<div class="column medium-9">
+			<h5>{{t1_title}}</h5>
+			<div class="row wizard setting" style="    overflow: auto;
+					    background: #ffffff;
+					    max-height: 20em;
+					    border: 0.1rem solid #ddd;">
+			    <center>
+					<img ng-if="!t1" src="./img/ajax-loader.gif"/>
+					<wdc-table data="{table:t1, decoration:{}}" ng-if="t1" style="padding:1em;"/>
+				</center>	
+			</div>
+			
+			<h5 ng-if="sQ.$title">{{sQ.$title}}</h5>
+			<div class="row wizard setting" ng-if="sQ.$title" style="    overflow: auto;
+		    background: #ffffff;
+		    max-height: 20em;
+		    border: 0.1rem solid #ddd;">
+			    <center>
+					<img ng-if="!t2" src="./img/ajax-loader.gif"/>
+					<wdc-table data="{table:t2, decoration:{}}" ng-if="t2" style="padding:1em;"/>
+				</center>	
+			</div>
+
+			<h5 ng-if="complete">
+				{{t1_title}}&nbsp;{{joinMode}}&nbsp;{{sQ.$title}}&nbsp;{{(test.length>0)?' on '+ condition():""}}
+			</h5>
+			<div 	class="row wizard setting" 
+					style="overflow: auto;
+				    background: #ffffff;
+				    max-height: 20em;
+				    border: 0.1rem solid #ddd;"
+				    ng-if="complete">
+			    <center>
+					<img ng-if="!resultTable" src="./img/ajax-loader.gif"/>
+					<wdc-table data="{table:resultTable, decoration:{}}" ng-if="resultTable" style="padding:1em;"/>
+				</center>	
+			</div>
+		</div>
+	</div>	
+
+	<div class="row">
+	  <button class="button alert tiny right seq" ng-click="cancel()"
+	          translate>CANCEL</button>
+	  <button type="submit" class="button tiny right seq" ng-click="save()"  translate>SAVE</button>
+  	</div>
+</div>		

@@ -38,6 +38,7 @@ let WdcTable = React.createClass( {
 
   },
 
+ 
   // react-directive properties
   propTypes : {
     data: React.PropTypes.object.isRequired
@@ -180,7 +181,7 @@ let WdcTable = React.createClass( {
 
 
   render: function() {
-    console.log("render", this.props)
+    // console.log("render", this.props)
     
     // get all render settings
     
@@ -203,8 +204,9 @@ let WdcTable = React.createClass( {
   
     let dataTable = this.props.data.table;
 
-    if (angular.isUndefined(dataTable)) return <div/>; 
-    if (angular.isUndefined(dataTable.metadata)) return <div/>; 
+    if (angular.isUndefined(dataTable)) return <h5>{this.noDataAvailabe}</h5>;
+    if (dataTable.body.length == 0) return <h5>No Data Available</h5>;
+    if (angular.isUndefined(dataTable.metadata)) return <h5>No Metadata Available</h5>; 
 
     // prepare palettes
     this.preparePalette();

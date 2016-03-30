@@ -155,33 +155,44 @@ exports.Normalize = function (table, params) {
 
   var normalizeMode = params.normalization.mode || "Range to [0,1]"; 
   var normalizeArea = params.normalization.direction || "Columns";
-  var precision = params.normalization.precision || null; 
+  var precision = params.normalization.precision || null;
 
+  var metaSuffix = " $";
+  	metaSuffix += (normalizeMode == "Range to [0,1]") 
+  		? "Range."
+  		:(normalizeMode == "Standartization")
+  			? "St."
+  			: "Log.";
+  metaSuffix += (normalizeArea == "Rows") ? "Row" : "Col";			
   if(normalizeArea == "Columns"){
-  	table.header.forEach(function(currentColumn,columnIndex){
-  		var data = table.body.map(function(currentRow){
-  			return currentRow.value[columnIndex];
-  		});
-  		switch (normalizeMode) {
-            case "Range to [0,1]":
-              data = STAT.normalize(data);
-              break;
-            case "Standartization":
-              data = STAT.standardize(data);
-              break;
-            case "Logistic":
-              data = STAT.logNormalize(data);
-              break;
-          }
-          data.forEach(function(currentValue,rowIndex){
-          	table.body[rowIndex].value[columnIndex] = (currentValue == null) ? null 
-          	: (precision !=null) ? new Number (Number(currentValue).toFixed(precision)) : currentValue; 
-          })
-  	})
-  	return table;
+  		table = exports.transposeTable(table,{transpose:true});
   }
 
-  if(normalizeArea == "Rows"){
+  // if(normalizeArea == "Columns"){
+  // 	table.header.forEach(function(currentColumn,columnIndex){
+  // 		var data = table.body.map(function(currentRow){
+  // 			return currentRow.value[columnIndex];
+  // 		});
+  // 		switch (normalizeMode) {
+  //           case "Range to [0,1]":
+  //             data = STAT.normalize(data);
+  //             break;
+  //           case "Standartization":
+  //             data = STAT.standardize(data);
+  //             break;
+  //           case "Logistic":
+  //             data = STAT.logNormalize(data);
+  //             break;
+  //         }
+  //         data.forEach(function(currentValue,rowIndex){
+  //         	table.body[rowIndex].value[columnIndex] = (currentValue == null) ? null 
+  //         	: (precision !=null) ? new Number (Number(currentValue).toFixed(precision)) : currentValue; 
+  //         })
+  // 	})
+  // 	return table;
+  // }
+
+  // if(normalizeArea == "Rows"){
   	table.body.forEach(function(currentRow){
   		switch (normalizeMode) {
             case "Range to [0,1]":
@@ -199,8 +210,16 @@ exports.Normalize = function (table, params) {
           	(precision != null) ? new Number (Number(currentValue).toPrecision(precision)) : currentValue;
           })
   	})
+  	table.body.forEach(function(col){
+  		col.metadata[col.metadata.length-1].id += metaSuffix;
+  		col.metadata[col.metadata.length-1].label += metaSuffix;
+  	})
+
+  	if(normalizeArea == "Columns"){
+  		table = exports.transposeTable(table,{transpose:true});
+  	}
   	return table;
-  }
+  // }
 
 }
 
@@ -635,29 +654,29 @@ exports.pca = function(table,params){
 			})
 		})
 
-		table.header.forEach(function(col,index){
-			result.body.push({
-				metadata : col.metadata.map(function(item){return item})
-				.concat({
-					dimension:"type",
-					dimensionLabel:"Type",
-					id:"o",
-					label:"Eigen Vector"
-				}),
-				value : data.eigenVectors[index].map(function(item){return item})
-			})
-		})
+		// table.header.forEach(function(col,index){
+		// 	result.body.push({
+		// 		metadata : col.metadata.map(function(item){return item})
+		// 		.concat({
+		// 			dimension:"type",
+		// 			dimensionLabel:"Type",
+		// 			id:"o",
+		// 			label:"Eigen Vector"
+		// 		}),
+		// 		value : data.eigenVectors[index].map(function(item){return item})
+		// 	})
+		// })
 
-		result.body.push({
-				metadata : table.header[0].metadata.map(function(item){return item})
-				.concat({
-					dimension:"type",
-					dimensionLabel:"Type",
-					id:"o",
-					label:"Origin"
-				}),
-				value : data.eigenVectors[0].map(function(item){return 0})
-			})
+		// result.body.push({
+		// 		metadata : table.header[0].metadata.map(function(item){return item})
+		// 		.concat({
+		// 			dimension:"type",
+		// 			dimensionLabel:"Type",
+		// 			id:"o",
+		// 			label:"Origin"
+		// 		}),
+		// 		value : data.eigenVectors[0].map(function(item){return 0})
+		// 	})
 
 		if(pca.direction == "Columns") result = exports.transposeTable(result,{transpose:true});
 		return result;
@@ -811,17 +830,45 @@ exports.joinTables = function(tables,params){
 	if(!params.join) return tables;
 	if(!params.join.enable) return tables;
 	
+	var result = {metadata:{}};
 	var direction = params.join.direction || "Rows";
 	var joinMode = params.join.mode || "left join"; // "inner"
 	var metaTest = params.join.test || []; // [t1.metadataindex. t2metadataindex]
 	var table1 = tables[0];
+	table1.header.forEach(function (col){
+		var cc = col.metadata.map(function(m){return m.label}).join(",")
+		col.metadata = [{
+			id: cc, 
+			label: cc, 
+			dimension: "Concatenated Meta", 
+			dimensionLabel: "Concatenated Meta"
+		}]
+		
+	})
+
+	
 	var table2 = tables[1];
-	var result = {};
+	table2.header.forEach(function (col){
+		var cc = col.metadata.map(function(m){return m.label}).join(",")
+		col.metadata = [{
+			id: cc, 
+			label: cc, 
+			dimension: "Concatenated Meta", 
+			dimensionLabel: "Concatenated Meta"
+		}]
+		
+	})
+	
+	// var result = {};
 	result.header = table1.header
-						.map(function(item){return item})
+						.map(function(item){
+							return item
+						})
 						.concat(
 							table2.header
-								.map(function(item){return item})
+								.map(function(item){
+									return item
+								})
 						);
 
 	var equalsMetas = function (m1,m2,test){
@@ -882,7 +929,7 @@ exports.joinTables = function(tables,params){
 			.distinct()
 			.get()
 	}		
-
+	// result.metadata = {}
 	return result;	 	
 }
 
