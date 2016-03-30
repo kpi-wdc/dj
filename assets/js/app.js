@@ -55,6 +55,7 @@ app.factory('appUrls', function (appId) {
     googleAuth: `/auth/google`,
     logout: `/logout`,
     usersList: `/api/users/list`,
+    setAdmin: '/api/admin/set',
     createTimeline: '/api/timeline/create',
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
@@ -412,6 +413,37 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
               })
           })
         })
+    },
+
+    openSetAdminDialog(){
+      console.log("openSetAdminDialog")
+      $http.get(appUrls.usersList)
+      .then((resp) => {
+        dialog({
+          title:"Set admin grant for user",
+          fields:{
+            user:{
+              title:"User's email",
+              type:"typeahead",
+              list:resp.data.map((user) => user.email)
+            }
+          }
+        })
+        .then((form) => {
+          console.log("User ", form.fields.user.value)
+          $http.post(appUrls.setAdmin, {
+            email:form.fields.user.value,
+            value:true
+          }).then((resp) => {
+            splash({
+                  title:"Grant Admin Role for "+resp.data[0].name+" ("+resp.data[0].email+")"
+                  },
+                  1000  
+                )
+          })
+        })  
+      })
+      
     },
 
     viewPageConfig() {

@@ -61,6 +61,7 @@ module.exports.routes = {
 
   // Users
   'get /api/users/list': 'UserController.getList',
+  'post /api/admin/set': 'UserController.setAdminGrant',
 
   // DataSource manipulation URLs
   'post /api/data/dataSource' : 'DataSourceController.add',

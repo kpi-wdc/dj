@@ -68,7 +68,7 @@
               <translate>TRANSLATIONS</translate>...
         </button>
 
-        <button title="Alt+T"
+        <button
                 ng-if="user.isAdmin"
                 ng-click="app.openPortalConfigDialog()" 
                 class="left button radius toolbar warning"
@@ -76,6 +76,17 @@
               <img src="./img/app-settings-icon.png" width="24px">
               <translate>PORTAL</translate>...
         </button>
+
+        <button 
+                ng-if="user.isAdmin"
+                ng-click="app.openSetAdminDialog()" 
+                class="left button radius toolbar warning"
+                style="margin:0 0 0 0.2rem; padding: 0.2em 0.5em;font-stretch: ultra-condensed;">
+              <img src="./img/app-settings-icon.png" width="24px">
+              <translate>ADMINS</translate>...
+        </button>
+
+        
       </div>
     </div>  
     <div class="right" style="margin: 0.5em 0 0 0;">

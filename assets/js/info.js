@@ -129,6 +129,18 @@ info.controller('DialogController', function ($scope, $modalInstance, form) {
     form.fields[i].editable = (angular.isDefined(form.fields[i].editable)) ? form.fields[i].editable : true; 
     form.fields[i].required = (angular.isDefined(form.fields[i].required)) ? form.fields[i].required : true;
     
+    if(form.fields[i].type == "typeahead"){
+      if(angular.isArray(form.fields[i].list)){
+        form.fields[i].getList = (filterValue) => {
+          return  form.fields[i].list.filter((item) =>
+            item.toLowerCase().includes(filterValue.toLowerCase())  
+          )
+        }  
+      }else{
+        form.fields[i].getList = form.fields[i].list
+      }
+    }
+
     if(form.fields[i].type == "select"){
       form.fields[i].options = form.fields[i].options.map(
         (item,index) => {

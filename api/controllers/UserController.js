@@ -14,6 +14,13 @@ module.exports = {
       sails.log.error('Error while getting list of users' + err);
       res.serverError();
     })
+  },
+  setAdminGrant: function(req,res){
+  	params = req.body;
+  	User.update({email:params.email},{isAdmin:params.value})
+  		.then(function(obj){
+  			return res.send(obj)
+  		})
   }
 };
 

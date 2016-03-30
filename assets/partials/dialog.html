@@ -20,6 +20,16 @@
 	             type="text" ng-disabled="!field.editable">
 	    </div>
 
+
+	    <div class="column large-9" ng-if="field.type=='typeahead'">
+	      <input type="text" ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable"
+             typeahead="item for item in field.getList($viewValue)"
+             typeahead-editable="false"
+             typeahead-on-select=""
+             typeahead-loading="loading" class="form-control">
+      	  <i ng-show="loading" class="glyphicon glyphicon-refresh"></i>       
+	    </div>
+
 	    <div class="column large-9" ng-if="field.type=='number'">
 	      <input 	ng-model="field.value" 
 	      			id="{{field.id}}"
