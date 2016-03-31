@@ -8,8 +8,8 @@ System.config({
     "canvg": "components/canvg/canvg.js",
     "rgbcolor": "components/canvg/rgbcolor.js",
     "stackblur": "components/canvg/StackBlur.js",
-    "Blob": "components/file-saver.js/Blob.js",
-    "canvas-toBlob": "components/file-saver.js/canvas-toBlob.js",
+    "Blob": "components/Blob.js/Blob.js",
+    "canvas-toBlob": "components/canvas-toBlob.js/canvas-toBlob.js",
     "file-saver": "components/file-saver.js/FileSaver.js"
 
 

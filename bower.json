@@ -36,9 +36,9 @@
     "d3.layout.cloud": "~1.2.1",
     "react": "~0.14.6",
     "ngReact": "~0.2.0",
-    "ng-json-explorer": "*",
     "md5": "blueimp/JavaScript-MD5",
-    "angular-openlayers-directive": "~1.9.2",
-    "file-saver.js": "~1.20150507.2"
+    "file-saver.js": "~1.20150507.2",
+    "canvas-toBlob.js": "eligrey/canvas-toBlob.js",
+    "Blob.js": "eligrey/Blob.js"
   }
 }
