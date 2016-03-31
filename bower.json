@@ -39,6 +39,7 @@
     "md5": "blueimp/JavaScript-MD5",
     "file-saver.js": "~1.20150507.2",
     "canvas-toBlob.js": "eligrey/canvas-toBlob.js",
-    "Blob.js": "eligrey/Blob.js"
+    "Blob.js": "eligrey/Blob.js",
+    "canvg": "~1.3.0"
   }
 }
