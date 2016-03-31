@@ -5,9 +5,9 @@ System.config({
     'topojson': 'widgets/v2.nvd3-widget/topojson.js',
     'nv.d3.ext': 'widgets/v2.nvd3-widget/nv.d3.ext.js',
     'angular-nvd3': 'widgets/v2.nvd3-widget/angular-nvd3-ext.js',
-    "canvg": "components/canvg/canvg.js",
-    "rgbcolor": "components/canvg/rgbcolor.js",
-    "stackblur": "components/canvg/StackBlur.js",
+    "canvg": "components/canvg/dist/canvg.bundle.js",
+    // "rgbcolor": "components/canvg/rgbcolor.js",
+    // "stackblur": "components/canvg/StackBlur.js",
     "Blob": "components/Blob.js/Blob.js",
     "canvas-toBlob": "components/canvas-toBlob.js/canvas-toBlob.js",
     "file-saver": "components/file-saver.js/FileSaver.js"
@@ -26,8 +26,9 @@ System.config({
       deps: ['nv.d3.ext']
     },
     'canvg': {
-      exports: 'canvg',
-      deps: ['rgbcolor', 'stackblur']
+      exports: 'canvg'
+      // ,
+      // deps: ['rgbcolor', 'stackblur']
     },
     'file-saver': {
         deps: ['Blob','canvas-toBlob']
