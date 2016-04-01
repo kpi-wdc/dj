@@ -3,6 +3,7 @@ var Query = require("../../wdc_libs/wdc-query"),
 	PCA = require("./lib/pca").PCA,
 	CLUSTER = require("./lib/cluster").CLUSTER,
 	UTIL = require("util");
+	require('string-natural-compare');
 
 	
 var concatLabels = function(list,usage){
@@ -293,16 +294,54 @@ exports.orderTable = function(table,params){
 	var asc = (params.order.asc) ? params.order.asc : "A-Z"; //"Z-A"
 	var index = (params.order.index) ? params.order.index : 0;
 
+
+	// String.alphbet = 
+			// "0123456789"
+		// +	"ABCDEFGH"
+		// +	"АБВГҐДЕЄЁЖЗИ"
+		// // +	"JKLMNOPQRSTUVWXYZ"
+		// 	"abcdefgh"
+		// +	"бвагґдеєёжзи"
+		// +	"ijklmnopqrstuvwxyz"
+		// // +	"ЇЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+		// +	"іїйклмнопрстуфхцчшщъыьэюя";
+	
 	if(direction == "Columns") table = exports.transposeTable(table,{transpose:true});
 
+	
 	table.body.sort(function(a,b){
-		if(index < 0){
+		if(index<0){
 			var j = -index-1;
-			return (asc == "A-Z") ? (a.metadata[j].label > b.metadata[j].label) : (b.metadata[j].label > a.metadata[j].label)
- 		}else{
-			return (asc == "A-Z") ? (a.value[index] - b.value[index]) : (b.value[index] - a.value[index])
- 		}
+			if (asc == "Z-A"){
+				return (!isNaN(new Number(a.metadata[j].label)) 
+					    && !isNaN(new Number(b.metadata[j].label)))
+					? b.metadata[j].label - a.metadata[j].label
+					: String.naturalCompare(b.metadata[j].label.toLowerCase(),a.metadata[j].label.toLowerCase())
+			}
 
+			if (asc == "A-Z"){
+				return (!isNaN(new Number(a.metadata[j].label)) 
+					    && !isNaN(new Number(b.metadata[j].label)))
+					? a.metadata[j].label - b.metadata[j].label
+					: String.naturalCompare(a.metadata[j].label.toLowerCase(),b.metadata[j].label.toLowerCase())
+			}			 
+		}else{
+			var j = index;
+			if (asc == "Z-A"){
+				return (!isNaN(new Number(a.metadata[j].label)) 
+					    && !isNaN(new Number(b.metadata[j].label)))
+					? b.value[j] - a.value[j]
+					: String.naturalCompare(b.value[j].toLowerCase(), a.value[j].toLowerCase())
+			}
+
+			if (asc == "A-Z"){
+				return (!isNaN(new Number(a.metadata[j].label)) 
+					    && !isNaN(new Number(b.metadata[j].label)))
+					? a.value[j] - b.value[j]
+					: String.naturalCompare(a.value[j].toLowerCase(),b.value[j].toLowerCase())
+			}
+		}
+		
 	})
 
 	if(direction == "Columns") table = exports.transposeTable(table,{transpose:true});
