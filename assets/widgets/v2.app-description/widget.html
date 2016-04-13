@@ -114,8 +114,8 @@
 		<div class="row">
 			<h5 style="margin:0;"><widget-translate>APPLICATION_AUTHOR</widget-translate>:</h5>
 			
-			<a ng-if="author.email" href="mailto:{{author.email}}"  target="blank" style="font-size: small;">
-			     <span style=" background-image: url({{author.photo}});
+			<a ng-if="app.owner.email" href="mailto:{{app.owner.email}}"  target="blank" style="font-size: small;">
+			     <span style=" background-image: url({{app.owner.photo}});
 	                  background-size: 48px 48px;
 	                  border-radius: 50%;
 	                  display: block;
@@ -125,10 +125,10 @@
 	                  width: 48px;
 	                  float:left;"></span>
 				<span style="float:left; margin:1em 0 0 0.5em;">
-			    	{{author.name}}
+			    	{{app.owner.name}}
 			    </span>
 			</a>
-			<div ng-if="!author.name" widget-translate style="color:#aa0000;font-size:small;font-weight:bold;">
+			<div ng-if="!app.owner.name" widget-translate style="color:#aa0000;font-size:small;font-weight:bold;">
 			    THIS_APP_DOESNT_HAVE_AUTHOR
 			</div>
 		</div>

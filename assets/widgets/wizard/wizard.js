@@ -174,7 +174,8 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 			
 			
 			var s = this.parentScope;
-	        this.modalInstance.open({
+	        
+	        return this.modalInstance.open({
 	          templateUrl: 'widgets/wizard/wizard.html',
 	          controller: 'WizardController',
 	          backdrop: 'static',
@@ -183,8 +184,8 @@ m.factory("Wizard",["$ocLazyLoad", function($ocLazyLoad){
 	              		return s;
 	            	}
 	          	}
-	         })
-	        .result.then(function (newWidgetConfig) {});
+	         }).result
+	        // .result.then(function (newWidgetConfig) {});
 		},
 
 		finish : function(){

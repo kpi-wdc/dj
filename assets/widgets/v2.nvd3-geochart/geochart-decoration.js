@@ -48,7 +48,8 @@ m.factory("GeochartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-geochart/options.json",
-	    			dataUrl : "./api/data/process/"
+	    			dataUrl : "./api/data/process/",
+	    			emitters: wizard.conf.emitters
 	    		}	
 
 	    		this.queries = [];
@@ -77,6 +78,7 @@ m.factory("GeochartDecoration",[
             	wizard.conf.dataIndex =  this.conf.dataIndex;
     			wizard.conf.bins =  this.conf.bins;
     			wizard.conf.scope =  this.conf.scope;
+    			wizard.conf.emitters  = this.conf.emitters;
 
 	    		this.settings = {options:angular.copy(this.options), data:[]};
 	    		this.conf = {};

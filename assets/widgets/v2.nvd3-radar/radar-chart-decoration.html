@@ -176,6 +176,29 @@
 
 		        	</div>
 		        </accordion-group>
+		        <accordion-group heading = "Behaviour">
+		        	<div class="row wizard setting">
+	
+						<label class="wizard left">
+							Emit selection events
+						</label>
+						
+					 	<div class="switch tiny right">
+				          <input type="checkbox"
+				                 id="emitEventsCheckbox"
+				                 ng-model="step.conf.decoration.enableEmitEvents"
+				           >
+				          <label for="emitEventsCheckbox"></label>
+				        </div>
+		 				
+				    </div>
+					<div class="row wizard setting">
+						<label class="wizard left">
+							Emitters
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.emitters">
+					</div>
+				</accordion-group>
         	</accordion>	
         </div>	
 	</div>

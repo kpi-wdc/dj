@@ -48,6 +48,7 @@ m.factory("TableWizard",["$http",
 	            wizard.parentScope.widget.decoration = wizard.conf.decoration;
 	            wizard.parentScope.widget.dataID = wizard.conf.dataID;
 	            wizard.parentScope.widget.queryID = wizard.conf.queryID;
+	            wizard.parentScope.widget.emitters = wizard.conf.emitters;
 			    
 			    // console.log("Finish",wizard.parentScope.widget);
 

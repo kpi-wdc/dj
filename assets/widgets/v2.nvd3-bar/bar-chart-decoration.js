@@ -39,7 +39,8 @@ m.factory("BarChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-bar/options.json",
-	    			dataUrl : "./api/data/process/"
+	    			dataUrl : "./api/data/process/",
+	    			emitters: wizard.conf.emitters
 	    		}	
 
 	    		this.queries = [];
@@ -61,6 +62,7 @@ m.factory("BarChartDecoration",[
 	    		wizard.conf.serieDataId  = this.conf.serieDataId; 
 	    		wizard.conf.queryID  = this.conf.queryID;
 	    		wizard.conf.dataID  = this.conf.dataID;
+	    		wizard.conf.emitters  = this.conf.emitters;
 
 	    		this.settings = {options:angular.copy(this.options), data:[]};
 	    		this.conf = {};

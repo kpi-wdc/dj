@@ -64,8 +64,9 @@ m.factory("GeochartWizard",["$http",
             	wizard.parentScope.widget.dataIndex =  wizard.conf.dataIndex;
     			wizard.parentScope.widget.bins =  wizard.conf.bins;
     			wizard.parentScope.widget.scope =  wizard.conf.scope;
+    			wizard.parentScope.widget.emitters = wizard.conf.emitters;
 	           
-			    wizard.parentScope.updateChart();
+			    // wizard.parentScope.updateChart();
 			    
 			    wizard.conf = {};
 	            wizard.context = {};

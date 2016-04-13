@@ -299,3 +299,27 @@ div.xy-tooltip {
   fill: none;
   stroke-width: 2px;
 }
+
+.nvd3 .selected {
+  stroke-opacity:1;
+}
+
+
+/*.nvd3 .nv-multibar .nv-groups rect,
+.nvd3 .nv-multibarHorizontal .nv-groups rect,
+.nvd3 .nv-discretebar .nv-groups rect {
+  stroke-opacity: 0;
+  fill-opacity: 0.5;
+  stroke-width: 4px;
+  transition: fill-opacity 250ms linear;
+  -moz-transition: fill-opacity 250ms linear;
+  -webkit-transition: fill-opacity 250ms linear;
+}
+
+.nvd3 .nv-multibar .nv-groups .selected rect,
+.nvd3 .nv-multibarHorizontal .nv-groups  .selected rect,
+.nvd3 .nv-discretebar .nv-groups .selected rect {
+  stroke-opacity: 1;
+  -moz-transition: fill-opacity 250ms linear;
+  -webkit-transition: fill-opacity 250ms linear;
+}*/

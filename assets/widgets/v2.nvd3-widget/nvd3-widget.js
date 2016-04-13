@@ -52,6 +52,100 @@ define(["angular",
       "nvd3"
   ]);
 
+
+  m.factory("Selector", [
+    function(){
+      var Selector =  function(serieadapter,data,emitter){
+        this.seriesRadioMode = false;
+        this.objectsRadioMode = false;
+        this.series = serieadapter.getSeriesSelection(angular.copy(data));
+        this.objects = serieadapter.getObjectsSelection(angular.copy(data));
+
+        
+
+        this.object = (objectKey) => {
+          return this.objects.filter((o) => o.key == objectKey)[0];
+        }
+
+
+        this.selectSerie = (serieKey) => {
+          
+          if(angular.isArray(serieKey)){
+            var thos = this;
+            serieKey.forEach((v,index) =>{
+              thos.series[index].disabled = v;
+            })
+            emitter.emit("selectSerie",this.series);  
+            return
+          }
+
+          if(this.seriesRadioMode){
+            this.series.forEach((s) =>{
+              if(s.key == serieKey){
+                s.disabled = false;
+              }else{
+                s.disabled = true
+              }
+            })
+            emitter.emit("selectSerie",this.series);  
+            return
+          }
+          
+          let selectedSerie = this.series.filter((s) => s.key === serieKey)[0];
+          selectedSerie.disabled = !selectedSerie.disabled;
+          emitter.emit("selectSerie",this.series);  
+          
+        };
+
+
+        this.selectOneObject= (objectKey) =>{
+          this.objects.forEach((o) =>{
+              if(o.key == objectKey){
+                o.disabled = false;
+              }else{
+                o.disabled = true
+              }
+            })
+          emitter.emit("selectObject",this.objects);  
+        };
+
+        this.inverseObjectSelection = () => {
+          this.objects.forEach((o) => {o.disabled = !!!o.disabled})
+        }
+
+        this.selectObject= (objectKey) => {
+          if(this.objectsRadioMode){
+            this.objects.forEach((o) =>{
+              if(o.key == objectKey){
+                o.disabled = false;
+              }else{
+                o.disabled = true
+              }
+            })
+            emitter.emit("selectObject",this.objects);  
+            return
+          }
+          
+          let selectedObject = this.objects.filter((o) => o.key === objectKey)[0];
+          selectedObject.disabled = !selectedObject.disabled;
+          if(this.objects.filter((o) => !o.disabled).length == 0){
+            selectedObject.disabled = !selectedObject.disabled;
+            this.inverseObjectSelection();
+          } 
+          emitter.emit("selectObject",this.objects);  
+        }
+
+        // this.selectOneObject(this.objects[0].key)
+      
+      }
+      
+
+      return Selector;
+      
+     
+  }])
+
+
   
   m.factory("NVD3WidgetV2", [ "$http",
                               "$q", 
@@ -61,6 +155,9 @@ define(["angular",
                               "i18n",
                               "parentHolder",
                               "dialog",
+                              "Selector",
+                              "EventEmitter",
+                              "pageSubscriptions",
                               
                                
   function (  $http, 
@@ -70,7 +167,10 @@ define(["angular",
               APIUser, 
               i18n, 
               parentHolder,
-              dialog
+              dialog,
+              Selector,
+              EventEmitter,
+              pageSubscriptions
            ) {
     
     $ocLazyLoad.load({
@@ -91,12 +191,14 @@ define(["angular",
       $scope.settings = {};
       $scope.options;
       $scope.data;
+      $scope.$selection;
       $scope.cashedResp;
       $scope.refreshState = {
           data:true,
           options:true
       };
 
+      $scope.EventEmitter = new EventEmitter($scope);
 
       this.serieRequest = $scope.widget.serieRequest;
       var thos = this;
@@ -107,6 +209,8 @@ define(["angular",
       $scope.complete = function(){
         $scope.completed = true;
       }
+
+      
 
       $scope.process = function(){
         $scope.completed = false;
@@ -135,8 +239,14 @@ define(["angular",
 
 
       $scope.expandOptions = (options) => {
+         // console.log("Expand Options")
          if($scope.widget.decoration){
-                    $scope.decorationAdapter.applyDecoration(options,$scope.widget.decoration)
+                    $scope.decorationAdapter.applyDecoration(
+                        options,
+                        $scope.widget.decoration,
+                        $scope.selector,
+                        $scope.api
+                    )
                   }else{
                     $scope.widget.decoration = $scope.decorationAdapter.getDecoration(options);
                   }
@@ -151,6 +261,15 @@ define(["angular",
                     options.locale = i18n.locale();
                   }
 
+                  // console.log($scope.widget.emitters)
+                  if( $scope.widget.emitters && $scope.widget.emitters.split(",").length > 0){
+                    options.chart.legend.slaveChart = true;
+                    options.chart.showControls = false;
+                  }else{
+                    options.chart.legend.slaveChart = false;
+                  }
+
+                  // options.chart.legend.slaveChart = $scope.widget.emitters.split(",").length == 0;
                   
                   if(angular.isDefined(params.serieAdapter)){
                     if (params.serieAdapter.getX) {
@@ -162,7 +281,8 @@ define(["angular",
                     }
 
                     options.chart.label = params.serieAdapter.getLabel;
-                  }  
+                  } 
+          // console.log("options", options)         
         return options          
       }
 
@@ -172,22 +292,20 @@ define(["angular",
           $scope.configured = false;
           return;  
         }
-        // console.log("updateChart", angular.copy($scope.options))
         $scope.configured = true;
         $scope.process();
         
         function loadOptions(){
           return $q((resolve, reject) => {
-            // console.log("load Options", angular.copy($scope.options))
             if( $scope.options ){
-              // console.log("Update Exists Options")
-              resolve(angular.copy($scope.expandOptions($scope.options)))
+              // resolve(angular.copy($scope.expandOptions($scope.options)))
+              resolve($scope.options)
               return
             }else{
                $http.get(params.optionsURL)
                 .then((resp) => {
-                  // console.log("Load new Options")
-                  resolve(angular.copy($scope.expandOptions(resp.data)))
+                  // resolve(angular.copy($scope.expandOptions(resp.data)))
+                  resolve(resp.data)
                   return
                 })
             }
@@ -200,15 +318,32 @@ define(["angular",
 
         $q.all([
             loadOptions().then( (options) =>{
+                 // console.log("Load options")
+               
                 $scope.options = options;
             }),
+
             loadData().then( (resp) =>{
+                // console.log("Load data")
                 $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
                     params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
+                    $scope.data.forEach((d, index) => {
+                      d.colorIndex = index;
+                    })
+
+                // $scope.selector = new Selector(params.serieAdapter,$scope.data,$scope.EventEmitter)    
+                
             })
         ]).then( () =>{
+            $scope.selector = new Selector(params.serieAdapter,$scope.data,$scope.EventEmitter);
+            if( $scope.widget.emitters && $scope.widget.emitters.split(",").length > 0){
+                $scope.data.forEach((item,index) =>{
+                  item.disabled = index != 0
+                })    
+            }
+          // console.log("q.all()")
             $scope.settings = {
-                options : angular.copy($scope.options), 
+                options : angular.copy($scope.expandOptions($scope.options)), 
                 data : angular.copy($scope.data)
             }
             $scope.complete();
@@ -265,17 +400,91 @@ define(["angular",
       $scope.APIProvider
         
         .config(function () {
-          // console.log("NVD3 config",  angular.copy($scope.options))
-          
+          if($scope.widget.emitters && $scope.widget.emitters.length &&
+             $scope.widget.emitters.trim().length > 0)
+          {
+            pageSubscriptions().removeListeners({
+              receiver: $scope.widget.instanceName,
+              signal: "selectSerie"
+            });
+            pageSubscriptions().removeListeners({
+              receiver: $scope.widget.instanceName,
+              signal: "selectObject"
+            });
+
+            $scope.emitters = ($scope.widget.emitters) ? $scope.widget.emitters.split(",") : [];
+            
+            
+            $scope.emitters = $scope.emitters.map((item) => {
+                let l = item.trim().split(".")
+                return {emitter:l[0], signal: l[1] ,slot: l[2], receiver:$scope.widget.instanceName}
+            }) 
+              
+            pageSubscriptions().addListeners($scope.emitters)
+            
+
+          }else{
+            pageSubscriptions().removeListeners({
+              receiver: $scope.widget.instanceName,
+              signal: "selectSerie"
+            });
+            pageSubscriptions().removeListeners({
+              receiver: $scope.widget.instanceName,
+              signal: "selectObject"
+            });
+          }
+
           $scope.updateChart();  
         }, true)
-        
+
+        .removal(() => {
+          pageSubscriptions().removeListeners({
+              receiver: $scope.widget.instanceName,
+              signal: "selectSerie"
+            });
+            pageSubscriptions().removeListeners({
+              receiver: $scope.widget.instanceName,
+              signal: "selectObject"
+            });
+        })
+
         .openCustomSettings(function () {
           $scope.wizard = params.wizard;
-          $scope.wizard.start($scope);
+          return $scope.wizard.start($scope)
         })
+
         .translate(function(){
           $scope.translate();
+        })
+
+        .provide("selectSerie", (e,selection) =>{
+          if($scope.decorationAdapter.onSelectSerie){
+              let s = $scope.decorationAdapter.onSelectSerie(
+                selection,
+                {
+                  options : angular.copy($scope.expandOptions($scope.options)), 
+                  data : angular.copy($scope.settings.data)
+                },  
+                $scope.api
+              );
+
+              $scope.settings = angular.copy(s)
+           }
+        })
+        
+        .provide("selectObject", (e,selection) =>{
+          if($scope.decorationAdapter.onSelectObject){
+            let s = $scope.decorationAdapter.onSelectObject(
+                selection,
+                {
+                  options : angular.copy($scope.expandOptions($scope.options)), 
+                  data : angular.copy($scope.settings.data)
+                },  
+                $scope.api
+              );
+
+              $scope.settings = angular.copy(s)
+           }
         })
     };
 

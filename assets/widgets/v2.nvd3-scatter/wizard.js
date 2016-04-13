@@ -58,11 +58,11 @@ m.factory("ScatterChartWizard",["$http",
 	            wizard.parentScope.widget.axisX = wizard.conf.axisX;
 	            wizard.parentScope.widget.category = wizard.conf.category;
 	            wizard.parentScope.widget.index = wizard.conf.index;
-	            
+	             wizard.parentScope.widget.emitters = wizard.conf.emitters;
 	            // console.log(wizard.conf)
 	            // console.log(wizard.parentScope.widget) 
 	           
-			    wizard.parentScope.updateChart();
+			    // wizard.parentScope.updateChart();
 			    
 			    wizard.conf = {};
 	            wizard.context = {};

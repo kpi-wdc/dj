@@ -1,12 +1,2 @@
 {
-  "schema": {
-    "type": "object",
-    "title": "Chart Settings",
-    "properties": {
-      "datasource": {
-        "title": "Datasource name",
-        "type": "string"
-      }
-    }
-  }
 }

@@ -28,6 +28,14 @@ m.controller('Nvd3PieChartCtrlV2', function ($scope, NVD3WidgetV2, PieChartWizar
                 },
                 getSeries: function (series) {
                   return series[0].values
+                },
+
+                getSeriesSelection: function(data){
+                  return data.map((s) => {return {key:s.label, disabled:false}})
+                },
+
+                getObjectsSelection: function(data){
+                  return [];
                 }
           }      
         });

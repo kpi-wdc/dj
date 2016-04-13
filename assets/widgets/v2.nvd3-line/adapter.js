@@ -4,7 +4,19 @@ import angular from 'angular';
 const m = angular.module('app.widgets.v2.line-chart-adapter', []);
 
 m.service('LineChartAdapter', function () {
-   this.applyDecoration = function (options, decoration) {
+
+    this.onSelectSerie = (selection,settings,api) => {
+      let data = d3.select(api.getSVG()).data();
+      settings.data.forEach((s) => {
+        let f = selection.filter(l => l.key == s.key)[0]
+        if(f){
+          s.disabled =  f.disabled
+        }
+      })
+      return settings;
+    } 
+
+   this.applyDecoration = function (options, decoration, selector,api) {
     if (angular.isDefined(decoration) && angular.isDefined(options)) {
       options.chart.height = decoration.height;
       options.title.text = decoration.title;
@@ -26,6 +38,14 @@ m.service('LineChartAdapter', function () {
       options.chart.lines.label = (decoration.showLabels) ? function (d) {
         return d.label// return d.y.toFixed(2)
       } : undefined;
+
+      if(decoration.enableEmitEvents){
+        options.chart.legend.dispatch = {
+          stateChange: function(e) {
+            selector.selectSerie(e.disabled);
+          }
+        }
+      }
 
 
     }

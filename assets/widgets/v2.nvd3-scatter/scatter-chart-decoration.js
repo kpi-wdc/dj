@@ -48,7 +48,8 @@ m.factory("ScatterChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-scatter/options.json",
-	    			dataUrl : "./api/data/process/"
+	    			dataUrl : "./api/data/process/",
+	    			emitters: wizard.conf.emitters
 	    		}	
 
 	    		this.queries = [];
@@ -75,6 +76,7 @@ m.factory("ScatterChartDecoration",[
 	    		wizard.conf.axisX = this.conf.axisX;
 	    		wizard.conf.category = this.conf.category;
 	    		wizard.conf.index = this.conf.index;
+	    		wizard.conf.emitters  = this.conf.emitters;  
 	    		  
 				
 	    		this.settings = {options:angular.copy(this.options), data:[]};

@@ -72,7 +72,11 @@
       "rotateLabels": 0,
       "staggerLabels": false
     },
+    "scatter":{},
     "lines": {
+      "scatter":{
+          "dispatch": {}  
+        },
       "dispatch": {},
       "interactive": true,
       "xDomain": null,

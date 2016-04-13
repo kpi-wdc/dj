@@ -25,6 +25,29 @@ m.controller('Nvd3HBarChartCtrlV2', function ($scope, NVD3WidgetV2, HBarChartWiz
             },
             getY: function (d) {
               return d.value
+            },
+            
+            getSeriesSelection: function(data){
+              return data.map((s) => {return {key:s.key, disabled:false}})
+            },
+
+            getObjectsSelection: function(data){
+              let r = []
+              data.forEach(function(s){
+                s.values.forEach(function(v){
+                  r.push({key:v.label, disabled:true})
+                })
+              })
+
+              let result = [];
+              r.forEach(function(item){
+                  var notExists = true;
+                  result.forEach(function(v){
+                        notExists &= item.key != v.key;
+                  })
+                  if(notExists == true) result.push(item)
+              });
+              return result;
             }
           }
         });

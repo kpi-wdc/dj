@@ -223,6 +223,8 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
   return $http.get(appUrls.templateTypes, {cache: true});
 });
 
+
+
 app.factory('config', function (initialConfig, $log) {
   if (initialConfig.pages.length <= 1) {
     $log.info('When there is no 404 page you might have problems with page routing!');
@@ -257,8 +259,9 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
                              hotkeys, splash, appHotkeysInfo,globalConfig,dialog,portal) {
 
   let pageConf;
+ 
 
-  
+ 
 
   angular.extend(this, {
     sendingToServer: false,
@@ -334,6 +337,37 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       config.pages.push(page);
     },
 
+    clonePage() {
+      console.log("Clone Page", config)
+      dialog({
+          title:"Clone Page",
+          fields:{
+            shortName:{
+              title:"Short Title",
+              type:"text"
+            },
+            href:{
+              title:"Reference",
+              type:"text"
+            },
+            cloned:{
+              title:"Cloned page",
+              type:"select",
+              options: config.pages.map((item) => {return {title:item.shortTitle, value: item}})
+            }
+
+          }
+        })
+        .then((form) => {
+            let clone = JSON.parse(form.fields.cloned.value);
+            clone.shortTitle = form.fields.shortName.value;
+            clone.href = form.fields.href.value;
+            config.pages.push(clone);
+            $state.go('page', {href: clone.href}, {reload: true});
+            this.markModified(true);
+        })
+    },
+
     openShareSettings() {
       $modal.open({
         templateUrl: appUrls.shareSettingsHTML,
@@ -353,7 +387,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
         windowClass: 'app-settings-modal',
         backdrop: 'static'
       }).result.then((newSettings) => {
-        console.log(newSettings);
+        // console.log(newSettings);
         angular.extend(config, newSettings);
         this.markModified(true);
       });
@@ -390,7 +424,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
       $http
         .get(portal.api.getConfig)
         .then((resp) => {
-          console.log("Portal Config",resp.data)
+          // console.log("Portal Config",resp.data)
           let fields = [];
           for(let key in resp.data){
             fields.push({title:key,value:resp.data[key]})
@@ -416,7 +450,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
     openSetAdminDialog(){
-      console.log("openSetAdminDialog")
+      // console.log("openSetAdminDialog")
       $http.get(appUrls.usersList)
       .then((resp) => {
         dialog({
@@ -430,7 +464,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
           }
         })
         .then((form) => {
-          console.log("User ", form.fields.user.value)
+          // console.log("User ", form.fields.user.value)
           $http.post(appUrls.setAdmin, {
             email:form.fields.user.value,
             value:true
@@ -595,8 +629,18 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
       const invocation = (new APIUser()).tryInvoke(widget.instanceName, APIProvider.OPEN_CUSTOM_SETTINGS_SLOT);
       if (!invocation.success) {
         this.openDefaultWidgetConfigurationDialog(widget);
+      }else{
+        // console.log("Returns from config dialog", invocation)
+        if(invocation.result){
+          invocation.result.then(() => {
+            const user = new APIUser();
+            user.invokeAll(APIProvider.RECONFIG_SLOT);
+            app.markModified(true);    
+          })
+        }
       }
     },
+
 
     openDefaultWidgetConfigurationDialog(widget) {
       $modal.open({
@@ -679,7 +723,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
                                            fullReload, hotkeys,splash,appHotkeysInfo) {
   
   if(user.isOwner || user.isCollaborator){
-    console.log("Add hotkeys")
+    // console.log("Add hotkeys")
     
 
     hotkeys.add({
@@ -760,7 +804,7 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
     },
 
     logIn() {
-      console.log("LOGIN")
+      // console.log("LOGIN")
       $cookies.put('redirectToUrl', $location.url());
       fullReload(appUrls.googleAuth);
     },
@@ -969,48 +1013,52 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
       }
 
       registerScope(scope);
+       widgetTypesPromise
+          .then((widgetTypes) => {
+            angular.extend(scope, {
+              globalConfig,
+              user,
+              widgetTemplateUrl: (widgetTypes.data[scope.type].html)
+                                  ? widgetTypes.data[scope.type].html
+                                  : appUrls.widgetHTML(scope.type),
+              widgetCodeLoaded: false,
+              widgetPanel: {
+                allowDeleting: !!attrs.onDelete,
+                allowCloning: !!attrs.onClone,
+                allowOpenHelp: true,
+                allowConfiguring: angular.isUndefined(attrs.nonConfigurable),
+                editingInstanceName: false,
+                openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
+                startEditingInstanceName() {
+                  if (scope.disallowEditInstanceName) return;
+                  scope.widgetPanel.editingInstanceName = true;
+                  scope.widgetPanel.newInstanceName = scope.widget.instanceName;
+                },
+                finishEditingInstanceName() {
+                  scope.widgetPanel.editingInstanceName = false;
+                  if (scope.widget.instanceName !== scope.widgetPanel.newInstanceName) {
+                    scope.widget.instanceName = scope.widgetPanel.newInstanceName;
+                    app.markModified();
+                  }
+                },
+                cancelEditingInstanceName() {
+                  scope.widgetPanel.editingInstanceName = false;
+                },
+                deleteWidget() {
+                  scope.onDelete();
+                },
 
-      angular.extend(scope, {
-        globalConfig,
-        user,
-        widgetTemplateUrl: appUrls.widgetHTML(scope.type),
-        widgetCodeLoaded: false,
-        widgetPanel: {
-          allowDeleting: !!attrs.onDelete,
-          allowCloning: !!attrs.onClone,
-          allowOpenHelp: true,
-          allowConfiguring: angular.isUndefined(attrs.nonConfigurable),
-          editingInstanceName: false,
-          openWidgetConfigurationDialog: widgetManager.openWidgetConfigurationDialog.bind(widgetManager),
-          startEditingInstanceName() {
-            if (scope.disallowEditInstanceName) return;
-            scope.widgetPanel.editingInstanceName = true;
-            scope.widgetPanel.newInstanceName = scope.widget.instanceName;
-          },
-          finishEditingInstanceName() {
-            scope.widgetPanel.editingInstanceName = false;
-            if (scope.widget.instanceName !== scope.widgetPanel.newInstanceName) {
-              scope.widget.instanceName = scope.widgetPanel.newInstanceName;
-              app.markModified();
-            }
-          },
-          cancelEditingInstanceName() {
-            scope.widgetPanel.editingInstanceName = false;
-          },
-          deleteWidget() {
-            scope.onDelete();
-          },
+                cloneWidget() {
+                  scope.onClone();
+                },
 
-          cloneWidget() {
-            scope.onClone();
-          },
-
-          openHelp() {
-            const url = appUrls.widgetHelp(scope.type, $translate.use());
-            $window.open(url, '_blank');
-          }
-        }
-      })
+                openHelp() {
+                  const url = appUrls.widgetHelp(scope.type, $translate.use());
+                  $window.open(url, '_blank');
+                }
+              }
+            })
+        })
     }
   };
 });

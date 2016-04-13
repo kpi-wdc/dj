@@ -36,7 +36,8 @@ m.factory("TableDecoration",[
 	    			decoration : (wizard.conf.decoration) ? wizard.conf.decoration : {},
 	    			dataID : wizard.conf.dataID,
 	    			queryID : wizard.conf.queryID,
-	    			dataUrl : "./api/data/process/"
+	    			dataUrl : "./api/data/process/",
+	    			emitters: wizard.conf.emitters
 	    		}
 	    		
 	    		this.conf.decoration.setColor = (palette) => { this.conf.decoration.color = angular.copy(palette) }
@@ -74,6 +75,8 @@ m.factory("TableDecoration",[
 	    		wizard.conf.decoration = this.conf.decoration;
 	    		wizard.conf.dataID  = this.conf.dataID; 
 	    		wizard.conf.queryID = this.conf.queryID;
+	    		wizard.conf.emitters  = this.conf.emitters;
+	    		
 	    		this.table = undefined;
 	    		this.conf = {};
 	    	},

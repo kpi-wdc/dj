@@ -600,6 +600,9 @@ modals.controller('PageManagerController', function (
     close(){
         $modalInstance.close();
     },
+    clonePage(){
+      app.clonePage();
+    },
     deletePageWithConfirmation(page) {
       $translate('WIDGET.PAGE-LIST.ARE_YOU_SURE_DELETE_PAGE')
         .then(confirm)

@@ -60,8 +60,9 @@ m.factory("PieChartWizard",["$http",
 	            wizard.parentScope.widget.serieDataId = wizard.conf.serieDataId;
 	            wizard.parentScope.widget.queryID = wizard.conf.queryID;
 	            wizard.parentScope.widget.dataID = wizard.conf.dataID;
-	           
-			    wizard.parentScope.updateChart();
+	            wizard.parentScope.widget.emitters = wizard.conf.emitters;
+
+			    // wizard.parentScope.updateChart();
 			    
 			    wizard.conf = {};
 	            wizard.context = {};

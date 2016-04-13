@@ -28,7 +28,8 @@ module.exports = {
             owner: app.owner && {
               id: app.owner.id,
               name: app.owner.name,
-              email: app.owner.email
+              email: app.owner.email,
+              photo: app.owner.photo
             },
             importedFromURL: app.importedFromURL,
             importedFromAuthor: app.importedFromAuthor

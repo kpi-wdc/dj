@@ -37,6 +37,28 @@ m.controller('Nvd3GeochartCtrlV2', function (
                           serie.properties.values[y.index()].v + "</div>";
               }
               return result;
+            },
+
+             getSeriesSelection: function(data){
+              // console.log(data)
+              return data[0].series.map((s) => {return {key:s.key, disabled:false}})
+            },
+
+            getObjectsSelection: function(data){
+              let r = []
+              data[0].features.forEach(function(s){
+                  r.push({key:s.properties.name, disabled:true})
+              })
+
+              let result = [];
+              r.forEach(function(item){
+                  var notExists = true;
+                  result.forEach(function(v){
+                        notExists &= item.key != v.key;
+                  })
+                  if(notExists == true) result.push(item)
+              });
+              return result;
             }
           }
         });

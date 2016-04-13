@@ -43,7 +43,7 @@ m.factory("BarChartWizard",["$http",
 	          .onStart(function(wizard){
 	          	wizard.conf = {};
 	            angular.copy(wizard.parentScope.widget, wizard.conf);
-	            console.log("Start conf", wizard.conf)
+	            // console.log("Start conf", wizard.conf)
 	          })
 
 
@@ -58,8 +58,9 @@ m.factory("BarChartWizard",["$http",
 	            wizard.parentScope.widget.serieDataId = wizard.conf.serieDataId;
 	            wizard.parentScope.widget.queryID = wizard.conf.queryID;
 	            wizard.parentScope.widget.dataID = wizard.conf.dataID;
-	           
-			    wizard.parentScope.updateChart();
+	           	wizard.parentScope.widget.emitters = wizard.conf.emitters;
+
+			    // wizard.parentScope.updateChart();
 			    
 			    wizard.conf = {};
 	            wizard.context = {};

@@ -4,6 +4,18 @@ import angular from 'angular';
 const m = angular.module('app.widgets.v2.radar-chart-adapter', []);
 
 m.service('RadarChartAdapter', function () {
+
+   this.onSelectSerie = (selection,settings,api) => {
+      let data = d3.select(api.getSVG()).data();
+      settings.data.forEach((s) => {
+        let f = selection.filter(l => l.key == s.key)[0]
+        if(f){
+          s.disabled =  f.disabled
+        }
+      })
+      return settings;
+    } 
+
   this.applyDecoration = function (options, decoration) {
     if (angular.isDefined(decoration) && angular.isDefined(options)) {
       options.chart.height = decoration.height;

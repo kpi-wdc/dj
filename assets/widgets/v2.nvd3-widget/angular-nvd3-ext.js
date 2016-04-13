@@ -25,11 +25,13 @@
 
         //basic directive configuration
         scope._config = angular.extend(defaultConfig, scope.config);
-
+        scope._onReady = undefined;
         //directive global api
         scope.api = {
           getScope: function(){ return scope; },
 
+          onReady: function(cb) {scope._onReady = cb},
+          
           getElement: function(){ return element; },
 
           getSVG: function(){
@@ -70,10 +72,12 @@
             scope.chart = nv.models[options.chart.type]();
 
             angular.forEach(scope.chart, function (value, key) {
+
               if (key === "options") ;else if (key === "dispatch") {
                 if (options.chart[key] === undefined || options.chart[key] === null) {
                   if (scope._config.extended) options.chart[key] = {};
                 }
+               
                 configureEvents(scope.chart[key], options.chart[key]);
               } else if (["lines", "lines1", "lines2", "bars", // TODO: Fix bug in nvd3, nv.models.historicalBar - chart.interactive (false -> _)
                   "bars1", "bars2", "stack1", "stack2", "multibar", "discretebar", "pie", "scatter", "bullet", "sparkline", "legend", "distX", "distY", "xAxis", "x2Axis", "yAxis", "yAxis1", "yAxis2", "y1Axis", "y2Axis", "y3Axis", "y4Axis", "interactiveLayer", "controls"].indexOf(key) >= 0) {
@@ -122,6 +126,7 @@
               d3.select(element[0]).select("svg")[0][0].style.height = scope.options.chart.height + "px";
               d3.select(element[0]).select("svg")[0][0].style.width = scope.options.chart.width + "px";
               if (scope.options.chart.type === "multiChart") scope.chart.update(); // multiChart is not automatically updated
+              if(scope._onReady) scope._onReady()
             }
           },
 
@@ -143,6 +148,7 @@
                 if (options[key] === undefined || options[key] === null) {
                   if (scope._config.extended) options[key] = {};
                 }
+
                 configureEvents(value, options[key]);
               } else if ( //TODO: need to fix bug in nvd3
               key === "xScale" && chartType === "scatterChart" || key === "yScale" && chartType === "scatterChart" || key === "values" && chartType === "pieChart") ;else if (["scatter", "defined", "options", "axis", "rangeBand", "rangeBands"].indexOf(key) < 0) {
