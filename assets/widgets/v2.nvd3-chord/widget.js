@@ -19,6 +19,14 @@ m.controller('Nvd3ChordChartCtrlV2', function ($scope, NVD3WidgetV2, ChordChartW
           decorationAdapter: NVD3ChordAdapter,
           optionsURL: "/widgets/v2.nvd3-chord/options.json",
           serieAdapter: {
+            getSeriesSelection: function(data){
+              return []
+            },
+
+            getObjectsSelection: function(data){
+               return []
+            },
+            
             tooltipContent: function (serie, x, y, s) {
               return  "<center><b>" 
                       + s.point.label 

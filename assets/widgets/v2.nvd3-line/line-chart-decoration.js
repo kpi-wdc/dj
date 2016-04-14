@@ -185,7 +185,7 @@ m.factory("LineChartDecoration",[
 			        	})
 			      	});
 		  		}
-		  		console.log("CatList",result)
+		  		// console.log("CatList",result)
 		      let thos = this;
 		      let c = result.filter((item) => item.index == thos.conf.category);
 		      if( c.length>0){
@@ -225,6 +225,27 @@ m.factory("LineChartDecoration",[
 		      	this.indexList[0].enable=true;
 		      	this.conf.index = [0];
 		      }  
+		    },
+
+		    selectAllIndexes: function(){
+		    	this.indexList.forEach((item) => {
+		    		item.enable = true;
+		    	})
+		    	this.selectIndex();
+		    },
+
+		    inverseIndexesSelection: function(){
+		    	this.indexList.forEach((item) => {
+		    		item.enable = !item.enable;
+		    	})
+		    	this.selectIndex();
+		    },
+
+		    clearIndexesSelection: function(){
+				this.indexList.forEach((item) => {
+		    		item.enable = false;
+		    	})
+		    	this.selectIndex();
 		    },
 
 

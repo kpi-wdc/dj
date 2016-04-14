@@ -80,6 +80,7 @@ module.exports = {
     newApp.isPublished = true;
     newApp.name = req.params.appName;
     newApp.owner = req.user.id;
+    newApp.icon = "/img/default/"+Math.round(20*Math.random())+".png";
 
     if (req.param('skinName')) {
       newApp.skinName = req.param('skinName');

@@ -301,6 +301,11 @@ modals.controller('AppSettingsModalController', function ($scope, $modalInstance
     },
     skins: appSkins,
 
+    generateIcon() {
+      this.settings.icon = "/img/default/"+Math.round(20*Math.random())+".png";
+    },
+
+
     ok() {
       this.settings.keywords = this.settings.keywords.split(",");
       

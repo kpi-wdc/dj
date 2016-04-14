@@ -186,7 +186,7 @@ m.factory("ScatterChartDecoration",[
 			        	})
 			      	});
 		  		}
-		  		console.log("CatList",result)
+		  		// console.log("CatList",result)
 		      let thos = this;
 		      let c = result.filter((item) => item.index == thos.conf.category);
 		      if( c.length>0){
@@ -228,7 +228,26 @@ m.factory("ScatterChartDecoration",[
 		      }  
 		    },
 
+		    selectAllIndexes: function(){
+		    	this.indexList.forEach((item) => {
+		    		item.enable = true;
+		    	})
+		    	this.selectIndex();
+		    },
 
+		    inverseIndexesSelection: function(){
+		    	this.indexList.forEach((item) => {
+		    		item.enable = !item.enable;
+		    	})
+		    	this.selectIndex();
+		    },
+
+		    clearIndexesSelection: function(){
+				this.indexList.forEach((item) => {
+		    		item.enable = false;
+		    	})
+		    	this.selectIndex();
+		    },
 
 		    loadData: function(){
 				let thos = this;

@@ -52,7 +52,20 @@
 								<label class="wizard left section">
 									Include Series				    
 								</label>
-						    	
+						    </div>
+						<div class="row wizard setting">
+							<button class="button radius left toolbar" ng-click="step.selectAllSeries()">
+								Select All
+							</button>
+							<button class="button radius left toolbar" ng-click="step.inverseSeriesSelection()">
+								Inverse
+							</button>
+							<button class="button radius left toolbar" ng-click="step.clearSeriesSelection()">
+								Clear
+							</button>
+						</div> 	
+					    
+					    <div class="row wizard setting">	
 							    <div class="row wizard setting" ng-repeat="item in step.indexList track by $index">
 									<label class="wizard left">
 										{{item.label}}

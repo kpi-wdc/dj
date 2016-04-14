@@ -263,10 +263,12 @@ define(["angular",
 
                   // console.log($scope.widget.emitters)
                   if( $scope.widget.emitters && $scope.widget.emitters.split(",").length > 0){
-                    options.chart.legend.slaveChart = true;
-                    options.chart.showControls = false;
+                    if(options.chart.legend)
+                      options.chart.legend.slaveChart = true;
+                      options.chart.showControls = false;
                   }else{
-                    options.chart.legend.slaveChart = false;
+                    if(options.chart.legend)
+                      options.chart.legend.slaveChart = false;
                   }
 
                   // options.chart.legend.slaveChart = $scope.widget.emitters.split(",").length == 0;

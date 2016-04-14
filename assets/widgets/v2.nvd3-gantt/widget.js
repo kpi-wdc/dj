@@ -46,6 +46,14 @@ m.controller('Nvd3GanttChartCtrlV2', function ($scope, NVD3WidgetV2,GanttChartWi
           decorationAdapter: GanttChartAdapter,
           optionsURL: "/widgets/v2.nvd3-gantt/options.json",
           serieAdapter: {
+            getSeriesSelection: function(data){
+              return []
+            },
+
+            getObjectsSelection: function(data){
+               return []
+            },
+
             getSeries : (data) => {
               var result = data.map((item) => {return item})
               result.forEach((item) => {

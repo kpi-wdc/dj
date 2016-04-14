@@ -130,6 +130,28 @@ m.factory("GeochartDecoration",[
 		      }  
 		    },
 
+		    selectAllSeries: function(){
+		    	this.indexList.forEach((item) => {
+		    		item.enable = true;
+		    	})
+		    	this.selectSerie();
+		    },
+
+		    inverseSeriesSelection: function(){
+		    	this.indexList.forEach((item) => {
+		    		item.enable = !item.enable;
+		    	})
+		    	this.selectSerie();
+		    },
+
+		    clearSeriesSelection: function(){
+				this.indexList.forEach((item) => {
+		    		item.enable = false;
+		    	})
+		    	this.selectSerie();
+		    },
+
+
 		    fixBoundary: function(){
 		    	if(this.conf.decoration.initialScope == true){
 		    		this.conf.decoration.boundary = this.chartAPI.chart().boundary()

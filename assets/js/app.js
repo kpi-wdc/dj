@@ -338,7 +338,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
     clonePage() {
-      console.log("Clone Page", config)
+      // console.log("Clone Page", config)
       dialog({
           title:"Clone Page",
           fields:{
