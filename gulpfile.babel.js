@@ -42,7 +42,7 @@ const plugins = gulpLoadPlugins(conf);
 gulp.task('default', ['build']);
 
 gulp.task('build', ['build-css', 'build-js', 'build-translations', 'merge-widget-configs',
-  'copy-templates-json', 'build-template-images', 'copy-static-files']);
+  'copy-templates-json', 'build-template-images', 'copy-static-files', 'build-deps','copy-license']);
 
 gulp.task('bower-install', ['generate-bower-json'], () =>
   plugins.bower({cwd: '.tmp'}, [undefined, {
@@ -60,6 +60,72 @@ gulp.task('collect-widgets-with-deps', () =>
       return json;
     }))
     .on('error', handleError)
+);
+
+var bowerDeps = []
+gulp.task('build-bower-deps', ['clean-deps','bower-install'], () =>
+  gulp.src('.tmp/bower_components/**/.bower.json')
+     .pipe(plugins.jsonEditor(json => {
+      bowerDeps.push(
+        { name:json.name,
+          description: json.description,
+          homepage : json.homepage
+      });
+      return json;
+    }))
+);  
+
+var nodeDeps = []
+gulp.task('build-node-deps', ['clean-deps',"bower-install"], () =>
+  gulp.src('node_modules/*/package.json')
+     .pipe(plugins.jsonEditor(json => {
+      nodeDeps.push(
+        { name:json.name,
+          description: json.description,
+          homepage : json.homepage
+      }
+      );
+      return json;
+    }))
+);  
+
+
+gulp.task('clean-deps', (done) => {
+  bowerDeps = [];
+  nodeDeps = []
+  const depPath = buildPublicDir+"/dependencies.html" 
+  del([depPath], done)
+} 
+);
+
+gulp.task('build-deps', ['build-bower-deps', 'build-node-deps'], () =>
+  gulp.src("assets/dependencies.html")
+    .pipe(plugins.tap(file => {
+      var _d = bowerDeps;//nodeDeps.concat(bowerDeps)
+      // _d.sort((a,b)=> a.name.toLowerCase() > b.name.toLowerCase())
+      _d = _d.map((d) => {
+              var title = d.name;
+              var href = (d.homepage) ? d.homepage : "";
+              var desc = (d.description) ? d.description : (d.homepage) ? d.homepage : "";
+              
+              return '<div>'+((href.length>0) ?'<a href="'+href+'">'+title+'</a>':title)+'&nbsp'+desc+'</div>'
+            })
+         .join("\n")
+      file.contents = Buffer.concat([
+        file.contents,
+        Buffer(_d),
+        Buffer('</body>')
+      ]) 
+    }))
+    .pipe(plugins.cached('build-deps'))
+    .pipe(gulp.dest(`${buildPublicDir}`))
+
+);  
+
+gulp.task('copy-license', () => 
+  gulp.src("assets/license.html")
+    .pipe(plugins.cached('copy-license'))
+    .pipe(gulp.dest(`${buildPublicDir}`))
 );
 
 gulp.task('generate-bower-json', ['collect-widgets-with-deps'], () =>
