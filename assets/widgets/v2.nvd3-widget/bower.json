@@ -1,6 +1,9 @@
 {
   "name": "v2.nvd3-widget",
   "private": true,
+  "main" : "./nvd3-widget.js",
+  "ignore": [],
+
   "dependencies": {
   }
 }

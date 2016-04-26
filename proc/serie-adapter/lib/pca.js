@@ -482,6 +482,7 @@ var d3 = {};
         }
       }
     }
+   
     return {U: u, S: q, V: v}
   }
 
@@ -500,10 +501,9 @@ var d3 = {};
       // return res
     });
     
-
-    //console.log(X);
-
-    var USV = svd(scale(X, true, true));
+    var scaled = scale(X, true, true)
+    
+    var USV = svd(scaled);
     var U = USV.U;
     var S = diag(USV.S);
     var V = USV.V;
@@ -513,9 +513,31 @@ var d3 = {};
     var pcXV = dot(X, V)
     var pcUdS = dot(U, S);
 
+    var eigenValues = std(pcUdS).map(function(v){return v*v})
+    var _s = d3.sum(eigenValues)/eigenValues.length;
+    eigenValues = diag(eigenValues
+    .map(function(v){
+      return v/_s;
+    }))
+
+    // console.log(eigenValues)
+
+    var factorCoef = V.map(function(d){
+      return d.map(function(v,i){return v/Math.sqrt(eigenValues[i][i])})
+    })
+    // console.log(factorCoef)
+
+    var loadings = V.map(function(d){
+      return d.map(function(v,i){return v*Math.sqrt(eigenValues[i][i])})
+    })
+    // console.log(loadings)
+
+    var scores = dot(scaled,factorCoef)
+    // console.log(scores)
     var prod = trunc(sub(pcXV, pcUdS), 1e-12);
     var zero = zeros(prod.length, prod[0].length);
     //console.assert(same(prod,zero), 'svd and eig ways must be the same.');
     //console.log("eigenValues",S);
-    return {eigenValues: S, eigenVectors: V, scores: pcUdS};
+    return {eigenValues: eigenValues, eigenVectors: V, scores: scores, loadings: loadings};
+   // return {eigenValues: S, eigenVectors: V, scores: pcUdS};
   }

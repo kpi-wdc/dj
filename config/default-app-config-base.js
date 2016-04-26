@@ -2,8 +2,9 @@ module.exports.defaultAppConfigBase = {
   "skinName": "default",
   "title": "Title",
   "description": "Description",
-  "keywords": [],
-  "collaborations": [],
+  "keywords": [
+    ""
+  ],
   "isPublished": true,
   "appWidgets": [
     {
@@ -14,6 +15,32 @@ module.exports.defaultAppConfigBase = {
     {
       "type": "page-list",
       "instanceName": "page-list-nav"
+    },
+    {
+      "instanceName": "AppTopbar",
+      "type": "v2.topbar",
+      "icon": "/widgets/v2.topbar/icon.png",
+      "decoration": {
+        "languageSelector": {
+          "enable": true,
+          "showFlag": true,
+          "showTitle": true
+        },
+        "loginButton": true,
+        "gotoApps": true
+      },
+      "content": [
+        {
+          "key": "qtzzi8mqy0huamuwdusypsyvi",
+          "title": "About",
+          "href": "/app/dj/about"
+        },
+        {
+          "key": "dlbwln8wa4xic3td4af5pzaor",
+          "title": "Home",
+          "href": "/app/dj/"
+        }
+      ]
     }
   ],
   "pages": [
@@ -25,18 +52,16 @@ module.exports.defaultAppConfigBase = {
         "column": {
           "widgets": [
             {
-              "type": "title",
-              "title": "Home page",
-              "instanceName": "title-widget"
-            },
-            {
+              "text": "<div><font size=\"6\">Home Page</font></div>Empty home page. You can switch to design mode to edit this contents or add new widgets",
               "type": "htmlwidget",
               "instanceName": "main-page-html-widget",
-              "text": "Empty home page. You can switch to design mode to edit this contents or add new widgets"
+              "icon": "/widgets/htmlwidget/icon.png"
             }
-          ]
+          ],
+          "width": 1318
         }
-      }
+      },
+      "subscriptions": []
     },
     {
       "shortTitle": "About",
@@ -46,17 +71,22 @@ module.exports.defaultAppConfigBase = {
         "column": {
           "widgets": [
             {
-              "type": "title",
-              "title": "About author",
-              "instanceName": "title"
+              "text": "<p><font size=\"6\">About App</font></p>",
+              "type": "htmlwidget",
+              "instanceName": "4dvg3sv7mjz1d83acqefnoecdi",
+              "icon": "/widgets/htmlwidget/icon.png"
             },
             {
-              "type": "about",
-              "instanceName": "about"
+              "masterWidget": "",
+              "type": "app-info",
+              "instanceName": "zg5zqh9y4cejt53bhk9be29",
+              "icon": "/widgets/app-info/icon.png"
             }
-          ]
+          ],
+          "width": 1328
         }
-      }
+      },
+      "subscriptions": []
     },
     {
       "href": "404",
@@ -78,5 +108,7 @@ module.exports.defaultAppConfigBase = {
         }
       }
     }
-  ]
+  ],
+  "name": "dj",
+  "i18n": {}
 }

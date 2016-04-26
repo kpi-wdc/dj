@@ -328,15 +328,15 @@ exports.orderTable = function(table,params){
 		}else{
 			var j = index;
 			if (asc == "Z-A"){
-				return (!isNaN(new Number(a.metadata[j].label)) 
-					    && !isNaN(new Number(b.metadata[j].label)))
+				return (!isNaN(new Number(a.value[j])) 
+					    && !isNaN(new Number(b.value[j])))
 					? b.value[j] - a.value[j]
 					: String.naturalCompare(b.value[j].toLowerCase(), a.value[j].toLowerCase())
 			}
 
 			if (asc == "A-Z"){
-				return (!isNaN(new Number(a.metadata[j].label)) 
-					    && !isNaN(new Number(b.metadata[j].label)))
+				return (!isNaN(new Number(a.value[j])) 
+					    && !isNaN(new Number(b.value[j])))
 					? a.value[j] - b.value[j]
 					: String.naturalCompare(a.value[j].toLowerCase(),b.value[j].toLowerCase())
 			}
