@@ -22,7 +22,8 @@
   <div class = "row">
 
     <ul class="small-block-grid-2 medium-block-grid-4 large-block-grid-6">
-      <li ng-repeat="app in apps | orderBy: 'name'"
+   
+      <li ng-repeat="app in apps | filter: hasTags | orderBy: 'name'"
           style="{{(app.selected)?'border:1px solid #ddd':''}}"
           >
           <a 

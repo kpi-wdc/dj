@@ -1,0 +1,35 @@
+<div  class="row" ng-controller="AppTagsController" style="margin:0 0.5em;">
+      <div class="row"  style="margin:0">
+        <div class="column medium-6 left-column">
+          <input 
+            style="margin:0.3em;" 
+            type="text" 
+            ng-model="selectedObject" 
+            typeahead="t for t in tags | filter:$viewValue | limitTo:8"
+            typeahead-editable="false"
+            typeahead-on-select="selectTag(selectedObject)">
+        </div>
+      </div>
+      <div class="row"  style="margin:0 0 1em 0;">
+        <div  class="left" 
+            ng-click="unselectTag(t)"
+            style=" margin: 0.1em 0.05em;
+                  font-size: small;
+                  padding: 0 0.5em;
+                  border: 0.15rem solid #008CBA;
+                  color: #008CBA;
+                  border-radius: 8px;
+                  cursor:pointer;
+                  font-stretch: extra-condensed;" 
+            ng-repeat="t in selectedTags track by $index"
+        >
+          
+          <span> {{t}}</span>
+          <i style="  font-size: x-small;
+                margin: 0 0 0 0.5em;"
+            class="fi-x">
+          </i>
+        </div>
+      </div>
+  
+</div>

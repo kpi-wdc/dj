@@ -4,9 +4,9 @@
     "type": "object",
     "title": "Application Tags",
     "properties": {
-      "appWidget":{
+      "listeners":{
         "type":"string",
-        "title":"Application Navigator Widget"
+        "title":"Application Tags Listeners"
       }
     }
   }  

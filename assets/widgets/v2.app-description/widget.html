@@ -106,7 +106,7 @@
 			<widget-translate>Keywords</widget-translate>&nbsp;:</h5>
 			<div ng-if="app.keywords.length>0" style="font-size: small;
 			    		text-align: justify; color:#008CBA;">
-			    <span ng-repeat="k in app.keywords track by $index">
+			    <span style="cursor:pointer;" ng-repeat="k in app.keywords track by $index" ng-click="selectTag(k)">
 			    	{{k | translate}}{{($index < (app.keywords.length-1))?' ,':''}}
 			    </span>		
 			</div>

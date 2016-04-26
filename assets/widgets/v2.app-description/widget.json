@@ -7,6 +7,10 @@
 	      "appWidget":{
 	        "type":"string",
 	        "title":"Application Navigator Widget"
+	      },
+	      "tagListeners":{
+	        "type":"string",
+	        "title":"Tag Listeners"
 	      }
 	    }
 	  }  

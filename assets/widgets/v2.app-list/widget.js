@@ -218,6 +218,15 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
     emitter.emit("setApplication",app);
   }
 
+  $scope.hasTags = (app) => {
+      let f = true;
+      let keywords = app.keywords.map((k)=>{
+        return $translate.instant(k)
+      })
+      $scope.tags.forEach(t => f &= keywords.indexOf(t) >=0 );
+      return f;
+    };
+
   new APIProvider($scope)
     .config(() => {
         
@@ -257,6 +266,11 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
     
     .provide("refresh", () => {
       $scope.update();
+    })
+
+    .provide("appTags", (e,tags) => {
+      $scope.tags = tags;
+      emitter.emit("setApplication",undefined);  
     })
 
     .provide("setApplication", (evt, app) => {

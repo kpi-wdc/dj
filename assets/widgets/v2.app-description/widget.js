@@ -126,6 +126,10 @@ angular.module('app.widgets.v2.app-description', [])
       }
       return angular.isUndefined(app.collaborations.find(c => c.user.id === user.id));
     };
+
+    $scope.selectTag = (tag)=>{
+      emitter.emit("setTag",[tag])
+    }
     
     new APIProvider($scope)
       .config(() => {
@@ -133,6 +137,26 @@ angular.module('app.widgets.v2.app-description', [])
         $scope.config = config;
         // $scope.app = ($scope.app)? $scope.app : config;
         
+        if($scope.widget.tagListeners){
+          pageSubscriptions().removeListeners({
+            emitter: $scope.widget.instanceName,
+            signal: "setTag"
+          })
+          $scope.tagListeners = ($scope.widget.tagListeners) ? $scope.widget.tagListeners.split(",") : [];
+          
+          pageSubscriptions().addListeners(
+            $scope.tagListeners.map((item) =>{
+              return {
+                  emitter: $scope.widget.instanceName,
+                  receiver: item.trim() ,
+                  signal: "setTag",
+                  slot: "setTag"
+              }
+            })
+          );
+
+        }  
+
         if($scope.widget.appWidget){
           
           pageSubscriptions().removeListeners({
