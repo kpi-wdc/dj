@@ -1,4 +1,5 @@
 {
+  "keywords":["html","title"],
   "schema": {
     "type": "object",
     "title": "Title widget",

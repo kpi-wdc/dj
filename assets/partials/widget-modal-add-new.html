@@ -1,17 +1,48 @@
-<h3>Choose widget type
-  <input ng-model="filterCriteria"
-         translate translate-attr-placeholder="SEARCH_FOR_DOTS">
-  <span ng-class="widgetErr.class" ng-if="widgetErr.message"
-        translate translate-value-msg="{{widgetErr.message}}">
-    ERROR_MESSAGE_WITH_TEXT
-  </span>
-</h3>
+<h4>Add widget</h4>
+<div class="row"  style="margin:0">
+      <h5>Tags</h5>
+      <div class="row"  style="margin:0">
+        <input 
+          style="margin:0.3em;" 
+          type="text" 
+          ng-model="selectedObject" 
+          typeahead="t for t in tags | filter:$viewValue | limitTo:8"
+          typeahead-editable="false"
+          typeahead-on-select="selectTag(selectedObject)">
+      </div>
+
+      <div class="row"  style="margin:0 0 1em 0;">
+        <div  class="left" 
+            ng-click="unselectTag(t)"
+            style=" margin: 0.1em 0.05em;
+                  font-size: small;
+                  padding: 0 0.5em;
+                  border: 0.15rem solid #008CBA;
+                  color: #008CBA;
+                  border-radius: 8px;
+                  cursor:pointer;
+                  font-stretch: extra-condensed;" 
+            ng-repeat="t in selectedTags track by $index"
+        >
+          
+          <span> {{t}}</span>
+          <i style="  font-size: x-small;
+                margin: 0 0 0 0.5em;"
+            class="fi-x" 
+            >
+          </i>
+        </div>
+      </div>
+    </div>  
+
   <div class="addWidget">
     <ul class="small-block-grid-3 medium-block-grid-6 large-block-grid-8">
-      <li ng-repeat="widget in filteredWidgets = (widgetTypes | filter: filterCriteria)"
+      <li ng-repeat="widget in filteredWidgets = (widgetTypes | filter: hasTags)"
           ng-click="add(widget)"
           class="has-tip"
-          title="{{widget.type + ': ' + widget.description}}">
+          
+          tooltip-popup-delay='1000'
+          tooltip="{{widget.type + ': ' + widget.description}}">
         <img class="th" ng-class="{selected: isSelected(filteredWidgets[$index])}" ng-src="{{widget.icon}}"/>
       </li>
     </ul>

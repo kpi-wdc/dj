@@ -1,4 +1,5 @@
 {
+  "keywords":["data","management","interactive","master", "list"],
   "schema": {
     "type": "object",
     "title": "Search Result",

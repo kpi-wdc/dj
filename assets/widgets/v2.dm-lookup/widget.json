@@ -1,4 +1,5 @@
 {
+  "keywords":["data","management","interactive","master", "description", "lookup"],
   "schema": {
     "type": "object",
     "title": "Key Lookup",

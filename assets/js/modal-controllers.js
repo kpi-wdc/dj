@@ -62,6 +62,7 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
       type
     };
 
+
     const translationId = `WIDGET.${type.toUpperCase()}.DESCRIPTION`;
     $translate(translationId).then(translation => {
       if (translation === translationId) {
@@ -70,6 +71,10 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
         currentWidget.description = translation;
       }
     });
+
+    //add keywords
+    
+    currentWidget.keywords = (widgetTypes.data[type].keywords) ? widgetTypes.data[type].keywords: [];
 
     // add path to icon of a widget
     if (widgetTypes.data[type].noicon) {
@@ -80,12 +85,42 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
     widgetTypesArr.push(currentWidget);
   }
 
+  $scope.tags = [];
+  widgetTypesArr.forEach((w) => {
+    w.keywords.forEach( (t) => {
+      if($scope.tags.indexOf(t) < 0) $scope.tags.push(t)
+    });
+  });
+
+  $scope.selectedTags = [];
+
+
   angular.extend($scope, {
     widgetTypes: widgetTypesArr,
     chooseWidget(widget) {
       $scope.chosenWidget = widget;
       // no error as a widget was chosen
       $scope.widgetErr = {};
+    },
+
+    selectTag(t){
+      let index = $scope.tags.indexOf(t);
+      $scope.tags.splice(index,1);
+      $scope.selectedTags.push(t);
+      $scope.selectedObject = "";
+      $scope.$viewValue = "";
+    },
+
+    unselectTag(t){
+      let index = $scope.selectedTags.indexOf(t);
+      $scope.selectedTags.splice(index,1);
+      $scope.tags.push(t);
+    },
+
+    hasTags(w){
+      let f = true;
+      $scope.selectedTags.forEach(t => f &= w.keywords.indexOf(t) >=0 );
+      return f;
     },
 
     add(widget) {

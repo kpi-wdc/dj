@@ -1,4 +1,5 @@
 {
+  "keywords":["data","management","interactive", "description"],
   "schema": {
     "type": "object",
     "title": "Dataset Info",

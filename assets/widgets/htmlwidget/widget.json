@@ -1,4 +1,5 @@
 {
+  "keywords":["html","fragment","static"],
   "schema": {
     "type": "object",
     "title": "Visual editor",

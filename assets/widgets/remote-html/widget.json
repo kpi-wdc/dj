@@ -1,4 +1,5 @@
 {
+  "keywords":["html","remote","reload"],
   "schema": {
     "type": "object",
     "title": "Remote HTML Fragment",

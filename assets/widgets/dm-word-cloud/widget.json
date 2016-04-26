@@ -1,4 +1,5 @@
-{
+{ 
+  "keywords":["data","metadata","search","tags"],
   "schema": {
     "type": "object",
     "title": "Tag Cloud",

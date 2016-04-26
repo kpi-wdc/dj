@@ -1,4 +1,4 @@
-{
+{ "keywords":["data","manager","commits","datasets"],
   "schema": {
     "type": "object",
     "title": "Datasets Management",
