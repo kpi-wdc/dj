@@ -220,6 +220,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
 
   $scope.hasTags = (app) => {
       let f = true;
+      app.keywords = (app.keywords)? app.keywords : [];
       let keywords = app.keywords.map((k)=>{
         return $translate.instant(k)
       })
