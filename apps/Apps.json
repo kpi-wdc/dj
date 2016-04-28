@@ -35,12 +35,12 @@
         {
           "key": "32mwlhd0fzxs9k9",
           "title": "About DJ",
-          "href": "/app/Apps/about"
+          "href": "/about"
         },
         {
           "key": "pctdoq7onescq5mi",
           "title": "DJ Apps",
-          "href": "/app/Apps/"
+          "href": "/"
         }
       ]
     }
@@ -54,49 +54,46 @@
         "column": {
           "widgets": [
             {
-              "title": "About DJ",
-              "level": 2,
-              "type": "title",
-              "instanceName": "vh6qacvlcg39dx6r",
-              "icon": "/widgets/title/icon.png"
+              "text": "<p style=\"text-align: center; margin-top: 0pt; margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><font face=\"Arial\" size=\"7\"><b><font color=\"#ffcc33\">\"Doggy&nbsp;Jam\"&nbsp;</font><span style=\"color: rgb(51, 51, 51); text-align: center;\">help for&nbsp;</span><span style=\"color: rgb(51, 51, 51); text-align: center;\">you to </span></b></font><span style=\"text-align: center;\"><font color=\"#333333\"><font face=\"Arial\"><b><font size=\"7\">hunt data</font></b></font></font></span></p>",
+              "type": "htmlwidget",
+              "instanceName": "4vgia6x1kozcyyfa9g4tzf47vi",
+              "icon": "/widgets/htmlwidget/icon.png"
+            },
+            {
+              "text": "<p style=\"margin-top: 0pt; margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><font face=\"Arial\"><b><font size=\"4\"><font color=\"#ffcc33\">DJ</font></font></b><font size=\"3\" style=\"color: rgb(51, 51, 51);\"> is platform that provide user\nfriendly\nonline SPA builder for </font></font><font color=\"#333333\"><font face=\"Arial\"><font size=\"3\">Data\nManagement, Data Analysis, Data Scientists Collaboration and other BI solutions.</font></font></font></p>",
+              "type": "htmlwidget",
+              "instanceName": "auajyumgzrxv5eag6qheg0hpvi",
+              "icon": "/widgets/htmlwidget/icon.png"
+            },
+            {
+              "text": "<p style=\"text-align: left; margin-top: 0pt; margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><font size=\"6\"><b><font face=\"Arial\"><font color=\"#ffcc33\"><br></font></font></b></font></p><p style=\"text-align: left; margin-top: 0pt; margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><font size=\"6\"><b><font face=\"Arial\"><font color=\"#ffcc33\">DJ</font><font color=\"#333333\"> key features</font></font></b></font></p>",
+              "type": "htmlwidget",
+              "instanceName": "ldgevz971gqe3e5qn01ss8aor",
+              "icon": "/widgets/htmlwidget/icon.png"
+            },
+            {
+              "text": "<p style=\"margin-top: 0pt; margin-bottom: 4pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><span style=\"font-family: Arial; color: rgb(0, 48, 94);\"><b><font size=\"4\">Basic</font></b></span></p><p style=\"margin-top: 0pt; margin-bottom: 4pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"></p><ul><li><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">Online\n</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">SPA\n</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">design</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">SPA\nHosting</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">Widget\nbased dashboards</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">Widgets\ninteraction</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">Flexible\nnavigation</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">Flexible\npage layout (device independent)</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">Skins,\nfull app i18n (without reload), management of app resources</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">User\ncollaboration support</span><br></li><li><span style=\"font-size: medium; color: rgb(0, 48, 94); font-family: Arial;\">Apps\nAccess policy</span><br></li></ul><p></p><p style=\"margin-top: 0pt; margin-bottom: 4pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><span style=\"font-family: Arial; color: rgb(0, 48, 94);\"><b><font size=\"4\">Advanced</font></b></span></p><p style=\"margin-top: 0pt; margin-bottom: 4pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"></p><ul><li><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">Toolkit\nfor </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94); font-weight: bold;\">Apps Management </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">(ready for use)</span><br></li><li><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">Toolkit\nfor </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94); font-weight: bold;\">Data Management</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">:\n</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">Rich\nmetadata support (tags, categories, lookups), full dataset i18n, dataset\nversion service, data</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\"> </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">uploads/downloads\n</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">(ready </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">for </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">use)</span><br></li><li><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">Toolkit\nfor </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94); font-weight: bold;\">Data Analysis &amp; Visualization</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">:\n</span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 48, 94);\">multidimensional\ndata cube manipulation, data queries (projections, selections, joins),\ninteractive charts, multilayered maps, tables, embedded data processing and\ndata mining </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">(ready </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">for </span><span style=\"font-size: medium; font-family: Arial; color: rgb(0, 176, 80); font-weight: bold;\">use)</span><br></li><li><font size=\"3\"><span style=\"font-family: Arial; color: rgb(0, 48, 94);\">Toolkit\nfor </span><span style=\"font-family: Arial; color: rgb(0, 48, 94); font-weight: bold;\">Project Management </span></font><span style=\"font-family: Arial; color: rgb(228, 108, 10); font-weight: bold;\"><font size=\"3\">(implementation\nstage)</font></span><br></li></ul><p></p><p style=\"margin-top: 0pt; margin-bottom: 4pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\">\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n</p><p style=\"margin-top: 0pt; margin-bottom: 4pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><span style=\"font-family: Arial; color: rgb(228, 108, 10); font-weight: bold;\"><font size=\"3\"></font></span></p>",
+              "type": "htmlwidget",
+              "instanceName": "aewsu0799eoy9zfr",
+              "icon": "/widgets/htmlwidget/icon.png"
+            },
+            {
+              "text": "<p style=\"text-align: left; margin-top: 0pt; margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><font size=\"6\"><font face=\"Arial\"><b><font color=\"#333333\"><br></font></b></font></font></p><p style=\"text-align: left; margin-top: 0pt; margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;\"><font size=\"6\"><font face=\"Arial\"><b><font color=\"#333333\">About </font><font color=\"#ffcc33\">DJ</font><font color=\"#333333\"> Apps</font></b></font></font></p>",
+              "type": "htmlwidget",
+              "instanceName": "n9z9rmx24sueq1vvomeha1yvi",
+              "icon": "/widgets/htmlwidget/icon.png"
             },
             {
               "masterWidget": "",
               "type": "app-info",
               "instanceName": "6boek2kxbfjn61or",
               "icon": "/widgets/app-info/icon.png"
-            },
-            {
-              "text": "<p class=\"MsoListParagraphCxSpLast\" style=\"box-sizing: inherit; margin-bottom: 1.25rem; margin-left: 21.3pt; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; text-rendering: optimizeLegibility; color: rgb(34, 34, 34); text-align: justify; background-color: rgb(255, 255, 255);\"><span class=\"apple-style-span\" style=\"box-sizing: inherit;\">Технологічний процес інтелектуального опрацювання данихможна розділити на стадії попередньої обробки, аналізу та пост-обробки даних, на кожній з яких вирішуються специфічні задачі з використанням методів багатовимірного статистичного аналізу, статистично-експертних методів, тощо.<span style=\"box-sizing: inherit; line-height: 20.8px;\"><br style=\"box-sizing: inherit;\"></span></span></p><p class=\"MsoListParagraphCxSpLast\" style=\"box-sizing: inherit; margin-bottom: 1.25rem; margin-left: 21.3pt; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; text-rendering: optimizeLegibility; color: rgb(34, 34, 34); text-align: justify; background-color: rgb(255, 255, 255);\"><span class=\"apple-style-span\" style=\"box-sizing: inherit;\">Одні й ті самі методи можуть використовуватися для вирішення різних задач, а також одна й та ж само задача може вирішуватися різними методами. У відповідності до цього є доцільним виділення програмних засобів, які реалізують статистичні та експертні методи незалежно від контексту їх застосування для вирішення конкретних задач обробки даних. Ці програмні засоби можуть організовуватись як універсальні програмні бібліотеки, що використовуються при реалізації тих програм, які відповідають за вирішення задач обробки даних в межах загального процесу.&nbsp;Така організація програмних ресурсів при наявності достатнього спектру засобів дозволяє фактично реалізувати концепцію «швидкої» розробки додатків для вирішення різноманітних задач інтелектуального опрацювання даних.<span style=\"box-sizing: inherit; font-size: 12pt; line-height: 20.8px; font-family: 'Times New Roman', serif;\"><br style=\"box-sizing: inherit;\"></span></span></p><p class=\"MsoListParagraphCxSpLast\" style=\"box-sizing: inherit; margin-bottom: 1.25rem; margin-left: 21.3pt; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; text-rendering: optimizeLegibility; color: rgb(34, 34, 34); text-align: justify; background-color: rgb(255, 255, 255);\"><span class=\"apple-style-span\" style=\"box-sizing: inherit;\">Однією з реалізацій викладеної концепції є проект&nbsp;\"<b style=\"box-sizing: inherit; line-height: inherit;\">doggy JAM\"</b>,<b style=\"box-sizing: inherit; line-height: inherit;\">&nbsp;</b>&nbsp;який є WEB-сервісом, що надає низку інструментів для швидкого створення тематичних інтерактивних звітів та презентацій з використанням результатіів моделювання сталого розвитку в глобальному та регіональному контексті, а також для аналізу даних з використанням методів багатовимірного статистичного аналізу. &nbsp;</span></p>",
-              "type": "htmlwidget",
-              "instanceName": "aewsu0799eoy9zfr",
-              "icon": "/widgets/htmlwidget/icon.png"
             }
           ],
           "width": 1318
         }
       },
       "subscriptions": []
-    },
-    {
-      "href": "404",
-      "template": "1-col",
-      "holders": {
-        "column": {
-          "widgets": [
-            {
-              "type": "title",
-              "title": "404 error",
-              "instanceName": "title"
-            },
-            {
-              "type": "htmlwidget",
-              "text": "Page not found",
-              "instanceName": "error-message"
-            }
-          ]
-        }
-      }
     },
     {
       "shortTitle": "main",
@@ -117,6 +114,19 @@
         },
         "topleft": {
           "widgets": [
+            {
+              "title": "#tags",
+              "level": 1,
+              "type": "title",
+              "instanceName": "u2ds1ffcte2ku8a0pto5bqpvi",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "listeners": "apps",
+              "type": "v2.app-tags",
+              "instanceName": "tags",
+              "icon": "/widgets/v2.app-tags/icon.png"
+            },
             {
               "title": "#apps",
               "level": 2,
@@ -144,12 +154,13 @@
             },
             {
               "appWidget": "apps",
-              "type": "v2.app-description",
-              "instanceName": "ibo1h5qh9f0cc8fr",
-              "icon": "/widgets/v2.app-description/icon.png",
+              "tagListeners": "tags",
               "appListeners": [
                 "apps"
-              ]
+              ],
+              "type": "v2.app-description",
+              "instanceName": "ibo1h5qh9f0cc8fr",
+              "icon": "/widgets/v2.app-description/icon.png"
             }
           ],
           "width": 654
@@ -160,6 +171,18 @@
         }
       },
       "subscriptions": [
+        {
+          "emitter": "tags",
+          "receiver": "apps",
+          "signal": "appTags",
+          "slot": "appTags"
+        },
+        {
+          "emitter": "ibo1h5qh9f0cc8fr",
+          "receiver": "tags",
+          "signal": "setTag",
+          "slot": "setTag"
+        },
         {
           "emitter": "apps",
           "receiver": "ibo1h5qh9f0cc8fr",
@@ -209,7 +232,9 @@
       "#keywords": "Ключові слова",
       "#title": "Досліди наші дані",
       "#description": "Портал \"Doggy Jam\" надає дружній  WEB интерфейс для дослідження даних",
-      "#AvailableDatasets": "Доступні набори даних:"
+      "#AvailableDatasets": "Доступні набори даних:",
+      "#selectRegion": "Виберіть одну або декілька областей",
+      "#tags": "Пошукові теги"
     },
     "en": {
       "#aaa": "Aaa",
@@ -243,7 +268,9 @@
       "#keywords": "Keywords",
       "#title": "Explore our data",
       "#description": "\"Doggy Jam\" portal provide user frendly WEB interface for data exploration",
-      "#AvailableDatasets": "Available datasets:"
+      "#AvailableDatasets": "Available datasets:",
+      "#selectRegion": "Select one or more regions",
+      "#tags": "Tags"
     },
     "ru": {
       "#aaa": "Rrr",
@@ -270,7 +297,9 @@
       "#about": "Про  DJ Data",
       "#title": "Исследуй наши данные",
       "#description": "Портал \"Doggy Jam\" предоставляет дружественный  WEB интерфейс для исследования данных",
-      "#AvailableDatasets": "Доступные наборы данных:"
+      "#AvailableDatasets": "Доступные наборы данных:",
+      "#selectRegion": "Select one or more regions",
+      "#tags": "Теги"
     }
   },
   "icon": "./api/resource/Apps-default-app-icon.png",
