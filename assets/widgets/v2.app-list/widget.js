@@ -207,6 +207,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
   // });
   // 
   
+  $scope.tags = [];
 
   $scope.select = (app) => {
     if ($scope.selection){
@@ -224,7 +225,9 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
       let keywords = app.keywords.map((k)=>{
         return $translate.instant(k)
       })
-      $scope.tags.forEach(t => f &= keywords.indexOf(t) >=0 );
+      if($scope.tags){
+        $scope.tags.forEach(t => f &= keywords.indexOf(t) >=0 );
+      }
       return f;
     };
 
