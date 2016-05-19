@@ -158,13 +158,15 @@ exports.Normalize = function (table, params) {
   var normalizeArea = params.normalization.direction || "Columns";
   var precision = params.normalization.precision || null;
 
-  var metaSuffix = " $";
-  	metaSuffix += (normalizeMode == "Range to [0,1]") 
-  		? "Range."
-  		:(normalizeMode == "Standartization")
-  			? "St."
-  			: "Log.";
-  metaSuffix += (normalizeArea == "Rows") ? "Row" : "Col";			
+  var metaSuffix = "";
+
+  // var metaSuffix = " $";
+  // 	metaSuffix += (normalizeMode == "Range to [0,1]") 
+  // 		? "Range."
+  // 		:(normalizeMode == "Standartization")
+  // 			? "St."
+  // 			: "Log.";
+  // metaSuffix += (normalizeArea == "Rows") ? "Row" : "Col";			
   if(normalizeArea == "Columns"){
   		table = exports.transposeTable(table,{transpose:true});
   }
