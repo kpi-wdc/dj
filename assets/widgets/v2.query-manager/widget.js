@@ -731,6 +731,21 @@ m.controller("PreparationDialogController", function (
       }
     }); 
 
+     $scope.operations.push({
+      title:"Inputation",
+      action: () => {
+        $scope.pushOp({
+          shortName:"Inputation",
+          inputation : {
+              "enable" : true,
+              "direction": "Row",
+              "mode": "fill",
+              "from":"left"
+          }    
+        })
+      }
+    }); 
+
     $scope.operations.push({
       title:"Sort Rows",
       action: () => {
