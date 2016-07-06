@@ -10456,6 +10456,7 @@ setTimeout(
     // Public Variables with Default Settings
     //------------------------------------------------------------
 
+
     var margin = { top: 5, right: 40, bottom: 5, left: 20 },
         width = null,
         height = null,
@@ -10476,6 +10477,67 @@ setTimeout(
           return !isNaN(getY(d, i)) && getY(d, i) !== null;
         } // allows a line to be not continuous when it is not defined
         ,
+        decoration = {
+          process:{
+            color:"#368A55",
+            id:{
+              enable:true
+            },
+            title:{
+              enable:false,
+              font:{
+                family:"Tahoma",
+                size:"medium",
+                color:"#000000",
+                weight:"bold"
+              }
+            }
+          },
+          task: {
+            color:"#007095",
+            id:{
+              enable:true
+            },
+             title:{
+              enable:false,
+              font:{
+                family:"Arial",
+                size:"small",
+                color:"#000000",
+                weight:"bold"
+              }
+            }
+          },
+          cause:{
+            enable:false
+
+          },
+          dependency:{
+            enable:false
+          },
+          income:{
+            enable:false,
+            color:"#43AC6A",
+            width:"1.5px",
+            font:{
+                family:"Arial",
+                size:"10px",
+                color:"#43AC6A",
+                weight:"bold"
+            }
+          },
+          expenditure:{
+            enable:false,
+            color:"#F04124",
+            width:"1.5px",
+            font:{
+                family:"Arial",
+                size:"10px",
+                color:"#F04124",
+                weight:"bold"
+            }
+          } 
+        }, 
         xScale = d3.scale.linear(),
         yScale = d3.scale.ordinal()//.domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
     
@@ -10675,7 +10737,8 @@ setTimeout(
          var barWidth = yScale.rangeBand()-11;
          barWidth = (barWidth > 15) ? 15 : barWidth;
          barWidth = (barWidth < 8) ? 8 : barWidth;
-         var barMargin = 7;
+         barWidth = 7;
+         var barMargin = 4;
 
         data.forEach(function(d){
           if(d.expenditure !== undefined){
@@ -10763,36 +10826,36 @@ setTimeout(
 
 
         
-       
-      links
-          .enter()
-          .append("g")
-          .attr("class", "nvd3 nv-gantt-link")
-          .attr("transform", function(d){ return "translate(" +margin.left+"," + 0 + ")"});
-       
-      links
-        .append("path")
-        .attr("class", "nv-area")
-        .attr("d", function (d) {  
+      if(decoration.cause.enable){ 
+        links
+            .enter()
+            .append("g")
+            .attr("class", "nvd3 nv-gantt-link")
+            .attr("transform", function(d){ return "translate(" +margin.left+"," + 0 + ")"});
+         
+        links
+          .append("path")
+          .attr("class", "nv-area")
+          .attr("d", function (d) {  
 
-                var source = {
-                  x: xScale(d.src.x),
-                  y: yScale(d.src.task)+barWidth/2+barMargin//7
-                };
+                  var source = {
+                    x: xScale(d.src.x),
+                    y: yScale(d.src.task)+barWidth/2+barMargin//7
+                  };
 
-                var target = {
-                  x: xScale(d.target.x)-arrowLength(d),
-                  y: yScale(d.target.task)+barWidth/2+barMargin//7
-                }
+                  var target = {
+                    x: xScale(d.target.x)-arrowLength(d),
+                    y: yScale(d.target.task)+barWidth/2+barMargin//7
+                  }
 
-                return nodeToNodePath({"source":source, "target":target})
+                  return nodeToNodePath({"source":source, "target":target})
 
-         })
-         .style("stroke", causeColor) 
-         .style("fill-opacity",0)
-         .style("stroke-width",causeWidth)
-         .style("stroke-opacity",causeOpacity)
-
+           })
+           .style("stroke", causeColor) 
+           .style("fill-opacity",0)
+           .style("stroke-width",causeWidth)
+           .style("stroke-opacity",causeOpacity)
+      }     
 
 
 
@@ -10882,7 +10945,14 @@ setTimeout(
           .attr("y2", function (d, i) {
             return barWidth/2+barMargin;
           })
-          .style("stroke",function(d) { return "url("+document.location.href+"#gradient-" + d.id + "-" + d.index + ")"; })
+          .style("stroke",function(d) {
+            return (!d.isOpen)
+              ? (d.childs.length==0)
+                  ? decoration.task.color
+                  : decoration.process.color
+              :"url("+document.location.href+"#gradient-" + d.id + "-" + d.index + ")"; 
+          })
+          
           .style("stroke-width", barWidth+"px")
           .style("stroke-opacity", function(d){return (d.expenditure || d.income) ? 0 : 1 })
 
@@ -10906,29 +10976,41 @@ setTimeout(
 
         gradient.append("svg:stop")
             .attr("offset", "0%")
-            .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+            .attr("stop-color", function(d) { 
+              return (d.childs.length==0) 
+                ? decoration.task.color
+                : decoration.process.color
+            })
             .attr("stop-opacity", 1);
 
-        gradient.append("svg:stop")
-            .attr("offset", function(d){
-              var end = (d.isOpen) ? xScale.domain()[1] : d.end;
-              return 400/(xScale(end)-xScale(d.start))+"%"
-            })
-            .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
-            .attr("stop-opacity", function(d) { return (d.isOpen) ? 0.5 : 0.2});    
+        // gradient.append("svg:stop")
+        //     .attr("offset", function(d){
+        //       var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+        //       return 400/(xScale(end)-xScale(d.start))+"%"
+        //     })
+        //     .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
+        //     .attr("stop-opacity", function(d) { return (d.isOpen) ? 0.5 : 0.2});    
         
-        gradient.append("svg:stop")
-            .attr("offset", function(d){
-              var end = (d.isOpen) ? xScale.domain()[1] : d.end;
-              return ( 100 - 400/(xScale(end)-xScale(d.start)))+"%"
-            })
-            .attr("stop-color", function(d) {return (d.childs.length==0) ? "#F08A24" : "#368a55"})
-            .attr("stop-opacity",function(d) { return (d.isOpen) ? 0 : 0.2});      
+        // gradient.append("svg:stop")
+        //     .attr("offset", function(d){
+        //       var end = (d.isOpen) ? xScale.domain()[1] : d.end;
+        //       return ( 100 - 400/(xScale(end)-xScale(d.start)))+"%"
+        //     })
+        //     .attr("stop-color", function(d) {
+        //       return (d.childs.length==0) 
+        //         ? "#F08A24" 
+        //         : "#368a55"
+        //     })
+        //     .attr("stop-opacity",function(d) { return (d.isOpen) ? 0 : 0.2});      
         
         gradient.append("svg:stop")
             .attr("offset", "100%")
-            .attr("stop-color", function(d) { return (d.childs.length==0) ? "#F08A24" : "#368a55"})
-            .attr("stop-opacity",function(d) { return (d.isOpen) ? 0 : 1});  
+            .attr("stop-color", function(d) { 
+              return (d.childs.length==0) 
+                ? decoration.task.color
+                : decoration.process.color
+            })
+            .attr("stop-opacity",0);  
           
 
 
@@ -10940,13 +11022,32 @@ setTimeout(
           .attr("x", function(d){
             return (d.childs.length>0)?xScale(xScale.domain()[0]):xScale(d.start)
           })
-          .attr("dx",function(d){return (d.childs.length>0)?"2em":"1em"})
+          .attr("dx",function(d){
+            return "0em" 
+            // return (d.childs.length>0)?"2em":"1em"
+          })
           .classed("nv-label", true)
           .text(function (d, i) {
-            return d.id+"."+d.title;
+            var _decor = (d.childs.length>0) ? decoration.process : decoration.task;
+            return  ""
+                    +((_decor.id.enable) ? d.id : "")
+                    +((_decor.id.enable && _decor.title.enable) ? "." : "")
+                    +((_decor.title.enable) ? d.title : "")
           })
-          .style("font-weight", function(d){return (d.childs.length>0)?"bold":"normal"})
-          .style("font-size", function(d){return (d.childs.length>0)?"medium":"small"})
+          .style("font-weight", function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.weight//(d.childs.length>0)?"bold":"normal"
+          })
+          .style("font-size", function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.size
+            // return (d.childs.length>0)?"medium":"small"
+          })
+          .style("font-family", function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.family
+            // return (d.childs.length>0)?"medium":"small"
+          })
           .style("fill","#ffffff")
           .style("stroke","#ffffff")
           .style("stroke-width",5)
@@ -10960,15 +11061,43 @@ setTimeout(
           .attr("x", function(d){
             return (d.childs.length>0)?xScale(xScale.domain()[0]):xScale(d.start)
           })
-          .attr("dx",function(d){return (d.childs.length>0)?"2em":"1em"})
+          .attr("dx",function(d){
+            return "0em"
+            // return (d.childs.length>0)?"2em":"1em"
+          })
           .classed("nv-label", true)
           .text(function (d, i) {
-            return d.id+"."+d.title;
+            var _decor = (d.childs.length>0) ? decoration.process : decoration.task;
+            return  ""
+                    +((_decor.id.enable) ? d.id : "")
+                    +((_decor.id.enable && _decor.title.enable) ? "." : "")
+                    +((_decor.title.enable) ? d.title : "")
           })
-          .style("font-weight", function(d){return (d.childs.length>0)?"bold":"normal"})
-          .style("font-size", function(d){return (d.childs.length>0)?"medium":"small"})
-          .style("fill","#555555")  
+          .style("font-weight", function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.weight//(d.childs.length>0)?"bold":"normal"
+          })
+          .style("font-size", function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.size
+            // return (d.childs.length>0)?"medium":"small"
+          })
+           .style("font-family", function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.family
+            // return (d.childs.length>0)?"medium":"small"
+          })
+          // .text(function (d, i) {
+          //   return d.id+"."+d.title;
+          // })
+          // .style("font-weight", function(d){return (d.childs.length>0)?"bold":"normal"})
+          // .style("font-size", function(d){return (d.childs.length>0)?"medium":"small"})
+          .style("fill",function(d){
+            var _decor = (d.childs.length>0) ? decoration.process.title : decoration.task.title;
+            return _decor.font.color
+          })
 
+      if(decoration.expenditure.enable){    
         series
           .filter(function(d){return d.expenditure !== undefined})
           .append("path")
@@ -10991,7 +11120,7 @@ setTimeout(
                         .apply(this, [d.expenditure]);
           })
           .style("fill-opacity",0.2)
-          .style("fill","#F04124");
+          .style("fill",decoration.expenditure.color);
 
         series
           .filter(function(d){return d.expenditure !== undefined})
@@ -11010,8 +11139,11 @@ setTimeout(
                         .apply(this, [d.expenditure]);
           })
           .style("fill-opacity",0)
-          .style("stroke","#F04124");//#43AC6A
-
+          .style("stroke-width",decoration.expenditure.width)
+          .style("stroke",decoration.expenditure.color);//#43AC6A
+      }
+      
+      if(decoration.income.enable){    
         series
           .filter(function(d){return d.income !== undefined})
           .append("path")
@@ -11034,7 +11166,7 @@ setTimeout(
                         .apply(this, [d.income]);
           })
           .style("fill-opacity",0.2)
-          .style("fill","#43AC6A");
+          .style("fill",decoration.income.color);
 
         series
           .filter(function(d){return d.income !== undefined})
@@ -11053,7 +11185,9 @@ setTimeout(
                         .apply(this, [d.income]);
           })
           .style("fill-opacity",0)
-          .style("stroke","#43AC6A");//#43AC6A
+          .style("stroke-width",decoration.income.width)
+          .style("stroke",decoration.income.color);//#43AC6A
+      }    
 
         // sources
         //   .enter()
@@ -11069,7 +11203,8 @@ setTimeout(
         //   .style("fill",causeColor)
         //   .style("fill-opacity",0.5)
         //   
-          
+      
+      if(decoration.cause.enable){     
         targets
         .enter()
         .append("g")
@@ -11087,8 +11222,9 @@ setTimeout(
           .style("stroke", causeColor)
           .style("fill",causeColor)
           .style("fill-opacity",causeOpacity)
+      }    
 
-
+      if(decoration.expenditure.enable || decoration.income.enable ){
         markers
           .enter()
           .append("g")
@@ -11097,13 +11233,17 @@ setTimeout(
 
         markers
           .append("circle")
-          .attr("r",2)
+          .attr("r",function(d){
+            return  (d.type == "expenditure") ? decoration.expenditure.width : decoration.income.width
+          })
           .attr("cx", function(d){return xScale(d.x)})
           .attr("cy", function(d){
             var s = (d.type == "expenditure") ? data[d.index].expenditureScale : data[d.index].incomeScale
             return s(d.y)
           })
-          .style("fill",function(d){return (d.type == "expenditure")?"#F04124":"#43AC6A"});
+          .style("fill",function(d){
+            return (d.type == "expenditure")?decoration.expenditure.color : decoration.income.color//"#F04124":"#43AC6A"
+          });
             
          markers
           .append("text")
@@ -11117,8 +11257,24 @@ setTimeout(
             return s(d.y)
           })
           .attr("dy", "-0.5em")
-          .style("font-size","xx-small")
-          .style("font-weight","bold")
+          .style("font-size", function(d){
+            return (d.type == "expenditure") 
+              ? decoration.expenditure.font.size 
+              : decoration.income.font.size
+          })  
+          //"xx-small")
+          .style("font-weight", function(d){
+            return (d.type == "expenditure") 
+              ? decoration.expenditure.font.weight 
+              : decoration.income.font.weight
+          })  
+          .style("font-family", function(d){
+            return (d.type == "expenditure") 
+              ? decoration.expenditure.font.family 
+              : decoration.income.font.family
+          })  
+
+          //"bold")
           .style("fill","#ffffff")
           .style("stroke","#ffffff")
           .style("stroke-width",3)
@@ -11137,16 +11293,38 @@ setTimeout(
             return s(d.y)
           })
           .attr("dy", "-0.5em")
-          .style("font-size","xx-small")
-          .style("font-weight","bold")
-          .style("fill",function(d){return (d.type == "expenditure")?"#F04124":"#43AC6A"});  
+          .style("font-size", function(d){
+            return (d.type == "expenditure") 
+              ? decoration.expenditure.font.size 
+              : decoration.income.font.size
+          })  
+          //"xx-small")
+          .style("font-weight", function(d){
+            return (d.type == "expenditure") 
+              ? decoration.expenditure.font.weight 
+              : decoration.income.font.weight
+          })  
+          .style("font-family", function(d){
+            return (d.type == "expenditure") 
+              ? decoration.expenditure.font.family 
+              : decoration.income.font.family
+          })  
+          // .style("font-size","xx-small")
+          // .style("font-weight","bold")
+          .style("fill",function(d){
+            return (d.type == "expenditure")
+              ? decoration.expenditure.font.color 
+              : decoration.income.font.color
+          });
+
 
         wrap
         .selectAll(".nv-gantt-marker text")
         .call(textWrap, 2 * (xScale(xScale.domain()[1])-xScale(xScale.domain()[0]))/xScale.ticks().length);  
-          
+      }    
 
-      })    
+      })
+
       return chart;
     
   }  
