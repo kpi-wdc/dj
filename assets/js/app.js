@@ -20,6 +20,7 @@ import 'template-cached-pages';
 import 'app-config';
 import 'author';
 import 'i18n';
+import 'dps';
 import 'dictionary';
 import 'info';
 import 'modal-controllers';
@@ -30,7 +31,7 @@ import 'widget-api';
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard','cfp.hotkeys',
   'app.templates', 'react',
-  'app.widgetApi', 'app.config', 'app.i18n', 'app.skinDirectives',
+  'app.widgetApi', 'app.config', 'app.i18n','app.dps', 'app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
 
 app.constant("portal", {
@@ -229,7 +230,9 @@ app.factory('config', function (initialConfig, $log) {
   if (initialConfig.pages.length <= 1) {
     $log.info('When there is no 404 page you might have problems with page routing!');
   }
-  return angular.copy(initialConfig);
+  var c = angular.copy(initialConfig);
+  //c.dps="https://dj-app.herokuapp.com"; 
+  return c;
 });
 
 app.factory('appHotkeysInfo', ['config', (config) => {

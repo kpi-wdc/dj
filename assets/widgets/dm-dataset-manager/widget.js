@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'dictionary';
 
 
-angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload'])
+angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload',"app.dps"])
   // .controller('DatasetManagerSearchResultController', function ($scope, $http, EventEmitter, 
   //   APIProvider, pageSubscriptions, $lookup, $translate,$modal, user) {
     
@@ -222,9 +222,9 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
 
 
 
-.controller("DatasetsManagerController", function ($scope, $http, $upload, $timeout,
+.controller("DatasetsManagerController", function ($scope, $http, $upload, $timeout, $dps, 
                                                 $lookup, EventEmitter,APIProvider, pageSubscriptions,
-                                                $translate, user, confirm, alert){
+                                                $translate, user, confirm, alert, dialog){
   
   const eventEmitter = new EventEmitter($scope);
 
@@ -249,6 +249,7 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
   $scope.lookup = $lookup;
   $scope.user = user;
   $scope.upload_process = false;
+  $scope.dps = $dps.getUrl();
 
   
 
@@ -302,36 +303,77 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
     }
   };
 
-  
-  $scope.upload = function (file) {
-    $scope.upload_process = true;
-    $upload.upload({
-      url: './api/dataset/update',
-      method: 'POST',
-      headers: {
-        'my-header' : 'my-header-value'
-      },
-      file: file,
-    })
-    .then(function(response) {
-      if(response.data.error){
-         alert.error(["Dataset Commit not created"].concat(response.data.error));
-         $scope.getCommitList();
-      }else{
-        if(response.data.warnings.length>0){
-         alert.message(["Dataset commit is created, but"].concat(response.data.warnings));
-        }
 
-        $scope.upload_process = false;
-        $lookup.reload();
-        $scope.item = response.data.metadata;
-        $timeout(function() {
-          $scope.getCommitList();
-          eventEmitter.emit('refresh');
-        });
-      }  
-    });
+  $scope.uploadCommit = function(){
+    dialog({
+        title:`${$translate.instant('Select .xlsx file')}:`,
+        fields:{
+          file:{
+            title:'Data file:', 
+            type:'file', 
+            editable:true, 
+            required:true
+          }
+        }
+      }).then((form) => {
+        const fd = new FormData();
+        // Take the first selected file
+        fd.append('file', form.fields.file.value);
+        $http.post($dps.getUrl()+'/api/dataset/update', fd, {
+          withCredentials: true,
+          headers: {'Content-Type': undefined},
+          transformRequest: angular.identity
+        }).success( function(response) {
+            if(response.error){
+               alert.error(["Dataset Commit not created"].concat(response.data.error));
+               $scope.getCommitList();
+            }else{
+              if(response.warnings.length>0){
+               alert.message(["Dataset commit is created, but"].concat(response.data.warnings));
+              }
+
+              $scope.upload_process = false;
+              $lookup.reload();
+              $scope.item = response.metadata;
+              $timeout(function() {
+                $scope.getCommitList();
+                eventEmitter.emit('refresh');
+              });
+            }  
+          });
+      }) 
   }
+
+  
+  // $scope.upload = function (file) {
+  //   $scope.upload_process = true;
+  //   $upload.upload({
+  //     url: $dps.getUrl()+'/api/dataset/update',
+  //     method: 'POST',
+  //     headers: {
+  //       //'my-header' : 'my-header-value'
+  //     },
+  //     file: file,
+  //   })
+  //   .then(function(response) {
+  //     if(response.data.error){
+  //        alert.error(["Dataset Commit not created"].concat(response.data.error));
+  //        $scope.getCommitList();
+  //     }else{
+  //       if(response.data.warnings.length>0){
+  //        alert.message(["Dataset commit is created, but"].concat(response.data.warnings));
+  //       }
+
+  //       $scope.upload_process = false;
+  //       $lookup.reload();
+  //       $scope.item = response.data.metadata;
+  //       $timeout(function() {
+  //         $scope.getCommitList();
+  //         eventEmitter.emit('refresh');
+  //       });
+  //     }  
+  //   });
+  // }
   
 
   $scope.headStyle = function(f){
@@ -354,7 +396,8 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
 
   $scope.upToHEAD = function(c){
     $scope.commits = undefined;
-    $http.get("./api/commit/head/"+c.metadata.dataset.commit.id)
+    //$http.get("./api/commit/head/"+c.metadata.dataset.commit.id)
+    $dps.get("/api/commit/head/"+c.metadata.dataset.commit.id)
       .success(function(resp){
         $scope.item = resp.metadata;
         $scope.getCommitList();        
@@ -363,7 +406,8 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
   }
 
   $scope.setCommitStatus = function(commitID,status){
-    $http.get("./api/commit/"+status+"/"+commitID)
+    // $http.get("./api/commit/"+status+"/"+commitID)
+    $dps.get("/api/commit/"+status+"/"+commitID)
       .success(function(resp){
         $scope.item = resp.metadata;
         $scope.getCommitList();
@@ -373,7 +417,8 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
 
   $scope.deleteCommit = function(c){
     $scope.commits = undefined;
-    $http.get("./api/commit/delete/"+c.metadata.dataset.commit.id)
+    // $http.get("./api/commit/delete/"+c.metadata.dataset.commit.id)
+    $dps.get("/api/commit/delete/"+c.metadata.dataset.commit.id)
       .success(function(){
         $scope.getCommitList();
         eventEmitter.emit('refresh');        
@@ -399,7 +444,8 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
   }
   
  $scope.getAllDatasets = function(){
-    $http.post("./api/metadata/items",{status:"private"})
+    // $http.post("./api/metadata/items",{status:"private"})
+    $dps.post("/api/metadata/items",{status:"private"})
       .success(function(resp){
         $scope.datasets = resp; 
       })
@@ -407,7 +453,8 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
 
   $scope.getCommitList = function(){
     if($scope.item){
-      $http.get("./api/dataset/commits/"+$scope.item.dataset.id)
+      // $http.get("./api/dataset/commits/"+$scope.item.dataset.id)
+      $dps.get("/api/dataset/commits/"+$scope.item.dataset.id)
         .success(function(data){
           $scope.commits = data;
         })

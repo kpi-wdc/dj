@@ -4,16 +4,19 @@ import 'angular-translate-loader-static-files';
 import 'angular-translate-storage-cookie';
 import 'angular-translate-storage-local';
 import 'i18n';
+import 'dps';
 
-const dictionaryModule = angular.module('app.dictionary', ['pascalprecht.translate','app.i18n']);
+const dictionaryModule = angular.module('app.dictionary', ['pascalprecht.translate','app.i18n','app.dps']);
 dictionaryModule.dictionary = {};
 
 
 
-dictionaryModule.run(function ($http,i18n) {
+dictionaryModule.run(function ($http,i18n,$dps) {
   
-  $http.get("./api/dictionary")
+  // $http.get("./api/dictionary")
+  $dps.get("/api/dictionary")
             .success(function (data) {
+              // console.log(data)
                 var d = {};
                 for(let i in data){
                   d[data[i].key] = data[i].value;
@@ -32,8 +35,8 @@ dictionaryModule.run(function ($http,i18n) {
             });
 });
 
-dictionaryModule.service("$lookup",[ "$http","$translate", "i18n",
-  function($http, $translate, i18n){
+dictionaryModule.service("$lookup",[ "$http","$translate", "i18n", "$dps",
+  function($http, $translate, i18n, $dps){
   
 
     var lookup = function(key){
@@ -43,7 +46,9 @@ dictionaryModule.service("$lookup",[ "$http","$translate", "i18n",
    
 
     lookup.reload = function(){
-      $http.get("./api/dictionary")
+      // $http.get("./api/dictionary")
+      
+      $dps.get("/api/dictionary")
               .success(function (data) {
                   var d = {};
                   for(let i in data){

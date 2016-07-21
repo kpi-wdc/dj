@@ -7,19 +7,18 @@
               border-bottom: 0.1rem solid #ddd;">
     <img src="./widgets/dm-dataset-manager/icon.png" width="32px"/>
     Datasets Management
-      <button ng-model="files" 
-      ng-file-select 
-      ng-multiple="true" 
-      ng-file-change="fileSelected($files, $event)"
-      class="button radius tiny secondary toolbar right"
-          style=" margin: 0.6rem 0.1rem 0.3rem 0.1rem;
+      
+      <button ng-click="uploadCommit()"
+             class="button radius tiny secondary toolbar right"
+             style=" margin: 0.6rem 0.1rem 0.3rem 0.1rem;
                   padding-top: 0.2rem;
-                  padding-bottom: 0.2rem;">   
-          <i class="fi-upload"/>
-          Update/Upload Dataset
-  </button>
+                  padding-bottom: 0.2rem;">
+              <i class="fi-plus"/>
+            Update/Upload Dataset 
+            </a>       
+    </button>
 
-
+      
      <button 
              class="button radius tiny secondary toolbar right"
              style=" margin: 0.6rem 0.1rem 0.3rem 0.1rem;
@@ -219,7 +218,7 @@
                 ng-click=""
                   class="button radius tiny toolbar secondary"
                 style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
-                <a href="{{'./api/commit/download/'+c.metadata.dataset.commit.id}}" target="blank">
+                <a href="{{dps+'/api/commit/download/'+c.metadata.dataset.commit.id}}" target="blank">
                   <i class="fi-download"/>
                   Download
                 </a>  

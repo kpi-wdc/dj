@@ -19,6 +19,7 @@ module.exports = {
             name: app.name,
             description:app.description,
             title:app.title,
+            dps: app.dps,
             keywords: app.keywords,
             collaborations: app.collaborations,
             i18n: app.i18n,

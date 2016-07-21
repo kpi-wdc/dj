@@ -332,7 +332,8 @@ modals.controller('AppSettingsModalController', function ($scope, $modalInstance
       keywords: config.keywords.join(", "),
       title: config.title,
       description: config.description,
-      icon:config.icon
+      icon:config.icon,
+      dps: config.dps
     },
     skins: appSkins,
 

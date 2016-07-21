@@ -26,6 +26,7 @@
   "DESIGN_MODE": "Дизайн",
   "DESIGN_PANEL": "Панель дизайну",
   "DOUBLE_CLICK_TO_EDIT": "Клацніть для редагування",
+  "DPS_URL":"Сервер обробки даних URL",
   "ENTER_NAME_DOTS": "Введіть ім’я...",
   "ERROR_MESSAGE_WITH_TEXT": "Помилка: {{msg}}",
   "ERROR_RENAMING_APP": "Помилка під час перейменування застосунку ${{error}}): {{data}}",

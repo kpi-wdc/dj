@@ -44,6 +44,9 @@ module.exports = {
     keywords: {
       type: 'array'
     },
+    dps: {
+      type: 'string'
+    },
     collaborations: {
       type: 'array'
     },

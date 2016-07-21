@@ -63,6 +63,7 @@ module.exports = {
                 title: app.title,
                 description: app.description,
                 keywords: app.keywords,
+                dps: app.dps,
                 importedFromURL: app.importedFromURL,
                 importedFromAuthor: app.importedFromAuthor,
                 isPublished: app.isPublished
