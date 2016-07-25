@@ -4,16 +4,18 @@ import angular from 'angular';
 // import "wizard-directives";
 
 
-var m = angular.module("app.widgets.v2.data-selector-options",[]);
+var m = angular.module("app.widgets.v2.data-selector-options",["app.dps"]);
 
 m.factory("DataSelectorOptions",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"pageWidgets",
 	
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder, 
 		pageWidgets ){
@@ -35,7 +37,7 @@ m.factory("DataSelectorOptions",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-bar/options.json",
-	    			dataUrl : "./api/data/process/"
+	    			dataUrl : $dps.getUrl()+"/api/data/process/"
 	    		}	
 
 	    		this.conf.decoration.direction = this.conf.decoration.direction || "Rows";
@@ -110,8 +112,8 @@ m.factory("DataSelectorOptions",[
 			loadData: function(){
 				let thos = this;
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			              /// extract object list

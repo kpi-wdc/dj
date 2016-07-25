@@ -4,8 +4,8 @@ import 'ngReact';
 import 'custom-react-directives';
 
 // console.log("REACT",React);
-let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ngFileUpload','react','custom-react-directives'])
-  m.controller('DataManagerDSInfoController', function ($scope, $http, EventEmitter, 
+let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','app.dps','ngFileUpload','react','custom-react-directives'])
+  m.controller('DataManagerDSInfoController', function ($scope, $http, $dps, EventEmitter, 
     APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n) {
     
 
@@ -17,11 +17,12 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ng
 
    
     $scope.formatDate = i18n.formatDate;
-
+    $scope.dps = $dps;
     
     $scope.download = function(item){
       item.download = true;
-      $http.get("./api/dataset/download/"+item.dataset.id)
+     // $http.get("./api/dataset/download/"+item.dataset.id)
+      $dps.get("/api/dataset/download/"+item.dataset.id)
         .success(function(){
           item.download = false;
         })

@@ -2,12 +2,12 @@ import angular from 'angular';
 import 'widgets/v2.data-selector/wizard';
 
 
-const m = angular.module('app.widgets.v2.data-selector', [
+const m = angular.module('app.widgets.v2.data-selector', ["app.dps",
   'app.widgets.v2.data-selector-wizard'
 ]);
 
 
-m.controller('DataSelectorCtrlV2', function ($scope, $http, DataSelectorWizard, APIProvider, EventEmitter) {
+m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWizard, APIProvider, EventEmitter) {
   
   $scope.emitter = new EventEmitter($scope);
 
@@ -97,8 +97,10 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, DataSelectorWizard, 
 
 
     $scope.load = function(){
-      $http
-        .get("./api/data/process/"+$scope.widget.dataID)
+      // $http
+      //   .get("./api/data/process/"+$scope.widget.dataID)
+      $dps
+        .get("/api/data/process/"+$scope.widget.dataID)  
         .then((resp) => {
 
           $scope.getSelectorData(resp.data.value)

@@ -2,8 +2,8 @@ import angular from 'angular';
 import 'dictionary';
 
 
-angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
-  .controller('DataManagerTagListController', function ($scope, $http, EventEmitter, 
+angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
+  .controller('DataManagerTagListController', function ($scope, $http, $dps, EventEmitter, 
     APIProvider, pageSubscriptions, $lookup, $translate, user) {
 
     
@@ -68,8 +68,10 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary'])
           //     $scope.total = resp.count;
           // });
 
-          $http.post(
-            "./api/metadata/tag/items",
+          // $http.post(
+          //   "./api/metadata/tag/items",
+          $dps.post(
+            "/api/metadata/tag/items",
             {property : $scope.property,"status":status}
            ).success(function(resp){
             $scope.total = resp.length;

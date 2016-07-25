@@ -4,8 +4,8 @@ import 'ngReact';
 import 'custom-react-directives';
 
 // console.log("REACT",React);
-let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUpload','react','custom-react-directives'])
-  m.controller('DataManagerSearchResultController', function ($scope, $http, EventEmitter, 
+let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','app.dps','ngFileUpload','react','custom-react-directives'])
+  m.controller('DataManagerSearchResultController', function ($scope, $http, $dps, EventEmitter, 
     APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n) {
     
 
@@ -21,7 +21,9 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','ngFileUp
             $scope.total = 0;
             $scope.query = query;
             var status = "public";//(user.isOwner || user.isCollaborator) ? "private" : "public";
-            $http.post("./api/metadata/items", {"query":query, "status":status}).success(
+            // $http.post("./api/metadata/items", {"query":query, "status":status})
+            $dps.post("/api/metadata/items", {"query":query, "status":status})
+            .success(
               function(resp){
                 $scope.result = resp;
 

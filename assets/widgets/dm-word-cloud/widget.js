@@ -7,9 +7,9 @@ import "d3.layout.cloud"
 
 
 
-angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
+angular.module('app.widgets.dm-word-cloud', ['app.dictionary',"app.dps"])
   .service("d3", function(){return d3})
-  .controller('WordCloudController', function ( $scope, $http, EventEmitter, 
+  .controller('WordCloudController', function ( $scope, $http, $dps, EventEmitter, 
                                                       APIProvider, $lookup,$translate, 
                                                       $q, d3, pageSubscriptions) {
     const eventEmitter = new EventEmitter($scope);
@@ -619,7 +619,8 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary'])
 
     function load(){
      
-      $http.post("./api/metadata/tag/dependencies",
+      // $http.post("./api/metadata/tag/dependencies",
+        $dps.post("/api/metadata/tag/dependencies",
           {
             "status":"public",
             "tags":[

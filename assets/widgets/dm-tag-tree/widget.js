@@ -2,8 +2,8 @@ import angular from 'angular';
 import 'dictionary';
 
 
-angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
-  .controller('DataManagerTagTreeController', function ($scope, $http, EventEmitter, 
+angular.module('app.widgets.dm-tag-tree', ['app.dictionary',"app.dps"])
+  .controller('DataManagerTagTreeController', function ($scope, $http, $dps, EventEmitter, 
     APIProvider, pageSubscriptions, $lookup, $translate, user, app) {
     
 
@@ -139,7 +139,8 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
         $scope.icon_class = $scope.widget.icon_class;
         $scope.property = $scope.widget.property || $scope.property;
          var status = (user.isOwner || user.isCollaborator) ? "private" : "public";   
-          $http.post("./api/metadata/tag/tree",{"status":status})
+          // $http.post("./api/metadata/tag/tree",{"status":status})
+          $dps.post("/api/metadata/tag/tree",{"status":status})
             .success(function(resp){
               $scope.breadcrums = [];
               $scope.tagList = [];
@@ -154,7 +155,8 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary'])
 
       .provide('refresh', (evt) => {
         var status = (user.isOwner || user.isCollaborator) ? "private" : "public";
-        $http.post("./api/metadata/tag/tree",{"status":status})
+        // $http.post("./api/metadata/tag/tree",{"status":status})
+        $dps.post("/api/metadata/tag/tree",{"status":status})
           .success(function(resp){
               $scope.breadcrums = [];
               $scope.tagList = [];
