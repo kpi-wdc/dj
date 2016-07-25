@@ -49,7 +49,8 @@ define(["angular",
 
   var m = angular.module("app.widgets.v2.nvd3-widget", [
       "oc.lazyLoad", 
-      "nvd3"
+      "nvd3",
+      "app.dps"
   ]);
 
 
@@ -148,6 +149,7 @@ define(["angular",
 
   
   m.factory("NVD3WidgetV2", [ "$http",
+                              "$dps",
                               "$q", 
                               "$ocLazyLoad", 
                               "APIProvider", 
@@ -161,6 +163,7 @@ define(["angular",
                               
                                
   function (  $http, 
+              $dps,
               $q, 
               $ocLazyLoad, 
               APIProvider, 
@@ -315,7 +318,7 @@ define(["angular",
         }
 
         function loadData(){
-          return $http.get("./api/data/process/"+$scope.widget.serieDataId)
+          return $dps.get("/api/data/process/"+$scope.widget.serieDataId)
         }
 
         $q.all([

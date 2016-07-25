@@ -7,10 +7,12 @@ import "wizard-directives";
 var m = angular.module("app.widgets.v2.hbar-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.hbar-chart-adapter",  
-    "wizard-directives"]);
+    "wizard-directives",
+    "app.dps"]);
 
 m.factory("HBarChartDecoration",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"HBarChartAdapter", 
@@ -18,6 +20,7 @@ m.factory("HBarChartDecoration",[
 	
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder, 
 		HBarChartAdapter,
@@ -43,7 +46,7 @@ m.factory("HBarChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-bar-h/options.json",
-	    			dataUrl : "./api/data/process/",
+	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
 	    		}	
 
@@ -97,7 +100,7 @@ m.factory("HBarChartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $http.post(this.conf.dataUrl,
+				let r = $dps.post(this.conf.dataUrl,
 					{
 						"cache": false,
 		                "data_id": this.conf.dataID,
@@ -113,8 +116,8 @@ m.factory("HBarChartDecoration",[
 				let thos = this;
 
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			          })

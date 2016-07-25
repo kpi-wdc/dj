@@ -7,16 +7,19 @@ import "wizard-directives";
 var m = angular.module("app.widgets.v2.steps.scatter-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.scatter-chart-adapter", 
-    "wizard-directives"]);
+    "wizard-directives",
+    "app.dps"]);
 
 m.factory("ScatterChartDecoration",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"NVD3ScatterAdapter",
 	"pageWidgets", 
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder, 
 		NVD3ScatterAdapter,
@@ -48,7 +51,7 @@ m.factory("ScatterChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-scatter/options.json",
-	    			dataUrl : "./api/data/process/",
+	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
 	    		}	
 
@@ -115,7 +118,7 @@ m.factory("ScatterChartDecoration",[
 
 			loadSeries : function(){
 				this.data = undefined; 
-				let r = $http.post(this.conf.dataUrl,
+				let r = $dps.post(this.conf.dataUrl,
 					{
 						"cache": false,
 		                "data_id": this.conf.dataID,
@@ -253,8 +256,8 @@ m.factory("ScatterChartDecoration",[
 				let thos = this;
 
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			              thos.axisXList = thos.makeAxisXList(thos.wizard.context.postprocessedTable);

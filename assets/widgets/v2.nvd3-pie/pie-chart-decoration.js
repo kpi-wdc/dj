@@ -7,16 +7,19 @@ import "wizard-directives";
 var m = angular.module("app.widgets.v2.steps.pie-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.pie-chart-adapter", 
-    "wizard-directives"]);
+    "wizard-directives",
+    "app.dps"]);
 
 m.factory("PieChartDecoration",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"PieChartAdapter",
 	"pageWidgets", 
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder, 
 		PieChartAdapter,
@@ -41,7 +44,7 @@ m.factory("PieChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-pie/options.json",
-	    			dataUrl : "./api/data/process/",
+	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
 	    		}	
 
@@ -96,7 +99,7 @@ m.factory("PieChartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $http.post(this.conf.dataUrl,
+				let r = $dps.post(this.conf.dataUrl,
 					{
 						"cache": false,
 		                "data_id": this.conf.dataID,
@@ -112,8 +115,8 @@ m.factory("PieChartDecoration",[
 				let thos = this;
 
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			          })

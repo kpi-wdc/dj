@@ -7,10 +7,12 @@ import "wizard-directives";
 var m = angular.module("app.widgets.v2.geochart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.geochart-adapter", 
-    "wizard-directives"]);
+    "wizard-directives",
+    "app.dps"]);
 
 m.factory("GeochartDecoration",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"GeochartAdapter", 
@@ -19,6 +21,7 @@ m.factory("GeochartDecoration",[
 	
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder, 
 		GeochartAdapter,
@@ -48,7 +51,7 @@ m.factory("GeochartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-geochart/options.json",
-	    			dataUrl : "./api/data/process/",
+	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
 	    		}	
 
@@ -170,7 +173,7 @@ m.factory("GeochartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $http.post(this.conf.dataUrl,
+				let r = $dps.post(this.conf.dataUrl,
 					{
 						"cache": false,
 		                "data_id": this.conf.dataID,
@@ -194,8 +197,8 @@ m.factory("GeochartDecoration",[
 				this.complete = false;
 
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			              thos.indexList = thos.makeSerieList(thos.wizard.context.postprocessedTable);

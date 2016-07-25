@@ -6,13 +6,15 @@ import 'widgets/v2.table/wizard';
 const m = angular.module('app.widgets.v2.table', [
   "oc.lazyLoad",
   "custom-react-directives",
-  'app.widgets.v2.table-wizard'
+  'app.widgets.v2.table-wizard',
+  "app.dps"
 ]);
 
 
 m.controller('TableCtrl', function (
   $scope, 
   $http, 
+  $dps,
   $ocLazyLoad, 
   APIProvider, 
   pageSubscriptions, 
@@ -58,7 +60,7 @@ m.controller('TableCtrl', function (
   $scope.update = function(){
      $scope.pending = angular.isDefined($scope.widget.dataID);
         if($scope.pending){
-          $http.get("./api/data/process/"+$scope.widget.dataID)
+          $dps.get("/api/data/process/"+$scope.widget.dataID)
             .success((resp) => {
               $scope.pending = false;
               $scope.table = resp.value;

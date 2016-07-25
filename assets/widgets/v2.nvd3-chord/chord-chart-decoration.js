@@ -7,10 +7,12 @@ import "wizard-directives";
 var m = angular.module("app.widgets.v2.steps.chord-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.chord-chart-adapter",  
-    "wizard-directives"]);
+    "wizard-directives",
+    "app.dps"]);
 
 m.factory("ChordChartDecoration",[
 	"$http",
+	'$dps',
 	"$q", 
 	"parentHolder",
 	"NVD3ChordAdapter", 
@@ -18,6 +20,7 @@ m.factory("ChordChartDecoration",[
 	
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder, 
 		NVD3ChordAdapter,
@@ -43,7 +46,7 @@ m.factory("ChordChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-chord/options.json",
-	    			dataUrl : "./api/data/process/"
+	    			dataUrl : "/api/data/process/"
 	    		}	
 
 	    		this.queries = [];
@@ -95,7 +98,7 @@ m.factory("ChordChartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $http.post(this.conf.dataUrl,
+				let r = $dps.post(this.conf.dataUrl,
 					{
 		                "data_id": this.conf.dataID,
 		                "params": {},
@@ -110,8 +113,8 @@ m.factory("ChordChartDecoration",[
 				let thos = this;
 
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			          })

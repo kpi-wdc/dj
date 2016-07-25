@@ -4,16 +4,18 @@ import "wizard-directives";
 
 
 var m = angular.module("app.widgets.v2.steps.table-decoration",[
-	 "custom-react-directives", "wizard-directives"]);
+	 "custom-react-directives", "wizard-directives", 'app.dps']);
 
 m.factory("TableDecoration",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"pageWidgets",
 	
 	function(
 		$http, 
+		$dps,
 		$q, 
 		parentHolder,
 		pageWidgets){
@@ -36,7 +38,7 @@ m.factory("TableDecoration",[
 	    			decoration : (wizard.conf.decoration) ? wizard.conf.decoration : {},
 	    			dataID : wizard.conf.dataID,
 	    			queryID : wizard.conf.queryID,
-	    			dataUrl : "./api/data/process/",
+	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
 	    		}
 	    		
@@ -102,8 +104,8 @@ m.factory("TableDecoration",[
 			loadData: function(){
 				let thos = this;
 
-				$http
-		          .get("./api/data/process/"+this.conf.dataID)
+				$dps
+		          .get("/api/data/process/"+this.conf.dataID)
 		          .success(function (resp) {
 		              thos.wizard.context.postprocessedTable = resp.value;
 		              thos.table = resp.value;

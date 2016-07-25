@@ -7,16 +7,19 @@ import "wizard-directives";
 var m = angular.module("app.widgets.v2.steps.line-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.line-chart-adapter", 
-    "wizard-directives"]);
+    "wizard-directives",
+    "app.dps"]);
 
 m.factory("LineChartDecoration",[
 	"$http",
+	"$dps",
 	"$q", 
 	"parentHolder",
 	"LineChartAdapter",
 	"pageWidgets", 
 	function(
-		$http, 
+		$http,
+		$dps, 
 		$q, 
 		parentHolder, 
 		LineChartAdapter,
@@ -48,7 +51,7 @@ m.factory("LineChartDecoration",[
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-line/options.json",
-	    			dataUrl : "./api/data/process/",
+	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
 	    		}	
 
@@ -114,7 +117,7 @@ m.factory("LineChartDecoration",[
 
 			loadSeries : function(){
 				this.data = undefined; 
-				let r = $http.post(this.conf.dataUrl,
+				let r = $dps.post(this.conf.dataUrl,
 					{
 						"cache": false,
 		                "data_id": this.conf.dataID,
@@ -254,8 +257,8 @@ m.factory("LineChartDecoration",[
 				let thos = this;
 
 				if(!this.wizard.context.postprocessedTable){
-					$http
-			          .get("./api/data/process/"+this.conf.dataID)
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
 			          .success(function (resp) {
 			              thos.wizard.context.postprocessedTable = resp.value;
 			              thos.axisXList = thos.makeAxisXList(thos.wizard.context.postprocessedTable);
