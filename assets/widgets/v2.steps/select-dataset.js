@@ -1,10 +1,10 @@
 import angular from 'angular';
 
-var m = angular.module("app.widgets.v2.steps.select-dataset",["ngFileUpload"]);
+var m = angular.module("app.widgets.v2.steps.select-dataset",["ngFileUpload", "app.dps"]);
 
-m.factory("SelectDataset",["$upload", '$http', '$timeout', "$lookup", "$translate",
+m.factory("SelectDataset",["$upload", '$http', '$dps', '$timeout', "$lookup", "$translate",
 
-  function($upload, $http, $timeout, $lookup, $translate){
+  function($upload, $http, $dps, $timeout, $lookup, $translate){
 	return {
 
     id: "SelectDataset",
@@ -61,7 +61,7 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', "$lookup", "$translat
     updateDatasetList: function(){
     	var thos = this;
     	this.pending = true;
-      $http.post("./api/metadata/items")
+      $dps.post("/api/metadata/items")
     	.success(function (data) {
         thos.datasets = data;
         thos.pending = false;  
@@ -72,7 +72,7 @@ m.factory("SelectDataset",["$upload", '$http', '$timeout', "$lookup", "$translat
   	},
 
 		select: function(dataset){
-          console.log("SELECT", this.wizard);
+          // console.log("SELECT", this.wizard);
         	if(!this.datasets || !dataset) return;
           this.datasets.forEach((item) =>{item.selected = false});
           dataset.selected = true;

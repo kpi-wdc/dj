@@ -10,7 +10,8 @@ let m = angular.module('app.widgets.v2.query-manager', [
   "custom-react-directives",
   "app.widgets.wizard",
   "app.widgets.v2.steps.select-dataset",
-  "app.widgets.v2.steps.make-query"
+  "app.widgets.v2.steps.make-query",
+  "app.dps"
 ]);
 
 m.service("md5", function(){return md5});
@@ -72,12 +73,14 @@ m._projectionWizard = undefined;
 
 m.factory("ProjectionWizard",[
   "$http",
+  "$dps",
   "$modal", 
   "Wizard",
   "SelectDataset",
   "MakeQuery",
     function (  
           $http,
+          $dps,
           $modal, 
           Wizard,
           SelectDataset,
@@ -115,6 +118,7 @@ m.factory("ProjectionWizard",[
 m.controller("PreparationDialogController", function (
     $scope,
     $http,
+    $dps,
     $modal,
     dialog,
     source,
@@ -947,8 +951,8 @@ m.controller("PreparationDialogController", function (
       }
     });
 
-    $http
-      .get("./api/data/process/"+source.context.queryResultId)
+    $dps
+      .get("/api/data/process/"+source.context.queryResultId)
       .success(function (resp) {
           $scope.resultTable = resp.value;
           $scope.data_id = resp.data_id;
@@ -964,8 +968,8 @@ m.controller("PreparationDialogController", function (
     $scope.runScript = () =>{
       let script = $scope.script.filter((item,index) => index<=$scope.cursor)
        $scope.resultTable = undefined;
-      $http
-          .post("./api/data/process/",
+      $dps
+          .post("/api/data/process/",
             {
               "cache": false,
               "data_id": source.context.queryResultId,
@@ -1003,6 +1007,7 @@ m.controller("JoinDialogController", function(
   $scope, 
   $modalInstance,
   $http,
+  $dps,
   pageWidgets,
   source,
   dialog,
@@ -1019,8 +1024,8 @@ m.controller("JoinDialogController", function(
     $scope.t1_data_id = source.context.queryResultId;
     $scope.t1_title = source.$title;
 
-    $http
-        .get("./api/data/process/"+$scope.t1_data_id)
+    $dps
+        .get("/api/data/process/"+$scope.t1_data_id)
         .success(function (resp) {
             $scope.t1 = resp.value;
             $scope.t1_data_id = resp.id;
@@ -1072,8 +1077,8 @@ m.controller("JoinDialogController", function(
 
       $scope.t2_title = q.$title;
 
-      $http
-        .get("./api/data/process/"+q.context.queryResultId)
+      $dps
+        .get("/api/data/process/"+q.context.queryResultId)
         .success(function (resp) {
             $scope.t2 = resp.value;
             $scope.t2_data_id = resp.id;
@@ -1141,8 +1146,8 @@ m.controller("JoinDialogController", function(
       $scope.resultTable = undefined;
       $scope.loaded = true;
 
-      $http
-          .post("./api/data/process/",
+      $dps
+          .post("/api/data/process/",
             {
               "cache": false,
               "data_id": [$scope.t1_data_id,$scope.t2_data_id],
@@ -1202,6 +1207,7 @@ m.controller("JoinDialogController", function(
 m.controller('QueryManagerController', function (
     $scope,
     $http,
+    $dps,
     $modal, 
     APIProvider,
     EventEmitter,
@@ -1312,8 +1318,8 @@ m.controller('QueryManagerController', function (
               +query.context.queryResultId
           : "Data ID: "+query.context.queryResultId; 
        
-       $http
-        .get("./api/data/process/"+query.context.queryResultId)
+       $dps
+        .get("/api/data/process/"+query.context.queryResultId)
         .success(function (resp) {
             $scope.preview = resp.value;
 

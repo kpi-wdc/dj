@@ -3,11 +3,11 @@ import 'dictionary';
 import 'custom-react-directives';
 
 
-var m = angular.module("app.widgets.v2.steps.make-query",['app','app.dictionary','custom-react-directives']);
+var m = angular.module("app.widgets.v2.steps.make-query",['app','app.dictionary','custom-react-directives', 'app.dps']);
 
-m.factory("MakeQuery",['$http', '$timeout', "$lookup", "$translate", '$q', "dialog", "alert",
+m.factory("MakeQuery",['$http', '$dps','$timeout', "$lookup", "$translate", '$q', "dialog", "alert",
 
-  function( $http, $timeout, $lookup, $translate, $q, dialog, alert){
+  function( $http, $dps, $timeout, $lookup, $translate, $q, dialog, alert){
 
 	return {
 
@@ -60,7 +60,7 @@ m.factory("MakeQuery",['$http', '$timeout', "$lookup", "$translate", '$q', "dial
       this.wizard.context.query = this.conf.query;
       if(!this.wizard.context.table && this.conf.query){
         let thos = this;
-        $http.post("./api/dataset/query",this.conf.query)
+        $dps.post("/api/dataset/query",this.conf.query)
           .success( (resp) => {
             thos.wizard.context.table = resp;
             thos.wizard.complete(thos);            
@@ -101,8 +101,8 @@ m.factory("MakeQuery",['$http', '$timeout', "$lookup", "$translate", '$q', "dial
         .then(function(form){
           
 
-          $http
-              .post("./api/data/process/",
+          $dps
+              .post("/api/data/process/",
                 {
                   "cache": false,
                   "data_query": thos.conf.query,
@@ -222,12 +222,12 @@ m.factory("MakeQuery",['$http', '$timeout', "$lookup", "$translate", '$q', "dial
     this.canceler = $q.defer();
     let thos = this; 
      if(this.wizard.context.table){
-        $http.get("./api/table/delete/"+this.wizard.context.table.id)
+        $dps.get("/api/table/delete/"+this.wizard.context.table.id)
           .success(function(){
             thos.wizard.context.table = undefined; 
             // item.tableID = undefined;
             
-            $http.post("./api/dataset/query",thos.request,{timeout:thos.canceler.promise})
+            $dps.post("/api/dataset/query",thos.request,{timeout:thos.canceler.promise})
               .success(function(resp){
               thos.wizard.context.table = resp;
               thos.complete();
@@ -239,7 +239,7 @@ m.factory("MakeQuery",['$http', '$timeout', "$lookup", "$translate", '$q', "dial
      }else{
         this.wizard.context.table = undefined;
         // item.tableID = undefined;
-        $http.post("./api/dataset/query",this.request,{timeout:this.canceler.promise})
+        $dps.post("/api/dataset/query",this.request,{timeout:this.canceler.promise})
           .success(function(resp){
           thos.wizard.context.table = resp;
           thos.complete();
@@ -250,7 +250,7 @@ m.factory("MakeQuery",['$http', '$timeout', "$lookup", "$translate", '$q', "dial
     }else{
       let thos = this;  
       if(this.wizard.context.table){
-        $http.get("./api/table/delete/"+this.wizard.context.table.id)
+        $dps.get("/api/table/delete/"+this.wizard.context.table.id)
           .success(function(){
             thos.wizard.context.table = undefined;
             // item.tableID = undefined;
