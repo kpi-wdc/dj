@@ -5952,13 +5952,13 @@ var query = require("./wdc-query-async");
 
 new query()
 	.from(data)
-	.select(function(item){
-		return item.dataset.id === "642d9490-5232-11e6-b854-578c0c697e08"
-	})
 	.map(function(item){
-		return item.dataset.note
+		return item.dataset.commit.createdAt
 	})
-	.execute()
+	.group(function(item){
+		return {key:item, value:item}
+	})
+	// .execute()
 	.then(function(data){
 		console.log(data)
 	})

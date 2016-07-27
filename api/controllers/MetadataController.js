@@ -19,7 +19,7 @@ module.exports = {
 
   
   getMetadataList: function (req, res) {
-     sails.log.debug("#getMetadataList");
+    sails.log.debug("#getMetadataList");
     var params = req.body;
 
     var mq = {"commit/HEAD": true};
@@ -29,6 +29,41 @@ module.exports = {
 
     params.$url = req.url;
 
+    var criteria = function (data) {
+                        outerOrC = false;
+                        for (i in params.query) {
+                          var andC = true;
+                          for (prop in params.query[i]) {
+                            var values = getProperty(data, prop);
+                            var test = params.query[i][prop];
+                            var orC = false;
+                            values.forEach(function (valuesItem) {
+                              test.forEach(function (testItem) {
+                                testItem = (util.isString(testItem)) ? {equals: testItem} : testItem;
+                                if (testItem.equals) {
+                                  orC |= valuesItem === testItem.equals;
+                                }
+                                if (testItem.notEquals) {
+                                  orC |= valuesItem !== testItem.notEquals;
+                                }
+                                if (testItem.startsWith) {
+                                  orC |= valuesItem.indexOf(testItem.startsWith) === 0;
+                                }
+                                if (testItem.endsWith) {
+                                  orC |= valuesItem.match(testItem.endsWith + "$") == testItem.endsWith;
+                                }
+                                if (testItem.includes) {
+                                  orC |= valuesItem.indexOf(testItem.includes) >= 0;
+                                }
+                              })
+                            })
+                            andC &= orC;
+                          }
+                          outerOrC |= andC;
+                        }
+                        return outerOrC;
+                      }
+
     Cache.get(params)
       .then(function(cachedResult){
         if(cachedResult){
@@ -36,71 +71,44 @@ module.exports = {
         }else{
           // no cached result avaible to do make request
               Dataset.find(mq).then(function (obj) {
-              var r = new query()
+
+              var r; 
+              new aquery()
                 .from(obj)
                 .map(function (item) {
                   return prepareDataset(item).metadata
                 })
-                .get();
-              if (!params.query) {
-                Cache.save("dsm",params,r)
-                  .then(function(){
-                    return res.send(r);    
+                // .get()
+                .then(function (queryResult){
+                  r = queryResult
+                  if (!params.query) {
+                    Cache.save("dsm",params,r)
+                      .then(function(){
+                        return res.send(r);    
+                      })
+                  } else {
+                    
+                    new aquery()
+                      .from(r)
+                      .select(criteria)
+                      // .get()
+                      .then(function (queryResult){
+                        Cache.save("dsm",params,queryResult)
+                        .then(function(){
+                          return res.send(queryResult);    
+                        })    
+                      })
+                    }    
                   })
-              } else {
-                r = new query()
-                  .from(r)
-                  .select(function (data) {
-                    outerOrC = false;
-                    for (i in params.query) {
-                      var andC = true;
-                      for (prop in params.query[i]) {
-                        var values = getProperty(data, prop);
-                        var test = params.query[i][prop];
-                        var orC = false;
-                        values.forEach(function (valuesItem) {
-                          test.forEach(function (testItem) {
-                            testItem = (util.isString(testItem)) ? {equals: testItem} : testItem;
-                            if (testItem.equals) {
-                              orC |= valuesItem === testItem.equals;
-                            }
-                            if (testItem.notEquals) {
-                              orC |= valuesItem !== testItem.notEquals;
-                            }
-                            if (testItem.startsWith) {
-                              orC |= valuesItem.indexOf(testItem.startsWith) === 0;
-                            }
-                            if (testItem.endsWith) {
-                              orC |= valuesItem.match(testItem.endsWith + "$") == testItem.endsWith;
-                            }
-                            if (testItem.includes) {
-                              orC |= valuesItem.indexOf(testItem.includes) >= 0;
-                            }
-                          })
-                        })
-                        andC &= orC;
-                      }
-                      outerOrC |= andC;
-                    }
-                    return outerOrC;
-                  })
-                  .get();
-
-                Cache.save("dsm",params,r)
-                  .then(function(){
-                    return res.send(r);    
-                  })    
+                })
               }
-            }, function (err) {
-              sails.log.error('Error while getting a metadata list: ' + err);
-              res.serverError();
             })
-
-          //
-        }
-      })
-
-    
+// , function (err) {
+//               sails.log.error('Error while getting a metadata list: ' + err);
+//               res.serverError();
+//             })
+      //   }
+      // })
   },
 
   getMetadata: function (req, res) {
@@ -118,8 +126,10 @@ module.exports = {
   },
 
   getTagList: function (req, res) {
-     sails.log.debug("#getTagList");
+    sails.log.debug("MetadataController#getTagList");
     var params = req.body;
+    sails.log.debug(params);
+    
     if (!params) {
       return res.send([]);
     }
@@ -140,7 +150,7 @@ module.exports = {
         }else{
 
            Dataset.find(mq).then(function (obj) {
-                var r = new query()
+              new aquery()
                   .from(obj)
                   .map(function (item) {
                     var tmp = getProperty(item, params.property);
@@ -161,21 +171,19 @@ module.exports = {
                   .map(function (item) {
                     return {tag: item.key, count: item.values.length}
                   })
-                  .get();
-
-                Cache.save("dsm",params,r)
-                  .then(function(){
-                    return res.send(r);    
-                  })  
-                
+                  .then(function(r){
+                    Cache
+                      .save("dsm",params,r)
+                      .then(function(){
+                        return res.send(r);    
+                      })  
+                  });
               }, function (err) {
                 sails.log.error('Error while getting a tag list' + err);
                 res.serverError();
               })
-
         }
       })
-
   },
 
   getDependencies: function(req,resp){

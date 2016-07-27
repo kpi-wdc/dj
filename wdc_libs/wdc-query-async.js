@@ -242,7 +242,7 @@ Query.prototype = {
     //param cb callback(value) returns {key,newValue}
     //returns ({key: ,values:[]}) 
    _group : function(cb){
-       var thos = this;
+      var thos = this;
        this.result = [];
        result = {};
        this.data.forEach(function(element){
@@ -262,8 +262,8 @@ Query.prototype = {
        // return this;
     },
 
-    group : function(data, cb){
-       this.commands.push({cmd:"_group", cb:cb});
+    group : function(mapper){
+       this.commands.push({cmd:"_group", cb:mapper});
        return this;   
     },
 
@@ -284,8 +284,8 @@ Query.prototype = {
        // return this;
     },
 
-    reduce : function(data, cb){
-       this.commands.push({cmd:"_reduce", cb:cb});
+    reduce : function(action){
+       this.commands.push({cmd:"_reduce", cb:action});
        return this;   
     },
  
@@ -331,7 +331,17 @@ Query.prototype = {
       return new Promise(function(resolve){
         thos._exec(resolve);
       }); 
+    },
+
+    then: function(cb){
+      var thos = this;
+      var p = new Promise(function(resolve){
+        thos._exec(resolve);
+      }); 
+      p.then(cb);
     }
+
+
 }
 
 module.exports = Query;
