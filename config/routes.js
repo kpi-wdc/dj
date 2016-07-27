@@ -21,6 +21,7 @@
  */
 
 module.exports.routes = {
+
   // Auth URLs
   'get /logout': 'AuthController.logout',
 
@@ -72,7 +73,7 @@ module.exports.routes = {
   'post /api/data/process' : 'DataProcController.process',
   'get /api/data/process/:dataId' : 'DataProcController.getById',
 
-// Dictionary manipulation URLs
+// Dataset Dictionary API
   'post /api/dictionary' : 'DictionaryController.getAllDictionaries',
   'get /api/dictionary' : 'DictionaryController.getAllDictionaries',
   'post /api/dictionary/update' : 'DictionaryController.uploadDictionary',
@@ -80,8 +81,8 @@ module.exports.routes = {
   'get /api/dictionary/download' : 'DictionaryController.downloadDictionary',
   
   
-
-// Dataset manipulation URLs
+// 
+// Dataset Managing API
 // 
   'post /api/dataset/get/:datasetID' : 'DatasetController.getDataset',
   'get /api/dataset/get/:datasetID' : 'DatasetController.getDataset',
@@ -94,48 +95,64 @@ module.exports.routes = {
 
   'post /api/dataset/update' : 'DatasetController.updateDataset',
 
-  'post /api/dataset/commits/:datasetID' : 'DatasetController.getCommitList',
-  'get /api/dataset/commits/:datasetID' : 'DatasetController.getCommitList',
-
+  
   'post /api/dataset/query' : 'DatasetController.getQueryResult',
 
-  'get /api/table/download/:tableID' : 'DatasetController.downloadTable',
-  'get /api/table/delete/:tableID' : 'DatasetController.deleteTable',
-  'get /api/table' : 'DatasetController.getAllTables',
+//
+// Cached Tables API 
+//   
   
-  
-  'post /api/commit/head/:commitID' : 'DatasetController.setHead',
-  'get /api/commit/head/:commitID' : 'DatasetController.setHead',
+  'get /api/table/download/:tableID' : 'TableController.downloadTable',
+  'get /api/table/delete/:tableID' : 'TableController.deleteTable',
+  'get /api/table' : 'TableController.getAllTables',
 
-  'post /api/commit/download/:commitID' : 'DatasetController.downloadCommit',
-  'get /api/commit/download/:commitID' : 'DatasetController.downloadCommit',
+// 
+// Dataset Contorl Version Service API
+// 
 
-  'post /api/commit/delete/:commitID' : 'DatasetController.deleteCommit',
-  'get /api/commit/delete/:commitID' : 'DatasetController.deleteCommit',
+  'post /api/dataset/commits/:datasetID' : 'DatasetCVController.getCommitList',
+  'get /api/dataset/commits/:datasetID' : 'DatasetCVController.getCommitList',
 
-  'post /api/commit/public/:commitID' : 'DatasetController.setPublicStatus',
-  'get /api/commit/public/:commitID' : 'DatasetController.setPublicStatus',
+  'post /api/commit/head/:commitID' : 'DatasetCVController.setHead',
+  'get /api/commit/head/:commitID' : 'DatasetCVController.setHead',
 
-  'post /api/commit/private/:commitID' : 'DatasetController.setPrivateStatus',
-  'get /api/commit/private/:commitID' : 'DatasetController.setPrivateStatus',
-  
-  'post /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
-  'get /api/metadata/get/:datasetID' : 'DatasetController.getMetadata',
+  'post /api/commit/download/:commitID' : 'DatasetCVController.downloadCommit',
+  'get /api/commit/download/:commitID' : 'DatasetCVController.downloadCommit',
 
-  'get /api/metadata/items' : 'DatasetController.getMetadataList',
-  'post /api/metadata/items' : 'DatasetController.getMetadataList',
+  'post /api/commit/delete/:commitID' : 'DatasetCVController.deleteCommit',
+  'get /api/commit/delete/:commitID' : 'DatasetCVController.deleteCommit',
 
-  'get /api/metadata/tag/items' : 'DatasetController.getTagList',
-  'post /api/metadata/tag/items' : 'DatasetController.getTagList',
+  'post /api/commit/public/:commitID' : 'DatasetCVController.setPublicStatus',
+  'get /api/commit/public/:commitID' : 'DatasetCVController.setPublicStatus',
 
-  'get /api/metadata/tag/total' : 'DatasetController.getTagTotal',
-  'post /api/metadata/tag/total' : 'DatasetController.getTagTotal',
+  'post /api/commit/private/:commitID' : 'DatasetCVController.setPrivateStatus',
+  'get /api/commit/private/:commitID' : 'DatasetCVController.setPrivateStatus',
 
-  'get /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
-  'post /api/metadata/tag/tree' : 'DatasetController.getTopicTree',
-  'post /api/metadata/tag/dependencies': 'DatasetController.getDependencies',
+//
+// Dataset Metadata API 
+//  
+ 
+  'post /api/metadata/get/:datasetID' : 'MetadataController.getMetadata',
+  'get /api/metadata/get/:datasetID' : 'MetadataController.getMetadata',
 
-  'post /api/timeline/create': "DatasetController.createTimeline",
+  'get /api/metadata/items' : 'MetadataController.getMetadataList',
+  'post /api/metadata/items' : 'MetadataController.getMetadataList',
+
+  'get /api/metadata/tag/items' : 'MetadataController.getTagList',
+  'post /api/metadata/tag/items' : 'MetadataController.getTagList',
+
+  'get /api/metadata/tag/total' : 'MetadataController.getTagTotal',
+  'post /api/metadata/tag/total' : 'MetadataController.getTagTotal',
+
+  'get /api/metadata/tag/tree' : 'MetadataController.getTopicTree',
+  'post /api/metadata/tag/tree' : 'MetadataController.getTopicTree',
+  'post /api/metadata/tag/dependencies': 'MetadataController.getDependencies',
+
+//
+// 
+//   
+
+  // 'post /api/timeline/create': "DatasetController.createTimeline",
   
   'get /api/resource' : 'ResourceController.getList',
 

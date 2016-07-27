@@ -13,7 +13,7 @@ module.exports = {
 
 
 
-	_save: function(tag, query, json,resolve){
+	_save: function(tag, query, json, resolve){
 			if(util.isArray(json) && json.length == 0 ) json = {};
 
 				this.get(query)
