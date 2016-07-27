@@ -10,9 +10,9 @@ module.exports = {
       type: 'string', 
       required: true
     },
-	data: {
-      type: 'binary',
-      required: false
-    }
+  	data: {
+        type: 'binary',
+        required: false
+      }
   }
 };
