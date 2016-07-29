@@ -2,11 +2,14 @@ var Parser = require("../wdc-parser");
 
 
 var p = new Parser({
-	filename : "./data3.csv",
+	filename : "./dict.csv",
+	
 	reader: {
 		type: "csv",
+		encoding:"win1251",
 		options:{delimiter: ";"}
 	},
+
 	validate: function(src){
 		console.log("#validate");
 		return src;

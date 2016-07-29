@@ -3,22 +3,37 @@ var csvtojson = require("csvtojson").Converter;
 var xlsxtojson = require("./wdc-xlsx2json");
 var fs = require('fs');
 var xmltojson = require('xml2js');
+var iconv = require('iconv-lite');
+
+
+// Supported encodings
+// All node.js native encodings: utf8, ucs2 / utf16-le, ascii, binary, base64, hex.
+// Additional unicode encodings: utf16, utf16-be, utf-7, utf-7-imap.
+// All widespread singlebyte encodings: Windows 125x family, ISO-8859 family, IBM/DOS codepages, Macintosh family, KOI8 family, all others supported by iconv library. Aliases like 'latin1', 'us-ascii' also supported.
+// All widespread multibyte encodings: CP932, CP936, CP949, CP950, GB2313, GBK, GB18030, Big5, Shift_JIS, EUC-JP.
+
+
 
 var formatter = {
 
-	csv : function(filename,options){
+	csv : function(filename,options,encoding){
 		var converter = new csvtojson(options);
 		var transform = function(resolve){
-			converter.fromFile(filename,function(err,result){
-				resolve(result)
-			});	
+			encoding = encoding || "utf8";
+			fs.readFile(filename,  function(err, data ) {
+				data = iconv.decode(new Buffer(data), encoding);
+				converter.fromString(data,function(err,result){
+					resolve(result)
+				});	
+			});
+			
 		}
 		return new Promise(function(resolve){
 	        transform(resolve);
 	    }); 
 	},
 
-	xlsx: function(filename,options){
+	xlsx: function(filename,options,encoding){
 		var transform = function(resolve){
 			var workbook = xlsxtojson.convert(xlsxtojson.parseFile(filename));
 			resolve(workbook)
@@ -28,7 +43,7 @@ var formatter = {
 	    });
 	},
 
-	xml: function(filename,options){
+	xml: function(filename,options,encoding){
 		var transform = function(resolve){
 			var parser = new xmltojson.Parser();
 			fs.readFile(filename, function(err, data) {
@@ -42,7 +57,7 @@ var formatter = {
 	    });
 	},
 
-	json: function(filename,options){
+	json: function(filename,options,encoding){
 		var transform = function(resolve){
 			
 			fs.readFile(filename, function(err, data) {
@@ -62,7 +77,7 @@ var Parser = function(options){
 	var thos = this;
 	this.options = options;
 
-	this.loadPromise = formatter[options.reader.type](options.filename,options.reader.options);
+	this.loadPromise = formatter[options.reader.type](options.filename,options.reader.options,options.reader.encoding);
 } 
 
 Parser.prototype = {
