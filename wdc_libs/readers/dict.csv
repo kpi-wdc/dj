@@ -1,0 +1,15 @@
+key;type;value.label#s;value.note;value.icon;value.url
+#WB;source;#WB_NAME;#WB_NOTE;https://innovation.internews.org/sites/default/files/styles/incil_large/public/content-images/world-bank-logos-282.jpg;http://data.worldbank.org/
+#ua;locale;Українська;;;
+#EC;topic;#EC_LABEL;#EC_NOTE;http://img2.wikia.nocookie.net/__cb20131223004217/halofanon/images/4/41/HF_Icon_Speciality_Economy.png;
+Andrey Boldak;;#BOLDAK_NAME;#BOLDAK_INFO;http://wdc.org.ua/sites/default/files/imagepicker/25/a_boldac.png;mailto:boldak@wdc.org.ua
+#en;locale;English;;;
+#UKR;;#UKR_LABEL;;http://flags.fmcdn.net/data/flags/mini/ua.png;
+#ECO;topic;#ECO_LABEL;#ECO_NOTE;http://youthaward.org/sites/youthaward.org/files/wsya2011-icon5-gogreen.png;
+#S;topic;#S_LABEL;#S_NOTE;https://www.alcatel-lucent.com/sites/live/files/sustainability/content/digital-inclusion-icon-131x136.png;
+#SDI_TOPIC;topic;#SDI;#SDI_NOTE;http://www.iisd.ca/_img/km/knowledge/icon_sustainable-development_225.png;
+#WDC;source;#WDC_LABEL;#WDC_NOTE;http://wdc-app-develop.herokuapp.com/api/resource/wdc-wdc.png;wdc.org.ua
+Ivan Pyshnograiev;;#PYSHNOGRAIEV_NAME;#PYSHNOGRAIEV_INFO;http://wdc.org.ua/sites/default/files/imagepicker/25/4_2.jpg;mailto:pyshnograiev@wdc.org.ua
+#CSL_TOPIC;topic;#CSL;#CSL_NOTE;https://pixabay.com/static/uploads/photo/2015/12/10/16/39/shield-1086703_960_720.png;
+#WDI;topic;#WDI_LABEL;The primary World Bank collection of development indicators, compiled from officially-recognized international sources. It presents the most current and accurate global development data available, and includes national, regional and global estimates.;http://a4.mzstatic.com/us/r30/Purple7/v4/50/49/57/5049573f-01c5-2197-16b7-c3d9c30ae451/icon175x175.jpeg;
+#GDP;topic;#GDP_ABBR;#GDP_NOTE;https://www.whitehouse.gov/sites/default/files/immigration/icon_gdp_1.png;https://en.wikipedia.org/wiki/Gross_domestic_product

@@ -4,7 +4,8 @@
 // 	console.log(result)
 // });
 
-var formatter = require("../../wdc-format")
+var script = "../../wdc-format";
+var formatter = require(script)
 formatter
 	.csv2json("./data.csv")
 	.then(function(result){
