@@ -4,6 +4,7 @@ var xlsxtojson = require("./wdc-xlsx2json");
 var fs = require('fs');
 var xmltojson = require('xml2js');
 var iconv = require('iconv-lite');
+var request = require("request");
 
 
 // Supported encodings
@@ -14,7 +15,7 @@ var iconv = require('iconv-lite');
 
 
 
-var formatter = {
+var fileFormatter = {
 
 	csv : function(filename,options,encoding){
 		var converter = new csvtojson(options);
@@ -72,12 +73,84 @@ var formatter = {
 }
 
 
+var requestFormatter = {
+
+	csv : function(url,options,encoding){
+		var converter = new csvtojson(options);
+		var transform = function(resolve){
+			encoding = encoding || "utf8";
+			// fs.readFile(filename,  function(err, data ) {
+			request(url, function (error, response, body) {	
+				console.log(body)
+				data = iconv.decode(new Buffer(body), encoding);
+				converter.fromString(data,function(err,result){
+					resolve(result)
+				});	
+			});
+			
+		}
+		return new Promise(function(resolve){
+	        transform(resolve);
+	    }); 
+	},
+
+	// xlsx: function(filename,options,encoding){
+	// 	var transform = function(resolve){
+	// 		var workbook = xlsxtojson.convert(xlsxtojson.parseFile(filename));
+	// 		resolve(workbook)
+	// 	}
+	// 	return new Promise(function(resolve){
+	//         transform(resolve);
+	//     });
+	// },
+
+	xml: function(url,options,encoding){
+		var transform = function(resolve){
+			var parser = new xmltojson.Parser();
+			request(url, function (error, response, body) {
+				parser.parseString(body, function (err, result) {
+			    	resolve(result)
+			    });
+			});
+		}
+		return new Promise(function(resolve){
+	        transform(resolve);
+	    });
+	},
+
+	json: function(url,options,encoding){
+		var transform = function(resolve){
+			request(url, function (error, response, body) {
+			  if (!error && response.statusCode == 200) {
+			    console.log(body); 
+			    var result = JSON.parse(body);
+			    resolve(result)
+			  }
+			})
+			
+		}
+		return new Promise(function(resolve){
+	        transform(resolve);
+	    });
+	}
+}
+
+
 
 var Parser = function(options){
 	var thos = this;
 	this.options = options;
 
-	this.loadPromise = formatter[options.reader.type](options.filename,options.reader.options,options.reader.encoding);
+	if(this.options.filename){
+		this.loadPromise = fileFormatter[options.reader.type](options.filename,options.reader.options,options.reader.encoding);
+		return
+	}
+	
+	if(this.options.url){
+		this.loadPromise = requestFormatter[options.reader.type](options.url,options.reader.options,options.reader.encoding);
+		return
+	}
+
 } 
 
 Parser.prototype = {
