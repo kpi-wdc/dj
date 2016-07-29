@@ -14,6 +14,28 @@ var util = require("util");
 var Cache = require("./Cache");
 
 
+var prepareDataset = function (obj) {
+  obj.metadata.dataset.commit.createdAt = obj.createdAt;
+  obj.metadata.dataset.commit.id = obj.id;
+  obj.metadata.dataset.commit.author = obj["commit/author"];
+  obj.metadata.dataset.commit.HEAD = obj["commit/HEAD"];
+  obj.metadata.dataset.status = obj["dataset/status"];
+  obj.data = obj.data || [];
+  delete obj.id;
+  delete obj.createdAt;
+  delete obj.updatedAt;
+  delete obj["dataset/id"];
+  delete obj["commit/HEAD"];
+  delete obj["commit/author"];
+  delete obj["dataset/status"];
+  return obj
+};
+
+var prepareEmptyDataset = function (obj) {
+  obj = prepareDataset(obj);
+  obj.data = [];
+  return obj;
+};
 
 module.exports = {
 
@@ -153,6 +175,7 @@ module.exports = {
               new aquery()
                   .from(obj)
                   .map(function (item) {
+                    // sails.log.debug("!", item)
                     var tmp = getProperty(item, params.property);
                     return tmp;
                   })
