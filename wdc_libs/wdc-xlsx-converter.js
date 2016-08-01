@@ -104,6 +104,52 @@ if (i18nSheet != undefined) {
   return {"warnings": warnings}; 
 }
 
+exports.parseDictionary = function(filename){
+  var workbook = parser.convert(parser.parseFile(filename));
+
+  var dictionarySheet = workbook.Sheets['dictionary'];
+  var i18nSheet = workbook.Sheets['i18n'];
+
+  var metadata, data, dictionary;
+
+ 
+  if (dictionarySheet != undefined) {
+    var dict = workbook.Sheets['dictionary'];
+    dictionary = [];
+
+    dict.forEach(function (item) {
+      pathes = [];
+      for (i in item) {
+        if (i.indexOf("__") != 0 && item[i] != undefined && item[i] != null) {
+          pathes.push({path: i, value: item[i]})
+        }
+      }
+      dictionary.push(FO.flat2json(pathes));
+    })
+  } else {
+    throw new Error('No dictionary sheet found in the document');
+  }
+
+  if (i18nSheet != undefined) {
+
+    dictionary = dictionary || [];
+
+    i18nSheet.forEach(function (item) {
+      pathes = [];
+      for (i in item) {
+        if (i.indexOf("__") != 0 && item[i] != undefined && item[i] != null) {
+          pathes.push({path: i, value: item[i]})
+        }
+      }
+      tmp = FO.flat2json(pathes);
+      tmp.type = "i18n";
+      dictionary.push(tmp);
+    })
+  } 
+
+  return dictionary
+};
+
 exports.parseXLS = function (filename) {
   var workbook = parser.convert(parser.parseFile(filename));
 

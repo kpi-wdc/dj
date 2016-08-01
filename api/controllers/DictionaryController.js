@@ -5,11 +5,12 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-converter = require("../../wdc_libs/wdc-xlsx-converter");
+var converter = require("../../wdc_libs/wdc-xlsx-converter");
 mime = require('mime');
 path = require('path');
 uuid = require('uuid');
 query = require('../../wdc_libs/wdc-query');
+
 
 module.exports = {
 
@@ -81,7 +82,7 @@ module.exports = {
         }
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
-        var dictionary = converter.parseXLS(uploadedFileAbsolutePath).dictionary;
+        var dictionary = converter.parseDictionary(uploadedFileAbsolutePath);
         module.exports.updateDictionary(dictionary);
         return res.send({status: "ok"})
       });

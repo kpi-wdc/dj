@@ -79,9 +79,7 @@ var requestFormatter = {
 		var converter = new csvtojson(options);
 		var transform = function(resolve){
 			encoding = encoding || "utf8";
-			// fs.readFile(filename,  function(err, data ) {
 			request(url, function (error, response, body) {	
-				console.log(body)
 				data = iconv.decode(new Buffer(body), encoding);
 				converter.fromString(data,function(err,result){
 					resolve(result)
@@ -121,7 +119,10 @@ var requestFormatter = {
 	json: function(url,options,encoding){
 		var transform = function(resolve){
 			request(url, function (error, response, body) {
+			  console.log(error)
+			  console.log(response.statusCode);
 			  if (!error && response.statusCode == 200) {
+			  	console.log(response);
 			    console.log(body); 
 			    var result = JSON.parse(body);
 			    resolve(result)
