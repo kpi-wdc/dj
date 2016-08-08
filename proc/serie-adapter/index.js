@@ -1107,7 +1107,15 @@ exports.BarChartSerie = function(table,params){
 	  
 	  var result = [];
       table.body.forEach(function(serieData){
-      	var currentSerie = {key:serieData.metadata[0].label,values:[]}
+      	var currentSerie = {
+      		key:serieData.metadata[0].label,
+      		role:serieData.metadata[0].role,
+      		format:serieData.metadata[0].format,
+      		label:{
+      			role:table.header[0].metadata[0].role,
+      			format:table.header[0].metadata[0].format
+      		},
+      		values:[]}
       	table.header.forEach(function(currentColumn,index){
       		currentSerie.values.push(
       				{
@@ -1405,19 +1413,19 @@ exports.scatter_serie = function(table,params){
 	 	base = table.header[0].metadata[-axisXIndex-1].dimensionLabel
 	}
 
-	xValues = xValues.map(function(item){return new Number(item)})
+	// xValues = xValues.map(function(item){return new Number(item)})
 
-	var isNumbers = true;
- 	isNumbers= xValues.reduce(function(isNumbers,item){ 
- 		return isNumbers && (!isNaN(item))
- 	})
+	// var isNumbers = true;
+ // 	isNumbers= xValues.reduce(function(isNumbers,item){ 
+ // 		return isNumbers && (!isNaN(item))
+ // 	})
 
- 	if(!isNumbers){
- 		base += "(Row Index)";
- 		xValues = xValues.map(function(item,index){
- 			return index
- 		})
- 	}
+ // 	if(!isNumbers){
+ // 		base += "(Row Index)";
+ // 		xValues = xValues.map(function(item,index){
+ // 			return index
+ // 		})
+ // 	}
 
  	if(catList.length == 0){
  		catList = [0];
@@ -1436,6 +1444,10 @@ exports.scatter_serie = function(table,params){
 		 	 		"key" : ((params.category) ? ("Category: "+cat+", ") : "")
 		 	 			+row.metadata.map(function(item){ return item.label}).join(", "),
 					"base" : base,
+					"axisX":{
+						role: table.header[0].metadata[0].role,
+						format:table.header[0].metadata[0].format
+					},
 					"values": row.value.map(function(item,j){
 						return {
 							"category" : categories[j],
@@ -1522,6 +1534,7 @@ exports.scatter_serie = function(table,params){
 exports.ScatterSerie = function (table,params){
 	return exports.scatter_serie(table,params)
 	 
+
 	 var axisXIndex = params.axisX || 0;
  	 var normalize = params.normalized || false;
 	 var pca = params.pca || false;
