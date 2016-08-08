@@ -1,7 +1,8 @@
 "use strict";
 
 (function () {
-  //console.log("LOAD nv.d3.ext")
+ console.log("LOAD nv.d3.ext")
+ console.log(date)
 d3.geo.tileServerEnable = true;
 
 d3.html(
@@ -3039,6 +3040,8 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
+        console.log("ScatterSerie",data)
+
         var container = d3.select(this),
             that = this;
 
@@ -3086,14 +3089,31 @@ d3.geo.tile = function () {
 
         //------------------------------------------------------------
 
+          if(data[0].axisX.role == "time"){
+            data.forEach(function(serie){
+              serie.values.forEach(function(value){
+                value.x = new Date(value.x)
+              })
+            })
+            console.log("Time format", data)
+          }  
 
         //------------------------------------------------------------
         // Setup Scales
+        if(data[0].axisX.role == "time"){
+          x = d3.time.scale();
+          x.domain([data[0].values[0].x,data[0].values[data[0].values.length-1].x])
+          lines.xScale = x;
+          x.range([0, availableWidth])  
+        }else{
+          x = lines.xScale();
+        }
 
-        x = lines.xScale();
         y = lines.yScale();
 
         //------------------------------------------------------------
+
+
 
 
         //------------------------------------------------------------
@@ -3168,9 +3188,26 @@ d3.geo.tile = function () {
         //------------------------------------------------------------
         // Setup Axes
 
-        if (showXAxis) {
-          xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
+          if (showXAxis) {
+            if(data[0].axisX.role == "time"){
+              var customTimeFormat = d3.time.format.multi([
+                [".%L", function(d) { return d.getMilliseconds(); }],
+                [":%S", function(d) { return d.getSeconds(); }],
+                ["%I:%M", function(d) { return d.getMinutes(); }],
+                ["%I %p", function(d) { return d.getHours(); }],
+                ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+                ["%b %d", function(d) { return d.getDate() != 1; }],
+                ["%B", function(d) { return d.getMonth(); }],
+                ["%Y", function() { return true; }]
+              ]);
+            
+            xAxis.tickFormat(customTimeFormat);
+          }
+          // else{
+            xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
+          // }
 
+         
           g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (y.range()[0] + 10) + ")");
           g.select(".nv-x.nv-axis").transition().call(xAxis);
         }
@@ -9012,7 +9049,21 @@ nv.models.multiBarChart = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+      // console.log("BARSERIE",data);
 
+      // convert date-time to formated string
+      data.forEach(function(serie,i) {
+            if(serie.role == "time"){
+              serie.key = date.format(new Date(serie.key), serie.format)
+            }
+            if(serie.label.role == "time"){
+              serie.values.forEach(function(value){
+                value.label = date.format(new Date(value.label), serie.label.format)
+              })
+            }
+        })
+      
+      //
       
       var container = d3.select(this),
           that = this;
@@ -9094,7 +9145,8 @@ nv.models.multiBarChart = function() {
 
       if (showLegend) {
         legend.width(availableWidth - controlWidth());
-
+        
+        
         if (multibar.barColor())
           data.forEach(function(series,i) {
             series.color = d3.rgb('#ccc').darker(i * 1.5).toString();
@@ -9508,6 +9560,7 @@ nv.models.multiBarHorizontal = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+
 
 
       var availableWidth = width - margin.left - margin.right,
@@ -9996,6 +10049,19 @@ nv.models.multiBarHorizontalChart = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+
+      // convert date-time to formated string
+      data.forEach(function(serie,i) {
+            if(serie.role == "time"){
+              serie.key = date.format(new Date(serie.key), serie.format)
+            }
+            if(serie.label.role == "time"){
+              serie.values.forEach(function(value){
+                value.label = date.format(new Date(value.label), serie.label.format)
+              })
+            }
+        })
+
       var container = d3.select(this),
           that = this;
 

@@ -20,7 +20,7 @@ System.config({
     },
     'nv.d3.ext': {
       exports: 'nv',
-      deps: ['nv.d3', 'topojson']
+      deps: ['nv.d3', 'topojson', "date-and-time"]
     },
     'angular-nvd3': {
       deps: ['nv.d3.ext']
