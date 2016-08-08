@@ -6,6 +6,7 @@
  */
 
 var converter = require("../../wdc_libs/wdc-xlsx-converter");
+var wdc_xlsx =  require("../../wdc_libs/parsers/wdc-xlsx");
 var mime = require('mime');
 var path = require('path');
 var uuid = require('uuid');
@@ -19,6 +20,7 @@ var prepareTimeline = require("../../wdc_libs/wdc-timeline").createSerie;
 var toXLS = require("../../wdc_libs/wdc-table-generator").prepareXLS;
 var I18N = require("../../wdc_libs/wdc-i18n");
 var Cache = require("./Cache");
+var date = require("date-and-time");
 
 
 
@@ -132,66 +134,133 @@ module.exports = {
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
 
-        var validationResult = converter.validate(uploadedFileAbsolutePath);
-        if(validationResult.error){
-          return res.send(validationResult)
-        }
+        wdc_xlsx(uploadedFileAbsolutePath)
+          .then(function(dataset){
+            // sails.log.debug(dataset)
 
-        var dataset = converter.parseXLS(uploadedFileAbsolutePath);
-        var dict = dataset.dictionary;
+            var dict = dataset.dictionary;
+            
+            var validationResult = dataset.validation;
+            if (validationResult.error){
+              return res.send(validationResult); 
+            }
 
-        dictionaryController.updateDictionary(dict);
-        delete dataset.dictionary;
-        dataset.metadata.dataset.commit.author = req.user.name;
-        Dataset.findOne(
-          {
-            "dataset/id": dataset.metadata.dataset.id,
-            "commit/HEAD": true
-          }).then(function (obj) {
-            if (!obj) {
-              Dataset.create(dataset, function (err, obj) {
-                if (err) {
-                  sails.log.error('Error while adding new data source: ' + err);
-                  return res.serverError();
+            dictionaryController.updateDictionary(dict);
+            delete dataset.dictionary;
+            dataset.metadata.dataset.commit.author = req.user.name;
+            Dataset.findOne(
+              {
+                "dataset/id": dataset.metadata.dataset.id,
+                "commit/HEAD": true
+              }).then(function (obj) {
+                if (!obj) {
+                  Dataset.create(dataset, function (err, obj) {
+                    if (err) {
+                      sails.log.error('Error while adding new data source: ' + err);
+                      return res.serverError();
+                    } else {
+                      // TODO send operation status
+                      var result = prepareCommitInfo(obj);
+                      result.warnings = validationResult.warnings;
+                      Cache.clear("dsm")
+                        .then(function(){
+                          return res.send(result);    
+                        })
+                    }
+                  })
                 } else {
-                  // TODO send operation status
-                  var result = prepareCommitInfo(obj);
-                  result.warnings = validationResult.warnings;
-                  Cache.clear("dsm")
-                    .then(function(){
-                      return res.send(result);    
+                  Dataset.destroy(
+                    {
+                      "dataset/id": dataset.metadata.dataset.id,
+                      createdAt: {">=": obj.createdAt},
+                      "commit/HEAD": false
+                    }).then(function () {
+                      Dataset.update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
+                        .then(function () {
+                          Dataset.create(dataset, function (err, obj) {
+                            if (err) {
+                              sails.log.error('Error while adding new data source: ' + err);
+                              return res.serverError();
+                            } else {
+                              var result = prepareCommitInfo(obj);
+                              result.warnings = validationResult.warnings;
+                              Cache.clear("dsm")
+                                .then(function(){
+                                  return res.send(result);    
+                                })
+                            }
+                          });
+                        });
                     })
                 }
+              }, function (err) {
+                sails.log.error('Error while updating a data set: ' + err);
+                res.serverError();
               })
-            } else {
-              Dataset.destroy(
-                {
-                  "dataset/id": dataset.metadata.dataset.id,
-                  createdAt: {">=": obj.createdAt},
-                  "commit/HEAD": false
-                }).then(function () {
-                  Dataset.update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
-                    .then(function () {
-                      Dataset.create(dataset, function (err, obj) {
-                        if (err) {
-                          sails.log.error('Error while adding new data source: ' + err);
-                          return res.serverError();
-                        } else {
-                          var result = prepareCommitInfo(obj);
-                          result.warnings = validationResult.warnings;
-                          Cache.clear("dsm")
-                            .then(function(){
-                              return res.send(result);    
-                            })
-                        }
-                      });
-                    });
-                })
-            }
-          }, function (err) {
-            sails.log.error('Error while updating a data set: ' + err);
-            res.serverError();
+
+
           })
+
+        // var validationResult = converter.validate(uploadedFileAbsolutePath);
+        // if(validationResult.error){
+        //   return res.send(validationResult)
+        // }
+
+        // var dataset = converter.parseXLS(uploadedFileAbsolutePath);
+        // var dict = dataset.dictionary;
+
+        // dictionaryController.updateDictionary(dict);
+        // delete dataset.dictionary;
+        // dataset.metadata.dataset.commit.author = req.user.name;
+        // Dataset.findOne(
+        //   {
+        //     "dataset/id": dataset.metadata.dataset.id,
+        //     "commit/HEAD": true
+        //   }).then(function (obj) {
+        //     if (!obj) {
+        //       Dataset.create(dataset, function (err, obj) {
+        //         if (err) {
+        //           sails.log.error('Error while adding new data source: ' + err);
+        //           return res.serverError();
+        //         } else {
+        //           // TODO send operation status
+        //           var result = prepareCommitInfo(obj);
+        //           result.warnings = validationResult.warnings;
+        //           Cache.clear("dsm")
+        //             .then(function(){
+        //               return res.send(result);    
+        //             })
+        //         }
+        //       })
+        //     } else {
+        //       Dataset.destroy(
+        //         {
+        //           "dataset/id": dataset.metadata.dataset.id,
+        //           createdAt: {">=": obj.createdAt},
+        //           "commit/HEAD": false
+        //         }).then(function () {
+        //           Dataset.update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
+        //             .then(function () {
+        //               Dataset.create(dataset, function (err, obj) {
+        //                 if (err) {
+        //                   sails.log.error('Error while adding new data source: ' + err);
+        //                   return res.serverError();
+        //                 } else {
+        //                   var result = prepareCommitInfo(obj);
+        //                   result.warnings = validationResult.warnings;
+        //                   Cache.clear("dsm")
+        //                     .then(function(){
+        //                       return res.send(result);    
+        //                     })
+        //                 }
+        //               });
+        //             });
+        //         })
+        //     }
+        //   }, function (err) {
+        //     sails.log.error('Error while updating a data set: ' + err);
+        //     res.serverError();
+        //   })
       });
   },
 
@@ -297,10 +366,23 @@ module.exports = {
           obj.metadata = i18n.translate(obj.metadata,locale);
           
           for(i in obj.metadata.dimension){
+          //   if(obj.metadata.dimension[i].role == "time"){
+          //     obj.metadata.dimension[i].values = obj.metadata.dimension[i].values.map(function(item){
+          //       sails.log.debug(item,obj.metadata.dimension[i].format, new Date(item.label));
+          //       return {id:item.id, label : date.format(new Date(item.label),obj.metadata.dimension[i].format)}
+          //     })
+          //     // sails.log.debug(obj.metadata.dimension[i].values);
+          //     // obj.metadata.dimension[i].values = date.format(obj.metadata.dimension[i].values,obj.metadata.dimension[i].format)
+          //   }else{
+              obj.metadata.dimension[i].values = 
+              i18n.translate(obj.metadata.dimension[i].values,locale)  
+            // }
             obj.metadata.dimension[i].label = i18n.translate(obj.metadata.dimension[i].label,locale);
-            obj.metadata.dimension[i].values = 
-              i18n.translate(obj.metadata.dimension[i].values,locale)
+            
           } 
+
+          // obj.metadata = i18n.translate(obj.metadata,locale);
+          
           var result = executeQuery(obj,query);
 
           result.metadata = {

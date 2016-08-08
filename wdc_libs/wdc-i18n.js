@@ -36,6 +36,10 @@ I18N.prototype = {
 	translate : function(o, lang){
 		lang = lang || this.lang || "en";
 		
+		if (util.isDate(o)){
+			return o;
+		}
+
 		if(util.isString(o)){
 			var key = (this.lookup[o] && this.lookup[o].label) ? this.lookup[o].label : o;
 			if(this.translations[key]){

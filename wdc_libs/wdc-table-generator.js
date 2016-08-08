@@ -83,7 +83,12 @@ rowsDimension.IDList.forEach(function(row){
 	var metadata = row;
 	metadata.dimension = rowsDimension.dimension;
 	metadata.dimensionLabel = dataset.metadata.dimension[metadata.dimension].label;
-	metadata.role = dataset.metadata.dimension[metadata.dimension].role; 
+	metadata.role = dataset.metadata.dimension[metadata.dimension].role;
+	
+	if(dataset.metadata.dimension[metadata.dimension].format){
+		metadata.format = dataset.metadata.dimension[metadata.dimension].format;
+	} 
+
 	var resultRow = {metadata:[metadata], value:[]};
 	var rowData = new query()
 		.from(result)
@@ -105,6 +110,9 @@ var splitRow = function(data,dimension){
 			m.dimension = dimension.dimension;
 			m.dimensionLabel = dataset.metadata.dimension[m.dimension].label; 
 			m.role = dataset.metadata.dimension[m.dimension].role; 
+			if(dataset.metadata.dimension[m.dimension].format){
+				m.format = dataset.metadata.dimension[m.dimension].format;
+			} 
 			var c = {metadata:rowset.metadata.map(function(item){return item})};
 			c.metadata.push(m);
 			c.data = new query()
@@ -126,7 +134,10 @@ var splitColumns = function(data,dimension){
 			var m = current;
 			m.dimension = dimension.dimension;
 			m.dimensionLabel = dataset.metadata.dimension[m.dimension].label;  
-			m.role = dataset.metadata.dimension[m.dimension].role; 
+			m.role = dataset.metadata.dimension[m.dimension].role;
+			if(dataset.metadata.dimension[m.dimension].format){
+				m.format = dataset.metadata.dimension[m.dimension].format;
+			}  
 			
 			var c = {metadata:colset.metadata.map(function(item){return item})};
 			c.metadata.push(m);
@@ -154,6 +165,10 @@ product.forEach(function(row){
 		m.dimension = columnsDimension.dimension;
 		m.dimensionLabel = dataset.metadata.dimension[m.dimension].label;  
 		m.role = dataset.metadata.dimension[m.dimension].role; 
+		if(dataset.metadata.dimension[m.dimension].format){
+			m.format = dataset.metadata.dimension[m.dimension].format;
+		}  
+		
 		columnes.push(
 			{
 				metadata:[m],

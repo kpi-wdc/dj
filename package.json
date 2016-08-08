@@ -44,6 +44,7 @@
     "connect-mongo": "0.8.1",
     "copy-object": "^1.0.0",
     "csvtojson": "^1.0.0",
+    "date-and-time": "^0.3.0",
     "del": "1.1.1",
     "ejs": "2.3.1",
     "es6-module-loader": "0.16.5",
