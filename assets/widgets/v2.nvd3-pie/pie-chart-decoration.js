@@ -146,8 +146,9 @@ m.factory("PieChartDecoration",[
 
 				this.dataLoaded = //(this.dataLoaded) ? this.dataLoaded :
 				 	this.loadSeries().then( (resp) => {
-				 		console.log(resp);
-				 		thos.data = resp.data.data[0].values;
+				 		// console.log(resp);
+				 		// thos.data = resp.data.data[0].values;
+				 		thos.data = resp.data.data;
 		                thos.conf.serieDataId = resp.data.data_id;
 		            });
 

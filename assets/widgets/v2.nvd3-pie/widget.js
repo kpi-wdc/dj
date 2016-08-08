@@ -27,7 +27,7 @@ m.controller('Nvd3PieChartCtrlV2', function ($scope, NVD3WidgetV2, PieChartWizar
                   return (isNaN(d.value)) ? d.value : Number(Number(d.value).toFixed(2))
                 },
                 getSeries: function (series) {
-                  return series[0].values
+                  return series
                 },
 
                 getSeriesSelection: function(data){

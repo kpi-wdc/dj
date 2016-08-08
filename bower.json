@@ -37,6 +37,12 @@
     "Blob.js": "eligrey/Blob.js",
     "canvg": "~1.3.0",
     "d3-layout-timeline": "emeeks/d3.layout.timeline",
-    "date-and-time": "knowledgecode/date-and-time#~0.3.0"
-  }
+    "date-and-time": "knowledgecode/date-and-time#~0.3.0",
+    "d3": "v3.5.17"
+  },
+
+  "resolutions": {
+      "d3": "v3.5.17"
+    }
+
 }
