@@ -2,6 +2,7 @@ import angular from 'angular';
 import 'ngReact';
 import "widgets/v2.steps/palettes";
 import "d3";
+import "date-and-time";
 
 let m = angular.module("custom-react-directives",['react','app.widgets.palettes']);
 m.service("d3", function(){return d3});
@@ -93,8 +94,13 @@ let WdcTable = React.createClass( {
       if((i % 2) == 1){
         headCells = table.header.map((item,index)=>
          <th key={"vth"+index+"_"+i} style={this.headerValueStyle}>
-            {item.metadata[Math.floor(i/2)].label}
-          </th>
+          {
+            (item.metadata[Math.floor(i/2)].role == "time" 
+              && item.metadata[Math.floor(i/2)].format) 
+            ? date.format(new Date(item.metadata[Math.floor(i/2)].label),item.metadata[Math.floor(i/2)].format) 
+            : item.metadata[Math.floor(i/2)].label
+          } 
+         </th>
         
         )
       }
@@ -170,8 +176,12 @@ let WdcTable = React.createClass( {
   },
 
   getValues: function (row, rowIndex){
+
     let meta = row.metadata.map((m,i) => 
-      <td key={"m"+i} style={this.headerValueStyle} >{m.label}</td>);
+      <td key={"m"+i} style={this.headerValueStyle} >{
+
+          (m.role == "time" && m.format) ? date.format(new Date(m.label),m.format) : m.label
+        }</td>);
 
     let values = row.value.map((v,colIndex) => 
       <td key={"v"+colIndex} style={this.getValueStyle(v,rowIndex,colIndex)}>{(v == null) ? "-" : v}</td>);
@@ -204,7 +214,7 @@ let WdcTable = React.createClass( {
   
     let dataTable = this.props.data.table;
 
-    if (angular.isUndefined(dataTable)) return <h5>{this.noDataAvailabe}</h5>;
+    if (angular.isUndefined(dataTable)) return <h5>{this.noDataAvailable}</h5>;
     if (dataTable.body.length == 0) return <h5>No Data Available</h5>;
     if (angular.isUndefined(dataTable.metadata)) return <h5>No Metadata Available</h5>; 
 

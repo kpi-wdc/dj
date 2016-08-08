@@ -28,7 +28,27 @@
         <a href="{{object.url}}" target="blank">{{object.url}}</a>
       </div>
     </div>
+    <h5 style="font-size:small;">Full Metadata List</h5>
+    <div class="row" style="font-size:small;">
+      <table width="100%">
+        <thead>
+          <tr>
+            <th style="font-size:smaller; color:#154163;">Key</th>
+            <th style="font-size:smaller;">Value</th>
+          </tr>
+        </thead>
+        <tbody>  
+          <tr ng-repeat="item in meta">
+            <th style="font-size:smaller; color:#154163;">{{item.key | translate}}</th>
+            <td style="font-size:smaller;">{{item.value | translate}}</td>
+          </tr>
+        </tbody>   
+      </table>
+    </div>
+
   </div>
+  
+
 </div>    
 
     
