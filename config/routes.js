@@ -153,6 +153,19 @@ module.exports.routes = {
 //   
 
   // 'post /api/timeline/create': "DatasetController.createTimeline",
+ 
+// 
+// Timeline Service API
+// 
+
+  'post /api/timeline/upload' : 'TimelineController.upload',
+  'post /api/timeline/get/:id' : 'TimelineController.get',
+  'get /api/timeline/get/:id' : 'TimelineController.get',
+
+
+// 
+// Resource Service API
+// 
   
   'get /api/resource' : 'ResourceController.getList',
 

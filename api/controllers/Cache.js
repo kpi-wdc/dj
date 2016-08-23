@@ -10,8 +10,10 @@ module.exports = {
 		return CacheData.findOne({hash:MD5(query)}); 
 	},
 	
-
-
+	getById: function (_id){
+		// console.log("get", query)
+		return CacheData.findOne({id:_id}); 
+	},
 
 	_save: function(tag, query, json, resolve){
 			if(util.isArray(json) && json.length == 0 ) json = {};
