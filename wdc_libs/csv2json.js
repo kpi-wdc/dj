@@ -6,38 +6,32 @@ const request = require('sync-request')
 const xml2json = require('xml2json')
 
 /*
-
 let data = getDataFromWeb('srcLink')
 
 data = getJSON('srcName', 'srcType', data)
-
 */
-
-
 
 // extractZip('/home/vm/Downloads/API_UKR_DS2_en_csv_v2.zip')
 
 
-
-
+let start = getJSON('srcName', 'csv', '/home/vm/Downloads/API_UKR_DS2_en_csv_v2.zip') 
 
 
 /**
  * Extract from zip to memory
  * @param {zip} data - zip file.
- * @returns {Array} extractFiles - array with data of file in strings.
+ * @returns {Array} fileData, len - array with quantity of files and data of files in strings.
  */
-const extractZip = (data) => {
-  let extractFiles = []
-
+function extractZip (data) {
+  let fileData = []
   const zip = new AdmZip(data)
-  const zipEntries = zip.getEntries()
+  const files = zip.getEntries().length
 
-  zipEntries.forEach((el) => {
-    extractFiles[el] = zip.readAsText(el)
+  zip.getEntries().forEach((entry) => {
+    fileData.push(zip.readAsText(entry)) // decompressed content of the entry
   })
 
-  return extractFiles
+  return {len: files, data: fileData}
 }
 
 /**
@@ -45,7 +39,7 @@ const extractZip = (data) => {
  * @param {string} srcLink - link to actual data of source.
  * @returns {string}
  */
-const getDataFromWeb = (srcLink) => {
+function getDataFromWeb (srcLink) {
   return request('GET', srcLink).getBody()
 }
 
@@ -56,7 +50,7 @@ const getDataFromWeb = (srcLink) => {
  * @param {string} data - link to actual data of source.
  * @returns {JSON} output - .
  */
-const getJSON = (srcName, srcType, data) => {
+function getJSON (srcName, srcType, data) {
   let output = `ERROR: NOT FOUND ${srcName} in getJSON`
 
   switch (srcType) {
@@ -67,19 +61,14 @@ const getJSON = (srcName, srcType, data) => {
       output = data
       break
     case 'csv':
-      output = extractZip(data)
-      let converter = new Converter({'ignoreEmpty': true})
-
-      converter.fromString(output, (err, result) => {
-        if (err) throw err
-        output = result
-      })
-      // TODO: Merge into 1 JSON
+      let extract = extractZip(data)
+      output = csv2json(extract)
+      // TODO: Merge into 1 JSON -->f unction merge(files) {}
       break
     case 'tsv':
-      output = extractZip(data)
-      // TODO: Convert to JSON
-      // TODO: Merge into 1 JSON
+      let extract = extractZip(data)
+      output = tsv2json(extract)
+      // TODO: Merge into 1 JSON --> function merge(files) {}
       break
     default:
       console.log(output)
@@ -94,18 +83,36 @@ const getJSON = (srcName, srcType, data) => {
 // const writeDiffToDB
 // TODO: write to MongoDB
 
+/**
+ * @param {Array} extract - array with tsv-files
+ * @returns {Call} csv2json(extract) extract - array with arrays of csv-object for each file.
+ */
+function tsv2json (extract) {
+  let files = [extract.len]
 
+  extract.data.forEach((entry) => {
+    files.push(entry.replace(/\t/g, ','))
+  })
 
+  csv2json(files)
+}
 
-
-
-let output = '/home/vm/Downloads/API_UKR_DS2_en_csv_v2.zip'
-
-output = extractZip(output)
-let converter = new Converter({'ignoreEmpty': true})
-/////////////////////// Ось тут тре  цикл чи щось таке
-converter.fromString(output, (err, result) => {
-  if (err) throw err
-  output = result
-  console.log(result)
-})
+/**
+ * @param {Array} extract - array with csv-files
+ * @returns {Call} merge(files) files - array with arrays of JSON-object for each file.
+ */
+function csv2json (extract) {
+  let files = []
+  extract.data.forEach((entry) => {
+    new Converter({'ignoreEmpty': true}).fromString(entry, (err, result) => {
+      if (err) throw err
+      files.push(JSON.stringify(result))
+      if (files.length === extract.len) merge(files)
+    })
+  })
+}
+/**
+ * @param {Array} files - array with arrays of 
+ * @returns {Call} csv2json(extract) extract - array with csv-files
+ */
+function merge (files) {}
