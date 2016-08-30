@@ -1,0 +1,13 @@
+{
+ "keywords":["application","management","portal","list","search"],		
+ "schema": {
+    "type": "object",
+    "title": "Event Navigator",
+    "properties": {
+      "listeners":{
+        "type":"string",
+        "title":"Application Tags Listeners"
+      }
+    }
+  }  
+}

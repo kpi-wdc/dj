@@ -57,7 +57,7 @@ app.factory('appUrls', function (appId) {
     logout: `/logout`,
     usersList: `/api/users/list`,
     setAdmin: '/api/admin/set',
-    createTimeline: '/api/timeline/create',
+    createTimeline: '/api/timeline/upload',
     templateTypes: '/templates/templates.json',
     widgetTypes: '/widgets/widgets.json',
     shareSettingsHTML: '/partials/share-settings.html',

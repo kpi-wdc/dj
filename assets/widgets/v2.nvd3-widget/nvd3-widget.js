@@ -4,6 +4,8 @@ System.config({
   paths: {
     'topojson': 'widgets/v2.nvd3-widget/topojson.js',
     'nv.d3.ext': 'widgets/v2.nvd3-widget/nv.d3.ext.js',
+    'nv.d3.ext.timeline': 'widgets/v2.nvd3-widget/nv.d3.ext.timeline.js',
+    'd3-layout-timeline':"components/d3-layout-timeline/d3.layout.timeline.js",
     'angular-nvd3': 'widgets/v2.nvd3-widget/angular-nvd3-ext.js',
     "canvg": "components/canvg/dist/canvg.bundle.js",
     // "rgbcolor": "components/canvg/rgbcolor.js",
@@ -22,8 +24,12 @@ System.config({
       exports: 'nv',
       deps: ['nv.d3', 'topojson', "date-and-time"]
     },
+    'nv.d3.ext.timeline': {
+      exports: 'nv',
+      deps: ['nv.d3.ext',"d3-layout-timeline"]
+    },
     'angular-nvd3': {
-      deps: ['nv.d3.ext']
+      deps: ['nv.d3.ext', 'nv.d3.ext.timeline']
     },
     'canvg': {
       exports: 'canvg'
@@ -332,9 +338,11 @@ define(["angular",
                 // console.log("Load data")
                 $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
                     params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
-                    $scope.data.forEach((d, index) => {
-                      d.colorIndex = index;
-                    })
+                    if($scope.data.forEach){
+                      $scope.data.forEach((d, index) => {
+                        d.colorIndex = index;
+                      })
+                    }
 
                 // $scope.selector = new Selector(params.serieAdapter,$scope.data,$scope.EventEmitter)    
                 

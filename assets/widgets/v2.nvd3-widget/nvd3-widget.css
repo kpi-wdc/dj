@@ -304,6 +304,13 @@ div.xy-tooltip {
   stroke-opacity:1;
 }
 
+.brush-control .extent {
+    stroke: gray;
+    fill: blue;
+    fill-opacity: .05;
+    stroke-width:1;
+}
+
 
 /*.nvd3 .nv-multibar .nv-groups rect,
 .nvd3 .nv-multibarHorizontal .nv-groups rect,

@@ -1,8 +1,8 @@
 "use strict";
 
 (function () {
- console.log("LOAD nv.d3.ext")
- console.log(date)
+ // console.log("LOAD nv.d3.ext")
+ // console.log(date)
 
  var customTimeFormat = d3.time.format.multi([
                 [".%L", function(d) { return d.getMilliseconds(); }],
@@ -2632,6 +2632,7 @@ d3.geo.tile = function () {
 
         var container = d3.select(this),
             that = this;
+            // console.log(container)
 
         var availableWidth = (width || parseInt(container.style("width")) || 960) - margin.left - margin.right,
             availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
@@ -2689,7 +2690,8 @@ d3.geo.tile = function () {
 
         //------------------------------------------------------------
         // Setup containers and skeleton of chart
-
+        // console.log(this)
+        // console.log(container.selectAll("g.nv-wrap.nv-lineChart"))
         var wrap = container.selectAll("g.nv-wrap.nv-lineChart").data([data]);
         var gEnter = wrap.enter().append("g").attr("class", "nvd3 nv-wrap nv-lineChart").append("g");
         var g = wrap.select("g");
@@ -2712,7 +2714,9 @@ d3.geo.tile = function () {
         if (showLegend) {
           legend.width(availableWidth);
 
-          g.select(".nv-legendWrap").datum(data).call(legend);
+          var temp = g.select(".nv-legendWrap").datum(data)
+          // console.log("RADAR gEnter.select(\".nv-legendWrap\").datum(data)",temp)
+          temp.call(legend);
 
           if (margin.top != legend.height()) {
             margin.top = legend.height() + 5;
@@ -6191,6 +6195,8 @@ d3.geo.tile = function () {
         },
 
         color = nv.utils.defaultColor(),
+        colorIndex = function(d){return d.colorIndex},
+
         align = true,
         rightAlign = true,
         updateState = true //If true, legend will update data.disabled and trigger a 'stateChange' dispatch.
@@ -6207,6 +6213,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
+        // console.log("update legend", data)
         var availableWidth = width - margin.left - margin.right,
             container = d3.select(this);
 
@@ -6317,9 +6324,11 @@ d3.geo.tile = function () {
           })
           .on("dblclick", function (d, i) {
             dispatch.legendDblclick(d, i);
+            console.log("dbl",updateState,minEnabledSeries)
             if (updateState && !minEnabledSeries) {
               //the default behavior of NVD3 legends, when double clicking one,
               // is to set all other series' to false, and make the double clicked series enabled.
+              console.log("!!!")
               data.forEach(function (series) {
                 series.disabled = true;
               });
@@ -6354,9 +6363,9 @@ d3.geo.tile = function () {
           .attr("dy", ".32em")
           .attr("dx", "8");
 
-        series.classed("disabled", function (d) {
-          return d.disabled;
-        });
+        // series.classed("disabled", function (d) {
+        //   return d.disabled;
+        // });
         
         bg.exit().remove();
         series.exit().remove();
@@ -6364,16 +6373,23 @@ d3.geo.tile = function () {
         series
           .select(".nv-legend-symbol")
           .style("fill", function (d) {
-            return d.color || color(d,d.colorIndex);
+            return d.color || color(d,colorIndex(d));
           })
           .style("stroke", function (d) {
-            return d.color || color(d,d.colorIndex);
+            return d.color || color(d,colorIndex(d));
           })
         
         if(isSlaveChart){  
           series
             .select(".nv-legend-symbol")
             .style("fill-opacity",0.3)
+        }else{
+          series
+            .select(".nv-legend-symbol")
+            .style("fill-opacity",function(d){return (d.disabled)? 0 : 0.3})
+            .classed("disabled", function (d) {
+              return d.disabled;
+            });
         }  
         
         // if(isSlaveChart){
@@ -6538,6 +6554,12 @@ d3.geo.tile = function () {
     chart.key = function (_) {
       if (!arguments.length) return getKey;
       getKey = _;
+      return chart;
+    };
+
+    chart.colorIndex = function (_) {
+      if (!arguments.length) return colorIndex;
+      colorIndex = _;
       return chart;
     };
 

@@ -1,0 +1,525 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Timeline with Dates</title>
+  <meta charset="utf-8" />
+    <style type="text/css">
+      svg {
+        height: 1100px;
+        width: 1100px;
+      }
+      div.viz {
+        height: 1000px;
+        width: 1000px;
+      }
+      
+      .axis { /* axis labels */
+    fill: #808080;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+.axis line{ /* axis tick marks */
+    stroke-width : 1;
+    stroke: grey;
+    shape-rendering: crispEdges;
+}
+
+.axis path { /* axis line */
+    stroke-width : 1;
+    stroke: grey;
+    shape-rendering: crispEdges;
+}
+
+.brush-control .extent {
+    stroke: gray;
+    fill: blue;
+    fill-opacity: .05;
+    stroke-width:1;
+}
+
+.chart {
+    fill: #EEEEEE;
+}
+
+.interval {
+    fill: #AAFFFF;
+    stroke-width: 6;
+    cursor : default;
+    pointer-events: true;
+}
+
+.instant {
+    fill: #FFAAFF;
+    stroke-width: 6;
+    cursor : default;
+    /*pointer-events: true;*/
+}
+
+.instantLabel {
+    fill : blue;
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+}
+
+.intervalLabel {
+    fill : black;
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+}
+
+.item {
+    cursor : default;
+    pointer-events: auto;
+}
+      </style>
+</head>
+
+<script src="../d3.min.js" type="text/JavaScript"></script>
+<script src="../d3.layout.timeline.js" charset="utf-8" type="text/javascript"></script>
+<script src="../date-and-time.js" charset="utf-8" type="text/javascript"></script>
+
+
+<script>
+  var avaibleWidth = 700;
+  var avaibleHeight = 150;
+  var brushHeight = 20;
+
+  var customTimeFormat = d3.time.format.multi([
+                [".%L", function(d) { return d.getMilliseconds(); }],
+                [":%S", function(d) { return d.getSeconds(); }],
+                ["%I:%M", function(d) { return d.getMinutes(); }],
+                ["%I %p", function(d) { return d.getHours(); }],
+                ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+                ["%b %d", function(d) { return d.getDate() != 1; }],
+                ["%B", function(d) { return d.getMonth(); }],
+                ["%Y", function() { return true; }]
+              ]);  
+
+  var timeline = d3.layout.timeline().size([avaibleWidth,avaibleHeight]);
+
+  // colorScale = d3.scale.ordinal()
+  //   .domain(["European","Native","Colonial","Latin America","Internal"])
+  //   .range(["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#00ffff"]);
+
+colorScale = d3.scale.ordinal()
+  .domain(["European","Native","Colonial","Latin America","Internal"])
+  .range(["#96abb1", "#313746", "#b0909d", "#687a97", "#292014"]);
+
+
+  // var events;
+  // var axis;
+  // var xAxis;
+  // var startScale;
+  // var tl;
+
+  var convertData = function(data){
+    data.forEach(function(d){
+      d.start = new Date(d.start);
+      d.end = new Date(d.end);
+    })
+    data.sort(function(a,b){
+      return date.subtract(a.start, b.start).toMilliseconds()}
+    ); 
+    
+    
+    var categories = [];
+    data.forEach(function(d){
+      if(d.sphere && categories.indexOf(d.sphere)<0) categories.push(d.sphere)
+    })
+    
+    var result = [];
+    categories.forEach(function(t){
+      result.push({
+        category : t,
+        values : data.filter(function(d){return d.sphere === t})
+      })
+    })
+    console.log(result)
+
+    return data;
+  }
+
+
+d3.csv("wars.csv", function (csv) {
+
+
+  currentIndex = 0;
+
+  csv = convertData(csv);
+  
+  // csv.forEach(function(serie){})
+
+
+  timelineBands = timeline(csv);
+  timelineBands.sort(function(a,b){
+    return date.subtract(a.originalStart, b.originalStart).toMilliseconds()
+  })
+
+  var x = d3.time.scale()
+            .domain([csv[0].start,csv[csv.length-1].end])
+            .range([0, avaibleWidth]);
+
+  var startScale = d3.time.scale()
+            .domain([csv[0].start,csv[csv.length-1].end])
+            .range([0, avaibleWidth]);          
+  
+
+  var axis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickSize(12, 0)
+            .tickFormat(customTimeFormat)
+            .ticks(20)
+  var brush = d3.svg.brush()
+              .x(startScale.range([0, avaibleWidth]))
+
+  var brushAxis = d3.svg.axis()
+            .scale(startScale)
+            .orient("bottom")
+            .tickSize(12, 0)
+            .tickFormat(customTimeFormat)
+            .ticks(20)          
+
+   d3.select("svg")
+    .style("width",avaibleWidth)
+    .style("height",avaibleHeight+brushHeight+70)
+
+  var xAxisG = 
+    d3.select("svg")
+    .append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0,"+(avaibleHeight+5)+")")
+  
+  var timelineG = d3.select("svg")
+  .append("g")
+  .attr("class", "tl")
+  .attr("transform", "translate(0,5)")
+
+  var currentPosG = d3.select("svg")
+    .append("rect")
+    .attr("class", "current")
+    .attr("height",avaibleHeight)
+    .attr("width", 1)
+    .attr("y", 0)
+    .attr("x", avaibleWidth/2)
+    .attr("transform", "translate(0,5)")
+    .style("fill","red")
+
+
+  timelineG.selectAll("circle.start")
+    .data(timelineBands)
+    .enter()
+    .append("circle")
+    .attr("class", "start")
+    .attr("cx", function (d) {return d.start})
+    .attr("cy", function (d) {return d.y})
+    .attr("r",function(d) {return 3})
+    .attr("transform", function(d){return "translate(0,"+(d.dy/2)+")"})
+    
+    // .attr("height", function (d) {return d.dy-d.dyp-3})
+    // .attr("width", function (d) {return d.end - d.start})
+    .style("fill", function (d) {return colorScale(d.sphere)})
+    .style("stroke", "black")
+    .style("stroke-width", 0)
+
+  // timelineG.selectAll("circle.end")
+  //   .data(timelineBands)
+  //   .enter()
+  //   .append("circle")
+  //   .attr("cx", function (d) {return d.end})
+  //   .attr("cy", function (d) {return d.y})
+  //   .attr("r",function(d) {return 1})
+  //   .attr("transform", function(d){return "translate(0,"+(d.dy/2)+")"})
+  //   .attr("class", "end")
+    // .style("fill","red")
+    
+  timelineG.selectAll("rect")
+    .data(timelineBands)
+    .enter()
+    .append("rect") 
+    .attr("class", "event")  
+    .attr("x", function (d) {return d.start})
+    .attr("y", function (d) {return d.y})
+    .attr("height", function (d,i) {
+      return (i == currentIndex) ? 3 : 1
+    })
+    .attr("width", function (d) {return d.end - d.start})
+    .attr("transform", function(d){return "translate(0,"+(d.dy/2-2)+")"})
+    .style("fill", function (d) {return colorScale(d.sphere)})
+    .style("stroke", "black")
+    .style("stroke-width", 0)
+  
+
+  // timelineG.selectAll("rect")  
+    // .append("rect")
+    // .attr("x", function (d) {return d.start})
+    // .attr("y", function (d) {return d.y})
+    // // .attr("r",function(d) {return 2})
+    // .attr("height", function (d) {return d.dy-d.dyp-3})
+    // .attr("width", function (d) {return d.end - d.start})
+    // .style("fill", function (d) {return colorScale(d.sphere)})
+    // .style("stroke", "black")
+    // .style("stroke-width", 0)
+
+
+  var brushG = d3.select("svg")
+  .append("g")
+  .append("svg")
+  .attr("class","brush")
+  
+  brushG
+    .append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0,"+(avaibleHeight+brushHeight+30)+")")
+    .call(brushAxis)
+
+
+
+ 
+  var redraw = function(timelineBands){
+        
+      var tmp = timelineG.selectAll("circle.start").data(timelineBands)
+      tmp  
+        .transition()
+        .duration(1000)
+        .attr("class", "start")
+        .attr("cx", function (d) {return d.start})
+        .attr("cy", function (d) {return d.y})
+        .attr("r",function(d,i) {
+          return (i == currentIndex) ? 7 : 3
+        })
+        // .attr("transform", "translate(0,"+(d.dy/2)+")")
+        
+        // .attr("height", function (d) {return d.dy-d.dyp-3})
+        // .attr("width", function (d) {return d.end - d.start})
+        // .style("fill", function (d) {return colorScale(d.sphere)})
+        // .style("stroke", "black")
+        // .style("stroke-width", 0)
+      tmp.exit().remove();
+        
+      // tmp = timelineG.selectAll("circle.end").data(timelineBands)
+      // tmp  
+      //   .transition()
+      //   .duration(1000)
+      //   .attr("cx", function (d) {return d.end})
+      //   .attr("cy", function (d) {return d.y})
+      //   .attr("r",function(d) {return 1})
+      //   // .attr("transform", "translate(0,"+(d.dy/2)+")")
+      //   .attr("class", "end")
+      // tmp.exit().remove();
+
+      tmp = timelineG.selectAll("rect.event").data(timelineBands)  
+      tmp  
+        .transition()
+        .duration(1000)
+        .attr("x", function (d) {return d.start})
+        .attr("y", function (d) {return d.y})
+        .attr("height", function (d,i) {
+          return (i == currentIndex) ? 5 : 1
+        })
+        .attr("width", function (d) {return d.end - d.start})
+        .attr("transform", function(d,i){
+          return "translate(0,"+(d.dy/2-((i == currentIndex) ? 2.5 : 0.5))+")"})
+    
+        // .style("fill", function (d) {return colorScale(d.sphere)})
+        // .style("stroke", "black")
+        // .style("stroke-width", 0)
+  
+
+
+
+
+        // var tmp = timelineG.selectAll("rect").data(timelineBands);
+        // tmp
+        //   .transition()
+        //   .duration(1000)
+        //   .attr("x", function (d) {return d.start})
+        //   .attr("y", function (d) {return d.y})
+        //   .attr("height", function (d) {return d.dy-d.dyp-3})
+        //   .attr("width", function (d) {return d.end - d.start})
+        //   .style("fill", function (d,i) {
+        //     return (i == currentIndex) ? "#faeeee" : colorScale(d.sphere)
+        //   })
+        //   .style("stroke", "black")
+        //   .style("stroke-width", 1)
+        
+        tmp.exit().remove();
+        xAxisG.call(axis)
+      }
+
+
+  var redrawBrush = function (){
+    brushG.select(".brush-control")
+      .transition()
+      .duration(500)
+      .call(brush)
+    brushG
+      .select(".brush-control")  
+      .selectAll("rect")
+      .attr("height", brushHeight) 
+      .attr("transform", "translate(0,"+(avaibleHeight+30)+")")
+
+    var e = brush.extent().map(function(d){return startScale(d)});
+
+    currentBrushPosG
+      .transition()
+      .duration(500)
+      .attr("class", "current")
+      .attr("height", brushHeight)
+      .attr("width", 1)
+      .attr("y", 0)
+      .attr("x", e[0]+(e[1]-e[0])/2)
+       .attr("transform", "translate(0,"+(avaibleHeight+30)+")")
+      .style("fill","red")  
+  }
+
+  var redrawBrushCurrentPos = function(){
+    var e = brush.extent().map(function(d){return startScale(d)});
+
+    currentBrushPosG
+      .attr("class", "current")
+      .attr("height", brushHeight)
+      .attr("width", 1)
+      .attr("y", 0)
+      .attr("x", e[0]+(e[1]-e[0])/2)
+       .attr("transform", "translate(0,"+(avaibleHeight+30)+")")
+      .style("fill","red")  
+  }  
+
+  var brushed = function(){
+    var domain = brush.empty()
+        ? startScale.domain()
+        : brush.extent();
+    timeline.extent(domain)
+    timelineBands = timeline(csv);
+    timelineBands.sort(function(a,b){
+      return date.subtract(a.originalStart, b.originalStart).toMilliseconds()
+    })
+    axis.scale().domain(domain)
+    redraw(timelineBands)
+    
+  }
+
+
+
+  var setBrushExtent = function(domain){
+    brush.extent(domain);
+    brushed();
+    redrawBrush();
+  }  
+
+  var navigate = function(){
+    var e = brush.extent().map(function(d){return startScale(d)});
+    var p = startScale(timelineBands[currentIndex].originalStart);
+    var m = (e[1]-e[0])/2;
+    setBrushExtent([new Date(ss(p-m)), new Date(ss(p+m))]) 
+  }
+
+  var first = function(){
+    currentIndex = 0;
+    navigate();
+  }  
+
+  var last = function(){
+     currentIndex = timelineBands.length-1;
+     navigate();
+  }
+
+  var next = function(){
+     currentIndex++;
+     currentIndex= (currentIndex > timelineBands.length-1) 
+      ? timelineBands.length-1
+      : currentIndex;
+     navigate();
+  }
+
+  var prev = function(){
+    currentIndex--;
+     currentIndex= (currentIndex < 0) 
+      ? 0
+      : currentIndex;
+     navigate();
+  }
+
+  var nav = d3.select(".navigator")
+
+  nav.select("#first").on("click", first)
+  nav.select("#prev").on("click", prev)
+  nav.select("#next").on("click", next)
+  nav.select("#last").on("click", last)
+
+
+  brush
+    .on("brushend", brushed)
+    .on("brush", function(){
+      redrawBrushCurrentPos();
+    });
+
+
+  brushG
+    .append("g")
+    .attr("class","brush-control")
+    .call(brush)
+
+  var currentBrushPosG = brushG
+      .append("rect") 
+      .attr("class", "current")
+      .attr("height", brushHeight)
+      .attr("width", 1)
+      .attr("y", 0)
+      .attr("transform", "translate(0,"+(avaibleHeight+30)+")")
+      .style("fill","red")  
+  
+
+  var brushDensityG = brushG
+    .append("g")
+    .attr("class", "b-dencity")
+
+  brushDensityG.selectAll("rect")
+    .data(timelineBands)
+    .enter()
+    .append("rect") 
+    .attr("class", "density") 
+    .attr("x", function (d) {return d.start})
+    .attr("y", 0)
+    .attr("height", brushHeight/2)
+    .attr("width", function (d) {return d.end - d.start})
+    // .attr("transform", function(d){return "translate(0,"+(d.dy/2-2)+")"})
+    .attr("transform", "translate(0,"+(avaibleHeight+30+(1*brushHeight/2))+")")
+    .style("fill", function (d) {return colorScale(d.sphere)})
+    .style("fill-opacity", 0.2)
+    .style("stroke", "black")
+    .style("stroke-width", 0)  
+
+
+
+  var ss = d3.time.scale().domain(startScale.range()).range(startScale.domain())
+  
+  brush.extent([new Date(ss(avaibleWidth*0.25)), new Date(ss(avaibleWidth*0.75))]);
+  first();
+  next();
+  next();
+  next();
+  
+  // prev();
+  // last();
+
+})
+
+
+</script>
+<body>
+<div id="viz">
+  <svg style="background:white;" height=1100 width=1100>
+  </svg>
+  <div class="navigator">
+    <button id="first" style="width:50px;float:left;padding:5px;margin:2px">&lt;&lt;</button>
+    <button id="prev" style="width:50px;float:left;padding:5px;margin:2px">&lt;</button>
+    <button id="next" style="width:50px;float:left;padding:5px;margin:2px">&gt;</button>
+    <button id="last" style="width:50px;float:left;padding:5px;margin:2px">&gt;&gt;</button>
+  </div>
+</div>
+<footer>
+</footer>
+</body>
+</html>

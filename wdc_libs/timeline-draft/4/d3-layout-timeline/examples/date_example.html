@@ -1,0 +1,779 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Timeline with Dates</title>
+  <meta charset="utf-8" />
+    <style type="text/css">
+      svg {
+        height: 1100px;
+        width: 1100px;
+      }
+      div.viz {
+        height: 1000px;
+        width: 1000px;
+      }
+      
+      .axis { /* axis labels */
+    fill: #808080;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+.axis line{ /* axis tick marks */
+    stroke-width : 1;
+    stroke: grey;
+    shape-rendering: crispEdges;
+}
+
+.axis path { /* axis line */
+    stroke-width : 1;
+    stroke: grey;
+    shape-rendering: crispEdges;
+}
+
+.brush-control .extent {
+    stroke: gray;
+    fill: blue;
+    fill-opacity: .05;
+    stroke-width:1;
+}
+
+.chart {
+    fill: #EEEEEE;
+}
+
+.interval {
+    fill: #AAFFFF;
+    stroke-width: 6;
+    cursor : default;
+    pointer-events: true;
+}
+
+.instant {
+    fill: #FFAAFF;
+    stroke-width: 6;
+    cursor : default;
+    /*pointer-events: true;*/
+}
+
+.instantLabel {
+    fill : blue;
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+}
+
+.intervalLabel {
+    fill : black;
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+}
+
+.item {
+    cursor : default;
+    pointer-events: auto;
+}
+      </style>
+</head>
+
+<script src="../d3.min.js" type="text/JavaScript"></script>
+<script src="../d3.layout.timeline.js" charset="utf-8" type="text/javascript"></script>
+<script src="../date-and-time.js" charset="utf-8" type="text/javascript"></script>
+
+
+<script>
+
+  var avaibleWidth = 600;
+  var avaibleHeight = 250;
+  var brushHeight = 30;
+
+  var customTimeFormat = d3.time.format.multi([
+                [".%L", function(d) { return d.getMilliseconds(); }],
+                [":%S", function(d) { return d.getSeconds(); }],
+                ["%I:%M", function(d) { return d.getMinutes(); }],
+                ["%I %p", function(d) { return d.getHours(); }],
+                ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+                ["%b %d", function(d) { return d.getDate() != 1; }],
+                ["%B", function(d) { return d.getMonth(); }],
+                ["%Y", function() { return true; }]
+              ]);  
+
+  var timeline = d3.layout.timeline()
+    .size([avaibleWidth,avaibleHeight])
+    .childAccessor(function (d) {return d.children});
+
+
+  var colorScale = d3.scale.ordinal()
+  .domain(["European","Native","Colonial","Latin America","Internal"])
+  // .range(["#96abb1", "#313746", "#b0909d", "#687a97", "#292014"]);
+  // .range(["red", "green", "blue", "yellow", "magenta"]);
+  .range(["#e6ab02","#66a61e","#e7298a","#7570b3","#d95f02"])
+  
+
+  var currentId = 0;
+  
+  var insert_Id = function(data){
+    data.forEach(function(d,i){
+      d._id = currentId;
+      currentId++;
+      if(d.children) insert_Id(d.children)
+    }) 
+  }
+  var line = [];
+
+  var createLine = function(data){
+    data.forEach(function(d){
+      line.push(d)
+      if(d.children) createLine(d.children)
+    })
+  }
+  var index = 0;
+  var insertId = function(data){
+    data.forEach(function(d,i){
+      d.id = line[index].id;
+      index++;
+      if(d.children) insertId(d.children)
+    }) 
+  }
+
+  var convertData = function(data){
+
+  data = data.filter(function(d){return d.sphere})
+
+
+    data.forEach(function(d){
+      if(d.start) d.start = new Date(d.start);
+      if(d.end) d.end = new Date(d.end)
+    })
+    
+    insert_Id(data);
+    createLine(data);
+    line.sort(function(a,b){
+      if(date.subtract(a.start, b.start).toMilliseconds() !=0)
+        return date.subtract(a.start, b.start).toMilliseconds()
+      return a._id - b._id
+    })
+
+    line.forEach(function(d,i){d.id = i})
+
+    line.sort(function(a,b){
+       return a._id - b._id
+    })
+    
+    insertId(data)
+    
+    var categories = [];
+    data.forEach(function(d){
+      if(d.sphere && categories.indexOf(d.sphere)<0) categories.push(d.sphere)
+    })
+    
+    var result = {
+      domain:[data[0].start,data[data.length-1].end],
+      series:[],
+      line:data
+    };
+    categories.forEach(function(t){
+      result.series.push({
+        category : t,
+        values : data.filter(function(d){return d.sphere === t})
+      })
+    })
+    return result
+  }
+
+
+  function generatePath(points){
+      return d3.svg.area()
+            .interpolate("linear")
+            // .defined(defined)
+            .x(function (p, i) {
+                  return p.x;
+            })
+            .y0(function (p, i) {
+                  return p.y;
+            })
+            .y1(function (p, i) {
+                  return p.y;
+            })
+            .apply(this, [points]);
+    } 
+
+
+var layout = function(){
+  this._layout = d3.layout.timeline();
+  this._data = undefined;
+  this._width = undefined;
+  this._height = undefined;
+  this._extent = undefined;
+  this._childAccessor = function(d){return d.children}
+  this._bands = [];
+}
+
+layout.prototype = {
+  
+  size : function(_){
+    if(!_) return [this._width, this._height]; 
+    this._width = _[0];
+    this._height = _[1];
+    return this;
+  },
+ 
+  width : function(_){
+    if(!_) return this._width; 
+    this._width = _;
+    return this;
+  },
+  
+  height : function(_){
+    if(!_) return this._height; 
+    this._height = _;
+    return this;
+  },
+
+  extent : function(_){
+    if(!_) return this._extent; 
+    this._extent = _;
+    return this;
+  },
+
+  childAccessor : function(_){
+    if(!_) return this._childAccessor; 
+    this._childAccessor = _;
+    return this;
+  },
+
+  bands : function(){
+   return this._bands; 
+  },
+
+  data : function(_){
+    if(!_) return this._data; 
+    this._data = _;
+    return this;
+  },
+
+  fit : function(){
+        var swimlines = [];
+        var thos = this;
+        this._data.series.forEach(function(serie,i){
+            thos._layout
+              .size([thos._width,thos._height/thos._data.series.length])
+              .extent(thos._extent)
+              .childAccessor(thos._childAccessor)
+            
+            var tmp = thos._layout(serie.values);
+            var swimline = {y:[],dy:[]}
+            tmp.forEach(function(d){
+              if(swimline.y.indexOf(d.y)<0){swimline.y.push(d.y)}
+              if(swimline.dy.indexOf(d.dy)<0){swimline.dy.push(d.dy)}
+            })
+            swimline.dy = d3.min(swimline.dy,function(t){return t})
+            swimlines.push(swimline);
+            thos._bands.push(tmp)
+        })
+
+        
+        var minWidth = d3.min(swimlines,function(d){return d.dy})
+        var sumWidth = 0;
+        swimlines.forEach(function(d){
+          d.ratio = minWidth * d.y.length;
+          sumWidth += d.ratio;
+        })
+        var cumulate = 0
+        swimlines.forEach(function(d){
+          d.ratio /= sumWidth;
+          d.height = minWidth;
+          d.hOffset = cumulate;
+          cumulate+= d.ratio
+        })
+
+        this._data.series.forEach(function(serie,i){
+          serie.layout = {
+            ratio : swimlines[i].ratio,
+            eventHeight : swimlines[i].height,
+            yOffset :  swimlines[i].hOffset
+          }
+        });
+        return this;
+      }
+  }
+
+
+
+
+d3.csv("wars.csv", function (csv) {
+
+  csv[0].children = [
+    {
+      sphere : csv[0].sphere,
+      start : new Date("4-19-1775"),
+      end : new Date("1-1-1777"),
+      name : "child[0]"
+    },
+    {
+      sphere : csv[0].sphere,
+      start : new Date("1-1-1776"),
+      end : new Date("9-3-1783"),
+      name : "child[1]",
+      children:[{
+        sphere : csv[0].sphere,
+        start : new Date("1-1-1776"),
+        end : new Date("9-3-1783"),
+        name : "child[1][1]"
+      },
+      {
+        sphere : csv[0].sphere,
+        start : new Date("1-1-1776"),
+        end : new Date("9-3-1783"),
+        name : "child[1][2]"
+      }]
+    },
+    {
+      sphere : csv[0].sphere,
+      start : new Date("1-1-1784"),
+      end : new Date("1-1-1787"),
+      name : "child[1]",
+      children:[{
+        sphere : csv[0].sphere,
+        start : new Date("1-1-1784"),
+        end : new Date("1-1-1785"),
+        name : "child[1][1]"
+      },
+      {
+        sphere : csv[0].sphere,
+        start : new Date("1-1-1785"),
+        end : new Date("1-1-1787"),
+        name : "child[1][2]"
+      }]
+    }
+  ]
+  
+  csv[0].name="With Child "+csv[0].name;
+
+
+  currentIndex = 0;
+
+  csv = convertData(csv);
+
+  timeline.size([avaibleWidth,avaibleHeight]);
+  
+  var btm = d3.layout.timeline()
+              .size([2*avaibleWidth/3,brushHeight])
+              .childAccessor(function (d) {return d.children});
+ 
+  var brushedTimelineBands = btm(csv.line)
+  brushedTimelineBands.sort(function(a,b){
+        return a.id-b.id
+      })
+
+  var l = new layout()
+    .data(csv)
+    .size([avaibleWidth,avaibleHeight])
+    .extent(csv.domain)
+    .fit();
+
+  csv = l.data();  
+  timelineBands = l.bands();
+
+  var x = d3.time.scale()
+            .domain(btm.extent())
+            .range([0, avaibleWidth]);
+
+  var startScale = d3.time.scale()
+            .domain(btm.extent())
+            .range([0, avaibleWidth]);          
+  
+
+  var axis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickSize(5, 0)
+            .tickFormat(customTimeFormat)
+            .ticks(20)
+
+
+  
+  var invertScale = d3.time.scale().domain(startScale.range()).range(startScale.domain())
+  
+  var brushScale =  d3.time.scale()
+            .domain([
+              new Date(invertScale(0-avaibleWidth*0.25)), 
+              new Date(invertScale(avaibleWidth+avaibleWidth*0.25))
+            ])
+            .range([0, avaibleWidth]);          
+  
+  var brush = d3.svg.brush()
+              .x(brushScale.range([0, avaibleWidth]))
+
+  var brushAxis = d3.svg.axis()
+            .scale(brushScale)
+            .orient("bottom")
+            .tickSize(5, 0)
+            .tickFormat(customTimeFormat)
+            .ticks(20)          
+
+   d3.select("svg")
+    .style("width",avaibleWidth)
+    .style("height",avaibleHeight+brushHeight+70)
+
+  var xAxisG = 
+    d3.select("svg")
+    .append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0,"+(avaibleHeight+5)+")")
+  
+  var timelineG = d3.select("svg")
+  .append("g")
+  .attr("class", "tl")
+  .attr("transform", "translate(0,10)")
+
+  timelineBands.forEach(function(timelineBand,i){
+    timelineG
+      .append("g")
+      .attr("class","band-"+i)
+    
+    timelineG
+      .append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width",avaibleWidth)
+      .attr("height",avaibleHeight*csv.series[i].layout.ratio)
+      .style("fill",function(d,i){return colorScale(timelineBand[0].sphere)})
+      .style("fill-opacity",0)
+      .attr("class","bg")
+      .attr("transform", "translate(0,"+(avaibleHeight*csv.series[i].layout.yOffset)+")");
+  })
+
+  var currentPosG = d3.select("svg")
+    .append("rect")
+    .attr("class", "current")
+    .attr("height",avaibleHeight)
+    .attr("width", 1)
+    .attr("y", 0)
+    .attr("x", avaibleWidth/2)
+    .attr("transform", "translate(0,5)")
+    .style("fill","#bbbbbb")
+
+  timelineBands.forEach(function(timelineBand,i){
+  
+    var processes =  timelineBand.filter(function(d){return !d.children})     
+    var flows = timelineBand.filter(function(d){return d.children && d.children.length>0})
+  
+    var f =  timelineG.selectAll(".band-"+i).selectAll("g.flow-container")
+      .data(flows)
+      .enter()
+      .append("g")
+      .attr("class", "flow-container")
+
+
+    f
+      .append("path")
+      .attr("d", function(d,i){
+        return generatePath([
+            {x:d.start,y:d.y+10},
+            {x:d.start,y:d.y},
+            {x:d.end,y:d.y},
+            {x:d.end,y:d.y+10}
+          ])
+      })
+      .attr("class","brackets")
+      .style("fill-opacity",0)
+      .style("stroke", function (d) {return colorScale(d.sphere)})
+      .style("stroke-width", 0.5)  
+    
+    
+    timelineG.selectAll(".band-"+i).selectAll("rect.event")
+      .data(processes)
+      .enter()
+      .append("rect") 
+      .attr("class", "event")  
+      .attr("x", function (d) {return d.start})
+      .attr("y", function (d) {return d.y})
+      .attr("width", function (d) {return d.end - d.start})
+      .style("fill", function (d) {return colorScale(d.sphere)})
+      .style("fill-opacity", function(d){return (d.children)?0:1}) 
+      .style("stroke", function (d) {return colorScale(d.sphere)})
+      .style("stroke-width", function(d){return (d.children)?1:0}) 
+      .attr("transform", "translate(0,"+(avaibleHeight*csv.series[i].layout.yOffset)+")");
+  })  
+  
+
+  var brushG = d3.select("svg")
+  .append("g")
+  .append("svg")
+  .attr("class","brush")
+  
+  brushG
+    .append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0,"+(avaibleHeight+brushHeight+30)+")")
+    .call(brushAxis)
+
+ 
+  var redraw = function(timelineBands){
+    
+    timelineBands.forEach(function(timelineBand,i){
+
+      processes =  timelineBand.filter(function(d){return !d.children})     
+      flows = timelineBand.filter(function(d){return d.children})
+        
+      tmp = timelineG.selectAll(".band-"+i).selectAll("rect.event").data(processes)  
+      tmp  
+        .transition()
+        .duration(1000)
+        .attr("x", function (d) {return d.start})
+        .attr("y", function (d) {return d.y})
+        .attr("height", function (d) {
+          return csv.series[i].layout.eventHeight
+        })
+        .attr("width", function (d) {return ((d.end - d.start)<5)? 5 : d.end - d.start})
+        .attr("transform", function(d){
+          return "translate(0,"+(avaibleHeight*csv.series[i].layout.yOffset)+")"
+        })  
+        .style("fill", function (d) {return colorScale(d.sphere)})
+        .style("fill-opacity", 0.2)//function(d){return (d.children)?0.05:1}) 
+        .style("stroke", function (d) {return colorScale(d.sphere)})
+        .style("stroke-width", function(d){
+            return (d.id == brushedTimelineBands[currentIndex].id)? 2.5:0.5
+        })
+      
+        tmp.exit().remove();
+        xAxisG.call(axis)
+      
+      tmp.exit().remove();
+
+      tmp = timelineG
+              .selectAll(".band-"+i)
+              .selectAll("path.brackets")
+              .data(flows)
+      tmp
+      .transition()
+      .duration(1000)
+      .attr("d", function(d,i){
+        return generatePath([
+            {x:d.start-3,y:d.y+d.dy},
+            {x:d.start-3,y:d.y-3},
+            {x:d.end+3,y:d.y-3},
+            {x:d.end+3,y:d.y+d.dy},
+            {x:d.start-3,y:d.y+d.dy}
+            
+          ])
+      })
+      .style("stroke", function (d) {return colorScale(d.sphere)})
+      .style("stroke-width", function (d) {
+        return (d.id == brushedTimelineBands[currentIndex].id) ?  2 : 0.5
+      })
+      .style("stroke-dasharray", function(d){return 10/(d.level+1)})
+  
+      })
+    }  
+
+
+  var redrawBrushCurrentPos = function(){
+    var e = brush.extent().map(function(d){return brushScale(d)});
+
+    currentBrushPosG
+      .attr("class", "current")
+      .attr("height", brushHeight)
+      .attr("width", 1)
+      .attr("y", 0)
+      .attr("x", e[0]+(e[1]-e[0])/2)
+       .attr("transform", "translate("+(0)+","+(avaibleHeight+30)+")")
+      .style("fill","red")  
+  }   
+
+  var redrawBrush = function (){
+    brushG.select(".brush-control")
+      .transition()
+      .duration(500)
+      .call(brush)
+    brushG
+      .select(".brush-control")  
+      .selectAll("rect")
+      .attr("height", brushHeight) 
+      .attr("transform", "translate(0,"+(avaibleHeight+30)+")")
+
+    var e = brush.extent().map(function(d){return startScale(d)});
+
+    redrawBrushCurrentPos();
+  }
+
+  
+
+  var brushed = function(){
+      var domain = brush.empty()
+        ? startScale.domain()
+        : brush.extent();
+    
+     timelineBands = [];
+     csv.series.forEach(function(serie,i){
+        
+        var timeline = d3.layout.timeline()
+            .size([avaibleWidth,avaibleHeight*serie.layout.ratio])///csv.series.length])
+            .childAccessor(function(d){return d.children})
+            .padding(2)
+            .extent(domain)    
+        var tmp = timeline(serie.values);
+        tmp.sort(function(a,b){
+          return a.id-b.id
+        })
+
+        timelineBands.push(tmp)
+      })
+   
+    axis.scale().domain(domain)
+    redraw(timelineBands)
+    
+  }
+
+
+
+  var setBrushExtent = function(domain){
+    brush.extent(domain);
+    brushed();
+    redrawBrush();
+  }  
+
+  var navigate = function(){
+    var e = brush.extent().map(function(d){return startScale(d)});
+    var p = startScale(brushedTimelineBands[currentIndex].originalStart);
+    var m = (e[1]-e[0])/2;
+    setBrushExtent([new Date(ss(p-m)), new Date(ss(p+m))]) 
+  }
+
+  var first = function(){
+    currentIndex = 0;
+    // console.log(brushedTimelineBands[currentIndex])
+    navigate();
+  }  
+
+  var last = function(){
+     currentIndex = brushedTimelineBands.length-1;
+     // console.log(brushedTimelineBands[currentIndex])
+     navigate();
+  }
+
+  var next = function(){
+     currentIndex++;
+     currentIndex= (currentIndex > brushedTimelineBands.length-1) 
+      ? brushedTimelineBands.length-1
+      : currentIndex;
+      // console.log(brushedTimelineBands[currentIndex])
+     navigate();
+  }
+
+  var prev = function(){
+    currentIndex--;
+     currentIndex= (currentIndex < 0) 
+      ? 0
+      : currentIndex;
+      // console.log(brushedTimelineBands[currentIndex])
+     navigate();
+  }
+
+  var nav = d3.select(".navigator")
+
+  nav.select("#first").on("click", first)
+  nav.select("#prev").on("click", prev)
+  nav.select("#next").on("click", next)
+  nav.select("#last").on("click", last)
+
+
+  brush
+    .on("brushend", brushed)
+    .on("brush", function(){
+      redrawBrushCurrentPos();
+    });
+
+
+  brushG
+    .append("g")
+    .attr("class","brush-control")
+    .call(brush)
+
+  var currentBrushPosG = brushG
+      .append("rect") 
+      .attr("class", "current")
+      .attr("height", brushHeight)
+      .attr("width", 1)
+      .attr("y", 0)
+      .attr("transform", "translate("+(0)+","+(avaibleHeight+30)+")")
+      .style("fill","red")  
+  
+
+  var brushDensityG = brushG
+    .append("g")
+    .attr("class", "b-dencity")
+
+
+  var brushTimelineBands = [];
+     csv.series.forEach(function(serie,i){
+        var timeline = d3.layout.timeline()
+              .size([2*avaibleWidth/3,brushHeight/2/csv.series.length])
+              .childAccessor(function (d) {return d.children})
+              .extent(startScale.domain()) 
+        var tmp = timeline(serie.values);
+        tmp.sort(function(a,b){
+          return a.id-b.id
+        })
+
+        brushTimelineBands.push(tmp)
+      })
+
+  brushTimelineBands.forEach(function(band,i){
+    brushDensityG
+      .append("g")
+      .attr("class","band-"+i)
+  })   
+        
+  brushTimelineBands.forEach(function(band,i){
+    brushDensityG.selectAll("g.band-"+i).selectAll("rect")
+    .data(band)
+    .enter()
+    .append("rect") 
+    .attr("class", "density") 
+    .attr("x", function (d) {return d.start})
+    .attr("y", function (d) {return d.y})
+    .attr("height", function (d) {return d.dy})
+    .attr("width", function (d) {return d.end - d.start})
+    .attr("transform", "translate("+(avaibleWidth*1/6)+","+(avaibleHeight+30+i*(brushHeight/brushTimelineBands.length))+")")
+    .style("fill", function (d) {return colorScale(d.sphere)})
+    .style("stroke", "black")
+    .style("stroke-width", 0)
+  })   
+  
+
+  var ss = d3.time.scale().domain(startScale.range()).range(startScale.domain())
+  brush.extent([new Date(ss(avaibleWidth*0.25)), new Date(ss(avaibleWidth*0.75))]);
+  first();
+  // setInterval(function(){
+  //   if(currentIndex == brushedTimelineBands.length-1){
+  //     first()
+  //   }else{
+  //     next()  
+  //   }
+  // }, 500)
+  // console.log( d3.select("#data")[0][0])
+  d3.select("#data")[0][0].innerHTML="<p>"+JSON.stringify(csv)+"</p>"
+
+})
+
+
+</script>
+
+
+<body>
+<div id="viz">
+  <svg style="background:white;" height=1100 width=1100>
+  </svg>
+  <div class="navigator">
+    <button id="first" style="width:50px;float:left;padding:5px;margin:2px">&lt;&lt;</button>
+    <button id="prev" style="width:50px;float:left;padding:5px;margin:2px">&lt;</button>
+    <button id="next" style="width:50px;float:left;padding:5px;margin:2px">&gt;</button>
+    <button id="last" style="width:50px;float:left;padding:5px;margin:2px">&gt;&gt;</button>
+  </div>
+</div>
+<div id="data">
+</div>
+<footer>
+</footer>
+</body>
+</html>

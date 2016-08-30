@@ -38,11 +38,10 @@
     "canvg": "~1.3.0",
     "d3-layout-timeline": "emeeks/d3.layout.timeline",
     "date-and-time": "knowledgecode/date-and-time#~0.3.0",
-    "d3": "v3.5.17"
+    "d3": "v3.5.17",
+    "ng-responsive-carousel": "*"
   },
-
   "resolutions": {
-      "d3": "v3.5.17"
-    }
-
+    "d3": "v3.5.17"
+  }
 }
