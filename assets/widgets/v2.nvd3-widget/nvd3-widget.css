@@ -311,6 +311,11 @@ div.xy-tooltip {
     stroke-width:1;
 }
 
+.nvd3 .brush .extent {
+    fill-opacity: .03;
+    stroke: #afafaf;
+    shape-rendering: crispEdges;
+}    
 
 /*.nvd3 .nv-multibar .nv-groups rect,
 .nvd3 .nv-multibarHorizontal .nv-groups rect,

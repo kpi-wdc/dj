@@ -29,6 +29,8 @@ var layout = function(){
   this._extent = undefined;
   this._childAccessor = function(d){return d.childs}
   this._bands = [];
+  this.line = [];
+  this.domain = new Array(2);
 }
 
 layout.prototype = {
@@ -71,18 +73,68 @@ layout.prototype = {
   data : function(_){
     if(!_) return this._data; 
     this._data = _;
+    if(!this._extent){
+	    var thos = this;
+	    function _min(s){
+	    	var r = s[0].start;
+
+	    	s.forEach(function(d){
+	    		
+	    		r = (date.subtract(new Date(r), new Date(d.start)).toMilliseconds() > 0) ? d.start : r;
+	    		if(d.childs){
+	    			var c = _min(d.childs)
+	    			r = (date.subtract(new Date(r), new Date(c)).toMilliseconds() > 0) ? c : r; 
+	    		}
+	    	})
+	    	return r;
+	    }
+
+	    function _max(s){
+	    	var r = s[0].end;
+
+	    	s.forEach(function(d){
+	    		
+	    		r = (date.subtract(new Date(r), new Date(d.end)).toMilliseconds() < 0) ? d.end : r;
+	    		if(d.childs){
+	    			var c = _max(d.childs)
+	    			r = (date.subtract(new Date(r), new Date(c)).toMilliseconds() < 0) ? c : r; 
+	    		}
+	    	})
+	    	return r;
+	    }
+
+	    this._data.forEach(function(serie){
+	    	var min = _min(serie.values)
+	    	var max = _max(serie.values)
+	    	if(thos.domain[0]){
+	    		thos.domain[0] = (thos.domain[0] > min) ? min : thos.domain[0];
+	    	} else{
+	    		thos.domain[0] = min;
+	    	}	
+	    	if(thos.domain[1]){
+		    	thos.domain[1] = (thos.domain[1] < max) ? max : thos.domain[1];
+		    }else{
+		    	thos.domain[1] = max
+		    }	
+	    })
+	    
+	    this._extent = this.domain;	
+    }
     return this;
   },
 
   fit : function(){
         var swimlines = [];
+        this._band = [];
+        
         var thos = this;
         this._data.forEach(function(serie,i){
             thos._layout
               .size([thos._width,thos._height/thos._data.length])
               .extent(thos._extent)
               .childAccessor(thos._childAccessor)
-            
+              
+              
             var tmp = thos._layout(serie.values);
             var swimline = {y:[],dy:[]}
             tmp.forEach(function(d){
@@ -109,13 +161,32 @@ layout.prototype = {
           cumulate+= d.ratio
         })
 
-        this._data.forEach(function(serie,i){
-          serie.layout = {
-            ratio : swimlines[i].ratio,
-            eventHeight : swimlines[i].height,
-            yOffset :  swimlines[i].hOffset
-          }
-        });
+        this._bands.forEach(function(band,i){
+        	band.forEach(function(item,j){
+        		item._id = j
+        		item.height = swimlines[i].height;
+        		item.y += swimlines[i].hOffset*thos._height;
+        		item.band = i; 
+        	})
+        })
+
+        
+        this.line = [];
+        
+        this._bands.forEach(function(band){
+        	thos.line = thos.line.concat(band);
+        })	
+
+        thos.line.sort(function(a,b){
+        	if(date.subtract(new Date(a.originalStart), new Date(b.originalStart)).toMilliseconds() !=0)
+		        return date.subtract(new Date(a.originalStart), new Date(b.originalStart)).toMilliseconds();
+		    if((a.band - b.band) != 0)
+		    	return a.band-b.band
+		    return a.lane - b.lane
+        })
+
+        this.domain = [this.line[0].originalStart, this.line[this.line.length-1].originalEnd] 
+        
         return this;
       }
   }
@@ -136,10 +207,8 @@ nv.models.timelineChart = function(){
         height = 500,
         
         color = nv.utils.defaultColor(),
-
-        // timeline = nv.models.timeline(),
-
-        axis = nv.models.axis(),
+		
+		axis = nv.models.axis(),
 
         brush = d3.svg.brush(),
         
@@ -149,7 +218,6 @@ nv.models.timelineChart = function(){
 
         legend = nv.models.legend()
         	.key(function(d){return d.category})
-        	// .min(1)
         	.radioButtonMode(false),
 
         dispatch = d3.dispatch("stateChange", "changeState"),
@@ -162,88 +230,139 @@ nv.models.timelineChart = function(){
         // local variables
         //  
 
-        var domain = [],
-        	_domain = [],
-        	line = [];
+        var domain = [];
+        var brushScale;
 /////////////////////////////////////////////////////////////////////////////////////////////////
-		var insert_Id = function(data,id){
-			if(id == undefined) id = 0
-		    data.forEach(function(d,i){
-		      d._id = id;
-		      id++;
-		      if(d.childs) insert_Id(d.childs,id)
-		    }) 
-		}
+		
+		
+
+		// var insert_Id = function(data,id){
+		// 	if(id == undefined) id = 0
+		//     data.forEach(function(d,i){
+		//       d._id = id;
+		//       id++;
+		//       if(d.childs) insert_Id(d.childs,id)
+		//     }) 
+		// }
 
 
 
-		var createLine = function(values,line){
-			if (line == undefined) line = [];
-		    values.forEach(function(d){
-		        line.push({
-		          start:d.start,
-		          end:d.end,
-		          context:d.context,
-		          _id:d._id
-		        })
-		        if(d.childs) line = createLine(d.childs)
-		    })
-		    return line;
-		}
+		// var createLine = function(values,line){
+		// 	if (line == undefined) line = [];
+		//     values.forEach(function(d){
+		//         line.push({
+		//           start:d.start,
+		//           end:d.end,
+		//           context:d.context,
+		//           _id:d._id
+		//         })
+		//         if(d.childs) line = createLine(d.childs)
+		//     })
+		//     return line;
+		// }
 
 
-		var insertId = function(data,line,index){
-			if(index == undefined) index = 0
-			data.forEach(function(d,i){
-			  d.id = line[index]._id;
-			  index++;
-			  if(d.childs) insertId(d.childs,line,index)
-			}) 
-		}
+		// var insertId = function(data,line,index){
+		// 	if(index == undefined) index = 0
+		// 	data.forEach(function(d,i){
+		// 	  d.id = line[index]._id;
+		// 	  index++;
+		// 	  if(d.childs) insertId(d.childs,line,index)
+		// 	}) 
+		// }
 
 
-		var insertSerieIndex = function(values,s,i){
+		var insertSerieIndex = function(values,i){
 		  values.forEach(function(d){
-		    d.serieIndex = s;
-		    d.bandIndex = i;
-		    
-		    if(d.childs) insertSerieIndex(d.childs,s,i);
+		    d.serieIndex = i;
+		    if(d.childs) insertSerieIndex(d.childs,i);
 		  })
 		}
 
-		var convertData = function(series){
-		    
-		    series.forEach(function(d){
-		      insert_Id(d.values);
-		    })
-		    
-		    line = [];
-		    
-		    series.forEach(function(d){
-		      line = createLine(d.values,line);
-		    })
-		    
-		    line.sort(function(a,b){
-		      if(date.subtract(new Date(a.start), new Date(b.start)).toMilliseconds() !=0)
-		        return date.subtract(new Date(a.start), new Date(b.start)).toMilliseconds()
-		      return a._id - b._id
-		    })
 
-		    domain = [line[0].start, line[line.length-1].end]
+		var getDomain = function(_data){
+			    var _domain= new Array(2);
 
-		    line.forEach(function(d,i){d.id = i})
+			    function _min(s){
+			    	var r = s[0].start;
 
-		    line.sort(function(a,b){
-		       return a._id - b._id
-		    })
+			    	s.forEach(function(d){
+			    		
+			    		r = (date.subtract(new Date(r), new Date(d.start)).toMilliseconds() > 0) ? d.start : r;
+			    		if(d.childs){
+			    			var c = _min(d.childs)
+			    			r = (date.subtract(new Date(r), new Date(c)).toMilliseconds() > 0) ? c : r; 
+			    		}
+			    	})
+			    	return r;
+			    }
+
+			    function _max(s){
+			    	var r = s[0].end;
+
+			    	s.forEach(function(d){
+			    		
+			    		r = (date.subtract(new Date(r), new Date(d.end)).toMilliseconds() < 0) ? d.end : r;
+			    		if(d.childs){
+			    			var c = _max(d.childs)
+			    			r = (date.subtract(new Date(r), new Date(c)).toMilliseconds() < 0) ? c : r; 
+			    		}
+			    	})
+			    	return r;
+			    }
+
+			    _data.forEach(function(serie){
+			    	var min = _min(serie.values)
+			    	var max = _max(serie.values)
+			    	if(_domain[0]){
+			    		_domain[0] = (_domain[0] > min) ? min : _domain[0];
+			    	} else{
+			    		_domain[0] = min;
+			    	}	
+			    	if(_domain[1]){
+				    	_domain[1] = (_domain[1] < max) ? max : _domain[1];
+				    }else{
+				    	_domain[1] = max
+				    }	
+			    })
+			    
+			   return [new Date(_domain[0]), new Date(_domain[1])];	
+		}    
+
+
+		// var convertData = function(series){
 		    
-		    series.forEach(function(d,i){
-		      insertId(d.values,line);
-		      insertSerieIndex(d.values,d.colorIndex,i)
-		    })
+		//     series.forEach(function(d){
+		//       insert_Id(d.values);
+		//     })
+		    
+		//     line = [];
+		    
+		//     series.forEach(function(d){
+		//       line = createLine(d.values,line);
+		//     })
+		    
+		//     line.sort(function(a,b){
+		//       if(date.subtract(new Date(a.start), new Date(b.start)).toMilliseconds() !=0)
+		//         return date.subtract(new Date(a.start), new Date(b.start)).toMilliseconds()
+		//       return a._id - b._id
+		//     })
+
+		//     domain = [line[0].start, line[line.length-1].end]
+
+		//     line.forEach(function(d,i){d.id = i})
+
+		//     line.sort(function(a,b){
+		//        return a._id - b._id
+		//     })
+		    
+		//     series.forEach(function(d,i){
+		//       insertId(d.values,line);
+		//       insertSerieIndex(d.values,d.colorIndex,i)
+		//     })
 		    
 		   
-		}
+		// }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,12 +371,15 @@ nv.models.timelineChart = function(){
 
     	selection.each(function (_d) {
     		
+    		_d.forEach(function(d,i){
+		      insertSerieIndex(d.values,i)
+		    })
+
     		var data = _d.filter(function(item){return item.disabled == false || item.disabled == undefined})
         	
-        	convertData(data);
-        	// domain = _domain;
-        	
-
+        	var needBrushSettings = (brush.extent() == null) || brush.empty();
+    		
+    		domain = needBrushSettings ? getDomain(data) : brush.extent();
 
     	// prepare visualization
     	// 
@@ -269,15 +391,6 @@ nv.models.timelineChart = function(){
         
         container = d3.select(this);
 
-
-       	var btm = d3.layout.timeline()
-		              .size([2*availableWidth/3,brushHeight])
-		              .childAccessor(function (d) {return d.childs});
-		 
-		  var brushedTimelineBands = btm(line)
-		  brushedTimelineBands.sort(function(a,b){
-		        return a.id-b.id
-		      })
 
 		  var container = d3.select(this),
               that = this;
@@ -308,50 +421,34 @@ nv.models.timelineChart = function(){
         gEnter.append("g").attr("class", "brush");
         gEnter.append("g").attr("class", "series");
         gEnter.append("g").attr("class", "nv-legendWrap");
-      
-
-
-
-
-        // gEnter.append("g").attr("class", "nv-legendWrap");
 
           legend.width(availableWidth);
 
           var temp = g.select(".nv-legendWrap").datum(_d)
-          // console.log("gEnter.select(\".nv-legendWrap\").datum(data)",temp)
           temp.call(legend);
          
-          // if (margin.top != legend.height()) {
             margin.top = legend.height() + 5;
             availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom -brushHeight-20;
-          // }
 
           wrap.select(".nv-legendWrap").attr("transform", "translate(0," + 0 + ")");
 
-
-
-
-
 		  var l = new layout()
 		    .data(data)
-		    .size([availableWidth,availableHeight])
 		    .extent(domain)
+		    .size([availableWidth,availableHeight])
 		    .fit();
-		 
-		  var data1 = l.data(); 
-      		
+		
+		  
+          
+
  	      var x = d3.time.scale()
-	            .domain(btm.extent())
+	            .domain(domain)
 	            .range([0, availableWidth]);
 
 		  var startScale = d3.time.scale()
-		            .domain(btm.extent())
+		            .domain(domain)
 		            .range([0, availableWidth]);          
 		  
-
-
-
-
 		  axis
 		  	.scale(x)
             .orient("bottom")
@@ -367,6 +464,7 @@ nv.models.timelineChart = function(){
                 ["%B", function(d) { return d.getMonth(); }],
                 ["%Y", function() { return true; }]
               ]))
+            .showMaxMin(false) 
             // .ticks(20)	
 
         //------------------------------------------------------------
@@ -382,15 +480,26 @@ nv.models.timelineChart = function(){
 							.domain(startScale.range())
 							.range(startScale.domain())
   
-  		var brushScale =  d3.time.scale()
-            .domain([
-              new Date(invertScale(0-availableWidth*0.25)), 
-              new Date(invertScale(availableWidth+availableWidth*0.25))
-            ])
-            .range([0, availableWidth]);
+  		
 
+  		if(needBrushSettings){
+  			brushScale =  d3.time.scale().range([0, availableWidth]);
+  			brushScale.domain([
+              new Date(invertScale(0 - availableWidth*0.25)), 
+              new Date(invertScale(availableWidth + availableWidth*0.25))
+            ])
+  		}
+  		// else{
+  		// 	brushScale.domain([
+    //           new Date(invertScale(0)), 
+    //           new Date(invertScale(availableWidth))
+    //         ])
+  		// }
+        
+        
         brush
         	.x(brushScale.range([0, availableWidth]))         
+        	.extent(domain)
 
          brushAxis
 		  	.scale(brushScale)
@@ -413,22 +522,38 @@ nv.models.timelineChart = function(){
 		var brushG = g.select(".brush")
 						.attr("transform", "translate("+margin.left+","+(availableHeight+margin.top+20)+")")									    
 
-		brushG
+		var brushAxisWrap = brushG.selectAll(".nv-x.nv-axis").data([_d])
+		
+		brushAxisWrap
+			.enter()
 		    .append("g")
 		    .attr("class", "nv-x nv-axis")
 		    .attr("transform", "translate("+0+","+(brushHeight)+")")
 		
-		g.select(".brush").select(".nv-x.nv-axis")    
+		brushAxisWrap.exit().remove();
+		
+		brushAxisWrap 
 		    .transition()
 		    .call(brushAxis)
 
-		brushG
+
+		var brushControlWrap =  brushG.selectAll(".brush-control").data([_d])   
+		    
+		brushControlWrap
+			.enter()
 		    .append("g")
 		    .attr("class", "brush-control")
 		
-		g.select(".brush").select(".brush-control")    
+		brushControlWrap.exit().remove();
+
+		brushControlWrap   
 		    .transition()
-		    .call(brush)    
+		    .call(brush)  
+		
+		brushControlWrap.selectAll("rect")
+			.attr("height", brushHeight)   
+
+
 
 		var seriesG = g.select(".series")
 						.attr("transform",function(d){
@@ -444,19 +569,17 @@ nv.models.timelineChart = function(){
 			.enter()
 			.append("g")
 			.attr("class","serie")
-			.attr("transform",function(d,i){
-				return "translate("+0+","+ ((availableHeight)*data1[i].layout.yOffset)+")"
-			})
+
 
 		seriesContainer
 			.exit()
 			.remove()
 
-		g.select("g.series").selectAll(".serie")
-			.transition()
-			.attr("transform",function(d,i){
-				return "translate("+0+","+ ((availableHeight)*data1[i].layout.yOffset)+")"
-			})
+		// g.select("g.series").selectAll(".serie")
+		// 	.transition()
+			// .attr("transform",function(d,i){
+			// 	return "translate("+0+","+ ((availableHeight)*data1[i].layout.yOffset)+")"
+			// })
 		
 		var items = g
 					.select("g.series")
@@ -470,13 +593,19 @@ nv.models.timelineChart = function(){
 			.enter()
 			.append("rect")
 			.attr("class", "item")
+			.attr("x", function (d) {
+		    	return 0
+	      	})
+	      	.attr("width", function (d) {
+	      		return 0
+	      	})
 			.style("fill-opacity", function(d){
 	      		return 0
 	      	}) 
 	      	.style("stroke-width", function(d){
 	      		0
 	      	})
-	      	.style("stroke-opacity", function(d){
+	      	.style("opacity", function(d){
 	      		0
 	      	})
 	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
@@ -487,6 +616,8 @@ nv.models.timelineChart = function(){
 		
 		items
 			.transition()
+			.duration(500)
+			// .ease("cubic-in")//"cubic-in", "linear", "quad", "cubic", "sin", "exp", "circle", "elastic", "back", "bounce"
 			.attr("x", function (d) {
 		    	return (d.type == "instant")? d.start-2.5 : d.start
 	      	})
@@ -495,44 +626,40 @@ nv.models.timelineChart = function(){
 	      		return ((d.end - d.start)<5) ? 5 : d.end - d.start
 	      	})
 	      	.attr("height", function (d) {
-	      	  return (d.type == "flow") ? d.dy : data1[d.bandIndex].layout.eventHeight
+	      	  return (d.type == "flow") ? d.dy : d.height
 	        })
 	      	.style("fill-opacity", function(d){
-	      		return (d.type == "flow") ? 0.05 : 0.5
+	      		return (d.type == "flow") ? 0.05 : 0.1
 	      	}) 
 	      	.style("stroke-width", function(d){
-	      		return (d.type == "flow") ? 0.3 : 0.5
+	      		return (d.type == "flow") ? 0.3 : 1
 	      	})
 	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
 			.style("stroke", function (d,i) {return color(d,d.serieIndex)})
 	      	
    		
  		legend.dispatch.on("stateChange", function (newState) {
-          console.log("state change", newState)
           state = newState;
-          // dispatch.changeState(state);
-          data.forEach(function (series, i) {
-              series.disabled = state.disabled[i];
-            });
-
-          chart.update();
+          dispatch.changeState(state);
         });
 	        
 	    
- 		dispatch.on("stateChange", function (e) {
-          // console.log("stateChange",e)
+ 		dispatch.on("changeState", function (e) {
           if (typeof e.disabled !== "undefined" && data.length === e.disabled.length) {
-            data.forEach(function (series, i) {
-              series.disabled = e.disabled[i];
+            _d.forEach(function (series, i) {
+              series.disabled = !!e.disabled[i];
             });
 
             state.disabled = e.disabled;
           }
 
+          brush.clear();
           chart.update();
         });
 
     	});
+
+		brush.on("brushend", function(){chart.update()})
 
     	return chart;
 
