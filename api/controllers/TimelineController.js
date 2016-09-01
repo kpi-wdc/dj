@@ -29,10 +29,19 @@ module.exports = {
 
         wdc_timeline(uploadedFileAbsolutePath)
           .then(function(data){
-            Cache.save("timeline",{},data)
-              .then(function(r){
-                return res.send(r)    
-              })
+              ProcData
+              .create({value:data})
+                .then(function(obj){
+                  ProcData.findOne({id:obj.id})
+                    .then(function(founded){
+                      return res.json(founded)
+                    })
+              // return res.json(obj);
+                })
+            // Cache.save("timeline",{},data)
+            //   .then(function(r){
+            //     return res.send(r)    
+            //   })
         })    
     })          
   },
