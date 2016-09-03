@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://bl.ocks.org/jebeck/10699411 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=1000">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@mbostock">
+<meta property="og:url" content="http://bl.ocks.org/jebeck/10699411">
+<meta property="og:title" content="SVG foreignObject tooltips in D3">
+<meta property="og:description" content="Jana Beck’s Block 10699411">
+<meta property="og:image" content="http://bl.ocks.org/jebeck/raw/10699411/780a82f288fa04398a1ccba283547e9c6f8260a9/thumbnail.png">
+<title>SVG foreignObject tooltips in D3 - bl.ocks.org</title>
+<link rel="icon" href="http://bl.ocks.org/favicon.png">
+<style>
+
+@import url("/style.css");
+
+</style>
+
+</head><body><header>
+  <div class="column">
+    <div class="navigation">
+      <a href="http://bl.ocks.org/">Popular</a>
+      / <a href="http://bl.ocks.org/-/about">About</a>
+    </div>
+    <a class="user" href="http://bl.ocks.org/jebeck"><img class="avatar" src="./SVG foreignObject tooltips in D3 - bl.ocks.org_files/1588547" width="30" height="30">Jana Beck</a>’s
+    Block <a class="gist gist-id self" title="View Gist on GitHub." href="https://gist.github.com/jebeck/10699411">10699411</a>    <div class="date">Updated July 5, 2016</div>
+  </div>
+</header>
+
+<div class="column">
+  <h1>SVG foreignObject tooltips in D3</h1>
+  <div class="index">
+    <iframe sandbox="allow-popups allow-scripts allow-forms allow-same-origin" src="./SVG foreignObject tooltips in D3 - bl.ocks.org_files/saved_resource.html" marginwidth="0" marginheight="0" style="height:500px;" scrolling="no"></iframe>
+  </div>
+  <div class="index-pop">
+    <a target="_blank" title="Open Block 10699411 a new window." href="http://bl.ocks.org/jebeck/raw/10699411">Open<svg height="16" width="12"><path d="M11 10h1v3c0 0.55-0.45 1-1 1H1c-0.55 0-1-0.45-1-1V3c0-0.55 0.45-1 1-1h3v1H1v10h10V10zM6 2l2.25 2.25-3.25 3.25 1.5 1.5 3.25-3.25 2.25 2.25V2H6z"></path></svg></a>
+  </div>
+  <div class="gist-readme" data-key="README.md"><h2 id="svgforeignobjecttooltipsind3">SVG foreignObject tooltips in D3</h2>
+
+<p>Just a little proof-of-concept here - using an SVG <code class="xml"><span class="tag">&lt;<span class="title">foreignObject</span>&gt;</span></code> element as a container for a tooltip that can involve handy HTML features like text-wrapping and (semi-)dynamic sizing.</p>
+
+<p>Gotchas so far:</p>
+
+<ul>
+<li><p>Like an <code class="xml"><span class="tag">&lt;<span class="title">svg</span>&gt;</span></code> element, a <code class="xml"><span class="tag">&lt;<span class="title">foreignObject</span>&gt;</span></code> element needs a width and a height in order to be rendered.</p></li>
+<li><p>However, specifying <code class="undefined">width</code> and/or <code class="undefined">height</code> can be delayed. Here I specify a width (<code class="undefined">foWidth</code>) of 300px, then find the height of the contained <code class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span></code> using <code class="undefined">getBoundingClientRect()</code> and use that to specify the height of the containing  <code class="xml"><span class="tag">&lt;<span class="title">foreignObject</span>&gt;</span></code>.</p></li>
+<li><p>If you want to provide a complex shape for the tooltip, this can be done e.g. with an SVG <code class="xml"><span class="tag">&lt;<span class="title">polygon</span>&gt;</span></code> but there's a slight paradox in needing to find the dynamic dimension of the <code class="xml"><span class="tag">&lt;<span class="title">foreignObject</span>&gt;</span></code> before creating the <code class="xml"><span class="tag">&lt;<span class="title">polygon</span>&gt;</span></code>, but the <code class="xml"><span class="tag">&lt;<span class="title">polygon</span>&gt;</span></code> needs to appear higher than the <code class="xml"><span class="tag">&lt;<span class="title">foreignObject</span>&gt;</span></code> in the SVG in order to be layered underneath it. The solution here is <code class="undefined">d3.insert(el, selector)</code>.</p></li>
+<li><p>Chrome doesn't create the SVG <code class="undefined">foreignObject</code> elements properly - they appear in the DOM as <code class="undefined">foreignobject</code> and can't then be selected by <code class="undefined">d3.selectAll('foreignObject')</code> (nor <code class="undefined">d3.selectAll('foreignobject')</code> because D3 knows about the proper names of things in the SVG XML namespace). Solution: use a class to identify all <code class="xml"><span class="tag">&lt;<span class="title">foreignObject</span>&gt;</span></code>s.</p></li>
+</ul></div>
+  <div class="gist-sources">
+    <div class="gist-source" data-key="index.html">
+      <h2>index.html<a name="index.html" class="anchor" href="http://bl.ocks.org/jebeck/10699411#index.html">#</a></h2>
+      <pre><code class="html xml"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span> <span class="attribute">lang</span>=<span class="value">'en'</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">'utf-8'</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">title</span>&gt;</span>
+            SVG foreignObject tooltips in D3
+        <span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">'http://d3js.org/d3.v3.min.js'</span> <span class="attribute">charset</span>=<span class="value">'utf-8'</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">'text/css'</span>&gt;</span><span class="css">
+            <span class="tag">svg</span> <span class="rules">{
+                <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span>;</span>
+                <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">0</span> auto</span>;</span>
+            <span class="rule">}</span></span>
+            <span class="class">.svg-tooltip</span> <span class="rules">{
+                <span class="rule"><span class="attribute">pointer-events</span>:<span class="value"> none</span>;</span>
+            <span class="rule">}</span></span>
+            <span class="class">.tooltip</span> <span class="rules">{
+                <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">10</span>px</span>;</span>
+                <span class="rule"><span class="attribute">color</span>:<span class="value"> <span class="number">#4A22FF</span></span>;</span>
+            <span class="rule">}</span></span>
+            <span class="class">.lead</span> <span class="rules">{
+                <span class="rule"><span class="attribute">font-style</span>:<span class="value"> italic</span>;</span>
+            <span class="rule">}</span></span>
+            <span class="tag">p</span> <span class="rules">{
+                <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">5</span>px <span class="number">0</span>px</span>;</span>
+            <span class="rule">}</span></span>
+            <span class="tag">polygon</span> <span class="rules">{
+                <span class="rule"><span class="attribute">pointer-events</span>:<span class="value"> none</span>;</span>
+            <span class="rule">}</span></span>
+        </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">'text/javascript'</span>&gt;</span><span class="javascript">
+            <span class="keyword">var</span> margin = {top: <span class="number">20</span>, right: <span class="number">10</span>, bottom: <span class="number">20</span>, left: <span class="number">10</span>};
+            <span class="keyword">var</span> width = <span class="number">800</span> - margin.left - margin.right;
+            <span class="keyword">var</span> height = <span class="number">480</span> - margin.top - margin.bottom;
+            <span class="keyword">var</span> svg = d3.select(<span class="string">'body'</span>)
+                .append(<span class="string">'svg'</span>)
+                .attr({
+                    <span class="string">'width'</span>: width + margin.left + margin.right,
+                    <span class="string">'height'</span>: height + margin.top + margin.bottom
+                })
+                .append(<span class="string">'g'</span>)
+                .attr(<span class="string">'transform'</span>, <span class="string">'translate('</span> + margin.left + <span class="string">','</span> + margin.top + <span class="string">')'</span>);
+            svg.append(<span class="string">'rect'</span>)
+                .attr({
+                    <span class="string">'width'</span>: width * <span class="number">0.8</span>,
+                    <span class="string">'height'</span>: height * <span class="number">0.8</span>,
+                    <span class="string">'x'</span>: width * <span class="number">0.1</span>,
+                    <span class="string">'y'</span>: height * <span class="number">0.1</span>,
+                    <span class="string">'fill'</span>: <span class="string">'#F8F8F8'</span>
+                });
+            <span class="keyword">var</span> foWidth = <span class="number">300</span>;
+            <span class="keyword">var</span> anchor = {<span class="string">'w'</span>: width/<span class="number">3</span>, <span class="string">'h'</span>: height/<span class="number">3</span>};
+            <span class="keyword">var</span> t = <span class="number">50</span>, k = <span class="number">15</span>;
+            <span class="keyword">var</span> tip = {<span class="string">'w'</span>: (<span class="number">3</span>/<span class="number">4</span> * t), <span class="string">'h'</span>: k};
+            svg.append(<span class="string">'circle'</span>)
+                .attr({
+                    <span class="string">'r'</span>: <span class="number">50</span>,
+                    <span class="string">'cx'</span>: anchor.w,
+                    <span class="string">'cy'</span>: anchor.h,
+                    <span class="string">'fill'</span>: <span class="string">'#7413E8'</span>,
+                    <span class="string">'opacity'</span>: <span class="number">0.35</span>
+                })
+                .on(<span class="string">'mouseover'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+                    <span class="keyword">var</span> fo = svg.append(<span class="string">'foreignObject'</span>)
+                        .attr({
+                            <span class="string">'x'</span>: anchor.w - tip.w,
+                            <span class="string">'y'</span>: anchor.h + tip.h,
+                            <span class="string">'width'</span>: foWidth,
+                            <span class="string">'class'</span>: <span class="string">'svg-tooltip'</span>
+                        });
+                    <span class="keyword">var</span> div = fo.append(<span class="string">'xhtml:div'</span>)
+                        .append(<span class="string">'div'</span>)
+                        .attr({
+                            <span class="string">'class'</span>: <span class="string">'tooltip'</span>
+                        });
+                    div.append(<span class="string">'p'</span>)
+                        .attr(<span class="string">'class'</span>, <span class="string">'lead'</span>)
+                        .html(<span class="string">'Holmes was certainly not a difficult man to live with.'</span>);
+                    div.append(<span class="string">'p'</span>)
+                        .html(<span class="string">'He was quiet in his ways, and his habits were regular. It was rare for him to be up after ten at night, and he had invariably breakfasted and gone out before I rose in the morning.'</span>);
+                    <span class="keyword">var</span> foHeight = div[<span class="number">0</span>][<span class="number">0</span>].getBoundingClientRect().height;
+                    fo.attr({
+                        <span class="string">'height'</span>: foHeight
+                    });
+                    svg.insert(<span class="string">'polygon'</span>, <span class="string">'.svg-tooltip'</span>)
+                        .attr({
+                            <span class="string">'points'</span>: <span class="string">"0,0 0,"</span> + foHeight + <span class="string">" "</span> + foWidth + <span class="string">","</span> + foHeight + <span class="string">" "</span> + foWidth + <span class="string">",0 "</span> + (t) + <span class="string">",0 "</span> + tip.w + <span class="string">","</span> + (-tip.h) + <span class="string">" "</span> + (t/<span class="number">2</span>) + <span class="string">",0"</span>,
+                            <span class="string">'height'</span>: foHeight + tip.h,
+                            <span class="string">'width'</span>: foWidth,
+                            <span class="string">'fill'</span>: <span class="string">'#D8D8D8'</span>, 
+                            <span class="string">'opacity'</span>: <span class="number">0.75</span>,
+                            <span class="string">'transform'</span>: <span class="string">'translate('</span> + (anchor.w - tip.w) + <span class="string">','</span> + (anchor.h + tip.h) + <span class="string">')'</span>
+                        });
+                })
+                .on(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+                    svg.selectAll(<span class="string">'.svg-tooltip'</span>).remove();
+                    svg.selectAll(<span class="string">'polygon'</span>).remove();
+                });
+        </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span></code></pre>
+    </div>
+  </div>
+  <div class="gist-license">
+    <h2>LICENSE<a name="license" class="anchor" href="http://bl.ocks.org/jebeck/10699411#license">#</a></h2>
+    This block appears to have <a target="_blank" href="http://choosealicense.com/no-license/">no license</a>. Please contact <a target="_blank" href="https://github.com/jebeck">the author</a> to request a license.
+  </div>
+</div>
+
+<script src="./SVG foreignObject tooltips in D3 - bl.ocks.org_files/d3.v3.min.js"></script>
+<script src="./SVG foreignObject tooltips in D3 - bl.ocks.org_files/highlight.min.js"></script>
+<script>
+
+var gist = {"public":true,"sha":"780a82f288fa04398a1ccba283547e9c6f8260a9","files":{"README.md":{"language":"Markdown","type":"text/plain","filename":"README.md","size":1354,"sha":"e33ea3baf0a326edc8047061b5332bee580b5c73"},"index.html":{"language":"HTML","type":"text/html","filename":"index.html","size":4059,"sha":"31d5488e8499e71d2b32fa22cb82d7e31ae210c0"},"thumbnail.png":{"language":null,"type":"image/png","filename":"thumbnail.png","size":25797,"sha":"84ead68fbe34a96a676ecd5a54a6499eade6f3d3"}},"created_at":"2014-04-15T03:21:21Z","updated_at":"2016-07-05T20:04:55Z","description":"SVG foreignObject tooltips in D3","owner":{"login":"jebeck"},"id":"10699411"};
+
+var files = d3.values(gist.files);
+
+d3.select(".gist-readme")
+    .data(files, function(d) { return d ? d.filename : this.getAttribute("data-key"); })
+    .each(function(d) {
+      var readme = d3.select(this);
+      d3.text("/jebeck/raw/10699411/780a82f288fa04398a1ccba283547e9c6f8260a9/" + d.filename, function(error, content) {
+        if (error) content = "Sorry, an error occurred.";
+        readme.html(new Showdown.converter().makeHtml(content));
+        readme.selectAll("code").each(function() { hljs.highlightBlock(this); });
+      });
+    });
+
+d3.selectAll(".gist-source")
+    .data(files, function(d) { return d ? d.filename : this.getAttribute("data-key"); })
+  .select("code")
+    .attr("class", function(d) { return d.language && (d.language === "JSON" ? "javascript" : d.language.toLowerCase()); })
+    .each(function(d) {
+      var code = d3.select(this);
+      d3.text("/jebeck/raw/10699411/780a82f288fa04398a1ccba283547e9c6f8260a9/" + (d.filename === "index.html" ? "" : d.filename), function(error, content) {
+        if (error) content = "Sorry, an error occurred.";
+        code.text(content);
+        hljs.highlightBlock(code.node());
+      });
+    });
+
+</script>
+
+<script>
+
+GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+ga("create", "UA-48272912-1", "auto");
+ga("send", "pageview");
+
+</script>
+<script async="" src="./SVG foreignObject tooltips in D3 - bl.ocks.org_files/analytics.js"></script>
+</body></html>
