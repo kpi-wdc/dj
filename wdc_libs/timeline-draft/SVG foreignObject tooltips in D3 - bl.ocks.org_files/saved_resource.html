@@ -90,13 +90,13 @@
                             'height': foHeight + tip.h,
                             'width': foWidth,
                             'fill': '#D8D8D8', 
-                            'opacity': 0.75,
+                            'opacity': 1,
                             'transform': 'translate(' + (anchor.w - tip.w) + ',' + (anchor.h + tip.h) + ')'
                         });
                 })
                 .on('mouseout', function() {
-                    svg.selectAll('.svg-tooltip').remove();
-                    svg.selectAll('polygon').remove();
+                    // svg.selectAll('.svg-tooltip').remove();
+                    // svg.selectAll('polygon').remove();
                 });
         </script><svg width="800" height="480"><g transform="translate(10,20)"><rect width="624" height="352" x="78" y="44" fill="#F8F8F8"></rect><circle r="50" cx="260" cy="146.66666666666666" fill="#7413E8" opacity="0.35"></circle></g></svg>
     

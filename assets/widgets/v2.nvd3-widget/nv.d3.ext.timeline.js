@@ -7,7 +7,7 @@
 
 function generatePath(points){
   return d3.svg.area()
-        .interpolate("linear")
+        .interpolate("linear-closed")
         .x(function (p, i) {
               return p.x;
         })
@@ -15,7 +15,10 @@ function generatePath(points){
               return p.y;
         })
         .y1(function (p, i) {
-              return p.y;
+              return 0;
+        })
+        .x1(function(p,i){
+        	return 0;
         })
         .apply(this, [points]);
 } 
@@ -184,6 +187,8 @@ layout.prototype = {
 		        return date.subtract(new Date(a.originalStart), new Date(b.originalStart)).toMilliseconds();
 		    if((a.band - b.band) != 0)
 		    	return a.band-b.band
+		    if((a.level - b.level) != 0)
+		    	return a.level - b.level
 		    return a.lane - b.lane
         })
 
@@ -194,6 +199,166 @@ layout.prototype = {
   }
 
 
+
+var foTooltip = function(w){
+	this._wrapper = w;
+	this._anchor = 50;
+	this._x =  0;
+	this._y = 0;
+	this._width = 100;
+	this._height = 100;
+	this._color = "gray";
+	this._bgColor = "white";
+	this._content =  function(d,w){
+			w.append("div").text((d)? d.toString(): "tooltip")	
+	}
+	this._margin = {top:10,right:10,bottom:10,left:10}
+	this.showed = false;
+}
+
+foTooltip.prototype = {
+	
+	wrapper: function(_){
+		if(!_) return this._wrapper;
+		this._wrapper = _;
+		return this;
+	},
+
+	anchor: function(_){
+		if(!_) return this._anchor;
+		this._anchor = _;
+		return this;
+	},
+
+	x: function(_){
+		if(!_) return this._x;
+		this._x = _;
+		return this;
+	},
+
+	y: function(_){
+		if(!_) return this._y;
+		this._y = _;
+		return this;
+	},
+
+	width: function(_){
+		if(!_) return this._width;
+		this._width = _;
+		return this;
+	},
+
+	height: function(_){
+		if(!_) return this._height;
+		this._height = _;
+		return this;
+	},
+
+	content: function(_){
+		if(!_) return this._content;
+		this._content = _;
+		return this;
+	},
+
+	bgColor: function(_){
+		if(!_) return this._bgColor;
+		this._bgColor = _;
+		return this;
+	},
+
+	color: function(_){
+		if(!_) return this._color;
+		this._color = _;
+		return this;
+	},
+	
+	show: function(d){
+		if(this.showed) this.hide();
+		this.showed = true;
+		console.log(this)
+		var thos = this;
+		var wr = {
+			x : thos.x()+thos._margin.left,
+			y:(thos._anchor-5<10) ? (thos.y()+thos._margin.top-10) : (thos.y()+thos._margin.top),
+			width: thos.width()-thos._margin.left-thos._margin.right-15,
+			height:thos.height()-thos._margin.top-thos._margin.bottom,
+			class: 'fo-tooltip'
+		}
+		this.contentWrapper = this._wrapper.append("foreignObject")
+							.attr(wr)
+		var c = this.contentWrapper
+				.append('xhtml:div')
+	            .append('div')
+			    .attr({
+			           'class': 'tooltip-container'
+			    });
+		
+		this._content(d,c)
+		
+		this._height = c[0][0].getBoundingClientRect().height;
+
+		var fo = {
+			lt: {
+					x: 0,//-thos._margin.left,
+					y: (thos._anchor-5<10) ? -10 : 0//-thos._margin.top
+			},
+
+			rt:{
+					x: thos._width-15,
+					y:(thos._anchor-5<10) ? -10 : 0
+			},
+				
+			rb:{
+					x:thos._width-15,//thos._width+thos._margin.right,
+					y:thos._height+thos._margin.bottom
+			},
+
+			lb:{
+				x: 0,//-thos._margin.left,
+				y: thos._height+thos._margin.bottom
+			},
+
+			sa:{
+				x:thos._width-15,//thos._width+thos._margin.right,
+				y:thos._anchor-5
+			},
+
+			ma:{
+				x:thos._width,//+thos._margin.right+15,
+				y:thos._anchor
+			},
+
+			ea:{
+				x:thos._width-15,//+thos._margin.right,
+				y:thos._anchor+5
+			}		
+
+
+
+		}
+		this._wrapper.insert("path",":first-child")
+	       	.attr("d", function(d,i){
+	       		return generatePath(
+	            	[fo.lt,fo.rt,fo.sa,fo.ma,fo.ea,fo.rb,fo.lb,fo.lt]
+	          	)
+	        })
+	        .attr("transform","translate("+this._x+","+this._y+")")
+	        .style("stroke",this._color)
+	        .style("stroke-width",0.5)
+	        .style("fill", this._bgColor)
+	        .style("fill-opacity", 0.75)	
+		this._wrapper.transition().attr("opacity",1)
+	},
+
+	hide: function(d){
+		this.showed = false;
+		this._wrapper.attr("opacity",0)
+		this._wrapper.select(".fo-tooltip").remove()
+		this._wrapper.select("path").remove()
+
+	}
+}	
+	
 
 
 nv.models.timelineChart = function(){
@@ -238,6 +403,8 @@ nv.models.timelineChart = function(){
         var brushScale;
         var brushCurrentPos;
         var currentIndex;
+
+        var tooltip = new foTooltip();
 
         var  	buttons = [
 	 		{
@@ -367,6 +534,7 @@ nv.models.timelineChart = function(){
             availableHeight = height - margin.top - margin.bottom-brushHeight-20-playerHeight;
         
         container = d3.select(this);
+       
 
 
 		  var container = d3.select(this),
@@ -399,6 +567,12 @@ nv.models.timelineChart = function(){
         gEnter.append("g").attr("class", "series");
         gEnter.append("g").attr("class", "nv-legendWrap");
 		gEnter.append("g").attr("class", "nv-playerWrap");
+		gEnter.append("g").attr("class", "fo-tooltipWrap");
+
+		
+		
+					
+
 
 
           legend.width(availableWidth);
@@ -537,24 +711,57 @@ nv.models.timelineChart = function(){
 	 		.attr("height", brushHeight)
 		    .attr("width", 1)
 		    .attr("y", 0)
-		    .attr("x", e[0]+(e[1]-e[0])/2)
+		    .attr("x", e[0]+(e[1]-e[0])*0.25)//2)
 		      // .attr("transform", "translate("+(0)+","+(avaibleHeight+30)+")")
 		    .style("fill","red")  
 
 	 	brushCurrentPos.exit().remove();
 
-
+	 	tooltip
+			.wrapper(g.select(".fo-tooltipWrap"))
+			.x(margin.left)
+			.y(margin.top)
+			.width(availableWidth*0.25)
+			.height(availableHeight)
+			.content(function(d,c){
+				var f = d3.time.format("%B %Y")
+				var text = f(d.originalStart);
+				text += (d.type != "instant") ? " - "+f(d.originalEnd) : "";
+				c.append('h5')
+	            		.attr('class', 'timestamp')
+						.text(text)
+						.style("color", "gray")
+						.style("font-size", "small")
+						.style("font-weight","bold")
+						.style("margin", "0px")
+						.style("font-stretch","ultra-condensed")
+				c.append('h4')
+	            		.attr('class', 'headline')
+						.text(d.context)
+						.style("color", "gray")
+						.style("font-size", "small")
+						.style("font-weight","bold")
+						.style("margin", "0px")
+						.style("font-stretch","ultra-condensed")		
+			});	
 
 		var navigate = function(){
+
 		    var e = brush.extent().map(function(d){return startScale(d)});
 		    var p = startScale(l.line[currentIndex].originalStart);
-		    var m = (e[1]-e[0])/2;
-		    brush.extent([new Date(startScale.invert(p-m)), new Date(startScale.invert(p+m))])
-		    chart.update(); 
+		    // var m = (e[1]-e[0])/2;
+		    var m = e[1]-e[0]
+		    brush.extent([new Date(startScale.invert(p-m*0.25)), new Date(startScale.invert(p+m*0.75))])
+		    chart.update();
+		    var currentEvent = l.line[currentIndex]; 
+		    tooltip
+		       	.anchor((currentEvent.type == "flow")? currentEvent.y+currentEvent.dy/2  :currentEvent.y+currentEvent.height/2)
+		    	.color(color(currentEvent, currentEvent.serieIndex))
+		    	.show(currentEvent) 
 		  }
 
 	 	chart.first = function(){
-	 		console.log("first");
+	 		// console.log("first");
 	 		currentIndex = 0;
 	 		buttons[0].disabled = true;
 			buttons[1].disabled = true;
@@ -564,7 +771,7 @@ nv.models.timelineChart = function(){
 	 	}
 
 	 	chart.prev = function(){
-	 		console.log("prev");
+	 		// console.log("prev");
 	 		if(currentIndex == undefined){
 	 			chart.first();
 	 			return;
@@ -584,7 +791,7 @@ nv.models.timelineChart = function(){
 	 	}
 
 	 	chart.next = function(){
-	 		console.log("next");
+	 		// console.log("next");
 	 		if(currentIndex == undefined){
 	 			chart.last();
 	 			return;
@@ -605,7 +812,7 @@ nv.models.timelineChart = function(){
 	 	}
 
 	 	chart.last = function(){
-	 		console.log("last");
+	 		// console.log("last");
 	 		currentIndex = l.line.length-1; 
 	 		buttons[0].disabled = false;
 			buttons[1].disabled = false;
@@ -744,8 +951,12 @@ nv.models.timelineChart = function(){
 	      	})
 	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
 			.style("stroke", function (d,i) {return color(d,d.serieIndex)})
-	      	
-   		
+		      	
+	   	
+
+
+
+
  		legend.dispatch.on("stateChange", function (newState) {
           state = newState;
           dispatch.changeState(state);
