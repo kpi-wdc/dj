@@ -275,7 +275,7 @@ foTooltip.prototype = {
 	show: function(d){
 		if(this.showed) this.hide();
 		this.showed = true;
-		console.log(this)
+		
 		var thos = this;
 		var wr = {
 			x : thos.x()+thos._margin.left,
@@ -296,46 +296,47 @@ foTooltip.prototype = {
 		this._content(d,c)
 		
 		this._height = c[0][0].getBoundingClientRect().height;
+		wr.y = this._y+this._anchor-this._height/2+this._margin.top;
+		wr.y = (wr.y < -10) ? -10 : wr.y;
+		this.contentWrapper.attr(wr);
 
 		var fo = {
 			lt: {
-					x: 0,//-thos._margin.left,
-					y: (thos._anchor-5<10) ? -10 : 0//-thos._margin.top
+					x: 0,
+					y: wr.y-thos._margin.top-thos._y
 			},
 
 			rt:{
 					x: thos._width-15,
-					y:(thos._anchor-5<10) ? -10 : 0
+					y:wr.y-thos._margin.top-thos._y
 			},
 				
 			rb:{
-					x:thos._width-15,//thos._width+thos._margin.right,
-					y:thos._height+thos._margin.bottom
+					x:thos._width-15,
+					y:wr.y+thos._height+thos._margin.bottom-thos._y
 			},
 
 			lb:{
-				x: 0,//-thos._margin.left,
-				y: thos._height+thos._margin.bottom
+				x: 0,
+				y: wr.y+thos._height+thos._margin.bottom-thos._y
 			},
 
 			sa:{
-				x:thos._width-15,//thos._width+thos._margin.right,
+				x:thos._width-15,
 				y:thos._anchor-5
 			},
 
 			ma:{
-				x:thos._width,//+thos._margin.right+15,
+				x:thos._width,
 				y:thos._anchor
 			},
 
 			ea:{
-				x:thos._width-15,//+thos._margin.right,
+				x:thos._width-15,
 				y:thos._anchor+5
 			}		
-
-
-
 		}
+		
 		this._wrapper.insert("path",":first-child")
 	       	.attr("d", function(d,i){
 	       		return generatePath(
@@ -344,13 +345,14 @@ foTooltip.prototype = {
 	        })
 	        .attr("transform","translate("+this._x+","+this._y+")")
 	        .style("stroke",this._color)
-	        .style("stroke-width",0.5)
+	        .style("stroke-width",1.5)
 	        .style("fill", this._bgColor)
 	        .style("fill-opacity", 0.75)	
 		this._wrapper.transition().attr("opacity",1)
 	},
 
 	hide: function(d){
+		if(!this.showed) return;
 		this.showed = false;
 		this._wrapper.attr("opacity",0)
 		this._wrapper.select(".fo-tooltip").remove()
@@ -730,19 +732,27 @@ nv.models.timelineChart = function(){
 				c.append('h5')
 	            		.attr('class', 'timestamp')
 						.text(text)
-						.style("color", "gray")
+						.style("color", color(d, d.serieIndex))//"#555555")
+						.style("font-size", "small")
+						.style("font-weight","bold")
+						.style("margin", "0px")
+						.style("text-align","center")
+				c.append('h4')
+	            		.attr('class', 'headline')
+						.text(d.context.headline)
+						// .style("color", "#cf2a0e")
 						.style("font-size", "small")
 						.style("font-weight","bold")
 						.style("margin", "0px")
 						.style("font-stretch","ultra-condensed")
-				c.append('h4')
-	            		.attr('class', 'headline')
-						.text(d.context)
-						.style("color", "gray")
-						.style("font-size", "small")
-						.style("font-weight","bold")
-						.style("margin", "0px")
-						.style("font-stretch","ultra-condensed")		
+				// c.append('p')
+	   //          		.attr('class', 'headline')
+				// 		.text(d.context.text)
+				// 		// .style("color", "#cf2a0e")
+				// 		.style("font-size", "10px")
+				// 		// .style("font-weight","bold")
+				// 		.style("margin", "0px")
+				// 		.style("font-stretch","ultra-condensed")					
 			});	
 
 		var navigate = function(){
@@ -958,6 +968,7 @@ nv.models.timelineChart = function(){
 
 
  		legend.dispatch.on("stateChange", function (newState) {
+          tooltip.hide();
           state = newState;
           dispatch.changeState(state);
         });
@@ -971,7 +982,7 @@ nv.models.timelineChart = function(){
 
             state.disabled = e.disabled;
           }
-
+          tooltip.hide();
           brush.clear();
           chart.update();
         });
@@ -979,13 +990,16 @@ nv.models.timelineChart = function(){
     	});
 		
 		var redrawBrushCurrentPos = function(){
+			tooltip.hide();
+			buttons.forEach(function(b){b.disabled = false})
+			currentIndex = undefined;
 		    var e = brush.extent().map(function(d){return brushScale(d)});
 		    brushCurrentPos
 		    	.attr("x", e[0]+(e[1]-e[0])/2)
 		}   
 
 		brush
-			.on("brushend", function(){chart.update()})
+			.on("brushend", function(){tooltip.hide(); chart.update()})
 			.on("brush", redrawBrushCurrentPos)
     	return chart;
 

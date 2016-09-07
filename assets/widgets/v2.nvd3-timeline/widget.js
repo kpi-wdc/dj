@@ -55,9 +55,27 @@ m.controller('Nvd3TimelineChartCtrlV2', function ($scope, NVD3WidgetV2,TimelineC
             },
 
             getSeries : (data) => {
+              
+              var _lookup = function(item){
+                var find = data.dictionary.find( (d) => {return d.key == item.context} ) 
+                if(find){
+                  item.context = find.value
+                }
+                if(item.childs){
+                  item.childs.forEach(function(ch){_lookup(ch)})
+                }
+                // return dictionaryModule.dictionary[key] || key
+              };
+              
               data.data.series.forEach(function(d,i){
-                d.colorIndex = i
+                d.colorIndex = i;
+                var find = data.dictionary.find( (t) => {return t.key == d.category} ) 
+                if(find){
+                  d.category = find.value.label
+                }
+                d.values.forEach(function(item){_lookup(item)})
               })
+              // console.log(data.data.series)
               return data.data.series;
             }
             //getX:function(d){return d.label},
