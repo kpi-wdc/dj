@@ -200,6 +200,7 @@ define(["angular",
       $scope.settings = {};
       $scope.options;
       $scope.data;
+      $scope.params = params;
       $scope.$selection;
       $scope.cashedResp;
       $scope.refreshState = {
@@ -217,6 +218,10 @@ define(["angular",
 
       $scope.complete = function(){
         $scope.completed = true;
+      }
+
+      $scope.emit = function(eventType,data){
+        $scope.EventEmitter.emit(eventType,data)
       }
 
       
@@ -254,7 +259,8 @@ define(["angular",
                         options,
                         $scope.widget.decoration,
                         $scope.selector,
-                        $scope.api
+                        $scope.api,
+                        $scope
                     )
                   }else{
                     $scope.widget.decoration = $scope.decorationAdapter.getDecoration(options);
@@ -297,6 +303,8 @@ define(["angular",
         return options          
       }
 
+
+
       $scope.updateChart = function(){
         
         if(!$scope.widget.serieDataId){
@@ -336,6 +344,39 @@ define(["angular",
 
             loadData().then( (resp) =>{
                 // console.log("Load data")
+                $scope.loadedData = resp.data.value;
+                if(params.dictionary) {
+                  $scope.dictionary =  params.dictionary(resp.data.value);
+                  var d = {};
+                  for(let i in $scope.dictionary){
+                   d[$scope.dictionary[i].key] = $scope.dictionary[i].value;
+                  }
+                  $scope.dictionary = {
+                    table: d,
+                    lookup: (key) => {
+                      return $scope.dictionary.table[key] || key
+                    }
+                  }    
+                };
+
+                if(params.translations) {
+                  
+                  $scope.translations = params.translations(resp.data.value);   
+                  var d = {};
+                  for(let i in $scope.translations){
+                   d[$scope.translations[i].key] = $scope.translations[i].value;
+                  }
+                  
+                  $scope.translations = {
+                    table: d,
+                    lookup: (key) => {
+                      if ($scope.translations.table[key]){
+                        return $scope.translations.table[key][i18n.locale()] || key  
+                      }
+                      return key
+                    }
+                  }      
+                }  
                 $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
                     params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
                     if($scope.data.forEach){
@@ -343,7 +384,8 @@ define(["angular",
                         d.colorIndex = index;
                       })
                     }
-
+                
+                
                 // $scope.selector = new Selector(params.serieAdapter,$scope.data,$scope.EventEmitter)    
                 
             })
@@ -402,12 +444,15 @@ define(["angular",
         // console.log("TRANSLATE HANDLER", i18n.locale(), $scope.options)
         if($scope.options.chart.locale){
           $scope.options.chart.locale = i18n.locale();
-          // console.log("TRANSLATE Options", i18n.locale(), $scope.options)
+        }
+        if($scope.options.chart.localeDef){
+          $scope.options.chart.localeDef = i18n.localeDef();
+        }
+          
           $scope.settings = {
                   options : angular.copy($scope.options), 
                   data : angular.copy($scope.data)
           }
-        }
       };
 
       $scope.APIProvider
@@ -467,6 +512,10 @@ define(["angular",
         })
 
         .translate(function(){
+          if(params.translate){
+            params.translate();
+            return;
+          }
           $scope.translate();
         })
 

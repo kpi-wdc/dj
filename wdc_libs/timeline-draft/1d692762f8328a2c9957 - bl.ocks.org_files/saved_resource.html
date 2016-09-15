@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- saved from url=(0094)http://bl.ocks.org/sgruhier/raw/1d692762f8328a2c9957/995f72c00bd9e929b78caa1f67d1f87259612e10/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="./d3.v3.js"></script>
+    <style type="text/css">
+      body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+      svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      p {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body marginwidth="0" marginheight="0">
+    <p>Use the mouse to pan (click and move) / zoom (scrollwheel)</p>
+  
+  <script type="text/javascript">
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .call(d3.behavior.zoom().on("zoom", function () {
+        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+      }))
+      .append("g")
+
+    svg.append("circle")
+      .attr("cx", document.body.clientWidth / 2)
+      .attr("cy", document.body.clientHeight / 2)
+      .attr("r", 50)
+      .style("fill", "#B8DEE6")
+  </script><svg width="100%" height="100%"><g transform="translate(-7.4211958391607595,-42.53006407421435) scale(1.1486983549970349)"><circle cx="480" cy="250" r="50" style="fill: rgb(184, 222, 230);"></circle></g></svg>
+</body></html>

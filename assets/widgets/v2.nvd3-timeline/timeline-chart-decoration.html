@@ -12,7 +12,7 @@
 				<h5>Decoration</h5>
 					
 			 <accordion class="wizard" close-others="false">	
-				<!--
+				
 				<accordion-group heading = "Titles">
 					<div class="row wizard setting">
 						<label class="wizard left">
@@ -23,17 +23,56 @@
 					    <label class="wizard left">
 							Subtitle
 					    </label>
-					    <input class="wizard" type="text" ng-model="conf.decoration.subtitle">
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.subtitle">
 					    
 					    <label class="wizard left">
 							Caption
 					    </label>
-					    <input class="wizard" type="text" ng-model="conf.decoration.caption">
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.caption">
+						 
+					</div>
+				</accordion-group>
+
+				<accordion-group heading="Tooltip">
+				
+					<div class="row wizard setting">
+
+						<label class="wizard left">
+							Show Tooltip
+						</label>
+					 	<div class="switch tiny right">
+				          <input type="checkbox"
+				                 id="showTooltipCheckbox"
+				                 ng-model="step.conf.decoration.showTooltip"
+				           >
+				          <label for="showTooltipCheckbox"></label>
+				        </div>
+
+					</div>	
+				
+				</accordion-group> 
+
+				<accordion-group heading = "Time Format">
+					<div class="row wizard setting">
+						<label class="wizard left">
+							Flow
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.timeFormat.flow">
+					    
+					    <label class="wizard left">
+							Process
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.timeFormat.process">
+					    
+					    <label class="wizard left">
+							Instant
+					    </label>
+					    <input class="wizard" type="text" ng-model="step.conf.decoration.timeFormat.instant">
 						 
 					</div>
 				</accordion-group>
 					
-				<accordion-group heading="Labels">
+				<!-- <accordion-group heading="Labels">
 				
 						<div class="row wizard setting">
 
@@ -73,9 +112,9 @@
 				       
 					</div>	
 				
-				</accordion-group>
+				</accordion-group>  -->
 				
-				<accordion-group heading = "Fill Area">	
+			<!-- 	<accordion-group heading = "Fill Area">	
 					<div class="row wizard setting">
 						<label class="wizard left">
 							Enable
@@ -89,9 +128,9 @@
 				        </div>
 						
 					</div>
-				</accordion-group>
+				</accordion-group> -->
 
-				<accordion-group heading="Grid">
+	<!-- 			<accordion-group heading="Grid">
 				
 						<div class="row wizard setting">
 
@@ -115,8 +154,8 @@
 
 					</div>	
 				
-				</accordion-group>
-				 -->
+				</accordion-group> -->
+				 
 				
 				<accordion-group heading = "Chart Height">
 				    <div class="row wizard setting">
@@ -125,7 +164,7 @@
 		        	</div>
 		        </accordion-group>
 		        
-		       <!--  <accordion-group heading="Palette">	
+		        <accordion-group heading="Palette">	
 
 					<div class="row wizard setting">
 						
@@ -175,7 +214,7 @@
 		 				
 
 		        	</div>
-		        </accordion-group> -->
+		        </accordion-group>
         	</accordion>	
         </div>	
 	</div>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://bl.ocks.org/mbostock/6123708 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=1000">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@mbostock">
+<meta property="og:url" content="http://bl.ocks.org/mbostock/6123708">
+<meta property="og:title" content="Drag + Zoom">
+<meta property="og:description" content="Mike Bostock’s Block 6123708">
+<meta property="og:image" content="http://bl.ocks.org/mbostock/raw/6123708/65e97764621a5b3ea75acf1cd66b60d8d76bae7e/thumbnail.png">
+<title>Drag + Zoom - bl.ocks.org</title>
+<link rel="icon" href="https://bl.ocks.org/favicon.png">
+<style>
+
+@import url("/style.css");
+
+</style>
+
+</head><body><header>
+  <div class="column">
+    <div class="navigation">
+      <a href="https://bl.ocks.org/">Popular</a>
+      / <a href="https://bl.ocks.org/-/about">About</a>
+    </div>
+    <a class="user" href="https://bl.ocks.org/mbostock"><img class="avatar" src="./Drag + Zoom - bl.ocks.org_files/230541" width="30" height="30">Mike Bostock</a>’s
+    Block <a class="gist gist-id self" title="View Gist on GitHub." href="https://gist.github.com/mbostock/6123708">6123708</a>    <div class="date">Updated February 8, 2016</div>
+  </div>
+</header>
+
+<div class="column">
+  <h1>Drag + Zoom</h1>
+  <div class="index">
+    <iframe sandbox="allow-popups allow-scripts allow-forms allow-same-origin" src="./Drag + Zoom - bl.ocks.org_files/saved_resource.html" marginwidth="0" marginheight="0" style="height:500px;" scrolling="no"></iframe>
+  </div>
+  <div class="index-pop">
+    <a target="_blank" title="Open Block 6123708 a new window." href="https://bl.ocks.org/mbostock/raw/6123708">Open<svg height="16" width="12"><path d="M11 10h1v3c0 0.55-0.45 1-1 1H1c-0.55 0-1-0.45-1-1V3c0-0.55 0.45-1 1-1h3v1H1v10h10V10zM6 2l2.25 2.25-3.25 3.25 1.5 1.5 3.25-3.25 2.25 2.25V2H6z"></path></svg></a>
+  </div>
+  <div class="gist-readme" data-key="README.md"><p>An example of how to combine <a href="https://github.com/mbostock/d3/wiki/Drag-Behavior">d3.behavior.drag</a> and <a href="https://github.com/mbostock/d3/wiki/Zoom-Behavior">d3.behavior.zoom</a>, using <code class="undefined">stopPropagation</code> to allow the drag behavior to take precedence over panning. Use the mouse to pan by clicking on the background, or drag by clicking on individual dots; you may also use the mousewheel to zoom.</p>
+
+<p>Note: combining these two behaviors means that gesture interpretation is ambiguous and highly sensitive to position. A click on a circle is interpreted as dragging that circle, whereas a click one pixel away could be interpreted as panning the background. A more robust method of combining these behaviors is to employ modality. For example, if the user holds down the SPACE key, clicking and dragging is interpreted as panning, rather than dragging, regardless of the click location. This approach is commonly employed in commercial software such as Adobe Photoshop.</p>
+
+<p>This example was created in response to a <a href="http://stackoverflow.com/a/17976205/365814">Stack Overflow question</a>.</p></div>
+  <div class="gist-sources">
+    <div class="gist-source" data-key="index.html">
+      <h2>index.html<a name="index.html" class="anchor" href="https://bl.ocks.org/mbostock/6123708#index.html">#</a></h2>
+      <pre><code class="html xml"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css">
+
+<span class="class">.dot</span> <span class="tag">circle</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill</span>:<span class="value"> lightsteelblue</span>;</span>
+  <span class="rule"><span class="attribute">stroke</span>:<span class="value"> steelblue</span>;</span>
+  <span class="rule"><span class="attribute">stroke-width</span>:<span class="value"> <span class="number">1.5</span>px</span>;</span>
+<span class="rule">}</span></span>
+
+<span class="class">.dot</span> <span class="tag">circle</span><span class="class">.dragging</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill</span>:<span class="value"> red</span>;</span>
+  <span class="rule"><span class="attribute">stroke</span>:<span class="value"> brown</span>;</span>
+<span class="rule">}</span></span>
+
+<span class="class">.axis</span> <span class="tag">line</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill</span>:<span class="value"> none</span>;</span>
+  <span class="rule"><span class="attribute">stroke</span>:<span class="value"> <span class="hexcolor">#ddd</span></span>;</span>
+  <span class="rule"><span class="attribute">shape-rendering</span>:<span class="value"> crispEdges</span>;</span>
+  <span class="rule"><span class="attribute">vector-effect</span>:<span class="value"> non-scaling-stroke</span>;</span>
+<span class="rule">}</span></span>
+
+</span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+<span class="tag">&lt;<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"//d3js.org/d3.v3.min.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+
+<span class="keyword">var</span> margin = {top: -<span class="number">5</span>, right: -<span class="number">5</span>, bottom: -<span class="number">5</span>, left: -<span class="number">5</span>},
+    width = <span class="number">960</span> - margin.left - margin.right,
+    height = <span class="number">500</span> - margin.top - margin.bottom;
+
+<span class="keyword">var</span> zoom = d3.behavior.zoom()
+    .scaleExtent([<span class="number">1</span>, <span class="number">10</span>])
+    .on(<span class="string">"zoom"</span>, zoomed);
+
+<span class="keyword">var</span> drag = d3.behavior.drag()
+    .origin(<span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d; })
+    .on(<span class="string">"dragstart"</span>, dragstarted)
+    .on(<span class="string">"drag"</span>, dragged)
+    .on(<span class="string">"dragend"</span>, dragended);
+
+<span class="keyword">var</span> svg = d3.select(<span class="string">"body"</span>).append(<span class="string">"svg"</span>)
+    .attr(<span class="string">"width"</span>, width + margin.left + margin.right)
+    .attr(<span class="string">"height"</span>, height + margin.top + margin.bottom)
+  .append(<span class="string">"g"</span>)
+    .attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + margin.left + <span class="string">","</span> + margin.right + <span class="string">")"</span>)
+    .call(zoom);
+
+<span class="keyword">var</span> rect = svg.append(<span class="string">"rect"</span>)
+    .attr(<span class="string">"width"</span>, width)
+    .attr(<span class="string">"height"</span>, height)
+    .style(<span class="string">"fill"</span>, <span class="string">"none"</span>)
+    .style(<span class="string">"pointer-events"</span>, <span class="string">"all"</span>);
+
+<span class="keyword">var</span> container = svg.append(<span class="string">"g"</span>);
+
+container.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"x axis"</span>)
+  .selectAll(<span class="string">"line"</span>)
+    .data(d3.range(<span class="number">0</span>, width, <span class="number">10</span>))
+  .enter().append(<span class="string">"line"</span>)
+    .attr(<span class="string">"x1"</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d; })
+    .attr(<span class="string">"y1"</span>, <span class="number">0</span>)
+    .attr(<span class="string">"x2"</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d; })
+    .attr(<span class="string">"y2"</span>, height);
+
+container.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"y axis"</span>)
+  .selectAll(<span class="string">"line"</span>)
+    .data(d3.range(<span class="number">0</span>, height, <span class="number">10</span>))
+  .enter().append(<span class="string">"line"</span>)
+    .attr(<span class="string">"x1"</span>, <span class="number">0</span>)
+    .attr(<span class="string">"y1"</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d; })
+    .attr(<span class="string">"x2"</span>, width)
+    .attr(<span class="string">"y2"</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d; });
+
+d3.tsv(<span class="string">"dots.tsv"</span>, dottype, <span class="function"><span class="keyword">function</span><span class="params">(error, dots)</span> {</span>
+  dot = container.append(<span class="string">"g"</span>)
+      .attr(<span class="string">"class"</span>, <span class="string">"dot"</span>)
+    .selectAll(<span class="string">"circle"</span>)
+      .data(dots)
+    .enter().append(<span class="string">"circle"</span>)
+      .attr(<span class="string">"r"</span>, <span class="number">5</span>)
+      .attr(<span class="string">"cx"</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d.x; })
+      .attr(<span class="string">"cy"</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> d.y; })
+      .call(drag);
+});
+
+<span class="function"><span class="keyword">function</span> <span class="title">dottype</span><span class="params">(d)</span> {</span>
+  d.x = +d.x;
+  d.y = +d.y;
+  <span class="keyword">return</span> d;
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">zoomed</span><span class="params">()</span> {</span>
+  container.attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + d3.event.translate + <span class="string">")scale("</span> + d3.event.scale + <span class="string">")"</span>);
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">dragstarted</span><span class="params">(d)</span> {</span>
+  d3.event.sourceEvent.stopPropagation();
+  d3.select(<span class="keyword">this</span>).classed(<span class="string">"dragging"</span>, <span class="literal">true</span>);
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">dragged</span><span class="params">(d)</span> {</span>
+  d3.select(<span class="keyword">this</span>).attr(<span class="string">"cx"</span>, d.x = d3.event.x).attr(<span class="string">"cy"</span>, d.y = d3.event.y);
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">dragended</span><span class="params">(d)</span> {</span>
+  d3.select(<span class="keyword">this</span>).classed(<span class="string">"dragging"</span>, <span class="literal">false</span>);
+}
+
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</code></pre>
+    </div>
+    <div class="gist-source" data-key="dots.tsv">
+      <h2>dots.tsv<a name="dots.tsv" class="anchor" href="https://bl.ocks.org/mbostock/6123708#dots.tsv">#</a></h2>
+      <pre><code class="undefined">x	y
+100	80
+80	69
+130	75
+90	88
+110	83
+140	99
+60	72
+40	42
+120	108
+70	48
+50	56
+</code></pre>
+    </div>
+  </div>
+  <div class="gist-license">
+    <h2>LICENSE<a name="license" class="anchor" href="https://bl.ocks.org/mbostock/6123708#license">#</a></h2>
+    Released under the <a target="_blank" href="https://opensource.org/licenses/GPL-3.0">GNU General Public License, version 3</a>.
+  </div>
+</div>
+
+<script src="./Drag + Zoom - bl.ocks.org_files/d3.v3.min.js"></script>
+<script src="./Drag + Zoom - bl.ocks.org_files/highlight.min.js"></script>
+<script>
+
+var gist = {"public":true,"sha":"65e97764621a5b3ea75acf1cd66b60d8d76bae7e","files":{".block":{"language":null,"type":"text/plain","filename":".block","size":17,"sha":"703d310b399098a243a76a50bc209167e924cfd2"},"README.md":{"language":"Markdown","type":"text/plain","filename":"README.md","size":1073,"sha":"ef710315911300e4e935e09134ac82a74e7dd234"},"dots.tsv":{"language":null,"type":"text/tab-separated-values","filename":"dots.tsv","size":76,"sha":"144d056ba9a79fba8cd4235b959c8bde67f3d3fc"},"index.html":{"language":"HTML","type":"text/html","filename":"index.html","size":2555,"sha":"16d36fe0e28dfc54cc655dbfdff4003d4f6639fd"},"thumbnail.png":{"language":null,"type":"image/png","filename":"thumbnail.png","size":5981,"sha":"79f267e13a06c284eba3daa0f81a59a0e731d04a"}},"created_at":"2013-07-31T16:36:23Z","updated_at":"2016-02-09T02:02:58Z","description":"Drag + Zoom","owner":{"login":"mbostock"},"id":"6123708"};
+
+var files = d3.values(gist.files);
+
+d3.select(".gist-readme")
+    .data(files, function(d) { return d ? d.filename : this.getAttribute("data-key"); })
+    .each(function(d) {
+      var readme = d3.select(this);
+      d3.text("/mbostock/raw/6123708/65e97764621a5b3ea75acf1cd66b60d8d76bae7e/" + d.filename, function(error, content) {
+        if (error) content = "Sorry, an error occurred.";
+        readme.html(new Showdown.converter().makeHtml(content));
+        readme.selectAll("code").each(function() { hljs.highlightBlock(this); });
+      });
+    });
+
+d3.selectAll(".gist-source")
+    .data(files, function(d) { return d ? d.filename : this.getAttribute("data-key"); })
+  .select("code")
+    .attr("class", function(d) { return d.language && (d.language === "JSON" ? "javascript" : d.language.toLowerCase()); })
+    .each(function(d) {
+      var code = d3.select(this);
+      d3.text("/mbostock/raw/6123708/65e97764621a5b3ea75acf1cd66b60d8d76bae7e/" + (d.filename === "index.html" ? "" : d.filename), function(error, content) {
+        if (error) content = "Sorry, an error occurred.";
+        code.text(content);
+        hljs.highlightBlock(code.node());
+      });
+    });
+
+</script>
+
+<script>
+
+GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+ga("create", "UA-48272912-1", "auto");
+ga("send", "pageview");
+
+</script>
+<script async="" src="./Drag + Zoom - bl.ocks.org_files/analytics.js"></script>
+</body></html>

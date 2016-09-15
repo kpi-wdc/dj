@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)http://bl.ocks.org/mbostock/raw/1557377/543d54af60613ba261b754f6c08c944afca29347/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+
+svg {
+  float: left;
+  border-bottom: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  margin-right: -1px;
+  margin-bottom: -1px;
+}
+
+</style>
+</head><body marginwidth="0" marginheight="0">
+<script src="./d3.v3.min.js"></script>
+<script>
+
+var width = 240,
+    height = 125,
+    radius = 20;
+
+var drag = d3.behavior.drag()
+    .origin(function(d) { return d; })
+    .on("drag", dragmove);
+
+var svg = d3.select("body").append("div").selectAll("svg")
+    .data(d3.range(16).map(function() { return {x: width / 2, y: height / 2}; }))
+  .enter().append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("circle")
+    .attr("r", radius)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .call(drag);
+
+function dragmove(d) {
+  d3.select(this)
+      .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
+      .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
+}
+
+</script><div><svg width="240" height="125"><circle r="20" cx="220" cy="105"></circle></svg><svg width="240" height="125"><circle r="20" cx="220" cy="105"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="220" cy="105"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg><svg width="240" height="125"><circle r="20" cx="120" cy="62.5"></circle></svg></div>
+</body></html>

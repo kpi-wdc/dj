@@ -2,7 +2,9 @@
   "chart": {
     "type": "timelineChart",
     "height": 300,
-    
+    "showNavigator": true,
+   
+
     "margin": {
       "top": 20,
       "right": 40,

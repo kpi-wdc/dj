@@ -18,6 +18,8 @@ m.factory("TimelineChartDecoration",[
 	"parentHolder",
 	"TimelineChartAdapter", 
 	"pageWidgets",
+	"i18n",
+	"EventEmitter",
 	function(
 		$http, 
 		$q, 
@@ -26,7 +28,8 @@ m.factory("TimelineChartDecoration",[
 		appUrls,
 		parentHolder, 
 		TimelineChartAdapter,
-		pageWidgets ){
+		pageWidgets,
+		i18n ){
 		
 		let chartAdapter = TimelineChartAdapter;
 
@@ -39,6 +42,11 @@ m.factory("TimelineChartDecoration",[
 	        
 	    	html : "./widgets/v2.nvd3-timeline/timeline-chart-decoration.html",
 
+	  //   	formatlist : [	"%Y-%m-%d", "%m/%d/%Y", "%H:%M","%H:%M %p", "%B %d", "%d %b", "%d-%b-%y", "%S s", "%M m", "%H h", "%a", "%A", "%d d", "%b", "%m/%Y",
+			// 				"%b %Y", "%B", "%c", "%d", "%e", "%H", "%I", "%j", 
+			// 				"%m", "%M", "%L", "%p", "%S", "%U", "%w", "%W", "%x", "%X", "%y", "%Z" 
+			// ],
+
 	    	onStartWizard: function(wizard){
 	    		this.wizard = wizard;
 	    		this.conf = {
@@ -47,7 +55,12 @@ m.factory("TimelineChartDecoration",[
 	    			serieDataId: wizard.conf.dataID,
 	    			optionsUrl : "./widgets/v2.nvd3-timeline/options.json",
 	    			dataUrl : "/api/data/process/"
-	    		}	
+	    		}
+
+	    		// var d = new Date()
+	    		// this.formatlist.forEach(function(item){
+	    		// 	console.log(d3.locale(i18n.localeDef()).timeFormat(item)(d))
+	    		// })	
 	    	},
 
 	    	onFinishWizard:  function(wizard){
@@ -63,44 +76,49 @@ m.factory("TimelineChartDecoration",[
 				this.conf = {};
 	    	},
 
-	    	
-	    	_prepare : function(data){
-              var result = data.map((item) => {return item})
-              result.forEach((item) => {
-                if(item.end == null) delete item.end;
-                if(item.note == null) delete item.note;
+	    	reversePalette: function(){
+				if ( this.conf.decoration.color ){
+					this.conf.decoration.color = this.conf.decoration.color.reverse(); 
+				}	
+			},
+
+	    	// _prepare : function(data){
+      //         var result = data.map((item) => {return item})
+      //         result.forEach((item) => {
+      //           if(item.end == null) delete item.end;
+      //           if(item.note == null) delete item.note;
                 
-                if(item.income == null) {
-                  delete item.income
-                }else{
-                  item.income.forEach((p) => {
-                    if(p.marker == null) delete p.marker
-                  })
-                } 
+      //           if(item.income == null) {
+      //             delete item.income
+      //           }else{
+      //             item.income.forEach((p) => {
+      //               if(p.marker == null) delete p.marker
+      //             })
+      //           } 
 
-                if(item.expenditure == null) {
-                  delete item.expenditure
-                }else{
-                  item.expenditure.forEach((p) => {
-                    if(p.marker == null) delete p.marker
-                  })
-                } 
+      //           if(item.expenditure == null) {
+      //             delete item.expenditure
+      //           }else{
+      //             item.expenditure.forEach((p) => {
+      //               if(p.marker == null) delete p.marker
+      //             })
+      //           } 
 
-                if(item.causes == null) {
-                  delete item.causes
-                }else{
-                  item.causes.forEach((p) => {
-                    if(p.type == null) {
-                      delete p.type
-                      delete p.src.type
-                      delete p.target.type
-                    }  
-                  })
-                }  
+      //           if(item.causes == null) {
+      //             delete item.causes
+      //           }else{
+      //             item.causes.forEach((p) => {
+      //               if(p.type == null) {
+      //                 delete p.type
+      //                 delete p.src.type
+      //                 delete p.target.type
+      //               }  
+      //             })
+      //           }  
 
-              })
-              return result;
-            },
+      //         })
+      //         return result;
+      //       },
 			
 			createTimeline: function(){
 			var thos = this;	
@@ -160,12 +178,13 @@ m.factory("TimelineChartDecoration",[
 							if(!thos.conf.decoration){
 			            		thos.conf.decoration = chartAdapter.getDecoration(thos.options);
 			            	}
+			            	thos.conf.decoration.setColor = (palette) => { console.log(thos, palette); thos.conf.decoration.color = angular.copy(palette) }
 			            	// console.log("thos.options",thos.options)
 						}),
 						thos.loadSeries().then((resp) => {
 							// console.log("resp",resp.data.value)
 							thos.data =resp.data.value.data.series; //thos._prepare( resp.data.value)
-							console.log("thos.data",thos.data)
+							// console.log("thos.data",thos.data)
 						})
 					])
 					.then(() => {
@@ -182,7 +201,7 @@ m.factory("TimelineChartDecoration",[
 
 			apply: function(){
 				this.conf.decoration.width = parentHolder(this.wizard.conf).width;
-				chartAdapter.applyDecoration(this.options,this.conf.decoration);
+				chartAdapter.applyDecoration(this.options,this.conf.decoration,undefined,undefined,this.wizard.parentScope);
 				this.settings = {options:angular.copy(this.options), data:angular.copy(this.data)};
 				// console.log("this.settings",this.settings)
 				

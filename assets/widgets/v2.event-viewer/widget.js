@@ -2,97 +2,38 @@ import angular from 'angular';
 import 'angular-foundation';
 
 
-const appTags = angular.module('app.widgets.v2.app-tags', ['mm.foundation']);
-
-
-
-
-
-
-appTags.controller('AppTagsController', function ($scope, $http, $translate,
-                                                        APIProvider,EventEmitter,
-                                                        i18n,config,appUrls,$modal,
-                                                        dialog, prompt, alert, user,
-                                                        appSkins, pageSubscriptions,
-                                                        $window
-                                                        ) {
+angular
+  .module('app.widgets.v2.event-viewer', ['mm.foundation'])
+  .controller('EventViewerController', 
+    function ($scope, pageSubscriptions, APIProvider, i18n) {
   
-
-  var emitter = new EventEmitter($scope);
-
-
-
-  angular.extend($scope, {
-    tags : [],
-    selectedTags : [],
-    update(){
-      $scope.tags = [];
-      $scope.selectedTags = [];
-      $http.get(appUrls.appList)
-        .success(apps => {
-          apps.forEach((app) => {
-          app.keywords = (app.keywords) ? app.keywords : [];  
-          app.keywords.forEach( (t) => {
-            let _t = $translate.instant(t)
-            if($scope.tags.indexOf(_t) < 0) $scope.tags.push(_t)
-          });
-        });
-          
-          // apps.forEach((c) =>{
-          //   if(c.i18n){
-          //     config.i18n = (config.i18n)? config.i18n : {}; 
-          //     for(let locale in c.i18n){
-          //       config.i18n[locale] = (config.i18n[locale]) ? config.i18n[locale] : {};
-          //       angular.extend(config.i18n[locale],c.i18n[locale])  
-          //     }
-          //   }  
-          // })
-          // i18n.refresh();
-        });
-        emitter.emit("appTags",$scope.selectedTags)
-       // emitter.emit("setApplication",undefined);  
-    },
-
-    selectTag(t){
-      let index = $scope.tags.indexOf(t);
-      $scope.tags.splice(index,1);
-      $scope.selectedTags.push(t);
-      $scope.selectedObject = "";
-      $scope.$viewValue = "";
-      emitter.emit("appTags",$scope.selectedTags)
-    },
-
-    unselectTag(t){
-      let index = $scope.selectedTags.indexOf(t);
-      $scope.selectedTags.splice(index,1);
-      $scope.tags.push(t);
-      emitter.emit("appTags",$scope.selectedTags)
-    }
-
-  });  
-  
-  
-
   new APIProvider($scope)
     .config(() => {
+
+      $scope.widget.timeFormat = $scope.widget.timeFormat || {
+        flow: "YYYY",
+        process: "MM.YYYY",
+        instant: "dd DD/MM/YYYY"
+      };
+      
         
-      if($scope.widget.listeners && $scope.widget.listeners.length &&
-        $scope.widget.listeners.trim().length > 0){
+      if($scope.widget.emitters && $scope.widget.emitters.length &&
+        $scope.widget.emitters.trim().length > 0){
           
         pageSubscriptions().removeListeners({
-            emitter: $scope.widget.instanceName,
-            signal: "appTags"
+            receiver: $scope.widget.instanceName,
+            signal: "timelineNavigate"
         });
 
-        $scope.appListeners = ($scope.widget.listeners) ? $scope.widget.listeners.split(",") : [];
+        $scope.emitters = ($scope.widget.emitters) ? $scope.widget.emitters.split(",") : [];
           
         pageSubscriptions().addListeners(
-          $scope.appListeners.map((item) =>{
+          $scope.emitters.map((item) =>{
             return {
-                emitter: $scope.widget.instanceName,
-                receiver:  item.trim(),
-                signal: "appTags",
-                slot: "appTags"
+                emitter: item.trim(),
+                receiver: $scope.widget.instanceName,
+                signal: "timelineNavigate",
+                slot: "timelineNavigate"
             }
           })
         );
@@ -100,27 +41,45 @@ appTags.controller('AppTagsController', function ($scope, $http, $translate,
       }else{
 
         pageSubscriptions().removeListeners({
-            emitter: $scope.widget.instanceName,
-            signal: "appTags"
+            receiver: $scope.widget.instanceName,
+            signal: "timelineNavigate"
         });
 
       }
 
-        $scope.update();
-
     })
     
-    .provide("refresh", () => {
-      $scope.update();
-    })
+    .provide("timelineNavigate", (e,d) => {
 
-    .provide("setTag", (e,tags) => {
-      tags = tags.map( t => $translate.instant(t) )
-      $scope.selectedTags = tags;
-      emitter.emit("appTags",$scope.selectedTags);
+      console.log("navigate",d)
+      if(!d || !d.data){
+        $scope.context = undefined;
+      }else{
+
+       var timestamp = (d.data.type == "instant")
+          ? i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.instant)
+          : (d.data.type == "process")
+            ? i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.process)+" - "+i18n.timeFormat(d.data.originalEnd,$scope.widget.timeFormat.process)
+            : i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.flow)+" - "+i18n.timeFormat(d.data.originalEnd,$scope.widget.timeFormat.flow)
+         
+
+        var tmp = d.dict.lookup(angular.copy(d.data.context));
+        $scope.context = {
+          // start : i18n.timeFormat(d.data.originalStart,"MMM YYYY"),
+          // end : i18n.timeFormat(d.data.originalEnd,"MMM YYYY"),
+          timestamp:timestamp,
+          type : d.data.type,
+          context:{
+            headline:d.tr.lookup(tmp.headline),
+            text:d.tr.lookup(tmp.text),
+            media: tmp.media
+          }
+        }
+      }
     })
     
-    .translate(()=>{$scope.update()})
+    .translate(()=>{
+    })
 
    
     

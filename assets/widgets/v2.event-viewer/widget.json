@@ -4,10 +4,55 @@
     "type": "object",
     "title": "Event Viewer",
     "properties": {
-      "listeners":{
+      "emitters":{
         "type":"string",
-        "title":"Application Tags Listeners"
+        "title":"Timelines"
+      },
+
+      "timeFormat":{
+        "type":"object",
+        "title":"Time Formats",
+        "properties": {
+        	"flow":{
+        		"type":"string",
+        		"title":"Flow",
+        		"default":"YYYY"
+        	},
+        	"process":{
+        		"type":"string",
+        		"title":"Process",
+        		"default":"MM YYYY"
+        	},
+        	"instant":{
+        		"type":"string",
+        		"title":"Instant",
+        		"defaut":"DD.MM.YYYY"
+        	}
+        }
+      },
+
+      "showDetails":{
+        "type":"object",
+        "title":"Show Details",
+        "properties": {
+        	"timestamp":{
+        		"type":"boolean",
+        		"title":"Timestamp",
+        		"default":true
+        	},
+        	"headline":{
+        		"type":"boolean",
+        		"title":"Headline",
+        		"default":true
+        	},
+        	"text":{
+        		"type":"boolean",
+        		"title":"Text",
+        		"default":true
+        	}
+        }
       }
+
     }
   }  
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- saved from url=(0082)http://bl.ocks.org/stepheneb/raw/1182434/56001c031d17f99c5b37788cf53936f98919eeac/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>One Graph</title>
+    <script type="text/javascript" src="./d3.v2.js"></script><script src="./d3.v2(1).js"></script>
+    <script type="text/javascript" src="./simple-graph.js"></script>
+    <style type="text/css">
+      body { font: 13px sans-serif; }
+      rect { fill: #fff; }
+      ul {
+        list-style-type: none;
+        margin: 0.5em 0em 0.5em 0em;
+        width: 100%; }
+        ul li {
+          display: table-cell;
+          vertical-align: middle;
+          margin: 0em;
+          padding: 0em 1em; }
+      .axis { font-size: 1.5em; }
+      .chart {
+        background-color: #F7F2C5;
+        width: 960px;
+        height: 500px; }
+      circle, .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 2px; }
+      circle {
+        fill: white;
+        fill-opacity: 0.2;
+        cursor: move; }
+        circle.selected {
+          fill: #ff7f0e;
+          stroke: #ff7f0e; }
+        circle:hover {
+          fill: #ff7f0e;
+          stroke: #707f0e; }
+        circle.selected:hover {
+          fill: #ff7f0e;
+          stroke: #ff7f0e; }
+    </style>
+  </head>
+  <body marginwidth="0" marginheight="0" style="cursor: auto;">
+    <div id="chart1" class="chart"><svg width="960" height="500"><g transform="translate(70,40)"><rect width="860" height="400" pointer-events="all" style="fill: rgb(238, 238, 238);"></rect><svg top="0" left="0" width="860" height="400" viewBox="0 0 860 400" class="line"><path class="line" d="M240.8281210790707,186.11726956514423L255.8281210790707,264.2274513981685L270.8281210790707,227.88713709700096L285.8281210790707,263.08737504376154L300.8281210790707,262.0603783044575L315.8281210790707,176.62145666072934L330.8281210790706,179.7834694621353L345.8281210790707,235.5236760467871L360.8281210790706,259.1421340009995L375.8281210790706,225.9496227630335L390.82812107907057,227.4616780898467L405.8281210790706,263.16800752669945L420.82812107907057,257.84738339237043L435.8281210790706,207.4270370846309L450.82812107907057,218.45014788551228L465.82812107907057,185.5704112726026L480.8281210790705,179.21064744140295L510.8281210790705,179.17616585719603L525.8281210790705,220.78995722798336L540.8281210790706,182.83899654836318L555.8281210790705,257.7583019121212L570.8281210790705,210.02532741793019L585.8281210790706,233.68654188604353L600.8281210790705,255.3072449736831L615.8281210790703,179.6173831360385L630.8281210790705,211.96359959458863L645.8281210790705,244.74333226448528L660.8281210790705,217.7698314157784"></path><circle cx="240.8281210790707" cy="186.11726956514423" r="10" style="cursor: ns-resize;"></circle><circle cx="255.8281210790707" cy="264.2274513981685" r="10" style="cursor: ns-resize;"></circle><circle cx="270.8281210790707" cy="227.88713709700096" r="10" style="cursor: ns-resize;"></circle><circle cx="285.8281210790707" cy="263.08737504376154" r="10" style="cursor: ns-resize;"></circle><circle cx="300.8281210790707" cy="262.0603783044575" r="10" style="cursor: ns-resize;"></circle><circle cx="315.8281210790707" cy="176.62145666072934" r="10" style="cursor: ns-resize;"></circle><circle cx="330.8281210790706" cy="179.7834694621353" r="10" style="cursor: ns-resize;"></circle><circle cx="345.8281210790707" cy="235.5236760467871" r="10" style="cursor: ns-resize;"></circle><circle cx="360.8281210790706" cy="259.1421340009995" r="10" style="cursor: ns-resize;"></circle><circle cx="375.8281210790706" cy="225.9496227630335" r="10" style="cursor: ns-resize;"></circle><circle cx="390.82812107907057" cy="227.4616780898467" r="10" style="cursor: ns-resize;"></circle><circle cx="405.8281210790706" cy="263.16800752669945" r="10" style="cursor: ns-resize;"></circle><circle cx="420.82812107907057" cy="257.84738339237043" r="10" style="cursor: ns-resize;"></circle><circle cx="435.8281210790706" cy="207.4270370846309" r="10" style="cursor: ns-resize;"></circle><circle cx="450.82812107907057" cy="218.45014788551228" r="10" style="cursor: ns-resize;"></circle><circle cx="465.82812107907057" cy="185.5704112726026" r="10" style="cursor: ns-resize;"></circle><circle class="selected" cx="480.8281210790705" cy="179.21064744140295" r="10" style="cursor: ns-resize;"></circle><circle cx="510.8281210790705" cy="179.17616585719603" r="10" style="cursor: ns-resize;"></circle><circle cx="525.8281210790705" cy="220.78995722798336" r="10" style="cursor: ns-resize;"></circle><circle cx="540.8281210790706" cy="182.83899654836318" r="10" style="cursor: ns-resize;"></circle><circle cx="555.8281210790705" cy="257.7583019121212" r="10" style="cursor: ns-resize;"></circle><circle cx="570.8281210790705" cy="210.02532741793019" r="10" style="cursor: ns-resize;"></circle><circle cx="585.8281210790706" cy="233.68654188604353" r="10" style="cursor: ns-resize;"></circle><circle cx="600.8281210790705" cy="255.3072449736831" r="10" style="cursor: ns-resize;"></circle><circle cx="615.8281210790703" cy="179.6173831360385" r="10" style="cursor: ns-resize;"></circle><circle cx="630.8281210790705" cy="211.96359959458863" r="10" style="cursor: ns-resize;"></circle><circle cx="645.8281210790705" cy="244.74333226448528" r="10" style="cursor: ns-resize;"></circle><circle cx="660.8281210790705" cy="217.7698314157784" r="10" style="cursor: ns-resize;"></circle></svg><text class="axis" x="430" dy="-0.8em" style="text-anchor: middle;">Simple Graph1</text><text class="axis" x="430" y="400" dy="2.4em" style="text-anchor: middle;">X Axis</text><g><text class="axis" transform="translate(-40 200) rotate(-90)" style="text-anchor: middle;">Y Axis</text></g><g class="y" transform="translate(0,226.11171437509174)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">20</text></g><g class="x" transform="translate(527.4947877457373,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize; font-weight: normal;">40</text></g><g class="x" transform="translate(384.161454412404,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">20</text></g><g class="y" transform="translate(0,276.11171437509165)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">10</text></g><g class="y" transform="translate(0,176.1117143750918)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">30</text></g><g class="x" transform="translate(97.49478774573747,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">-20</text></g><g class="x" transform="translate(240.8281210790707,0)"><line stroke="#666" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">0</text></g><g class="x" transform="translate(670.8281210790705,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize; font-weight: normal;">60</text></g><g class="x" transform="translate(814.1614544124037,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">80</text></g><g class="y" transform="translate(0,376.11171437509154)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">-10</text></g><g class="y" transform="translate(0,326.1117143750916)" background-fill="#FFEEB6"><line stroke="#666" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">0</text></g><g class="y" transform="translate(0,126.11171437509184)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">40</text></g><g class="y" transform="translate(0,76.11171437509189)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">50</text></g><g class="y" transform="translate(0,26.11171437509196)" background-fill="#FFEEB6"><line stroke="#ccc" x1="0" x2="860"></line><text class="axis" x="-3" dy=".35em" text-anchor="end" style="cursor: ns-resize;">60</text></g><g class="x" transform="translate(25.828121079070847,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">-30</text></g><g class="x" transform="translate(169.16145441240408,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">-10</text></g><g class="x" transform="translate(312.4947877457373,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">10</text></g><g class="x" transform="translate(455.82812107907057,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">30</text></g><g class="x" transform="translate(599.1614544124038,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize;">50</text></g><g class="x" transform="translate(742.4947877457371,0)"><line stroke="#ccc" y1="0" y2="400"></line><text class="axis" y="400" dy="1em" text-anchor="middle" style="cursor: ew-resize; font-weight: normal;">70</text></g></g></svg></div>
+    <script type="text/javascript">
+      graph = new SimpleGraph("chart1", {
+          "xmax": 60, "xmin": 0,
+          "ymax": 40, "ymin": 0, 
+          "title": "Simple Graph1",
+          "xlabel": "X Axis",
+          "ylabel": "Y Axis"  
+        });
+    </script>
+  
+
+
+<div style="visibility: hidden; top: 0px; height: 0px; width: 0px; overflow-y: scroll;"><div style="height: 2000px;"></div></div></body></html>

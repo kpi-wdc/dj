@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://bl.ocks.org/sgruhier/1d692762f8328a2c9957 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=1000">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@mbostock">
+<meta property="og:url" content="http://bl.ocks.org/sgruhier/1d692762f8328a2c9957">
+<meta property="og:title" content="Untitled">
+<meta property="og:description" content="Sébastien Gruhier’s Block 1d692762f8328a2c9957">
+<title>1d692762f8328a2c9957 - bl.ocks.org</title>
+<link rel="icon" href="http://bl.ocks.org/favicon.png">
+<style>
+
+@import url("/style.css");
+
+</style>
+
+</head><body><header>
+  <div class="column">
+    <div class="navigation">
+      <a href="http://bl.ocks.org/">Popular</a>
+      / <a href="http://bl.ocks.org/-/about">About</a>
+    </div>
+    <a class="user" href="http://bl.ocks.org/sgruhier"><img class="avatar" src="./1d692762f8328a2c9957 - bl.ocks.org_files/3385" width="30" height="30">Sébastien Gruhier</a>’s
+    Block <a class="gist gist-id self" title="View Gist on GitHub." href="https://gist.github.com/sgruhier/1d692762f8328a2c9957">1d692762f8328a2c9957</a>    <div class="date">Updated May 31, 2016</div>
+  </div>
+</header>
+
+<div class="column">
+  <h1>1d692762f8328a2c9957</h1>
+  <div class="index">
+    <iframe sandbox="allow-popups allow-scripts allow-forms allow-same-origin" src="./1d692762f8328a2c9957 - bl.ocks.org_files/saved_resource.html" marginwidth="0" marginheight="0" style="height:500px;" scrolling="no"></iframe>
+  </div>
+  <div class="index-pop">
+    <a target="_blank" title="Open Block 1d692762f8328a2c9957 a new window." href="http://bl.ocks.org/sgruhier/raw/1d692762f8328a2c9957">Open<svg height="16" width="12"><path d="M11 10h1v3c0 0.55-0.45 1-1 1H1c-0.55 0-1-0.45-1-1V3c0-0.55 0.45-1 1-1h3v1H1v10h10V10zM6 2l2.25 2.25-3.25 3.25 1.5 1.5 3.25-3.25 2.25 2.25V2H6z"></path></svg></a>
+  </div>
+  <div class="gist-readme" data-key="README.md"><p>Simplest way to add pan/zoom to a d3js visualisation</p></div>
+  <div class="gist-sources">
+    <div class="gist-source" data-key="index.html">
+      <h2>index.html<a name="index.html" class="anchor" href="http://bl.ocks.org/sgruhier/1d692762f8328a2c9957#index.html">#</a></h2>
+      <pre><code class="html xml"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"http://d3js.org/d3.v3.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
+      <span class="tag">body</span>, <span class="tag">html</span> <span class="rules">{
+        <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">100</span>%</span>;</span>
+        <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">100</span>%</span>;</span>
+        <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">0</span></span>;</span>
+      <span class="rule">}</span></span>
+      <span class="tag">svg</span> <span class="rules">{
+        <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span>;</span>
+        <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">0</span></span>;</span>
+        <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">0</span></span>;</span>
+      <span class="rule">}</span></span>
+      <span class="tag">p</span> <span class="rules">{
+        <span class="rule"><span class="attribute">text-align</span>:<span class="value"> center</span>;</span>
+      <span class="rule">}</span></span>
+    </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">p</span>&gt;</span>Use the mouse to pan (click and move) / zoom (scrollwheel)<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+    <span class="keyword">var</span> svg = d3.select(<span class="string">"body"</span>)
+      .append(<span class="string">"svg"</span>)
+      .attr(<span class="string">"width"</span>, <span class="string">"100%"</span>)
+      .attr(<span class="string">"height"</span>, <span class="string">"100%"</span>)
+      .call(d3.behavior.zoom().on(<span class="string">"zoom"</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        svg.attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + d3.event.translate + <span class="string">")"</span> + <span class="string">" scale("</span> + d3.event.scale + <span class="string">")"</span>)
+      }))
+      .append(<span class="string">"g"</span>)
+
+    svg.append(<span class="string">"circle"</span>)
+      .attr(<span class="string">"cx"</span>, document.body.clientWidth / <span class="number">2</span>)
+      .attr(<span class="string">"cy"</span>, document.body.clientHeight / <span class="number">2</span>)
+      .attr(<span class="string">"r"</span>, <span class="number">50</span>)
+      .style(<span class="string">"fill"</span>, <span class="string">"#B8DEE6"</span>)
+  </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span></code></pre>
+    </div>
+  </div>
+  <div class="gist-license">
+    <h2>LICENSE<a name="license" class="anchor" href="http://bl.ocks.org/sgruhier/1d692762f8328a2c9957#license">#</a></h2>
+    This block appears to have <a target="_blank" href="http://choosealicense.com/no-license/">no license</a>. Please contact <a target="_blank" href="https://github.com/sgruhier">the author</a> to request a license.
+  </div>
+</div>
+
+<script src="./1d692762f8328a2c9957 - bl.ocks.org_files/d3.v3.min.js"></script>
+<script src="./1d692762f8328a2c9957 - bl.ocks.org_files/highlight.min.js"></script>
+<script>
+
+var gist = {"public":true,"sha":"995f72c00bd9e929b78caa1f67d1f87259612e10","files":{"README.md":{"language":"Markdown","type":"text/plain","filename":"README.md","size":52,"sha":"3b6870b844b85782df66acf8fafdf4634657c768"},"index.html":{"language":"HTML","type":"text/html","filename":"index.html","size":998,"sha":"f957a652777f608f45836c74e1baf5521f0c8eaf"}},"created_at":"2014-12-17T12:41:31Z","updated_at":"2016-05-31T19:11:39Z","description":"","owner":{"login":"sgruhier"},"id":"1d692762f8328a2c9957"};
+
+var files = d3.values(gist.files);
+
+d3.select(".gist-readme")
+    .data(files, function(d) { return d ? d.filename : this.getAttribute("data-key"); })
+    .each(function(d) {
+      var readme = d3.select(this);
+      d3.text("/sgruhier/raw/1d692762f8328a2c9957/995f72c00bd9e929b78caa1f67d1f87259612e10/" + d.filename, function(error, content) {
+        if (error) content = "Sorry, an error occurred.";
+        readme.html(new Showdown.converter().makeHtml(content));
+        readme.selectAll("code").each(function() { hljs.highlightBlock(this); });
+      });
+    });
+
+d3.selectAll(".gist-source")
+    .data(files, function(d) { return d ? d.filename : this.getAttribute("data-key"); })
+  .select("code")
+    .attr("class", function(d) { return d.language && (d.language === "JSON" ? "javascript" : d.language.toLowerCase()); })
+    .each(function(d) {
+      var code = d3.select(this);
+      d3.text("/sgruhier/raw/1d692762f8328a2c9957/995f72c00bd9e929b78caa1f67d1f87259612e10/" + (d.filename === "index.html" ? "" : d.filename), function(error, content) {
+        if (error) content = "Sorry, an error occurred.";
+        code.text(content);
+        hljs.highlightBlock(code.node());
+      });
+    });
+
+</script>
+
+<script>
+
+GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+ga("create", "UA-48272912-1", "auto");
+ga("send", "pageview");
+
+</script>
+<script async="" src="./1d692762f8328a2c9957 - bl.ocks.org_files/analytics.js"></script>
+</body></html>

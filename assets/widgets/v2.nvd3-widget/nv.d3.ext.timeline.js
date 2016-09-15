@@ -133,6 +133,9 @@ layout.prototype = {
         this._band = [];
         
         var thos = this;
+        
+        console.log(this._data)
+
         this._data.forEach(function(serie,i){
             thos._layout
               .size([thos._width,thos._height/thos._data.length])
@@ -209,8 +212,14 @@ var foTooltip = function(w){
 	this._height = 100;
 	this._color = "gray";
 	this._bgColor = "white";
-	this._content =  function(d,w){
-			w.append("div").text((d)? d.toString(): "tooltip")	
+	this._dateFormat = {
+		flow: "%Y",
+		process:"%b.%Y",
+		instant:"%d.%b.%Y"
+	};
+	
+	this._content =  function(d){
+			return "tooltip"	
 	}
 	this._margin = {top:10,right:10,bottom:10,left:10}
 	this.showed = false;
@@ -272,6 +281,12 @@ foTooltip.prototype = {
 		return this;
 	},
 	
+	dateFormat: function(_){
+		if(!_) return this._dateFormat;
+		this._dateFormat = _;
+		return this;
+	},
+	
 	show: function(d){
 		if(this.showed) this.hide();
 		this.showed = true;
@@ -286,14 +301,15 @@ foTooltip.prototype = {
 		}
 		this.contentWrapper = this._wrapper.append("foreignObject")
 							.attr(wr)
+		
+		
 		var c = this.contentWrapper
 				.append('xhtml:div')
 	            .append('div')
 			    .attr({
 			           'class': 'tooltip-container'
-			    });
-		
-		this._content(d,c)
+			    })
+			    .html(this._content(d))
 		
 		this._height = c[0][0].getBoundingClientRect().height;
 		wr.y = this._y+this._anchor-this._height/2+this._margin.top;
@@ -383,9 +399,28 @@ nv.models.timelineChart = function(){
         
         brushAxis = nv.models.axis(),
 
-        brushRatio = 0.2,
+        brushRatio = 0.1,
 
         playerHeight = 20,
+
+        tooltipContent = function(d){ return "tooltip"},
+
+        showTooltip = true,
+
+        localeDef = {
+	      "decimal": ",",
+	      "thousands": "\u00A0",
+	      "grouping": [3],
+	      "currency": ["", " руб."],
+	      "dateTime": "%A, %e %B %Y г. %X",
+	      "date": "%d.%m.%Y",
+	      "time": "%H:%M:%S",
+	      "periods": ["AM", "PM"],
+	      "days": ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"],
+	      "shortDays": ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
+	      "months": ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
+	      "shortMonths": ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"]
+	    },
 
         legend = nv.models.legend()
         	.key(function(d){return d.category})
@@ -395,7 +430,19 @@ nv.models.timelineChart = function(){
 
         state = {},
 
-        defaultState = null;
+        defaultState = null,
+
+        dateFormat = {
+						flow: "%Y",
+						process:"%b.%Y",
+						instant:"%d.%b.%Y"
+					},
+
+    	showNavigator = true,
+
+		onNavigate = function(d){
+			console.log("navigate",d)
+		};
 
 
         // local variables
@@ -405,10 +452,8 @@ nv.models.timelineChart = function(){
         var brushScale;
         var brushCurrentPos;
         var currentIndex;
-
         var tooltip = new foTooltip();
-
-        var  	buttons = [
+        var buttons = [
 	 		{
 	 			d:  d3.svg.symbol().size((playerHeight-6)*10).type("triangle-up").call(this),
 	 			transform: "translate("+(playerHeight/2)+","+(playerHeight/2)+") rotate(-90)",
@@ -568,7 +613,7 @@ nv.models.timelineChart = function(){
         gEnter.append("g").attr("class", "brush");
         gEnter.append("g").attr("class", "series");
         gEnter.append("g").attr("class", "nv-legendWrap");
-		gEnter.append("g").attr("class", "nv-playerWrap");
+		// gEnter.append("g").attr("class", "nv-playerWrap");
 		gEnter.append("g").attr("class", "fo-tooltipWrap");
 
 		
@@ -609,7 +654,7 @@ nv.models.timelineChart = function(){
             .orient("bottom")
             .tickSize(-availableHeight, 0)
             .tickPadding(7)
-            .tickFormat(d3.time.format.multi([
+            .tickFormat(d3.locale(localeDef).timeFormat.multi([
                 [".%L", function(d) { return d.getMilliseconds(); }],
                 [":%S", function(d) { return d.getSeconds(); }],
                 ["%I:%M", function(d) { return d.getMinutes(); }],
@@ -656,7 +701,7 @@ nv.models.timelineChart = function(){
             .orient("bottom")
             .tickSize(-brushHeight, 0)
             .tickPadding(7)
-            .tickFormat(d3.time.format.multi([
+            .tickFormat(d3.locale(localeDef).timeFormat.multi([
                 [".%L", function(d) { return d.getMilliseconds(); }],
                 [":%S", function(d) { return d.getSeconds(); }],
                 ["%I:%M", function(d) { return d.getMinutes(); }],
@@ -725,35 +770,8 @@ nv.models.timelineChart = function(){
 			.y(margin.top)
 			.width(availableWidth*0.25)
 			.height(availableHeight)
-			.content(function(d,c){
-				var f = d3.time.format("%B %Y")
-				var text = f(d.originalStart);
-				text += (d.type != "instant") ? " - "+f(d.originalEnd) : "";
-				c.append('h5')
-	            		.attr('class', 'timestamp')
-						.text(text)
-						.style("color", color(d, d.serieIndex))//"#555555")
-						.style("font-size", "small")
-						.style("font-weight","bold")
-						.style("margin", "0px")
-						.style("text-align","center")
-				c.append('h4')
-	            		.attr('class', 'headline')
-						.text(d.context.headline)
-						// .style("color", "#cf2a0e")
-						.style("font-size", "small")
-						.style("font-weight","bold")
-						.style("margin", "0px")
-						.style("font-stretch","ultra-condensed")
-				// c.append('p')
-	   //          		.attr('class', 'headline')
-				// 		.text(d.context.text)
-				// 		// .style("color", "#cf2a0e")
-				// 		.style("font-size", "10px")
-				// 		// .style("font-weight","bold")
-				// 		.style("margin", "0px")
-				// 		.style("font-stretch","ultra-condensed")					
-			});	
+			.content(tooltipContent)
+			
 
 		var navigate = function(){
 
@@ -764,14 +782,24 @@ nv.models.timelineChart = function(){
 		    brush.extent([new Date(startScale.invert(p-m*0.25)), new Date(startScale.invert(p+m*0.75))])
 		    chart.update();
 		    var currentEvent = l.line[currentIndex]; 
-		    tooltip
-		       	.anchor((currentEvent.type == "flow")? currentEvent.y+currentEvent.dy/2  :currentEvent.y+currentEvent.height/2)
-		    	.color(color(currentEvent, currentEvent.serieIndex))
-		    	.show(currentEvent) 
+		    if(showTooltip)
+			    tooltip
+			       	.anchor((currentEvent.type == "flow")? currentEvent.y+currentEvent.dy/2  :currentEvent.y+currentEvent.height/2)
+			    	.color(color(currentEvent, currentEvent.serieIndex))
+			    	.show(currentEvent); 
+		    var f = d3.locale(localeDef).timeFormat(dateFormat[currentEvent.type])
+		    onNavigate(currentEvent)	
 		  }
 
+			if(currentIndex!=undefined){
+				var currentEvent = l.line[currentIndex];
+				onNavigate(currentEvent)	
+			}else{
+				onNavigate()
+			}
+
 	 	chart.first = function(){
-	 		// console.log("first");
+	 		
 	 		currentIndex = 0;
 	 		buttons[0].disabled = true;
 			buttons[1].disabled = true;
@@ -781,7 +809,7 @@ nv.models.timelineChart = function(){
 	 	}
 
 	 	chart.prev = function(){
-	 		// console.log("prev");
+	 		
 	 		if(currentIndex == undefined){
 	 			chart.first();
 	 			return;
@@ -801,7 +829,7 @@ nv.models.timelineChart = function(){
 	 	}
 
 	 	chart.next = function(){
-	 		// console.log("next");
+	 		
 	 		if(currentIndex == undefined){
 	 			chart.last();
 	 			return;
@@ -822,7 +850,7 @@ nv.models.timelineChart = function(){
 	 	}
 
 	 	chart.last = function(){
-	 		// console.log("last");
+	 		
 	 		currentIndex = l.line.length-1; 
 	 		buttons[0].disabled = false;
 			buttons[1].disabled = false;
@@ -834,51 +862,52 @@ nv.models.timelineChart = function(){
 	 	brushCurrentPos
 	 		.attr("x", e[0]+(e[1]-e[0])/2);
 
+	 	if(showNavigator){	
+		 	var player = brushG.selectAll(".nv-playerWrap").data([_d])
+		 	player
+		 		.enter()
+		 		.append("g").attr("class", "nv-playerWrap")
+				.attr("transform", "translate("	+(0)
+									+","
+									+(brushHeight/2-playerHeight/2)
+									+")")	 	
 
-	 	var player = g.select(".nv-playerWrap");
-	 	
-	 	player
-	 		.attr("transform", "translate("+(margin.left+availableWidth-playerHeight*4)+","+(availableHeight+margin.top+44+brushHeight)+")")
-	 	
+			player.exit().remove();	
+		 
+		    
+		  	buttons[2].transform =  "translate("
+		  							+(availableWidth-2*playerHeight+playerHeight/2)
+		  							+","
+		  							+(playerHeight/2)
+		  							+") rotate(90)";
+
+			buttons[3].transform =  "translate("
+		  							+(availableWidth-playerHeight/2)
+		  							+","
+		  							+(playerHeight/2)
+		  							+") rotate(90)";
+		 		
+			var playerButtons = player.selectAll(".nv-player-button").data(buttons) 
+
+		 	playerButtons
+		 		.enter()
+		 		.append("path")
+		 		.attr("class","nv-player-button") 
 
 
-	    var playerBg = player.selectAll(".nv-player-bg").data([buttons])
+			playerButtons.exit().remove();
+		 	
+			playerButtons
+				.style("fill","#d5d5ea")
+				.style("fill-opacity", function(d){return (!d.disabled)? 1 : 0 })
+	            .style("stroke", "gray")
+	            .style("stroke-width", function(d){return (!d.disabled)? 1.5 : 0 })
+	            .style("cursor",function(d){return (!d.disabled)? "hand" : "" })
+	            .attr("d", function(d){return d.d})            
+	            .attr("transform", function(d){return d.transform})
+	            .on("click", function(d){ if(!d.disabled) d.onClick()})
 
-	    playerBg
-	    	.enter()
-	    	.append("rect")
-	    	.attr("class","nv-player-bg")
-	    	.attr("x",-3)
-	    	.attr("y",-3)
-			.attr("width",playerHeight*4+6)
-	    	.attr("height",playerHeight+6)
-	    	.style("fill-opacity",0)
-	    	.style("stroke", "gray")
-	    	.style("stroke-width",0.2)
-
-
-	    playerBg.exit().remove();	
-	 		
-		var playerButtons = player.selectAll(".nv-player-button").data(buttons) 
-
-	 	playerButtons
-	 		.enter()
-	 		.append("path")
-	 		.attr("class","nv-player-button") 
-
-
-		playerButtons.exit().remove();
-	 	
-		playerButtons
-			.style("fill","gray")
-			.style("fill-opacity", function(d){return (!d.disabled)? 1 : 0 })
-            .style("stroke", "gray")
-            .style("cursor",function(d){return (!d.disabled)? "hand" : "" })
-            .attr("d", function(d){return d.d})            
-            .attr("transform", function(d){return d.transform})
-            .on("click", function(d){ if(!d.disabled) d.onClick()})
-
-            
+	    }        
 
 		var seriesG = g.select(".series")
 						.attr("transform",function(d){
@@ -937,7 +966,7 @@ nv.models.timelineChart = function(){
 		
 		items
 			.transition()
-			.duration(500)
+	//		.duration(500)
 			// .ease("cubic-in")//"cubic-in", "linear", "quad", "cubic", "sin", "exp", "circle", "elastic", "back", "bounce"
 			.attr("x", function (d) {
 		    	return (d.type == "instant")? d.start-2.5 : d.start
@@ -949,15 +978,25 @@ nv.models.timelineChart = function(){
 	      	.attr("height", function (d) {
 	      	  return (d.type == "flow") ? d.dy : d.height
 	        })
+	        .attr("rx", function(d){
+	        	var w =  ((d.end - d.start)<5) ? 5 : (d.end - d.start)
+	        	var h = (d.type == "flow") ? d.dy : d.height
+	        	return (w >= h)? h/2 : w/2
+	        })	
+	        .attr("ry", function(d){
+				var w =  ((d.end - d.start)<5) ? 5 : (d.end - d.start)
+	        	var h = (d.type == "flow") ? d.dy : d.height
+	        	return (w >= h)? h/2 : w/2
+	        })
 	      	.style("fill-opacity", function(d){
 	      		return (d.type == "flow") 
 	      			? ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 0.5 : 0.05 
-	      			: ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 0.5 : 0.1
+	      			: ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 0.7 : 0.3
 	      	}) 
 	      	.style("stroke-width", function(d){
 	      		return (d.type == "flow") 
 	      			? ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 2 : 0.3 
-	      			: ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 2 : 0.5
+	      			: ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 3 : 1.5
 	      	})
 	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
 			.style("stroke", function (d,i) {return color(d,d.serieIndex)})
@@ -982,6 +1021,7 @@ nv.models.timelineChart = function(){
 
             state.disabled = e.disabled;
           }
+          onNavigate();
           tooltip.hide();
           brush.clear();
           chart.update();
@@ -991,6 +1031,7 @@ nv.models.timelineChart = function(){
 		
 		var redrawBrushCurrentPos = function(){
 			tooltip.hide();
+			
 			buttons.forEach(function(b){b.disabled = false})
 			currentIndex = undefined;
 		    var e = brush.extent().map(function(d){return brushScale(d)});
@@ -999,11 +1040,11 @@ nv.models.timelineChart = function(){
 		}   
 
 		brush
-			.on("brushend", function(){tooltip.hide(); chart.update()})
+			.on("brushend", function(){onNavigate(); tooltip.hide(); chart.update()})
 			.on("brush", redrawBrushCurrentPos)
     	return chart;
 
-    }
+    } 
 
      //============================================================
     // Expose Public Variables
@@ -1037,6 +1078,12 @@ nv.models.timelineChart = function(){
       return chart;
     };
 
+	chart.localeDef = function (_) {
+      if (!arguments.length) return localeDef;
+      localeDef = _;
+      return chart;
+    };
+
     
     chart.color = function (_) {
       if (!arguments.length) return color;
@@ -1057,6 +1104,39 @@ nv.models.timelineChart = function(){
       defaultState = _;
       return chart;
     };
+
+	chart.dateFormat = function (_) {
+      if (!arguments.length) return dateFormat;
+      dateFormat = _;
+      return chart;
+    };
+
+    chart.showNavigator = function (_) {
+      if (!arguments.length) return showNavigator;
+      showNavigator = _;
+      return chart;
+    };
+
+	chart.onNavigate = function (_) {
+      if (!arguments.length) return onNavigate;
+      onNavigate = _;
+      return chart;
+    };
+
+     chart.tooltipContent = function (_) {
+      if (!arguments.length) return tooltipContent;
+      tooltipContent = _;
+      return chart;
+    };
+
+	chart.showTooltip = function (_) {
+      if (!arguments.length) return showTooltip;
+      showTooltip = _;
+      return chart;
+    };
+
+
+
 
   
     //============================================================
