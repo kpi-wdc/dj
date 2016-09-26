@@ -3,33 +3,34 @@
   <div ng-if = "context">
 
     <h4 ng-if="widget.showDetails.timestamp" style="
-        color: #7f7f7f;
-        font-weight: bold;
-        /* text-align: right; */
-        margin: 20px 5px 0px 5px;
+          color: {{context.context.color}};
+          /* font-weight: bold; */
+          /* text-align: right; */
+          margin: 0px 5px 5px 5px;
+          font-stretch: condensed;
+          font-size: initial;
     ">
       {{context.timestamp}}
     </h4>
-    <h3 ng-if="widget.showDetails.headline" style="
-          color: #7f7f7f;
-          font-weight: bold;
+    <h4 ng-if="widget.showDetails.headline" style="
+          color: {{context.context.color}};
+          margin: 0px 5px 10px 5px;
+          font-stretch: condensed;
           line-height: 1;
-          font-stretch: extra-condensed;
-          margin: 0px 5px;
           font-size: larger;
     ">
       {{context.context.headline}}
-    </h3>
+    </h4>
     <div ng-if="widget.showDetails.text" style="
           font-stretch: extra-condensed;
           /* font-size: small; */
           text-align: justify;
-          line-height: 1.2;
+          line-height: 1.1;
           margin: 5px;
     ">
     <div  ng-if="context.context.media"  class="row"  style="margin:0">
       <!-- <div class="column medium-6 left-column"> -->
-        <img ng-if="context.context.media" ng-src="{{context.context.media}}" style="float:left;width:30%">
+        <img ng-if="context.context.media" ng-src="{{context.context.media}}" style="float:left;width:30%;margin:10px;">
       <!-- </div> -->
       <!-- <div class="column medium-6 left-column"> -->
        {{context.context.text}}
@@ -40,6 +41,16 @@
     <div  ng-if="!context.context.media"  class="row"  style="margin:0">
       {{context.context.text}}
     </div>  
+
+    <div ng-if="context.context.url"  class="row" style="margin:0;">
+      <a  href="{{context.context.url.href}}" 
+          target="blank" 
+          style="     float: right;
+                      font-size: small;
+                      margin: 10px;">
+        {{context.context.url.label}}
+      </a>
+    </div>
       
     </div>
   </div>

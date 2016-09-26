@@ -58,6 +58,9 @@
           },
           // Update chart with new options
           updateWithOptions: function (options) {
+            
+            if(scope.chart && scope.chart.destroy) scope.chart.destroy();
+
             scope.data = scope.settings.data;
             // Clearing
             scope.api.clearElement();

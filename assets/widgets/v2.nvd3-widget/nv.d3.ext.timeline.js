@@ -131,11 +131,9 @@ layout.prototype = {
   fit : function(){
         var swimlines = [];
         this._band = [];
-        
+        this.lanes =[];
         var thos = this;
-        
-        console.log(this._data)
-
+       
         this._data.forEach(function(serie,i){
             thos._layout
               .size([thos._width,thos._height/thos._data.length])
@@ -146,6 +144,8 @@ layout.prototype = {
             var tmp = thos._layout(serie.values);
             var swimline = {y:[],dy:[]}
             tmp.forEach(function(d){
+            
+            
               if(swimline.y.indexOf(d.y)<0){swimline.y.push(d.y)}
               if(swimline.dy.indexOf(d.dy)<0){swimline.dy.push(d.dy)}
             })
@@ -162,7 +162,8 @@ layout.prototype = {
           sumWidth += d.ratio;
         })
         var cumulate = 0
-        swimlines.forEach(function(d){
+
+        swimlines.forEach(function(d,i){
           d.ratio /= sumWidth;
           d.height = minWidth;
           d.hOffset = cumulate;
@@ -174,9 +175,21 @@ layout.prototype = {
         		item._id = j
         		item.height = swimlines[i].height;
         		item.y += swimlines[i].hOffset*thos._height;
-        		item.band = i; 
+        		item.band = i;
+        		if(item.type != "flow"){
+        			item.height = (item.height > 16) ? 16 : item.height ;
+        			item.y = item.y+swimlines[i].height/2 - item.height/2 
+        		}
+        		var laneY = (item.type != "flow") ? item.y+item.height/2 : item.y+minWidth/2;
+        		var lane = {serie:item.serieIndex, lane:item.lane, y:laneY}
+	        	var foundedLane = thos.lanes.filter(function(t){return t.serie == lane.serie && t.lane == lane.lane}) 
+	        	if(foundedLane.length == 0){
+	        		thos.lanes.push(lane)
+	        	}	 
         	})
         })
+
+       
 
         
         this.line = [];
@@ -196,7 +209,6 @@ layout.prototype = {
         })
 
         this.domain = [this.line[0].originalStart, this.line[this.line.length-1].originalEnd] 
-        
         return this;
       }
   }
@@ -204,6 +216,10 @@ layout.prototype = {
 
 
 var foTooltip = function(w){
+	this._stopped = true;
+	this._initState = true;
+	this._timer = undefined;
+	this._chart = undefined;
 	this._wrapper = w;
 	this._anchor = 50;
 	this._x =  0;
@@ -221,11 +237,32 @@ var foTooltip = function(w){
 	this._content =  function(d){
 			return "tooltip"	
 	}
-	this._margin = {top:10,right:10,bottom:10,left:10}
+	this._margin = {top:5,right:10,bottom:5,left:10}
 	this.showed = false;
 }
 
+
+
 foTooltip.prototype = {
+
+	destroy: function(){
+		this.hide();
+		if (this._timer) this._timer.stop();
+		this._stopped = true;
+		return this;
+	},
+
+	stop: function(){
+		if (this._timer) this._timer.stop();
+		this._stopped = true;
+		return this;
+	},
+
+	chart: function(_){
+		if(!_) return this._chart;
+		this._chart = _;
+		return this;
+	},
 	
 	wrapper: function(_){
 		if(!_) return this._wrapper;
@@ -302,20 +339,60 @@ foTooltip.prototype = {
 		this.contentWrapper = this._wrapper.append("foreignObject")
 							.attr(wr)
 		
-		
+		var nav = 	'<center>'
+					+'&nbsp;'
+					+'<button class="navigator first" style="opacity:0;font-size: 10px;margin: 2px;padding: 2px 5px;color: #666666;background: #eaeaea;border: 1px solid #666666;width:15%;'+((thos._stopped) ? '' : 'visibility:hidden;')+'"> &lt;&lt; </button>'
+					+'<button class="navigator prev" style="opacity:0;font-size: 10px;margin: 2px;padding: 2px 5px;color: #666666;background: #eaeaea;border: 1px solid #666666;width:15%;'+((thos._stopped) ? '' : 'visibility:hidden;')+'"> &lt; </button>'
+					+'<button class="navigator play" style="opacity:0;font-size: 10px;margin: 2px;padding: 2px 7px;color: #666666;background: #eaeaea;border: 1px solid #666666;text-align:center;">'+((thos._stopped) ? 'Play' : 'Stop')+'</button>'
+					+'<button class="navigator next" style="opacity:0;font-size: 10px;margin: 2px;padding: 2px 5px;color: #666666;background: #eaeaea;border: 1px solid #666666;width:15%;'+((thos._stopped) ? '' : 'visibility:hidden;')+'"> &gt; </button>'
+					+'<button class="navigator last" style="opacity:0;font-size: 10px;margin: 2px;padding: 2px 5px;color: #666666;background: #eaeaea;border: 1px solid #666666;width:15%;'+((thos._stopped) ? '' : 'visibility:hidden;')+'"> &gt;&gt; </button>'
+					+'</center>'					
+
 		var c = this.contentWrapper
 				.append('xhtml:div')
+				
 	            .append('div')
 			    .attr({
 			           'class': 'tooltip-container'
 			    })
 			    .html(this._content(d))
+
+		c.append("div").html(nav)	    
+		c.select("button.navigator.prev").on("click",function(){thos._chart.prev()})
+        c.select("button.navigator.next").on("click",function(){thos._chart.next()})
+        c.select("button.navigator.first").on("click",function(){thos._chart.first()})
+        c.select("button.navigator.last").on("click",function(){thos._chart.last()})
+        c.select("button.navigator.play").on("click",function(){
+        	var onPlayNext = function(tooltip){
+        		thos._chart.next();
+        		if(!thos._stopped) thos._timer = d3.timeout(onPlayNext,3000)
+        	}
+
+        	if(thos._stopped){
+        		thos._stopped = false;
+        		thos.show(d);
+        		thos._timer = d3.timeout(onPlayNext,3000)
+        	}else{
+        		thos._stopped = true;
+        		thos._timer.stop();
+        		thos.show(d);
+        	}
+        	
+        })
+
+        c.selectAll("button.navigator")
+        	.transition()
+        	.duration(500)
+        	.style("opacity",1)
+
+        // console.log(c,this.contentWrapper.select("div.tooltip-container").node())
+					    	
 		
 		this._height = c[0][0].getBoundingClientRect().height;
-		wr.y = this._y+this._anchor-this._height/2+this._margin.top;
-		wr.y = (wr.y < -10) ? -10 : wr.y;
+		wr.y = this._y+this._anchor-this._height/2//+this._margin.top;
+		wr.y = (wr.y < (thos._margin.top+2)) ? thos._margin.top+2 : wr.y;
 		this.contentWrapper.attr(wr);
-
+		
 		var fo = {
 			lt: {
 					x: 0,
@@ -353,6 +430,7 @@ foTooltip.prototype = {
 			}		
 		}
 		
+		
 		this._wrapper.insert("path",":first-child")
 	       	.attr("d", function(d,i){
 	       		return generatePath(
@@ -360,11 +438,16 @@ foTooltip.prototype = {
 	          	)
 	        })
 	        .attr("transform","translate("+this._x+","+this._y+")")
-	        .style("stroke",this._color)
-	        .style("stroke-width",1.5)
-	        .style("fill", this._bgColor)
-	        .style("fill-opacity", 0.75)	
-		this._wrapper.transition().attr("opacity",1)
+	        .style("stroke",d3.rgb(this._color).darker(1))//this._color)
+	        .style("stroke-width",0.6)
+	        .style("fill", this._bgColor)//d3.rgb(this._color).brighter(5.4))
+	        .style("fill-opacity", 1)
+	        .style("filter","url("+document.location.href+"#drop-shadow)")	
+		this._wrapper
+		.transition()
+		.duration(500)
+		.ease("cubic-in")
+		.attr("opacity",1)
 	},
 
 	hide: function(d){
@@ -376,7 +459,7 @@ foTooltip.prototype = {
 
 	}
 }	
-	
+
 
 
 nv.models.timelineChart = function(){
@@ -395,14 +478,7 @@ nv.models.timelineChart = function(){
 		
 		axis = nv.models.axis(),
 
-        brush = d3.svg.brush(),
         
-        brushAxis = nv.models.axis(),
-
-        brushRatio = 0.1,
-
-        playerHeight = 20,
-
         tooltipContent = function(d){ return "tooltip"},
 
         showTooltip = true,
@@ -449,41 +525,15 @@ nv.models.timelineChart = function(){
         //  
 
         var domain = [];
-        var brushScale;
-        var brushCurrentPos;
-        var currentIndex;
-        var tooltip = new foTooltip();
-        var buttons = [
-	 		{
-	 			d:  d3.svg.symbol().size((playerHeight-6)*10).type("triangle-up").call(this),
-	 			transform: "translate("+(playerHeight/2)+","+(playerHeight/2)+") rotate(-90)",
-	 			onClick: function(){
-	 				chart.first()
-	 			}
-	 	   },
-		   {
-	 			d:  d3.svg.symbol().size((playerHeight-6)*10).type("triangle-up").call(this),
-	 			transform: "translate("+(playerHeight+playerHeight/2)+","+(playerHeight/2)+") rotate(-90)",
-	 			onClick: function(){
-	 				chart.prev()
-	 			}
-		   },
-		   {
-	 			d:  d3.svg.symbol().size((playerHeight-6)*10).type("triangle-up").call(this),
-	 			transform: "translate("+(2*playerHeight+playerHeight/2)+","+(playerHeight/2)+") rotate(90)",
-	 			onClick: function(){
-	 				chart.next()
-	 			}
-		   },
-		    {
-	 			d:  d3.svg.symbol().size((playerHeight-6)*10).type("triangle-up").call(this),
-	 			transform: "translate("+(3*playerHeight+playerHeight/2)+","+(playerHeight/2)+") rotate(90)",
-	 			onClick: function(){
-	 				chart.last()
-	 			}
-		   }
+        var currentIndex, _currentEvent;
+        var tooltip =  new foTooltip();
+       
+        var zoom = d3.behavior
+        			.zoom()
+        			.scaleExtent([1, 5]);
+        var prevTranslate,prevZoom;			
 
-	 	 ]
+   
 /////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	
@@ -561,25 +611,24 @@ nv.models.timelineChart = function(){
 
     		var data = _d.filter(function(item){return item.disabled == false || item.disabled == undefined})
         	
-        	var needBrushSettings = (brush.extent() == null) || brush.empty();
         	
-        	if(needBrushSettings){
-        		buttons.forEach(function(b){
-        			b.disabled = false;
-        			currentIndex = undefined;
-        		})
-        	}
-    		
-    		domain = needBrushSettings ? getDomain(data) : brush.extent();
-
+     
     	// prepare visualization
-    	// 
     	 
-    	var brushHeight = (height - margin.top - margin.bottom)*brushRatio;    
         
     	var availableWidth = width - margin.left - margin.right,
-            availableHeight = height - margin.top - margin.bottom-brushHeight-20-playerHeight;
+            availableHeight = height - margin.top - margin.bottom;
         
+        
+    	 domain =  getDomain(data);
+    		var xScale = d3.time.scale()
+	            .domain(domain)
+	            .range([0, availableWidth]);
+	        
+	        var middle = availableWidth/2;
+	        var start = xScale.invert(middle-availableWidth/2/zoom.scale())
+	        var end =   xScale.invert(middle+availableWidth/2/zoom.scale())
+	
         container = d3.select(this);
        
 
@@ -604,31 +653,68 @@ nv.models.timelineChart = function(){
 	        
 	        chart.container = this;      
 
+	    
+	    	// filters go in defs element
+		var defsWrap = container.selectAll("defs").data([data])
+
+		var defs = defsWrap.enter().append("defs");
+
+		// create filter with id #drop-shadow
+		// height=130% so that the shadow is not clipped
+		var filter = defs.append("filter")
+		    .attr("id", "drop-shadow")
+		    .attr("height", "130%");
+
+		// SourceAlpha refers to opacity of graphic that this filter will be applied to
+		// convolve that with a Gaussian with standard deviation 3 and store result
+		// in blur
+		filter.append("feGaussianBlur")
+		    .attr("in", "Source")//"SourceAlpha")
+		    .attr("stdDeviation", 2)
+		    .attr("result", "blur");
+
+		// translate output of Gaussian blur to the right and downwards with 2px
+		// store result in offsetBlur
+		filter.append("feOffset")
+		    .attr("in", "blur")
+		    .attr("dx", 0)
+		    .attr("dy", 2)
+		    .attr("result", "offsetBlur");
+
+		// overlay original SourceGraphic over translated blurred opacity by using
+		// feMerge filter. Order of specifying inputs is important!
+		var feMerge = filter.append("feMerge");
+
+		feMerge.append("feMergeNode")
+		    .attr("in", "offsetBlur")
+		feMerge.append("feMergeNode")
+		    .attr("in", "SourceGraphic");
+
+		defsWrap.exit().remove();    
+    
         
         var wrap = container.selectAll("g.nv-wrap.nv-timeline").data([data]);
         var gEnter = wrap.enter().append("g").attr("class", "nvd3 nv-wrap nv-timeline").append("g");
         var g = wrap.select("g");
 
+        gEnter.append("g").attr("class", "nv-zoom");
         gEnter.append("g").attr("class", "nv-x nv-axis");
-        gEnter.append("g").attr("class", "brush");
         gEnter.append("g").attr("class", "series");
         gEnter.append("g").attr("class", "nv-legendWrap");
-		// gEnter.append("g").attr("class", "nv-playerWrap");
+		gEnter.append("g").attr("class", "nv-playerWrap");
 		gEnter.append("g").attr("class", "fo-tooltipWrap");
-
 		
 		
-					
+		
 
 
+        legend.width(availableWidth);
 
-          legend.width(availableWidth);
-
-          var temp = g.select(".nv-legendWrap").datum(_d)
+        var temp = g.select(".nv-legendWrap").datum(_d)
           temp.call(legend);
          
             margin.top = legend.height() + 5;
-            availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom -brushHeight-20-playerHeight;
+            availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
 
           wrap.select(".nv-legendWrap").attr("transform", "translate(0," + 0 + ")");
 
@@ -639,7 +725,28 @@ nv.models.timelineChart = function(){
 		    .fit();
 		
 		  
-          
+        
+					
+		var zoomLayer = g.select("g.nv-zoom").selectAll("rect.nv-zoom").data([_d])
+		zoomLayer
+			.enter()
+			.append("rect")
+			.attr({
+				"class":"nv-zoom",
+				x:0,
+				y:0,
+				width:availableWidth,
+				height:availableHeight,
+				transform:"translate("+margin.left+","+margin.top+")"
+			})
+			.style("fill-opacity",0)
+			.call(zoom)
+			
+
+		
+		zoomLayer
+			.exit()
+			.remove()	
 
  	      var x = d3.time.scale()
 	            .domain(domain)
@@ -674,240 +781,22 @@ nv.models.timelineChart = function(){
         var xAxisG =  g.select(".nv-x.nv-axis")
 					    .attr("transform", "translate("+margin.left+","+(availableHeight+margin.top)+")")
 
-		xAxisG.transition().call(axis);
-
-		var invertScale = d3.time.scale()
-							.domain(startScale.range())
-							.range(startScale.domain())
-  
-  		
-
-  		if(needBrushSettings){
-  			brushScale =  d3.time.scale().range([0, availableWidth]);
-  			brushScale.domain([
-              new Date(invertScale(0 - availableWidth*0.25)), 
-              new Date(invertScale(availableWidth + availableWidth*0.25))
-            ])
-  		}
-  		
-        
-        
-        brush
-        	.x(brushScale.range([0, availableWidth]))         
-        	.extent(domain)
-
-         brushAxis
-		  	.scale(brushScale)
-            .orient("bottom")
-            .tickSize(-brushHeight, 0)
-            .tickPadding(7)
-            .tickFormat(d3.locale(localeDef).timeFormat.multi([
-                [".%L", function(d) { return d.getMilliseconds(); }],
-                [":%S", function(d) { return d.getSeconds(); }],
-                ["%I:%M", function(d) { return d.getMinutes(); }],
-                ["%I %p", function(d) { return d.getHours(); }],
-                ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
-                ["%b %d", function(d) { return d.getDate() != 1; }],
-                ["%B", function(d) { return d.getMonth(); }],
-                ["%Y", function() { return true; }]
-              ]))
-            .showMaxMin(false)      
-        
-
-		var brushG = g.select(".brush")
-						.attr("transform", "translate("+margin.left+","+(availableHeight+margin.top+20)+")")									    
-
-		var brushAxisWrap = brushG.selectAll(".nv-x.nv-axis").data([_d])
-		
-		brushAxisWrap
-			.enter()
-		    .append("g")
-		    .attr("class", "nv-x nv-axis")
-		    .attr("transform", "translate("+0+","+(brushHeight)+")")
-		
-		brushAxisWrap.exit().remove();
-		
-		brushAxisWrap 
-		    .transition()
-		    .call(brushAxis)
+	 	if(showTooltip){
+		 	tooltip
+		 		.chart(chart)
+				.wrapper(g.select(".fo-tooltipWrap"))
+				.x(margin.left)
+				.y(margin.top)
+				.width(availableWidth*0.25)
+				.height(availableHeight)
+				.content(tooltipContent)
+		}		
 
 
-		var brushControlWrap =  brushG.selectAll(".brush-control").data([_d])   
-		    
-		brushControlWrap
-			.enter()
-		    .append("g")
-		    .attr("class", "brush-control")
-		
-		brushControlWrap.exit().remove();
-
-		brushControlWrap   
-		    .transition()
-		    .call(brush)  
-		
-		brushControlWrap.selectAll("rect")
-			.attr("height", brushHeight)   
-
-
-		brushCurrentPos = brushG.selectAll(".current").data([_d]);
-		var e = brush.extent().map(function(d){return brushScale(d)}); 
-	 	brushCurrentPos
- 		.enter()
-	 		.append("rect")
-	 		.attr("class", "current")
-	 		.attr("height", brushHeight)
-		    .attr("width", 1)
-		    .attr("y", 0)
-		    .attr("x", e[0]+(e[1]-e[0])*0.25)//2)
-		      // .attr("transform", "translate("+(0)+","+(avaibleHeight+30)+")")
-		    .style("fill","red")  
-
-	 	brushCurrentPos.exit().remove();
-
-	 	tooltip
-			.wrapper(g.select(".fo-tooltipWrap"))
-			.x(margin.left)
-			.y(margin.top)
-			.width(availableWidth*0.25)
-			.height(availableHeight)
-			.content(tooltipContent)
-			
-
-		var navigate = function(){
-
-		    var e = brush.extent().map(function(d){return startScale(d)});
-		    var p = startScale(l.line[currentIndex].originalStart);
-		    // var m = (e[1]-e[0])/2;
-		    var m = e[1]-e[0]
-		    brush.extent([new Date(startScale.invert(p-m*0.25)), new Date(startScale.invert(p+m*0.75))])
-		    chart.update();
-		    var currentEvent = l.line[currentIndex]; 
-		    if(showTooltip)
-			    tooltip
-			       	.anchor((currentEvent.type == "flow")? currentEvent.y+currentEvent.dy/2  :currentEvent.y+currentEvent.height/2)
-			    	.color(color(currentEvent, currentEvent.serieIndex))
-			    	.show(currentEvent); 
-		    var f = d3.locale(localeDef).timeFormat(dateFormat[currentEvent.type])
-		    onNavigate(currentEvent)	
-		  }
-
-			if(currentIndex!=undefined){
-				var currentEvent = l.line[currentIndex];
-				onNavigate(currentEvent)	
-			}else{
-				onNavigate()
-			}
-
-	 	chart.first = function(){
-	 		
-	 		currentIndex = 0;
-	 		buttons[0].disabled = true;
-			buttons[1].disabled = true;
-			buttons[2].disabled = false;
-			buttons[3].disabled = false;
-	 		navigate()
-	 	}
-
-	 	chart.prev = function(){
-	 		
-	 		if(currentIndex == undefined){
-	 			chart.first();
-	 			return;
-	 		}
-	 		currentIndex--;
-	 		currentIndex = (currentIndex<0) ? 0 : currentIndex; 
-	 		if(currentIndex == 0){
-	 			buttons[0].disabled = true;
-	 			buttons[1].disabled = true;
-	 		}else{
-	 			buttons[0].disabled = false;
-	 			buttons[1].disabled = false;
-	 		}
-	 		buttons[2].disabled = false;
-	 		buttons[3].disabled = false;
-	 		navigate()
-	 	}
-
-	 	chart.next = function(){
-	 		
-	 		if(currentIndex == undefined){
-	 			chart.last();
-	 			return;
-	 		}
-	 		currentIndex = (currentIndex) ? currentIndex : 0;
-	 		currentIndex++;
-	 		currentIndex = (currentIndex > l.line.length-1) ? l.line.length-1 : currentIndex;
-	 		if(currentIndex == l.line.length-1){
-	 			buttons[2].disabled = true;
-	 			buttons[3].disabled = true;
-	 		}else{
-	 			buttons[2].disabled = false;
-	 			buttons[3].disabled = false;
-	 		}
-	 		buttons[0].disabled = false;
-	 		buttons[1].disabled = false; 
-	 		navigate()
-	 	}
-
-	 	chart.last = function(){
-	 		
-	 		currentIndex = l.line.length-1; 
-	 		buttons[0].disabled = false;
-			buttons[1].disabled = false;
-			buttons[2].disabled = true;
-			buttons[3].disabled = true;
-	 		navigate()
-	 	}	
-
-	 	brushCurrentPos
-	 		.attr("x", e[0]+(e[1]-e[0])/2);
-
-	 	if(showNavigator){	
-		 	var player = brushG.selectAll(".nv-playerWrap").data([_d])
-		 	player
-		 		.enter()
-		 		.append("g").attr("class", "nv-playerWrap")
-				.attr("transform", "translate("	+(0)
-									+","
-									+(brushHeight/2-playerHeight/2)
-									+")")	 	
-
-			player.exit().remove();	
-		 
-		    
-		  	buttons[2].transform =  "translate("
-		  							+(availableWidth-2*playerHeight+playerHeight/2)
-		  							+","
-		  							+(playerHeight/2)
-		  							+") rotate(90)";
-
-			buttons[3].transform =  "translate("
-		  							+(availableWidth-playerHeight/2)
-		  							+","
-		  							+(playerHeight/2)
-		  							+") rotate(90)";
-		 		
-			var playerButtons = player.selectAll(".nv-player-button").data(buttons) 
-
-		 	playerButtons
-		 		.enter()
-		 		.append("path")
-		 		.attr("class","nv-player-button") 
-
-
-			playerButtons.exit().remove();
-		 	
-			playerButtons
-				.style("fill","#d5d5ea")
-				.style("fill-opacity", function(d){return (!d.disabled)? 1 : 0 })
-	            .style("stroke", "gray")
-	            .style("stroke-width", function(d){return (!d.disabled)? 1.5 : 0 })
-	            .style("cursor",function(d){return (!d.disabled)? "hand" : "" })
-	            .attr("d", function(d){return d.d})            
-	            .attr("transform", function(d){return d.transform})
-	            .on("click", function(d){ if(!d.disabled) d.onClick()})
-
-	    }        
+		chart.destroy = function(){
+			console.log("destroy")
+			tooltip.destroy(); 
+		}
 
 		var seriesG = g.select(".series")
 						.attr("transform",function(d){
@@ -930,11 +819,29 @@ nv.models.timelineChart = function(){
 			.remove()
 
 		
+
+		var lanes = g
+					.select("g.series")
+					.selectAll("line.lane")
+					.data(l.lanes)
+
+		lanes
+			.enter()
+			.append("line")
+			.attr("class", "lane")
+			.attr("x1", 0)
+			.attr("y1",function(d){ return d.y})
+			.attr("x2", availableWidth)
+			.attr("y2",function(d){ return d.y})
+			.style("stroke",function(d){return color(d, d.serie)})
+			.style("stroke-width",0.25)
+
+		lanes.exit().remove();	
 		
 		var items = g
 					.select("g.series")
 					.selectAll(".serie")
-					.selectAll(".item")
+					.selectAll("rect.item")
 					.data(function (d) {
 			          return d;
 			        });
@@ -952,60 +859,307 @@ nv.models.timelineChart = function(){
 			.style("fill-opacity", function(d){
 	      		return 0
 	      	}) 
-	      	.style("stroke-width", function(d){
-	      		0
-	      	})
-	      	.style("opacity", function(d){
-	      		0
-	      	})
+	      	// .style("stroke-width", function(d){
+	      	// 	return 0
+	      	// })
+	      	// .style("opacity", function(d){
+	      	// 	return 0
+	      	// })
 	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
 			.style("stroke", function (d,i) {return color(d,d.serieIndex)})
+			.style("cursor", "pointer")
+			.on("mouseover", function(d){
+				if(!showTooltip){
+					 nv.tooltip.show(
+					 	[d3.event.pageX, d3.event.pageY], 
+					 	'<div style="width:'+(Math.round(availableWidth/4))+'px; white-space: normal;margin:5px;">'+tooltipContent(d)+'</div>', 
+					 	"n", 
+					 	null, 
+					 	null,
+					 	"xy-tooltip with-3d-shadow with-transitions"
+					);
+				}
+			})
+			.on("mouseout", function(d){
+				if(!showTooltip){
+					 nv.tooltip.cleanup()
+				}
+			})
+			.on("click",function(d){
+				if(!showTooltip){
+
+					var index = l.line.map(function(item) {return item.context}).indexOf(d.context)
+					if(index >=0){
+						currentIndex = index;
+						navigate();
+						chart.redraw();
+						
+						// g.select("g.nv-x.nv-axis")
+						// .transition()
+						// .attr("transform",
+						// 		"translate("+zoom.translate()[0]+","+(availableHeight+margin.top)+")")
+						// g.select(".series")
+						// 	.transition()
+						// 	.attr("transform",
+						// 		"translate("+zoom.translate()[0]+","+(margin.top)+")") 
+					}else{
+						currentIndex = undefined;
+						_currentEvent = undefined;
+						navigate();
+						chart.redraw();
+					}	
+				}else{
+					// console.log("click with navigator")
+					tooltip.stop();
+					var index = l.line.map(function(item) {return item.context}).indexOf(d.context)
+					if(index >=0){
+						currentIndex = index;
+						navigate();
+						chart.redraw();
+						translateWrap(_currentEvent)
+					}	
+				}		
+			})
 		
 		items.exit().remove()      	
-		      	
 		
-		items
-			.transition()
-	//		.duration(500)
-			// .ease("cubic-in")//"cubic-in", "linear", "quad", "cubic", "sin", "exp", "circle", "elastic", "back", "bounce"
-			.attr("x", function (d) {
-		    	return (d.type == "instant")? d.start-2.5 : d.start
-	      	})
-	      	.attr("y", function (d) {return d.y})
-	      	.attr("width", function (d) {
-	      		return ((d.end - d.start)<5) ? 5 : d.end - d.start
-	      	})
-	      	.attr("height", function (d) {
-	      	  return (d.type == "flow") ? d.dy : d.height
-	        })
-	        .attr("rx", function(d){
-	        	var w =  ((d.end - d.start)<5) ? 5 : (d.end - d.start)
-	        	var h = (d.type == "flow") ? d.dy : d.height
-	        	return (w >= h)? h/2 : w/2
-	        })	
-	        .attr("ry", function(d){
-				var w =  ((d.end - d.start)<5) ? 5 : (d.end - d.start)
-	        	var h = (d.type == "flow") ? d.dy : d.height
-	        	return (w >= h)? h/2 : w/2
-	        })
-	      	.style("fill-opacity", function(d){
-	      		return (d.type == "flow") 
-	      			? ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 0.5 : 0.05 
-	      			: ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 0.7 : 0.3
-	      	}) 
-	      	.style("stroke-width", function(d){
-	      		return (d.type == "flow") 
-	      			? ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 2 : 0.3 
-	      			: ((currentIndex!=undefined) && d.id == l.line[currentIndex].id) ? 3 : 1.5
-	      	})
-	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
-			.style("stroke", function (d,i) {return color(d,d.serieIndex)})
+		
+
+
+		chart.redraw = function(){
+			lanes
+				.transition().attr("x1", 0)
+				.attr("y1",function(d){ return d.y})
+				// .attr("x2", availableWidth)
+				.attr("y2",function(d){ return d.y})
+				.style("stroke",function(d){return color(d, d.serie)})
+				.style("stroke-width",0.25)
+				.attr("x2", availableWidth*zoom.scale())
+				
+			items
+				.transition()
+		//		.duration(500)
+				// .ease("cubic-in")//"cubic-in", "linear", "quad", "cubic", "sin", "exp", "circle", "elastic", "back", "bounce"
+				.attr("x", function (d) {
+			    	return (d.type == "instant")? d.start*zoom.scale()-2.5 : d.start*zoom.scale()
+		      	})
+		      	.attr("y", function (d) {
+		      		return  (d.type == "instant") ? d.y+d.height/2-2.5 : d.y
+		      	})
+		      	.attr("width", function (d) {
+		      		return ((d.end*zoom.scale() - d.start*zoom.scale())<5) ? 5 : d.end*zoom.scale() - d.start*zoom.scale()
+		      	})
+		      	.attr("height", function (d) {
+		      	  return (d.type == "flow") ? d.dy : (d.type == "instant") ? 5 : d.height
+		        })
+		        .attr("rx", function(d){
+		        	if(d.type == "flow") return 0;
+		        	var w =  ((d.end*zoom.scale() - d.start*zoom.scale())<5) ? 5 : (d.end*zoom.scale() - d.start*zoom.scale())
+		        	var h = (d.type == "flow") ? d.dy : d.height
+		        	return (w >= h)? h/2 : w/2
+		        })	
+		        .attr("ry", function(d){
+		        	if(d.type == "flow") return 0;
+					var w =  ((d.end*zoom.scale() - d.start*zoom.scale())<5) ? 5 : (d.end*zoom.scale() - d.start*zoom.scale())
+		        	var h = (d.type == "flow") ? d.dy : d.height
+		        	return (w >= h)? h/2 : w/2
+		        })
+		      	.style("fill-opacity", function(d){
+		      		return (d.type == "flow") 
+		      				? ( _currentEvent && d.context == _currentEvent.context ) ? 0.5 : 0.05 
+		      				: ( _currentEvent && d.context == _currentEvent.context ) ? 0.7 : 0.3
+		      	}) 
+		      	// 		? ((currentIndex!=undefined) && l.line[currentIndex] && d.id == l.line[currentIndex].id) ? 0.5 : 0.05 
+		      	// 		: ((currentIndex!=undefined) && l.line[currentIndex] && d.id == l.line[currentIndex].id) ? 0.7 : 0.3
+		      	// }) 
+		      	.style("stroke-width", function(d){
+		      		return (d.type == "flow") 
+		      		
+		      			? ( _currentEvent && d.context == _currentEvent.context ) ? 2 : 0.3 
+		      			: ( _currentEvent && d.context == _currentEvent.context ) ? 2 : 1.5
+		      			// ? ((currentIndex!=undefined) && l.line[currentIndex] && d.id == l.line[currentIndex].id) ? 2 : 0.3 
+		      			// : ((currentIndex!=undefined) && l.line[currentIndex] && d.id == l.line[currentIndex].id) ? 3 : 1.5
+		      	})
+		      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
+				.style("stroke", function (d,i) {
+					var c = 
+					( _currentEvent && d.context == _currentEvent.context )
+						? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+						: color(d,d.serieIndex)
+					return c;
+				})
+			
+			
+			x.range([0,availableWidth*zoom.scale()])
+			xAxisG.call(axis);	
 		      	
-	   	
+		}	   	
 
+		chart.redraw();
 
+		var navigate = function(){
+		    var currentEvent = l.line[currentIndex]; 
+		    _currentEvent =  l.line[currentIndex]; 
+		    console.log("navigate",currentIndex,_currentEvent)
+		    if(showTooltip)
+			    tooltip
+			       	.anchor((currentEvent.type == "flow")? currentEvent.y+currentEvent.dy/2  :currentEvent.y+currentEvent.height/2)
+			    	.color(color(currentEvent, currentEvent.serieIndex))
+			    	.show(currentEvent); 
+		    // var f = d3.locale(localeDef).timeFormat(dateFormat[currentEvent.type])
+		    currentEvent.color = d3.rgb(color(currentEvent, currentEvent.serieIndex)).darker(0.7).toString()
+		    onNavigate(currentEvent)	
+		  }
 
+		
+	 	var first = function(){
+	 		currentIndex = 0;
+	 		navigate()
+	 		return l.line[currentIndex]
+	 	}
 
+	 	var last = function(){
+	 		currentIndex =  l.line.length-1;
+	 		navigate()
+	 		return l.line[currentIndex]
+	 	}
+
+	 	var prev = function(){
+	 		if(currentIndex == undefined){
+	 			return first();
+	 		}
+	 		currentIndex--;
+	 		if(currentIndex<0) return last(); 
+	 		navigate()
+	 		return l.line[currentIndex]
+	 	}
+
+	 	var next = function(){
+	 		if(currentIndex == undefined){
+	 			return first();
+	 		}
+	 		currentIndex = (currentIndex) ? currentIndex : 0;
+	 		currentIndex++;
+	 		if((currentIndex > l.line.length-1)) return first();
+	 		navigate()
+	 		return l.line[currentIndex]
+	 	}
+
+	 	var current = function(){
+	 		if(currentIndex == undefined){
+	 			return first();
+	 		}
+	 		navigate()
+	 		return l.line[currentIndex]
+	 	}
+
+	 	var translateWrap = function(e){
+	 		chart.redraw();
+	 		g.select("g.nv-x.nv-axis")
+				.transition()
+				.duration(500)
+				.ease("cubic-in")
+				.attr("transform","translate("+(-e.start*zoom.scale()+margin.left+2+availableWidth*0.25)+","+(availableHeight+margin.top)+")")
+			g.select(".series")
+				.transition()
+				.duration(500)
+				.ease("cubic-in")
+				.attr("transform","translate("+(-e.start*zoom.scale()+margin.left+2+availableWidth*0.25)+","+(margin.top)+")")
+		}
+
+	 	chart.next = function(){
+	 		var e = next();
+	 		translateWrap(e)
+		}
+
+		chart.first = function(){
+	 		var e = first();
+	 		translateWrap(e)
+		}
+
+		chart.last = function(){
+	 		var e = last();
+	 		translateWrap(e)
+		}
+
+	 	chart.prev = function(){
+	 		var e = prev();
+	 		translateWrap(e)
+	 	}
+
+		var onZoomWithTooltip = function(){
+					
+					var e;
+					if(prevZoom 
+						&& prevZoom != zoom.scale()){
+						zoom.translate(prevTranslate)
+					}
+					if(
+						prevZoom 
+						&& prevZoom == zoom.scale() 
+					){
+						if(prevTranslate && (zoom.translate()[0] != prevTranslate[0])){
+							if(zoom.translate()[0]-prevTranslate[0]>0){
+								e = prev();
+							}else{
+								e = next()
+							}
+						} else if(!prevTranslate){
+							e = first()
+						}
+					}else{
+						e = current()
+					}	
+
+					prevTranslate = zoom.translate();
+					prevZoom = zoom.scale();
+
+					translateWrap(e)
+			}
+
+		var onZoomWithoutTooltip = function(){
+			chart.redraw();
+		}	
+
+		if(showTooltip){	
+			zoom.on("zoomend", onZoomWithTooltip)
+			
+		} else{
+			zoom
+				.on("zoomend", onZoomWithoutTooltip)
+				.on("zoom", function(){
+					g.select("g.nv-x.nv-axis")
+						.transition()
+						// .duration(500)
+						// .ease("cubic-in")
+						.attr("transform","translate("+zoom.translate()[0]+","+(availableHeight+margin.top)+")")
+					g.select(".series")
+						.transition()
+						// .duration(500)
+						// .ease("cubic-in")
+						.attr("transform","translate("+zoom.translate()[0]+","+(margin.top)+")")
+						})
+		}	
+
+		if(_currentEvent){
+
+				var index = l.line.map(function(d) {return d.context}).indexOf(_currentEvent.context)
+				if(index >=0){
+					currentIndex = index;
+					if(showTooltip)	{
+						translateWrap(current());
+					}else{
+						current();
+						chart.redraw();
+					}	
+				}else{
+						if(showTooltip)	translateWrap(first())
+				}
+			}else{
+				if(showTooltip)	translateWrap(first())
+			}
+
+	
  		legend.dispatch.on("stateChange", function (newState) {
           tooltip.hide();
           state = newState;
@@ -1022,26 +1176,12 @@ nv.models.timelineChart = function(){
             state.disabled = e.disabled;
           }
           onNavigate();
-          tooltip.hide();
-          brush.clear();
+          if(showTooltip) tooltip.hide();
           chart.update();
         });
 
     	});
 		
-		var redrawBrushCurrentPos = function(){
-			tooltip.hide();
-			
-			buttons.forEach(function(b){b.disabled = false})
-			currentIndex = undefined;
-		    var e = brush.extent().map(function(d){return brushScale(d)});
-		    brushCurrentPos
-		    	.attr("x", e[0]+(e[1]-e[0])/2)
-		}   
-
-		brush
-			.on("brushend", function(){onNavigate(); tooltip.hide(); chart.update()})
-			.on("brush", redrawBrushCurrentPos)
     	return chart;
 
     } 

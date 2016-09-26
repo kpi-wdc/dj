@@ -43,6 +43,7 @@ System.config({
     "angular-leaflet": "components/angular-leaflet/dist/angular-leaflet-directive.js",
     "d3": "components/d3/d3.js",
     "d3.layout.cloud": "components/d3.layout.cloud/build/d3.layout.cloud.js",
+    "d3.timer": "components/d3.timer/index.js",    
     "jsinq": "components/jsinq/source/jsinq.js",
     "jsinq-query": "components/jsinq/source/jsinq-query.js",
     "json-stat": "components/jsonstat/json-stat.max.js",
@@ -223,6 +224,12 @@ System.config({
     },
     "d3.layout.cloud": {
       "exports": "d3.layout.cloud",
+      "deps": [
+        "d3"
+      ]
+    },
+    "d3.timer": {
+      "exports": "d3.timer",
       "deps": [
         "d3"
       ]

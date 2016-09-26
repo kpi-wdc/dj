@@ -32,12 +32,18 @@ m.service('TimelineChartAdapter', ["i18n" , function (i18n) {
         var timeStamp = (d.type == "instant")
           ? i18n.timeFormat(d.originalStart,options.timeFormat.instant)
           : (d.type == "process")
-            ? i18n.timeFormat(d.originalStart,options.timeFormat.process)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.process)
-            : i18n.timeFormat(d.originalStart,options.timeFormat.flow)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.flow)
+            ? (i18n.timeFormat(d.originalStart,options.timeFormat.process) === i18n.timeFormat(d.originalEnd,options.timeFormat.process)) 
+              ? i18n.timeFormat(d.originalStart,options.timeFormat.instant)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.instant)
+              : i18n.timeFormat(d.originalStart,options.timeFormat.process)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.process)
+            : (i18n.timeFormat(d.originalStart,options.timeFormat.flow) === i18n.timeFormat(d.originalEnd,options.timeFormat.flow))
+              ? i18n.timeFormat(d.originalStart,options.timeFormat.process)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.process)
+              : i18n.timeFormat(d.originalStart,options.timeFormat.flow)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.flow)
         
         var headline = (scope.translations.lookup(scope.dictionary.lookup(angular.copy(d.context)).headline));
         
-        return ( '<h5' 
+        return ( 
+          
+          '<h5' 
           +'   style= "font-size: 12px;' 
           +'   font-weight: bold;' 
           +'   margin: 0px;">'
@@ -47,9 +53,12 @@ m.service('TimelineChartAdapter', ["i18n" , function (i18n) {
           +'    style="font-size: 12px;' 
           +'    margin: 0px;'
           +'    text-align:justify;' 
-          +'    font-stretch: ultra-condensed;">'
+          +'    font-stretch: ultra-condensed;'
+          +'    line-height:1;"'
+          +'>'
           + ((headline)? headline: "")
-          +'</h4>')
+          +'</h4>'
+          )
       }
       // options.chart.isArea = decoration.isArea;
       options.chart.color = (decoration.color) ? decoration.color : null;
