@@ -193,13 +193,35 @@ i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
       "shortMonths": ["Січ","Лют","Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"]
     }
   }
+
+
+  var LocalI18n = function(){}
+  LocalI18n.prototype = {
+    _table: {},
+    translate: function(key){
+      var locale = $translate.use() || "en";
+      return (this._table[key]) ? this._table[key][locale]|| this._table[key]["en"] || key : key 
+    },
+    _init:function(translations){
+      for(let i in translations){
+            this._table[translations[i].key] = translations[i].value;
+          }
+          return this;
+    }
+  }
+
   angular.extend(this,{
 
     locale : function(){
       return $translate.use() || "en";
     },
 
-     localeDef : function(){
+    translation: function(translations){
+      return new LocalI18n()._init(translations)
+    },
+    
+
+    localeDef : function(){
       var l = this.locale();
       return   localeDef[l];
     },

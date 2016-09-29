@@ -35,6 +35,11 @@
         "type":"object",
         "title":"Show Details",
         "properties": {
+            "category":{
+                "type":"boolean",
+                "title":"Category",
+                "default":true
+            },
         	"timestamp":{
         		"type":"boolean",
         		"title":"Timestamp",

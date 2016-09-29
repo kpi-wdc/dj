@@ -35,15 +35,36 @@ dictionaryModule.run(function ($http,i18n,$dps) {
             });
 });
 
+
+
 dictionaryModule.service("$lookup",[ "$http","$translate", "i18n", "$dps",
   function($http, $translate, i18n, $dps){
-  
+    var LocalDictionary = function(){
+    }
+
+    LocalDictionary.prototype = {
+        
+        _table: {},
+        
+        lookup: function(key){
+          return this._table[key] || key
+        },
+        
+        _init: function(dict){
+          for(let i in dict){
+            this._table[dict[i].key] = dict[i].value;
+          }
+          return this;
+        }  
+    }
 
     var lookup = function(key){
       return dictionaryModule.dictionary[key] || key
     };
 
-   
+     lookup.dictionary = function(dict){
+        return new LocalDictionary()._init(dict)      
+     }
 
     lookup.reload = function(){
       // $http.get("./api/dictionary")
@@ -70,3 +91,6 @@ dictionaryModule.service("$lookup",[ "$http","$translate", "i18n", "$dps",
 
   return lookup;
 }]);
+
+
+

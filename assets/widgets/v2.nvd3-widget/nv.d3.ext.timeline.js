@@ -208,7 +208,7 @@ layout.prototype = {
 		    return a.lane - b.lane
         })
 
-        this.domain = [this.line[0].originalStart, this.line[this.line.length-1].originalEnd] 
+        // this.domain = [this.line[0].originalStart, this.line[this.line.length-1].originalEnd] 
         return this;
       }
   }
@@ -336,6 +336,9 @@ foTooltip.prototype = {
 			height:thos.height()-thos._margin.top-thos._margin.bottom,
 			class: 'fo-tooltip'
 		}
+		
+		// console.log("show",wr)
+
 		this.contentWrapper = this._wrapper.append("foreignObject")
 							.attr(wr)
 		
@@ -387,67 +390,74 @@ foTooltip.prototype = {
 
         // console.log(c,this.contentWrapper.select("div.tooltip-container").node())
 					    	
+		d3.timeout(function(){
+				thos._height = c[0][0].getBoundingClientRect().height;
+				wr.y = thos._y+thos._anchor-thos._height/2//+this._margin.top;
+				wr.y = (wr.y < (thos._margin.top+2)) ? thos._margin.top+2 : wr.y;
+				wr.height = thos._height;
+
+				// console.log("calc", wr)
+				if(thos._height>0){
+						thos.contentWrapper.attr(wr);
+						
+						var fo = {
+							lt: {
+									x: 0,
+									y: wr.y-thos._margin.top-thos._y
+							},
+
+							rt:{
+									x: thos._width-15,
+									y:wr.y-thos._margin.top-thos._y
+							},
+								
+							rb:{
+									x:thos._width-15,
+									y:wr.y+thos._height+thos._margin.bottom-thos._y
+							},
+
+							lb:{
+								x: 0,
+								y: wr.y+thos._height+thos._margin.bottom-thos._y
+							},
+
+							sa:{
+								x:thos._width-15,
+								y:thos._anchor-5
+							},
+
+							ma:{
+								x:thos._width,
+								y:thos._anchor
+							},
+
+							ea:{
+								x:thos._width-15,
+								y:thos._anchor+5
+							}		
+						}
+						
+						
+						thos._wrapper.insert("path",":first-child")
+					       	.attr("d", function(d,i){
+					       		return generatePath(
+					            	[fo.lt,fo.rt,fo.sa,fo.ma,fo.ea,fo.rb,fo.lb,fo.lt]
+					          	)
+					        })
+					        .attr("transform","translate("+thos._x+","+thos._y+")")
+					        .style("stroke",d3.rgb(thos._color).darker(1))//this._color)
+					        .style("stroke-width",0.6)
+					        .style("fill", thos._bgColor)//d3.rgb(this._color).brighter(5.4))
+					        .style("fill-opacity", 1)
+					        .style("filter","url("+document.location.href+"#drop-shadow)")	
+						thos._wrapper
+						.transition()
+						.duration(500)
+						.ease("cubic-in")
+						.attr("opacity",1)
+				}		
+		},50)
 		
-		this._height = c[0][0].getBoundingClientRect().height;
-		wr.y = this._y+this._anchor-this._height/2//+this._margin.top;
-		wr.y = (wr.y < (thos._margin.top+2)) ? thos._margin.top+2 : wr.y;
-		this.contentWrapper.attr(wr);
-		
-		var fo = {
-			lt: {
-					x: 0,
-					y: wr.y-thos._margin.top-thos._y
-			},
-
-			rt:{
-					x: thos._width-15,
-					y:wr.y-thos._margin.top-thos._y
-			},
-				
-			rb:{
-					x:thos._width-15,
-					y:wr.y+thos._height+thos._margin.bottom-thos._y
-			},
-
-			lb:{
-				x: 0,
-				y: wr.y+thos._height+thos._margin.bottom-thos._y
-			},
-
-			sa:{
-				x:thos._width-15,
-				y:thos._anchor-5
-			},
-
-			ma:{
-				x:thos._width,
-				y:thos._anchor
-			},
-
-			ea:{
-				x:thos._width-15,
-				y:thos._anchor+5
-			}		
-		}
-		
-		
-		this._wrapper.insert("path",":first-child")
-	       	.attr("d", function(d,i){
-	       		return generatePath(
-	            	[fo.lt,fo.rt,fo.sa,fo.ma,fo.ea,fo.rb,fo.lb,fo.lt]
-	          	)
-	        })
-	        .attr("transform","translate("+this._x+","+this._y+")")
-	        .style("stroke",d3.rgb(this._color).darker(1))//this._color)
-	        .style("stroke-width",0.6)
-	        .style("fill", this._bgColor)//d3.rgb(this._color).brighter(5.4))
-	        .style("fill-opacity", 1)
-	        .style("filter","url("+document.location.href+"#drop-shadow)")	
-		this._wrapper
-		.transition()
-		.duration(500)
-		.ease("cubic-in")
-		.attr("opacity",1)
 	},
 
 	hide: function(d){
@@ -525,7 +535,7 @@ nv.models.timelineChart = function(){
         //  
 
         var domain = [];
-        var currentIndex, _currentEvent;
+        var currentIndex, _currentEvent, _prevEvent;
         var tooltip =  new foTooltip();
        
         var zoom = d3.behavior
@@ -604,7 +614,8 @@ nv.models.timelineChart = function(){
     function chart (selection){
 
     	selection.each(function (_d) {
-    		
+    		if (_d.length ==0) return;
+
     		_d.forEach(function(d,i){
 		      insertSerieIndex(d.values,i)
 		    })
@@ -794,7 +805,6 @@ nv.models.timelineChart = function(){
 
 
 		chart.destroy = function(){
-			console.log("destroy")
 			tooltip.destroy(); 
 		}
 
@@ -866,7 +876,9 @@ nv.models.timelineChart = function(){
 	      	// 	return 0
 	      	// })
 	      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
-			.style("stroke", function (d,i) {return color(d,d.serieIndex)})
+			.style("stroke", function (d,i) {
+				return color(d,d.serieIndex)
+			})
 			.style("cursor", "pointer")
 			.on("mouseover", function(d){
 				if(!showTooltip){
@@ -905,6 +917,7 @@ nv.models.timelineChart = function(){
 					}else{
 						currentIndex = undefined;
 						_currentEvent = undefined;
+						_prevEvent = undefined;
 						navigate();
 						chart.redraw();
 					}	
@@ -944,22 +957,30 @@ nv.models.timelineChart = function(){
 			    	return (d.type == "instant")? d.start*zoom.scale()-2.5 : d.start*zoom.scale()
 		      	})
 		      	.attr("y", function (d) {
-		      		return  (d.type == "instant") ? d.y+d.height/2-2.5 : d.y
+		      		return  (d.type == "instant")
+		      		? d.y+d.height/2-2.5
+		      		:(d.type == "process") 
+		      			? d.y+d.height/2-3.5
+		      			: d.y
 		      	})
 		      	.attr("width", function (d) {
 		      		return ((d.end*zoom.scale() - d.start*zoom.scale())<5) ? 5 : d.end*zoom.scale() - d.start*zoom.scale()
 		      	})
 		      	.attr("height", function (d) {
-		      	  return (d.type == "flow") ? d.dy : (d.type == "instant") ? 5 : d.height
+		      	  return (d.type == "flow") 
+		      	  	? d.dy 
+		      	  	: (d.type == "instant")
+		      	  		? 5
+		      	  		: 7 // || d.type == "process") ? 5 : d.height
 		        })
 		        .attr("rx", function(d){
-		        	if(d.type == "flow") return 0;
+		        	if(d.type != "instant") return 0;
 		        	var w =  ((d.end*zoom.scale() - d.start*zoom.scale())<5) ? 5 : (d.end*zoom.scale() - d.start*zoom.scale())
 		        	var h = (d.type == "flow") ? d.dy : d.height
 		        	return (w >= h)? h/2 : w/2
 		        })	
 		        .attr("ry", function(d){
-		        	if(d.type == "flow") return 0;
+		        	if(d.type != "instant") return 0;
 					var w =  ((d.end*zoom.scale() - d.start*zoom.scale())<5) ? 5 : (d.end*zoom.scale() - d.start*zoom.scale())
 		        	var h = (d.type == "flow") ? d.dy : d.height
 		        	return (w >= h)? h/2 : w/2
@@ -982,11 +1003,55 @@ nv.models.timelineChart = function(){
 		      	})
 		      	.style("fill", function (d,i) {return color(d, d.serieIndex)})
 				.style("stroke", function (d,i) {
-					var c = 
-					( _currentEvent && d.context == _currentEvent.context )
-						? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
-						: color(d,d.serieIndex)
-					return c;
+					if(!_currentEvent){
+						return color(d,d.serieIndex);
+					}
+
+					return (
+						(d.context == _currentEvent.context)
+									? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+									: color(d,d.serieIndex)	
+					)
+									
+					// if(_currentEvent && (d.context == _currentEvent.context))
+					// console.log(_prevEvent, _currentEvent, color(d,d.serieIndex))
+					
+					// if(!_currentEvent){
+					// 	console.log("return",(d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString()));
+					// 	return (d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString());
+					// } 					
+					// if(!_prevEvent){
+					// 	if(_currentEvent && (d.context == _currentEvent.context))
+					// 	console.log("return",(( _currentEvent && (d.context == _currentEvent.context))
+					// 			? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+					// 			: d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString()));
+
+					// 	return (( _currentEvent && (d.context == _currentEvent.context))
+					// 			? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+					// 			: d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString());
+					// }
+					// if(_currentEvent && (d.context == _currentEvent.context)){
+					// 	console.log(d.context,_prevEvent.context,_currentEvent.context,( d.context == _prevEvent.context && d.context == _currentEvent.context ))
+					// 	console.log("return",(
+					// 		( d.context == _prevEvent.context ) 
+					// 			? (d.context == _currentEvent.context)
+					// 				? color(d,d.serieIndex)
+					// 				: d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString()
+					// 			: (d.context == _currentEvent.context)
+					// 				? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+					// 				: d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString()	
+					// 	));
+					// }				 
+					// return (
+					// 	( d.context == _prevEvent.context) 
+					// 		? (d.context == _currentEvent.context)
+					// 			? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+					// 			: d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString()
+					// 		: (d.context == _currentEvent.context)
+					// 			? d3.rgb(color(d,d.serieIndex)).darker(0.7).toString()
+					// 			: d3.rgb(color(d,d.serieIndex)).brighter(0.7).toString()	
+					// )			
+
 				})
 			
 			
@@ -998,16 +1063,20 @@ nv.models.timelineChart = function(){
 		chart.redraw();
 
 		var navigate = function(){
-		    var currentEvent = l.line[currentIndex]; 
+			// console.log(currentIndex)
+		    var currentEvent = l.line[currentIndex];
+		    _prevEvent = _currentEvent;
 		    _currentEvent =  l.line[currentIndex]; 
-		    console.log("navigate",currentIndex,_currentEvent)
+		    // console.log("navigate",currentIndex,_currentEvent)
 		    if(showTooltip)
 			    tooltip
 			       	.anchor((currentEvent.type == "flow")? currentEvent.y+currentEvent.dy/2  :currentEvent.y+currentEvent.height/2)
 			    	.color(color(currentEvent, currentEvent.serieIndex))
 			    	.show(currentEvent); 
 		    // var f = d3.locale(localeDef).timeFormat(dateFormat[currentEvent.type])
-		    currentEvent.color = d3.rgb(color(currentEvent, currentEvent.serieIndex)).darker(0.7).toString()
+		    currentEvent._color = d3.rgb(color(currentEvent, currentEvent.serieIndex)).darker(0.7).toString()
+		    currentEvent._bgColor = d3.rgb(color(currentEvent, currentEvent.serieIndex)).brighter(5.55).toString()
+		    
 		    onNavigate(currentEvent)	
 		  }
 
@@ -1089,11 +1158,13 @@ nv.models.timelineChart = function(){
 
 		var onZoomWithTooltip = function(){
 					
-					var e;
+					var e = current();
 					if(prevZoom 
 						&& prevZoom != zoom.scale()){
 						zoom.translate(prevTranslate)
+
 					}
+
 					if(
 						prevZoom 
 						&& prevZoom == zoom.scale() 

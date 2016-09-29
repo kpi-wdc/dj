@@ -166,6 +166,7 @@ define(["angular",
                               "APIProvider", 
                               "APIUser",
                               "i18n",
+                              "$lookup",
                               "parentHolder",
                               "dialog",
                               "Selector",
@@ -180,6 +181,7 @@ define(["angular",
               APIProvider, 
               APIUser, 
               i18n, 
+              $lookup,
               parentHolder,
               dialog,
               Selector,
@@ -351,36 +353,11 @@ define(["angular",
                 // console.log("Load data")
                 $scope.loadedData = resp.data.value;
                 if(params.dictionary) {
-                  $scope.dictionary =  params.dictionary(resp.data.value);
-                  var d = {};
-                  for(let i in $scope.dictionary){
-                   d[$scope.dictionary[i].key] = $scope.dictionary[i].value;
-                  }
-                  $scope.dictionary = {
-                    table: d,
-                    lookup: (key) => {
-                      return $scope.dictionary.table[key] || key
-                    }
-                  }    
+                  $scope.dictionary =  $lookup.dictionary(params.dictionary(resp.data.value));
                 };
 
                 if(params.translations) {
-                  
-                  $scope.translations = params.translations(resp.data.value);   
-                  var d = {};
-                  for(let i in $scope.translations){
-                   d[$scope.translations[i].key] = $scope.translations[i].value;
-                  }
-                  
-                  $scope.translations = {
-                    table: d,
-                    lookup: (key) => {
-                      if ($scope.translations.table[key]){
-                        return $scope.translations.table[key][i18n.locale()] || key  
-                      }
-                      return key
-                    }
-                  }      
+                  $scope.translations = i18n.translation(params.translations(resp.data.value)); 
                 }  
                 $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
                     params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
@@ -455,7 +432,7 @@ define(["angular",
         }
           
           $scope.settings = {
-                  options : angular.copy($scope.options), 
+                  options : angular.copy($scope.expandOptions($scope.options)),//angular.copy($scope.options), 
                   data : angular.copy($scope.data)
           }
       };
@@ -501,6 +478,9 @@ define(["angular",
         }, true)
 
         .removal(() => {
+
+          if(params.onRemove) params.onRemove();
+          
           pageSubscriptions().removeListeners({
               receiver: $scope.widget.instanceName,
               signal: "selectSerie"
@@ -512,6 +492,7 @@ define(["angular",
         })
 
         .openCustomSettings(function () {
+          if(params.onBeforeConfig) params.onBeforeConfig(); 
           $scope.wizard = params.wizard;
           return $scope.wizard.start($scope)
         })
@@ -519,10 +500,24 @@ define(["angular",
         .translate(function(){
           if(params.translate){
             params.translate();
-            return;
           }
           $scope.translate();
         })
+
+        .beforeDesignMode(function(){
+          // console.log("beforeDesignMode")
+          if(params.onBeforeDesignMode) params.onBeforeDesignMode();
+        })
+
+        .beforePresentationMode(function(){
+          // console.log("beforePresentationMode")
+          if(params.onBeforePresentationMode) params.onBeforePresentationMode();
+        })
+
+        .beforeChangePage(function(){
+          if(params.onBeforeChangePage) params.onBeforeChangePage();
+        })
+
 
         .provide("selectSerie", (e,selection) =>{
           if($scope.decorationAdapter.onSelectSerie){

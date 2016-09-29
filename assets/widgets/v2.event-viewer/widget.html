@@ -1,12 +1,22 @@
 <div  class="row" ng-controller="EventViewerController" style="margin:0 0.5em;">
 
   <div ng-if = "context">
+    <h4  ng-if="widget.showDetails.category" style="
+          color: {{context.context.color}};
+          font-weight: bold;
+          margin: 0px 5px 0px 5px;
+          font-stretch: condensed;
+          font-size: initial;
+          line-height: 0.9;
+    ">
+      {{context.category}}:
+    </h4>
 
     <h4 ng-if="widget.showDetails.timestamp" style="
           color: {{context.context.color}};
           /* font-weight: bold; */
           /* text-align: right; */
-          margin: 0px 5px 5px 5px;
+          margin: 0px 5px 0px 5px;
           font-stretch: condensed;
           font-size: initial;
     ">
@@ -14,9 +24,10 @@
     </h4>
     <h4 ng-if="widget.showDetails.headline" style="
           color: {{context.context.color}};
-          margin: 0px 5px 10px 5px;
+          margin: 0px 5px 5px 5px;
           font-stretch: condensed;
-          line-height: 1;
+          line-height: 0.9;
+          font-weight: bold;
           font-size: larger;
     ">
       {{context.context.headline}}
@@ -28,9 +39,14 @@
           line-height: 1.1;
           margin: 5px;
     ">
-    <div  ng-if="context.context.media"  class="row"  style="margin:0">
+    <div  ng-if="context.context.media"  class="row"  style="margin:0; line-height: 0.9;">
       <!-- <div class="column medium-6 left-column"> -->
-        <img ng-if="context.context.media" ng-src="{{context.context.media}}" style="float:left;width:30%;margin:10px;">
+        <img ng-if="context.context.media" ng-src="{{context.context.media}}" 
+          style="
+            float:left;
+            margin: 10px 10px 10px 0px;
+            width:{{(context.context.text)?'50%':'100%'}};
+        ">
       <!-- </div> -->
       <!-- <div class="column medium-6 left-column"> -->
        {{context.context.text}}
@@ -38,7 +54,7 @@
       
 
     </div> 
-    <div  ng-if="!context.context.media"  class="row"  style="margin:0">
+    <div  ng-if="!context.context.media"  class="row"  style="margin:0; line-height: 0.9;">
       {{context.context.text}}
     </div>  
 

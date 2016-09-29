@@ -13,7 +13,7 @@ angular
       $scope.widget.timeFormat = $scope.widget.timeFormat || {
         flow: "YYYY",
         process: "MM.YYYY",
-        instant: "dd DD/MM/YYYY"
+        instant: "DD/MM/YYYY"
       };
       
         
@@ -56,7 +56,8 @@ angular
         $scope.context = undefined;
       }else{
 
-       
+       console.log(d)
+
        var timeStamp = (d.data.type == "instant")
           ? i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.instant)
           : (d.data.type == "process")
@@ -67,27 +68,30 @@ angular
               ? i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.process)+" - "+i18n.timeFormat(d.data.originalEnd,$scope.widget.timeFormat.process)
               : i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.flow)+" - "+i18n.timeFormat(d.data.originalEnd,$scope.widget.timeFormat.flow)
          
-       // var timestamp = (d.data.type == "instant")
-       //    ? i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.instant)
-       //    : (d.data.type == "process")
-       //      ? i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.process)+" - "+i18n.timeFormat(d.data.originalEnd,$scope.widget.timeFormat.process)
-       //      : i18n.timeFormat(d.data.originalStart,$scope.widget.timeFormat.flow)+" - "+i18n.timeFormat(d.data.originalEnd,$scope.widget.timeFormat.flow)
-         
+       
         var tmp = d.dict.lookup(angular.copy(d.data.context));
+        console.log(
+            d.data.category,
+            d.dict.lookup(d.data.category), 
+            d.tr.translate(d.dict.lookup(angular.copy(d.data.category)))
+        )
         $scope.context = {
-          // start : i18n.timeFormat(d.data.originalStart,"MMM YYYY"),
-          // end : i18n.timeFormat(d.data.originalEnd,"MMM YYYY"),
           timestamp:timeStamp,
           type : d.data.type,
+          category: d.tr.translate(d.dict.lookup(angular.copy(d.data.category)).label),
           context:{
-            color: d.data.color,
-            headline:d.tr.lookup(tmp.headline),
-            text:d.tr.lookup(tmp.text),
-            media: d.tr.lookup(tmp.media),
+
+            color: d.data._color,
+            bgColor: d.data._bgColor,
+            headline:d.tr.translate(tmp.headline),
+            text:d.tr.translate(tmp.text),
+            media: d.tr.translate(tmp.media),
             url:(tmp.url)
                 ? {
-                    href : d.tr.lookup(tmp.url.href),
-                    label : decodeURIComponent(d.tr.lookup(tmp.url.href))
+                    href : d.tr.translate(tmp.url.href),
+                    label : (tmp.url.label && tmp.url.label !='')
+                      ? d.tr.translate(tmp.url.label)
+                      : decodeURIComponent(d.tr.translate(tmp.url.href))
                   }
                 : undefined   
           }

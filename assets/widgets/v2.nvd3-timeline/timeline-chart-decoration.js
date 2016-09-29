@@ -147,6 +147,7 @@ m.factory("TimelineChartDecoration",[
 				          	thos.data = resp.value;
 				          	thos.conf.dataID = resp.id;
 				          	thos.conf.serieDataId = resp.id;
+				          	thos.updateData = true;
 				          	thos.loadData();
 				        })
 				        .error((data, status) => {
@@ -178,16 +179,22 @@ m.factory("TimelineChartDecoration",[
 							if(!thos.conf.decoration){
 			            		thos.conf.decoration = chartAdapter.getDecoration(thos.options);
 			            	}
-			            	thos.conf.decoration.setColor = (palette) => { console.log(thos, palette); thos.conf.decoration.color = angular.copy(palette) }
+			            	thos.conf.decoration.setColor = (palette) => {thos.conf.decoration.color = angular.copy(palette) }
 			            	// console.log("thos.options",thos.options)
 						}),
 						thos.loadSeries().then((resp) => {
 							// console.log("resp",resp.data.value)
+							thos.metadata = resp.data.value.metadata; 
 							thos.data =resp.data.value.data.series; //thos._prepare( resp.data.value)
 							// console.log("thos.data",thos.data)
 						})
 					])
 					.then(() => {
+						if(thos.updateData){
+							thos.conf.decoration.title = thos.metadata.dataset.label;
+							thos.conf.decoration.subtitle = thos.metadata.dataset.note;
+							thos.updateData = false;
+						}
 						thos.apply();
 					})
 

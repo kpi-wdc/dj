@@ -36,10 +36,35 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
             $scope.data = $scope.params.serieAdapter.getSeries($scope.loadedData)
             $scope.options.chart.localeDef = i18n.localeDef();
             $scope.settings = {
-                  options : angular.copy($scope.options), 
+                  options : angular.copy($scope.expandOptions($scope.options)), 
                   data : angular.copy($scope.data)
             }
           },
+
+          onBeforeDesignMode: () => {
+            if($scope.api && $scope.api.chart())
+                $scope.api.chart().destroy();
+          },
+
+          onBeforePresentationMode: () => {
+           if($scope.api && $scope.api.chart())
+                $scope.api.chart().destroy();
+          },
+
+          onBeforeConfig: () => {
+           if($scope.api && $scope.api.chart())
+                $scope.api.chart().destroy();
+          },
+
+          onRemove: () => {
+            $scope.api.chart().destroy();
+          },
+          
+          onBeforeChangePage: () => {
+            if($scope.api && $scope.api.chart())
+                $scope.api.chart().destroy();
+          },
+
 
           dictionary: (data) => {
             return data.dictionary;
@@ -48,6 +73,7 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
           translations: (data) => {
             return data.dictionary.filter((item) => {return item.type =="i18n"})
           },
+
 
           serieAdapter: {
             
@@ -66,7 +92,7 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
               result.forEach(function(d,i){
                 d.colorIndex = i;
                 d.category = $scope.dictionary.lookup(d.category).label;
-                d.category = $scope.translations.lookup(d.category)
+                d.category = $scope.translations.translate(d.category)
               })
               
               return result;

@@ -58,7 +58,7 @@
           },
           // Update chart with new options
           updateWithOptions: function (options) {
-            
+            // console.log("updateWithOptions", scope.chart)
             if(scope.chart && scope.chart.destroy) scope.chart.destroy();
 
             scope.data = scope.settings.data;
@@ -108,6 +108,7 @@
 
             nv.addGraph(function () {
               // Update the chart when window resizes
+            
               nv.utils.windowResize(function () {
                 scope.chart.update();
               });

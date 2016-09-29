@@ -141,6 +141,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
   $urlMatcherFactoryProvider.strictMode(false);
 
   $urlRouterProvider.when(`/app/${appName}`, ($state) => {
+    
     $state.go('page', {href: ''});
   });
 
@@ -258,8 +259,10 @@ app.factory('appHotkeysInfo', ['config', (config) => {
 
 
 app.service('app', function ($http, $state, $stateParams, $log, config, $rootScope, $modal,
-                             $translate, appUrls, appName, fullReload, eventWires, APIUser,
-                             hotkeys, splash, appHotkeysInfo,globalConfig,dialog,portal) {
+                             $translate, appUrls, appName, fullReload, eventWires, APIUser, 
+                             // APIProvider, 
+                             hotkeys, splash, appHotkeysInfo,globalConfig,
+                             dialog, portal) {
 
   let pageConf;
  
@@ -283,6 +286,10 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
     pageIndexByHref(href) {
+      
+      var user = new APIUser();
+      user.invokeAll('BEFORE_CHANGE_PAGE_SLOT');
+      
       let result = config.pages.findIndex(p => p.href === href);
       if (result !== -1) {
         return result;
@@ -303,6 +310,7 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
     },
 
     deletePage(page) {
+      
       const curPageHref = $stateParams.href;
       const index = config.pages.indexOf(page);
       const deletedPageHref = config.pages[index].href;
@@ -723,7 +731,8 @@ app.controller('MetaInfoController', function ($scope, $rootScope, appName, app,
 
 app.controller('MainController', function ($scope, $location, $cookies, $window, $translate,
                                            alert, app, config, user, appUrls, globalConfig,
-                                           fullReload, hotkeys,splash,appHotkeysInfo) {
+                                           fullReload, hotkeys,splash,appHotkeysInfo,
+                                           APIProvider, APIUser) {
   
   if(user.isOwner || user.isCollaborator){
     // console.log("Add hotkeys")
@@ -833,6 +842,13 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   $scope.$watch('globalConfig.designMode', () => {
     const cnf = $scope.globalConfig;
     cnf.debugMode = cnf.debugMode && !cnf.designMode;
+    var user = new APIUser();
+    if(globalConfig.designMode) {
+      user.invokeAll(APIProvider.BEFORE_DESIGN_MODE_SLOT);
+    }else{
+      user.invokeAll(APIProvider.BEFORE_PRESENTATION_MODE_SLOT);
+    }  
+   
   });
 
   $window.onbeforeunload = (evt) => {

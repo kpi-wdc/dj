@@ -3,20 +3,24 @@ import angular from 'angular';
 
 const m = angular.module('app.widgets.v2.timeline-chart-adapter', [ ]);
 
-m.service('TimelineChartAdapter', ["i18n" , function (i18n) {
+m.service('TimelineChartAdapter', ["i18n","$lookup","$translate" , 
+function (i18n, $lookup, $translate) {
   this.applyDecoration = function (options, decoration,selector,api,scope) {
     if (angular.isDefined(decoration) && angular.isDefined(options)) {
+      
+      // console.log(scope);
+
       options.chart.height = decoration.height;
       options.chart.width = decoration.width;
       
-      options.title.text = decoration.title;
-      options.subtitle.text = decoration.subtitle;
-      options.caption.text = decoration.caption;
+      options.title.text = scope.translations.translate($translate.instant(decoration.title));
+      options.subtitle.text = scope.translations.translate($translate.instant(decoration.subtitle));
+      options.caption.text = scope.translations.translate($translate.instant(decoration.caption));
 
       decoration.timeFormat = decoration.timeFormat || {
         flow: "YYYY",
         process: "MM.YYYY",
-        instant: "dd DD/MM/YYYY"
+        instant: "DD/MM/YYYY"
       };
       
       options.timeFormat = decoration.timeFormat;
@@ -39,7 +43,7 @@ m.service('TimelineChartAdapter', ["i18n" , function (i18n) {
               ? i18n.timeFormat(d.originalStart,options.timeFormat.process)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.process)
               : i18n.timeFormat(d.originalStart,options.timeFormat.flow)+" - "+i18n.timeFormat(d.originalEnd,options.timeFormat.flow)
         
-        var headline = (scope.translations.lookup(scope.dictionary.lookup(angular.copy(d.context)).headline));
+        var headline = (scope.translations.translate(scope.dictionary.lookup(angular.copy(d.context)).headline));
         
         return ( 
           
@@ -56,7 +60,7 @@ m.service('TimelineChartAdapter', ["i18n" , function (i18n) {
           +'    font-stretch: ultra-condensed;'
           +'    line-height:1;"'
           +'>'
-          + ((headline)? headline: "")
+          + ((headline) ? headline : "")
           +'</h4>'
           )
       }

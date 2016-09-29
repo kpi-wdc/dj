@@ -106,6 +106,20 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
       return this;
     }
 
+    beforeDesignMode(slotFn) {
+      this.provide(APIProvider.BEFORE_DESIGN_MODE_SLOT, slotFn);
+      return this;
+    }
+
+     beforePresentationMode(slotFn) {
+      this.provide(APIProvider.BEFORE_PRESENTATION_MODE_SLOT, slotFn);
+      return this;
+    }
+
+
+
+    
+
     /**
      * @description Provides a slot which is
      * automatically called when widget config was changed
@@ -153,12 +167,35 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
       this.provide(APIProvider.REMOVAL_SLOT, slotFn);
       return this;
     }
+
+    beforeChangePage(slotFn) {
+      this.provide(APIProvider.BEFORE_CHANGE_PAGE_SLOT, slotFn);
+      return this;
+    }
+
+    // beforeConfig(slotFn) {
+    //   this.provide(APIProvider.BEFORE_CONFIG_SLOT, slotFn);
+    //   return this;
+    // }
+
+    // beforeCloneWidget(slotFn) {
+    //   this.provide(APIProvider.BEFORE_CLONE_WIDGET_SLOT, slotFn);
+    //   return this;
+    // }
+
+    
+
   }
 
   APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
   APIProvider.TRANSLATE_SLOT = 'TRANSLATE_SLOT';
   APIProvider.REMOVAL_SLOT = 'DESTROY_SLOT';
   APIProvider.OPEN_CUSTOM_SETTINGS_SLOT = 'OPEN_CUSTOM_SETTINGS_SLOT';
+  APIProvider.BEFORE_DESIGN_MODE_SLOT = 'BEFORE_DESIGN_MODE_SLOT';
+  APIProvider.BEFORE_PRESENTATION_MODE_SLOT = 'BEFORE_PRESENTATION_MODE_SLOT';
+  APIProvider.BEFORE_CHANGE_PAGE_SLOT = 'BEFORE_CHANGE_PAGE_SLOT';
+  // APIProvider.BEFORE_CONFIG_SLOT = 'BEFORE_CONFIG_SLOT';
+  // APIProvider.BEFORE_CLONE_WIDGET_SLOT = 'BEFORE_CLONE_WIDGET_SLOT';
 
   $rootScope.$watch(() => {
     const pageConf = app.pageConfig();
