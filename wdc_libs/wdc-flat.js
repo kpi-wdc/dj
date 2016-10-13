@@ -93,12 +93,14 @@ function getProperty(obj,path){
 	  			mp = (mp.indexOf(".")==0) ? mp.slice(1) : mp;
 	  			var o = getSimpleProperty(res,mp)
 	  			for(var i in o){
-	  				buf.push(getSimpleProperty(o,i))
+	  				var pushedValue = getSimpleProperty(o,i);
+	  				if(pushedValue !=undefined) buf.push(pushedValue)
 	  			}
 	  		}else{
 				var mp = p;
 	  			mp = (mp.indexOf(".")==0) ? mp.slice(1) : mp;
-	  			buf.push(getSimpleProperty(res,mp))
+	  			var pushedValue = getSimpleProperty(res,mp);
+	  			if(pushedValue !=undefined) buf.push(pushedValue)
 	  		}
 	    })
   	})

@@ -8,6 +8,7 @@
 var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
 var I18N = require("../../wdc_libs/wdc-i18n");
 var util = require("util");
+var Query = require("../../wdc_libs/wdc-query-async");
 
 
 var getQueryResult = function(query,proc,proc_params){
@@ -250,6 +251,103 @@ module.exports = {
       }, function (err) {
         res.negotiate(err);
       });
+  },
+
+
+
+
+  /**
+   *  `DataProcController.updateProcData(<procdata item id>)`
+   *  Updates process result after update datasets
+   */
+  
+  updateProcData: function(req,resp){
+    
+    var id = req.params.id;
+    var processed = [];
+    var promises = [];
+    var c = 0;
+    
+
+    var process = function(cacheTree, cacheItem){
+      // console.log("create process", cacheItem)
+      var pr =  new Promise(function(resolve){
+      
+        // console.log("resolve promise ", cacheItem)
+        if(cacheItem.parent == undefined){
+          //execute dataset query
+          processed.push(cacheItem)
+          // console.log("QUERIED ", cacheItem.id)
+          cacheItem.index = c++;
+          setTimeout(function() {resolve(cacheItem)},100)
+        }else{
+          if(processed.map(function(item){return item.id}).indexOf(cacheItem.parent)<0){
+            var current = cacheTree.filter(function(item){return item.id == cacheItem.parent})[0]
+            processed.push(current)
+            // console.log("PUSH ", current.id)
+            // process(cacheTree,current)
+            //   .then(function(){
+               // console.log("PROCESSED ", cacheItem)
+                // execute data process
+                cacheItem.index = c++; 
+                setTimeout(function() {resolve(cacheItem)},100)
+              // })
+          }else{
+            // console.log(" PRECOND PROCESSED ", current.id)
+                // execute data process
+                cacheItem.index = c++; 
+               setTimeout(function() {resolve(cacheItem)},100)
+          }  
+        }
+      })
+      // console.log("pr",pr)
+      return pr
+    }
+
+    ProcData.find({})
+      .then(function(collection){
+         // return resp.json(
+          new Query()
+          .from(collection)
+          .select(function(item){
+            if(!item.value.metadata) return false;
+            if(!item.value.metadata.source) return false;
+            return item.value.metadata.source.dataset.id == id
+          })
+          .map(function(item){
+
+            return {
+              id: item.id,
+              parent: (item.parent.length == 0)? undefined : item.parent,
+              datasource: (item.parent.length == 0) ? item.value.metadata.source.dataset.id : undefined,
+              query: (item.parent.length == 0) ? item.value.metadata.selection:undefined,
+              postProcess: item.value.postProcess
+            }
+          })
+          .get()
+         // ) 
+          .then(function(result){
+            // console.log("founded processes", result)
+            result.forEach(function(item){
+              var p = process(result,item);
+              // console.log(" process promise ",p)
+              promises.push(p.then(function(r){console.log("resolved ",r.id, ((r.parent)? r.parent: "Q"), r.index)}))
+            })
+            console.log("promises ",promises)
+            Promise
+              .all(promises)
+              .then(function(result){
+                resp.json(promises);    
+              })
+          })
+      })
   }
+  
+
+
+
+
+
+
 };
 

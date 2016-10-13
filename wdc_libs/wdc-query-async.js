@@ -120,24 +120,18 @@ Query.prototype = {
  */  
 
     _distinct : function(){
-       if (this.data == undefined) throw "Cannot remove dublicates items from undefined data"
+        if (this.data == undefined) throw "Cannot remove dublicates items from undefined data"
   
-        this.result = [];
+        // this.result = [];
+        this.result = {};
         var thos = this;
         this.data.forEach(function(item){
-            var notExists = true;
-            thos.result.forEach(function(r){
-                if(util.isObject(item)){
-                  for(key in item){
-                      notExists &= item[key] != r[key];
-                  }
-                }else{
-                  notExists &= item != r;
-                }
-            })
-            if(notExists == true) thos.result.push(item)
+            var hash = JSON.stringify(item);
+            if( !thos.result[hash]) thos.result[hash] = item
         });
-        this.data = this.result;
+        this.data = [];
+        for(key in this.result) this.data.push(this.result[key])
+        // this.data = this.result;
         // return this;
     },
 

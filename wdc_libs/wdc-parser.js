@@ -155,38 +155,38 @@ var Parser = function(options){
 } 
 
 Parser.prototype = {
-	execute: function(cb){
+	execute: function(cb, args){
 		var thos = this;
 		var _execute = function(resolve){
 			if(thos.loadPromise){
 				thos.loadPromise.then(function(data){
 					thos.src = data;
 					thos.loadPromise = undefined;
-					resolve(cb(thos.src))
+					resolve(cb(thos.src, args))
 				})
-			} else { resolve(cb(thos.src)) }	
+			} else { resolve(cb(thos.src, args)) }	
 		}
 		return new Promise(function(resolve){ _execute(resolve)})
 	},
 
 	validate: function(){
-		if(this.options.validate) return this.execute(this.options.validate);
+		if(this.options.validate) return this.execute(this.options.validate, arguments);
 	},
 
 	metadata: function(){
-		if(this.options.metadata) return this.execute(this.options.metadata);
+		if(this.options.metadata) return this.execute(this.options.metadata, arguments);
 	},
 
 	data: function(){
-		if(this.options.data) return this.execute(this.options.data);
+		if(this.options.data) return this.execute(this.options.data, arguments);
 	},
 
 	dictionary: function(){
-		if(this.options.dictionary) return this.execute(this.options.dictionary);
+		if(this.options.dictionary) return this.execute(this.options.dictionary,arguments);
 	},
 
 	i18n: function(){
-		if(this.options.i18n) return this.execute(this.options.i18n);
+		if(this.options.i18n) return this.execute(this.options.i18n, arguments);
 	},
 }
 

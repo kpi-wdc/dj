@@ -58,6 +58,10 @@ module.exports = {
                           for (prop in params.query[i]) {
                             var values = getProperty(data, prop);
                             var test = params.query[i][prop];
+                            // console.log("values",values)
+                            // console.log("test",test)
+                            if(values == undefined) return false;
+                            
                             var orC = false;
                             values.forEach(function (valuesItem) {
                               test.forEach(function (testItem) {

@@ -7,6 +7,7 @@
 
 var converter = require("../../wdc_libs/wdc-xlsx-converter");
 var wdc_xlsx =  require("../../wdc_libs/parsers/wdc-xlsx");
+var ch_datasetGroupParser =  require("../../wdc_libs/parsers/ch-ftp");
 var mime = require('mime');
 var path = require('path');
 var uuid = require('uuid');
@@ -21,6 +22,8 @@ var toXLS = require("../../wdc_libs/wdc-table-generator").prepareXLS;
 var I18N = require("../../wdc_libs/wdc-i18n");
 var Cache = require("./Cache");
 var date = require("date-and-time");
+var Promise = require("bluebird");
+
 
 
 
@@ -78,6 +81,11 @@ var prepareEmptyDataset = function (obj) {
 // TODO select user from session and set commit.author in createDataset, updateDataset
 
 module.exports = {
+
+  getNewDatasetId: function(req, res){
+    var result = {id:uuid.v1()}
+    return res.send(result)
+  },
 
   createDataset: function (req, res) {
     sails.log.debug("#Create dataset");
@@ -265,6 +273,210 @@ module.exports = {
   },
 
 
+
+
+  updateChDatasetGroup: function (req, res) {
+    var groupResult = [];
+    var promises = [];
+    
+    var $createDataset = function(dataset){
+      dataset["commit/HEAD"] = true;
+      return Dataset
+                .create(dataset)
+                .then(function(obj){
+                  var result = prepareCommitInfo(obj);
+                   groupResult.push(result);
+                   return result
+                });
+    }
+
+    var $makeHeadCommit = function(dataset,obj){
+        return new Promise(function(resolve){
+          Dataset
+                .destroy(
+                  {
+                    "dataset/id": dataset.metadata.dataset.id,
+                    createdAt: {">=": obj.createdAt},
+                    "commit/HEAD": false
+                  })
+                .then(function () {
+                  Dataset
+                          .update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
+                          .then(function(obj){
+                            resolve(obj)
+                          })
+                })
+        })
+    }
+
+    var $updateDataset = function(dataset){
+      return new Promise(function (resolve){
+        Dataset
+                  .findOne(
+                    {
+                      "dataset/id": dataset.metadata.dataset.id,
+                      "commit/HEAD": true
+                    })
+                  .then(function (obj) {
+                    if (!obj) {
+                     
+                        $createDataset(dataset)
+                          .then(function(result){
+                            resolve(result);
+                          })
+                     
+                    } else {
+                        $makeHeadCommit(dataset,obj)
+                          .then(function(){
+                              $createDataset(dataset)
+                                .then(function(result){
+                                  resolve(result);
+                                })
+                          })
+                    }
+                  }) 
+      })
+    }
+
+
+    sails.log.debug("#Update dataset group");
+    req.file('file').upload({},
+      function (err, uploadedFiles) {
+
+        if (err) {
+          return res.negotiate(err);
+        }
+
+        if (uploadedFiles.length === 0) {
+          return res.badRequest('No file was uploaded');
+        }
+
+        var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+
+        ch_datasetGroupParser(uploadedFileAbsolutePath)
+          .then(function(datasetGroup){
+            datasetGroup.forEach(function(dataset,index){
+              var dict = dataset.dictionary;
+              dictionaryController.updateDictionary(dict);
+              delete dataset.dictionary;
+              dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
+               promises.push($updateDataset(dataset));
+            }); // datasetGroup.forEach
+            
+            Promise.all(promises)
+              .then(function(){
+                Cache.clear("dsm")
+                        .then(function(){
+                          return res.send(groupResult)    
+                        })
+              })
+          })
+      });
+  },
+
+
+
+  // updateChDatasetGroup: function (req, res) {
+  //   sails.log.debug("#Update dataset group");
+  //   req.file('file').upload({},
+  //     function (err, uploadedFiles) {
+
+  //       if (err) {
+  //         return res.negotiate(err);
+  //       }
+
+  //       if (uploadedFiles.length === 0) {
+  //         return res.badRequest('No file was uploaded');
+  //       }
+
+  //       var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+
+  //        ch_datasetGroupParser(uploadedFileAbsolutePath)
+  //         .then(function(datasetGroup){
+  //           // sails.log.debug(dataset)
+            
+  //           var promises = [];
+  //           groupResult = [];
+  //           // return res.send(datasetGroup)
+
+  //           datasetGroup.forEach(function(dataset){
+
+  //             var dict = dataset.dictionary;
+              
+  //             var validationResult = dataset.validation;
+  //             if (validationResult.error){
+  //               return res.send(validationResult); 
+  //             }
+
+  //             dictionaryController.updateDictionary(dict);
+  //             delete dataset.dictionary;
+  //             dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
+  //             promises.push(
+  //               Dataset.findOne(
+  //               {
+  //                 "dataset/id": dataset.metadata.dataset.id,
+  //                 "commit/HEAD": true
+  //               }).then(function (obj) {
+  //                 if (!obj) {
+  //                   Dataset.create(dataset, function (err, obj) {
+  //                     if (err) {
+  //                       sails.log.error('Error while adding new data source: ' + err);
+  //                       return res.serverError();
+  //                     } else {
+  //                       // TODO send operation status
+  //                       var result = prepareCommitInfo(obj);
+  //                       result.warnings = validationResult.warnings;
+  //                       Cache.clear("dsm")
+  //                         .then(function(){
+  //                           groupResult.push(result);
+  //                           // return res.send(result);    
+  //                         })
+  //                     }
+  //                   })
+  //                 } else {
+  //                   Dataset.destroy(
+  //                     {
+  //                       "dataset/id": dataset.metadata.dataset.id,
+  //                       createdAt: {">=": obj.createdAt},
+  //                       "commit/HEAD": false
+  //                     }).then(function () {
+  //                       Dataset.update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
+  //                         .then(function () {
+  //                           Dataset.create(dataset, function (err, obj) {
+  //                             if (err) {
+  //                               sails.log.error('Error while adding new data source: ' + err);
+  //                               return res.serverError();
+  //                             } else {
+  //                               var result = prepareCommitInfo(obj);
+  //                               result.warnings = validationResult.warnings;
+  //                               Cache.clear("dsm")
+  //                                 .then(function(){
+  //                                   groupResult.push(result);
+  //                                   // return res.send(result);    
+  //                                 })
+  //                             }
+  //                           });
+  //                         });
+  //                     })
+  //                 }
+  //               }, function (err) {
+  //                 sails.log.error('Error while updating a data set: ' + err);
+  //                 res.serverError();
+  //               })
+  //             ) //promises push
+  //           }) // datasetGroup.forEach
+            
+  //           Promise.all(promises)
+  //             .then(function(){
+  //               console.log(promises)
+  //               return res.send(groupResult)
+  //             })
+  //         })
+  //     });
+  // },
+
+
+
   // createTimeline: function (req, res) {
   //   sails.log.debug("#createTimeline");
   //   req.file('file').upload({},
@@ -347,6 +559,7 @@ module.exports = {
   getQueryResult: function(req,resp){
      sails.log.debug("#getQueryResult");
     var params = req.body;
+    sails.log.debug(params)
     if(!params){return resp.serverError();}
     var commitID = params.commitID;
     var query = params.query;

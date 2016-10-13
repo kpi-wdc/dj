@@ -73,6 +73,10 @@ module.exports.routes = {
   'post /api/data/process' : 'DataProcController.process',
   'get /api/data/process/:dataId' : 'DataProcController.getById',
 
+  'get /api/data/process/update/:id' : 'DataProcController.updateProcData',
+  
+
+
 // Dataset Dictionary API
   'post /api/dictionary' : 'DictionaryController.getAllDictionaries',
   'get /api/dictionary' : 'DictionaryController.getAllDictionaries',
@@ -90,10 +94,15 @@ module.exports.routes = {
   'post /api/dataset/download/:datasetID' : 'DatasetController.downloadDataset',
   'get /api/dataset/download/:datasetID' : 'DatasetController.downloadDataset',
 
+  'post /api/dataset/id/create' : 'DatasetController.getNewDatasetId',
+  'get /api/dataset/id/create' : 'DatasetController.getNewDatasetId',
+
   'post /api/dataset/create' : 'DatasetController.createDataset',
   'get /api/dataset/create' : 'DatasetController.createDataset',
 
   'post /api/dataset/update' : 'DatasetController.updateDataset',
+
+  'post /api/dataset/ch/update' : 'DatasetController.updateChDatasetGroup',
 
   
   'post /api/dataset/query' : 'DatasetController.getQueryResult',
@@ -178,14 +187,15 @@ module.exports.routes = {
   
   'get /api/resource/delete/:path' : 'ResourceController.delete',
   'post /api/resource/delete/:path' : 'ResourceController.delete',
-
+   
+ // Cache servce API
    'get /api/test/get/:id' : 'TestCacheController.getID',
    'post /api/test/get' : 'TestCacheController.getQuery',
    'post /api/test/set' : 'TestCacheController.save',
    'get /api/test/clear' : 'TestCacheController.clear',
    'get /api/test/list' : 'TestCacheController.list'
    
-   
+
    
     
   
