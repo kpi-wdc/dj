@@ -107,9 +107,17 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
         console.log("getDataSet", value)
         $scope.ds = value;
         if($scope.ds){
+          
           eventEmitter.emit('setLookupKey', undefined);
           $scope.topics = prepareTopics($scope.ds.dataset.topics);
+          $scope.ds.dataset.$periodicity = $translate.instant('WIDGET.V2.DM-DS-DESCRIPTION.'+$scope.ds.dataset.periodicity); 
+        
         }  
+      })
+
+      .translate(() => { 
+        if($scope.ds)
+        $scope.ds.dataset.$periodicity = $translate.instant('WIDGET.V2.DM-DS-DESCRIPTION.'+$scope.ds.dataset.periodicity); 
       })
 
       .removal(() => {

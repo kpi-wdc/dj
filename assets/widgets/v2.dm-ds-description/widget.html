@@ -23,7 +23,7 @@
               <img  ng-if="!lookup(ds.dataset.source).icon"
                 src="./img/default-app-icon.png" style="width:48px;"/>
                -->
-        {{ds.dataset.label | translate}}
+        {{ds.dataset.label | translate}}&nbsp;{{ds.dataset.ext}}
       </h4>
       <div class="row" style="
         font-size:x-small;
@@ -66,7 +66,47 @@
        </i>) : {{d.values.length}} <widget-translate>items</widget-translate>.
       </div>
 
+      <div ng-if = "ds.dataset.units" class="row" style="margin:0.5em 0 0 0;">
+        <span   class="left" 
+            style="
+              font-size:1.125rem;
+              color:#222222;
+              font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
+              font-style: normal;
+                font-weight: normal;
+              "
+            widget-translate
+        >
+          Units
+        </span>
+        <span   class="left"
+            style="font-size: small; margin: 0.35em 0.5em;"
+        >
+          {{ds.dataset.units}}  
+        </span>
+      </div>
 
+      <div ng-if = "ds.dataset.periodicity" class="row" style="margin:0.5em 0 0 0;">
+        <span   class="left" 
+            style="
+              font-size:1.125rem;
+              color:#222222;
+              font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
+              font-style: normal;
+                font-weight: normal;
+              "
+            widget-translate
+        >
+          Periodicity
+        </span>
+        <span   class="left"
+            style="font-size: small; margin: 0.35em 0.5em;"
+        >
+          {{ds.dataset.$periodicity}} 
+        </span>
+      </div>
+
+      
       <h5 ng-if="topics.length > 0" style="margin:0.5em 0 0 0;">
       <widget-translate>Keywords</widget-translate>
       </h5>

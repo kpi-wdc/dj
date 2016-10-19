@@ -195,9 +195,12 @@ i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
   }
 
 
-  var LocalI18n = function(){}
+  var LocalI18n = function(translations){
+    this._table = {};
+    if (translations) this._init(translations)
+  }
+
   LocalI18n.prototype = {
-    _table: {},
     translate: function(key){
       var locale = $translate.use() || "en";
       return (this._table[key]) ? this._table[key][locale]|| this._table[key]["en"] || key : key 

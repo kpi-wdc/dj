@@ -262,6 +262,8 @@ m.factory("MakeQuery",['$http', '$dps','$timeout', "$lookup", "$translate", '$q'
   makeRequest: function(item){
     let req = {};
     req.commitID = item.dataset.commit.id;
+    req.datasetID = item.dataset.id;
+    
     req.query = [];
     req.locale = $translate.use();
     for(let i in item.dimension){

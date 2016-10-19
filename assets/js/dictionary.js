@@ -39,12 +39,12 @@ dictionaryModule.run(function ($http,i18n,$dps) {
 
 dictionaryModule.service("$lookup",[ "$http","$translate", "i18n", "$dps",
   function($http, $translate, i18n, $dps){
-    var LocalDictionary = function(){
+    var LocalDictionary = function(dictionary){
+      this._table = {}
+      if (dictionary) this._init(dictionary)
     }
 
     LocalDictionary.prototype = {
-        
-        _table: {},
         
         lookup: function(key){
           return this._table[key] || key
