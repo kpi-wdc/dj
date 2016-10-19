@@ -13,6 +13,7 @@ var path = require('path');
 var uuid = require('uuid');
 var query = require("../../wdc_libs/wdc-query");
 var dictionaryController = require("./DictionaryController");
+var dataprocController = require("./DataProcController");
 var getProperty = require("../../wdc_libs/wdc-flat").getProperty;
 var flat2json = require("../../wdc_libs/wdc-flat").flat2json;
 var util = require("util");
@@ -172,7 +173,10 @@ module.exports = {
                       result.warnings = validationResult.warnings;
                       Cache.clear("dsm")
                         .then(function(){
-                          return res.send(result);    
+                          dataprocController.updateCache(result.metadata.dataset.id)
+                            .then(function(){
+                              return res.send(result);    
+                            })
                         })
                     }
                   })
@@ -192,10 +196,16 @@ module.exports = {
                             } else {
                               var result = prepareCommitInfo(obj);
                               result.warnings = validationResult.warnings;
-                              Cache.clear("dsm")
-                                .then(function(){
-                                  return res.send(result);    
-                                })
+                              
+                          
+                                  Cache.clear("dsm")
+                                    .then(function(){
+                                      dataprocController.updateCache(result.metadata.dataset.id)
+                                        .then(function(){
+                                          return res.send(result);    
+                                      })
+
+                                  })    
                             }
                           });
                         });
@@ -330,7 +340,10 @@ module.exports = {
                           .then(function(){
                               $createDataset(dataset)
                                 .then(function(result){
-                                  resolve(result);
+                                  dataprocController.updateCache(result.metadata.dataset.id)
+                                    .then(function(){
+                                      resolve(result);
+                                    })                                  
                                 })
                           })
                     }

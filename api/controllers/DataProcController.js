@@ -9,6 +9,10 @@ var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
 var I18N = require("../../wdc_libs/wdc-i18n");
 var util = require("util");
 var Query = require("../../wdc_libs/wdc-query-async");
+var dataProcess = require("../../wdc_libs/data-processing");
+var Cache = require("./Cache");
+var Promise = require("bluebird");
+var flat = require("../../wdc_libs/wdc-flat");
 
 
 var getQueryResult = function(query,proc,proc_params){
@@ -55,10 +59,138 @@ var getQueryResult = function(query,proc,proc_params){
     }); 
   };
 
+var translateQueryResult = function(obj,locale){
+ var r = new Promise(
+    function(resolve){
+      Dictionary
+            .find({})
+            .then(function(json){
+              i18n = new I18N(json);
+              obj = i18n.translate(obj,locale);
+              resolve(obj);
+            })
+      }) 
+  return r;            
+}
+
+var prepareCachedResult = function(d){
+  d = (util.isArray(d))? d[0] : d;
+  d = d || {};
+  return {
+    data: d.value,
+    data_id: d.id,
+    createdAt: d.createdAt,
+    updatedAt: d.updatedAt
+  }
+}
+
+var _extend = function(obj,ext){
+  for(var key in ext){
+    obj[key] = ext[key]
+  }
+  return obj;
+} 
+
 module.exports = {
   /**
    * `DataProcController.process()`
    */
+  
+
+
+  process1: function(req, res){
+      // Cache
+      //   .get(req.body)
+      //   .then(function(cached){
+      //     if(cached){
+      //        return res.send(cached.value);
+      //     }else{
+            if (req.body.data_query){
+               Dataset.findOne({"dataset/id": req.body.data_query.datasetID, "commit/HEAD": true})
+               .then(function(dataset){
+                  if(dataset) {
+                    dataProcess(dataset, {query: req.body.data_query.query})
+                      .then(function(dpr){
+                        var locale = (req.body.data_query.locale === "uk") ? "ua" : req.body.data_query.locale;
+                        translateQueryResult(dpr,locale)
+                          .then(function(dpr){
+                            var params = {
+                              dataset: req.body.data_query.datasetID,
+                              script : {query: req.body.data_query.query}
+                            }
+                            dpr.dataset = req.body.data_query.datasetID
+                            Cache
+                              .save("process",req.body,dpr,params)
+                              .then(function(result){
+                                return res.send(prepareCachedResult(result))
+                              })
+                          })  
+                      })
+                  }else{
+                    return res.badRequest('Cannot query data');
+                  }    
+               }) 
+            }else{
+              if(req.body.data_id) {
+                Cache
+                  .getById(req.body.data_id)
+                  .then(function(cached){
+                      var data = [];
+                      var parent = [];
+                      if(util.isArray(cached)){
+                        req.body.data_id.forEach(function(item){
+                          parent.push(item)
+                          data.push(
+                            cached
+                              .filter(function(d){return d.id == item})[0].value
+                          )
+                        }) 
+                      }else{
+                        data = cached.value;
+                        parent = req.body.data_id;
+                      }
+
+                      var p = req.body.params;
+
+                      if(req.body.proc_name == "scatter-serie"){
+                        p.serie = "scatter";
+                      }
+
+                      if(req.body.proc_name == "barchartserie"){
+                        p.serie = "bar";
+                      }
+
+                      if(req.body.proc_name == "corr-matrix"){
+                        p.serie = "deps";
+                      }
+
+                       if(req.body.proc_name == "geochart-serie"){
+                        p.serie = "geojson";
+                      }
+
+                      dataProcess(data,p)
+                        .then(function(result){
+                          var params = {
+                            parent: parent,
+                            dataset: (data.forEach) ?data[0].dataset : data.dataset,
+                            script: result.postProcess
+                          }
+                          result.parent = parent;
+                          result.dataset = (data.forEach) ?data[0].dataset : data.dataset
+                          Cache
+                          .save("process",req.body,result,params)
+                          .then(function(result){
+                            res.send(prepareCachedResult(result))
+                          })
+                        })
+                  })
+              }  
+            }
+        //   }
+        // })
+  }, 
+
+
   process: function (req, res) {
     var tempObj = req.body;
     sails.log.debug("REQUEST", req.body);
@@ -253,8 +385,127 @@ module.exports = {
       });
   },
 
+   /**
+   *  Gets a data by its id
+   */
+  getById1: function (req, res) {
+
+    Cache.getById(req.params.dataId)
+      .then(function (result) {
+        if (result) {
+          res.send(result)
+        } else {
+          res.forbidden();
+        }
+      }, function (err) {
+        res.negotiate(err);
+      });
+  },
 
 
+  updateCache:function(dataset,locale){
+    // console.log("Update cache for "+dataset)
+
+    var processed = {};
+    var promises = [];
+  
+    var process = function(cacheTree, cacheItem){
+      if(processed[cacheItem.id]) return processed[cacheItem.id];
+
+      return  new Promise(function(resolve){
+          if(cacheItem.parent !== undefined){
+            cacheItem.parent = (cacheItem.parent.forEach)? cacheItem.parent:[cacheItem.parent];
+            var promises = [];
+            cacheItem.parent.forEach(function(parent){
+               var p = process(cacheTree,cacheTree.filter(function(c){return c.id == parent})[0])
+               promises.push(p);
+               processed[parent] = p;
+            })
+            Promise.all(promises).then(function(){
+              // console.log("resolve data script id:", cacheItem.id," parent:", cacheItem.parent)
+
+              Cache
+                  .getById(cacheItem.parent)
+                  .then(function(cached){
+                      var data = [];
+                      if(util.isArray(cached) && cached.length >1){
+                        cacheItem.parent.forEach(function(item){
+                          data.push(
+                            cached
+                              .filter(function(d){return d.id == item})[0].value
+                          )
+                        }) 
+                      }else{
+                        data = cached[0].value;
+                      }
+
+                      
+                      dataProcess(data, {script:cacheItem.postProcess})
+                        .then(function(result){
+                          Cache
+                          .update(cacheItem.id,result)
+                          .then(function(result){
+                             resolve(cacheItem)
+                          })
+                        })
+                  })
+            })
+          }else{
+            // console.log("resolve query", cacheItem)
+
+
+            Dataset.findOne({"dataset/id": cacheItem.dataset, "commit/HEAD": true})
+               .then(function(dataset){
+                  if(dataset) {
+                    dataProcess(dataset, {script:cacheItem.postProcess})
+                      .then(function(dpr){
+                        var locale = (locale === "uk") ? "ua" : locale;
+                        translateQueryResult(dpr,locale)
+                          .then(function(dpr){
+                            dpr.dataset = cacheItem.dataset
+                            Cache
+                              .update(cacheItem.id, dpr)
+                              .then(function(result){
+                                resolve(cacheItem)
+                              })
+                          })  
+                      })
+                  } 
+               }) 
+          }  
+      })
+    }
+
+    return new Promise(function(resolve){
+      Cache.list()
+        .then(function(collection){
+          new Query()
+              .from(collection)
+              .select(function(item){
+                if(item.tag != "process") return false;
+                if(!item.params) return false;
+                return item.params.dataset == dataset
+              })
+              .map(function(item){
+                return {
+                  id: item.id,
+                  parent: (item.params.parent) ? item.params.parent : undefined,
+                  dataset: item.params.dataset,
+                  postProcess: item.params.script
+                }
+              })
+              .then(function(result){
+                result.forEach(function(item){
+                  var p = process(result,item);
+                  promises.push(p)
+                  processed[item.id] = p;
+                })
+                  
+                Promise.all(promises).then(function(){resolve(promises)})
+              })
+        })  
+    })  
+  },
 
   /**
    *  `DataProcController.updateProcData(<procdata item id>)`
@@ -264,90 +515,13 @@ module.exports = {
   updateProcData: function(req,resp){
     
     var id = req.params.id;
-    var processed = [];
-    var promises = [];
-    var c = 0;
-    
+    var locale = req.params.locale;
+    this.updateCache(id)
+        .then(function(){
+          resp.send({result:"ok"})
+        })
 
-    var process = function(cacheTree, cacheItem){
-      // console.log("create process", cacheItem)
-      var pr =  new Promise(function(resolve){
-      
-        // console.log("resolve promise ", cacheItem)
-        if(cacheItem.parent == undefined){
-          //execute dataset query
-          processed.push(cacheItem)
-          // console.log("QUERIED ", cacheItem.id)
-          cacheItem.index = c++;
-          setTimeout(function() {resolve(cacheItem)},100)
-        }else{
-          if(processed.map(function(item){return item.id}).indexOf(cacheItem.parent)<0){
-            var current = cacheTree.filter(function(item){return item.id == cacheItem.parent})[0]
-            processed.push(current)
-            // console.log("PUSH ", current.id)
-            // process(cacheTree,current)
-            //   .then(function(){
-               // console.log("PROCESSED ", cacheItem)
-                // execute data process
-                cacheItem.index = c++; 
-                setTimeout(function() {resolve(cacheItem)},100)
-              // })
-          }else{
-            // console.log(" PRECOND PROCESSED ", current.id)
-                // execute data process
-                cacheItem.index = c++; 
-               setTimeout(function() {resolve(cacheItem)},100)
-          }  
-        }
-      })
-      // console.log("pr",pr)
-      return pr
-    }
-
-    ProcData.find({})
-      .then(function(collection){
-         // return resp.json(
-          new Query()
-          .from(collection)
-          .select(function(item){
-            if(!item.value.metadata) return false;
-            if(!item.value.metadata.source) return false;
-            return item.value.metadata.source.dataset.id == id
-          })
-          .map(function(item){
-
-            return {
-              id: item.id,
-              parent: (item.parent.length == 0)? undefined : item.parent,
-              datasource: (item.parent.length == 0) ? item.value.metadata.source.dataset.id : undefined,
-              query: (item.parent.length == 0) ? item.value.metadata.selection:undefined,
-              postProcess: item.value.postProcess
-            }
-          })
-          .get()
-         // ) 
-          .then(function(result){
-            // console.log("founded processes", result)
-            result.forEach(function(item){
-              var p = process(result,item);
-              // console.log(" process promise ",p)
-              promises.push(p.then(function(r){console.log("resolved ",r.id, ((r.parent)? r.parent: "Q"), r.index)}))
-            })
-            console.log("promises ",promises)
-            Promise
-              .all(promises)
-              .then(function(result){
-                resp.json(promises);    
-              })
-          })
-      })
-  }
-  
-
-
-
-
-
+  }    
 
 };
 

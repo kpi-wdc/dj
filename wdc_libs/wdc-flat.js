@@ -1,5 +1,25 @@
 util = require("util");
 
+exports.setProperty = function(object,path,value){
+		path = path.split(".");
+		pos = path[path.length-1].indexOf("[]");
+		if(pos>=0){
+			value = (value) ? value.split(",") : [];
+			path[path.length-1] = path[path.length-1].substring(0,pos);	
+		}
+		value = (util.isArray(value)) ? value : [value];
+		for(i in value){
+				value[i] = (value[i] && value[i].trim) ? value[i].trim() : value[i];
+			};
+		value = (value.length == 1) ? value[0] : value; 
+		current = object;
+		path.forEach(function(item, index){
+				current[item] = (index == path.length-1) ? value : current[item] || {};
+				current = current[item];
+		});
+		return object;
+	}
+
 exports.flat2json = function(pathes){
 	
 	setProperty = function(object,path,value){

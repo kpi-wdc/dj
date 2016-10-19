@@ -10,6 +10,7 @@ var mime = require('mime');
 var path = require('path');
 var uuid = require('uuid');
 var Cache = require("./Cache");
+var dataprocController = require("./DataProcController");
 
 var prepareCommitInfo = function (obj) {
   obj.metadata.dataset.commit.createdAt = obj.createdAt;
@@ -68,7 +69,10 @@ module.exports = {
             .then(function (obj) {
               Cache.clear("dsm")
                 .then(function(){
-                  return res.send(prepareCommitInfo(obj[0]));    
+                  dataprocController.updateCache(obj[0].metadata.dataset.id)
+                    .then(function(){
+                      return res.send(prepareCommitInfo(obj[0]));    
+                    })
                 })
             })
         })

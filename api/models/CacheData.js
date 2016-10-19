@@ -16,6 +16,10 @@ module.exports = {
       type: 'json',
       required: true
     },
+    params: {
+      type: 'json',
+      required: false
+    },
     hash: {
       type: 'string',
       required: false,

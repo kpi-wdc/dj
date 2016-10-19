@@ -12,10 +12,11 @@ module.exports = {
 	
 	getById: function (_id){
 		// console.log("get", query)
-		return CacheData.findOne({id:_id}); 
+		if(util.isArray(_id)) return CacheData.findByIdIn(_id)
+ 		return CacheData.findOne({id:_id}); 
 	},
 
-	_save: function(tag, query, json, resolve){
+	_save: function(tag, query, json, params, resolve){
 			if(util.isArray(json) && json.length == 0 ) json = {};
 
 				this.get(query)
@@ -25,6 +26,7 @@ module.exports = {
 								{hash  : MD5(query)},
 								{
 									value : json,
+									params: params,
 									"tag" : tag
 								})
 							)
@@ -33,6 +35,7 @@ module.exports = {
 							 CacheData.create({
 								hash  : MD5(query),
 								value : json,
+								params: params,
 								"tag" : tag
 							})
 							)					
@@ -41,11 +44,21 @@ module.exports = {
 					
 		},
 
-	save: function(tag,query,json){
+	save: function(tag,query,json,params){
 		var thos = this;
 		return new Promise(function(resolve){
-			thos._save(tag,query,json,resolve);
+			thos._save(tag,query,json,params,resolve);
 		});	
+	},
+
+	update: function(id,json){
+		return new Promise(function(resolve){
+			CacheData
+				.update({"id":id},{value:json})
+				.then(function(result){
+					resolve(result)
+				})	
+		})
 	},
 
 	delete: function(query){

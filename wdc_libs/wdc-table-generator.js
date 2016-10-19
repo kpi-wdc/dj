@@ -6,7 +6,6 @@ var fs = require("fs");
 var prepare = function (dataset,selection){
 
 
-
 var getIDList = function(metadata,selection){
 	// console.log(metadata.dimension[selection.dimension])
 	return new query()
