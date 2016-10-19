@@ -116,7 +116,8 @@ module.exports = {
                           .then(function(dpr){
                             var params = {
                               dataset: req.body.data_query.datasetID,
-                              script : {query: req.body.data_query.query}
+                              script : {query: req.body.data_query.query},
+                              locale : locale
                             }
                             dpr.dataset = req.body.data_query.datasetID
                             Cache
@@ -403,7 +404,7 @@ module.exports = {
   },
 
 
-  updateCache:function(dataset,locale){
+  updateCache:function(dataset){
     // console.log("Update cache for "+dataset)
 
     var processed = {};
@@ -459,7 +460,7 @@ module.exports = {
                   if(dataset) {
                     dataProcess(dataset, {script:cacheItem.postProcess})
                       .then(function(dpr){
-                        var locale = (locale === "uk") ? "ua" : locale;
+                        var locale = (cacheItem.locale === "uk") ? "ua" : cacheItem.locale;
                         translateQueryResult(dpr,locale)
                           .then(function(dpr){
                             dpr.dataset = cacheItem.dataset
@@ -491,7 +492,8 @@ module.exports = {
                   id: item.id,
                   parent: (item.params.parent) ? item.params.parent : undefined,
                   dataset: item.params.dataset,
-                  postProcess: item.params.script
+                  postProcess: item.params.script,
+                  locale: item.params.locale
                 }
               })
               .then(function(result){
