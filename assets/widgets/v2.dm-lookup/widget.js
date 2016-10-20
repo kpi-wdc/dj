@@ -23,6 +23,7 @@ angular.module('app.widgets.v2.dm-lookup', ['app.dictionary'])
       .provide('setLookupKey', (evt, value) => {
         // console.log("setLookupKey", value)
         if(angular.isDefined(value)){
+          $scope.fml = false;
           $scope.visibility = true;
           $scope.key = value;
           let tmp = $lookup($scope.key);
@@ -31,6 +32,7 @@ angular.module('app.widgets.v2.dm-lookup', ['app.dictionary'])
             $scope.meta = [];
           }else{
             $scope.object = tmp;
+            $scope.object.label = $scope.object.label || $scope.object["Short Name"] 
             $scope.meta = [];
             var keys = Object.keys($scope.object);
             for(var i=0; i<keys.length;i++){

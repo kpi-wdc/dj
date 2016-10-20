@@ -1521,7 +1521,32 @@ d3.geo.tile = function () {
         }
 
         //------------------------------------------------------------
+         //------------------------------------------------------------
 
+          if(data[0].axisX.role == "time"){
+            data.forEach(function(serie){
+              serie.values.forEach(function(value){
+                value.x = new Date(value.x)
+              })
+            })
+            // console.log("Time format", data)
+          }  
+
+        //------------------------------------------------------------
+        // Setup Scales
+        if(data[0].axisX.role == "time"){
+          x = d3.time.scale();
+          x.domain([data[0].values[0].x,data[0].values[data[0].values.length-1].x])
+          scatter.xScale = x;
+          x.range([0, availableWidth])  
+        }
+        // else{
+        //   x = scatter.xScale();
+        // }
+
+        // y = scatter.yScale();
+
+        //------------------------------------------------------------
 
         //------------------------------------------------------------
         // Setup Scales
@@ -1631,15 +1656,28 @@ d3.geo.tile = function () {
         }
 
         //------------------------------------------------------------
+        if (showXAxis) {
+            if(data[0].axisX.role == "time"){
+              xAxis.tickFormat(customTimeFormat);
+            }
+            // else{
+              // xAxis.scale(x).ticks(xAxis.ticks() && xAxis.ticks().length ? xAxis.ticks() : availableWidth / 100).tickSize(-availableHeight, 0);
+            // }
+            // else{
+              xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
+            // }
+
+           
+            g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (y.range()[0] + 10) + ")");
+            g.select(".nv-x.nv-axis").transition().call(xAxis);
+          // }else{
+          //   g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (y.range()[0] + 10) + ")").call(xAxis);
+          // }
+        }  
 
 
         //------------------------------------------------------------
         // Setup Axes
-        if (showXAxis) {
-          xAxis.scale(x).ticks(xAxis.ticks() && xAxis.ticks().length ? xAxis.ticks() : availableWidth / 100).tickSize(-availableHeight, 0);
-
-          g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (y.range()[0] + 10) + ")").call(xAxis);
-        }
 
         if (showYAxis) {
           yAxis.scale(y).ticks(yAxis.ticks() && yAxis.ticks().length ? yAxis.ticks() : availableHeight / 36).tickSize(-availableWidth, 0);
@@ -3379,7 +3417,7 @@ d3.geo.tile = function () {
 
     function chart(selection) {
       selection.each(function (data) {
-        console.log("ScatterSerie",data)
+        // console.log("ScatterSerie",data)
 
         var container = d3.select(this),
             that = this;
@@ -3434,7 +3472,7 @@ d3.geo.tile = function () {
                 value.x = new Date(value.x)
               })
             })
-            console.log("Time format", data)
+            // console.log("Time format", data)
           }  
 
         //------------------------------------------------------------
@@ -3442,8 +3480,8 @@ d3.geo.tile = function () {
         if(data[0].axisX.role == "time"){
           x = d3.time.scale();
           x.domain([data[0].values[0].x,data[0].values[data[0].values.length-1].x])
-          lines.xScale = x;
           x.range([0, availableWidth])  
+          lines.xScale(x);
         }else{
           x = lines.xScale();
         }
@@ -3529,15 +3567,15 @@ d3.geo.tile = function () {
 
           if (showXAxis) {
             if(data[0].axisX.role == "time"){
-             
-            
-            xAxis.tickFormat(customTimeFormat);
+                xAxis.tickFormat(customTimeFormat);
           }
           // else{
+          
             xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
           // }
 
-         
+          // console.log("AXIS LINE ", xAxis.ticks(), xAxis.tickFormat())
+
           g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (y.range()[0] + 10) + ")");
           g.select(".nv-x.nv-axis").transition().call(xAxis);
         }
@@ -4885,12 +4923,28 @@ d3.geo.tile = function () {
         }
 
         //------------------------------------------------------------
+        if(data[0].axisX.role == "time"){
+            data.forEach(function(serie){
+              serie.values.forEach(function(value){
+                value.x = new Date(value.x)
+              })
+            })
+            // console.log("Time format", data)
+          }  
 
 
         //------------------------------------------------------------
         // Setup Scales
+        if(data[0].axisX.role == "time"){
+          x = d3.time.scale();
+          x.domain([data[0].values[0].x,data[0].values[data[0].values.length-1].x])
+          x.range([0, availableWidth])  
+          stacked.xScale(x);
+        }else{
+          x = stacked.xScale();
+        }
 
-        x = stacked.xScale();
+        // x = stacked.xScale();
         y = stacked.yScale();
 
         //------------------------------------------------------------
@@ -5011,14 +5065,25 @@ d3.geo.tile = function () {
 
         //------------------------------------------------------------
         // Setup Axes
-
+        // 
         if (showXAxis) {
-          xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
-
-          g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (availableHeight + 10) + ")");
-
-          g.select(".nv-x.nv-axis").transition().duration(0).call(xAxis);
+            if(data[0].axisX.role == "time"){
+                xAxis.tickFormat(customTimeFormat);
+            }
+            xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
+          
+          g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (y.range()[0] + 10) + ")");
+          g.select(".nv-x.nv-axis").transition().call(xAxis);
         }
+
+        // if (showXAxis) {
+        //   xAxis.scale(x).ticks(availableWidth / 100).tickSize(-availableHeight, 0);
+        //   console.log("AXIS Stacked ", xAxis.ticks(), xAxis.tickFormat())
+
+        //   g.select(".nv-x.nv-axis").attr("transform", "translate(0," + (availableHeight + 10) + ")");
+
+        //   g.select(".nv-x.nv-axis").transition().duration(0).call(xAxis);
+        // }
 
         if (showYAxis) {
           yAxis.scale(y)
@@ -6324,11 +6389,11 @@ d3.geo.tile = function () {
           })
           .on("dblclick", function (d, i) {
             dispatch.legendDblclick(d, i);
-            console.log("dbl",updateState,minEnabledSeries)
+            // console.log("dbl",updateState,minEnabledSeries)
             if (updateState && !minEnabledSeries) {
               //the default behavior of NVD3 legends, when double clicking one,
               // is to set all other series' to false, and make the double clicked series enabled.
-              console.log("!!!")
+              // console.log("!!!")
               data.forEach(function (series) {
                 series.disabled = true;
               });
@@ -11074,7 +11139,7 @@ setTimeout(
 
     function chart(selection) {
       selection.each(function (data) {
-        console.log("gantt", data)
+        // console.log("gantt", data)
         if(data.length == 0) return;
         // prepare data
         var data = data.filter(function (item) {

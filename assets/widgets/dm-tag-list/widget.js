@@ -77,6 +77,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
             $scope.total = resp.length;
             resp.forEach(function(item){
               item.lookup = $lookup(item.tag)
+              // item.lookup.label = item.lookup.label || item.lookup["Short Name"] 
             }); 
             $scope.tagList = resp;
           });

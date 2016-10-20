@@ -15,10 +15,32 @@
       <h4 style="margin:0 0 0.5em;">
         <img ng-if="object.icon" src="{{object.icon}}" width="48px" height="48px" />
         <img ng-if="!object.icon" src="./img/default-info-icon.png" width="48px">
-        {{object.label | translate}}
+        {{ object.label | translate}}
       </h4>
-  
+    </div>  
+
+     <div class="row" ng-if="meta.length > 0">
+      <a ng-click="fml = !fml" style="font-size:small;float:right;">{{((fml)?"Hide":"Show")+" Full Metadata List"}}</a>
       
+      <div ng-if="fml" class="row" style="font-size:small;">
+        <table width="100%">
+          <thead>
+            <tr>
+              <th style="font-size:smaller; color:#154163;">Key</th>
+              <th style="font-size:smaller;">Value</th>
+            </tr>
+          </thead>
+          <tbody>  
+            <tr ng-repeat="item in meta">
+              <th style="font-size:smaller; color:#154163;">{{item.key | translate}}</th>
+              <td style="font-size:smaller;">{{item.value | translate}}</td>
+            </tr>
+          </tbody>   
+        </table>
+      </div>
+    </div>
+
+     <div class="row">  
       <div ng-if="object.note" style="font-size: small;
               text-align: justify;">
             {{object.note | translate}}
@@ -28,23 +50,8 @@
         <a href="{{object.url}}" target="blank">{{object.url}}</a>
       </div>
     </div>
-    <h5 style="font-size:small;">Full Metadata List</h5>
-    <div class="row" style="font-size:small;">
-      <table width="100%">
-        <thead>
-          <tr>
-            <th style="font-size:smaller; color:#154163;">Key</th>
-            <th style="font-size:smaller;">Value</th>
-          </tr>
-        </thead>
-        <tbody>  
-          <tr ng-repeat="item in meta">
-            <th style="font-size:smaller; color:#154163;">{{item.key | translate}}</th>
-            <td style="font-size:smaller;">{{item.value | translate}}</td>
-          </tr>
-        </tbody>   
-      </table>
-    </div>
+    
+    
 
   </div>
   
