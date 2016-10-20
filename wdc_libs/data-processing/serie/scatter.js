@@ -11,7 +11,7 @@ module.exports = function(table,params){
   var axisXIndex = params.axisX || 0;
   var xValues = [];
   var categories = [];
-  var base;
+  var base,role,format;
   var result = [];
 
   if ( !params.index ) return {};
@@ -49,16 +49,27 @@ module.exports = function(table,params){
   })  
 
   
+  console.log("axisXIndex",axisXIndex);
+  console.log("HEADER")
+  table.header.forEach(function (item,index){console.log(index, item.metadata)})
+  console.log("BODY")
+  table.body.forEach(function (item,index){console.log(index, item.metadata)})
+
+
   if( axisXIndex>=0 ){
     xValues = table.body[axisXIndex].value.map(function(item){
       return item
     });
-    base = table.body[axisXIndex].metadata.map(function(item){ return item.label}).join(", ")
+    base = table.body[axisXIndex].metadata.map(function(item){ return item.label}).join(", ");
+    role = table.body[axisXIndex].metadata
+              .filter(function(item){return item.role})
+              .map(function(item){return item.role})[0];
   } else {
     xValues = table.header.map(function(row){
       return row.metadata[-axisXIndex-1].label
     });
-    base = table.header[0].metadata[-axisXIndex-1].dimensionLabel
+    base = table.header[0].metadata[-axisXIndex-1].dimensionLabel;
+    role = table.header[0].metadata[-axisXIndex-1].role
   }
 
   if(catList.length == 0){
@@ -69,6 +80,13 @@ module.exports = function(table,params){
     })
   }
   
+  var $axisX = {
+    label: base,
+    role: role, //table.header[0].metadata[0].role,
+    format:table.header[0].metadata[0].format
+  }
+
+
    table.body.forEach(function(row,index){
     if(params.index.indexOf(index) >= 0){
       
@@ -78,10 +96,11 @@ module.exports = function(table,params){
           "key" : ((params.category) ? ("Category: "+cat+", ") : "")
             +row.metadata.map(function(item){ return item.label}).join(", "),
           "base" : base,
-          "axisX":{
-            role: table.header[0].metadata[0].role,
-            format:table.header[0].metadata[0].format
-          },
+          "axisX": $axisX,
+          // {
+          //   role: table.header[0].metadata[0].role,
+          //   format:table.header[0].metadata[0].format
+          // },
           "values": row.value.map(function(item,j){
             return {
               "category" : categories[j],
