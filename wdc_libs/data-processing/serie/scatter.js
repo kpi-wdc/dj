@@ -49,11 +49,11 @@ module.exports = function(table,params){
   })  
 
   
-  console.log("axisXIndex",axisXIndex);
-  console.log("HEADER")
-  table.header.forEach(function (item,index){console.log(index, item.metadata)})
-  console.log("BODY")
-  table.body.forEach(function (item,index){console.log(index, item.metadata)})
+  // console.log("axisXIndex",axisXIndex);
+  // console.log("HEADER")
+  // table.header.forEach(function (item,index){console.log(index, item.metadata)})
+  // console.log("BODY")
+  // table.body.forEach(function (item,index){console.log(index, item.metadata)})
 
 
   if( axisXIndex>=0 ){

@@ -11,6 +11,7 @@ require('string-natural-compare');
 var Coder = require("../../wdc-coder");
 var downloadData = require("./download"); 
 var aggregate = require("./aggregate");
+var clean = require("./clean");
 
 var product = {};
 
@@ -108,8 +109,8 @@ module.exports = function (filename){
 					conf.patterns.push(indicators[id].files)
 				}
 
-				// return downloadData(conf)
-				// 	.then( function(){
+				return downloadData(conf)
+					.then( function(){
 
 
 
@@ -157,10 +158,14 @@ module.exports = function (filename){
 						})
 					}
 					return Promise.all(promises).then(function(resolve){
+						return clean(conf)
+							.then(function(){
+								return result		
+							})
 						// console.log("promises", promises)
-						return result
+						// return result
 					});
-				// })	
+				})	
 			}
 				
 
