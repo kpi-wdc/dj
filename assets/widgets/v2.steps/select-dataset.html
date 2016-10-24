@@ -9,17 +9,25 @@
             padding: 0.5rem;
             margin: 0.3rem;"
     >
-    <label style="color: #008CBA;">
-    <b>ID: </b>{{step.conf.dataset.dataset.id}}
-    <br/> 
-      <b>
-      {{
-            (step.lookup(step.conf.dataset.dataset.label).label) ? 
+    <label style="    color: #008CBA;
+    font-size: smaller;
+    line-height: 1;">
+      <img src="
+          {{
+            (step.lookup(step.conf.dataset.dataset.source).icon)
+              ? step.lookup(step.conf.dataset.dataset.source).icon 
+              : './img/default-ds-icon.png'
+          }}" width="16px" style="margin-top: -2px;"/>
+      <b style="font-size: medium;">
+      {{(step.lookup(step.conf.dataset.dataset.label).label) ? 
               step.lookup(step.conf.dataset.dataset.label).label : 
               step.conf.dataset.dataset.label
               | translate
-      }}
-      </b> &nbsp;
+      }}{{ step.conf.dataset.dataset.ext}}
+       </span>
+      
+      </b><br/>
+      
       <i>
       {{
             (step.lookup(step.conf.dataset.dataset.note).label) ? 
@@ -28,6 +36,8 @@
               | translate
       }}
       </i><br/>
+      <b>ID: </b>{{step.conf.dataset.dataset.id}}
+      <br/> 
       Source:
       {{
             (step.lookup(step.conf.dataset.dataset.source).label) ? 
@@ -37,7 +47,7 @@
       }} 
       
       &nbsp;
-      Updated: {{step.formatDate(step.conf.dataset.dataset.commit.createdAt)}} 
+      Updated at {{step.formatDate(step.conf.dataset.dataset.commit.createdAt)}} 
     </label>
   </div>
 
@@ -54,24 +64,38 @@
                   height: 20em;
                   border: 0.1rem solid #ddd;">
                   
-    <div ng-repeat="item in  step.datasets" style="margin:0 0 1rem 0;">
-      <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
+    <div ng-repeat="item in  step.datasets" style="    margin: 0 0 0.2rem 0;
+    border-bottom: 1px solid #dddddd;">
+      <h5 style="font-stretch: semi-condensed;
+    margin: 0;
+    color: #555555;
+    font-weight: bold;
+    font-size: initial;">
         <span ng-click="step.select(item)" style="cursor:pointer; "ng-class="{selected : item.selected}">
+        <img src="
+          {{
+            (step.lookup(item.dataset.source).icon)
+              ? step.lookup(item.dataset.source).icon 
+              : './img/default-ds-icon.png'
+          }}" width="16px"/>
           {{
             (step.lookup(item.dataset.label).label) ? 
               step.lookup(item.dataset.label).label : 
               item.dataset.label
               | translate
-          }}
+          }}{{ item.dataset.ext}}
         </span>
       </h5>  
 
       <div ng-if="!item.collapsed"
-           style="margin: 0.2em 0 0.5em 2.5em;
+           style="margin: 0.2em 0 0.5em 0.5em;
                   padding: 0.5em;
-                  border: 0.1rem solid #ddd;
-                  background: #f4f4f4;">
-        <div style=" font-size: small; text-align: justify;margin:0 0 0 0.1em;">
+                  ">
+        <div style="    font-size: small;
+    text-align: justify;
+    margin: 0 0.5em 0.5em 0.5em;
+    font-stretch: condensed;
+    line-height: 1;">
           <b>
             NOTE
           </b>:&nbsp;&nbsp;
@@ -82,7 +106,11 @@
               | translate
           }}
         </div>  
-        <div style=" font-size: small; text-align: justify;">
+        <div style="    font-size: small;
+    text-align: justify;
+    margin: 0 0.5em 0.5em 0.5em;
+    font-stretch: condensed;
+    line-height: 1;">
           <b>
             SOURCE
           </b>:&nbsp;&nbsp;
@@ -93,7 +121,11 @@
               | translate
           }}
         </div>
-        <div style=" font-size: small; text-align: justify;">
+        <div style="    font-size: small;
+    text-align: justify;
+    margin: 0 0.5em 0.5em 0.5em;
+    font-stretch: condensed;
+    line-height: 1;">
           <b>
             LAST UPDATE
           </b>:&nbsp;&nbsp;{{step.formatDate(item.dataset.commit.createdAt)}}  
