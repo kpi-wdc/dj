@@ -7,6 +7,7 @@ System.config({
     "info": "js/info.js",
     "i18n": "js/i18n.js",
     "dps": "js/dps.js",
+    "skins":"js/skins.js",
     "dictionary": "js/dictionary.js",
     "custom-react-directives": "js/custom-react-directives.js",
     "modal-controllers": "js/modal-controllers.js",

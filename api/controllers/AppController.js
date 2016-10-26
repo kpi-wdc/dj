@@ -6,6 +6,7 @@
  */
 var fs = require('fs');
 
+
 module.exports = {
   getList: function (req, res) {
     AppConfig

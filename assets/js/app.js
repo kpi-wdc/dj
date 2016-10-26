@@ -21,6 +21,7 @@ import 'app-config';
 import 'author';
 import 'i18n';
 import 'dps';
+import 'skins'
 import 'dictionary';
 import 'info';
 import 'modal-controllers';
@@ -31,7 +32,7 @@ import 'widget-api';
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard','cfp.hotkeys',
   'app.templates', 'react',
-  'app.widgetApi', 'app.config', 'app.i18n','app.dps', 'app.skinDirectives',
+  'app.widgetApi', 'app.config', 'app.i18n','app.dps', 'app.skins','app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
 
 app.constant("portal", {
@@ -98,12 +99,26 @@ app.constant('globalConfig', {
 
 app.constant('selectedHolder',null);
 
-app.constant('appSkins', [
-  {
-    name: "default",
-    title: "Default"
-  }
-]);
+// app.constant('appSkins', [
+//   {
+//     name: "default",
+//     title: "Default"
+//   }
+// ]);
+
+// app.factory("appSkins", function($http){
+//  var list = [];
+//  if(list.length == 0){
+//       $http
+//       .get("./api/app/skins")
+//       .then(function(resp){
+        
+//         list = resp.data.map((item) => {return {title:item, name:item}});
+//         console.log("Skins", list)
+//       })
+//  }
+//  return list; 
+// })
 
 app.constant('randomWidgetName', () => Math.random().toString(36).substring(2));
 

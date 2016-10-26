@@ -4,6 +4,8 @@
  * @description :: Server-side logic for managing portal config
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
+var fs = require("fs");
+var path = require("path");
 
 module.exports = {
   
@@ -23,6 +25,16 @@ module.exports = {
       .then(function(updatedConfig){
         return res.send(updatedConfig[0].value)
       })
+  },
+
+  getSkins:function(req,res){
+    return res.ok(
+        fs
+          .readdirSync("./assets/skins/")
+          .map(function(file){
+            return path.parse(file).name;
+          })
+    )
   }
 
 };

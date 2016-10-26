@@ -43,6 +43,7 @@ module.exports.routes = {
   
   //Portal
    'get /api/app/config/get': 'PortalConfigController.getConfig',
+   'get /api/app/skins': 'PortalConfigController.getSkins',
    'post /api/app/config/get': 'PortalConfigController.getConfig',
    'post /api/app/config/set': 'PortalConfigController.setConfig',
      

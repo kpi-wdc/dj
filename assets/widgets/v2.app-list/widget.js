@@ -139,6 +139,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
     },
     
     openCreateAppDialog() {
+      console.log(appSkins)
       dialog({
         title:`${$translate.instant('WIDGET.V2.APP-LIST.ADD_NEW_APP')}:`,
           fields:{
