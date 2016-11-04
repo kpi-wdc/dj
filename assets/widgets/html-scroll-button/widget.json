@@ -1,0 +1,43 @@
+{
+  "keywords":["html","scrolling"],
+  "schema": {
+    "type": "object",
+    "title": "Scroll button widget",
+    "properties": {
+      "targets":{
+        "title":"Targets",
+        "type": "array",
+        "format":"table",
+        "items": {
+            "type": "object",
+            "properties": {
+              "title":{
+                "title" : "Button Title",
+                "type": "string"
+              },
+              "target":{
+                "title":"Target",
+                "type":"object",
+                "properties":{
+                  "widget":{
+                    "title":"Widget Name",
+                    "type":"string"
+                  },
+                  "url":{
+                    "title":"URL",
+                    "type":"string"
+                  }
+                }
+              },
+              "class":{
+                "title":"Class",
+                "type":"string",
+                "enum":["normal","warning","alert","success","secondary"],
+                "default":"normal"
+              }
+            }  
+        }
+      }    
+    }  
+  }
+}

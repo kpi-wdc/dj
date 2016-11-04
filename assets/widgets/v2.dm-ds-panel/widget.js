@@ -13,6 +13,7 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','app.dps'
     $scope.lookup = $lookup;
     $scope.total = 0;
     $scope.key = undefined; 
+    $scope.formatDate = i18n.formatDate;
 
     var searchDatasets = function(query){
 
@@ -56,7 +57,7 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','app.dps'
     new APIProvider($scope)
       .config(() => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
-        
+        $scope.layout = $scope.widget.layout || "panel"; 
 
         if($scope.key){
           $scope.object = $lookup($scope.key);

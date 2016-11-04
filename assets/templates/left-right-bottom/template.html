@@ -1,4 +1,13 @@
-<widget-holder name="column"></widget-holder>
+
+<div class="row" style="
+      max-width: 75em;
+      float: none;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top:0; 
+      margin-bottom:0;">
+  <widget-holder name="column"></widget-holder>
+</div>
 <div class="row">
   <div class="column medium-6 left-column">
     <widget-holder name="topleft"></widget-holder>
@@ -7,9 +16,13 @@
     <widget-holder name="topright"></widget-holder>
   </div>
 </div>
-<widget-holder name="bottom"></widget-holder>
 
-<div ng-if="globalConfig.debugMode">
-  Config: <br>
-  <pre>{{config | json}}</pre>
+<div class="row" style="
+      max-width: 75em;
+      float: none;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top:0; 
+      margin-bottom:0;">
+  <widget-holder name="bottom"></widget-holder>
 </div>

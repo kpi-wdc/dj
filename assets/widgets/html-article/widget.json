@@ -1,0 +1,35 @@
+{
+  "keywords":["html","title"],
+  "schema": {
+    "type": "object",
+    "title": "Article",
+    "properties": {
+      "title": {
+        "title": "Title",
+        "type": "string"
+      },
+      "intro": {
+        "title": "Intro",
+        "type": "string"
+      },
+      "text": {
+        "title": "Text",
+        "type": "string"
+      },
+      "href":{
+        "type":"object",
+        "title": "Reference",
+        "properties":{
+          "url":{
+            "title":"URL",
+            "type":"string"
+          },
+          "description":{
+            "title":"Descriptiion",
+            "type":"string"
+          }
+        }
+      }
+    }
+  }  
+}

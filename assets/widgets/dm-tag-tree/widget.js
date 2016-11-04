@@ -61,7 +61,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary',"app.dps"])
       $scope.breadcrums.push(tag);
       prepareList(tag);
       $scope.tag = tag;
-      eventEmitter.emit('setLookupKey', tag._tag);
+      eventEmitter.emit('setLookupKey', tag._tag, $scope.category);
       let tmp = {};
       tmp["dataset.topics"] = [{startsWith:tag._path}];
       let query = [tmp];
@@ -76,6 +76,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary',"app.dps"])
       .config( () => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.title = $scope.widget.title;
+        $scope.category = $scope.widget.category;
 
 
         $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];

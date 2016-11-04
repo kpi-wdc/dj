@@ -20,9 +20,11 @@
 <body ng-controller="MainController"
       ng-class="{'debug-enabled': globalConfig.debugMode,
                  'design-mode-enabled': globalConfig.designMode}">
+             
 <ng-include src="skin.url"></ng-include>
 <!-- ES6 polyfill. Load before every other JS file -->
 <script src="/js/es6-polyfill.js"></script>
+
 <script src="/components/es6-module-loader/dist/es6-module-loader.src.js"></script>
 <script src="/components/system.js/dist/system.src.js"></script>
 <script>

@@ -9,6 +9,11 @@
         "title": "Title"
       },
 
+      "category": {
+        "type": "string",
+        "title": "Category"
+      },
+
       "property": {
         "type": "string",
         "title": "Tag property"

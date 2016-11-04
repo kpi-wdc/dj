@@ -1,174 +1,134 @@
+<style>
+  .dsMetadataValue {
+      font-size: small;
+      margin: 0.35em 0.5em;
+      color: #222;
+      font-weight: normal;
+  }
 
+  .dsMetadataKey {
+       margin: 0.2em 0 0 0;
+      color: #0078a0;
+      font-stretch: condensed;
+      font-weight: bold;
+      font-size: inherit;
+  }
+</style>
 
-
- <div 
+<div 
     ng-controller="DataManagerDSInfoController">
- <!--  <div class="row" ng-if="!ds">
-    <center>
-      <h4 style="color:#eee">
-        <widget-translate>NO_INFO_AVAILABLE</widget-translate>
-      </h4>
-    </center> 
-  </div>   -->
-  <div ng-if="ds" class="row" style="    margin: 0;
-    padding: 2em;
-    border: 1px solid #ddd;" >   
-    <div class="row">
-      <h4 style="margin:0;">
-        <img 
-                src="./img/default-ds-icon.png" style="width:48px;"/>
+  <div ng-if="ds" 
+       class="row" 
+       style="    margin: 0 0 0.5em 0;
+                  padding: 0 1em;
+                  line-height: 1;" >   
+  <div class="row">   
+    <h3 ng-if="title && title.length>0"
+          style="    color: #0078a0;
+                      margin: 0 0 0.5em;
+                      line-height: 1;">
+            {{title | translate}}
+    </h3>
+  </div>  
+    <h4 style=" color: #0078a0;
+                  margin: 0 0 0.5em;
+                  padding: 0 0 0.5em 0;
+                  line-height: 1;">
+      <img ng-if="lookup(ds.dataset.source).icon" 
+           ng-src="{{lookup(ds.dataset.source).icon}}" style="height:36px;">
 
-              <!-- <img ng-if="lookup(ds.dataset.source).icon" ng-src="{{lookup(ds.dataset.source).icon}}" width="48px" height="48px">
-
-              <img  ng-if="!lookup(ds.dataset.source).icon"
-                src="./img/default-app-icon.png" style="width:48px;"/>
-               -->
-        {{ds.dataset.label | translate}}&nbsp;{{ds.dataset.ext}}
-      </h4>
-      <div class="row" style="
-        font-size:x-small;
-        border-bottom:1px solid #ddd;
-        padding:0.2em;
-        margin:0.5em 0.5em 1em 0.5em;
-      ">
-        
-        
-        <button
-          class="button radius right tiny toolbar success" 
-              style="margin:0 0.2em; padding: 0.3em 1em;"
-          >
-            <a  class="right"
-          style="padding:0;color:#ffffff"
-          target="_blank"
-              href="{{dps.getUrl()+'/api/dataset/download/'+ds.dataset.id}}"
-          >
-                <widget-translate>DOWNLOAD</widget-translate>
-              </a>  
-          </button>
-        
-      </div>
-      
+      <img  ng-if="!lookup(ds.dataset.source).icon"
+            src="./img/default-ds-icon.png" style="width:36px;"/>
+                
+      {{ds.dataset.label | translate}}&nbsp;{{ds.dataset.ext}}
+          
+      <button
+            class="button radius tiny toolbar success" 
+                style="margin:0 0.2em; padding: 0.3em 1em;"
+      >
+        <a  class="right"
+            style="padding:0;color:#ffffff"
+            target="_blank"
+                href="{{dps.getUrl()+'/api/dataset/download/'+ds.dataset.id}}"
+        >
+          <widget-translate>DOWNLOAD</widget-translate>
+        </a>  
+      </button>
+    </h4> 
      
-      <div style="font-size: small;
+    <div style="font-size: small;
               text-align: justify;">
-            {{ds.dataset.note | translate}}
-      </div>
+      {{ds.dataset.note | translate}}
+    </div>
 
-      <h5 ng-if="topics.length > 0" style="margin:0.5em 0 0 0;">
+    <h5   ng-if="topics.length > 0" class="dsMetadataKey">
       <widget-translate>Data</widget-translate>
-      </h5>
-      <div ng-repeat="d in ds.dimension" style="font-size: small; margin:0 0 0 1em;">
-       <b>{{d.label | translate}}</b> (<i>
+    </h5>
+    <div ng-repeat="d in ds.dimension" style="font-size: small; margin:0 0 0 1em;">
+      <b>{{d.label | translate}}</b> (<i>
         <widget-translate ng-if="d.role=='geo'">geo</widget-translate>
         <widget-translate ng-if="d.role=='time'">time</widget-translate>
         <widget-translate ng-if="d.role=='metric'">metric</widget-translate>
         <widget-translate ng-if="d.role=='category'">category</widget-translate>
        </i>) : {{d.values.length}} <widget-translate>items</widget-translate>.
-      </div>
+    </div>
 
-      <div ng-if = "ds.dataset.units" class="row" style="margin:0.5em 0 0 0;">
-        <span   class="left" 
-            style="
-              font-size:1.125rem;
-              color:#222222;
-              font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
-              font-style: normal;
-                font-weight: normal;
-              "
-            widget-translate
-        >
-          Units
-        </span>
-        <span   class="left"
-            style="font-size: small; margin: 0.35em 0.5em;"
-        >
+    <div ng-if = "ds.dataset.units" class="row" style="margin:0;">
+      <h5 ng-if="topics.length > 0" 
+         class="dsMetadataKey">
+        <widget-translate>Units</widget-translate>
+        <span class="dsMetadataValue">
           {{ds.dataset.units}}  
         </span>
-      </div>
+    </div>
 
-      <div ng-if = "ds.dataset.periodicity" class="row" style="margin:0.5em 0 0 0;">
-        <span   class="left" 
-            style="
-              font-size:1.125rem;
-              color:#222222;
-              font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
-              font-style: normal;
-                font-weight: normal;
-              "
-            widget-translate
-        >
-          Periodicity
-        </span>
-        <span   class="left"
-            style="font-size: small; margin: 0.35em 0.5em;"
-        >
+    <div ng-if = "ds.dataset.periodicity" class="row" style="margin:0;">
+        <h5 ng-if="topics.length > 0" 
+            class="dsMetadataKey">
+          <widget-translate>Periodicity</widget-translate>
+          <span class="dsMetadataValue">
           {{ds.dataset.$periodicity}} 
-        </span>
-      </div>
+          </span>
+        </h5>
+    </div>
 
-      
-      <h5 ng-if="topics.length > 0" style="margin:0.5em 0 0 0;">
+    <h5 ng-if="topics.length > 0" class="dsMetadataKey">
       <widget-translate>Keywords</widget-translate>
-      </h5>
-      <div ng-if="topics.length>0" style="font-size: small;
-              text-align: justify; color:#008CBA;">
-
-          <a ng-repeat="k in topics track by $index" ng-click="selectTopic(k)">
-                  {{(lookup(k).label) ? lookup(k).label : k | translate}}
-                  {{($index < (topics.length-1))?', ':''}}
-          </a>    
-          
-      </div>
+    </h5>
+    <div  ng-if="topics.length>0" 
+          style=" font-size: small;
+                  text-align: justify; 
+                  color:#008CBA;">
+      <a ng-repeat="k in topics track by $index" ng-click="selectTopic(k)">
+              {{(lookup(k).label) ? lookup(k).label : k | translate}}
+              {{($index < (topics.length-1))?', ':''}}
+      </a>    
+    </div>
     
-
-    <div class="row" style="margin:0.5em 0 0 0;">
-      <span   class="left" 
-          style="
-            font-size:1.125rem;
-            color:#222222;
-            font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
-            font-style: normal;
-              font-weight: normal;
-            "
-          widget-translate
-      >
-        SOURCE
-      </span>
-      <span   class="left"
-          style="font-size: small; margin: 0.35em 0.5em;"
-      >
-
-        <a ng-click="selectSource(ds.dataset.source)">
+    <div class="row" style="margin:0;">
+      <h5 ng-if="topics.length > 0" 
+          class="dsMetadataKey">
+        <widget-translate>SOURCE</widget-translate>
+        <span
+            style="font-size: small; margin: 0.35em 0.5em; font-weight:normal"
+        >
+          <a ng-click="selectSource(ds.dataset.source)">
                 {{(lookup(ds.dataset.source).label) 
                   ? lookup(ds.dataset.source).label : ds.dataset.source | translate}}
-        </a>
-      </span>
+          </a>
+        </span>
+      </h5>
     </div>
 
-    
- 
-
-
-    <div class="row" style="margin:0.5em 0 0 0;">
-      <span   class="left" 
-          style="
-            font-size:1.125rem;
-            color:#222222;
-            font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif
-            font-style: normal;
-              font-weight: normal;
-            "
-          widget-translate
-      >
-        UpdatedAt
-      </span>
-      <span   class="left"
-          style="font-size: small; margin: 0.35em 0.5em;"
-      >{{formatDate(ds.dataset.commit.createdAt)}}</span>
+    <div class="row" style="margin:0;">
+      <h5 ng-if="topics.length > 0" 
+          class="dsMetadataKey">
+          <widget-translate>UpdatedAt</widget-translate>
+         <span class="dsMetadataValue">
+           {{formatDate(ds.dataset.commit.createdAt)}}
+          </span>
+      </h5>
     </div>
-    
-  </div>
-
   </div>  
 </div>
 

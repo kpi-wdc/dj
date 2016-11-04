@@ -1,0 +1,26 @@
+{
+  "keywords":["html","title"],
+  "schema": {
+    "type": "object",
+    "title": "Banner widget",
+    "properties": {
+      "enabled":{
+        "title":"Enabled",
+        "type":"boolean",
+        "default":true
+      },
+      
+      "bgImage": {
+        "title": "Background",
+        "type": "string",
+        "default": "./img/default-banner.png"
+      },
+
+      "height":{
+        "title":"Height",
+        "type":"integer",
+        "default":150
+      }
+    }
+  }
+}

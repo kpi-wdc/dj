@@ -9,6 +9,12 @@
         "title": "Title"
       },
 
+       "category": {
+        "type": "string",
+        "title": "Category"
+      },
+
+
       "lookupListeners": {
         "type": "string",
         "title": "Lookup Listeners"

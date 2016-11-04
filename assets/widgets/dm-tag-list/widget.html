@@ -3,21 +3,28 @@
   margin: 0 0 0.5rem;
   box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;"
- --><div   style="/*border: 0.1rem solid #ddd;*/ margin:0.2rem 0;"
+ -->
+ <div   style="margin:0 0 0.2em 0; line-height:1;"
   ng-controller="DataManagerTagListController">
     <h4 ng-click="changeState()"
-        style=" color: rgba(0, 0, 0, 0.6);
-                /*background-color: #efefef;*/ padding: 0 0.5em; 
-                cursor:pointer;margin:0; font-stretch: semi-condensed;"> 
-      <a>
-      <i class="{{icon_class}}" style="color: rgb(77, 174, 207);"></i> 
+        style="     color: #fff;
+                    padding: 0.3em 0.5em;
+                    background: #0078a0;
+                    cursor: pointer;
+                    margin: 0;
+                    border-radius: 15px 0 0 0;
+                    "> 
+      <a style="color:#fff">
+      <i class="{{icon_class}}" style="#fff;"></i> 
         {{title | translate}} &nbsp;{{(collapsed)?'('+total+')':''}}
         <span ng-if="collapsed">
           ...
         </span>
       </a>
     </h4>
-    <div ng-if="!collapsed" style=" padding: 0.5em 0.5em 1em;">
+    <div ng-if="!collapsed" style="    padding: 0.5em 0.5em 1em;
+            border: 1px solid #ddd;
+            border-radius: 0 0 0 15px;">
     <span ng-repeat="item in tagList track by $index">
       <a  style="font-size: smaller;font-stretch: ultra-condensed;" ng-click="selectItem(item.tag)">
       <img ng-if="item.lookup.icon" ng-src="{{item.lookup.icon}}" width="24px" height:"24px"/>
@@ -26,5 +33,6 @@
      </span>
     </div>      
 </div>
+
 
  

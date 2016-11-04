@@ -5,6 +5,22 @@
       "column"
     ]
   },
+  
+  "f-layout-home": {
+    "description": "Foundation 5.0 Homepage layout",
+    "holders" : [
+      "header",
+      "callout0",
+      "callout1",
+      "callout2",
+      "main",
+      "feature0",
+      "feature1",
+      "feature2",
+      "feature3",
+      "footer"
+    ]
+  },
   "2-cols": {
     "description": "Two-column layout",
     "holders" : [

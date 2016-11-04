@@ -3,7 +3,12 @@ import 'dictionary';
 
 
 angular.module('app.widgets.v2.dm-lookup', ['app.dictionary'])
-  .controller('V2DataManagerLookupController', function ($scope, $http, EventEmitter, APIProvider, $lookup) {
+  .controller('V2DataManagerLookupController', function ($scope, 
+    $http, 
+    EventEmitter, 
+    APIProvider, 
+    $lookup,
+    $scroll) {
     
     $scope.key = undefined; 
     $scope.visibility = true;
@@ -20,18 +25,22 @@ angular.module('app.widgets.v2.dm-lookup', ['app.dictionary'])
           $scope.object = undefined;
         }
       })
-      .provide('setLookupKey', (evt, value) => {
-        // console.log("setLookupKey", value)
+      .provide('setLookupKey', (evt, value, cat) => {
+        console.log("setLookupKey", value, cat)
         if(angular.isDefined(value)){
           $scope.fml = false;
           $scope.visibility = true;
+
+          $scroll($scope.widget.instanceName)
+          
           $scope.key = value;
           let tmp = $lookup($scope.key);
           if($scope.key == tmp || tmp.en){
-            $scope.object = {label:$scope.key};
+            $scope.object = {label:$scope.key, category:cat};
             $scope.meta = [];
           }else{
             $scope.object = tmp;
+            $scope.object.category = cat;
             $scope.object.label = $scope.object.label || $scope.object["Short Name"] 
             $scope.meta = [];
             var keys = Object.keys($scope.object);

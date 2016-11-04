@@ -28,6 +28,7 @@ m.service('LineChartAdapter', function () {
       options.chart.rotateLabels = decoration.xAxisAngle;
       options.chart.reduceXTicks = decoration.reduceXTicks;
       options.chart.isArea = decoration.isArea;
+      // console.log("apply showPoints for "+options.chart.lines.scatter)
       options.chart.showPoints = 
         (angular.isDefined(decoration.showPoints)) ? decoration.showPoints : true;
 

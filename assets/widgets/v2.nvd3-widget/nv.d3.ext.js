@@ -18,11 +18,11 @@
  var convertDateTime = function(data){
       data.forEach(function(serie,i) {
             if(serie.role == "time"){
-              serie.key = date.format(new Date(serie.key), serie.format)
+              serie.key = date.format(new Date(serie.key), ((serie.format)?serie.format:"YY.MM.DD"))
             }
             if(serie.label.role == "time"){
               serie.values.forEach(function(value){
-                value.label = date.format(new Date(value.label), serie.label.format)
+                value.label = date.format(new Date(value.label), ((serie.label.format)?serie.label.format:"YY.MM.DD"))
               })
             }
         })
@@ -524,6 +524,7 @@ d3.geo.tile = function () {
         x = d3.scale.linear(),
         y = d3.scale.linear(),
         z = d3.scale.linear() //linear because d3.svg.shape.size is treated as area
+    ,   showPoints = true 
     ,
         getX = function (d) {
       return d.x;
@@ -594,6 +595,7 @@ d3.geo.tile = function () {
         dispatch = d3.dispatch("elementClick", "elementDblClick","elementMouseover", "elementMouseout"),
         useVoronoi = true,
         showRadiusVector = true;
+
 
     //============================================================
 
@@ -902,126 +904,128 @@ d3.geo.tile = function () {
         }).style("stroke", function (d, i) {
           return color(d, i);
         }).style("stroke-opacity", 1).style("fill-opacity", 0.5);
-
-        if (onlyCircles) {
-          var points = groups.selectAll("circle.nv-point").data(function (d) {
-            return d.values;
-          }, pointKey);
-          var labels = groups.selectAll("text.nv-label").data(function (d) {
-            return d.values;
-          }, pointKey);
-          if (showRadiusVector) {
-            groups.selectAll("line.nv-radius-vector").data(function (d) {
+        
+        if(showPoints){
+          if (onlyCircles) {
+            var points = groups.selectAll("circle.nv-point").data(function (d) {
               return d.values;
-            }, pointKey).exit().remove();
-
-            var rVectors = groups.selectAll("line.nv-radius-vector").data(function (d) {
-              return d.values.filter(function (item) {
-                return item.radiusVector;
-              });
             }, pointKey);
+            var labels = groups.selectAll("text.nv-label").data(function (d) {
+              return d.values;
+            }, pointKey);
+            if (showRadiusVector) {
+              groups.selectAll("line.nv-radius-vector").data(function (d) {
+                return d.values;
+              }, pointKey).exit().remove();
+
+              var rVectors = groups.selectAll("line.nv-radius-vector").data(function (d) {
+                return d.values.filter(function (item) {
+                  return item.radiusVector;
+                });
+              }, pointKey);
 
 
-            //console.log("rVectors",rVectors)
-            rVectors.exit().remove();
+              //console.log("rVectors",rVectors)
+              rVectors.exit().remove();
 
-            rVectors.enter().append("svg:line").attr("class", "nv-radius-vector").attr("x1", function (d, i) {
-              return nv.utils.NaNtoZero(x0(getOX(d, i)));
-            }).attr("y1", function (d, i) {
-              return nv.utils.NaNtoZero(y0(getOY(d, i)));
-            }).attr("x2", function (d, i) {
-              return nv.utils.NaNtoZero(x0(getX(d, i)));
-            }).attr("y2", function (d, i) {
-              return nv.utils.NaNtoZero(y0(getY(d, i)));
+              rVectors.enter().append("svg:line").attr("class", "nv-radius-vector").attr("x1", function (d, i) {
+                return nv.utils.NaNtoZero(x0(getOX(d, i)));
+              }).attr("y1", function (d, i) {
+                return nv.utils.NaNtoZero(y0(getOY(d, i)));
+              }).attr("x2", function (d, i) {
+                return nv.utils.NaNtoZero(x0(getX(d, i)));
+              }).attr("y2", function (d, i) {
+                return nv.utils.NaNtoZero(y0(getY(d, i)));
+              }).style("stroke", function (d, i) {
+                return d.color;
+              }).style("stroke-width", "1px").style("opacity", 0.3);
+            }
+
+            points.enter().append("circle").style("fill", function (d, i) {
+              return d.color;
             }).style("stroke", function (d, i) {
               return d.color;
-            }).style("stroke-width", "1px").style("opacity", 0.3);
-          }
+            }).attr("cx", function (d, i) {
+              return nv.utils.NaNtoZero(x0(getX(d, i)));
+            }).attr("cy", function (d, i) {
+              return nv.utils.NaNtoZero(y0(getY(d, i)));
+            }).attr("r", function (d, i) {
+              return Math.sqrt(z(getSize(d, i)) / Math.PI);
+            });
+            points.exit().remove();
+            labels.enter().append("text").style("fill", function (d, i) {
+              return d.color;
+            }).style("text-anchor", "start").attr("x", function (d, i) {
+              return nv.utils.NaNtoZero(x0(getX(d, i)));
+            }).attr("y", function (d, i) {
+              return nv.utils.NaNtoZero(y0(getY(d, i)));
+            }).attr("dy", "-0.7em").classed("nv-label", true).text(function (d, i) {
+              return getLabel ? getLabel(d, i) : "";
+            });
+            ;
+            labels.exit().remove();
 
-          points.enter().append("circle").style("fill", function (d, i) {
-            return d.color;
-          }).style("stroke", function (d, i) {
-            return d.color;
-          }).attr("cx", function (d, i) {
-            return nv.utils.NaNtoZero(x0(getX(d, i)));
-          }).attr("cy", function (d, i) {
-            return nv.utils.NaNtoZero(y0(getY(d, i)));
-          }).attr("r", function (d, i) {
-            return Math.sqrt(z(getSize(d, i)) / Math.PI);
-          });
-          points.exit().remove();
-          labels.enter().append("text").style("fill", function (d, i) {
-            return d.color;
-          }).style("text-anchor", "start").attr("x", function (d, i) {
-            return nv.utils.NaNtoZero(x0(getX(d, i)));
-          }).attr("y", function (d, i) {
-            return nv.utils.NaNtoZero(y0(getY(d, i)));
-          }).attr("dy", "-0.7em").classed("nv-label", true).text(function (d, i) {
-            return getLabel ? getLabel(d, i) : "";
-          });
-          ;
-          labels.exit().remove();
-
-          groups.exit().selectAll("path.nv-point").transition().attr("cx", function (d, i) {
-            return nv.utils.NaNtoZero(x(getX(d, i)));
-          }).attr("cy", function (d, i) {
-            return nv.utils.NaNtoZero(y(getY(d, i)));
-          }).remove();
-          points.each(function (d, i) {
-            d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
-          });
-          labels.each(function (d, i) {
-            d3.select(this).classed("nv-label", true);
-          });
-          points.transition().attr("cx", function (d, i) {
-            return nv.utils.NaNtoZero(x(getX(d, i)));
-          }).attr("cy", function (d, i) {
-            return nv.utils.NaNtoZero(y(getY(d, i)));
-          }).attr("r", function (d, i) {
-            return Math.sqrt(z(getSize(d, i)) / Math.PI);
-          });
-          labels.transition().attr("x", function (d, i) {
-            return nv.utils.NaNtoZero(x(getX(d, i)));
-          }).attr("y", function (d, i) {
-            return nv.utils.NaNtoZero(y(getY(d, i)));
-          });
-          if (showRadiusVector) {
-            rVectors.transition().attr("class", "nv-radius-vector").attr("x1", function (d, i) {
-              return nv.utils.NaNtoZero(x(getOX(d, i)));
-            }).attr("y1", function (d, i) {
-              return nv.utils.NaNtoZero(y(getOY(d, i)));
-            }).attr("x2", function (d, i) {
+            groups.exit().selectAll("path.nv-point").transition().attr("cx", function (d, i) {
               return nv.utils.NaNtoZero(x(getX(d, i)));
-            }).attr("y2", function (d, i) {
+            }).attr("cy", function (d, i) {
               return nv.utils.NaNtoZero(y(getY(d, i)));
-            }).style("opacity", 0.8);
+            }).remove();
+            points.each(function (d, i) {
+              d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
+            });
+            labels.each(function (d, i) {
+              d3.select(this).classed("nv-label", true);
+            });
+            points.transition().attr("cx", function (d, i) {
+              return nv.utils.NaNtoZero(x(getX(d, i)));
+            }).attr("cy", function (d, i) {
+              return nv.utils.NaNtoZero(y(getY(d, i)));
+            }).attr("r", function (d, i) {
+              return Math.sqrt(z(getSize(d, i)) / Math.PI);
+            });
+            labels.transition().attr("x", function (d, i) {
+              return nv.utils.NaNtoZero(x(getX(d, i)));
+            }).attr("y", function (d, i) {
+              return nv.utils.NaNtoZero(y(getY(d, i)));
+            });
+            if (showRadiusVector) {
+              rVectors.transition().attr("class", "nv-radius-vector").attr("x1", function (d, i) {
+                return nv.utils.NaNtoZero(x(getOX(d, i)));
+              }).attr("y1", function (d, i) {
+                return nv.utils.NaNtoZero(y(getOY(d, i)));
+              }).attr("x2", function (d, i) {
+                return nv.utils.NaNtoZero(x(getX(d, i)));
+              }).attr("y2", function (d, i) {
+                return nv.utils.NaNtoZero(y(getY(d, i)));
+              }).style("opacity", 0.8);
+            }
+          } else {
+            var points = groups.selectAll("path.nv-point").data(function (d) {
+              return d.values;
+            });
+            points.enter().append("path").style("fill", function (d, i) {
+              return d.color;
+            }).style("stroke", function (d, i) {
+              return d.color;
+            }).attr("transform", function (d, i) {
+              return "translate(" + x0(getX(d, i)) + "," + y0(getY(d, i)) + ")";
+            }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
+              return z(getSize(d, i));
+            }));
+            points.exit().remove();
+            groups.exit().selectAll("path.nv-point").transition().attr("transform", function (d, i) {
+              return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
+            }).remove();
+            points.each(function (d, i) {
+              d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
+            });
+            points.transition().attr("transform", function (d, i) {
+              //nv.log(d,i,getX(d,i), x(getX(d,i)));
+              return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
+            }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
+              return z(getSize(d, i));
+            }));
           }
-        } else {
-          var points = groups.selectAll("path.nv-point").data(function (d) {
-            return d.values;
-          });
-          points.enter().append("path").style("fill", function (d, i) {
-            return d.color;
-          }).style("stroke", function (d, i) {
-            return d.color;
-          }).attr("transform", function (d, i) {
-            return "translate(" + x0(getX(d, i)) + "," + y0(getY(d, i)) + ")";
-          }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
-            return z(getSize(d, i));
-          }));
-          points.exit().remove();
-          groups.exit().selectAll("path.nv-point").transition().attr("transform", function (d, i) {
-            return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
-          }).remove();
-          points.each(function (d, i) {
-            d3.select(this).classed("nv-point", true).classed("nv-point-" + i, true).classed("hover", false);
-          });
-          points.transition().attr("transform", function (d, i) {
-            //nv.log(d,i,getX(d,i), x(getX(d,i)));
-            return "translate(" + x(getX(d, i)) + "," + y(getY(d, i)) + ")";
-          }).attr("d", d3.svg.symbol().type(getShape).size(function (d, i) {
-            return z(getSize(d, i));
-          }));
         }
 
 
@@ -1082,6 +1086,12 @@ d3.geo.tile = function () {
     chart.label = function (_) {
       if (!arguments.length) return getLabel;
       getLabel = d3.functor(_);
+      return chart;
+    };
+
+    chart.showPoints = function (_) {
+      if (!arguments.length) return showPoints;
+      showPoints = _;
       return chart;
     };
 
@@ -3096,6 +3106,7 @@ d3.geo.tile = function () {
         width = 960,
         height = 500,
         color = nv.utils.defaultColor() // a function that returns a color
+       
     ,
         getX = function (d, i) {
       return d.x;
@@ -3320,6 +3331,10 @@ d3.geo.tile = function () {
       return chart;
     };
 
+    
+
+
+
     chart.clipEdge = function (_) {
       if (!arguments.length) return clipEdge;
       clipEdge = _;
@@ -3418,6 +3433,7 @@ d3.geo.tile = function () {
     function chart(selection) {
       selection.each(function (data) {
         // console.log("ScatterSerie",data)
+        // console.log("scatter", lines.scatter)
 
         var container = d3.select(this),
             that = this;
@@ -3766,6 +3782,13 @@ d3.geo.tile = function () {
       return chart;
     };
 
+    chart.showPoints = function (_) {
+      
+      if (!arguments.length) return lines.scatter.showPoints;
+     lines.scatter.showPoints(_);
+      return chart;
+    }; 
+
     chart.showXAxis = function (_) {
       if (!arguments.length) return showXAxis;
       showXAxis = _;
@@ -3777,6 +3800,12 @@ d3.geo.tile = function () {
       showYAxis = _;
       return chart;
     };
+
+    // chart.showPoints = function (_) {
+    //   if (!arguments.length) return line.showPoints;
+    //   line.showPoins(_);
+    //   return chart;
+    // };
 
     chart.rightAlignYAxis = function (_) {
       if (!arguments.length) return rightAlignYAxis;
@@ -5320,6 +5349,13 @@ d3.geo.tile = function () {
       //console.log("SA CHART", _)
       if (!arguments.length) return stacked.label;
       stacked.label(_);
+      return chart;
+    };
+
+    chart.ShowPoints = function (_) {
+      //console.log("SA CHART", _)
+      if (!arguments.length) return stacked.scatter.showPoints();
+      stacked.scatter.showPoints(_);
       return chart;
     };
 

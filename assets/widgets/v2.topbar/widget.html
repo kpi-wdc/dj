@@ -4,17 +4,8 @@
       <li class="name">
         <h1>
           <a href="#">
-          <span class="left"
-                    
-                style=" 
-                background-image: url('{{(config.icon)?config.icon:'./img/default-app-icon.png'}}');
-                background-size: 44px 44px;
-                overflow: hidden;
-                width: 44px;
-                height: 44px;
-                margin: 0 0.5em 0 0;">
-           </span>
-          <!-- <img ng-if="config.icon" src="{{config.icon}}" style="height:48px;"/>   -->
+          <img src="{{(config.icon)?config.icon:'./img/default-app-icon.png'}}"
+                style="height: 40px; margin: -0.2em 0 0;"/>
           {{config.title | translate}}
           </a>
         </h1>

@@ -1,4 +1,5 @@
 // Bower modules
+
 import angular from 'angular';
 import 'angular-animate';
 import 'angular-cookies';
@@ -9,6 +10,7 @@ import 'angular-ui-router';
 import 'angular-ui-tree';
 import 'angular-clipboard';
 import 'angular-hotkeys';
+import 'angular-scroll';
 import 'ngReact';
 
 
@@ -29,9 +31,11 @@ import 'skin-directives'
 import 'user';
 import 'widget-api';
 
+
+
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard','cfp.hotkeys',
-  'app.templates', 'react',
+  'app.templates', 'react', 'duScroll',
   'app.widgetApi', 'app.config', 'app.i18n','app.dps', 'app.skins','app.skinDirectives',
   'app.user', 'app.info', 'app.author', 'app.modals','app.dictionary']);
 
@@ -121,6 +125,23 @@ app.constant('selectedHolder',null);
 // })
 
 app.constant('randomWidgetName', () => Math.random().toString(36).substring(2));
+
+app.value('duScrollDuration', 500)
+app.value('duScrollOffset', 70)
+app.value('duScrollEasing', function (t) { return 1+(--t)*t*t*t*t })
+
+app.service("$scroll",function($document,APIUser){
+  return function(scope){
+    if(!scope.widget){
+      scope = (new APIUser()).getScopeByInstanceName(scope)
+    }
+    
+    if(scope){
+      var element = scope.container.getElement()[0].children[0];
+      $document.scrollToElementAnimated(element);
+    }
+  }
+})
 
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
                      $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
@@ -621,6 +642,10 @@ app.service("logIn", function($cookies, $location,fullReload,appUrls){
 
 app.service('widgetLoader', function ($q, $ocLazyLoad, widgetTypesPromise, appUrls) {
   this.load = (widgets) => {
+    
+    
+
+
     widgets = angular.isArray(widgets) ? widgets : [widgets];
     return widgetTypesPromise.then((widgetTypesHTTP) => {
       const widgetControllers = [];
@@ -961,6 +986,7 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
     },
     controller() {}, // needed for require: '^widget' to work in widget-translate directive
     link(scope, element, attrs) {
+      // console.log("Link", element)
       if (!scope.type) {
         throw "widget directive needs type parameter";
       }
@@ -980,7 +1006,8 @@ app.directive('widget', function ($rootScope, $translate, $window, appUrls, glob
         if (!conf) {
           conf = {
             instanceName: attrs.instancename,
-            type: scope.type
+            type: scope.type,
+            container: scope.container
           };
           config.appWidgets.push(conf);
         }

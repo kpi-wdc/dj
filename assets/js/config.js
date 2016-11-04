@@ -8,6 +8,7 @@ System.config({
     "i18n": "js/i18n.js",
     "dps": "js/dps.js",
     "skins":"js/skins.js",
+    "sails.io":"js/dependencies/sails.io.js",
     "dictionary": "js/dictionary.js",
     "custom-react-directives": "js/custom-react-directives.js",
     "modal-controllers": "js/modal-controllers.js",
@@ -27,6 +28,7 @@ System.config({
     "angular-ui-router": "components/angular-ui-router/release/angular-ui-router.js",
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
+    "angular-scroll": "components/angular-scroll/angular-scroll.js",
     "react": "components/react/react.js",
     "react-dom": "components/react/react-dom.js",
     "ngReact": "components/ngReact/ngReact.js",
@@ -62,6 +64,7 @@ System.config({
     "file-upload-shim": {
       "deps": []
     },
+
     "angular": {
       "deps": [
         "jquery",
@@ -69,6 +72,7 @@ System.config({
       ],
       "exports": "angular"
     },
+
     "file-upload": {
       "deps": [
         "angular"
@@ -89,6 +93,11 @@ System.config({
       ]
     },
     "angular-animate": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-scroll": {
       "deps": [
         "angular"
       ]

@@ -1,8 +1,9 @@
 import angular from 'angular';
 import 'angular-foundation';
 import 'file-upload';
+import 'i18n';
 
-const info = angular.module('app.info', ['mm.foundation','ngFileUpload']);
+const info = angular.module('app.info', ['mm.foundation','ngFileUpload','app.i18n']);
 
 info.service('alert', function ($modal, $log) {
   this.message = (msg) => {
@@ -69,6 +70,21 @@ info.factory('prompt', function ($modal) {
     }).result;
   };
 });
+
+
+info.factory('log', function ($modal) {
+  return (log) => {
+    return $modal.open({
+      templateUrl: '/partials/log.html',
+      controller: 'LogController',
+      windowClass: 'dialog-modal',
+      resolve: {
+        log: () => log
+      }
+    }).result;
+  };
+});
+
 
 info.factory('dialog', function ($modal) {
   return (form) => {
@@ -223,6 +239,15 @@ info.controller('SplashController', function ($scope, $modalInstance, form, wait
   if(wait){
     setTimeout(() => {$modalInstance.dismiss();}, wait);
   }
+});  
+
+
+info.controller('LogController', function ($scope, $modalInstance, i18n, log) {
+  
+  $scope.close = () => {$modalInstance.dismiss()};
+  $scope.log = log.messages;
+  $scope.title = log.title || {level:"info", text:"Operation Log"}
+  $scope.formatDate = i18n.formatDate;
 });  
 
   

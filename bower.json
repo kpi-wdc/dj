@@ -39,7 +39,8 @@
     "d3-layout-timeline": "emeeks/d3.layout.timeline",
     "date-and-time": "knowledgecode/date-and-time#~0.3.0",
     "d3": "v3.5.17",
-    "d3.timer":"https://d3js.org/d3-timer.v1.min.js"
+    "d3.timer": "https://d3js.org/d3-timer.v1.min.js",
+    "angular-scroll": "~1.0.0"
   },
   "resolutions": {
     "d3": "v3.5.17"

@@ -702,6 +702,98 @@ m.controller("PreparationDialogController", function (
     });
 
     $scope.operations.push({
+      title:"Merge Rows",
+      action: () => {
+
+        let rows =  
+          $scope.resultTable.body
+            .map((item,index) => {
+              return {
+                title:item.metadata.map((m) => m.label).join("."),
+                value:index
+              }  
+            });
+        
+        dialog({
+          
+          title:"Merge Rows",
+          fields:{
+            master:{
+              title:"Master row",
+              type:"select",
+              options:rows
+            },
+            slave:{
+              title:"Slave row",
+              type:"select",
+              options:rows
+            }
+          }
+
+        }).then((form) => {
+          let indexes; 
+          $scope.pushOp({
+            shortName: "Merge Rows("+form.fields.master.value+","+form.fields.slave.value+")",
+            merge : {
+              "enable" : true,
+              "direction" : "Rows",
+              "master" : form.fields.master.value,
+              "slave" : form.fields.slave.value
+            }
+          })  
+        })
+      }
+    });
+
+    $scope.operations.push({
+      title:"Merge Columns",
+      action: () => {
+
+        let rows =  
+          $scope.resultTable.header
+            .map((item,index) => {
+              return {
+                title:item.metadata.map((m) => m.label).join("."),
+                value:index
+              }  
+          });
+        
+        dialog({
+          
+          title:"Merge Columns",
+          fields:{
+            master:{
+              title:"Master column",
+              type:"select",
+              options:rows
+            },
+            slave:{
+              title:"Slave column",
+              type:"select",
+              options:rows
+            }
+          }
+
+        }).then((form) => {
+          let indexes; 
+          $scope.pushOp({
+            shortName: "Merge Columns("+form.fields.master.value+","+form.fields.slave.value+")",
+            merge : {
+              "enable" : true,
+              "direction" : "Columns",
+              "master" : form.fields.master.value,
+              "slave" : form.fields.slave.value
+            }
+          })  
+        })
+      }
+    });
+
+
+
+
+
+    $scope.operations.push({
       title:"Format numbers",
       action: () => {
         dialog({

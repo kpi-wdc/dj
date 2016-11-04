@@ -1,0 +1,33 @@
+{
+  "keywords":["data","management","interactive","master", "list"],
+  "schema": {
+    "type": "object",
+    "title": "Search Result List",
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Title"
+      },
+
+      "query": {
+        "type": "string",
+        "title": "Query"
+      },
+
+      "listeners": {
+        "type": "string",
+        "title": "Lookup Listeners"
+      },
+
+      "rlisteners": {
+        "type": "string",
+        "title": "Refresh Listeners"
+      },
+
+      "dslisteners": {
+        "type": "string",
+        "title": "Dataset Info Listeners"
+      }
+    }
+  }
+}

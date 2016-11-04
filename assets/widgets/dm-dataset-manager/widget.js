@@ -224,7 +224,7 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
 
 .controller("DatasetsManagerController", function ($scope, $http, $upload, $timeout, $dps, 
                                                 $lookup, EventEmitter,APIProvider, pageSubscriptions,
-                                                $translate, user, confirm, alert, dialog){
+                                                $translate, user, confirm, alert, dialog, log){
   
   const eventEmitter = new EventEmitter($scope);
 
@@ -304,6 +304,7 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
   };
 
 
+
   $scope.uploadCommit = function(){
     dialog({
         title:`${$translate.instant('Select .xlsx file')}:`,
@@ -324,26 +325,66 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
           headers: {'Content-Type': undefined},
           transformRequest: angular.identity
         }).success( function(response) {
-            if(response.error){
-               alert.error(["Dataset Commit not created"].concat(response.data.error));
-               $scope.getCommitList();
-            }else{
-              if(response.warnings.length>0){
-               alert.message(["Dataset commit is created, but"].concat(response.data.warnings));
-              }
 
-              $scope.upload_process = false;
-              $lookup.reload();
-              $scope.item = response.metadata;
-              $timeout(function() {
-                $scope.getCommitList();
-                eventEmitter.emit('refresh');
-              });
-            }  
+            var title = {level:"success",text:"Dataset Created"};
+            
+            if(response.log.filter((item) => {return item.level=="error"}).length>0)
+              title = {level:"error",text:"Cannot create Dataset"};
+            if(response.log.filter((item) => {return item.level=="warning"}).length>0)
+              title = {level:"warning",text:"Dataset Created with Warnings"};
+            
+            log({title:title, messages:response.log});
+
+            $scope.upload_process = false;
+            $lookup.reload();
+            $scope.item = response.metadata;
+            $timeout(function() {
+              $scope.getCommitList();
+              eventEmitter.emit('refresh');
+            });
           });
       }) 
   }
 
+ $scope.uploadfromFTP = function(){
+    dialog({
+        title:`${$translate.instant('Select .xlsx file')}:`,
+        fields:{
+          file:{
+            title:'Data file:', 
+            type:'file', 
+            editable:true, 
+            required:true
+          }
+        }
+      }).then((form) => {
+        const fd = new FormData();
+        // Take the first selected file
+        fd.append('file', form.fields.file.value);
+        $http.post($dps.getUrl()+'/api/dataset/ch/update', fd, {
+          withCredentials: true,
+          headers: {'Content-Type': undefined},
+          transformRequest: angular.identity
+        }).success( function(response) {
+            var title = {level:"success",text:"Dataset Group Created"};
+            
+            if(response.log.filter((item) => {return item.level=="error"}).length>0)
+              title = {level:"error",text:"Cannot create Dataset Group"};
+            if(response.log.filter((item) => {return item.level=="warning"}).length>0)
+              title = {level:"warning",text:"Dataset Group Created with Warnings"};
+            
+            log({title:title, messages:response.log});
+
+            $scope.upload_process = false;
+            $lookup.reload();
+            // $scope.item = response.metadata;
+            // $timeout(function() {
+            //   $scope.getCommitList();
+            //   eventEmitter.emit('refresh');
+            // });
+          });
+      }) 
+  }
   
   // $scope.upload = function (file) {
   //   $scope.upload_process = true;

@@ -1,6 +1,6 @@
 
 <div 
-    ng-controller="V2DataManagerLookupController">
+    ng-controller="V2DataManagerLookupController" style="line-height:1;">
  <!--  <div class="row" ng-if="!(object && (object !== key))">
     <center>
       <h4 style="color:#eee">
@@ -8,18 +8,27 @@
       </h4>
     </center> 
   </div>   -->
-  <div ng-if="object && (object !== key) && visibility" class="row" style="    margin: 0;
+  <div ng-if="object && (object !== key) && visibility" class="row" style="    margin:0 0 0.5em 0;
     padding: 0 1em;">
    
     <div class="row">
-      <h4 style="margin:0 0 0.5em;">
-        <img ng-if="object.icon" src="{{object.icon}}" width="48px" height="48px" />
-        <img ng-if="!object.icon" src="./img/default-info-icon.png" width="48px">
+      <h3 ng-if="object.category"
+          style="    color: #0078a0;
+    margin: 0 0 0.5em;
+    line-height: 1;">
+            {{object.category | translate}}:
+      </h3>
+      <h4 style="      color: #0078a0;
+    margin: 0 0 0.5em;
+    line-height: 1;">
+        <img ng-if="object.icon" src="{{object.icon}}" width="36px" height="36px" />
+       <!--  <img ng-if="!object.icon" src="./img/default-info-icon.png" width="48px"> -->
+        
         {{ object.label | translate}}
       </h4>
     </div>  
 
-     <div class="row" ng-if="meta.length > 0">
+   <!--   <div class="row" ng-if="meta.length > 0">
       <a ng-click="fml = !fml" style="font-size:small;float:right;">{{((fml)?"Hide":"Show")+" Full Metadata List"}}</a>
       
       <div ng-if="fml" class="row" style="font-size:small;">
@@ -38,7 +47,7 @@
           </tbody>   
         </table>
       </div>
-    </div>
+    </div> -->
 
      <div class="row">  
       <div ng-if="object.note" style="font-size: small;

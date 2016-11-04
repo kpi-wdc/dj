@@ -1,0 +1,13 @@
+<div style="margin: 1.875rem 0;" ng-controller="ArticleController">
+	<div class="row"  style="margin:0;">
+		<h2 ng-if="widget.title" style = "text-align: center;">{{widget.title | translate}}</h2>
+		<h4 ng-if="widget.intro" style="font-size: 1.125rem;
+									    line-height: 1.6;
+									    color: #777;
+										text-align: center;">
+			{{widget.intro | translate}}
+		</h4>
+		<p ng-if="widget.text">{{widget.text | translate}}</p>
+		<a ng-if="widget.href" href="{{widget.href.url | translate}}">{{widget.href.description | translate}}</a>
+	</div>
+</div>	

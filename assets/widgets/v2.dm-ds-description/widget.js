@@ -6,7 +6,7 @@ import 'custom-react-directives';
 // console.log("REACT",React);
 let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','app.dps','ngFileUpload','react','custom-react-directives'])
   m.controller('DataManagerDSInfoController', function ($scope, $http, $dps, EventEmitter, 
-    APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n) {
+    APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n, $scroll) {
     
 
     const eventEmitter = new EventEmitter($scope);
@@ -29,13 +29,15 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
     }
 
     $scope.selectSource = function(key){
-      eventEmitter.emit('setLookupKey', key);
+      console.log("Select Source")
+      eventEmitter.emit('setLookupKey', key,"#Datasource");
       let query = [{"dataset.source":[{equals:key}]}];
       eventEmitter.emit('searchQuery', query);
     }
 
     $scope.selectTopic = function(key){
-      eventEmitter.emit('setLookupKey', key);
+      console.log("Select Topic")
+      eventEmitter.emit('setLookupKey', key, "#Topic");
       let query = [{"dataset.topics":[{includes:key}]}];
       eventEmitter.emit('searchQuery', query);
     }
@@ -111,7 +113,7 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
           eventEmitter.emit('setLookupKey', undefined);
           $scope.topics = prepareTopics($scope.ds.dataset.topics);
           $scope.ds.dataset.$periodicity = $translate.instant('WIDGET.V2.DM-DS-DESCRIPTION.'+$scope.ds.dataset.periodicity); 
-        
+          $scroll($scope)
         }  
       })
 

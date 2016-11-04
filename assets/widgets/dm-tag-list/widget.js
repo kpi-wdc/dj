@@ -51,7 +51,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
 
 
     $scope.selectItem = function(key){
-      eventEmitter.emit('setLookupKey', key);
+      eventEmitter.emit('setLookupKey', key, $scope.category);
       let tmp = {};
       tmp[$scope.property.split(".").slice(1).join(".")] = [{includes:key}];
       let query = [tmp];
@@ -87,6 +87,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
       .config(() => {
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.title = $scope.widget.title;
+        $scope.category = $scope.widget.category;
         $scope.icon_class = $scope.widget.icon_class;
         $scope.property = $scope.widget.property || $scope.property;
 

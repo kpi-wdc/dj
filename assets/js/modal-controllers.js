@@ -53,9 +53,9 @@ modals.controller('WidgetModalSettingsController', function ($scope, $modalInsta
 modals.controller('WidgetModalAddNewController', function ($scope, $modalInstance, $log,
                                                         $timeout, $translate,
                                                         holder, appUrls,
-                                                        widgetTypes) {
+                                                        widgetTypes,user) {
   // create array instead of map (easy filtering)
-  const widgetTypesArr = [];
+  var widgetTypesArr = [];
 
   for (let type in widgetTypes.data) {
     const currentWidget = {
@@ -82,6 +82,8 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
     } else {
       currentWidget.icon = appUrls.widgetIcon(currentWidget.type);
     }
+    // console.log("Grant for ", widgetTypes.data[type])
+    currentWidget.grant = (widgetTypes.data[type].grant) ? widgetTypes.data[type].grant : ['owner','collaborator',"administrator"]
     widgetTypesArr.push(currentWidget);
   }
 
@@ -94,7 +96,22 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
 
   $scope.selectedTags = [];
 
+  var userRoles = [];
+  if(user.isAdmin)userRoles.push("administrator");
+  if(user.isOwner)userRoles.push("owner");
+  if(user.isCollaborator)userRoles.push("collaborator");
 
+  var hasGrant = function(roles,grants){
+    var r = false;
+    roles.forEach((role) => {
+      r |= grants.indexOf(role) >= 0;
+    })
+    return r;
+  }
+
+  widgetTypesArr = widgetTypesArr.filter( (w) => { return hasGrant(userRoles,w.grant) } )
+
+  
   angular.extend($scope, {
     widgetTypes: widgetTypesArr,
     chooseWidget(widget) {

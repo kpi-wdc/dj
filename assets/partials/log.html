@@ -1,0 +1,71 @@
+<style>
+.logger {
+    font-size: medium;
+    font-stretch: condensed;
+}
+
+.log h5.info {
+    color: #555555;
+}
+
+.log h5.warning {
+    color: #cf6e0e;
+}
+
+.log h5.success {
+    color: #43ac6a;
+}
+
+.log h5.error {
+    color: #cf2a0e;
+}
+
+.log h5.debug {
+    color: #007095;
+}
+
+.logger div.info {
+    color: #555555;
+}
+
+.logger div.warning {
+    background: #cf6e0e;
+    color: #fff;
+}
+
+.logger div.success {
+    color: #fff;
+    background: #43ac6a;
+}
+
+.logger div.error {
+    color: #fff;
+    background: #cf2a0e;
+    font-weight: bold;
+}
+
+.logger div.debug {
+    color: #007095;
+}
+
+.logger span {
+    float: left;
+    margin: 0 1em 0 0;
+}
+</style>
+<div class="log">
+    <h5 class="info" ng-class="title.level" style="border-bottom: 1px solid #ddd;">
+        {{title.text}}
+    </h5>
+    <div class="logger" style="height:350px; overflow:auto;line-height:1;">
+        <div class="row" ng-repeat="m in log" ng-class="m.level">
+            <span>
+            <i class="fi-info" ng-if="m.level != 'error'"></i>
+            <i class="fi-alert" ng-if="m.level == 'error'"></i>
+            {{m.timeStamp}}
+         </span>
+            <span ng-repeat="msg in m.message">{{msg}}</span>
+        </div>
+    </div>
+    <a class="close-reveal-modal" ng-click="close()">&#215;</a>
+</div>

@@ -1,0 +1,145 @@
+<!-- <div ng-controller="DataManagerSearchResultController">
+    <div ng-if="total > 0">
+      <div style="border-bottom: 0.1rem solid #ddd;">
+        <h4 style="     color: #888;
+                        font-stretch: ultra-condensed;
+                        font-weight: bold;
+                        padding: 0.2em 1em 0.2em 0;
+                        margin: 0;" ng-if="title">
+            <img ng-if="object.icon" ng-src="{{object.icon}}" width="48px" height="48px" >
+            {{object.label | translate}}
+        </h4>
+        <div ng-if="object.note" style="font-size: small; margin: 0 0.5rem 0.5rem 1.5rem; text-align: justify;">
+          {{object.note | translate}}
+        </div>
+        <div ng-if="object.url" style="font-size:small; margin: 0 0.5rem 1rem 1.5rem; text-align: justify;">
+          <a href="{{object.url}}" target="blank">{{object.url}}</a>
+        </div>
+      </div>
+    
+      <h4 style=" color: #888;
+                  font-stretch: ultra-condensed;">
+                  <widget-translate>Available_Datasets</widget-translate>&nbsp;({{total}})
+      </h4>
+
+      <center ng-if="query && total == 0" >
+        <img src="./img/ajax-loader.gif">
+      </center>
+    
+      <div style=" padding: 0.5em 0.5em 1em;">
+        <div ng-repeat="item in result" style="margin:0 0 1rem 0;">
+          <h5 style="font-stretch: ultra-condensed; margin:0;color: #888; font-weight: bold;">
+            <span ng-click="item.collapsed = !item.collapsed" style="cursor:pointer;">
+              <i ng-if="item.dataset.status == 'private'" class="fi-lock" 
+                 style=" padding:0 0.3em;
+                          margin:0 0.2em 0 0;
+                          color:#cf2a0e;">
+              </i>
+              <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="24px" height="24px">
+              <i ng-if="!lookup(item.dataset.source).icon" class="fi-database" style="color:#a0d3e8;"></i>
+              {{item.dataset.label | translate}}{{(item.collapsed)?' ...':''}}
+            </span>
+            <button 
+                     ng-click="openQueryDialog(item)"
+                      class="button radius tiny secondary toolbar right"
+                     style="margin:0.5rem 0.1rem 0.3rem 0.1rem;padding-top:0.2rem; padding-bottom:0.2rem;">
+                    <i class="fi-crop"/>
+                    Query...       
+            </button>
+            <button 
+                     ng-click="download(item)"
+                      class="button radius tiny secondary toolbar right"
+                    style="margin:0.5rem 0.1rem 0.3rem 0.1rem; padding-top:0.2rem; padding-bottom:0.2rem;">
+                    <a href="{{'./api/dataset/download/'+item.dataset.id}}" target="blank">
+                      <i class="fi-download"/>
+                      Download
+                    </a>       
+            </button>
+          </h5>  
+    
+          <div ng-if="!item.collapsed"
+               style="margin: 0.2em 0 0.5em 2.5em;
+                      padding: 0.5em;
+                      border: 0.1rem solid #ddd;
+                      background: #f4f4f4;">
+            <div style=" font-size: small; text-align: justify;margin:0 0 0 0.1em;">
+              <b>
+                <widget-translate>NOTE</widget-translate>
+              </b>:&nbsp;&nbsp;{{item.dataset.note | translate}}
+            </div>  
+            <div style=" font-size: small; text-align: justify;">
+              <b>
+                <widget-translate>SOURCE</widget-translate>
+              </b>:&nbsp;&nbsp;
+              <a ng-click="selectSource(item.dataset.source)">
+                {{(lookup(item.dataset.source).label) ? lookup(item.dataset.source).label : item.dataset.source | translate}}
+              </a>
+            </div>
+            <div style=" font-size: small; text-align: justify;">
+              <b>
+                <widget-translate>LAST_UPDATE</widget-translate>
+              </b>:&nbsp;&nbsp;{{formatDate(item.dataset.commit.createdAt)}}  
+            </div>
+            <div style=" font-size: small; text-align: justify;">
+              <b>
+                <widget-translate>TOPICS</widget-translate>
+              </b>:&nbsp;&nbsp;
+              <span ng-repeat="topic in prepareTopics(item.dataset.topics)">
+                <a ng-click="selectTopic(topic)">
+                  {{(lookup(topic).label) ? lookup(topic).label : topic | translate}}
+                </a>&nbsp;,
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>        
+</div>
+ -->
+ 
+
+ <div  class="row" ng-controller="'DataManagerSearchResultListController" style="margin:0 3em;">
+  <center ng-if="query && total == 0" >
+        <img src="./img/ajax-loader.gif">
+  </center>
+  
+  <div class = "row" ng-if="query && (total > 0)" >
+    <h4>
+      {{widget.title | translate}}
+    </h4>
+
+
+    
+
+    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+      <li ng-repeat="item in result"
+          style="{{(item.selected)?'border:1px solid #ddd;padding:0;':'padding:0;'}}"
+          >
+          <a style="margin:1em;"
+            ng-click="select(item)"
+            tooltip="{{item.dataset.note | translate}}"
+            tooltip-placement="bottom"
+            tooltip-popup-delay='1000'
+            class="has-tip"
+          >
+            <center>
+              <img 
+                src="./img/default-ds-icon.png" style="width:48px;"/>
+
+              <!-- <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" width="48px" height="48px">
+
+              <img  ng-if="!lookup(item.dataset.source).icon"
+                src="./img/default-app-icon.png" style="width:48px;"/>
+               -->
+              <div style="    font-size: small;
+                              font-weight: normal;
+                              font-stretch: semi-condensed;">
+               {{item.dataset.label | translate}}{{item.dataset.ext}}
+              </div>  
+            </center>
+          </a>
+      </li>
+    </ul>
+  </div>  
+
+</div>

@@ -14,6 +14,13 @@
         "title": "Query"
       },
 
+      "layout":{
+        "type": "string",
+        "title":"Layout",
+        "enum": ["panel","list"],
+        "default":"panel"
+      },
+
       "listeners": {
         "type": "string",
         "title": "Lookup Listeners"

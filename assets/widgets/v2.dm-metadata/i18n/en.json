@@ -1,0 +1,30 @@
+{
+  "DELETE": "Delete",
+  "DESCRIPTION": "Widget which shows list of applications",
+  "ERROR_DELETING_APP": "Error while deleting the app {{error}}: {{data}}",
+  "ERROR_RENAMING_APP": "Error happened while renaming app: {{status}}",
+  "EXPORT": "Export",
+  "NEW_NAME": "New name",
+  "NAME": "Name",
+  
+  "RENAME": "Rename",
+  "SUBMIT": "Submit",
+  "TYPE_APP_NAME_TO_CONFIRM_DELETION": "Type again name of the app to confirm deletion: ",
+  "VIEW": "View",
+  "WRONG_NAME_APP_NOT_DELETED": "Wrong name, app is not deleted!",
+  "NO_INFO_AVAILABLE":"No Info Available",
+
+
+  "APPLICATION_AUTHOR": "Application author",
+  "THIS_APP_DOESNT_HAVE_AUTHOR": "This app doesn't have author - everybody can modify it.",
+  "DESCRIPTION": "Widget which shows information about app author",
+  "Keywords":"Keywords",
+  "Collaborators":"Collaborators",
+  "CreatedAt": "Created at:",
+  "UpdatedAt": "Updated at:", 
+  "BASED_ON": "* Based on :",
+  "FROM": " from ",
+  "Key":  "Metadata Key",
+  "Value": "Metadata Value"
+   
+}

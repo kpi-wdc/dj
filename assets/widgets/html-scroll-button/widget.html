@@ -1,0 +1,21 @@
+<div class="row" ng-controller="ScrollButtonController" style="text-align:center;">
+	<span ng-repeat = "t in targets">
+		<button ng-if="t.target.widget"
+				ng-click="scroll(t.target.widget)"
+				class="button large" 
+				ng-class="t.class"
+				style="border-radius:5px; margin: 0.5em 0.25em;">
+			{{t.title | translate}}
+		</button>
+		<a 	ng-if="t.target.url" 
+			href="{{t.target.url}}"
+			target="blank"	
+			class="button large" 
+			ng-class="t.class"
+			style="border-radius:5px; margin: 0.5em 0.25em;">
+			
+			{{t.title | translate}}
+		
+		</a>	
+	</span>
+</div>

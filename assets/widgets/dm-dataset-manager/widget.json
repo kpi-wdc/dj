@@ -1,4 +1,5 @@
 { "keywords":["data","manager","commits","datasets"],
+  "grant":["administrator"],
   "schema": {
     "type": "object",
     "title": "Datasets Management",

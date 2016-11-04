@@ -1,0 +1,60 @@
+<style>
+
+  .commitDate, .tableHead {
+    font-size:smaller; 
+    color:#154163;
+    padding: 0.2rem 0.625rem;
+  }
+  
+  .commitNote {
+    font-size:smaller; 
+    color:#154163;
+    padding: 0.2rem 0.625rem;
+  }
+
+</style>
+
+<div 
+    ng-controller="DataManagerDSHistoryController">
+  <div ng-if="ds" 
+       class="row" 
+       style="    margin: 1.5em 0 0 0;
+                  padding: 0 1em;
+                  font-size:small;
+                  line-height: 1;" >   
+  
+    <div class="row">   
+      <h5 ng-if="title && title.length>0"
+            style="    color: #0078a0;
+                        margin: 0 0 0.5em;
+                        line-height: 1;">
+              {{title | translate}}
+      </h5>
+    </div>  
+    <center ng-if="!commits" >
+        <img src="./img/ajax-loader.gif">
+    </center>
+    <div class="row" ng-if="commits" style="font-size:small;">   
+      <table width="100%">
+        <thead>
+          <tr>
+            <th class="tableHead" width="33%" widget-translate>Date</th>
+            <th class = "tableHead" widget-translate>Comment</th>
+          </tr>
+        </thead>
+        <tbody>  
+          <tr ng-repeat="item in commits">
+             <td class="commitDate" 
+                style="font-weight:{{(item.metadata.dataset.commit.HEAD)?'bold':'normal'}}">
+              {{formatDate(item.metadata.dataset.commit.createdAt)}}
+            </td>
+            <td class="commitNote"
+                style="font-weight:{{(item.metadata.dataset.commit.HEAD)?'bold':'normal'}}">
+              {{item.metadata.dataset.commit.note}}
+            </td>
+          </tr>
+        </tbody>  
+      </table>
+    </div>  
+  </div>
+</div>

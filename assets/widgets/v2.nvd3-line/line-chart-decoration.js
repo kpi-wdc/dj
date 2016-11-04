@@ -127,7 +127,7 @@ m.factory("LineChartDecoration",[
 		                	"index" : this.conf.index
 
 		                },
-		                "proc_name": "scatter-serie",
+		                "proc_name": "line-serie",
 		                "response_type": "data"
 		            }
 				)

@@ -1,12 +1,14 @@
+<div id="scroll-container">
 <!-- <div class="row">
   <design-panel ng-if="user.isOwner || user.isCollaborator"></design-panel>
 </div> -->
 
-<div class="row">
+<div class="row" ng-if="globalConfig.designMode">
   <design-panel></design-panel>
 </div>
-
-
+<!-- <div class="row">
+  <widget type="v2.banner" instanceName="Banner" skin="true"></widget>
+</div> -->
 <div class="row">
   <!-- <login-google-button ng-if="!user.isLoggedIn"></login-google-button> -->
   <widget type="v2.topbar" instanceName="AppTopbar" skin="true"></widget>
@@ -21,7 +23,7 @@
 </div> -->
 
 <div class="row">
-  <div id="page-view" style="margin:1em;">
+  <div id="page-view" style="margin:0 1em;">
     <application-view>
       <translate>LOADING_DOTS</translate>
     </application-view>
@@ -66,6 +68,8 @@
     </div>
   </div>
 </footer>
+
+</div>
 <!-- <div class="row">
   <div ng-if="user.isLoggedIn">
     <logout-button></logout-button>

@@ -1,0 +1,19 @@
+{
+  "keywords":["data","management","interactive","master", "description", "lookup"],
+  "schema": {
+    "type": "object",
+    "title": "Metadata List",
+    
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Title"
+      },
+  
+      "icon_class":{
+        "type": "string",
+        "title": "Icon fondation class"
+      }
+    }
+  }
+}

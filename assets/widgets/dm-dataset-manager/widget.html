@@ -1,5 +1,9 @@
-<div ng-controller="DatasetsManagerController" ng-show="globalConfig.designMode">
+<div 
+     ng-controller="DatasetsManagerController" 
+     ng-show="globalConfig.designMode"
+>
 
+<div ng-if="user.isAdmin" >
   <h4 style=" color: #888;
               font-size: large;
               margin: 0;
@@ -7,7 +11,15 @@
               border-bottom: 0.1rem solid #ddd;">
     <img src="./widgets/dm-dataset-manager/icon.png" width="32px"/>
     Datasets Management
-      
+      <button ng-click="uploadfromFTP()"
+      class="button radius tiny secondary toolbar right"
+          style=" margin: 0.6rem 0.1rem 0.3rem 0.1rem;
+                  padding-top: 0.2rem;
+                  padding-bottom: 0.2rem;">
+          <i class="fi-plus"/>
+          Upload CSV from FTP
+      </button>
+
       <button ng-click="uploadCommit()"
              class="button radius tiny secondary toolbar right"
              style=" margin: 0.6rem 0.1rem 0.3rem 0.1rem;
@@ -101,7 +113,7 @@
         <a>{{d.dataset.id}}</a>
       </td>
       <td style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">
-        <a><b>{{d.dataset.label | translate}}</b></a>
+        <a><b>{{d.dataset.label | translate}}{{d.dataset.ext}}</b></a>
       </td>
       <td  style="font-size:smaller;padding:0.1rem 0.5rem;font-stretch: ultra-condensed;">
         <a>{{d.dataset.commit.author}}</a>
@@ -251,6 +263,6 @@
     </tr>
   </table>
 </div>
-
+</div>
 </div>
 </div>
