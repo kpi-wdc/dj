@@ -24,6 +24,7 @@ var I18N = require("../../wdc_libs/wdc-i18n");
 var Cache = require("./Cache");
 var date = require("date-and-time");
 var Promise = require("bluebird");
+var logger = require("../../wdc_libs/wdc-log").global;
 
 
 
@@ -129,7 +130,8 @@ module.exports = {
 
 
   updateDataset: function (req, res) {
-    sails.log.debug("#Update dataset");
+    sails.log.debug("#Update dataset",logger);
+    logger.info("Update dataset")
     req.file('file').upload({},
       function (err, uploadedFiles) {
 
@@ -143,14 +145,18 @@ module.exports = {
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
 
+        logger.info("Parse file "+uploadedFileAbsolutePath)
+    
         wdc_xlsx(uploadedFileAbsolutePath)
           .then(function(dataset){
-            // sails.log.debug(dataset)
+            // logger.debug("dataset parsed")
 
             var dict = dataset.dictionary;
             
             var validationResult = dataset.validation;
             if (validationResult.error){
+              validationResult.log = logger.get();
+              logger.clear();
               return res.send(validationResult); 
             }
 
@@ -163,6 +169,7 @@ module.exports = {
                 "commit/HEAD": true
               }).then(function (obj) {
                 if (!obj) {
+                  logger.info("Create new dataset")
                   Dataset.create(dataset, function (err, obj) {
                     if (err) {
                       sails.log.error('Error while adding new data source: ' + err);
@@ -181,6 +188,7 @@ module.exports = {
                     }
                   })
                 } else {
+                  logger.info("Update dataset (create head commit)")
                   Dataset.destroy(
                     {
                       "dataset/id": dataset.metadata.dataset.id,
@@ -200,8 +208,12 @@ module.exports = {
                           
                                   Cache.clear("dsm")
                                     .then(function(){
+                                      logger.info("Update Cache")
                                       dataprocController.updateCache(result.metadata.dataset.id)
                                         .then(function(){
+                                          logger.success("Operation Completed")
+                                          result.log = logger.get();
+                                          logger.clear();
                                           return res.send(result);    
                                       })
 
@@ -286,6 +298,9 @@ module.exports = {
 
 
   updateChDatasetGroup: function (req, res) {
+
+    // return res.send({data:{warnings:["Method updateChDatasetGroup overrided by stub"]}})
+    logger.info("Update dataset group")
     var groupResult = [];
     var promises = [];
     
@@ -366,6 +381,8 @@ module.exports = {
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
 
+        logger.info("Process file "+ uploadedFileAbsolutePath)
+
         ch_datasetGroupParser(uploadedFileAbsolutePath)
           .then(function(datasetGroup){
             datasetGroup.forEach(function(dataset,index){
@@ -373,6 +390,7 @@ module.exports = {
               dictionaryController.updateDictionary(dict);
               delete dataset.dictionary;
               dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
+              logger.info("Create or update dataset "+dataset.metadata.dataset.id)
                promises.push($updateDataset(dataset));
             }); // datasetGroup.forEach
             
@@ -380,7 +398,13 @@ module.exports = {
               .then(function(){
                 Cache.clear("dsm")
                         .then(function(){
-                          return res.send(groupResult)    
+                          logger.success("Operation completed")
+                          var sendedObj = {
+                            log: logger.get(),
+                            result:groupResult
+                          }
+                          logger.clear();
+                          return res.send(sendedObj)    
                         })
               })
           })

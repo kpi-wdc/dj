@@ -4,6 +4,7 @@
 var copyObject = require('copy-object');
 var util = require("util");
 var _ = require("lodash-node/compat/collection")
+var date = require("date-and-time");
 
 /**
  * Instantiate Query.
@@ -190,6 +191,30 @@ Query.prototype = {
         return this;
     },
 
+    outerJoin: function(data,criteria){
+        var thos = this;
+        this.result = [];
+        this.data.forEach(function(item,index){
+            var newItem = copyObject(item);
+            var f = false;
+            data.forEach(function(element, index){
+               
+              if(criteria(item,element)){
+                element.__joined = true;
+                thos.result.push(copyObject(newItem,element));
+                f = true;
+              }
+            });
+            if(!f){
+                thos.result.push(newItem);
+            };
+            // thos.result.push(newItem)
+        });
+        this.data = this.result.concat(data.filter(function(item){return !item.__joined}));
+        data.forEach(function(item){ delete item.__joined})
+        return this;
+    },
+
     //param cb callback(value) returns {key,newValue}
     //returns ({key: ,values:[]}) 
     group : function(cb){
@@ -258,6 +283,49 @@ Query.prototype = {
     length: function(){
         return this.data.length;
     } 
+}
+
+
+Query.criteria = {
+
+  "String" : {
+    "A-Z" : function(selector){
+      return function(a,b){
+        return String.naturalCompare((selector(a)+'').toLowerCase(),(selector(b)+'').toLowerCase())
+      }
+    },
+    "Z-A": function(selector){
+        return function(a,b){
+          return String.naturalCompare((selector(b)+'').toLowerCase(),(selector(a)+'').toLowerCase())
+        }
+    }   
+  },
+
+  "Number":{
+    "A-Z" : function(selector){
+        return function(a,b){
+          return selector(a)-selector(b)
+        }  
+    },
+    "Z-A": function(selector){
+        return function(a,b){
+          return selector(b)-selector(a)
+        }
+    }     
+  },
+
+  "Date": {
+    "A-Z" : function(selector){
+        return function(a,b){
+          return date.subtract(new Date(selector(a)), new Date(selector(b))).toMilliseconds();
+        }
+    },  
+    "Z-A": function(selector){
+        return function(a,b){
+          return date.subtract(new Date(selector(b)), new Date(selector(a))).toMilliseconds();
+        }
+    }    
+  } 
 }
 
 module.exports = Query;

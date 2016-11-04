@@ -21,7 +21,7 @@
  */
 
 module.exports.routes = {
-
+  
   // Auth URLs
   'get /logout': 'AuthController.logout',
 

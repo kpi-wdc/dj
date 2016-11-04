@@ -4,7 +4,7 @@ var query = require('../../wdc-query');
 var util = require("util");
 var FO = require("../../wdc-flat");
 var date = require('date-and-time');
-
+var logger = require("../../wdc-log").global;
 
 
 module.exports = function (filename){
@@ -24,9 +24,11 @@ module.exports = function (filename){
 				  var i18nSheet = workbook.Sheets['i18n'];
 				  var warnings =[];
 
-				  if(!metadataSheet) 
+				  if(!metadataSheet){ 
+				  	logger.error("Cannot find metadata. Metadata sheet must be named 'metadata'")
 				  	return {error:"Cannot find metadata. Metadata sheet must be named 'metadata'"}
-
+				  }
+				  	
 				  var metadata = FO.flat2json(
 				      new query()
 				        .from(metadataSheet)
@@ -35,81 +37,125 @@ module.exports = function (filename){
 				        })
 				        .get());
 				  
-				  if(!metadata.dataset.id || metadata.dataset.id =='')
-				      return {error:"Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'"}    
+				  if(!metadata.dataset.id || metadata.dataset.id ==''){
+				 	  logger.error("Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'")
+				  	  return {error:"Cannot find metadata.dataset.id. Create and download new dataset with dataset manager'"}    
+				  }
 
-				  if(!metadata.dataset.commit.note || metadata.dataset.commit.note == '')
+				  if(!metadata.dataset.commit.note || metadata.dataset.commit.note == ''){
+				  	  logger.warn("Metadata.dataset.commit.note is empty");	
 				      warnings.push("Metadata.dataset.commit.note is empty");
+				  }
 
-				  if(!metadata.dataset.label || metadata.dataset.label == '')   
+				  if(!metadata.dataset.label || metadata.dataset.label == ''){   
+				    logger.warn("Dataset.label is empty");
 				    warnings.push("Dataset.label is empty");
+				  }  
 
-				  if(!metadata.dataset.note || metadata.dataset.note == '')   
+				  if(!metadata.dataset.note || metadata.dataset.note == ''){   
+				    logger.warn("Dataset.note is empty")
 				    warnings.push("Dataset.note is empty");
+				  }  
 
-				  if(!metadata.dataset.source || metadata.dataset.source == '')   
+				  if(!metadata.dataset.source || metadata.dataset.source == ''){   
+				    logger.warn("Dataset.source is empty");
 				    warnings.push("Dataset.source is empty");
+				  }  
 
-				  if(!metadata.dataset.topics || metadata.dataset.topics.length == 0)   
+				  if(!metadata.dataset.topics || metadata.dataset.topics.length == 0){   
+				    logger.warn("List of topics is empty");
 				    warnings.push("List of topics is empty");
+				  }  
 
-				  if(!metadata.dimension) return {error:"Cannot find dataset dimension."}   
+				  if(!metadata.dimension){
+				   logger.error("Cannot find dataset dimension.")
+				   return {error:"Cannot find dataset dimension."}
+				  }    
 				  
 				  for(var key in metadata.dimension){
-				    if(!metadata.dimension[key].label || metadata.dimension[key].label=='')
+				  	if(metadata.dimension[key].role =="time" && !metadata.dimension[key].format){
+				  		logger.error("Cannot find format date for "+ key +"dimension");
+				        return {error:"Cannot find format date for "+ key +"dimension"}
+				  	}
+				    
+				    if(!metadata.dimension[key].label || metadata.dimension[key].label==''){
+				    	logger.error("Cannot find dimension."+ key +".label")
 				        return {error:"Cannot find dimension."+ key +".label"}
-				    if(!metadata.dimension[key].role || metadata.dimension[key].role=='')
+				    }
+				    if(!metadata.dimension[key].role || metadata.dimension[key].role==''){
+				    	logger.warn("Cannot find dimension."+ key +".role");
 				        warnings.push("Cannot find dimension."+ key +".role");
+				    }
 				  }
 				  
-				  if(!metadata.layout || metadata.layout=='') 
+				  if(!metadata.layout || metadata.layout==''){
+				  	logger.error("Cannot find metadata.layout");
 				  	return {error:"Cannot find metadata.layout"}
+				  }	
 
-				  if(!metadata.layout.sheet || !workbook.Sheets[metadata.layout.sheet]) 
+				  if(!metadata.layout.sheet || !workbook.Sheets[metadata.layout.sheet]){
+				  	logger.error("Reference "+metadata.layout.sheet+"to data sheet...")
 				    return {error:"Reference "+metadata.layout.sheet+"to data sheet..."} 
-
+				  }  
+				  
 				  for(var key in metadata.dimension){
-				    if(!metadata.layout[key].label || metadata.layout[key].label == '')
+				    if(!metadata.layout[key].label || metadata.layout[key].label == ''){
+				    	logger.error("Cannot find layout."+ key +".label. It must be refered to data sheet column")
 				        return {error:"Cannot find layout."+ key +".label. It must be refered to data sheet column"}
-				    if(!metadata.layout[key].id || metadata.layout[key].id =='')
+				    }
+				    if(!metadata.layout[key].id || metadata.layout[key].id ==''){
+				    	logger.warn("Cannot find layout."+ key +".id. It must be refered to data sheet column")
 				        warnings.push("Cannot find layout."+ key +".id. It must be refered to data sheet column");
+				    }
 				  }
 				  
 				  data = workbook.Sheets[metadata.layout.sheet];
 
-				  if(!metadata.layout.value || metadata.layout.value == '') 
+				  if(!metadata.layout.value || metadata.layout.value == ''){ 
+				    logger.error("Cannot find layout.value. It must be refered to data sheet column")
 				    return {error:"Cannot find layout.value. It must be refered to data sheet column"}
+				  }  
 				  
 				  for(var key in metadata.dimension){
 				    for(var row in data){
-				      if(!data[row][metadata.layout[key].label]) 
+				      if(!data[row][metadata.layout[key].label]){ 
+				        logger.error("Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].label+"'")
 				        return {error:"Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].label+"'"}
-				      if(!data[row][metadata.layout[key].id]) 
+				      }  
+				      if(!data[row][metadata.layout[key].id]){ 
+				        logger.error("Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].id+"'")
 				        return {error:"Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].id+"'"}
+				      }  
 				    }
 				  }
 
 				  for(var row in data){
-				    if(!data[row][metadata.layout.value])
+				    if(!data[row][metadata.layout.value]){
+				    	logger.warn("Sheet '"+metadata.layout.sheet+"' row "+row + " has undefined value in column '"+metadata.layout.value+"'")
 				        warnings.push("Sheet '"+metadata.layout.sheet+"' row "+row + " has undefined value in column '"+metadata.layout.value+"'") 
+				    }
 				  }
 
 
 				  if (dictionarySheet != undefined) {
 				    var dict = workbook.Sheets['dictionary'];
 				    for(var i in dict){
-				      if(!dict[i].key)
+				      if(!dict[i].key){
+				        logger.error("Sheet 'dictionary' row "+i +" has undefined value in column 'key'")
 				        return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'key'"}
-				      if(!dict[i]["value.label"])
-				        return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'value.label'"}
+				      }  
+				      // if(!dict[i]["value.label"])
+				      //   return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'value.label'"}
 				    }
 				  }
 
 				if (i18nSheet != undefined) {
 				    var dict = workbook.Sheets['i18n'];
 				    for(var i in dict){
-				      if(!dict[i].key)
+				      if(!dict[i].key){
+				        logger.error("Sheet 'i18n' row "+i +" has undefined value in column 'key'")
 				        return {error:"Sheet 'i18n' row "+i +" has undefined value in column 'key'"}
+				      }  
 				    }
 				  }
 
@@ -244,30 +290,31 @@ module.exports = function (filename){
 			parser.validate()
 					.then(function(validation){
 						product.validation = validation;
+						logger.log("validate");
 						if (!validation.error){
 							parser.metadata()
 								.then(function(metadata){
 									product.metadata = metadata;
-									// console.log(product);
+									logger.log("extract metadata");
 									parser.data()
 										.then(function(data){
 											product.data = data;
-											// console.log(product);
+											logger.log("parse data");
 											parser.dictionary()
 												.then(function(dict){
 													product.dictionary = dict;
-													// console.log(product);
+													logger.log("extract dictionary");
 													parser.i18n()
 														.then(function(dict){
 															product.dictionary = product.dictionary.concat(dict);
-															// console.log(product);
+															logger.log("extract i18n");
 															resolve(product);	
 														})
 												})
 										})
 								})
 						}else{
-							resolve(undefined);
+							resolve(product);
 						}
 					})
 	})				

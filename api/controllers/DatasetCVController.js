@@ -11,6 +11,7 @@ var path = require('path');
 var uuid = require('uuid');
 var Cache = require("./Cache");
 var dataprocController = require("./DataProcController");
+var date = require("date-and-time");
 
 var prepareCommitInfo = function (obj) {
   obj.metadata.dataset.commit.createdAt = obj.createdAt;
@@ -44,9 +45,12 @@ module.exports = {
     Dataset.find({"dataset/id": req.params.datasetID}).then(function (obj) {
       obj = new query()
         .from(obj)
-        .orderBy(function (a, b) {
-          return a.createdAt < b.createdAt
-        })
+        .orderBy(
+          query.criteria.Date["Z-A"](function(item){return item.createdAt})
+        //   function (a, b) {
+        //   return a.createdAt < b.createdAt
+        // }
+        )
         .map(function (item) {
           return prepareCommitInfo(item)
         })

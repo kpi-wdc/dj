@@ -13,6 +13,7 @@ var executionMap = {
 		reduceMeta		: require("./table/reduce-meta"),
 		format 			: require("./table/format"),
 		join 			: require("./table/join"),
+		merge 			: require("./table/merge"),
 
 		norm 			: require("./stat/norm"),
 		pca 			: require("./stat/pca"),
@@ -27,7 +28,8 @@ var executionMap = {
 		bar				: require("./serie/bar"),
 		deps			: require("./serie/deps"),
 		geojson			: require("./serie/geojson"),
-		scatter			: require("./serie/scatter")
+		scatter			: require("./serie/scatter"),
+		line			: require("./serie/line")
 }
 
 var getProcess = function(params){
@@ -48,6 +50,7 @@ var getProcess = function(params){
 	if(params.pca) processId =  "pca";
 	if(params.inputation) processId =  "imput";
 	if(params.join) processId =  "join";
+	if(params.merge) processId =  "merge";
 	if(params.query) processId =  "query";
 	
 	if(params.serie) processId =  params.serie;

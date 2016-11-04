@@ -3,6 +3,7 @@ var Promise = require("bluebird");
 var path = require("path");
 var fs = require("fs");
 var mm = require("minimatch");
+var logger = require("../../wdc-log").global;
   
 
 module.exports = function (config){
@@ -17,7 +18,7 @@ module.exports = function (config){
         fs.mkdirSync(config.dest);
   }
 
-  // console.log(config)
+  logger.info("ftp connect "+config.host+" as "+config.user);
   return ftp
 	  .connect(config)
 	  .then(function (serverMessage) {
@@ -66,7 +67,7 @@ module.exports = function (config){
 	    			ftp
 	    				.get(f)
 	    				.then(function (stream) {
-	    					// console.log("download "+f+" into "+dest+path.basename(f))
+	    					logger.info("download "+f+" into "+dest+path.basename(f))
 						    return new Promise(function (resolve, reject) {
 						      stream.once('close', resolve);
 						      stream.once('error', reject);
@@ -76,6 +77,7 @@ module.exports = function (config){
 	    		)
 	    	})
 	    	return Promise.all(promises).then(function(){
+	    		logger.info("All files downloaded")
 	    		return ftp.end()
 	    	})	
 	    });

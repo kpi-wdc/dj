@@ -13,6 +13,7 @@ var dataProcess = require("../../wdc_libs/data-processing");
 var Cache = require("./Cache");
 var Promise = require("bluebird");
 var flat = require("../../wdc_libs/wdc-flat");
+var logger = require("../../wdc_libs/wdc-log").global;
 
 
 var getQueryResult = function(query,proc,proc_params){
@@ -155,6 +156,10 @@ module.exports = {
 
                       if(req.body.proc_name == "scatter-serie"){
                         p.serie = "scatter";
+                      }
+
+                      if(req.body.proc_name == "line-serie"){
+                        p.serie = "line";
                       }
 
                       if(req.body.proc_name == "barchartserie"){
@@ -405,12 +410,14 @@ module.exports = {
 
 
   updateCache:function(dataset){
-    // console.log("Update cache for "+dataset)
+    // console.log("Update cache for ",dataset)
+    logger.info("Update cache for ",dataset)
 
     var processed = {};
     var promises = [];
-  
+    
     var process = function(cacheTree, cacheItem){
+      // console.log("Process "+cacheItem)
       if(processed[cacheItem.id]) return processed[cacheItem.id];
 
       return  new Promise(function(resolve){
@@ -418,12 +425,15 @@ module.exports = {
             cacheItem.parent = (cacheItem.parent.forEach)? cacheItem.parent:[cacheItem.parent];
             var promises = [];
             cacheItem.parent.forEach(function(parent){
-               var p = process(cacheTree,cacheTree.filter(function(c){return c.id == parent})[0])
-               promises.push(p);
-               processed[parent] = p;
+              var child = cacheTree.filter(function(c){return c.id == parent})[0];
+              if(child){
+                 var p = process(cacheTree,cacheTree.filter(function(c){return c.id == parent})[0])
+                 promises.push(p);
+                 processed[parent] = p;
+              } 
             })
             Promise.all(promises).then(function(){
-              // console.log("resolve data script id:", cacheItem.id," parent:", cacheItem.parent)
+              logger.info("resolve script: "+ cacheItem.id + " parent: " + cacheItem.parent)
 
               Cache
                   .getById(cacheItem.parent)
@@ -452,7 +462,7 @@ module.exports = {
                   })
             })
           }else{
-            // console.log("resolve query", cacheItem)
+            logger.info("resolve query: ", cacheItem.id)
 
 
             Dataset.findOne({"dataset/id": cacheItem.dataset, "commit/HEAD": true})

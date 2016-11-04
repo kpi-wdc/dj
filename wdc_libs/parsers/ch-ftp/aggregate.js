@@ -10,7 +10,8 @@ var date = require('date-and-time');
 require('string-natural-compare');
 var Coder = require("../../wdc-coder");
 var downloadData = require("./download"); 
-var STAT = require("./stat")
+var STAT = require("./stat");
+var logger = require("../../wdc-log").global;
 
 var timePeriod = {
 		millisecond: 	"YYYY MM DD HH mm ss SSS",
@@ -62,6 +63,23 @@ var valueTimePattern = {
 		year: 			timePeriod.year
 }
 
+var shift = {
+	// "YYYY MM DD HH mm ss SSS" : 	function(d){return d},
+	// "YYYY MM DD HH mm ss": 			function(d){return date.addSeconds(d,1)},
+	// "YYYY MM DD HH mm": 			function(d){return date.addMinutes(d,1)},
+	// "YYYY MM DD HH": 				function(d){return date.addHours(d,1)},
+	// "YYYY MM DD": 					function(d){return date.addDays(d,1)}, 
+	// "YYYY MM": 						function(d){return date.addMonth(d,1)},
+	// "YYYY": 						function(d){return date.addYears(d,1)},
+	millisecond: 	function(d){return d},
+	second: 		function(d){return date.addSeconds(d,1)},
+	minute: 		function(d){return date.addMinutes(d,1)},
+	hour: 			function(d){return date.addHours(d,1)},
+	day: 			function(d){return date.addDays(d,1)},
+	month: 			function(d){return date.addMonths(d,1)},
+	year: 			function(d){return date.addYears(d,1)}
+}
+
 var aggregations = {
 		avg: STAT.mean,
 		mean: STAT.mean,
@@ -80,6 +98,11 @@ module.exports = function(dataset){
 	var truncDate = function(d,period){
 		return date.parse(date.format(new Date(d),period),period)
 	}
+
+	var truncAndShiftDate = function(d,period){
+		var vtp = valueTimePattern[period];
+		return shift[period](date.parse(date.format(new Date(d),vtp),vtp))
+	}
 	
 	var clone = function(obj){
 		return FO.flat2json(FO.json2flat(obj))
@@ -89,10 +112,11 @@ module.exports = function(dataset){
 	var periodicity = dataset.metadata.layout.aggregation.periodicity;
 	var aggregationMethod = aggregations[dataset.metadata.layout.aggregation.method];
 	
+	logger.info("Aggregate dataset for periodicity ["+periodicity.reduce(function(v,item){return v+","+item})+"]")
 	
 	periodicity.forEach(function(period){
 		var tp = timePeriod[period];
-		var vtp = valueTimePattern[period];
+		
 		var r = copyObject(dataset);
 		r.data = new Query()
 				.from(r.data)
@@ -100,7 +124,7 @@ module.exports = function(dataset){
 						period: period,
 						datasetId: date.format(truncDate(item.time,tp),datasetIdMarkerFormat[period]),
 						datasetLabel: date.format(truncDate(item.time,tp),datasetLabelMarkerFormat[period]),
-						time : truncDate(item.time,vtp),
+						time : truncAndShiftDate(item.time,period),
 						"#value":item["#value"],
 						"indicator":item["indicator"],
 						"#indicator":item["#indicator"]
@@ -215,10 +239,10 @@ module.exports = function(dataset){
 		r.metadata.layout.time = {id : "timestamp", label : "timestamp"};
 
 
-
+		logger.info("Aggregate dataset "+ r.metadata.dataset.id)
 
 		datasetGroup.push(r);
 	})
-
+		logger.info("Total "+datasetGroup.length+" datasets completed")
 	return datasetGroup;
 }

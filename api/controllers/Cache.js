@@ -66,7 +66,7 @@ module.exports = {
 	},
 
 	clear: function(tag){
-		console.log("clear", tag)
+		// console.log("clear", tag)
 		if( tag ){
 			return CacheData.destroy({"tag":tag});	
 		}

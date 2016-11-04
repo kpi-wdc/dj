@@ -12,6 +12,7 @@ var Coder = require("../../wdc-coder");
 var downloadData = require("./download"); 
 var aggregate = require("./aggregate");
 var clean = require("./clean");
+var logger = require("../../wdc-log").global;
 
 var product = {};
 
@@ -119,8 +120,9 @@ module.exports = function (filename){
 					var promises = [];
 					for(var id in indicators){
 						indicators[id].files = glob.sync(conf.dest+indicators[id].files)
+						logger.info ("For indicator "+id+" "+indicators[id].files+" files processed")
 						indicators[id].files.forEach(function(file){
-							// console.log("process "+file);
+							logger.debug("process "+file);
 							var csvParser = new Parser(
 								{
 									filename : file,
@@ -133,6 +135,7 @@ module.exports = function (filename){
 									},
 									data: function(src,args){
 										var id = args[0];
+										logger.debug("insert "+src.length+" records")
 										return src.map(function(item){
 											var t = item.DATE.toString() 
 													+ ":"
@@ -160,6 +163,7 @@ module.exports = function (filename){
 					return Promise.all(promises).then(function(resolve){
 						return clean(conf)
 							.then(function(){
+								logger.info("Temporary files deleted")
 								return result		
 							})
 						// console.log("promises", promises)
@@ -175,9 +179,11 @@ module.exports = function (filename){
 			parser.validate()
 					.then(function(validation){
 						product.validation = validation;
+						logger.warn("ignore validation stage")
 						if (!validation.error){
 							parser.metadata()
 								.then(function(metadata){
+									logger.info("Metadata parsed")
 									product.metadata = metadata;
 									parser.data()
 										.then(function(data){

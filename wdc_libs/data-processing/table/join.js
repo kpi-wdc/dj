@@ -9,7 +9,7 @@ module.exports = function(tables,params){
 	
 	var result = {metadata:{}};
 	var direction = params.join.direction || "Rows";
-	var joinMode = params.join.mode || "left join"; // "inner"
+	var joinMode = params.join.mode || "left join"; // "inner"// "outer"
 	var metaTest = params.join.test || []; // [t1.metadataindex. t2metadataindex]
 	var table1 = tables[0];
 	table1.header.forEach(function (col){
@@ -84,7 +84,9 @@ module.exports = function(tables,params){
 			})
 			.distinct()
 			.get()
-	} else {
+		return result;	
+	} 
+	if(joinMode == "inner join"){
 		result.body = new Query()
 			.from(table1.body)
 			.wrap("a")
@@ -105,6 +107,38 @@ module.exports = function(tables,params){
 			})
 			.distinct()
 			.get()
+		return result;	
+	}
+
+	if(joinMode == "outer join"){
+		result.body = new Query()
+			.from(table1.body)
+			.wrap("a")
+			.outerJoin(
+				new Query()
+					.from(table2.body)
+					.wrap("b")
+					.get(),
+				function(r1,r2){
+					return equalsMetas(r1.a.metadata,r2.b.metadata,metaTest)
+				}	
+			)
+			.map(function(row){
+				return {
+					metadata:(row.a) 
+								? row.a.metadata
+								: row.b.metadata,
+					value: (row.a)
+								? row.a.value.concat(
+									(row.b) 
+										? row.b.value 
+										: nulls(table2.header.length)
+								): (nulls(table1.header.length)).concat(row.b.value)
+				}
+			})
+			.distinct()
+			.get()
+		return result;	
 	}		
 	
 	return result;	 	
