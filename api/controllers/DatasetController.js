@@ -108,7 +108,7 @@ module.exports = {
       delete dataset.data;
       dict = dataset.dictionary;
       dataset.metadata.dataset.status = "private";
-      dataset.metadata.dataset.commit.author = req.user.name || "internal actor";
+      dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
       // dictionaryController.updateDictionary(dict);
       delete dataset.dictionary;
 
@@ -163,7 +163,7 @@ module.exports = {
             dictionaryController.updateDictionary(dict)
             .then(function(){
               delete dataset.dictionary;
-              dataset.metadata.dataset.commit.author = req.user.name || "internal actor";
+              dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";;
               Dataset.findOne(
                 {
                   "dataset/id": dataset.metadata.dataset.id,
