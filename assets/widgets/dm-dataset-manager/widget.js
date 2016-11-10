@@ -386,6 +386,50 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary','ngFileUpload
       }) 
   }
   
+
+  $scope.uploadDictionary = function(){
+    dialog({
+        title:`${$translate.instant('Select .xlsx file')}:`,
+        fields:{
+          file:{
+            title:'Data file:', 
+            type:'file', 
+            editable:true, 
+            required:true
+          }
+        }
+      }).then((form) => {
+        const fd = new FormData();
+        // Take the first selected file
+        fd.append('file', form.fields.file.value);
+        $http.post($dps.getUrl()+'/api/dictionary/update', fd, {
+          withCredentials: true,
+          headers: {'Content-Type': undefined},
+          transformRequest: angular.identity
+        }).success( function(response) {
+            var title = {level:"success",text:"Dictionaries updated"};
+            
+            if(response.log.filter((item) => {return item.level=="error"}).length>0)
+              title = {level:"error",text:"Cannot update dictionary"};
+            if(response.log.filter((item) => {return item.level=="warning"}).length>0)
+              title = {level:"warning",text:"Dictionary updated with Warnings"};
+            
+            log({title:title, messages:response.log});
+
+            $scope.upload_process = false;
+            $lookup.reload();
+            // $scope.item = response.metadata;
+            // $timeout(function() {
+            //   $scope.getCommitList();
+            //   eventEmitter.emit('refresh');
+            // });
+          });
+      }) 
+  }
+
+
+
+
   // $scope.upload = function (file) {
   //   $scope.upload_process = true;
   //   $upload.upload({
