@@ -108,7 +108,7 @@ module.exports = {
       delete dataset.data;
       dict = dataset.dictionary;
       dataset.metadata.dataset.status = "private";
-      dataset.metadata.dataset.commit.author = req.user.name;
+      dataset.metadata.dataset.commit.author = req.user.name || "internal actor";
       // dictionaryController.updateDictionary(dict);
       delete dataset.dictionary;
 
