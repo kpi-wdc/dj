@@ -160,74 +160,75 @@ module.exports = {
               return res.send(validationResult); 
             }
 
-            dictionaryController.updateDictionary(dict);
-            delete dataset.dictionary;
-            dataset.metadata.dataset.commit.author = req.user.name;
-            Dataset.findOne(
-              {
-                "dataset/id": dataset.metadata.dataset.id,
-                "commit/HEAD": true
-              }).then(function (obj) {
-                if (!obj) {
-                  logger.info("Create new dataset")
-                  Dataset.create(dataset, function (err, obj) {
-                    if (err) {
-                      sails.log.error('Error while adding new data source: ' + err);
-                      return res.serverError();
-                    } else {
-                      // TODO send operation status
-                      var result = prepareCommitInfo(obj);
-                      result.warnings = validationResult.warnings;
-                      Cache.clear("dsm")
-                        .then(function(){
-                          dataprocController.updateCache(result.metadata.dataset.id)
-                            .then(function(){
-                              return res.send(result);    
-                            })
-                        })
-                    }
-                  })
-                } else {
-                  logger.info("Update dataset (create head commit)")
-                  Dataset.destroy(
-                    {
-                      "dataset/id": dataset.metadata.dataset.id,
-                      createdAt: {">=": obj.createdAt},
-                      "commit/HEAD": false
-                    }).then(function () {
-                      Dataset.update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
-                        .then(function () {
-                          Dataset.create(dataset, function (err, obj) {
-                            if (err) {
-                              sails.log.error('Error while adding new data source: ' + err);
-                              return res.serverError();
-                            } else {
-                              var result = prepareCommitInfo(obj);
-                              result.warnings = validationResult.warnings;
-                              
-                          
-                                  Cache.clear("dsm")
-                                    .then(function(){
-                                      logger.info("Update Cache")
-                                      dataprocController.updateCache(result.metadata.dataset.id)
-                                        .then(function(){
-                                          logger.success("Operation Completed")
-                                          result.log = logger.get();
-                                          logger.clear();
-                                          return res.send(result);    
-                                      })
-
-                                  })    
-                            }
-                          });
-                        });
+            dictionaryController.updateDictionary(dict)
+            .then(function(){
+              delete dataset.dictionary;
+              dataset.metadata.dataset.commit.author = req.user.name;
+              Dataset.findOne(
+                {
+                  "dataset/id": dataset.metadata.dataset.id,
+                  "commit/HEAD": true
+                }).then(function (obj) {
+                  if (!obj) {
+                    logger.info("Create new dataset")
+                    Dataset.create(dataset, function (err, obj) {
+                      if (err) {
+                        sails.log.error('Error while adding new data source: ' + err);
+                        return res.serverError();
+                      } else {
+                        // TODO send operation status
+                        var result = prepareCommitInfo(obj);
+                        result.warnings = validationResult.warnings;
+                        Cache.clear("dsm")
+                          .then(function(){
+                            dataprocController.updateCache(result.metadata.dataset.id)
+                              .then(function(){
+                                return res.send(result);    
+                              })
+                          })
+                      }
                     })
-                }
-              }, function (err) {
-                sails.log.error('Error while updating a data set: ' + err);
-                res.serverError();
-              })
+                  } else {
+                    logger.info("Update dataset (create head commit)")
+                    Dataset.destroy(
+                      {
+                        "dataset/id": dataset.metadata.dataset.id,
+                        createdAt: {">=": obj.createdAt},
+                        "commit/HEAD": false
+                      }).then(function () {
+                        Dataset.update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
+                          .then(function () {
+                            Dataset.create(dataset, function (err, obj) {
+                              if (err) {
+                                sails.log.error('Error while adding new data source: ' + err);
+                                return res.serverError();
+                              } else {
+                                var result = prepareCommitInfo(obj);
+                                result.warnings = validationResult.warnings;
+                                
+                            
+                                    Cache.clear("dsm")
+                                      .then(function(){
+                                        logger.info("Update Cache")
+                                        dataprocController.updateCache(result.metadata.dataset.id)
+                                          .then(function(){
+                                            logger.success("Operation Completed")
+                                            result.log = logger.get();
+                                            logger.clear();
+                                            return res.send(result);    
+                                        })
 
+                                    })    
+                              }
+                            });
+                          });
+                      })
+                  }
+                }, function (err) {
+                  sails.log.error('Error while updating a data set: ' + err);
+                  res.serverError();
+                })
+              })
 
           })
 
@@ -387,11 +388,13 @@ module.exports = {
           .then(function(datasetGroup){
             datasetGroup.forEach(function(dataset,index){
               var dict = dataset.dictionary;
-              dictionaryController.updateDictionary(dict);
-              delete dataset.dictionary;
-              dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
-              logger.info("Create or update dataset "+dataset.metadata.dataset.id)
-               promises.push($updateDataset(dataset));
+              dictionaryController.updateDictionary(dict)
+                then(function(){
+                  delete dataset.dictionary;
+                  dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
+                  logger.info("Create or update dataset "+dataset.metadata.dataset.id)
+                  promises.push($updateDataset(dataset));
+               })
             }); // datasetGroup.forEach
             
             Promise.all(promises)

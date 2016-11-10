@@ -6,10 +6,12 @@
  */
 
 var converter = require("../../wdc_libs/wdc-xlsx-converter");
-mime = require('mime');
-path = require('path');
-uuid = require('uuid');
-query = require('../../wdc_libs/wdc-query');
+var mime = require('mime');
+var path = require('path');
+var uuid = require('uuid');
+var query = require('../../wdc_libs/wdc-query');
+var Promise = require("bluebird");
+var logger = require("../../wdc_libs/wdc-log").global;
 
 
 module.exports = {
@@ -51,27 +53,36 @@ module.exports = {
   updateDictionary: function (dictionary) {
     var promises = [];
     dictionary.forEach(function (item) {
-      Dictionary.find({key: item.key}).then(function (result) {
-        if (result.length == 0) {
-          Dictionary.create(item).then(function (r) {
-            ;
-          }, function (err) {
-            sails.log.error('Error while creating dictionary' + err);
-            res.serverError();
-          });
-        } else {
-          Dictionary.update({key: item.key}, item).then(function (r) {
-            ;
-          }, function (err) {
-            sails.log.error('Error while updating dictionary' + err);
-            res.serverError();
-          });
-        }
-      });
+      promises.push(new Promise(function(resolve){
+          Dictionary.find({key: item.key}).then(function (result) {
+            if (result.length == 0) {
+              Dictionary.create(item).then(function (r) {
+                logger.info("create "+r.type+": "+r.key);
+                resolve(r);
+              }, function (err) {
+                sails.log.error('Error while creating dictionary' + err);
+                res.serverError();
+              });
+            } else {
+              Dictionary.update({key: item.key}, item).then(function (r) {
+                logger.info("update "+r[0].type+": "+r[0].key);
+                resolve(r);
+              }, function (err) {
+                sails.log.error('Error while updating dictionary' + err);
+                res.serverError();
+              });
+            }
+          })
+        })
+      );
     });
+    return Promise.all(promises).then(function(){
+      logger.debug("Promises "+promises.length)
+    })
   },
 
   uploadDictionary: function (req, res) {
+    logger.info("Start upload dictionary operation")
     req.file('file').upload({},
       function (err, uploadedFiles) {
         if (err) {
@@ -82,9 +93,17 @@ module.exports = {
         }
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
+        logger.info("Parse file: "+uploadedFileAbsolutePath)
         var dictionary = converter.parseDictionary(uploadedFileAbsolutePath);
-        module.exports.updateDictionary(dictionary);
-        return res.send({status: "ok"})
+        logger.info(dictionary.length + " items parsed")
+        module.exports.updateDictionary(dictionary)
+          .then(function(){
+            logger.success("Operation Complete")
+            var response = {log:logger.get()}
+            logger.clear();
+            return res.send(response)    
+          });
+        
       });
   },
 
