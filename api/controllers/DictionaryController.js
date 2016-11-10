@@ -51,7 +51,7 @@ module.exports = {
   },
 
   updateDictionary: function (dictionary) {
-    console.log("Update dictionary", dictionary)
+    // console.log("Update dictionary", dictionary)
     var promises = [];
     dictionary.forEach(function (item) {
       promises.push(new Promise(function(resolve){

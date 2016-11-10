@@ -163,7 +163,7 @@ module.exports = {
             dictionaryController.updateDictionary(dict)
             .then(function(){
               delete dataset.dictionary;
-              dataset.metadata.dataset.commit.author = req.user.name;
+              dataset.metadata.dataset.commit.author = req.user.name || "internal actor";
               Dataset.findOne(
                 {
                   "dataset/id": dataset.metadata.dataset.id,
