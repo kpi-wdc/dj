@@ -389,7 +389,7 @@ module.exports = {
             datasetGroup.forEach(function(dataset,index){
               var dict = dataset.dictionary;
               dictionaryController.updateDictionary(dict)
-                then(function(){
+                .then(function(){
                   delete dataset.dictionary;
                   dataset.metadata.dataset.commit.author = (req.user) ? req.user.name : "internal actor";
                   logger.info("Create or update dataset "+dataset.metadata.dataset.id)

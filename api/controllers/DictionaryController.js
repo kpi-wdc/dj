@@ -51,6 +51,7 @@ module.exports = {
   },
 
   updateDictionary: function (dictionary) {
+    console.log("Update dictionary", dictionary)
     var promises = [];
     dictionary.forEach(function (item) {
       promises.push(new Promise(function(resolve){
@@ -60,25 +61,27 @@ module.exports = {
                 logger.info("create "+r.type+": "+r.key);
                 resolve(r);
               }, function (err) {
-                sails.log.error('Error while creating dictionary' + err);
-                res.serverError();
+                logger.error(err)
+                resolve()
+                // sails.log.error('Error while creating dictionary' + err);
+                // res.serverError();
               });
             } else {
               Dictionary.update({key: item.key}, item).then(function (r) {
                 logger.info("update "+r[0].type+": "+r[0].key);
                 resolve(r);
               }, function (err) {
-                sails.log.error('Error while updating dictionary' + err);
-                res.serverError();
+                logger.error(err)
+                resolve()
+                // sails.log.error('Error while updating dictionary' + err);
+                // res.serverError();
               });
             }
           })
         })
       );
     });
-    return Promise.all(promises).then(function(){
-      logger.debug("Promises "+promises.length)
-    })
+    return Promise.all(promises)
   },
 
   uploadDictionary: function (req, res) {
