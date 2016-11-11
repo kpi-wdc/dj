@@ -66,7 +66,7 @@ module.exports = {
     
     d
       .map(function(item){
-        return {key:item.key, value:item.values[0].value}
+        return {key:item.key, type:item.values[0].type, value:item.values[0].value}
       })
       .forEach(function (item) {
        promises.push(new Promise(function(resolve){
