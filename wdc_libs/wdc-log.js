@@ -43,6 +43,7 @@ log.prototype.info = function(){ this._push("info",arguments); return this};
 log.prototype.log = function(){ this._push("info",arguments); return this};
 log.prototype.debug = function(){ this._push("debug",arguments); return this};
 log.prototype.warn = function(){ this._push("warning",arguments); return this};
+log.prototype.warning = function(){ this._push("warning",arguments); return this};
 log.prototype.error = function(){ this._push("error",arguments); return this};
 log.prototype.success = function(){ this._push("success",arguments); return this};
 

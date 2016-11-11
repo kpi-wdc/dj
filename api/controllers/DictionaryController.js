@@ -53,8 +53,23 @@ module.exports = {
   updateDictionary: function (dictionary) {
     // console.log("Update dictionary", dictionary)
     var promises = [];
-    dictionary.forEach(function (item) {
-      promises.push(new Promise(function(resolve){
+    var d = new query()
+          .from(dictionary)
+          .group(function(item){return {key:item.key, value:item} })
+          .get();
+    
+    d.forEach(function(item){
+      if(item.values.length>1){
+        logger.warning("Key duplication: "+item.key)
+      }
+    })
+    
+    d
+      .map(function(item){
+        return {key:item.key, value:item.values[0].value}
+      })
+      .forEach(function (item) {
+       promises.push(new Promise(function(resolve){
           Dictionary.find({key: item.key}).then(function (result) {
             if (result.length == 0) {
               Dictionary.create(item).then(function (r) {
