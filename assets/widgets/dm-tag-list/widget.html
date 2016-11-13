@@ -16,10 +16,14 @@
                     "> 
       <a style="color:#fff">
       <i class="{{icon_class}}" style="#fff;"></i> 
-        {{title | translate}} &nbsp;{{(collapsed)?'('+total+')':''}}
-        <span ng-if="collapsed">
-          ...
+        {{title | translate}} &nbsp;
+        <span ng-if="collapsed && processed">
+          (<img src="./img/ajax-loader.gif">)...
         </span>
+        <span ng-if="collapsed && !processed">
+          {{(collapsed)?'('+total+')':''}}...
+        </span>
+        
       </a>
     </h4>
     <div ng-if="!collapsed" style="    padding: 0.5em 0.5em 1em;

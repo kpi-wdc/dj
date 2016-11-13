@@ -15,6 +15,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
     $scope.breadcrums = [];
     $scope.tagList = [];
     $scope.collapsed = true;
+    $scope.processed = false;
 
     $scope.changeState = function(){
       $scope.collapsed = !$scope.collapsed;      
@@ -70,10 +71,12 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
 
           // $http.post(
           //   "./api/metadata/tag/items",
+          $scope.processed = true;  
           $dps.post(
             "/api/metadata/tag/items",
             {property : $scope.property,"status":status}
            ).success(function(resp){
+            $scope.processed = false;
             $scope.total = resp.length;
             resp.forEach(function(item){
               item.lookup = $lookup(item.tag)
