@@ -25,7 +25,7 @@ dictionaryModule.run(function ($http,i18n,$dps) {
                 var tua = {};
                 var ten = {};
                 for(let i in data){
-                  if (data[i].type == "i18n" && data[i].value) {
+                  if (data[i].type == "i18n" &&  data[i].value) {
                     tua[data[i].key] = data[i].value.ua;
                     ten[data[i].key] = data[i].value.en;
                   }
@@ -79,7 +79,7 @@ dictionaryModule.service("$lookup",[ "$http","$translate", "i18n", "$dps",
                   var tua = {};
                   var ten = {};
                   for(let i in data){
-                    if (data[i].type == "i18n") {
+                    if (data[i].type == "i18n" &&  data[i].value) {
                       tua[data[i].key] = data[i].value.ua;
                       ten[data[i].key] = data[i].value.en;
                     }
