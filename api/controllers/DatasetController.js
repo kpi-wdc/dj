@@ -130,7 +130,7 @@ module.exports = {
 
 
   updateDataset: function (req, res) {
-    sails.log.debug("#Update dataset",logger);
+    sails.log.debug("#Update dataset");
     logger.info("Update dataset")
     req.file('file').upload({},
       function (err, uploadedFiles) {

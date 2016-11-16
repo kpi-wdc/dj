@@ -83,7 +83,19 @@ module.exports.routes = {
   'post /api/dictionary/update' : 'DictionaryController.uploadDictionary',
   'post /api/dictionary/download' : 'DictionaryController.downloadDictionary',
   'get /api/dictionary/download' : 'DictionaryController.downloadDictionary',
+
+
+// 
+// Collections import/export support API
+// 
   
+ 'get /api/export/datasets/metadata'  : 'IOController.getDatasetMetadataList',
+ 'get /api/export/datasets/:id' : 'IOController.getDataset',
+ 'get /api/export/datasets'     : 'IOController.getDataset',
+ 'get /api/export/dictionary'   : 'IOController.getDictionary',
+ 
+ 'post /api/import/datasets'    : 'IOController.updateDatasets',
+ 'post /api/import/dictionary'  : 'IOController.updateDictionary',
   
 // 
 // Dataset Managing API
