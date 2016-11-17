@@ -217,6 +217,7 @@ module.exports = function(dataset){
 		r.dictionary = (index == 0) ? dataset.dictionary : [];
 
 		r.metadata.dataset.periodicity = d.periodicity;
+		r.metadata.dataset.commit.note = "Upload from SSE ChNPP source at "+date.format(new Date(),"YYYY/MM/DD hh:mm:ss");
 		r.metadata.dataset.id +="_"+d.datasetId;
 		r.metadata.dataset.ext ="( "+d.datasetLabel+" )";
 		r.data = d.data;
@@ -224,6 +225,8 @@ module.exports = function(dataset){
 		for(var dim in r.metadata.dimension){
 			r.metadata.dimension[dim].values = getValueList(dim,r.data)
 		}	
+
+		r.metadata.dimension.time.format = valueLabelFormat[r.metadata.dataset.periodicity]
 
 		// if(r.metadata.dimension[dim].scale == "ordinal"){
 	 //    	r.metadata.dimension[dim].range = [
@@ -236,7 +239,10 @@ module.exports = function(dataset){
 	    r.metadata.layout.value = "Value";
 	    r.metadata.layout.indicator.id = "indicatorAbbr";
 		r.metadata.layout.indicator.label = "indicator";
-		r.metadata.layout.time = {id : "timestamp", label : "timestamp"};
+		r.metadata.layout.time = {
+			id : "timestamp", 
+			label : "timestamp"
+		};
 
 
 		logger.info("Aggregate dataset "+ r.metadata.dataset.id)
