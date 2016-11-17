@@ -8,7 +8,7 @@
   		{{form.note}}
   	</div>
 
-	<div class="row" style="margin: 0.5em 0 0 0;"
+	<div class="row" style="margin: 0.5em 0 0 0; height:auto;"
 		ng-repeat="field in form.fields track by $index">
 	    
 	    <div class="column medium-3">
@@ -74,6 +74,14 @@
 
 	    <div class="column large-9" ng-if="field.type == 'select'">
 	    	<select ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable">
+        		<option ng-repeat="option in field.options" value="{{option.value}}">
+        			{{option.title}}
+        		</option>
+      		</select>
+	    </div>
+
+	    <div class="column large-9" ng-if="field.type == 'multiselect'" style="height:auto;">
+	    	<select ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable" multiple="1" style="height:25em; font-size:smaller;">
         		<option ng-repeat="option in field.options" value="{{option.value}}">
         			{{option.title}}
         		</option>

@@ -180,7 +180,7 @@ info.controller('DialogController', function($scope, $modalInstance, form) {
             }
         }
 
-        if (form.fields[i].type == "select") {
+        if (form.fields[i].type == "select" || form.fields[i].type == "multiselect") {
             form.fields[i].options = form.fields[i].options.map(
                 (item, index) => {
                     return (angular.isDefined(item.title)) ? (angular.isDefined(item.value)) ? item : { "title": item.title, "value": item.title } : (angular.isDefined(item.value)) ? { "title": item.value, "value": item.value } : { "title": item, "value": item }
@@ -262,6 +262,9 @@ info.controller('LogController', function($scope, $modalInstance, i18n, log) {
     $scope.close = () => { $modalInstance.dismiss() };
     $scope.log = log.messages;
     $scope.title = log.title || { level: "info", text: "Operation Log" }
+    $scope.title = ($scope.title.text) ? $scope.title : { level: "info", text: $scope.title}
+    $scope.level = $scope.title.level || "info";
+    
     $scope.formatDate = i18n.formatDate;
 });
 

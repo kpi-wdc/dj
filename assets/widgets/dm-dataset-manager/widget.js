@@ -2,7 +2,7 @@ import angular from 'angular';
 import 'dictionary';
 
 
-angular.module('app.widgets.dm-dataset-manager', ['app.dictionary', 'ngFileUpload', "app.dps"])
+angular.module('app.widgets.dm-dataset-manager', ['app.dictionary', 'ngFileUpload', "app.dps", 'mm.foundation'])
     // .controller('DatasetManagerSearchResultController', function ($scope, $http, EventEmitter, 
     //   APIProvider, pageSubscriptions, $lookup, $translate,$modal, user) {
 
@@ -393,6 +393,140 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary', 'ngFileUploa
         })
     }
 
+    $scope.exportDictionary = function(){
+        var p = progress("Download Dictionaries")
+        $dps
+            .get("/api/export/dictionary")
+            .then((response) => {
+                p.close();
+                $dps.downloadJSON(response.data,response.data.data.file)
+            })    
+    }
+
+    $scope.exportDatasets = function() {
+        var p = progress("Wait one moment")
+        $dps
+            .get("/api/export/datasets/metadata")
+            .then((response) => {
+                p.close();
+                dialog({
+                    title:"Select datasets for export",
+                    fields: {
+                        list:{
+                            title:"Dataset list",
+                            type:"multiselect",
+                            options:response.data.data.list.map((item)=>{
+                                return {
+                                    value:item.id,
+                                    title: $translate.instant(item.label)
+                                }    
+                            }),
+                            editable: true,
+                            required: true
+                        }
+                    }
+                })
+                .then( (form) => {
+                    p = progress("Download data")
+
+                    $dps
+                    .get("/api/export/datasets/"+form.fields.list.value.join("+"))
+                    .then((response) => {
+                        p.close()
+                        $dps.downloadJSON(response.data,response.data.data.file)
+                        log({ messages: response.data.log })
+                    })
+                })        
+        })
+    }
+
+    $scope.importDatasets = function() {
+        dialog({
+            title: `${$translate.instant('Select .json file with datasets')}:`,
+            fields: {
+                file: {
+                    title: 'Data file:',
+                    type: 'file',
+                    editable: true,
+                    required: true
+                }
+            }
+        }).then((form) => {
+            var p = progress("Import datasets ");
+            const fd = new FormData();
+            // Take the first selected file
+            fd.append('file', form.fields.file.value);
+            $http.post($dps.getUrl() + '/api/import/datasets', fd, {
+                withCredentials: true,
+                headers: { 'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).success(function(response) {
+                p.close()
+                var title = { level: "success", text: "Datasets imported" };
+
+                if (response.log.filter((item) => {
+                        return item.level == "error" }).length > 0)
+                    title = { level: "error", text: "Cannot import datasets" };
+                if (response.log.filter((item) => {
+                        return item.level == "warning" }).length > 0)
+                    title = { level: "warning", text: "Datasets imported with Warnings" };
+
+                log({ title: title, messages: response.log });
+
+                $scope.upload_process = false;
+                $lookup.reload();
+                // $scope.item = response.metadata;
+                // $timeout(function() {
+                //   $scope.getCommitList();
+                //   eventEmitter.emit('refresh');
+                // });
+            });
+        })
+    }
+
+     $scope.importDictionary = function() {
+        dialog({
+            title: `${$translate.instant('Select .json file with dictionary')}:`,
+            fields: {
+                file: {
+                    title: 'Data file:',
+                    type: 'file',
+                    editable: true,
+                    required: true
+                }
+            }
+        }).then((form) => {
+            var p = progress("Import dictionaries ");
+            const fd = new FormData();
+            // Take the first selected file
+            fd.append('file', form.fields.file.value);
+            $http.post($dps.getUrl() + '/api/import/dictionary', fd, {
+                withCredentials: true,
+                headers: { 'Content-Type': undefined },
+                transformRequest: angular.identity
+            }).success(function(response) {
+                p.close()
+                var title = { level: "success", text: "Dictionary imported" };
+
+                if (response.log.filter((item) => {
+                        return item.level == "error" }).length > 0)
+                    title = { level: "error", text: "Cannot import dictionary" };
+                if (response.log.filter((item) => {
+                        return item.level == "warning" }).length > 0)
+                    title = { level: "warning", text: "Dictionary imported with Warnings" };
+
+                log({ title: title, messages: response.log });
+
+                $scope.upload_process = false;
+                $lookup.reload();
+                // $scope.item = response.metadata;
+                // $timeout(function() {
+                //   $scope.getCommitList();
+                //   eventEmitter.emit('refresh');
+                // });
+            });
+        })
+    }
 
     $scope.uploadDictionary = function() {
         dialog({

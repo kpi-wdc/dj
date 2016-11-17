@@ -35,7 +35,7 @@
                   padding: 0 0 0.5em 0;
                   line-height: 1;">
       <img ng-if="lookup(ds.dataset.source).icon" 
-           ng-src="{{lookup(ds.dataset.source).icon}}" style="height:36px;">
+           ng-src="{{lookup(ds.dataset.source).icon | translate}}" style="height:36px;">
 
       <img  ng-if="!lookup(ds.dataset.source).icon"
             src="./img/default-ds-icon.png" style="width:36px;"/>

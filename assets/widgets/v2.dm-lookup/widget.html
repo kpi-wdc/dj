@@ -21,7 +21,7 @@
       <h4 style="      color: #0078a0;
     margin: 0 0 0.5em;
     line-height: 1;">
-        <img ng-if="object.icon" src="{{object.icon}}" style="height:36px;" />
+        <img ng-if="object.icon" src="{{object.icon | translate}}" style="height:36px;" />
        <!--  <img ng-if="!object.icon" src="./img/default-info-icon.png" width="48px"> -->
         
         {{ object.label | translate}}
@@ -56,7 +56,7 @@
       </div>
 
       <div ng-if="object.url" style="font-size:small; margin:0.5em 0; text-align: justify;">
-        <a href="{{object.url}}" target="blank">{{object.url}}</a>
+        <a href="{{object.url | translate}}" target="blank">{{object.url | translate}}</a>
       </div>
     </div>
     

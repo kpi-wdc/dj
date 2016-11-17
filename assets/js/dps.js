@@ -1,6 +1,7 @@
 import angular from 'angular';
+import "angular-file-saver";
 
-const dps = angular.module('app.dps', ['app.config']);
+const dps = angular.module('app.dps', ['app.config','ngFileSaver']);
 
 dps.run (function(config, $location){
   config.dps = config.dps || $location.protocol()+'://'+$location.host()+":"+$location.port();
@@ -10,7 +11,7 @@ dps.run (function(config, $location){
 
 dps.service('$dps',
 
-   	function($http,config, $location){
+   	function($http, config, $location, FileSaver, Blob){
    	    var dpsURL = config.dps || $location.protocol()+'://'+$location.host()+":"+$location.port();
 		angular.extend(this,
 			{
@@ -27,6 +28,11 @@ dps.service('$dps',
 				
 				post : function (url,config){
 					return $http.post(dpsURL+url, config)
+				},
+
+				downloadJSON: function(data,file){
+				 var savedObject = new Blob([JSON.stringify(data)],{type:"application/json;charset=utf-8"})// { type: 'text/plain;charset=utf-8' });
+    			 FileSaver.saveAs(savedObject,file);
 				},
 
 				getUrl: function(){

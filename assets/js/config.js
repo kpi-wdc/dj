@@ -29,6 +29,7 @@ System.config({
     "angular-ui-tree": "components/angular-ui-tree/dist/angular-ui-tree.js",
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
     "angular-scroll": "components/angular-scroll/angular-scroll.js",
+    "angular-file-saver": "components/angular-file-saver/dist/angular-file-saver.bundle.js",
     "react": "components/react/react.js",
     "react-dom": "components/react/react-dom.js",
     "ngReact": "components/ngReact/ngReact.js",
@@ -98,6 +99,11 @@ System.config({
       ]
     },
     "angular-scroll": {
+      "deps": [
+        "angular"
+      ]
+    },
+    "angular-file-saver": {
       "deps": [
         "angular"
       ]
