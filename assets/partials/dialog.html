@@ -81,7 +81,7 @@
 	    </div>
 
 	    <div class="column large-9" ng-if="field.type == 'multiselect'" style="height:auto;">
-	    	<select ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable" multiple="1" style="height:25em; font-size:smaller;">
+	    	<select ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable" multiple="1" style="height:25em; font-size:x-small;">
         		<option ng-repeat="option in field.options" value="{{option.value}}">
         			{{option.title}}
         		</option>

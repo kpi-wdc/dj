@@ -418,7 +418,7 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary', 'ngFileUploa
                             options:response.data.data.list.map((item)=>{
                                 return {
                                     value:item.id,
-                                    title: $translate.instant(item.label)
+                                    title: $translate.instant(item.label)+item.ext
                                 }    
                             }),
                             editable: true,
