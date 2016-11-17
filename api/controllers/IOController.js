@@ -136,6 +136,8 @@ module.exports = {
         log: logger.success("total: "+responseList.length+" from "+((obj) ? obj.length:"0")).get(),
         data: {
           source: req.host,
+          file: req.host+"_export_Dataset_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json",
+          type: mime.lookup("json"),
           downloadedAt: new Date(),
           collection:"Dataset",
           list:responseList
@@ -143,7 +145,9 @@ module.exports = {
       }
       logger.clear();
       res.setHeader('Content-type', mime.lookup("json"));
-       res.setHeader('Content-disposition', 'attachment; filename=' + req.host+"_export_Dataset_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json");
+      res.setHeader('Content-disposition', 'attachment; filename=' + req.host+"_export_Dataset_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json");
+      res.setHeader("X-Filename", req.host+"_export_Dataset_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json");
+      res.setHeader("Access-Control-Expose-Header","Content-disposition, Content-type, X-Filename");
       return res.send(response);
     }, function (err) {
       var response = {
@@ -163,6 +167,8 @@ module.exports = {
             log: logger.success("total: "+json.length).get(),
             data: {
               source: req.host,
+              file: req.host+"_export_Dictionary_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json",
+              type: mime.lookup("json"),
               downloadedAt: new Date(),
               collection:"Dictionary",
               list:json.map(function(item){
@@ -178,6 +184,9 @@ module.exports = {
         logger.clear();
         res.setHeader('Content-type', mime.lookup("json"));
         res.setHeader('Content-disposition', 'attachment; filename=' + req.host+"_export_Dictionary_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json");
+        res.setHeader("X-Filename", req.host+"_export_Dictionary_"+date.format(new Date(),"YYYY_MM_DD_hh_mm_ss")+".json");
+        res.setHeader("Access-Control-Expose-Header","Content-disposition, Content-type, X-Filename");
+      
         return res.send(response);
       }, function (err) {
         var response = {
