@@ -71,7 +71,7 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
           },
 
           translations: (data) => {
-            return data.dictionary.filter((item) => {return item.type =="i18n"})
+            return  data.dictionary.filter((item) => {return item.type =="i18n"})
           },
 
 

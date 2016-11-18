@@ -4,7 +4,6 @@
         font-size: small;
         margin:0;
         padding: 0 1em;
-        background-color:#fff;
         color:#333;
   }
 
@@ -35,68 +34,81 @@
     Datasets Management
     <div class="column-6" style="
       float: right; 
-      border: 1px solid #ddd; 
       padding: 0.2em;    
-      box-shadow: 4px 4px 6px -4px #333333;"
+      "
     >
-      <div class="row" style="margin:0;">
-        <i class="fi-list" style="cursor:pointer;float:right;" 
-          ng-click="show_menu = !show_menu"/>
-      </div>  
-      <div ng-if="show_menu" class="row" style="margin:0;">
-          <ul class="dsmenu">
-            <li class="dsmenusection">View</li>
-            <li ng-click="showDatasetList()" class="dsmenuitem">
-              <a>
-                 <i class="fi-results"/>Show Available Datasets
-              </a>
-            </li>
-            <li class="dsmenusection">Create</li>
-            <li ng-click="showDatasetList()" class="dsmenuitem">
-              <a href="{{dps+'/api/dataset/create'}}" target="blank">
-                 <i class="fi-plus"/>New Dataset
-              </a>
-            </li>
-            <li class="dsmenusection">Upload XSLX</li>
-            <li ng-click="uploadCommit()" class="dsmenuitem">
-              <a>
-                 <i class="fi-upload"/>Create/Update Dataset
-              </a>
-            </li>
-            <li ng-click="uploadfromFTP()" class="dsmenuitem">
-              <a>
-                 <i class="fi-upload"/>Upload from FTP (SSE ChNPP)
-              </a>
-            </li>
-            <li ng-click="uploadDictionary()" class="dsmenuitem">
-              <a>
-                 <i class="fi-upload"/>Update Dictionaries
-              </a>
-            </li>
-            <li class="dsmenusection">Export JSON</li>
-            <li ng-click="exportDatasets()" class="dsmenuitem">
-              <a>
-                 <i class="fi-arrow-right"/>Export Datasets
-              </a>
-            </li>
-            <li ng-click="exportDictionary()" class="dsmenuitem">
-              <a>
-                 <i class="fi-arrow-right"/>Export Dictionaries
-              </a>
-            </li>
-            <li class="dsmenusection">Import JSON</li>             
-            <li ng-click="importDatasets()" class="dsmenuitem">
-              <a>
-                 <i class="fi-arrow-left"/>import Datasets
-              </a>
-            </li>
-            <li ng-click="importDictionary()" class="dsmenuitem">
-              <a>
-                 <i class="fi-arrow-left"/>import Dictionaries
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div style="position:relative;">
+        <div style="
+            position: absolute;
+            border: {{(show_menu)?'1px solid #ddd;':'none;'}}
+            box-shadow: {{(show_menu)?'4px 4px 6px -4px #333333;':'none;'}}
+            background-color:{{(show_menu)?'#f9f9f9;':'#fff;'}}
+            right: 0;
+            left: auto;
+            min-width: 14em;
+            padding: 0 0.25em;
+            z-index: 400;
+        ">
+          <div class="row" style="margin:0;">
+            <i class="fi-list" style="cursor:pointer;float:right;" 
+              ng-click="show_menu = !show_menu"/>
+          </div>  
+          <div ng-if="show_menu" class="row" style="margin:0;">
+              <ul class="dsmenu">
+                <li class="dsmenusection">View</li>
+                <li ng-click="showDatasetList()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-results"/>Show Available Datasets
+                  </a>
+                </li>
+                <li class="dsmenusection">Create</li>
+                <li ng-click="showDatasetList()" class="dsmenuitem">
+                  <a href="{{dps+'/api/dataset/create'}}" target="blank">
+                     <i class="fi-plus"/>New Dataset
+                  </a>
+                </li>
+                <li class="dsmenusection">Upload XSLX</li>
+                <li ng-click="uploadCommit()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-upload"/>Create/Update Dataset
+                  </a>
+                </li>
+                <li ng-click="uploadfromFTP()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-upload"/>Upload from FTP (SSE ChNPP)
+                  </a>
+                </li>
+                <li ng-click="uploadDictionary()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-upload"/>Update Dictionaries
+                  </a>
+                </li>
+                <li class="dsmenusection">Export JSON</li>
+                <li ng-click="exportDatasets()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-arrow-right"/>Export Datasets
+                  </a>
+                </li>
+                <li ng-click="exportDictionary()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-arrow-right"/>Export Dictionaries
+                  </a>
+                </li>
+                <li class="dsmenusection">Import JSON</li>             
+                <li ng-click="importDatasets()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-arrow-left"/>Import Datasets
+                  </a>
+                </li>
+                <li ng-click="importDictionary()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-arrow-left"/>Import Dictionaries
+                  </a>
+                </li>
+              </ul>
+          </div>
+        </div>  
+      </div>
     </div> 
   </h4>
 

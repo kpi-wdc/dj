@@ -19,6 +19,7 @@ m.factory("TimelineChartDecoration",[
 	"TimelineChartAdapter", 
 	"pageWidgets",
 	"i18n",
+	"$lookup",
 	"EventEmitter",
 	function(
 		$http, 
@@ -29,7 +30,9 @@ m.factory("TimelineChartDecoration",[
 		parentHolder, 
 		TimelineChartAdapter,
 		pageWidgets,
-		i18n ){
+		i18n,
+		$lookup,
+		EventEmitter ){
 		
 		let chartAdapter = TimelineChartAdapter;
 
@@ -56,7 +59,7 @@ m.factory("TimelineChartDecoration",[
 	    			optionsUrl : "./widgets/v2.nvd3-timeline/options.json",
 	    			dataUrl : "/api/data/process/"
 	    		}
-
+	    		 //console.log("Start step", this)
 	    		// var d = new Date()
 	    		// this.formatlist.forEach(function(item){
 	    		// 	console.log(d3.locale(i18n.localeDef()).timeFormat(item)(d))
@@ -69,6 +72,8 @@ m.factory("TimelineChartDecoration",[
 	    		wizard.conf.serieDataId  = this.conf.serieDataId;
 	    		this.settings = {options:angular.copy(this.options), data:[]};
 	    		this.conf = {};
+	    		this.data = undefined;
+	    		 //console.log("Finish step", this)
 	    	},
 
 	    	onCancelWizard: function(wizard){
@@ -171,6 +176,7 @@ m.factory("TimelineChartDecoration",[
 
 			
 		   loadData: function(){
+		   		//console.log("load data for", this.wizard.conf.instanceName,this.conf.serieDataId)
 				let thos = this;
 				$q
 					.all([
@@ -186,14 +192,22 @@ m.factory("TimelineChartDecoration",[
 							// console.log("resp",resp.data.value)
 							thos.metadata = resp.data.value.metadata; 
 							thos.data =resp.data.value.data.series; //thos._prepare( resp.data.value)
+							
+							thos.scopeStub = {
+								dictionary: $lookup.dictionary(resp.data.value.dictionary),
+								translations: i18n.translation(resp.data.value.dictionary.filter(item => item.type=="i18n"))
+			               }
+							
 							// console.log("thos.data",thos.data)
 						})
 					])
 					.then(() => {
 						if(thos.updateData){
+
 							thos.conf.decoration.title = thos.metadata.dataset.label;
 							thos.conf.decoration.subtitle = thos.metadata.dataset.note;
 							thos.updateData = false;
+							//console.log("data loaded", thos)
 						}
 						thos.apply();
 					})
@@ -208,7 +222,7 @@ m.factory("TimelineChartDecoration",[
 
 			apply: function(){
 				this.conf.decoration.width = parentHolder(this.wizard.conf).width;
-				chartAdapter.applyDecoration(this.options,this.conf.decoration,undefined,undefined,this.wizard.parentScope);
+				chartAdapter.applyDecoration(this.options,this.conf.decoration,undefined,undefined,this.scopeStub);
 				this.settings = {options:angular.copy(this.options), data:angular.copy(this.data)};
 				// console.log("this.settings",this.settings)
 				

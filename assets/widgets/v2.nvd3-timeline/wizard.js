@@ -41,9 +41,9 @@ m.factory("TimelineChartWizard",["$http",
 
 
 	           .onStart(function(wizard){
-	          	wizard.conf = {};
-	            angular.copy(wizard.parentScope.widget, wizard.conf);
-	            // console.log("Start wizard", wizard)
+	          	
+	            wizard.conf = angular.copy(wizard.parentScope.widget);
+	            //console.log("Start wizard", wizard.parentScope.widget)
 	          })
 
 
@@ -53,6 +53,7 @@ m.factory("TimelineChartWizard",["$http",
 			  })
 
 	          .onFinish(function(wizard){
+	          	//console.log("Finish wizard", wizard)
 	          	wizard.parentScope.widget.instanceName  =  wizard.conf.instanceName;
 	            wizard.parentScope.widget.decoration = wizard.conf.decoration;
 	            wizard.parentScope.widget.serieDataId = wizard.conf.serieDataId;
@@ -63,6 +64,7 @@ m.factory("TimelineChartWizard",["$http",
 			    
 			    wizard.conf = {};
 	            wizard.context = {};
+	             //console.log("Parentscope", wizard.parentScope.widget)
 	          });
 	        }
 	        return m._wizard;  

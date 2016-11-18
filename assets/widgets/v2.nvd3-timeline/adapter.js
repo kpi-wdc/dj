@@ -8,7 +8,7 @@ function (i18n, $lookup, $translate) {
   this.applyDecoration = function (options, decoration,selector,api,scope) {
     if (angular.isDefined(decoration) && angular.isDefined(options)) {
       
-      // console.log(scope);
+      //console.log("apply decoration for scope",scope, decoration);
 
       options.chart.height = decoration.height;
       options.chart.width = decoration.width;
@@ -28,7 +28,9 @@ function (i18n, $lookup, $translate) {
       options.chart.showTooltip = decoration.showTooltip;
 
       options.chart.onNavigate = (d) => { 
-        scope.emit("timelineNavigate",{data:d,dict:scope.dictionary,tr:scope.translations})
+        if(scope.emit){
+          scope.emit("timelineNavigate",{data:d,dict:scope.dictionary,tr:scope.translations})
+        }  
       }
       options.chart.localeDef = i18n.localeDef();
       
