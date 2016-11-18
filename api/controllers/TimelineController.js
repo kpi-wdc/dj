@@ -26,13 +26,14 @@ module.exports = {
         }
 
         var uploadedFileAbsolutePath = uploadedFiles[0].fd;
-
+        
         wdc_timeline(uploadedFileAbsolutePath)
           .then(function(data){
                Cache
-                .save("timeline",req.body,data)
+                .save("timeline",uploadedFiles[0].fd+uploadedFiles[0].size,data)
                 .then(function(obj){
-                      return res.json(obj[0])
+                      console.log(" from cache "+ JSON.stringify(obj))
+                      return res.json(obj)
                 })
             })    
     })          

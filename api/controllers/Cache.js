@@ -6,7 +6,7 @@ var util = require("util");
 module.exports = {
 	
 	get: function (query){
-		// console.log("get", query)
+		
 		return CacheData.findOne({hash:MD5(query)}); 
 	},
 	
