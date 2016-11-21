@@ -7,7 +7,8 @@
 
 var wdc_timeline =  require("../../wdc_libs/parsers/wdc-timeline");
 var Cache = require("./Cache");
-
+var uuid = require('uuid');
+var util = require("util");
 
 module.exports = {
 
@@ -29,11 +30,14 @@ module.exports = {
         
         wdc_timeline(uploadedFileAbsolutePath)
           .then(function(data){
-               Cache
-                .save("timeline",uploadedFiles[0].fd+uploadedFiles[0].size,data)
+              data.metadata.dataset.id =  (data.metadata.dataset.id) ? data.metadata.dataset.id : uuid.v1();
+              Cache
+                // .save("timeline",uploadedFiles[0].fd+uploadedFiles[0].size,data)
+                .save("timeline", data.metadata.dataset.id, data)
                 .then(function(obj){
-                      console.log(" from cache "+ JSON.stringify(obj))
-                      return res.json(obj)
+                      console.log(" from cache "+ obj.length)
+                      var response = (util.isArray(obj)) ? obj[0] : obj;
+                      return res.json(response)
                 })
             })    
     })          
