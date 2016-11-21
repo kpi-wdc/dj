@@ -393,6 +393,16 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary', 'ngFileUploa
         })
     }
 
+    $scope.getDatasetUUID = function(){
+        var p = progress("Create new dataset UUID")
+         $dps
+            .get("/api/dataset/id/create")
+            .then((response) => {
+                p.close();
+                confirm(response.data.id)
+            })
+    }
+
     $scope.exportDictionary = function(){
         var p = progress("Download Dictionaries")
         $dps

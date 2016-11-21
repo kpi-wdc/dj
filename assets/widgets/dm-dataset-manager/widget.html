@@ -17,6 +17,11 @@
   .dsmenusection {
     border-bottom:1px solid #ddd;
   }
+  
+  .dcmenubutton i:hover{
+    color:#000;
+  }
+
 
 </style>
 <div 
@@ -49,7 +54,7 @@
             padding: 0 0.25em;
             z-index: 400;
         ">
-          <div class="row" style="margin:0;">
+          <div class="row  dcmenubutton" style="margin:0;">
             <i class="fi-list" style="cursor:pointer;float:right;" 
               ng-click="show_menu = !show_menu"/>
           </div>  
@@ -62,9 +67,14 @@
                   </a>
                 </li>
                 <li class="dsmenusection">Create</li>
+                <li ng-click="getDatasetUUID()" class="dsmenuitem">
+                  <a>
+                     <i class="fi-plus"/>New Dataset UUID
+                  </a>
+                </li>
                 <li ng-click="showDatasetList()" class="dsmenuitem">
                   <a href="{{dps+'/api/dataset/create'}}" target="blank">
-                     <i class="fi-plus"/>New Dataset
+                     <i class="fi-plus"/>Download New Dataset Template
                   </a>
                 </li>
                 <li class="dsmenusection">Upload XSLX</li>
