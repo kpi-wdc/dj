@@ -6,8 +6,11 @@ var log = function(scope){
 	this.scope = scope;
 	this.pool = [];
 	this.id = current++;
-	this.timeStampFormat = "YY/MM/DD hh:mm:ss"
+	this.timeStampFormat = "hh:mm:ss"
 };
+
+var messagePriority = ["debug","info","warning","success", "error"]
+
 
 log.prototype._push = function(level,data){
 	var msg = [];
@@ -15,7 +18,11 @@ log.prototype._push = function(level,data){
 	for(var key in data){
 		msg.push(data[key])
 	}
-
+	
+	if(messagePriority.indexOf(level) >= messagePriority.indexOf(this.consoleLevel)){
+		console.log(date.format(new Date(),this.timeStampFormat)+" <"+level+"> "+msg)
+	}
+		
 	this.pool.push({
 		logger: this.id,
 		scope: this.scope,
@@ -25,6 +32,9 @@ log.prototype._push = function(level,data){
 	})	
 }
 log.prototype.clear = function(){ this.pool=[]; return this};
+
+log.prototype.consoleLevel = function(level){ this.consoleLevel = level || "error"; return this};
+
 log.prototype.timeFormat = function(_){ 
 	if(!_) return this.timeStampFormat;
 	this.timeStampFormat = _;

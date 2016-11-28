@@ -135,6 +135,7 @@ module.exports = function (filename){
 									},
 									data: function(src,args){
 										var id = args[0];
+										logger.debug(id)
 										logger.debug("insert "+src.length+" records")
 										return src.map(function(item){
 											var t = item.DATE.toString() 
@@ -160,7 +161,8 @@ module.exports = function (filename){
 							)
 						})
 					}
-					return Promise.all(promises).then(function(resolve){
+					return Promise.all(promises)
+					.then(function(resolve){
 						return clean(conf)
 							.then(function(){
 								logger.info("Temporary files deleted")

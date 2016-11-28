@@ -302,6 +302,82 @@ module.exports = {
       })    
   },
 
+  importDataset: function(req,res){
+
+      var $createDataset = function(dataset){
+        dataset["commit/HEAD"] = true;
+        return Dataset
+                  .create(dataset)
+                  .then(function(obj){
+                    var result = prepareCommitInfo(obj);
+                     return result
+                  });
+      }
+
+      var $makeHeadCommit = function(dataset,obj){
+          return new Promise(function(resolve){
+            Dataset
+                  .destroy(
+                    {
+                      "dataset/id": dataset.metadata.dataset.id,
+                      createdAt: {">=": obj.createdAt},
+                      "commit/HEAD": false
+                    })
+                  .then(function () {
+                    Dataset
+                            .update({"dataset/id": dataset.metadata.dataset.id}, {"commit/HEAD": false})
+                            .then(function(obj){
+                              resolve(obj)
+                            })
+                  })
+          })
+      }
+
+      var $updateDataset = function(dataset){
+        return new Promise(function (resolve){
+          Dataset
+                    .findOne(
+                      {
+                        "dataset/id": dataset.metadata.dataset.id,
+                        "commit/HEAD": true
+                      })
+                    .then(function (obj) {
+                      if (!obj) {
+                        
+                          $createDataset(dataset)
+                            .then(function(result){
+                              logger.info("create "+result.metadata.dataset.id)
+                              resolve(result);
+                            })
+                       
+                      } else {
+                          $makeHeadCommit(dataset,obj)
+                            .then(function(){
+                                $createDataset(dataset)
+                                  .then(function(result){
+                                    logger.info("update "+result.metadata.dataset.id)
+                                    dataprocController.updateCache(result.metadata.dataset.id)
+                                      .then(function(){
+                                        resolve(result);
+                                      })                                  
+                                  })
+                            })
+                      }
+                    }) 
+        })
+      }
+
+      logger.info("Import dataset")
+      var dataset = req.body;
+      $updateDataset(dataset)
+        .then(function(){
+          logger.clear();
+          return res.send("Dataset "+dataset.metadata.dataset.id+" imported successfully")
+        })
+       
+  },
+
+
   updateDictionary: function(req,res){
     logger.info("Import dictionary")
      req.file('file')

@@ -95,6 +95,7 @@ module.exports.routes = {
  'get /api/export/dictionary'   : 'IOController.getDictionary',
  
  'post /api/import/datasets'    : 'IOController.updateDatasets',
+ 'put /api/import/datasets'    : 'IOController.importDataset',
  'post /api/import/dictionary'  : 'IOController.updateDictionary',
   
 // 
