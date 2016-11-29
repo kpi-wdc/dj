@@ -50,6 +50,17 @@ Query.prototype = {
         return this;    
     },
 
+    concat : function(list){
+      list = (list.forEach)? list : [list];
+      this.data = [];
+      var self = this;
+      list.forEach(function(item){
+        item = (item.forEach)? item : [item]
+        self.data = self.data.concat(item)
+      })
+      return this;
+    },
+
     /** 
 * Equil criteria callback returns true then item a equils item b
 * @callback equilsCriteria
@@ -95,6 +106,10 @@ Query.prototype = {
        if (this.data == undefined) throw "Cannot sort items from undefined data"
        this.data.sort(criteria);
         return this;    
+    },
+
+    order : function(criteria){
+      return this.orderBy(criteria)
     },
 
  /**
@@ -329,3 +344,29 @@ Query.criteria = {
 }
 
 module.exports = Query;
+
+String.prototype.startWith = function(term){
+  return this.indexOf(term)==0
+}
+
+String.prototype.endWith = function(term){
+  return  this.match(term + "$") == term
+}
+
+String.prototype.contains = function(term){
+  return this.indexOf(term)>=0
+}
+
+String.prototype.includes = String.prototype.contains; 
+
+String.prototype.equals = function(term){
+  return this == term
+}
+
+String.prototype.notEquals = function(term){
+  return this != term
+}
+
+Array.prototype.contains = function(criteria){
+  return this.filter(criteria).length > 0
+}

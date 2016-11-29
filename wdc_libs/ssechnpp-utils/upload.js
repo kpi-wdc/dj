@@ -1,12 +1,12 @@
 var http = require('request-promise');
-var logger = require("../wdc-log").global.consoleLevel("debug");
+var logger = require("../wdc-log").global.consoleLevel("success");
 var fs = require("fs");
 var datasetGroupParser =  require("../parsers/ch-ftp");
 var Promise = require("bluebird");
 
 
-// var host = 'https://dj-dps.herokuapp.com';
-var host = 'http://localhost:8088';
+var host = 'https://dj-dps.herokuapp.com';
+// var host = 'http://localhost:8088';
 var srcDir = './dsrc';
 
 var updateDataset = function(ds){

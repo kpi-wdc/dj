@@ -12,6 +12,7 @@ var getProperty = require("../../wdc_libs/wdc-flat").getProperty;
 var flat2json = require("../../wdc_libs/wdc-flat").flat2json;
 var util = require("util");
 var Cache = require("./Cache");
+var jp= require("jsonpath");
 
 
 var prepareDataset = function (obj) {
@@ -114,16 +115,18 @@ module.exports = {
                       })
                   } else {
                     
-                    new aquery()
-                      .from(r)
-                      .select(criteria)
-                      // .get()
-                      .then(function (queryResult){
-                        Cache.save("dsm",params,queryResult)
+                    // new aquery()
+                    //   .from(r)
+                    //   .select(criteria)
+                    //   // .get()
+                    //   .then(function (queryResult){
+                        r = jp.query(r,params.query)
+                        Cache.save("dsm",params,r)
                         .then(function(){
-                          return res.send(queryResult);    
-                        })    
-                      })
+                          return res.send(r);    
+                        })
+
+                      // })
                     }    
                   })
                 })
@@ -177,12 +180,12 @@ module.exports = {
 
            Dataset.find(mq).then(function (obj) {
               new aquery()
-                  .from(obj)
-                  .map(function (item) {
-                    // sails.log.debug("!", item)
-                    var tmp = getProperty(item, params.property);
-                    return tmp;
-                  })
+                  .from(jp.query(obj,params.property))
+                  // .map(function (item) {
+                  //   // sails.log.debug("!", item)
+                  //   var tmp = getProperty(item, params.property);
+                  //   return tmp;
+                  // })
                   .select(function (item) {
                     return item
                   })
@@ -214,14 +217,16 @@ module.exports = {
   },
 
   getDependencies: function(req,resp){
-    sails.log.debug("#getDependencies");    
-    function getTags(datasets,meta,property){
+    sails.log.debug("#getDependencies", req.body);    
+
+    function getTags(datasets,tag){
+      console.log("TAG",tag)
       return new query()
-        .from(datasets)
-        .map(function (item) {
-          var tmp = getProperty(item, property);
-          return tmp;
-        })
+        .from(jp.query(datasets,tag.property))
+        // .map(function (item) {
+        //   var tmp = getProperty(item, property);
+        //   return tmp;
+        // })
         .select(function (item) {
           return item
         })
@@ -235,7 +240,7 @@ module.exports = {
           return {key: item, value: item}
         })
         .map(function (item) {
-          return {"tag": item.key, "meta": meta,property:property}
+          return {"tag": item.key, "meta": tag.meta, "property":tag.property, "query": tag.query}
         })
         .get();
     }
@@ -261,28 +266,33 @@ module.exports = {
         }else{
 
           Dataset.find(mq).then(function (obj) {
+            
             var tagList = [];
-            for(var i in params.tags){
-              tagList = tagList.concat(getTags(obj, params.tags[i].meta, params.tags[i].property));
-            }
-
+            
+            params.tags.forEach(function(tag){
+              console.log("#TAG", tag)
+              tagList = tagList.concat(getTags(obj,tag))
+            })
+            
             tagList.forEach(function(item, index){item.index=index})
 
             var keywordMap = [];
-            for(j in obj){
+
+            obj.forEach(function(dataset){
               var dskw = [];
-              for(var i in params.tags){
-                dskw = dskw.concat(getTags([obj[j]], params.tags[i].meta, params.tags[i].property));
-              }
+              params.tags.forEach(function(tag){
+                dskw = dskw.concat(getTags(dataset, tag));
+              })
               var values = [];
               tagList.forEach(function(item){
                 values.push(
                   (dskw.filter(function(w){return w.tag == item.tag}).length > 0) ? 1 : 0
                 )
               })
-              keywordMap.push({dataset:obj[j].id, keywords:values})
-            }
+              keywordMap.push({dataset:dataset.id, keywords:values})
+            })
 
+            
             tagList.forEach(function(item){
               item.value = keywordMap
                 .map(function(d){return d.keywords[item.index]})

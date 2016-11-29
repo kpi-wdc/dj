@@ -292,11 +292,14 @@ module.exports = {
               Promise
                 .all(promises)
                 .then(function(){
-                  var response = {
-                    log: logger.success("Total: "+list.length).get()
-                  }
-                  logger.clear();
-                  res.send(response);
+                  Cache.clear("dsm")
+                    .then(function(){
+                        var response = {
+                          log: logger.success("Total: "+list.length).get()
+                        }
+                        logger.clear();
+                        res.send(response);
+                    })    
                 })
             })
       })    
@@ -371,9 +374,12 @@ module.exports = {
       var dataset = req.body;
       $updateDataset(dataset)
         .then(function(){
-          logger.clear();
-          return res.send("Dataset "+dataset.metadata.dataset.id+" imported successfully")
-        })
+           Cache.clear("dsm")
+            .then(function(){
+              logger.clear();
+              return res.send("Dataset "+dataset.metadata.dataset.id+" imported successfully")
+            })
+          })
        
   },
 

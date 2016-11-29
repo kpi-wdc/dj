@@ -1,5 +1,9 @@
 var Promise = require("bluebird");
 
+
+const args = process.argv;
+console.log(args);
+
 var t = [3000,1000,2000,0,500,0]
 
 Promise.reduce(t, function(s , time, index){

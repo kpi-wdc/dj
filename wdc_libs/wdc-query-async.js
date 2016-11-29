@@ -338,4 +338,72 @@ Query.prototype = {
 
 }
 
+Query.criteria = {
+
+  "String" : {
+    "A-Z" : function(selector){
+      return function(a,b){
+        return String.naturalCompare((selector(a)+'').toLowerCase(),(selector(b)+'').toLowerCase())
+      }
+    },
+    "Z-A": function(selector){
+        return function(a,b){
+          return String.naturalCompare((selector(b)+'').toLowerCase(),(selector(a)+'').toLowerCase())
+        }
+    }   
+  },
+
+  "Number":{
+    "A-Z" : function(selector){
+        return function(a,b){
+          return selector(a)-selector(b)
+        }  
+    },
+    "Z-A": function(selector){
+        return function(a,b){
+          return selector(b)-selector(a)
+        }
+    }     
+  },
+
+  "Date": {
+    "A-Z" : function(selector){
+        return function(a,b){
+          return date.subtract(new Date(selector(a)), new Date(selector(b))).toMilliseconds();
+        }
+    },  
+    "Z-A": function(selector){
+        return function(a,b){
+          return date.subtract(new Date(selector(b)), new Date(selector(a))).toMilliseconds();
+        }
+    }    
+  } 
+}
+
 module.exports = Query;
+
+String.prototype.startWith = function(term){
+  return this.indexOf(term)==0
+}
+
+String.prototype.endWith = function(term){
+  return  this.match(term + "$") == term
+}
+
+String.prototype.contains = function(term){
+  return this.indexOf(term)>=0
+}
+
+String.prototype.includes = String.prototype.contains; 
+
+String.prototype.equals = function(term){
+  return this == term
+}
+
+String.prototype.notEquals = function(term){
+  return this != term
+}
+
+Array.prototype.contains = function(criteria){
+  return this.filter(criteria).length > 0
+}
