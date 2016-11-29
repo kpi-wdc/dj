@@ -31,14 +31,16 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
     $scope.selectSource = function(key){
       console.log("Select Source")
       eventEmitter.emit('setLookupKey', key,"#Datasource");
-      let query = [{"dataset.source":[{equals:key}]}];
+      // let query = [{"dataset.source":[{equals:key}]}];
+      let query = "$[?(@.dataset.source=='{{}}')]".split("{{}}").join(key);
       eventEmitter.emit('searchQuery', query);
     }
 
     $scope.selectTopic = function(key){
       console.log("Select Topic")
       eventEmitter.emit('setLookupKey', key, "#Topic");
-      let query = [{"dataset.topics":[{includes:key}]}];
+      // let query = [{"dataset.topics":[{includes:key}]}];
+      let query = "$[?(@.dataset.topics.contains(function(d){return d.startWith('{{}}')}))]".split("{{}}").join(key);
       eventEmitter.emit('searchQuery', query);
     }
 

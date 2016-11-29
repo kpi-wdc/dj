@@ -426,10 +426,11 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary',"app.dps"])
           size  : Math.round(scale(item.value)), 
           index : i,
           key   : item.key,
-          property : item.property
+          property : item.property,
+          query : item.query
         }
       })
-
+      console.log("words", words)
       var links = ontology.links.map((item) => {
         return {
                   source:words[item.source], 
@@ -544,11 +545,12 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary',"app.dps"])
         }
 
         function click(d){
-          // console.log("click",d)
+          console.log("click",d)
           eventEmitter.emit('setLookupKey', d.key);
-          let tmp = {};
-          tmp[d.property.split(".").slice(1).join(".")] = [{includes:d.key}];
-          let query = [tmp];
+          // let tmp = {};
+          // tmp[d.property.split(".").slice(1).join(".")] = [{includes:d.key}];
+          // let query = [tmp];
+          let query = d.query.split("{{}}").join(d.key)
           eventEmitter.emit('searchQuery', query);
         } 
 
@@ -594,6 +596,7 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary',"app.dps"])
           tag: (obj.label) ? obj.label : item.tag,
           key: item.tag,
           property: item.property,
+          query: item.query,
           icon: (obj.icon) ? obj.icon : defaultIcon[item.meta],
           meta: item.meta,
           value:item.value
@@ -626,19 +629,18 @@ angular.module('app.widgets.dm-word-cloud', ['app.dictionary',"app.dps"])
             "tags":[
                   {
                     "meta":"indicator",
-                      "property":"metadata.dimension.concept.values.*.label"
+                    "property":"$..metadata.dimension.concept.values..label",
+                    "query":"$[?(@.dimension.concept.values.contains(function(d){return d.label.startWith('{{}}')}))]"
                   },
-                  // {
-                  //   "meta":"author",
-                  //     "property":"metadata.dataset.commit.author"
-                  // },
                   {
                     "meta":"topic",
-                      "property":"metadata.dataset.topics"
+                    "property":"$..metadata.dataset.topics",
+                    "query":"$[?(@.dataset.topics.contains(function(d){return d.startWith('{{}}')}))]"
                   },
                   {
                     "meta":"source",
-                      "property":"metadata.dataset.source"
+                    "property":"$..metadata.dataset.source",
+                    "query":"$[?(@.dataset.source.startWith('{{}}'))]"
                   }
               ]
           }

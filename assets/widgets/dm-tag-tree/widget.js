@@ -62,9 +62,12 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary',"app.dps"])
       prepareList(tag);
       $scope.tag = tag;
       eventEmitter.emit('setLookupKey', tag._tag, $scope.category);
-      let tmp = {};
-      tmp["dataset.topics"] = [{startsWith:tag._path}];
-      let query = [tmp];
+      // let tmp = {};
+      // tmp["dataset.topics"] = [{startsWith:tag._path}];
+      // let query = [tmp];
+      // 
+      let query = $scope.query.split("{{}}").join(tag._path);
+
       eventEmitter.emit('searchQuery', query);
     }
 

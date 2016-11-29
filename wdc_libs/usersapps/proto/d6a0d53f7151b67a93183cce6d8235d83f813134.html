@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)http://bl.ocks.org/mbostock/raw/950642/d6a0d53f7151b67a93183cce6d8235d83f813134/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8">
+<style>
+
+.owner {
+    stroke: #ada;
+    stroke-opacity: 1;
+    fill-opacity: 0;
+    stroke-width: 3px;
+
+}
+.collaborator {
+    stroke: #ada;
+    stroke-opacity: 1;
+    fill-opacity: 0;
+    stroke-width: 2px;
+    stroke-dasharray: 5 2 2 2
+}
+
+.association {
+    stroke: #daa;
+    stroke-opacity: 1;
+    fill-opacity: 0;
+    stroke-width: 2px;
+    stroke-dasharray: 2 2   
+}
+
+.linkA {
+    stroke: #ddaaaa;
+    stroke-opacity: 1;
+    fill-opacity: 0;
+    stroke-width: 3px;
+}
+
+.event-layer {
+  fill: none;
+  pointer-events: all;
+  stroke:#ff0000;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+</style>
+</head><body>
+<script src="./bower_components/d3/d3.js"></script>
+<script>
+
+var width = 960,
+    height = 500
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var overlay = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("z-index", 3);    
+
+
+svg.append("defs").append("clipPath")
+    .attr("id", "g-mug-clip")
+  .append("circle")
+    .attr("r", 20);
+
+
+var force = d3.layout.force()
+    // .gravity(.05)
+    // .linkDistance(function(d){return 200-2*d.value/*50*(1/(d.value*d.value))*/})
+    // .charge(-100)
+    .size([width, height]);
+
+
+function nodeToNode(d) {
+
+   return "M" + d.source.x + "," + d.source.y
+         + "C" + d.source.x + "," + d.source.y
+         + " " + d.target.x + "," + d.target.y
+         + " " + d.target.x + "," + d.target.y;
+  // console.log("d",d)
+    // var deltaX = 0.5*(-d.source.x + d.target.x);
+    // var deltaY = 0.5*(-d.source.y + d.target.y);
+     
+    // var amx = []
+    // if(deltaX >= deltaY){
+    //   amx.push({x:d.source.x+deltaX,y:d.source.y})
+    //   amx.push({x:d.target.x-deltaX,y:d.target.y})
+    // }else{
+    //   amx.push({x:d.source.x,y:d.source.y+deltaY})
+    //   amx.push({x:d.target.x,y:d.target.y-deltaY})
+    // }
+    
+    // return "M" + d.source.x + "," + d.source.y
+    //      + "C" + amx[0].x + "," + amx[0].y
+    //      + " " + amx[1].x + "," + amx[1].y
+    //      // + " " + d.target.x + "," + d.target.y
+    //      + " " + d.target.x + "," + d.target.y;
+  }
+
+
+// var bundle = d3.layout.bundle();
+
+var line = d3.svg.line()
+.x(function(d){return d.x})
+.y(function(d){return d.y})
+// console.log(line)
+    //.interpolate("basis")
+    // .x(function(d){console.log(d); return source.x})
+    // .y(function(d){console.log(d); return source.y})
+    
+    // .tension(.85)
+    // .radius(function(d) { return d.y; })
+    // .angle(function(d) { return d.x / 180 * Math.PI; });    
+// var diagonal = d3.svg.diagonal.radial()
+    // .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+
+// var json = {
+//     "nodes":[
+//       {"name":"Myriel","group":1},
+//       {"name":"Napoleon","group":1},
+//       {"name":"Mlle.Baptistine","group":1},
+//       {"name":"Mme.Magloire","group":1}
+//     ],
+//     "links":[
+//       {"source":1,"target":0,"value":1},
+//       // {"source":2,"target":0,"value":8},
+//       // {"source":3,"target":0,"value":10},
+//       {"source":3,"target":2,"value":6}
+//      ]
+//    }
+
+
+// var json = {"nodes":[{"name":"Myriel","group":1},{"name":"Napoleon","group":1},{"name":"Mlle.Baptistine","group":1},{"name":"Mme.Magloire","group":1},{"name":"CountessdeLo","group":1},{"name":"Geborand","group":1},{"name":"Champtercier","group":1},{"name":"Cravatte","group":1},{"name":"Count","group":1},{"name":"OldMan","group":1},{"name":"Labarre","group":2},{"name":"Valjean","group":2},{"name":"Marguerite","group":3},{"name":"Mme.deR","group":2},{"name":"Isabeau","group":2},{"name":"Gervais","group":2},{"name":"Tholomyes","group":3},{"name":"Listolier","group":3},{"name":"Fameuil","group":3},{"name":"Blacheville","group":3},{"name":"Favourite","group":3},{"name":"Dahlia","group":3},{"name":"Zephine","group":3},{"name":"Fantine","group":3},{"name":"Mme.Thenardier","group":4},{"name":"Thenardier","group":4},{"name":"Cosette","group":5},{"name":"Javert","group":4},{"name":"Fauchelevent","group":0},{"name":"Bamatabois","group":2},{"name":"Perpetue","group":3},{"name":"Simplice","group":2},{"name":"Scaufflaire","group":2},{"name":"Woman1","group":2},{"name":"Judge","group":2},{"name":"Champmathieu","group":2},{"name":"Brevet","group":2},{"name":"Chenildieu","group":2},{"name":"Cochepaille","group":2},{"name":"Pontmercy","group":4},{"name":"Boulatruelle","group":6},{"name":"Eponine","group":4},{"name":"Anzelma","group":4},{"name":"Woman2","group":5},{"name":"MotherInnocent","group":0},{"name":"Gribier","group":0},{"name":"Jondrette","group":7},{"name":"Mme.Burgon","group":7},{"name":"Gavroche","group":8},{"name":"Gillenormand","group":5},{"name":"Magnon","group":5},{"name":"Mlle.Gillenormand","group":5},{"name":"Mme.Pontmercy","group":5},{"name":"Mlle.Vaubois","group":5},{"name":"Lt.Gillenormand","group":5},{"name":"Marius","group":8},{"name":"BaronessT","group":5},{"name":"Mabeuf","group":8},{"name":"Enjolras","group":8},{"name":"Combeferre","group":8},{"name":"Prouvaire","group":8},{"name":"Feuilly","group":8},{"name":"Courfeyrac","group":8},{"name":"Bahorel","group":8},{"name":"Bossuet","group":8},{"name":"Joly","group":8},{"name":"Grantaire","group":8},{"name":"MotherPlutarch","group":9},{"name":"Gueulemer","group":4},{"name":"Babet","group":4},{"name":"Claquesous","group":4},{"name":"Montparnasse","group":4},{"name":"Toussaint","group":5},{"name":"Child1","group":10},{"name":"Child2","group":10},{"name":"Brujon","group":4},{"name":"Mme.Hucheloup","group":8}],"links":[{"source":1,"target":0,"value":1},{"source":2,"target":0,"value":8},{"source":3,"target":0,"value":10},{"source":3,"target":2,"value":6},{"source":4,"target":0,"value":1},{"source":5,"target":0,"value":1},{"source":6,"target":0,"value":1},{"source":7,"target":0,"value":1},{"source":8,"target":0,"value":2},{"source":9,"target":0,"value":1},{"source":11,"target":10,"value":1},{"source":11,"target":3,"value":3},{"source":11,"target":2,"value":3},{"source":11,"target":0,"value":5},{"source":12,"target":11,"value":1},{"source":13,"target":11,"value":1},{"source":14,"target":11,"value":1},{"source":15,"target":11,"value":1},{"source":17,"target":16,"value":4},{"source":18,"target":16,"value":4},{"source":18,"target":17,"value":4},{"source":19,"target":16,"value":4},{"source":19,"target":17,"value":4},{"source":19,"target":18,"value":4},{"source":20,"target":16,"value":3},{"source":20,"target":17,"value":3},{"source":20,"target":18,"value":3},{"source":20,"target":19,"value":4},{"source":21,"target":16,"value":3},{"source":21,"target":17,"value":3},{"source":21,"target":18,"value":3},{"source":21,"target":19,"value":3},{"source":21,"target":20,"value":5},{"source":22,"target":16,"value":3},{"source":22,"target":17,"value":3},{"source":22,"target":18,"value":3},{"source":22,"target":19,"value":3},{"source":22,"target":20,"value":4},{"source":22,"target":21,"value":4},{"source":23,"target":16,"value":3},{"source":23,"target":17,"value":3},{"source":23,"target":18,"value":3},{"source":23,"target":19,"value":3},{"source":23,"target":20,"value":4},{"source":23,"target":21,"value":4},{"source":23,"target":22,"value":4},{"source":23,"target":12,"value":2},{"source":23,"target":11,"value":9},{"source":24,"target":23,"value":2},{"source":24,"target":11,"value":7},{"source":25,"target":24,"value":13},{"source":25,"target":23,"value":1},{"source":25,"target":11,"value":12},{"source":26,"target":24,"value":4},{"source":26,"target":11,"value":31},{"source":26,"target":16,"value":1},{"source":26,"target":25,"value":1},{"source":27,"target":11,"value":17},{"source":27,"target":23,"value":5},{"source":27,"target":25,"value":5},{"source":27,"target":24,"value":1},{"source":27,"target":26,"value":1},{"source":28,"target":11,"value":8},{"source":28,"target":27,"value":1},{"source":29,"target":23,"value":1},{"source":29,"target":27,"value":1},{"source":29,"target":11,"value":2},{"source":30,"target":23,"value":1},{"source":31,"target":30,"value":2},{"source":31,"target":11,"value":3},{"source":31,"target":23,"value":2},{"source":31,"target":27,"value":1},{"source":32,"target":11,"value":1},{"source":33,"target":11,"value":2},{"source":33,"target":27,"value":1},{"source":34,"target":11,"value":3},{"source":34,"target":29,"value":2},{"source":35,"target":11,"value":3},{"source":35,"target":34,"value":3},{"source":35,"target":29,"value":2},{"source":36,"target":34,"value":2},{"source":36,"target":35,"value":2},{"source":36,"target":11,"value":2},{"source":36,"target":29,"value":1},{"source":37,"target":34,"value":2},{"source":37,"target":35,"value":2},{"source":37,"target":36,"value":2},{"source":37,"target":11,"value":2},{"source":37,"target":29,"value":1},{"source":38,"target":34,"value":2},{"source":38,"target":35,"value":2},{"source":38,"target":36,"value":2},{"source":38,"target":37,"value":2},{"source":38,"target":11,"value":2},{"source":38,"target":29,"value":1},{"source":39,"target":25,"value":1},{"source":40,"target":25,"value":1},{"source":41,"target":24,"value":2},{"source":41,"target":25,"value":3},{"source":42,"target":41,"value":2},{"source":42,"target":25,"value":2},{"source":42,"target":24,"value":1},{"source":43,"target":11,"value":3},{"source":43,"target":26,"value":1},{"source":43,"target":27,"value":1},{"source":44,"target":28,"value":3},{"source":44,"target":11,"value":1},{"source":45,"target":28,"value":2},{"source":47,"target":46,"value":1},{"source":48,"target":47,"value":2},{"source":48,"target":25,"value":1},{"source":48,"target":27,"value":1},{"source":48,"target":11,"value":1},{"source":49,"target":26,"value":3},{"source":49,"target":11,"value":2},{"source":50,"target":49,"value":1},{"source":50,"target":24,"value":1},{"source":51,"target":49,"value":9},{"source":51,"target":26,"value":2},{"source":51,"target":11,"value":2},{"source":52,"target":51,"value":1},{"source":52,"target":39,"value":1},{"source":53,"target":51,"value":1},{"source":54,"target":51,"value":2},{"source":54,"target":49,"value":1},{"source":54,"target":26,"value":1},{"source":55,"target":51,"value":6},{"source":55,"target":49,"value":12},{"source":55,"target":39,"value":1},{"source":55,"target":54,"value":1},{"source":55,"target":26,"value":21},{"source":55,"target":11,"value":19},{"source":55,"target":16,"value":1},{"source":55,"target":25,"value":2},{"source":55,"target":41,"value":5},{"source":55,"target":48,"value":4},{"source":56,"target":49,"value":1},{"source":56,"target":55,"value":1},{"source":57,"target":55,"value":1},{"source":57,"target":41,"value":1},{"source":57,"target":48,"value":1},{"source":58,"target":55,"value":7},{"source":58,"target":48,"value":7},{"source":58,"target":27,"value":6},{"source":58,"target":57,"value":1},{"source":58,"target":11,"value":4},{"source":59,"target":58,"value":15},{"source":59,"target":55,"value":5},{"source":59,"target":48,"value":6},{"source":59,"target":57,"value":2},{"source":60,"target":48,"value":1},{"source":60,"target":58,"value":4},{"source":60,"target":59,"value":2},{"source":61,"target":48,"value":2},{"source":61,"target":58,"value":6},{"source":61,"target":60,"value":2},{"source":61,"target":59,"value":5},{"source":61,"target":57,"value":1},{"source":61,"target":55,"value":1},{"source":62,"target":55,"value":9},{"source":62,"target":58,"value":17},{"source":62,"target":59,"value":13},{"source":62,"target":48,"value":7},{"source":62,"target":57,"value":2},{"source":62,"target":41,"value":1},{"source":62,"target":61,"value":6},{"source":62,"target":60,"value":3},{"source":63,"target":59,"value":5},{"source":63,"target":48,"value":5},{"source":63,"target":62,"value":6},{"source":63,"target":57,"value":2},{"source":63,"target":58,"value":4},{"source":63,"target":61,"value":3},{"source":63,"target":60,"value":2},{"source":63,"target":55,"value":1},{"source":64,"target":55,"value":5},{"source":64,"target":62,"value":12},{"source":64,"target":48,"value":5},{"source":64,"target":63,"value":4},{"source":64,"target":58,"value":10},{"source":64,"target":61,"value":6},{"source":64,"target":60,"value":2},{"source":64,"target":59,"value":9},{"source":64,"target":57,"value":1},{"source":64,"target":11,"value":1},{"source":65,"target":63,"value":5},{"source":65,"target":64,"value":7},{"source":65,"target":48,"value":3},{"source":65,"target":62,"value":5},{"source":65,"target":58,"value":5},{"source":65,"target":61,"value":5},{"source":65,"target":60,"value":2},{"source":65,"target":59,"value":5},{"source":65,"target":57,"value":1},{"source":65,"target":55,"value":2},{"source":66,"target":64,"value":3},{"source":66,"target":58,"value":3},{"source":66,"target":59,"value":1},{"source":66,"target":62,"value":2},{"source":66,"target":65,"value":2},{"source":66,"target":48,"value":1},{"source":66,"target":63,"value":1},{"source":66,"target":61,"value":1},{"source":66,"target":60,"value":1},{"source":67,"target":57,"value":3},{"source":68,"target":25,"value":5},{"source":68,"target":11,"value":1},{"source":68,"target":24,"value":1},{"source":68,"target":27,"value":1},{"source":68,"target":48,"value":1},{"source":68,"target":41,"value":1},{"source":69,"target":25,"value":6},{"source":69,"target":68,"value":6},{"source":69,"target":11,"value":1},{"source":69,"target":24,"value":1},{"source":69,"target":27,"value":2},{"source":69,"target":48,"value":1},{"source":69,"target":41,"value":1},{"source":70,"target":25,"value":4},{"source":70,"target":69,"value":4},{"source":70,"target":68,"value":4},{"source":70,"target":11,"value":1},{"source":70,"target":24,"value":1},{"source":70,"target":27,"value":1},{"source":70,"target":41,"value":1},{"source":70,"target":58,"value":1},{"source":71,"target":27,"value":1},{"source":71,"target":69,"value":2},{"source":71,"target":68,"value":2},{"source":71,"target":70,"value":2},{"source":71,"target":11,"value":1},{"source":71,"target":48,"value":1},{"source":71,"target":41,"value":1},{"source":71,"target":25,"value":1},{"source":72,"target":26,"value":2},{"source":72,"target":27,"value":1},{"source":72,"target":11,"value":1},{"source":73,"target":48,"value":2},{"source":74,"target":48,"value":2},{"source":74,"target":73,"value":3},{"source":75,"target":69,"value":3},{"source":75,"target":68,"value":3},{"source":75,"target":25,"value":3},{"source":75,"target":48,"value":1},{"source":75,"target":41,"value":1},{"source":75,"target":70,"value":1},{"source":75,"target":71,"value":1},{"source":76,"target":64,"value":1},{"source":76,"target":65,"value":1},{"source":76,"target":66,"value":1},{"source":76,"target":63,"value":1},{"source":76,"target":62,"value":1},{"source":76,"target":48,"value":1},{"source":76,"target":58,"value":1}]}   
+
+var json = {
+nodes:
+[ { context: 
+     { isAdmin: true,
+       email: 'boldak.andrey@gmail.com',
+       name: 'Andrey Boldak',
+       photo: 'https://lh4.googleusercontent.com/-FXs5tjXLlzs/AAAAAAAAAAI/AAAAAAAAAMY/v9q_vfkyfGc/photo.jpg?sz=500',
+       createdAt: '2016-05-13T09:11:46.101Z',
+       updatedAt: '2016-11-21T14:46:14.983Z',
+       id: '57359a52139ca40300d657dc' },
+    type: 'user',
+    index: 0,
+    weight: 6 },
+  { context: 
+     { isAdmin: true,
+       email: 'pyshnograiev@gmail.com',
+       name: 'Ivan Pyshnograiev',
+       photo: 'https://lh4.googleusercontent.com/-Wf01Wxsw8xg/AAAAAAAAAAI/AAAAAAAAASI/zm6p8Df-Lwo/photo.jpg?sz=500',
+       createdAt: '2016-05-24T12:18:26.434Z',
+       updatedAt: '2016-11-10T10:21:14.628Z',
+       id: '574446921ebb2803007fa3a0' },
+    type: 'user',
+    index: 1,
+    weight: 3 },
+  { context: 
+     { isAdmin: false,
+       email: 'k.yefremov@gmail.com',
+       name: 'Kostiantyn Yefremov',
+       photo: 'https://lh4.googleusercontent.com/-TKSKH92sD80/AAAAAAAAAAI/AAAAAAAABPs/aQr73x-j3Nk/photo.jpg?sz=500',
+       createdAt: '2016-05-27T13:03:56.031Z',
+       updatedAt: '2016-05-27T13:03:56.031Z',
+       id: '574845bc0b3d9f030076af6c' },
+    type: 'user',
+    index: 2,
+    weight: 1 },
+  { context: 
+     { isAdmin: false,
+       email: 'supernickola@ukr.net',
+       name: 'Nick Biletskiy',
+       photo: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=500',
+       createdAt: '2016-07-01T10:12:30.407Z',
+       updatedAt: '2016-07-01T10:12:30.407Z',
+       id: '5776420e71673103005d094a' },
+    type: 'user',
+    index: 3,
+    weight: 0 },
+  { context: 
+     { isAdmin: false,
+       email: 'alekspea@gmail.com',
+       name: 'A Pea',
+       photo: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=500',
+       createdAt: '2016-07-18T17:08:03.670Z',
+       updatedAt: '2016-07-18T17:08:03.671Z',
+       id: '578d0cf318b9e10300edd277' },
+    type: 'user',
+    index: 4,
+    weight: 1 },
+  { context: 
+     { isAdmin: false,
+       email: 'hairlyjoe2826@gmail.com',
+       name: 'Hairly  Joe ',
+       photo: 'https://lh3.googleusercontent.com/-IrT5lzD1BB4/AAAAAAAAAAI/AAAAAAAAADc/TVF8qIh3Veg/photo.jpg?sz=500',
+       createdAt: '2016-07-30T19:54:00.532Z',
+       updatedAt: '2016-07-30T19:54:00.532Z',
+       id: '579d05d8a18d57030070c50a' },
+    type: 'user',
+    index: 5,
+    weight: 0 },
+  { context: 
+     { isAdmin: false,
+       email: 'sajel15@gmail.com',
+       name: 'Андрей Ханевич',
+       photo: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=500',
+       createdAt: '2016-09-22T18:43:51.595Z',
+       updatedAt: '2016-09-22T18:43:51.595Z',
+       id: '57e426674de8d80300b77760' },
+    type: 'user',
+    index: 6,
+    weight: 0 },
+  { context: 
+     { isAdmin: false,
+       email: 'dzhygyrey@wdc.org.ua',
+       name: 'Iryna Dzhygyrey',
+       photo: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=500',
+       createdAt: '2016-10-07T13:37:24.382Z',
+       updatedAt: '2016-10-07T13:37:24.382Z',
+       id: '57f7a51471d8820300b770f9' },
+    type: 'user',
+    index: 7,
+    weight: 1 },
+  { context: 
+     { isAdmin: true,
+       email: 'tkachenko@wdc.org.ua',
+       name: '- Tkachenko',
+       photo: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=500',
+       createdAt: '2016-11-11T10:05:16.817Z',
+       updatedAt: '2016-11-11T10:07:11.751Z',
+       id: '582597dcc421940400815962' },
+    type: 'user',
+    index: 8,
+    weight: 1 },
+  { type: 'app',
+    context: 
+     { id: '57359aee139ca40300d657de',
+       name: 'Apps',
+       description: '"Doggy Jam" portal provide user frendly online builder for SPA based on widgets.',
+       title: 'Apps',
+       keywords: [Object],
+       collaborations: [],
+       i18n: [Object],
+       icon: './api/resource/Apps-dj.png',
+       createdAt: '2016-05-13T09:14:22.248Z',
+       updatedAt: '2016-05-13T09:18:32.630Z',
+       owner: [Object],
+       importedFromURL: 'http://localhost:8080/app/Apps' },
+    index: 9,
+    weight: 4 },
+  { type: 'app',
+    context: 
+     { id: '582464d070a40104003a2178',
+       name: 'Ch test',
+       description: 'Description',
+       title: 'Open Data Portal',
+       dps: 'https://dj-dps.herokuapp.com',
+       keywords: [Object],
+       collaborations: [Object],
+       i18n: [Object],
+       icon: './api/resource/Ch test-companyname_en_light.png',
+       createdAt: '2016-11-10T12:15:12.754Z',
+       updatedAt: '2016-11-14T16:07:30.710Z',
+       owner: [Object],
+       importedFromURL: 'http://localhost:8080/app/ChData',
+       importedFromAuthor: 'Andrey Boldak' },
+    index: 10,
+    weight: 3 },
+  { type: 'app',
+    context: 
+     { id: '571e0f13df0b8403005694fb',
+       name: 'Data',
+       description: '#description',
+       title: 'Data',
+       dps: 'https://dj-dps.herokuapp.com',
+       keywords: [Object],
+       collaborations: [Object],
+       i18n: [Object],
+       icon: './api/resource/Data-default-ds-icon.png',
+       createdAt: '2016-04-25T12:35:31.453Z',
+       updatedAt: '2016-11-10T12:32:52.994Z',
+       importedFromURL: 'http://localhost:8080/app/Data',
+       importedFromAuthor: 'Andrey Boldak' },
+    index: 11,
+    weight: 5 },
+  { type: 'app',
+    context: 
+     { id: '582b0198b61fa10400c96b35',
+       name: 'Data Processing Example',
+       description: 'Description',
+       title: 'Title',
+       keywords: [Object],
+       i18n: {},
+       icon: '/img/default/20.png',
+       createdAt: '2016-11-15T12:37:44.045Z',
+       updatedAt: '2016-11-15T12:37:44.045Z',
+       owner: [Object] },
+    index: 12,
+    weight: 1 },
+  { type: 'app',
+    context: 
+     { id: '57f7a55971d8820300b770fb',
+       name: 'SD History',
+       description: ',jfgkjdfnv ngbnrebgekg',
+       title: '#SDM',
+       dps: 'https://dj-dps.herokuapp.com',
+       keywords: [Object],
+       collaborations: [Object],
+       i18n: [Object],
+       icon: './api/resource/wdc-wdc.png',
+       createdAt: '2016-10-07T13:38:33.007Z',
+       updatedAt: '2016-10-07T14:01:00.984Z',
+       owner: [Object] },
+    index: 13,
+    weight: 2 },
+  { type: 'app',
+    context: 
+     { id: '5742a6e8265d460300865b7e',
+       name: 'SDI',
+       description: 'UA SDI Exploration',
+       title: 'appName',
+       dps: 'https://dj-dps.herokuapp.com',
+       keywords: [Object],
+       collaborations: [Object],
+       i18n: [Object],
+       icon: './api/resource/wdc-wdc.png',
+       createdAt: '2016-05-23T06:44:56.725Z',
+       updatedAt: '2016-11-15T14:19:33.019Z',
+       owner: [Object] },
+    index: 14,
+    weight: 3 },
+  { type: 'app',
+    context: 
+     { id: '579b192e5737200300890d2a',
+       name: 'Test',
+       description: 'Description',
+       title: 'Title',
+       keywords: [Object],
+       collaborations: [],
+       i18n: {},
+       icon: '/img/default/17.png',
+       createdAt: '2016-07-29T08:51:58.017Z',
+       updatedAt: '2016-08-14T18:42:45.389Z',
+       owner: [Object] },
+    index: 15,
+    weight: 1 },
+  { type: 'app',
+    context: 
+     { id: '57ed3685c01ec203000c33b0',
+       name: 'Timelines',
+       description: 'Description',
+       title: 'Title',
+       dps: 'https://dj-dps.herokuapp.com',
+       keywords: [Object],
+       collaborations: [],
+       i18n: [Object],
+       icon: './api/resource/wdc-wdc.png',
+       createdAt: '2016-09-29T15:43:01.596Z',
+       updatedAt: '2016-11-21T14:48:21.679Z',
+       owner: [Object],
+       importedFromURL: 'http://localhost:8080/app/TimelineExamples',
+       importedFromAuthor: 'Andrey Boldak' },
+    index: 16,
+    weight: 1 },
+  { type: 'app',
+    context: 
+     { id: '571e0f13df0b8403005694fc',
+       name: 'app-list',
+       description: 'Main page description',
+       title: 'Main page',
+       keywords: [Object],
+       collaborations: [],
+       i18n: {},
+       icon: './api/resource/Apps-dj.png',
+       createdAt: '2016-04-25T12:35:31.465Z',
+       updatedAt: '2016-05-13T09:20:06.893Z' },
+    index: 17,
+    weight: 0 },
+  { type: 'app',
+    context: 
+     { id: '571e0f13df0b8403005694fe',
+       name: 'wdc',
+       description: '#WDC description',
+       title: '#WDC Datasets Exploration',
+       keywords: [Object],
+       collaborations: [],
+       i18n: [Object],
+       icon: './api/resource/wdc-wdc.png',
+       createdAt: '2016-04-25T12:35:31.539Z',
+       updatedAt: '2016-05-13T09:21:42.784Z',
+       importedFromURL: 'http://localhost:8080/app/wdc',
+       importedFromAuthor: 'Andrey Boldak' },
+    index: 18,
+    weight: 3 },
+  { type: 'tag', context: 'Widget', index: 19, weight: 1 },
+  { type: 'tag', context: 'Single Page App', index: 20, weight: 1 },
+  { type: 'tag', context: 'Angular', index: 21, weight: 1 },
+  { type: 'tag',
+    context: 'Data Management System',
+    index: 22,
+    weight: 1 },
+  { type: 'tag', context: 'BI', index: 23, weight: 1 },
+  { type: 'tag', context: 'Data Processing', index: 24, weight: 1 },
+  { type: 'tag', context: 'Data Minning', index: 25, weight: 1 },
+  { type: 'tag', context: '#Data Management', index: 26, weight: 1 },
+  { type: 'tag',
+    context: '#World Data System',
+    index: 27,
+    weight: 1 },
+  { type: 'tag',
+    context: '#Sustainable Development',
+    index: 28,
+    weight: 1 },
+  { type: 'connector', context: 'owner', index: 29 },
+  { type: 'connector', context: 'association', index: 30 },
+  { type: 'connector', context: 'association', index: 31 },
+  { type: 'connector', context: 'association', index: 32 },
+  { type: 'connector', context: 'owner', index: 33 },
+  { type: 'connector', context: 'collaborator', index: 34 },
+  { type: 'connector', context: 'collaborator', index: 35 },
+  { type: 'connector', context: 'collaborator', index: 36 },
+  { type: 'connector', context: 'association', index: 37 },
+  { type: 'connector', context: 'association', index: 38 },
+  { type: 'connector', context: 'association', index: 39 },
+  { type: 'connector', context: 'association', index: 40 },
+  { type: 'connector', context: 'owner', index: 41 },
+  { type: 'connector', context: 'owner', index: 42 },
+  { type: 'connector', context: 'collaborator', index: 43 },
+  { type: 'connector', context: 'owner', index: 44 },
+  { type: 'connector', context: 'collaborator', index: 45 },
+  { type: 'connector', context: 'collaborator', index: 46 },
+  { type: 'connector', context: 'owner', index: 47 },
+  { type: 'connector', context: 'owner', index: 48 },
+  { type: 'connector', context: 'association', index: 49 },
+  { type: 'connector', context: 'association', index: 50 },
+  { type: 'connector', context: 'association', index: 51 } ]
+,
+links:
+[ { source: 9, target: 29, type: 'owner' },
+  { source: 29, target: 0, type: 'owner' },
+  { source: 9, target: 30, type: 'association' },
+  { source: 30, target: 19, type: 'association' },
+  { source: 9, target: 31, type: 'association' },
+  { source: 31, target: 20, type: 'association' },
+  { source: 9, target: 32, type: 'association' },
+  { source: 32, target: 21, type: 'association' },
+  { source: 10, target: 33, type: 'owner' },
+  { source: 33, target: 0, type: 'owner' },
+  { source: 10, target: 34, type: 'collaborator' },
+  { source: 34, target: 1, type: 'collaborator' },
+  { source: 10, target: 35, type: 'collaborator' },
+  { source: 35, target: 8, type: 'collaborator' },
+  { source: 11, target: 36, type: 'collaborator' },
+  { source: 36, target: 1, type: 'collaborator' },
+  { source: 11, target: 37, type: 'association' },
+  { source: 37, target: 22, type: 'association' },
+  { source: 11, target: 38, type: 'association' },
+  { source: 38, target: 23, type: 'association' },
+  { source: 11, target: 39, type: 'association' },
+  { source: 39, target: 24, type: 'association' },
+  { source: 11, target: 40, type: 'association' },
+  { source: 40, target: 25, type: 'association' },
+  { source: 12, target: 41, type: 'owner' },
+  { source: 41, target: 0, type: 'owner' },
+  { source: 13, target: 42, type: 'owner' },
+  { source: 42, target: 7, type: 'owner' },
+  { source: 13, target: 43, type: 'collaborator' },
+  { source: 43, target: 0, type: 'collaborator' },
+  { source: 14, target: 44, type: 'owner' },
+  { source: 44, target: 0, type: 'owner' },
+  { source: 14, target: 45, type: 'collaborator' },
+  { source: 45, target: 1, type: 'collaborator' },
+  { source: 14, target: 46, type: 'collaborator' },
+  { source: 46, target: 2, type: 'collaborator' },
+  { source: 15, target: 47, type: 'owner' },
+  { source: 47, target: 4, type: 'owner' },
+  { source: 16, target: 48, type: 'owner' },
+  { source: 48, target: 0, type: 'owner' },
+  { source: 18, target: 49, type: 'association' },
+  { source: 49, target: 26, type: 'association' },
+  { source: 18, target: 50, type: 'association' },
+  { source: 50, target: 27, type: 'association' },
+  { source: 18, target: 51, type: 'association' },
+  { source: 51, target: 28, type: 'association' } ]
+};
+
+
+  var d = [];
+  json.nodes.forEach(function(l,i){
+    l.x = i*(height/json.nodes.length);
+    l.y = i*(height/json.nodes.length);
+    if(d.indexOf(l.weight)<0) d.push(l.weight);
+  })
+  d.sort(function(a,b){return a-b})
+  var imgScale = d3.scale.ordinal()
+                      .domain(d)
+                      .rangePoints([8,24])
+  var textScale = d3.scale.ordinal()
+                      .domain(d)
+                      .rangePoints([10,16])
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .linkStrength(0.7)
+      // .friction(0.9)
+      .linkDistance(height/20)
+      .charge(-height/10)
+      .chargeDistance(height)
+      .gravity(0.05)
+      // .theta(0.7)
+      // .alpha(0)
+      .start();
+
+// console.log(json.nodes, json.links)
+
+for(var i=0; i<(3*json.nodes.length*json.links.length); i++) force.tick();
+// force.stop();
+
+// console.log(json.nodes, json.links)
+
+
+
+
+var bounds = d3.geom.polygon([
+  [0, 0],
+  [0, height],
+  [width, height],
+  [width, 0]
+]);
+  
+ // var movieTarget = overlay.append("g")
+ //      .attr("class", "event-layer")
+ //    .selectAll("path")
+ //      .data(d3.geom.voronoi(json.nodes.map(function(d) { var t = [d.x, d.y]; t.node = d; return t })).map(function(d) { return bounds.clip(d); }))
+ //      .datum(function(d, i) { return json.nodes[i]; })
+ //    // .datum(json.nodes)
+ //    .enter().append("path")
+ //      .attr("clip-path", function(d, i) { return "url(#g-node-" + i + ")"; })
+ //      .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
+ //      // .datum(function(d, i) { return network.movies[i]; })
+ //      .on("mouseover", mouseover)
+ //      .on("mouseout", mouseout)
+
+
+  // var link = 
+  //     svg.selectAll(".link")
+  //     .data(json.links)
+  //     .enter().append("line")
+  //     .attr("class", "link");
+
+  
+
+
+
+  // svg.selectAll(".link")
+  //     .data(bundle(json.links))
+  //   .enter().append("path")
+  //     .attr("class", "link")
+  //     .attr("d", line);    
+  //     
+  //     
+ 
+  svg.append("g")
+      .attr("class", "g-movie-clips")
+    .selectAll("clipPath")
+      .data(json.nodes)
+    .enter().append("clipPath")
+      .attr("id", function(d, i) { return "g-node-" + i; })
+    .append("circle")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("r", 280);
+
+
+ var link = svg.append("g").attr("class", "links").selectAll(".link")
+      .data(json.links)
+    .enter().append("path")
+      .attr("class", function(d){return d.type})
+      .attr("d", nodeToNode)
+      
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes.filter(function(d){return d.type != "connector"}))
+    .enter().append("g")
+      .attr("class", "node")
+      // .attr("id", function(d){return "g-node-"+d.index})
+      // .on("mouseover", mouseover)
+      // .on("mouseout", mouseout)
+      .call(force.drag);
+
+
+  node.append("image")
+      .attr("xlink:href", function(d){
+        if(d.type == "user") return d.context.photo;
+        if(d.type == "app") return "./app.png"//d.context.icon;
+        if(d.type == "tag") return "./tag.png";
+      })
+      .attr("x", function(d){return "-"+imgScale(d.weight)+"px"})//function(d){return d.x})
+      .attr("y", function(d){return "-"+imgScale(d.weight)+"px"})//function(d){return d.y})
+      .attr("width", function(d){return (imgScale(d.weight)*2)+"px"})
+      .attr("height", function(d){return (imgScale(d.weight)*2)+"px"})
+  
+      
+
+  node.append("text")
+      .attr("dx", 0)//function(d){return -imgScale(d.weight)})
+      .attr("dy", function(d){return imgScale(d.weight)+3})
+      .text(function(d) {
+        var t = (d.type == "tag" ||d.type == "connector") ? d.context : d.context.name 
+        return t
+      })
+      .attr("text-anchor","middle")
+      .attr("alignment-baseline","text-before-edge")
+      .style("font-size",function(d){return textScale(d.weight)+"px"});
+  
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });    
+  
+  force.on("tick", function() {
+    // console.log("Link",link)
+    // counter++
+    // if(counter >100) force.stop();
+    link.attr("d", nodeToNode)
+        // .attr("x1", function(d) { return d.source.x; })
+        // .attr("y1", function(d) { return d.source.y; })
+        // .attr("x2", function(d) { return d.target.x; })
+        // .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+
+
+      // .on("click", click);
+
+ 
+
+
+
+// function mouseover(d) {
+//   // console.log(d)
+//   var g = svg.insert("g", ".g-highligth")
+//             .attr("class","linkA");
+//   var selectedLinks = json.links.filter(
+//         function(l){
+//           return l.target.name == d.name || l.source.name == d.name
+//         })
+//   var selectedNodes = selectedLinks.map(
+//       function(l){
+//         return (l.target.name == d.name) ? l.source : l.target; 
+//       }
+//     )
+
+//  // console.log(selectedLinks,selectedNodes)
+
+//   g.selectAll("path")
+//       .data(selectedLinks)
+//       .enter()
+//       .append("path")
+//         .attr("d", nodeToNode)
+//         .style("stroke-dasharray", "0,250")
+//       .transition()
+//         .duration(2000)
+//         .ease("cubic-in")
+//         .style("stroke-dasharray", "10,10")
+//       .duration(250);
+  
+//   g.selectAll("circle")
+//       .data([d])
+//       .enter()
+//       .append("circle")
+//         .style("stroke-dasharray", "0,250")
+//         .attr("r", function(d){return 20})
+//         .attr("cx", function(d){return d.x})
+//         .attr("cy", function(d){return d.y})
+//      .transition()
+//         .ease("cubic-in")
+//         .style("stroke-dasharray", "250,250")
+//       .duration(250);
+
+  
+//   var gn = g.insert("g", ".g-highligth")
+//             // .attr("class","linkA");     
+//   gn.selectAll("circle")
+//       .data(selectedNodes)
+//       .enter()
+//       .append("circle")
+//         .style("stroke-dasharray", "0,250")
+//         .attr("r", function(d){return 10})
+//         .attr("cx", function(d){return d.x})
+//         .attr("cy", function(d){return d.y})
+//         .attr("id",function(d){return d.name})
+//      .transition()
+//         .ease("cubic-in")
+//         .style("stroke-dasharray", "250,250")
+//       .duration(500);
+      
+
+// }  
+
+// function mouseout() {
+//     d3.selectAll(".linkA")
+//         .remove();
+// }
+
+
+/*
+
+      .on("mouseover", mouseover)
+      .on("mouseout", mouseout)
+
+function mouseover(d) {
+   svg.selectAll("path")
+        .data(json.links.filter(function(l){return l.target.name == d.name || l.source.name == d.name}));
+      .enter().append("path")
+        .attr("d", nodeToNode)
+        .style("stroke-dasharray", "0,250")
+      .transition()
+        .ease("cubic-in")
+        .style("stroke-dasharray", "250,250");
+}  
+
+   function mouseout() {
+    d3.selectAll(".g-movie-links.g-active")
+        .remove();
+
+    d3.selectAll(".g-active")
+        .classed("g-active", false)
+        .style("stroke-dasharray", null);
+
+    tooltip.style("display", "none");
+  }
+
+*/
+
+// });
+
+</script>
+</body></html>

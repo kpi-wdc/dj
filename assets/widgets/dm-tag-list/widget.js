@@ -51,11 +51,16 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
       };
 
 
+
     $scope.selectItem = function(key){
       eventEmitter.emit('setLookupKey', key, $scope.category);
       let tmp = {};
-      tmp[$scope.property.split(".").slice(1).join(".")] = [{includes:key}];
-      let query = [tmp];
+      // tmp[$scope.property.split(".").slice(1).join(".")] = [{includes:key}];
+      // let query = [tmp];
+      let query = $scope.query.split("{{}}").join(key);
+      
+      console.log(query);
+
       eventEmitter.emit('searchQuery', query);
     }
 
@@ -93,6 +98,8 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
         $scope.category = $scope.widget.category;
         $scope.icon_class = $scope.widget.icon_class;
         $scope.property = $scope.widget.property || $scope.property;
+        $scope.query = $scope.widget.query || $scope.query;
+
 
         $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];
         

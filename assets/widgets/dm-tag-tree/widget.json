@@ -9,9 +9,14 @@
         "title": "Title"
       },
 
-       "category": {
+      "category": {
         "type": "string",
         "title": "Category"
+      },
+
+      "query": {
+        "type": "string",
+        "title": "Query"
       },
 
 
