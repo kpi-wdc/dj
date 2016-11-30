@@ -66,7 +66,9 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary',"app.dps"])
       // tmp["dataset.topics"] = [{startsWith:tag._path}];
       // let query = [tmp];
       // 
-      let query = $scope.query.split("{{}}").join(tag._path);
+      let query = "$[?(@.dataset.topics.contains(function(d){return d.startWith('{{}}')}))]"
+                    .split("{{}}")
+                    .join(tag._path);
 
       eventEmitter.emit('searchQuery', query);
     }
@@ -80,6 +82,7 @@ angular.module('app.widgets.dm-tag-tree', ['app.dictionary',"app.dps"])
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.title = $scope.widget.title;
         $scope.category = $scope.widget.category;
+        $scope.query = $scope.widget.query;
 
 
         $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];
