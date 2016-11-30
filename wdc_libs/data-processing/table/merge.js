@@ -17,10 +17,10 @@ module.exports = function(table,params){
 
 
 
-	if(!params.merge) return table;
-	if(!params.merge.enable) return table;
+	// if(!params.merge) return table;
+	// if(!params.merge.enable) return table;
 	
-	var merge = params.merge;
+	var merge = (params.merge)? params.merge:params;
 
 	if(merge.direction == "Columns") table = transposeTable(table,{transpose:true});
 	var master = merge.master;

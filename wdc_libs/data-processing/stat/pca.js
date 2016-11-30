@@ -6,9 +6,9 @@ var transposeTable			= require("../table/transpose"),
 
 
 module.exports = function(table,params){
-	if(!params.pca) return table;
-	if(!params.pca.enable) return table;
-	var pca= params.pca;
+	// if(!params.pca) return table;
+	// if(!params.pca.enable) return table;
+	var pca= (params.pca) ? params.pca : params;
 	if(pca.direction == "Columns") table = transposeTable(table,{transpose:true});
 	
 	var result = {

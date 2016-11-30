@@ -3,10 +3,10 @@
 
 module.exports = function(table,params){
 
-	if(!params.limit) return table;
-	if(!params.limit.enable) return table;
+	// if(!params.limit) return table;
+	// if(!params.limit.enable) return table;
 	
-	var limit = params.limit;
+	var limit = (params.limit)? params.limit : params;
 	table.body = table.body.filter(function(item,index){
 		return ((index+1) >= limit.start) && ((index+1) < (limit.start+limit.length))
 	})

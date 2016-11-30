@@ -16,10 +16,10 @@ module.exports = function(table,params){
 
 
 
-	if(!params.aggregation) return table;
-	if(!params.aggregation.enable) return table;
+	// if(!params.aggregation) return table;
+	// if(!params.aggregation.enable) return table;
 	
-	var aggregation = params.aggregation;
+	var aggregation = (params.aggregation)?params.aggregation:params;
 
 	if(aggregation.direction == "Columns") table = transposeTable(table,{transpose:true});
 

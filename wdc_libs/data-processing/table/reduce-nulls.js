@@ -3,10 +3,12 @@
 
 
 module.exports = function(table,params){
-	if(!params.reduce) return table;
-	if(!params.reduce.enable) return table;
-	var direction = params.reduce.direction || "Rows"; // "Columns"
-	var mode = params.reduce.mode || "Has Null"; // "All Nulls"
+	// if(!params.reduce) return table;
+	// if(!params.reduce.enable) return table;
+	
+	var reduce = (params.reduce)?params.reduce:params;
+	var direction = reduce.direction || "Rows"; // "Columns"
+	var mode = reduce.mode || "Has Null"; // "All Nulls"
 
 	
 	var	hasNull = function(data){

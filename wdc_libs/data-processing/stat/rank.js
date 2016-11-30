@@ -5,10 +5,10 @@ var   STAT            = require("../lib/stat"),
 
 
 module.exports = function(table,params){
-	if(!params.rank) return table;
-	if(!params.rank.enable) return table;
+	// if(!params.rank) return table;
+	// if(!params.rank.enable) return table;
 	
-	var rank = params.rank;
+	var rank = (params.rank) ? params.rank : params;
 	if(rank.direction == "Columns") table = transposeTable(table,{transpose:true});
 	
 	var b = [];

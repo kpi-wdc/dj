@@ -4,13 +4,13 @@ var Query = require("../../wdc-query");
 
 module.exports = function(tables,params){
 
-	if(!params.join) return tables;
-	if(!params.join.enable) return tables;
-	
+	// if(!params.join) return tables;
+	// if(!params.join.enable) return tables;
+	var join = (params.join) ? params.join : params;
 	var result = {metadata:{}};
-	var direction = params.join.direction || "Rows";
-	var joinMode = params.join.mode || "left join"; // "inner"// "outer"
-	var metaTest = params.join.test || []; // [t1.metadataindex. t2metadataindex]
+	var direction = join.direction || "Rows";
+	var joinMode = join.mode || "left join"; // "inner"// "outer"
+	var metaTest = join.test || []; // [t1.metadataindex. t2metadataindex]
 	var table1 = tables[0];
 	table1.header.forEach(function (col){
 		var cc = col.metadata.map(function(m){return m.label}).join(",")

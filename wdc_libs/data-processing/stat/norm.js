@@ -6,12 +6,12 @@ var   STAT            = require("../lib/stat"),
 
 
 module.exports = function (table, params) {
-  if(!params.normalization) return table;
-  if(!params.normalization.enable) return table;
-
-  var normalizeMode = params.normalization.mode || "Range to [0,1]"; 
-  var normalizeArea = params.normalization.direction || "Columns";
-  var precision = params.normalization.precision || null;
+  // if(!params.normalization) return table;
+  // if(!params.normalization.enable) return table;
+  var normalization = (params.normalization) ? params.normalization : params;
+  var normalizeMode = normalization.mode || "Range to [0,1]"; 
+  var normalizeArea = normalization.direction || "Columns";
+  var precision = normalization.precision || null;
 
   var metaSuffix = "";
   if(normalizeArea == "Columns"){

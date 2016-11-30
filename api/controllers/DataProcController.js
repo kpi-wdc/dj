@@ -533,7 +533,54 @@ module.exports = {
           resp.send({result:"ok"})
         })
 
-  }    
+  },
 
-};
+
+  runScript : function(req,resp){
+    // logger.debug("Script "+ JSON.stringify(req.body))
+    var str = req.body.data;
+    var parsed = require("../../wdc_libs/data-processing/script/parser").parse(str);
+    // logger.debug("Parsed "+ JSON.stringify(parsed))
+    var source = parsed.source;
+    var script = parsed.script;
+
+    
+    
+    var apply = function(data,script){
+      // logger.debug("Apply "+data+" "+script)
+      dataProcess(data,{script:script})
+            .then(function(result){
+              // var params = {
+              //   dataset: source.dataset,
+              //   script: result.postProcess
+              // }
+              result.dataset = source.dataset
+              // result.postProcess
+              resp.send(result)
+              // Cache
+              // .save("process",req.body,result,params)
+              // .then(function(result){
+                // resp.send(prepareCachedResult(result))
+              // })
+      })
+    }
+
+    if(source.dataset){
+      Dataset.findOne({"dataset/id": source.dataset, "commit/HEAD": true})
+       .then(function(dataset){
+          logger.debug("Fetch dataset "+dataset)
+          apply(dataset,script)
+        }) 
+    }else{
+      Cache
+        .getById(source.table)
+        .then(function(cached){
+          apply(cached, script)
+        })  
+    }
+  }
+
+
+
+};//eof
 

@@ -4,11 +4,12 @@ var executeQuery = require("../../wdc-table-generator").prepare;
 
 
 module.exports = function(dataset,params){
-	var result = executeQuery(dataset,params.query);
+	var query = (params.query)? params.query : params;
+	var result = executeQuery(dataset,query);
 	result.metadata = {
         type : "Query Result Table",
         source : dataset.metadata,
-        selection : params.query
+        selection : query
     }
     return result;
 }

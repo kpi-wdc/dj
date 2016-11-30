@@ -4,12 +4,12 @@ var transposeTable = require("../table/transpose");
 
 
 module.exports = function(table, params){
-	if(!params.inputation) return table;
-	if(!params.inputation.enable) return table;
-
-	var direction = (params.inputation.direction) ? params.inputation.direction : "Rows";//"Columns"
-	var from = (params.inputation.from) ? params.inputation.from : "left"; //"right"
-	var mode = (params.inputation.mode) ? params.inputation.mode : "fill"; //"mean","fit", ... etc
+	// if(!params.inputation) return table;
+	// if(!params.inputation.enable) return table;
+	var inputation = (params.inputation) ? params.inputation : params;
+	var direction = (inputation.direction) ? inputation.direction : "Rows";//"Columns"
+	var from = (inputation.from) ? inputation.from : "left"; //"right"
+	var mode = (inputation.mode) ? inputation.mode : "fill"; //"mean","fit", ... etc
 
 	if(direction == "Columns") table = transposeTable(table,{transpose:true});
 

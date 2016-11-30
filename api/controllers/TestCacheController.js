@@ -45,7 +45,7 @@ module.exports = {
   },
   
   clear: function(req,resp){
-    Cache.clear()
+    Cache.clear(req.tag)
       .then(function(){
         return resp.ok()
       })

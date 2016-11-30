@@ -6,10 +6,10 @@ var transposeTable			= require("../table/transpose"),
 	
 
 module.exports = function(table,params){
-	if(!params.cluster) return table;
-	if(!params.cluster.enable) return table;
+	// if(!params.cluster) return table;
+	// if(!params.cluster.enable) return table;
 	
-	var cluster= params.cluster;
+	var cluster= (params.cluster) ? params.cluster : params;
 
 	if(cluster.direction == "Columns") table = transposeTable(table,{transpose:true});
 

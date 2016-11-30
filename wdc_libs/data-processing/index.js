@@ -55,16 +55,24 @@ var getProcess = function(params){
 	
 	if(params.serie) processId =  params.serie;
 
-	// console.log("process",processId)
+	// console.log("process",params,processId)
 	if(processId) return executionMap[processId]
 	return undefined;
 	
 }
 
 var executeStep = function (table,params){
-	// console.log("execute")
-	var process = getProcess(params);
-	if(process) return process(table,params);
+	// console.log("execute", JSON.stringify(params))
+	var process,p;
+	if(params.processId){
+		process = executionMap[params.processId];
+		p = params.settings;
+	}else{
+		process = getProcess(params);
+		p = params;
+	}
+	
+	if(process) return process(table,p);
 	return table;
 }	
 	

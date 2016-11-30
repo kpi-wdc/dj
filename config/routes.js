@@ -71,6 +71,8 @@ module.exports.routes = {
 
   // DataProcessing manipulation URLs
   'post /api/data/process' : 'DataProcController.process1',
+  'post /api/data/script' : 'DataProcController.runScript',
+
   'get /api/data/process/:dataId' : 'DataProcController.getById1',
 
   'get /api/data/process/update/:id' : 'DataProcController.updateProcData',
@@ -205,7 +207,7 @@ module.exports.routes = {
    'get /api/test/get/:id' : 'TestCacheController.getID',
    'post /api/test/get' : 'TestCacheController.getQuery',
    'post /api/test/set' : 'TestCacheController.save',
-   'get /api/test/clear' : 'TestCacheController.clear',
+   'get /api/test/clear/:tag' : 'TestCacheController.clear',
    'get /api/test/list' : 'TestCacheController.list'
    
 

@@ -6,10 +6,10 @@ var transposeTable = require("../table/transpose"),
 
 
 module.exports = function(table,params){
-	if(!params.histogram) return table;
-	if(!params.histogram.enable) return table;
+	// if(!params.histogram) return table;
+	// if(!params.histogram.enable) return table;
 	
-	var histogram= params.histogram;
+	var histogram= (params.histogram)? params.histogram : params;
 
 	if(histogram.direction == "Columns") table = transposeTable(table,{transpose:true});
 	

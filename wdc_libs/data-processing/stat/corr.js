@@ -5,10 +5,10 @@ var transposeTable = require("../table/transpose"),
 
 
 module.exports = function(table,params){
-	if(!params.correlation) return table;
-	if(!params.correlation.enable) return table;
+	// if(!params.correlation) return table;
+	// if(!params.correlation.enable) return table;
 	
-	var correlation= params.correlation;
+	var correlation= (params.correlation) ? params.correlation : params;
 
 	if(correlation.direction == "Columns") table = transposeTable(table,{transpose:true});
 

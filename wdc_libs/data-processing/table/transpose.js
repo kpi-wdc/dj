@@ -2,7 +2,7 @@
 
 
 module.exports = function(table,params){
-	if (!params.transpose) return table;
+	// if (!params.transpose) return table;
 	var tBody = table.header;
 	var values = [];
 	table.body.forEach(function(row){

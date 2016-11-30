@@ -38,11 +38,11 @@ var Compare = {
 
 module.exports = function(table,params){
 	
-	if(!params.order.enable) return table;
-
-	var direction = (params.order.direction) ? params.order.direction : "Rows";//"Columns"
-	var asc = (params.order.asc) ? params.order.asc : "A-Z"; //"Z-A"
-	var index = (params.order.index) ? params.order.index : 0;
+	// if(!params.order.enable) return table;
+	var order = (params.order)?params.order:params;
+	var direction = (order.direction) ? order.direction : "Rows";//"Columns"
+	var asc = (order.asc) ? order.asc : "A-Z"; //"Z-A"
+	var index = (order.index) ? order.index : 0;
 
 
 	// String.alphbet = 
