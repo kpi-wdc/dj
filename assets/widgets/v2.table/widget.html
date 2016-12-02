@@ -1,5 +1,5 @@
 <div class="widget" ng-controller="TableCtrl">
-  <div ng-if="widget.dataID"> 
+  <div ng-if="widget.dataID && !hidden"> 
     <div class="table caption" ng-if="widget.decoration.caption">{{widget.decoration.caption}}</div>
     <div class="table title" ng-if="widget.decoration.title">{{widget.decoration.title}}</div>
     <center>

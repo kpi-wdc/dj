@@ -548,6 +548,32 @@ define(["angular",
               $scope.settings = angular.copy(s)
            }
         })
+
+        .provide('setData', (e, context) => {
+          console.log("LINE SETDATA HANDLER", context)
+          if(!params.acceptData){ console.log("no acceptData handler", params);return }
+          if(!context){
+            console.log("Context is undefined")
+            $scope.hidden = true;
+            return
+          }
+          if(params.acceptData(context)){
+            $scope.dataset = context.dataset;
+            $scope.data = context.data;
+            $scope.hidden = false;
+            $scope.settings = {
+                    options : angular.copy($scope.expandOptions($scope.options)),
+                    data : angular.copy($scope.data)
+            }
+            
+          }else{
+            if($scope.dataset!=context.dataset){
+              $scope.hidden = true;
+            }
+          }
+
+        })
+
     };
 
 

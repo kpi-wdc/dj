@@ -19,6 +19,11 @@ m.controller('Nvd3LineChartCtrlV2', function ($scope, NVD3WidgetV2, LineChartWiz
           wizard: LineChartWizard,
           decorationAdapter: LineChartAdapter,
           optionsURL: "/widgets/v2.nvd3-line/options.json",
+          
+          acceptData : function(context){
+              return context.key == "line"
+          },
+
           serieAdapter: {
             getX: function (d) {
               return d.x
@@ -49,6 +54,7 @@ m.controller('Nvd3LineChartCtrlV2', function ($scope, NVD3WidgetV2, LineChartWiz
               });
               return result;
             }
+            
           }
         }
   );

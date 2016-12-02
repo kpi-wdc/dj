@@ -123,5 +123,23 @@ m.controller('TableCtrl', function (
       $scope.columnSelection = selection;
       $scope.select();
    })
+    .provide('setData', (e, context) => {
+      console.log("TABLE SET DATA", context)
+      if(!context){
+        $scope.hidden = true;
+        return
+      }
+      if(context.key == "table"){
+        $scope.dataset = context.dataset;
+        $scope.table = context.data;
+        $scope.hidden = false;
+        $scope.settings = {table:angular.copy($scope.table), decoration:angular.copy($scope.decoration)}
+      }else{
+        if($scope.dataset!=context.dataset){
+          $scope.hidden = true;
+        }
+      }
+
+    })
 
 });

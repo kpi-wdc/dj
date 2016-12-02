@@ -131,7 +131,10 @@ let m = angular.module('app.widgets.v2.dm-ds-panel', ['app.dictionary','app.dps'
 
       .provide('searchQuery', (evt, value) => {
         // console.log('searchQuery', value);
+
+
         $scope.query = value;
+        if(!$scope.query) return;
         searchDatasets(value);
         // console.log('send setDataSet', value);
         eventEmitter.emit("setDataSet",undefined);

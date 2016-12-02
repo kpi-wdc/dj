@@ -25,7 +25,7 @@
 			  </i>
 	  	</a> -->
 	  
-
+	  	<div ng-if="!hidden">
   <div nvd3 settings="settings" api="api" ng-show="completed"></div>
 
   <h1 ng-if="!completed && configured" style="color:#eeeeee; text-align: center;">
@@ -35,5 +35,6 @@
   <h1 ng-if="!configured" style="color:#eeeeee; text-align: center;">
     Widget Not Configured
   </h1>
+  </div>
 </div>
 

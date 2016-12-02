@@ -15,6 +15,24 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
     $scope.key = undefined; 
 
 
+
+    
+    var applyContext = function(template, context){
+      var getContextValue = function(){
+          var tags =arguments[1].split(".")
+          var value = context;
+          tags.forEach(function(tag){
+            tag = tag.trim();
+            value = value[tag] 
+          })
+
+          return value
+      }
+      return template.replace(/(?:\{\{\s*)([a-zA-Z0-9_\.]*)(?:\s*\}\})/gim, getContextValue)
+    }
+
+
+
    
     $scope.formatDate = i18n.formatDate;
     $scope.dps = $dps;
@@ -61,6 +79,31 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
 
     $scope.prepareTopics = prepareTopics;
 
+    var downloadSamples = function(metadata){
+      if(metadata.dataset.preview){
+        for(var key in metadata.dataset.preview){
+          console.log("Inspect samples for "+key+": "+applyContext(metadata.dataset.preview[key],metadata))
+          $dps.post("/api/data/script",{
+            "data" : applyContext(metadata.dataset.preview[key],metadata),
+            "key"  :key,
+            "locale": i18n.locale()
+          })
+            .success(function(response){
+              console.log(response.key+" RESPONSE ", response.data)
+              response.dataset = metadata.dataset.id
+              eventEmitter.emit('setData', response);
+            })
+            .error(function(response){
+              console.log("ERROR", response)
+            })
+        }
+      }else{
+        eventEmitter.emit('setData', undefined);
+      }
+      
+
+    } 
+
     
     
     new APIProvider($scope)
@@ -104,18 +147,42 @@ let m = angular.module('app.widgets.v2.dm-ds-description', ['app.dictionary','ap
             }
           })
         );
-       
+
+        
+        $scope.d_listeners = ($scope.widget.d_listeners) ? $scope.widget.d_listeners.split(",") : [];
+        pageSubscriptions().removeListeners({
+          emitter: $scope.widget.instanceName,
+          signal: "setData"
+        })
+
+        pageSubscriptions().addListeners(
+          $scope.d_listeners.map((item) =>{
+            return {
+                emitter: $scope.widget.instanceName,
+                receiver: item.trim(),
+                signal: "setData",
+                slot: "setData"
+            }
+          })
+        );
+        
+        
+         eventEmitter.emit('setData', undefined);
       })
 
       .provide('setDataSet', (evt, value) => {
         console.log("getDataSet", value)
+        eventEmitter.emit('setData', undefined);
         $scope.ds = value;
         if($scope.ds){
-          
           eventEmitter.emit('setLookupKey', undefined);
+          eventEmitter.emit('searchQuery', undefined);
+          
+          
           $scope.topics = prepareTopics($scope.ds.dataset.topics);
           $scope.ds.dataset.$periodicity = $translate.instant('WIDGET.V2.DM-DS-DESCRIPTION.'+$scope.ds.dataset.periodicity); 
           $scroll($scope)
+          downloadSamples($scope.ds);
         }  
       })
 

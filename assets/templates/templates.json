@@ -40,6 +40,20 @@
     ]
   },
 
+  "2(3x9)details": {
+    "description": "Two-column 3:9 layout",
+    "holders" : [
+      "column",
+      "topleft",
+      "topright",
+      "detail1",
+      "detail2",
+      "detail3",
+      "bottomright",
+      "bottom"
+    ]
+  },
+
   "2(9x3)-cols": {
     "description": "Two-column 9:3 layout",
     "holders" : [

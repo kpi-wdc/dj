@@ -19,6 +19,11 @@ m.controller('Nvd3BarChartCtrlV2', function ($scope, NVD3WidgetV2, BarChartWizar
           wizard: BarChartWizard,
           decorationAdapter: BarChartAdapter,
           optionsURL: "/widgets/v2.nvd3-bar/options.json",
+          
+          acceptData : function(context){
+              return context.key == "bar"
+          },
+
           serieAdapter: {
             getX: function (d) {
               return d.label

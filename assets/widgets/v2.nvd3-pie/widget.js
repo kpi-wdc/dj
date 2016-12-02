@@ -19,6 +19,9 @@ m.controller('Nvd3PieChartCtrlV2', function ($scope, NVD3WidgetV2, PieChartWizar
           wizard: PieChartWizard,
           decorationAdapter: PieChartAdapter,
           optionsURL: "/widgets/v2.nvd3-pie/options.json",
+           acceptData : function(context){
+              return context.key == "bar"
+          },
           serieAdapter: {
                 getX: function (d) {
                   return d.label

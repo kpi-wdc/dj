@@ -17,7 +17,13 @@
       "s_listeners": {
         "type": "string",
         "title": "Search Listeners"
+      },
+
+      "d_listeners": {
+        "type": "string",
+        "title": "Preview Listeners"
       }
+
     }
   }
 }

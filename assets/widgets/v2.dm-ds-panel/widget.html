@@ -2,6 +2,7 @@
   ng-controller="DataManagerSearchResultController" 
   style="    margin: 1.5em 0 0 0;
     padding: 0 1em;">
+   <div ng-if="query"> 
   
   <center ng-if="query && total == 0" >
         <img src="./img/ajax-loader.gif">
@@ -33,7 +34,7 @@
                 <!-- <img 
                   src="./img/default-ds-icon.png" style="width:48px;"/>
  -->
-                <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon}}" style="height:24px;">
+                <img ng-if="lookup(item.dataset.source).icon" ng-src="{{lookup(item.dataset.source).icon | translate}}" style="height:24px;">
 
                 <img  ng-if="!lookup(item.dataset.source).icon"
                   src="./img/default-ds-icon.png" style="height:24px;"/>
@@ -68,9 +69,9 @@
                 style="cursor:pointer;">
             <img src="
               {{
-                (lookup(item.dataset.source).icon)
+                ((lookup(item.dataset.source).icon)
                   ? lookup(item.dataset.source).icon 
-                  : './img/default-ds-icon.png'
+                  : './img/default-ds-icon.png') | translate
               }}" style="height:16px"/>
               {{item.dataset.label | translate}}{{item.dataset.ext}}
           </span>
@@ -99,5 +100,6 @@
 
     </div>
   </div>  
+  </div>
   </div>
 </div>
