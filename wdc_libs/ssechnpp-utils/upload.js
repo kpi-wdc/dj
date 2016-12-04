@@ -5,9 +5,10 @@ var datasetGroupParser =  require("../parsers/ch-ftp");
 var Promise = require("bluebird");
 
 
-var host = 'https://dj-dps.herokuapp.com';
-// var host = 'http://localhost:8088';
-var srcDir = './dsrc';
+// var host = 'https://dj-dps.herokuapp.com';
+var host = 'http://localhost:8088';
+// var srcDir = './dsrc';
+var srcDir = './new data';
 
 var updateDataset = function(ds){
 	var options = {

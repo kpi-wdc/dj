@@ -1,5 +1,18 @@
 module.exports = {
 
+    source : "source",
+    src : "source",
+
+    ds : "dataset",
+    dataset : "dataset",
+
+    t: "table",
+    table: "table",
+
+    save : "save",
+    store: "save",
+    cache: "save", 
+
     reduce: "reduce",
     order: "order",
 
@@ -71,21 +84,21 @@ module.exports = {
     column: "Columns",
     col: "Columns",
 
-    ignored: "Ignored",
-    ignore: "Ignored",
-    ign: "Ignored",
+    ignored: "Ignore",
+    ignore: "Ignore",
+    ign: "Ignore",
 
-    "columns splitter": "Columns Splitter",
-    "split-col": "Columns Splitter",
-    scol: "Columns Splitter",
-    cs: "Columns Splitter",
-    "col-split": "Columns Splitter",
+    "columns splitter": "Split Columns",
+    "split-col": "Split Columns",
+    scol: "Split Columns",
+    cs: "Split Columns",
+    "col-split": "Split Columns",
 
-    "rows splitter": "Rows Splitter",
-    "split-row": "Rows Splitter",
-    sr: "Rows Splitter",
-    rs: "Rows Splitter",
-    "row-split": "Rows Splitter",
+    "rows splitter": "Split Rows",
+    "split-row": "Split Rows",
+    sr: "Split Rows",
+    rs: "Split Rows",
+    "row-split": "Split Rows",
 
     // serie process params and values
     direction: "direction",

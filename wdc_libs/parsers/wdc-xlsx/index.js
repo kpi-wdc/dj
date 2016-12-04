@@ -116,47 +116,49 @@ module.exports = function (filename){
 				    return {error:"Cannot find layout.value. It must be refered to data sheet column"}
 				  }  
 				  
+				  logger.debug("Find "+ data.length + " records in data sheet")
 				  for(var key in metadata.dimension){
-				    for(var row in data){
-				      if(!data[row][metadata.layout[key].label]){ 
-				        logger.error("Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].label+"'")
-				        return {error:"Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].label+"'"}
+				  	var index = 0;
+				    data.forEach(function(row,index){
+				      if(!row[metadata.layout[key].label]){ 
+				        logger.error("Sheet '"+metadata.layout.sheet+"' row "+index+" has undefined value in column '"+metadata.layout[key].label+"'")
+				        return {error:"Sheet '"+metadata.layout.sheet+"' row "+index+" has undefined value in column '"+metadata.layout[key].label+"'"}
 				      }  
-				      if(!data[row][metadata.layout[key].id]){ 
-				        logger.error("Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].id+"'")
-				        return {error:"Sheet '"+metadata.layout.sheet+"' row "+row+" has undefined value in column '"+metadata.layout[key].id+"'"}
-				      }  
-				    }
+				      if(!row[metadata.layout[key].id]){ 
+				        logger.error("Sheet '"+metadata.layout.sheet+"' row "+index+" has undefined value in column '"+metadata.layout[key].id+"'")
+				        return {error:"Sheet '"+metadata.layout.sheet+"' row "+index+" has undefined value in column '"+metadata.layout[key].id+"'"}
+				      }	
+				    })
+				    
 				  }
 
-				  for(var row in data){
-				    if(!data[row][metadata.layout.value]){
-				    	logger.warn("Sheet '"+metadata.layout.sheet+"' row "+row + " has undefined value in column '"+metadata.layout.value+"'")
-				        warnings.push("Sheet '"+metadata.layout.sheet+"' row "+row + " has undefined value in column '"+metadata.layout.value+"'") 
-				    }
-				  }
+				  data.forEach(function(row,index){
+				      if(!row[metadata.layout.value]){
+				    	index++;
+				    	logger.warn("Sheet '"+metadata.layout.sheet+"' row "+index + " has undefined value in column '"+metadata.layout.value+"'")
+				        warnings.push("Sheet '"+metadata.layout.sheet+"' row "+index + " has undefined value in column '"+metadata.layout.value+"'") 
+				    	}
+				  })
 
 
 				  if (dictionarySheet != undefined) {
 				    var dict = workbook.Sheets['dictionary'];
-				    for(var i in dict){
-				      if(!dict[i].key){
-				        logger.error("Sheet 'dictionary' row "+i +" has undefined value in column 'key'")
-				        return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'key'"}
-				      }  
-				      // if(!dict[i]["value.label"])
-				      //   return {error:"Sheet 'dictionary' row "+i +" has undefined value in column 'value.label'"}
-				    }
+				    dict.forEach(function(row, index){
+				    	if(!row.key){
+				        logger.error("Sheet 'dictionary' row "+index +" has undefined value in column 'key'")
+				        return {error:"Sheet 'dictionary' row "+index +" has undefined value in column 'key'"}
+				      }	
+				    })
 				  }
 
 				if (i18nSheet != undefined) {
 				    var dict = workbook.Sheets['i18n'];
-				    for(var i in dict){
-				      if(!dict[i].key){
-				        logger.error("Sheet 'i18n' row "+i +" has undefined value in column 'key'")
-				        return {error:"Sheet 'i18n' row "+i +" has undefined value in column 'key'"}
-				      }  
-				    }
+				    dict.forEach(function(row, index){
+				      if(!row.key){
+				        logger.error("Sheet 'dictionary' row "+index +" has undefined value in column 'key'")
+				        return {error:"Sheet 'dictionary' row "+index +" has undefined value in column 'key'"}
+				      }
+				    })	
 				  }
 
 				  

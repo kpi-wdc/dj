@@ -85,6 +85,7 @@
     "gulp-uglify": "1.2.0",
     "htm-to-json": "^0.1.4",
     "iconv-lite": "^0.4.13",
+    "json2csv": "^3.7.2",
     "jsonpath": "^0.2.9",
     "jspm": "0.15.4",
     "lodash-node": "^3.10.2",

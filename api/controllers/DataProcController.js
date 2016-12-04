@@ -9,7 +9,10 @@ var executeQuery = require("../../wdc_libs/wdc-table-generator").prepare;
 var I18N = require("../../wdc_libs/wdc-i18n");
 var util = require("util");
 var Query = require("../../wdc_libs/wdc-query-async");
-var dataProcess = require("../../wdc_libs/data-processing");
+// var dataProcess = require("../../wdc_libs/data-processing");
+var execScript = require("./Script");
+var dataProcess = require("./Script");
+var scriptParser = require("../../wdc_libs/data-processing/script/parser");
 var Cache = require("./Cache");
 var Promise = require("bluebird");
 var flat = require("../../wdc_libs/wdc-flat");
@@ -110,8 +113,9 @@ module.exports = {
                Dataset.findOne({"dataset/id": req.body.data_query.datasetID, "commit/HEAD": true})
                .then(function(dataset){
                   if(dataset) {
-                    dataProcess(dataset, {query: req.body.data_query.query})
+                    dataProcess({table:dataset, key:"dataset"}, {query: req.body.data_query.query})
                       .then(function(dpr){
+                        dpr = dpr.table;
                         var locale = (req.body.data_query.locale === "uk") ? "ua" : req.body.data_query.locale;
                         translateQueryResult(dpr,locale)
                           .then(function(dpr){
@@ -174,8 +178,9 @@ module.exports = {
                         p.serie = "geojson";
                       }
 
-                      dataProcess(data,p)
+                      dataProcess({table:data, key:"dataset"},p)
                         .then(function(result){
+                          result = result.table;
                           var params = {
                             parent: parent,
                             dataset: (data.forEach) ?data[0].dataset : data.dataset,
@@ -535,50 +540,83 @@ module.exports = {
 
   },
 
+  applyScript: function(data,script){
+    return  new Promise(function(resolve,reject){
+      dataProcess({table:data, key:""},{script:script})
+          .then(function(result){
+            // result.dataset = source.dataset
+            resolve({
+              data : result.table,
+              key: result.key
+            })
+      })
+    })
+  },
 
   runScript : function(req,resp){
-    // logger.debug("Script "+ JSON.stringify(req.body))
-    var str = req.body.data;
-    var parsed = require("../../wdc_libs/data-processing/script/parser").parse(str);
-    // logger.debug("Parsed "+ JSON.stringify(parsed))
-    var source = parsed.source;
-    var script = parsed.script;
+    var script = req.body.data;
+    // var key = req.body.key;
+    // var self = this;
+    var locale = req.body.locale || "en";
+    locale = (req.body.locale == "uk") ? "ua" : req.body.locale; //|| "en";
+    // var parsed = scriptParser.parse(str);
+    // var source = parsed.source;
+    // var script = parsed.script;
 
-    
-    
-    var apply = function(data,script){
-      // logger.debug("Apply "+data+" "+script)
-      dataProcess(data,{script:script})
-            .then(function(result){
-              // var params = {
-              //   dataset: source.dataset,
-              //   script: result.postProcess
-              // }
-              result.dataset = source.dataset
-              // result.postProcess
-              resp.send(result)
-              // Cache
-              // .save("process",req.body,result,params)
-              // .then(function(result){
-                // resp.send(prepareCachedResult(result))
-              // })
+    execScript(script,locale)
+      .then(function(result){
+        return resp.send({
+                data : result.table,
+                key: result.key
+              })
       })
-    }
+  }  
+    
+    // var apply = function(data,script){
+    //   dataProcess({table:data, key:"dataset"},{script:script})
+    //         .then(function(result){
+    //           result.dataset = source.dataset
+    //           resp.send({
+    //             data : result.table,
+    //             key: result.key
+    //           })
+    //   })
+    // }
 
-    if(source.dataset){
-      Dataset.findOne({"dataset/id": source.dataset, "commit/HEAD": true})
-       .then(function(dataset){
-          logger.debug("Fetch dataset "+dataset)
-          apply(dataset,script)
-        }) 
-    }else{
-      Cache
-        .getById(source.table)
-        .then(function(cached){
-          apply(cached, script)
-        })  
-    }
-  }
+  //   if(source.dataset){
+  //     Dataset.findOne({"dataset/id": source.dataset, "commit/HEAD": true})
+  //      .then(function(dataset){
+  //         Dictionary.find({})
+  //         .then(function(json){
+  //           i18n = new I18N(json);
+  //           dataset.data = i18n.translate(dataset.data,locale);
+  //           dataset.metadata = i18n.translate(dataset.metadata,locale);
+          
+  //           for(i in dataset.metadata.dimension){
+  //             dataset.metadata.dimension[i].values = 
+  //             i18n.translate(dataset.metadata.dimension[i].values,locale)  
+  //             dataset.metadata.dimension[i].label = i18n.translate(dataset.metadata.dimension[i].label,locale);
+  //           } 
+  //            console.log("SAIlS DS",sails)
+  //           self.applyScript(dataset,script,sails)
+  //             .then(function(result){
+  //               return resp.send(result)
+  //             })
+  //         })  
+  //       }) 
+  //   }else{
+  //     Cache
+  //       .getById(source.table)
+  //       .then(function(cached){
+  //         // logger.debug("select "+JSON.stringify(cached))
+  //         self.applyScript(cached.value,script,sails)
+  //             .then(function(result){
+  //               return resp.send(result)
+  //             })
+  //         // apply(cached.value, script)
+  //       })  
+  //   }
+  // }
 
 
 

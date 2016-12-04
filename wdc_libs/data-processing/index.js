@@ -3,6 +3,33 @@
 
 var Promise = require("bluebird");
 
+var typeMap = {
+		reduce 			: "table",
+		order 			: "table",
+		aggregate 		: "table",
+		transpose 		: "table", 
+		limit 			: "table",
+		reduceMeta		: "table",
+		format 			: "table",
+		join 			: "table",
+		merge 			: "table",
+
+		norm 			: "table",
+		pca 			: "table",
+		cluster 		: "table",
+		hist 			: "table",
+		corr 			: "table",
+		rank 			: "table",
+		imput 			: "table",
+
+		query 			: "table",
+
+		bar				: "bar",
+		deps			: "deps",
+		geojson			: "geojson",
+		scatter			: "scatter",
+		line			: "line"
+}
 
 var executionMap = {
 		reduce 			: require("./table/reduce-nulls"),
@@ -61,34 +88,38 @@ var getProcess = function(params){
 	
 }
 
-var executeStep = function (table,params){
+var executeStep = function (data, params){
 	// console.log("execute", JSON.stringify(params))
-	var process,p;
+	var process, p, key;
 	if(params.processId){
 		process = executionMap[params.processId];
 		p = params.settings;
+		key = typeMap[params.processId];
 	}else{
-		process = getProcess(params);
+		var processId = getProcess(params);
+		process = executionMap[processId];
 		p = params;
+		key = typeMap[params.processId] 
 	}
 	
-	if(process) return process(table,p);
-	return table;
+	if(process) return { table:	process(data.table,p), key: key }
+
+	return data;
 }	
 	
 
 
 
-module.exports = function(table,params){
-
+module.exports = function(data,params,sails){
+	console.log("SAILS PPPP", arguments)
 	return new Promise(function(resolve){
 		var script = (params.script) ? (params.script.forEach) ? params.script: [params.script] : [params];
-		var currentTable = table;
+		var currentData = data;
 		script.forEach(function(operation){
-			currentTable = executeStep(currentTable, operation)
+			currentData = executeStep(currentData, operation)
 		})
-		currentTable.postProcess = script;
-		resolve(currentTable);
+		currentData.postProcess = script;
+		resolve(currentData);
 	})
 }
 
