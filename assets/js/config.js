@@ -36,6 +36,8 @@ System.config({
     "mousetrap": "components/mousetrap/mousetrap.js",
     "angular-hotkeys": "js/hotkeys.js",
     "ngstorage": "components/ngstorage/ngStorage.js",
+    "ng-prettyjson-tmpl": "components/ng-prettyjson/src/ng-prettyjson.js",
+    "ng-prettyjson": "components/ng-prettyjson/src/ng-prettyjson-tmpl.js",
     "ng-json-explorer": "components/ng-json-explorer/src/angular-json-explorer.js",
     "angular-oclazyload": "components/oclazyload/dist/ocLazyLoad.js",
     "angular-foundation": "components/angular-foundation/mm-foundation-tpls.js",
@@ -145,6 +147,14 @@ System.config({
         "angular"
       ]
     },
+
+    "ng-prettyjson": {
+      "deps": [
+        "angular",
+        "ng-prettyjson-tmpl"
+      ]
+    },
+
     "ng-json-explorer": {
       "deps": [
         "angular"

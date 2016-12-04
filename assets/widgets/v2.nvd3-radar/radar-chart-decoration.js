@@ -16,14 +16,14 @@ m.factory("RadarChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"RadarChartAdapter", 
-	"pageWidgets",
+	"pageWidgets", "i18n",
 	function(
 		$http, 
 		$dps,
 		$q, 
 		parentHolder, 
 		RadarChartAdapter,
-		pageWidgets ){
+		pageWidgets, i18n ){
 		
 		let chartAdapter = RadarChartAdapter;
 
@@ -102,16 +102,11 @@ m.factory("RadarChartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $dps.post(this.conf.dataUrl,
-					{
-						"cache": false,
-		                "data_id": this.conf.dataID,
-		                "params": {},
-		                "proc_name": "barchartserie",
-		                "response_type": "data"
-		            }
-				)
-				return r
+				return $dps
+				          .post("/api/data/script",{
+				            "data"  : "source(table:'"+this.conf.dataID+"');bar();save()",
+				            "locale": i18n.locale()
+				          })
 			}, 
 
 			setupOptions: function(){
@@ -186,8 +181,8 @@ m.factory("RadarChartDecoration",[
 
 				this.dataLoaded = //(this.dataLoaded) ? this.dataLoaded :
 				 	this.loadSeries().then( (resp) => {
-				 		thos.data = resp.data.data;
-		                thos.conf.serieDataId = resp.data.data_id;
+				 		thos.data = resp.data.data.data;
+		                thos.conf.serieDataId = resp.data.data.data_id;
 		            });
 
 				$q.all([this.optionsLoaded, this.dataLoaded]).then(() => {

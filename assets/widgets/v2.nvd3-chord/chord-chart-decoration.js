@@ -16,7 +16,7 @@ m.factory("ChordChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"NVD3ChordAdapter", 
-	"pageWidgets",
+	"pageWidgets","i18n",
 	
 	function(
 		$http, 
@@ -24,7 +24,7 @@ m.factory("ChordChartDecoration",[
 		$q, 
 		parentHolder, 
 		NVD3ChordAdapter,
-		pageWidgets ){
+		pageWidgets, i18n ){
 
 		let chartAdapter = NVD3ChordAdapter;
 
@@ -98,15 +98,13 @@ m.factory("ChordChartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $dps.post(this.conf.dataUrl,
-					{
-		                "data_id": this.conf.dataID,
-		                "params": {},
-		                "proc_name": "corr-matrix",
-		                "response_type": "data"
-		            }
-				)
-				return r
+
+				return $dps
+				          .post("/api/data/script",{
+				            "data"  : "source(table:'"+this.conf.dataID+"');deps();save()",
+				            "locale": i18n.locale()
+				          })
+
 			}, 
 
 			loadData: function(){
@@ -154,8 +152,8 @@ m.factory("ChordChartDecoration",[
 
 				this.dataLoaded = //(this.dataLoaded) ? this.dataLoaded :
 				 	this.loadSeries().then( (resp) => {
-				 		thos.data = resp.data.data;
-		                thos.conf.serieDataId = resp.data.data_id;
+				 		thos.data = resp.data.data.data;
+		                thos.conf.serieDataId = resp.data.data.data_id;
 		            });
 
 				$q.all([this.optionsLoaded, this.dataLoaded]).then(() => {

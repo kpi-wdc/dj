@@ -1,0 +1,74 @@
+<style>
+  .scriptInput{
+        font-family: monospace, monospace;
+        font-size: medium;
+        /*font-weight: bold;*/
+        color: #007095;
+        line-height: 0.9;
+  }
+
+  .scriptOutput{
+    font-size: 10px;
+    line-height: 0.9;
+  }
+  .clipboardButton{
+    padding: 0em 0.3em;
+    margin: -0.3em 0.5em;
+    border: 0.1rem solid #868686;
+    background-color: initial;
+  }
+
+  pre.pretty-json {outline: 1px solid #e9e9e9; padding: 5px; margin: 5px; }
+  pre.pretty-json span.string { color: green; }
+  pre.pretty-json span.number { color: darkorange; }
+  pre.pretty-json span.boolean { color: blue; }
+  pre.pretty-json span.null { color: magenta; }
+  pre.pretty-json span.key { color: red; }
+  pre.pretty-json span.sep { color: black; }
+
+</style>
+<div ng-controller="ScriptController" style="border:1px solid #ddd;padding:0.5rem;">
+    <h4> Run Data Processing Script</h4>
+
+    <div class="row" style="margin: 0.5em 0 0 0; height:auto;">
+        <div class="column medium-3">
+          <label for="#key">Key</label>
+        </div>
+        <div class="column large-9">
+          <input ng-model="key" id="#key" type="text" class="scriptInput">
+        </div>
+    </div>
+    <div class="row" style="margin: 0.5em 0 0 0; height:auto;">
+       <label style="float:left">Script</label>
+       <button
+        ng-click = "runScript()"  
+        class="button right small radius" 
+        style="padding: 0.5em;font-stretch: ultra-condensed;margin: 0 0.5em 0.1rem;">
+        Execute
+       </button>
+       <button class="button clipboardButton radius toolbar secondary"
+              title="Copy script to clipboard" 
+              ng-click="copyToClipboard(script)"
+              >
+              <img style="width:16px;" src="./img/clippy.svg"alt="Copy to clipboard">
+
+        </button>  
+       <textarea rows="15" cols="40" ng-model="script" class="scriptInput">
+       </textarea>
+    </div>
+     <div class="row scriptOutput" style="margin: 0.5em 0 0 0; height:auto;">
+      <label style="float:left">Server response</label>
+      <img ng-if="!response" src="./img/ajax-loader.gif"/>
+      <button ng-if="response" class="button clipboardButton radius toolbar secondary"
+              title="Copy server response to clipboard" 
+              ng-click="copyToClipboard(response)"
+              >
+              <img style="width:16px;" src="./img/clippy.svg"alt="Copy to clipboard">
+
+        </button>  
+        <div class="row" style="margin: 0.5em 0 0 0; height:150px; overflow:auto;">
+         <pretty-json json="response"></pretty-json>
+        </div>
+     </div>
+</div>
+

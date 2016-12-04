@@ -41,7 +41,8 @@
     "d3": "v3.5.17",
     "d3.timer": "https://d3js.org/d3-timer.v1.min.js",
     "angular-scroll": "~1.0.0",
-    "angular-file-saver": "~1.1.2"
+    "angular-file-saver": "~1.1.2",
+    "ng-prettyjson": "~0.2.0"
   },
   "resolutions": {
     "d3": "v3.5.17"

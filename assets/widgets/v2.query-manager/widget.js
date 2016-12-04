@@ -78,13 +78,15 @@ m.factory("ProjectionWizard",[
   "Wizard",
   "SelectDataset",
   "MakeQuery",
+  "i18n",
     function (  
           $http,
           $dps,
           $modal, 
           Wizard,
           SelectDataset,
-          MakeQuery) {
+          MakeQuery,
+          i18n) {
       
       if (!m._projectionWizard){
         m._projectionWizard = 
@@ -125,7 +127,8 @@ m.controller("PreparationDialogController", function (
     $modalInstance,
     Queries,
     pageWidgets,
-    app
+    app,
+    i18n
     ){
 
     $scope.source = source;
@@ -174,14 +177,21 @@ m.controller("PreparationDialogController", function (
         }
 
       }).then((form) => {
-
-        Queries.add(
-          angular.copy({
-            queryResultId: $scope.data_id, 
-            script:$scope.script
-           }), "preparation", form.fields.name.value);
-        app.markModified();
-        $modalInstance.close();  
+        $dps
+          .post("/api/data/script",{
+            "data"  : $scope.script.map(item => item.shortName).join(";")+";save()",
+            "locale": i18n.locale()
+          })
+          .success(function (resp) {
+              console.log(resp)
+              Queries.add(
+                angular.copy({
+                  queryResultId: resp.data.data_id, 
+                  script:$scope.script
+                 }), "preparation", form.fields.name.value);
+              app.markModified();
+              $modalInstance.close();
+          })
       })
       
     }
@@ -227,7 +237,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
-            shortName: "Reduce Columns ("+form.fields.mode.value+")",
+            shortName: "reduce(mode:'"+form.fields.mode.value+"',direction : 'Columns')",//"Reduce Columns ("+form.fields.mode.value+")",
             reduce : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -256,7 +266,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
-            shortName: "Reduce Rows ("+form.fields.mode.value+")",
+            shortName: "reduce(mode:'"+form.fields.mode.value+"',direction : 'Rows')",//"Reduce Rows ("+form.fields.mode.value+")",
             reduce : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -282,7 +292,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
-            shortName: "PCA ("+form.fields.mode.value+") from Rows",
+            shortName: "pca(result:'"+form.fields.mode.value+"',direction : 'Rows')",//"PCA ("+form.fields.mode.value+") from Rows",
             pca : {
               "enable" : true,
               "direction" : "Rows",
@@ -308,7 +318,7 @@ m.controller("PreparationDialogController", function (
             }
           }).then((form) => {
             $scope.pushOp({
-              shortName: "PCA ("+form.fields.mode.value+") from Columns",
+              shortName: "pca(result:'"+form.fields.mode.value+"',direction : 'Columns')",//"PCA ("+form.fields.mode.value+") from Columns",
               pca : {
                 "enable" : true,
                 "direction" : "Columns",
@@ -336,7 +346,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form)=>{
           $scope.pushOp({
-            shortName: "Clusters ("+form.fields.count.value+") for Rows",
+            shortName: "cluster(count:'"+form.fields.count.value+"',direction : 'Rows')",//"Clusters ("+form.fields.count.value+") for Rows",
             cluster:{
               enable    :true,
               direction :"Rows",
@@ -364,7 +374,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form)=>{
           $scope.pushOp({
-            shortName: "Clusters ("+form.fields.count.value+") for Columns",
+            shortName: "cluster(count:'"+form.fields.count.value+"',direction : 'Columns')",//"Clusters ("+form.fields.count.value+") for Columns",
             cluster:{
               enable    :true,
               direction :"Columns",
@@ -398,7 +408,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
-              shortName: ((form.fields.cumulate.value)? "Cumulate ": "")+"Histogram for Rows ("+form.fields.beans.value+" beans)",
+              shortName: "cls(beans:"+form.fields.beans.value+",cumulate:"+form.fields.cumulate.value+",direction : 'Rows')",//,((form.fields.cumulate.value)? "Cumulate ": "")+"Histogram for Rows ("+form.fields.beans.value+" beans)",
               histogram : {
                 "enable" : true,
                 "direction" : "Rows",
@@ -432,7 +442,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
-              shortName: ((form.fields.cumulate.value)? "Cumulate ": "")+"Histogram for Columns ("+form.fields.beans.value+" beans)",
+              shortName: "cls(beans:"+form.fields.beans.value+",cumulate:"+form.fields.cumulate.value+",direction : 'Columns')",//((form.fields.cumulate.value)? "Cumulate ": "")+"Histogram for Columns ("+form.fields.beans.value+" beans)",
               histogram : {
                 "enable" : true,
                 "direction" : "Columns",
@@ -449,7 +459,7 @@ m.controller("PreparationDialogController", function (
       title:"Correlations for Rows",
       action: () => {
         $scope.pushOp({
-          shortName: "Correlations for Rows",
+          shortName: "corr(direction:'Rows')",//"Correlations for Rows",
           correlation : {
             "enable" : true,
             "direction" : "Rows"
@@ -462,7 +472,7 @@ m.controller("PreparationDialogController", function (
       title:"Correlations for Columns",
       action: () => {
         $scope.pushOp({
-          shortName: "Correlations for Columns",
+          shortName: "corr(direction:'Columns')",//"Correlations for Columns",
           correlation : {
             "enable" : true,
             "direction" : "Columns"
@@ -487,7 +497,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
-            shortName: "Normalize Rows("+form.fields.mode.value+")",
+            shortName: "norm(direction:'Rows', mode:'"+form.fields.mode.value+"')",//"Normalize Rows("+form.fields.mode.value+")",
             normalization : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -514,7 +524,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
-            shortName: "Normalize Columns("+form.fields.mode.value+")",
+            shortName: "norm(direction:'Columns', mode:'"+form.fields.mode.value+"')",//"Normalize Columns("+form.fields.mode.value+")",
             normalization : {
               "enable" : true,
               "mode" : form.fields.mode.value,
@@ -549,7 +559,7 @@ m.controller("PreparationDialogController", function (
             .filter( (item,index) => form.fields.agg.value[index].value)
             .map((item) => item.title)
           $scope.pushOp({
-            shortName: "Aggregate Rows("+aggs.join(",")+")",
+            shortName: "aggregate(direction:'Rows', data:"+JSON.stringify(aggs)+")",//"Aggregate Rows("+aggs.join(",")+")",
             aggregation : {
               "enable" : true,
               "direction" : "Rows",
@@ -584,7 +594,7 @@ m.controller("PreparationDialogController", function (
             .filter( (item,index) => form.fields.agg.value[index].value)
             .map((item) => item.title)
           $scope.pushOp({
-            shortName: "Aggregate Columns("+aggs.join(",")+")",
+            shortName: "aggregate(direction:'Columns', data:"+JSON.stringify(aggs)+")",//"Aggregate Columns("+aggs.join(",")+")",
             aggregation : {
               "enable" : true,
               "direction" : "Columns",
@@ -629,12 +639,12 @@ m.controller("PreparationDialogController", function (
         }).then((form) => {
           let indexes; 
           $scope.pushOp({
-            shortName: "Rank "+form.fields.asc.value+" for Rows("+
-              form.fields.rows.value
-                  .map((item,index) => (item.value) ? item.title : "")
-                  .filter((item) => item.length > 0)
-                  .join(",")
-              +")",
+            shortName: "rank(direction:'Columns',asc:'"+form.fields.asc.value+"',indexes:"+
+              JSON.stringify(
+                form.fields.rows.value
+                  .map((item,index) => (item.value) ? index : -1)
+                  .filter((item) => item >= 0)
+              )+")",
             rank : {
               "enable" : true,
               "direction" : "Columns",
@@ -682,12 +692,12 @@ m.controller("PreparationDialogController", function (
         }).then((form) => {
           let indexes; 
           $scope.pushOp({
-            shortName: "Rank "+form.fields.asc.value+" for Columns("+
-              form.fields.rows.value
-                  .map((item,index) => (item.value) ? item.title : "")
-                  .filter((item) => item.length > 0)
-                  .join(",")
-              +")",
+            shortName: "rank(direction:'Columns',asc:'"+form.fields.asc.value+"',indexes:"+
+              JSON.stringify(
+                form.fields.rows.value
+                  .map((item,index) => (item.value) ? index : -1)
+                  .filter((item) => item >= 0)
+              )+")",
             rank : {
               "enable" : true,
               "direction" : "Rows",
@@ -733,7 +743,7 @@ m.controller("PreparationDialogController", function (
         }).then((form) => {
           let indexes; 
           $scope.pushOp({
-            shortName: "Merge Rows("+form.fields.master.value+","+form.fields.slave.value+")",
+            shortName: "merge(direction:'Rows',master:"+form.fields.master.value+",slave:"+form.fields.slave.value+")",//"Merge Rows("+form.fields.master.value+","+form.fields.slave.value+")",
             merge : {
               "enable" : true,
               "direction" : "Rows",
@@ -777,7 +787,7 @@ m.controller("PreparationDialogController", function (
         }).then((form) => {
           let indexes; 
           $scope.pushOp({
-            shortName: "Merge Columns("+form.fields.master.value+","+form.fields.slave.value+")",
+            shortName:  "merge(direction:'Columns',master:"+form.fields.master.value+",slave:"+form.fields.slave.value+")",//"Merge Columns("+form.fields.master.value+","+form.fields.slave.value+")",
             merge : {
               "enable" : true,
               "direction" : "Columns",
@@ -809,7 +819,7 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) => {
           $scope.pushOp({
-            shortName:"Number precision: "+form.fields.precision.value,
+            shortName: "format(precision:"+form.fields.precision.value+")",//"Number precision: "+form.fields.precision.value,
             precision:form.fields.precision.value
           })
         })
@@ -821,7 +831,7 @@ m.controller("PreparationDialogController", function (
       title:"Transpose Table",
       action: () => {
         $scope.pushOp({
-          shortName:"Transpose",
+          shortName:"transpose()",
           transpose:true
         })
       }
@@ -831,7 +841,7 @@ m.controller("PreparationDialogController", function (
       title:"Inputation",
       action: () => {
         $scope.pushOp({
-          shortName:"Inputation",
+          shortName: "imput(direction:'Row', mode:'fill', from:'left'",//"Inputation",
           inputation : {
               "enable" : true,
               "direction": "Row",
@@ -873,8 +883,9 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
-            shortName:"Sort Rows "+form.fields.asc.value+" order by "
-              +criterias.filter((item) => { return (item.value - form.fields.index.value) == 0 })[0].title,
+            shortName:"order(direction:'Row', asc:'"+form.fields.asc.value+"', index:"+form.fields.index.value+")",
+            // "Sort Rows "+form.fields.asc.value+" order by "
+            //   +criterias.filter((item) => { return (item.value - form.fields.index.value) == 0 })[0].title,
             order:{
               enable    :true,
               direction :"Rows",
@@ -918,8 +929,9 @@ m.controller("PreparationDialogController", function (
           }
         }).then((form) =>{
           $scope.pushOp({
-            shortName:"Sort Columns "+form.fields.asc.value+" order by "
-              +criterias.filter((item) => item.value == form.fields.index.value)[0].title,
+            shortName: "order(direction:'Columns', asc:'"+form.fields.asc.value+"', index:"+form.fields.index.value+")",
+            // "Sort Columns "+form.fields.asc.value+" order by "
+            //   +criterias.filter((item) => item.value == form.fields.index.value)[0].title,
             order:{
               enable    :true,
               direction :"Columns",
@@ -957,12 +969,13 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
-              shortName:"Use Row Metadata("+
-                form.fields.rows.value
-                .filter((item) => item.value)
-                .map((item) => item.title)
-                .join(",")
-                +")",
+              shortName: "reduceMeta(useRowMetadata:"+JSON.stringify(form.fields.rows.value.map((item) => item.value))+")",
+              // "Use Row Metadata("+
+              //   form.fields.rows.value
+              //   .filter((item) => item.value)
+              //   .map((item) => item.title)
+              //   .join(",")
+              //   +")",
               useRowMetadata : form.fields.rows.value.map((item) => item.value)
            }) 
         })
@@ -995,12 +1008,13 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
-              shortName:"Use Column Metadata("+
-                form.fields.rows.value
-                .filter((item) => item.value)
-                .map((item) => item.title)
-                .join(",")
-                +")",
+              shortName: "reduceMeta(useColumnMetadata:"+JSON.stringify(form.fields.rows.value.map((item) => item.value))+")",
+              // "Use Column Metadata("+
+              //   form.fields.rows.value
+              //   .filter((item) => item.value)
+              //   .map((item) => item.title)
+              //   .join(",")
+              //   +")",
               useColumnMetadata : form.fields.rows.value.map((item) => item.value)
            }) 
         })
@@ -1031,7 +1045,7 @@ m.controller("PreparationDialogController", function (
 
         }).then((form) => {
            $scope.pushOp({
-              shortName:"Start with "+form.fields.start.value+" limit "+ form.fields.length.value,
+              shortName:"limit(start:"+form.fields.start.value+", length:"+ form.fields.length.value+")",
               limit : {
                 "enable" : true,
                 "start" : form.fields.start.value,
@@ -1043,36 +1057,37 @@ m.controller("PreparationDialogController", function (
       }
     });
 
-    $dps
-      .get("/api/data/process/"+source.context.queryResultId)
-      .success(function (resp) {
-          $scope.resultTable = resp.value;
-          $scope.data_id = resp.data_id;
-          $scope.pushOp({
-            shortName:"Select "+source.$title+"("+ source.context.queryResultId +")",
-            select:{
-              "source":source.$title
-            }
-          })
+    // $dps
+    //   .get("/api/data/process/"+source.context.queryResultId)
+    //   .success(function (resp) {
+    //       $scope.resultTable = resp.value;
+    //       $scope.data_id = resp.data_id;
+    //       $scope.pushOp({
+    //         shortName: "source(table:'"+source.context.queryResultId+"')",//"Select "+source.$title+"("+ source.context.queryResultId +")",
+    //         select:{
+    //           "source":source.$title
+    //         }
+    //       })
           
-    });
+    // });
 
+    
     $scope.runScript = () =>{
       let script = $scope.script.filter((item,index) => index<=$scope.cursor)
-       $scope.resultTable = undefined;
+      $scope.resultTable = undefined;
+
+      console.log("RUN SCRIPT", script.map(item => item.shortName).join(";"))//+";save()")
+      
+
       $dps
-          .post("/api/data/process/",
-            {
-              "cache": false,
-              "data_id": source.context.queryResultId,
-              "params": {"script":script},
-              "proc_name": "post-process",
-              "response_type": "data"
-            }    
-          )
+          .post("/api/data/script",{
+            "data"  : script.map(item => item.shortName).join(";"),//+";save()",
+            "locale": i18n.locale()
+          })
           .success(function (resp) {
+            console.log(resp)
               $scope.resultTable = resp.data;
-              $scope.data_id = resp.data_id;
+              // $scope.data_id = resp.data.data_id;
 
           })
     }   
@@ -1090,7 +1105,14 @@ m.controller("PreparationDialogController", function (
       }).then((form) => {
         $scope.operations[form.fields.operation.value].action();
       })
-    }  
+    }
+
+    setTimeout(function(){
+      $scope.pushOp({
+            shortName: "source(table:'"+source.context.queryResultId+"')"
+          })  
+    },0)
+    
 
 })
 
@@ -1104,7 +1126,8 @@ m.controller("JoinDialogController", function(
   source,
   dialog,
   Queries,
-  app){
+  app,
+  i18n){
 
     $scope.queries = [];
 

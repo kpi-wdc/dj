@@ -1,0 +1,13 @@
+{
+  "keywords":["data","management","interactive", "description"],
+  "schema": {
+    "type": "object",
+    "title": "Execute data processing script",
+    "properties": {
+      "d_listeners": {
+        "type": "string",
+        "title": "Preview Listeners"
+      }
+    }
+  }
+}

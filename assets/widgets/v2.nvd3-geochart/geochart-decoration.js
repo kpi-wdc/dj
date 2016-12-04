@@ -173,23 +173,37 @@ m.factory("GeochartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $dps.post(this.conf.dataUrl,
-					{
-						"cache": false,
-		                "data_id": this.conf.dataID,
 
-		                "params": {
-		                	"direction" : this.conf.direction,
-		                	"dataIndex":this.conf.dataIndex,
-	            			"bins":this.conf.bins,
-	            			"scope" : this.conf.scope
-						},
+				return $dps
+				          .post("/api/data/script",{
+				            "data"  : 	"source(table:'"+this.conf.dataID+"');"+
+				            			"geojson(dir:'"+this.conf.direction+"',"+
+				            				"dataIndex:"+ JSON.stringify(this.conf.dataIndex)+","+
+				            				"bins:"+this.conf.bins+","+
+				            				"scope:'"+this.conf.scope+"'"+
+				            			");"+
+				            			"save()",
+				            "locale": i18n.locale()
+				          })
 
-		                "proc_name": "geochart-serie",
-		                "response_type": "data"
-		            }
-				)
-				return r
+
+				// let r = $dps.post(this.conf.dataUrl,
+				// 	{
+				// 		"cache": false,
+		  //               "data_id": this.conf.dataID,
+
+		  //               "params": {
+		  //               	"direction" : this.conf.direction,
+		  //               	"dataIndex":this.conf.dataIndex,
+	   //          			"bins":this.conf.bins,
+	   //          			"scope" : this.conf.scope
+				// 		},
+
+		  //               "proc_name": "geochart-serie",
+		  //               "response_type": "data"
+		  //           }
+				// )
+				// return r
 			}, 
 
 			loadData: function(){
@@ -251,8 +265,8 @@ m.factory("GeochartDecoration",[
 
 				this.dataLoaded = //(this.dataLoaded) ? this.dataLoaded :
 				 	this.loadSeries().then( (resp) => {
-				 		thos.data = resp.data.data;
-		                thos.conf.serieDataId = resp.data.data_id;
+				 		thos.data = resp.data.data.data;
+		                thos.conf.serieDataId = resp.data.data.data_id;
 		            });
 
 				$q.all([this.optionsLoaded, this.dataLoaded]).then(() => {

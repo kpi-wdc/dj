@@ -16,14 +16,14 @@ m.factory("LineChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"LineChartAdapter",
-	"pageWidgets", 
+	"pageWidgets","i18n", 
 	function(
 		$http,
 		$dps, 
 		$q, 
 		parentHolder, 
 		LineChartAdapter,
-		pageWidgets ){
+		pageWidgets, i18n ){
 		
 		let chartAdapter = LineChartAdapter;
 
@@ -117,21 +117,17 @@ m.factory("LineChartDecoration",[
 
 			loadSeries : function(){
 				this.data = undefined; 
-				let r = $dps.post(this.conf.dataUrl,
-					{
-						"cache": false,
-		                "data_id": this.conf.dataID,
-		                "params": {
-		                	"axisX" : this.conf.axisX,
-		                	"category" : this.conf.category,
-		                	"index" : this.conf.index
 
-		                },
-		                "proc_name": "line-serie",
-		                "response_type": "data"
-		            }
-				)
-				return r
+				return $dps
+				          .post("/api/data/script",{
+				            "data"  : 	"source(table:'"+this.conf.dataID+"');"+
+				            			"line(x:"+this.conf.axisX+","+
+				            				"index:"+ JSON.stringify(this.conf.index)+","+
+				            				"category:"+this.conf.category+
+				            			");"+
+				            			"save()",
+				            "locale": i18n.locale()
+				          })
 			},
 
 			makeAxisXList : function(table){
@@ -297,11 +293,11 @@ m.factory("LineChartDecoration",[
 
 				this.dataLoaded = //(this.dataLoaded) ? this.dataLoaded :
 				 	this.loadSeries().then( (resp) => {
-				 		thos.data = resp.data.data;
+				 		thos.data = resp.data.data.data;
 				 		if (!thos.data.length){
 				 			thos.data = [];
 				 		}
-		                thos.conf.serieDataId = resp.data.data_id;
+		                thos.conf.serieDataId = resp.data.data.data_id;
 
 		            });
 

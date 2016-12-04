@@ -16,14 +16,14 @@ m.factory("PieChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"PieChartAdapter",
-	"pageWidgets", 
+	"pageWidgets", "i18n", 
 	function(
 		$http, 
 		$dps,
 		$q, 
 		parentHolder, 
 		PieChartAdapter,
-		pageWidgets ){
+		pageWidgets, i18n ){
 		
 		let chartAdapter = PieChartAdapter;
 
@@ -99,16 +99,11 @@ m.factory("PieChartDecoration",[
 			},
 
 			loadSeries : function(){
-				let r = $dps.post(this.conf.dataUrl,
-					{
-						"cache": false,
-		                "data_id": this.conf.dataID,
-		                "params": {},
-		                "proc_name": "barchartserie",
-		                "response_type": "data"
-		            }
-				)
-				return r
+				return $dps
+				          .post("/api/data/script",{
+				            "data"  : "source(table:'"+this.conf.dataID+"');bar();save()",
+				            "locale": i18n.locale()
+				          })
 			}, 
 
 			loadData: function(){
@@ -148,8 +143,8 @@ m.factory("PieChartDecoration",[
 				 	this.loadSeries().then( (resp) => {
 				 		// console.log(resp);
 				 		// thos.data = resp.data.data[0].values;
-				 		thos.data = resp.data.data;
-		                thos.conf.serieDataId = resp.data.data_id;
+				 		thos.data = resp.data.data.data;
+		                thos.conf.serieDataId = resp.data.data.data_id;
 		            });
 
 				$q.all([this.optionsLoaded, this.dataLoaded]).then(() => {
