@@ -4,6 +4,7 @@
 var ReduceNull      = require("../table/reduce-nulls"),
     transposeTable  = require("../table/transpose"),
     query = require("../../wdc-query");
+    util = require("util");
 
 
 
@@ -16,10 +17,22 @@ module.exports = function(table,params){
   var base,role,format;
   var result = [];
 
-  if ( !params.index ) return {};
-  if ( params.index.length == 0 ) return {};
+  // if ( !params.index ) return {};
+  // if ( params.index.length == 0 ) return {};
+  if(!util.isUndefined(params.index) && util.isString(params.index)){
+    var n = Number(params.index);
+    params.index =(isNaN(n)||params.index=='')? undefined : [n]
+  }
+  
+  if(!util.isUndefined(params.index) && util.isNumber(params.index)){
+    params.index = [params.index]
+  }
 
-
+  if (!params.index || !params.index.forEach || params.index.length==0){
+    params.index = [];
+    table.header.forEach(function(item,index){params.index.push(index)})
+  }
+  
   // table = ReduceNull(table,{
   //   reduce:{
   //     enable:true,

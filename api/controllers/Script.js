@@ -5,7 +5,7 @@ var Promise = require("bluebird");
 var Cache = require("./Cache");
 var logger = require("../../wdc_libs/wdc-log").global;
 var scriptParser = require("../../wdc_libs/data-processing/script/parser");
-
+var I18N = require("../../wdc_libs/wdc-i18n");
 
 
 var getDataset = function (id,locale){
@@ -54,7 +54,7 @@ var prepareCachedResult = function(d){
   d = (util.isArray(d))? d[0] : d;
   d = d || {};
   return {
-    // data: d.value,
+    data: d.value,
     data_id: d.id,
     createdAt: d.createdAt,
     updatedAt: d.updatedAt
@@ -69,6 +69,109 @@ var saveImpl = function(data, params, locale, script){
             resolve(prepareCachedResult(result))
           })
 	})
+}
+
+
+var metaImpl = function(data, params, locale, script){
+	return new Promise(function(resolve,reject){
+		Dataset.find({"commit/HEAD": true})
+       	.then(function(datasets){
+       		datasets = datasets.map(function(item){return item.metadata})
+       		Dictionary.find({})
+	          .then(function(json){
+	    		i18n = new I18N(json);
+	            Promise.reduce(datasets, function(c,dataset){
+	            	return new Promise(function(resolve){
+	            		dataset = i18n.translate(dataset,locale);
+		                for(i in dataset.dimension){
+			              dataset.dimension[i].values = 
+			              i18n.translate(dataset.dimension[i].values,locale)  
+			              dataset.dimension[i].label = i18n.translate(dataset.dimension[i].label,locale);
+			            } 
+		        		resolve()	
+	            	})
+	           },0).then(function(){resolve(datasets)})
+	    	})	
+       	})
+    })   		
+}
+
+var dictImpl = function(data, params, locale, script){
+	return new Promise(function(resolve,reject){
+		Dictionary.find({})
+	          .then(function(result){
+	          	resolve(result)
+	          })	
+	})
+}
+
+var countImpl = function(data, params, locale, script){
+	return new Promise(function(resolve,reject){
+			resolve(data.length)
+	})
+}	
+
+var translateImpl = function(data, params, locale, script){
+	var dict = {}
+	function _lookup(o){
+		if(util.isObject(o)){
+			for(var key in o){
+				o[key] = _lookup(o[key])
+			}
+			return o
+		}
+		if(util.isArray(o)){
+			return o.map(function(item){return _lookup(item)})
+		}
+		if(util.isString(o)){
+			return (dict[o] && dict[o][locale])? dict[o][locale] : o
+		}	
+		return o;
+	}
+
+	return new Promise(function(resolve){
+      Dictionary.find({type:"i18n"})
+            .then(function(json){
+              json.forEach(function(item){
+              	dict[item.key] = item.value;
+              })
+              obj = _lookup(data);
+              resolve(obj);
+            })
+      }) 
+}
+
+var lookupImpl = function(data, params, locale, script){
+
+	var dict = {}
+
+	function _lookup(o){
+		if(util.isObject(o)){
+			for(var key in o){
+				o[key] = _lookup(o[key])
+			}
+			return o
+		}
+		if(util.isArray(o)){
+			return o.map(function(item){return _lookup(item)})
+		}
+		if(util.isString(o)){
+			return (dict[o])? dict[o] : o
+		}	
+		return o;
+	}
+
+
+	return new Promise(function(resolve){
+      Dictionary.find({})
+            .then(function(json){
+              json.forEach(function(item){
+              	dict[item.key] = item.value;
+              })
+              var res = _lookup(data)
+              resolve(res);
+            })
+      }) 
 }
 
 var typeMap = {
@@ -98,7 +201,15 @@ var typeMap = {
 		scatter			: "scatter",
 		line			: "line",
 		source			: "source",
-		save 			: "cache"
+		save 			: "cache",
+
+		jspath			: "list",
+		meta 			: "list",
+		dict			: "list",
+		count 			: "number",
+		i18n 			: "list",
+		lookup 			: "list"
+
 }
 
 var executionMap = {
@@ -128,36 +239,17 @@ var executionMap = {
 		scatter			: require("../../wdc_libs/data-processing/serie/scatter"),
 		line			: require("../../wdc_libs/data-processing/serie/line"),
 		
-		source			: sourceImpl,
-		save 			: saveImpl
-}
+		jspath			: require("../../wdc_libs/data-processing/serie/jspath"),
+		
 
-// var getProcess = function(params){
-// 	var processId;
-// 	if(params.useColumnMetadata) processId = "reduceMeta";
-// 	if(params.useRowMetadata) processId =  "reduceMeta";
-// 	if(params.reduce) processId =  "reduce";
-// 	if(params.normalization) processId = "norm";
-// 	if(params.precision) processId = "format";
-// 	if(params.transpose) processId =  "transpose";
-// 	if(params.order) processId =  "order";
-// 	if(params.aggregation) processId =  "aggregate";
-// 	if(params.rank) processId =  "rank";
-// 	if(params.histogram) processId =  "hist";
-// 	if(params.correlation) processId =  "corr";
-// 	if(params.limit) processId =  "limit";
-// 	if(params.cluster) processId =  "cluster";
-// 	if(params.pca) processId =  "pca";
-// 	if(params.inputation) processId =  "imput";
-// 	if(params.join) processId =  "join";
-// 	if(params.merge) processId =  "merge";
-// 	if(params.query) processId =  "query";
-	
-// 	if(params.serie) processId =  params.serie;
-// 	if(processId) return executionMap[processId]
-// 	return undefined;
-	
-// }
+		source			: sourceImpl,
+		save 			: saveImpl,
+		meta 			: metaImpl,
+		dict 			: dictImpl,
+		count 			: countImpl,
+		i18n 			: translateImpl,
+		lookup 			: lookupImpl
+}
 
 var executeStep = function (data, params, locale, script){
 	var process, p, key;

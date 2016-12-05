@@ -37,31 +37,44 @@ var lookup = function(o){
 
 module.exports = {
 	parse : function(str){
-		// logger.debug("parser get string "+str)
-		var p = str.replace(/\/\/[\w\S\ .\t\:\,;\'\"\(\)\{\}\[\]0-9-_]*(?:[\n\r]*)/gi,"")
+
+		var values = str.match(
+		/'((?:\\\\[\'bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\'\\\\])*)'|\"((?:\\\\[\"bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\"\\\\])*)\"/gim
+		)
+
+
+		function varIndex(tag){return  "^"+values.indexOf(tag)}
+
+		function switchQ(tag){return (tag=="'")? '"' : "'"}
+
+		function varValue(tag){return values[Number(tag.substring(1))].replace(/[\'\"]/gi, switchQ)}
+		var p = str.replace(
+			/'((?:\\\\[\'bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\'\\\\])*)'|\"((?:\\\\[\"bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\"\\\\])*)\"/gim
+		, varIndex)
+		
+		p = p.replace(/\/\/[\w\S\ .\t\:\,;\'\"\(\)\{\}\[\]0-9-_]*(?:[\n\r]*)/gi,"")
 			.replace(/[\r\n\t\s]*/gim,"")
 			.replace(/\/\*[\w\b\.\t\:\,;\'\"\(\)\{\}\[\]0-9-_]*(?:\*\/)/gim,"")
 			.replace(/(\))([a-zA-Z])/gim,"$1;$2")
-			.replace(/\(([\w\b\.\t\:\,\'\"0-9-_]+[\w\b\.\t\:\,\'\"\[\]0-9-_]*)\)/gi,"({$1})")
+			.replace(/\(([\w\b\.\t\:\,\'\"0-9-_]+[\w\b\.\t\:\,\'\"\[\]\^0-9-_]*)\)/gi,"({$1})")
 			.replace(/([a-zA-Z-]+(?=[\(\)\{\}\:\[\]\s]+))/gim,"\"$1\"")
 			.replace(/\'/gim,"\"")
 			.replace(/\(\s*\)/gi,"({})")
 			.replace(/\(/gim,":")
 			.replace(/\)/gim,"")
+			.replace(/\^[0-9]+/gim,varValue)
 		
-		logger.debug("transform "+p)
+		// logger.debug("transform "+p)
 		var script = [];
-
 		var cmd = p.split(";")
 		cmd.forEach(function(cm){
 			// if(c!=""){
-				// logger.debug("parser process "+cm)
+				logger.debug("parser process "+cm)
 				var t = lookup(JSON.parse("{"+cm+"}"));
 				script.push(t)
 			// }	
 		})
-		// var result = {};
-		// result.source = script.splice(0,1)[0].source;
+		
 		var result = script.map(function(c){
 						return {
 							processId : Object.keys(c)[0],

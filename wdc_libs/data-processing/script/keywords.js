@@ -1,5 +1,25 @@
 module.exports = {
 
+    i18n: "i18n",
+    translate: "i18n",
+    lookup : "lookup",
+    extend : "lookup",
+
+
+    path:"path",
+    jspath:"jspath",
+    jsonpath:"jspath",
+    select:"jspath",
+
+    meta:"meta",
+    metadata:"meta",
+    
+    dict:"dict",
+    dictionary:"dict",
+
+
+
+
     source : "source",
     src : "source",
 
@@ -34,6 +54,7 @@ module.exports = {
     pca: "pca",
 
     cluster: "cluster",
+    cls: "cluster",
     kmeans: "cluster",
 
     hist: "hist",
@@ -187,7 +208,7 @@ module.exports = {
     start: "start",
     length: "length",
 
-        master: "master",
+    master: "master",
     slave: "slave",
 
     usecolumnmetadata: "useColumnMetadata",
