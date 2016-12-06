@@ -174,6 +174,17 @@ var lookupImpl = function(data, params, locale, script){
       }) 
 }
 
+
+var versionImpl = function(){
+	return {name: "DJ Data Processing Script", version:"0.1"}
+}
+
+
+
+
+
+	
+
 var typeMap = {
 		reduce 			: "table",
 		order 			: "table",
@@ -200,15 +211,18 @@ var typeMap = {
 		geojson			: "geojson",
 		scatter			: "scatter",
 		line			: "line",
-		source			: "source",
-		save 			: "cache",
+		source			: "json",
+		save 			: "json",
 
-		jspath			: "list",
-		meta 			: "list",
-		dict			: "list",
-		count 			: "number",
-		i18n 			: "list",
-		lookup 			: "list"
+		jspath			: "json",
+		meta 			: "json",
+		dict			: "json",
+		count 			: "json",
+		i18n 			: "json",
+		lookup 			: "json",
+		ver 			: "json",
+		get 			: "json",
+		put 			: "json"
 
 }
 
@@ -240,6 +254,10 @@ var executionMap = {
 		line			: require("../../wdc_libs/data-processing/serie/line"),
 		
 		jspath			: require("../../wdc_libs/data-processing/serie/jspath"),
+
+		put			: require("../../wdc_libs/data-processing/variable/set.js"),
+		get			: require("../../wdc_libs/data-processing/variable/get.js"),
+		
 		
 
 		source			: sourceImpl,
@@ -248,20 +266,47 @@ var executionMap = {
 		dict 			: dictImpl,
 		count 			: countImpl,
 		i18n 			: translateImpl,
-		lookup 			: lookupImpl
+		lookup 			: lookupImpl,
+		ver 			: versionImpl
 }
 
-var executeStep = function (data, params, locale, script){
+var executeStep = function (data, params, locale, script, scriptContext){
 	var process, p, key;
+	var get = require("../../wdc_libs/data-processing/variable/get.js")
+
+	var applyContext = function(o,c){
+		if(util.isObject(o)){
+			for(var key in o){
+				o[key] = applyContext(o[key])
+			}
+			return o
+		}
+		if(util.isArray(o)){
+			return o.map(function(item){return applyContext(item)})
+		}
+		if(util.isString(o)){
+			if(o.match(/\{\{[\s\S]*\}\}/gi)){
+				var key = o.substring(2,o.length-2);
+				console.log("apply "+key)
+				return get(undefined,{path:key}, undefined, undefined, scriptContext)
+
+			}else{
+				return o
+			}	
+		}	
+		return o;
+	}
+	
 	return new Promise(function(resolve,reject){
 		if(params.processId){
 			process = executionMap[params.processId];
 			p = params.settings;
+			p = applyContext(p,scriptContext);
 			key = typeMap[params.processId];
 			key = (key == 'source')? (params.settings.dataset)? "dataset" : "table" : key
 		}
 		if(process){
-			var res = process(((data) ? data.table : undefined), p, locale, script);
+			var res = process(((data) ? data.table : undefined), p, locale, script, scriptContext);
 			if(res.then){
 				res.then(function(r){
 					resolve( { table:r, key: key } )
@@ -285,9 +330,11 @@ module.exports = function(script,locale){
 
 	return new Promise(function(resolve){
 		var currentData;
+		var scriptContext = {};
+
 		Promise.reduce(scriptParser.parse(script), function(currentData, operation, index){
 			return new Promise(function(resolve){
-				executeStep(currentData, operation, locale, script)
+				executeStep(currentData, operation, locale, script, scriptContext)
 					.then(function(res){
 						currentData = res;
 						resolve(currentData);		

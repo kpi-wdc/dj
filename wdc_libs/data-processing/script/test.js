@@ -1,22 +1,34 @@
 var parser = require("./parser");
-// var example = 'source(  '
-// 	+'\n dataset:\'{{dataset.id}}\'   )'
-// 	+'\n    query(['
-// 	+'\n	{dim:"indicator",role:"col",items:[]},'
-// 	+'\n	{dim:"time", role:"row",items:[]}'
-// 	+'\n    ])'
-// 	+'\n'
-// 	+'\n  transpose()' 
-// 	+'\norder(asc:"az",dir:"row",index:0);'
-// 	+'\nline-serie ( '
-// 	+'\n	 xaxis:-1,' 
-// 	+'\n	"index":[0]'
-// 	+'\n'
-// 	+'\n)';
+var example = 
+	'/*'
+	+'\n********************************************'
+	+'\n   Select sources from metadata'
+	+'\n   Select sources from metadata '
+	+'\n  Select sources from metadata'
+	+'\n  !@#$%^&*()_+}{|\\//>><<<?~`'
+	+'\n*/'
+	+'\n source(  '
+	+'\n dataset:\'{{dataset.id}}\'   )'
+	+'\n    query(['
+	+'\n	{dim:"indicator",role:"col",items:[]},'
+	+'\n	{dim:"time", role:"row",items:[]}'
+	+'\n    ])'
+	+'\n'
+	+'\n  transpose()' 
+	+'\norder(asc:"az",dir:"row",index:0);'
+	+'\nline-serie ( '
+	+'\n	 xaxis:-1,' 
+	+'\n	"index":[0])'
+	+'\n select(path:"$..dataset[@.source==\'#WDC\'].label"'
+	+'\n)';
 
-var example= "source(table:'5843ff26496b7de842437a4d');format(precision:2);order(direction:'Row', asc:'A-Z', index:-1);select(path:'$[?(@.dataset.source==\"aaaaaaa\")]');aggregate(direction:'Rows', data:['min','max','avg','std','sum'])"
+// var example= "source(table:'5843ff26496b7de842437a4d');format(precision:2);order(direction:'Row', asc:'A-Z', index:-1);select(path:'$[?(@.dataset.source==\"aaaaaaa\")]');aggregate(direction:'Rows', data:['min','max','avg','std','sum'])"
 console.log(example);
 console.log(parser.parse(example))
+
+
+console.log(parser.stringify(parser.parse(example)).match(/\{\{[\s\S]*\}\}/gi))
+
 // console.log(example.match(/'\S*'/gim));
 // console.log(example.match(/\S+[\{\}\:\[\]\s]/gim));
 // console.log(example.match(/[a-zA-Z-]+(?=[\(\)\{\}\:\[\]\s]+)/gim));

@@ -1,4 +1,10 @@
 module.exports = {
+    set:"put",
+    put:"put",
+    get:"get",
+    
+    ver : "ver",
+    version : "ver",
 
     i18n: "i18n",
     translate: "i18n",
