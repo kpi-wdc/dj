@@ -4,6 +4,21 @@
     "type": "object",
     "title": "Execute data processing script",
     "properties": {
+      "title":{
+        "title":"Title",
+        "type": "string",
+        "default":"DJ Data Process Scripting"
+      },
+      "examples":{
+        "title": "Show Examples",
+        "type":"boolean",
+        "default": true
+       },
+      "editor":{
+        "title": "Editor",
+        "type":"boolean",
+        "default": false
+       },
       "d_listeners": {
         "type": "string",
         "title": "Preview Listeners"

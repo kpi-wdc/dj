@@ -1,0 +1,13 @@
+/****************************************************************/
+/**             DJ Data Processing Script Example              **/
+/**                                                            **/
+/****************************************************************/
+/** File: metadata.dps                                         **/
+/** Description: Get metadata list and returns it length       **/
+/** Inputs: not available                                      **/
+/** Output: length of metadata list                            **/
+/**                                                            **/
+/****************************************************************/
+
+meta()
+count()

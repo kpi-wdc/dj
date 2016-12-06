@@ -437,6 +437,35 @@ define(["angular",
           }
       };
 
+
+
+      $scope.setData = function(value){
+        $scope.loadedData = value;
+                if(params.dictionary) {
+                  $scope.dictionary =  $lookup.dictionary(params.dictionary(value));
+                };
+
+                if(params.translations) {
+                  $scope.translations = i18n.translation(params.translations(value)); 
+                }  
+                
+                $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
+                    params.serieAdapter.getSeries(value) : value;
+                
+                if($scope.data.forEach){
+                  $scope.data.forEach((d, index) => {
+                    d.colorIndex = index;
+                  })
+                }
+
+                $scope.settings = {
+                  options : angular.copy($scope.expandOptions($scope.options)), 
+                  data : angular.copy($scope.data)
+                }
+                
+                $scope.complete();
+      }
+
       $scope.APIProvider
         
         .config(function () {
@@ -559,13 +588,8 @@ define(["angular",
           }
           if(params.acceptData(context)){
             $scope.dataset = context.dataset;
-            $scope.data = context.data;
             $scope.hidden = false;
-            $scope.settings = {
-                    options : angular.copy($scope.expandOptions($scope.options)),
-                    data : angular.copy($scope.data)
-            }
-            
+            $scope.setData(context.data)
           }else{
             if($scope.dataset!=context.dataset){
               $scope.hidden = true;

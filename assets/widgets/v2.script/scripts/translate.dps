@@ -1,0 +1,20 @@
+/****************************************************************/
+/**             DJ Data Processing Script Example              **/
+/**                                                            **/
+/****************************************************************/
+/** File: metadata.dps                                         **/
+/**                                                            **/
+/** Description: Get metadata list, select "dataset.source"    **/
+/** property only, extends source metadata and translate it    **/
+/** at your localization                                       **/
+/**                                                            **/
+/** Inputs: not available                                      **/
+/**                                                            **/
+/** Output: localized source metadata list                     **/
+/**                                                            **/
+/****************************************************************/
+
+meta()
+select(path:'$..dataset.source')
+extend()
+translate()

@@ -18,13 +18,54 @@ let m = angular.module('app.widgets.v2.script', [
     APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n, $scroll,clipboard) {
     
     const eventEmitter = new EventEmitter($scope);
-    
-    $scope.copyToClipboard = function(text){
-      console.log("Copy", text)
-      text = angular.isObject(text)? JSON.stringify(text, "\n") : text;
-      console.log("text", text)
-      clipboard.copyText(text);
+
+    $scope.examples = [
+      {
+        title:"Visualize Data",
+        url:"./widgets/v2.script/scripts/sample1.dps"
+      },
+      {
+        title:"Work with metadata",
+        url:"./widgets/v2.script/scripts/metadata.dps"
+      },
+      {
+        title:"Extend and translate",
+        url:"./widgets/v2.script/scripts/translate.dps"      },
+      {
+        title:"Find data",
+        url:"./widgets/v2.script/scripts/find_datasets.dps"
+      },
+      {
+        title:"DJ DPS version",
+        url:"./widgets/v2.script/scripts/version.dps"
+      }
+    ]
+
+
+    $scope.getScript = function(s){
+        var e = $scope.examples.filter(item => item.title == s)[0]
+        if(e){
+          if(e.script){
+            $scope.script = e.script
+          }else{
+            $http
+              .get(e.url)
+              .then(function(resp){
+                e.script = resp.data;
+                $scope.script = e.script 
+              })
+          }
+        }
     }
+
+    $scope.selectedExample;
+
+    $scope.$watch('selectedExample', (newValue, oldValue) => {
+          console.log("SELECT",newValue,oldValue)
+          if (newValue !== oldValue) {
+            $scope.getScript(newValue)
+          }
+        });
 
     $scope.runScript = function(){
        $scope.response = undefined;
@@ -46,6 +87,21 @@ let m = angular.module('app.widgets.v2.script', [
     
     new APIProvider($scope)
       .config(() => {
+        if(($scope.widget.editor && !$scope.widget.examples)){
+          $scope.script = "// Write your script here ...\n"  
+        }
+        if(($scope.widget.editor && $scope.widget.examples)){
+          $scope.script = "// Select example \n// and(or) write your script here ...\n"  
+        }
+        if((!$scope.widget.editor && $scope.widget.examples)){
+          if($scope.selectedExample){
+            $scope.selectedExample = $scope.examples[0].title;
+          }else{
+            $scope.script = "// Select example and run it ..."
+          }
+        }
+        
+
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.d_listeners = ($scope.widget.d_listeners) ? $scope.widget.d_listeners.split(",") : [];
         pageSubscriptions().removeListeners({
@@ -72,7 +128,7 @@ let m = angular.module('app.widgets.v2.script', [
       })
 
       .removal(() => {
-        console.log('Find Result widget is destroyed');
+        console.log('Script widget is destroyed');
       });
   })
 

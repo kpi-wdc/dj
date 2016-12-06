@@ -1,0 +1,50 @@
+/****************************************************************/
+/**             DJ Data Processing Script Example              **/
+/**                                                            **/
+/****************************************************************/
+/** File: sample1.dps                                          **/
+/**                                                            **/
+/** Description: Find, get, postprocess and visualize data     **/
+/**                                                            **/
+/** Inputs: not available                                      **/
+/**                                                            **/
+/** Output: Line chart for founded dataset                     **/
+/**                                                            **/
+/****************************************************************/
+
+// get metadata list
+
+	meta()
+
+// select dataset UUID from first item 
+
+	select(path:"$[0].dataset.id")
+
+//store first item as id
+
+	put(var:"id",value:"$[0]")
+
+// get dataset with stored UUID as source 
+
+	source(ds:'{{$.id}}')
+
+// get projection from source
+
+	query([
+	  {dim:'indicator', role:'col', items:[]},
+	  {dim:'time', role:'row', items:[]}
+	])
+
+// format numbers with precision 2
+
+	format(p:2)
+
+// sort rows by time
+
+	order(dir:'row', asc:'az', index:-1)
+
+// visualize table as line chart
+// axis X is time
+// all series enabled
+
+	line(x:-1)

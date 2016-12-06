@@ -127,7 +127,7 @@ app.constant('selectedHolder',null);
 app.constant('randomWidgetName', () => Math.random().toString(36).substring(2));
 
 app.value('duScrollDuration', 500)
-app.value('duScrollOffset', 70)
+app.value('duScrollOffset', 50)
 app.value('duScrollEasing', function (t) { return 1+(--t)*t*t*t*t })
 
 app.service("$scroll",function($document,APIUser){

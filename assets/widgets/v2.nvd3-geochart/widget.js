@@ -24,6 +24,9 @@ m.controller('Nvd3GeochartCtrlV2', function (
           wizard: GeochartWizard,
           decorationAdapter: GeochartAdapter,
           optionsURL: "/widgets/v2.nvd3-geochart/options.json",
+          acceptData : function(context){
+              return context.key == "geochart"
+          },
           serieAdapter: {
             tooltipContent : function (serie, x, y, s) {
               var locale = i18n.locale();

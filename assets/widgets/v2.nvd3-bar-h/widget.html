@@ -1,29 +1,14 @@
 
 
 <div 
-	class="widget border" 
+	class="widget" 
 	ng-controller="Nvd3HBarChartCtrlV2" 
 	style="overflow:auto;"
 	ng-mouseleave="focused = false" 
   	ng-init="focused = false"
   	ng-mouseover="focused = true" 
 >
-	
-		<!-- <a 
-		  	ng-click="exportImage()" 
-		  	title="Export png"
-		  	
-		  	ng-disabled="!focused"
-		  	>
-			  <i class="tiny right fi-camera"
-			  		style="	color: {{(focused)?'#cf6e0e':'rgba(207,110,14,0);'}};
-						    border: 2px solid;
-						    border-radius: 20%;
-						    padding: 0 0.5em;
-						    font-size: x-large;">
 
-			  </i>
-	  	</a> -->
 	  
 	  	<div ng-if="!hidden">
 		  <div nvd3 settings="settings" api="api" ng-show="completed"></div>

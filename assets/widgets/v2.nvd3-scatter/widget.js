@@ -19,6 +19,9 @@ m.controller('Nvd3ScatterChartCtrlV2', function ($scope, NVD3WidgetV2, ScatterCh
           wizard: ScatterChartWizard,
           decorationAdapter: NVD3ScatterAdapter,
           optionsURL: "/widgets/v2.nvd3-scatter/options.json",
+          acceptData : function(context){
+              return context.key == "scatter"
+          },
           serieAdapter: {
               getX: function (d) {
                 return d.x

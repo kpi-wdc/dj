@@ -1,0 +1,43 @@
+<style>
+  .scriptInput{
+        font-family: monospace, monospace;
+        font-size: medium;
+        /*font-weight: bold;*/
+        color: #007095;
+        line-height: 0.9;
+  }
+
+  .scriptOutput{
+    font-size: small;
+    line-height: 0.9;
+  }
+
+
+  pre.pretty-json {padding: 5px; margin: 5px; }
+  pre.pretty-json span.string { color: green; }
+  pre.pretty-json span.number { color: darkorange; }
+  pre.pretty-json span.boolean { color: blue; }
+  pre.pretty-json span.null { color: magenta; }
+  pre.pretty-json span.key { color: red; }
+  pre.pretty-json span.sep { color: black; }
+
+</style>
+<div class="row" ng-controller="JsonViewerController" 
+  style="margin: 0; padding: 0;">
+    
+    <div ng-if="!hidden" 
+        style="margin: 0.5rem;
+              padding: 0.5rem;
+              border:1px solid #ddd">
+      <h5>JSON Preview</h5>               
+      <div 
+            class="row scriptOutput" 
+            style="    margin: 0.5em 0px 0px;
+                        height: 506px;
+                        overflow: auto;
+                        border: 1px solid #ddd;">
+           <pretty-json json="data"></pretty-json>
+      </div>
+    </div>  
+</div>
+

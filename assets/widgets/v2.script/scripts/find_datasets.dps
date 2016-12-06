@@ -1,0 +1,17 @@
+/***************************************************************/
+/**             DJ Data Processing Script Example              */
+/**                                                            */
+/***************************************************************/
+/** File: find_datasets.dps                                    */
+/**                                                            */
+/** Description: Select list of datasets UIID datasets         */
+/** from source #WB                                            */
+/**                                                            */
+/** Inputs: not available                                      */
+/**                                                            */
+/** Output: list of datasets UIID from source #WB              */
+/**                                                            */
+/***************************************************************/
+
+meta()
+select(path:"$[?(@.dataset.source=='#WB')].dataset.id")

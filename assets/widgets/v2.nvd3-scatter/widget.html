@@ -2,7 +2,7 @@
 
 
 <div 
-	class="widget border" 
+	class="widget" 
 	ng-controller="Nvd3ScatterChartCtrlV2" 
 	style="overflow:auto;"
 	ng-mouseleave="focused = false" 
@@ -10,31 +10,16 @@
   	ng-mouseover="focused = true" 
 >
 	
-		<!-- <a 
-		  	ng-click="exportImage()" 
-		  	title="Export png"
-		  	
-		  	ng-disabled="!focused"
-		  	>
-			  <i class="tiny right fi-camera"
-			  		style="	color: {{(focused)?'#cf6e0e':'rgba(207,110,14,0);'}};
-						    border: 2px solid;
-						    border-radius: 20%;
-						    padding: 0 0.5em;
-						    font-size: x-large;">
+	<div ng-if="!hidden">	
+	  <div nvd3 settings="settings" api="api" ng-show="completed"></div>
 
-			  </i>
-	  	</a> -->
-	  
+	  <h1 ng-if="!completed && configured" style="color:#eeeeee; text-align: center;">
+	    <center><img src="./img/ajax-loader.gif"/></center>
+	  </h1>
 
-  <div nvd3 settings="settings" api="api" ng-show="completed"></div>
-
-  <h1 ng-if="!completed && configured" style="color:#eeeeee; text-align: center;">
-    <center><img src="./img/ajax-loader.gif"/></center>
-  </h1>
-
-  <h1 ng-if="!configured" style="color:#eeeeee; text-align: center;">
-    Widget Not Configured
-  </h1>
+	  <h1 ng-if="!configured" style="color:#eeeeee; text-align: center;">
+	    Widget Not Configured
+	  </h1>
+	</div>  
 </div>
 
