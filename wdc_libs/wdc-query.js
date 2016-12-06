@@ -120,6 +120,7 @@ Query.prototype = {
  */  
 
     distinct : function(){
+
        if (this.data == undefined) throw "Cannot remove dublicates items from undefined data"
   
         // this.result = [];

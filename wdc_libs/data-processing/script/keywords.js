@@ -1,8 +1,13 @@
 module.exports = {
+
+   
+    unique:"unique",
+    uniq:"unique",
+
     set:"put",
     put:"put",
     get:"get",
-    
+
     ver : "ver",
     version : "ver",
 
@@ -87,6 +92,7 @@ module.exports = {
     "deps-serie": "deps",
 
     geojson: "geojson",
+    geochart: "geojson",
     "geo-serie": "geojson",
 
     scatter: "scatter",

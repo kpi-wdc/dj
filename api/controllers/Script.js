@@ -195,6 +195,7 @@ var typeMap = {
 		format 			: "table",
 		join 			: "table",
 		merge 			: "table",
+		table 			: "table",
 
 		norm 			: "table",
 		pca 			: "table",
@@ -207,14 +208,20 @@ var typeMap = {
 		query 			: "table",
 
 		bar				: "bar",
+		hbar			: "hbar",
+		pie				: "pie",
 		deps			: "deps",
-		geojson			: "geojson",
+		geojson			: "geochart",
 		scatter			: "scatter",
 		line			: "line",
+		area			: "area",
+		radar			: "radar",
+		
 		source			: "json",
 		save 			: "json",
 
 		jspath			: "json",
+		unique 		    : "json",
 		meta 			: "json",
 		dict			: "json",
 		count 			: "json",
@@ -223,6 +230,7 @@ var typeMap = {
 		ver 			: "json",
 		get 			: "json",
 		put 			: "json"
+
 
 }
 
@@ -236,6 +244,8 @@ var executionMap = {
 		format 			: require("../../wdc_libs/data-processing/table/format"),
 		join 			: require("../../wdc_libs/data-processing/table/join"),
 		merge 			: require("../../wdc_libs/data-processing/table/merge"),
+		table 			: require("../../wdc_libs/data-processing/table/nop"),
+
 
 		norm 			: require("../../wdc_libs/data-processing/stat/norm"),
 		pca 			: require("../../wdc_libs/data-processing/stat/pca"),
@@ -248,16 +258,25 @@ var executionMap = {
 		query 			: require("../../wdc_libs/data-processing/dataset/query"),
 
 		bar				: require("../../wdc_libs/data-processing/serie/bar"),
+		hbar			: require("../../wdc_libs/data-processing/serie/bar"),
+		pie				: require("../../wdc_libs/data-processing/serie/bar"),
+		radar			: require("../../wdc_libs/data-processing/serie/bar"),
+		
 		deps			: require("../../wdc_libs/data-processing/serie/deps"),
+		
 		geojson			: require("../../wdc_libs/data-processing/serie/geojson"),
+		
 		scatter			: require("../../wdc_libs/data-processing/serie/scatter"),
+		
 		line			: require("../../wdc_libs/data-processing/serie/line"),
+		area			: require("../../wdc_libs/data-processing/serie/line"),
 		
-		jspath			: require("../../wdc_libs/data-processing/serie/jspath"),
+		jspath			: require("../../wdc_libs/data-processing/json/jspath"),
+		unique		    : require("../../wdc_libs/data-processing/json/unique"),
 
-		put			: require("../../wdc_libs/data-processing/variable/set.js"),
-		get			: require("../../wdc_libs/data-processing/variable/get.js"),
-		
+
+		put				: require("../../wdc_libs/data-processing/variable/set.js"),
+		get				: require("../../wdc_libs/data-processing/variable/get.js"),
 		
 
 		source			: sourceImpl,
@@ -287,7 +306,6 @@ var executeStep = function (data, params, locale, script, scriptContext){
 		if(util.isString(o)){
 			if(o.match(/\{\{[\s\S]*\}\}/gi)){
 				var key = o.substring(2,o.length-2);
-				console.log("apply "+key)
 				return get(undefined,{path:key}, undefined, undefined, scriptContext)
 
 			}else{
