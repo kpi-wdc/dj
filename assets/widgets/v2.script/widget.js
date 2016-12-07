@@ -137,13 +137,23 @@ let m = angular.module('app.widgets.v2.script', [
             "key"  : $scope.key,
             "locale": i18n.locale()
           })
-        .success(function(response){
-              $scope.response = response
-              eventEmitter.emit('setData', response);
+        .then(function(response){
+              if(response.data.key == "url"){
+                $scope.response = {
+                  data:{
+                    success: $dps.getUrl()+response.data.data.url
+                  },  
+                  key:"json"
+                }
+                window.open($dps.getUrl()+response.data.data.url,'_blank')
+              }else{
+                $scope.response = response.data
+              }  
+              eventEmitter.emit('setData', $scope.response);
             })
-            .error(function(response){
-              $scope.response = response
-            })
+            // .error(function(response){
+            //   $scope.response = response
+            // })
     }
     
     new APIProvider($scope)

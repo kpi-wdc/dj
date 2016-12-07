@@ -34,6 +34,10 @@ dps.service('$dps',
 				 var savedObject = new Blob([JSON.stringify(data)],{type:"application/json;charset=utf-8"})// { type: 'text/plain;charset=utf-8' });
     			 FileSaver.saveAs(savedObject,file);
 				},
+				saveAttachement: function(data,mime,file){
+				 var savedObject = new Blob([data],{type:mime})// { type: 'text/plain;charset=utf-8' });
+    			 FileSaver.saveAs(savedObject,file);
+				},
 
 				getUrl: function(){
 					return dpsURL
