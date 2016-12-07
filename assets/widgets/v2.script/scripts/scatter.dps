@@ -5,11 +5,20 @@
 *              DJ Data Processing Script Example               *
 *                                                              *
 ****************************************************************
-* File: find_datasets.dps                                      *
+* File: postprocess.dps                                        *
 *                                                              *
-* Description: Select UUIDs for datasets from source #WB       *
+* Description: Data Visualization. Build Scatter chart         *
 *                                                              *
 ****************************************************************/
 
-meta()
-select(path:"$[?(@.dataset.source=='#WB')].dataset.id")
+source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')
+
+query([
+  { dim:'time', role:'row', items:[] },
+  { dim:'indicator', role:'col', items:[] } 
+])
+
+norm(dir:'col', mode:'log')
+cls(dir:'row',count:4)
+format(p:3)
+scatter(x:0,index:[1], cat:5)

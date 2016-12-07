@@ -5,11 +5,18 @@
 *              DJ Data Processing Script Example               *
 *                                                              *
 ****************************************************************
-* File: find_datasets.dps                                      *
+* File: projection.dps                                         *
 *                                                              *
-* Description: Select UUIDs for datasets from source #WB       *
+* Description: Get projection from data cube                   *
 *                                                              *
 ****************************************************************/
+source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')
 
-meta()
-select(path:"$[?(@.dataset.source=='#WB')].dataset.id")
+query([
+  { dim:'time', role:'row', items:[] },
+  { 
+    dim:'indicator', 
+    role:'col', 
+    items:['NSMS_DAU001_NFD004' ,'NSMS_DAU001_NFD009'] 
+  } 
+])

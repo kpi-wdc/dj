@@ -1,12 +1,14 @@
-/****************************************************************/
-/**             DJ Data Processing Script Example              **/
-/**                                                            **/
-/****************************************************************/
-/** File: version.dps                                          **/
-/** Description: Get script version                            **/
-/** Inputs: not available                                      **/
-/** Output: version object (JSON)                              **/
-/**                                                            **/
-/****************************************************************/
+/***************************************************************
+* Copyright (c) 2014-2016 Andrey Boldak                        *
+* MIT License - http://opensource.org/licenses/mit-license.php *
+*                                                              *
+*              DJ Data Processing Script Example               *
+*                                                              *
+****************************************************************
+* File: version.dps                                            *
+*                                                              *
+* Description: Get DJDP script version                         *
+*                                                              *
+****************************************************************/
 
-ver()
+version()

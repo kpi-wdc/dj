@@ -5,11 +5,19 @@
 *              DJ Data Processing Script Example               *
 *                                                              *
 ****************************************************************
-* File: find_datasets.dps                                      *
+* File: postprocess.dps                                        *
 *                                                              *
-* Description: Select UUIDs for datasets from source #WB       *
+* Description: Data Visualization. Build Area chart            *
 *                                                              *
 ****************************************************************/
 
-meta()
-select(path:"$[?(@.dataset.source=='#WB')].dataset.id")
+source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')
+
+query([
+  { dim:'time', role:'row', items:[] },
+  { dim:'indicator', role:'col', items:[] } 
+])
+
+norm(dir:'col', mode:'log')
+format(p:3)
+area(x:-1)

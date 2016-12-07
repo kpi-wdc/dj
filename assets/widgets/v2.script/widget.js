@@ -21,23 +21,84 @@ let m = angular.module('app.widgets.v2.script', [
 
     $scope.examples = [
       {
-        title:"Visualize Data",
-        url:"./widgets/v2.script/scripts/sample1.dps"
+        title:"DJ DPS version",
+        url:"./widgets/v2.script/scripts/version.dps"
       },
       {
-        title:"Work with metadata",
+        title:"Working with metadata",
         url:"./widgets/v2.script/scripts/metadata.dps"
       },
-      {
-        title:"Extend and translate",
-        url:"./widgets/v2.script/scripts/translate.dps"      },
       {
         title:"Find data",
         url:"./widgets/v2.script/scripts/find_datasets.dps"
       },
       {
-        title:"DJ DPS version",
-        url:"./widgets/v2.script/scripts/version.dps"
+        title:"Extend and translate",
+        url:"./widgets/v2.script/scripts/translate.dps"      
+      },
+      {
+        title:"Get info from metadata",
+        url:"./widgets/v2.script/scripts/custom-info.dps"
+      },
+      {
+        title:"Data Cube Projection",
+        url:"./widgets/v2.script/scripts/projection.dps"
+      },
+      {
+        title:"Table Postprocessing",
+        url:"./widgets/v2.script/scripts/postprocess.dps"
+      },
+      {
+        title:"Table Analitics",
+        url:"./widgets/v2.script/scripts/analitics.dps"
+      },
+      {
+        title:"Data Normalization",
+        url:"./widgets/v2.script/scripts/normalization.dps"
+      },
+      {
+        title:"Correlation matrix",
+        url:"./widgets/v2.script/scripts/corr.dps"
+      },
+      {
+        title:"Clusters",
+        url:"./widgets/v2.script/scripts/clusters.dps"
+      },
+      {
+        title:"PCA (Scores)",
+        url:"./widgets/v2.script/scripts/scores.dps"
+      },
+      {
+        title:"PCA (Eigen Values)",
+        url:"./widgets/v2.script/scripts/ev.dps"
+      },
+      {
+        title:"Data Visualization. Vertical Bar Chart",
+        url:"./widgets/v2.script/scripts/bar.dps"
+      },
+      {
+        title:"Data Visualization. Horizontal Bar Chart",
+        url:"./widgets/v2.script/scripts/hbar.dps"
+      },
+      {
+        title:"Data Visualization. Radar Chart",
+        url:"./widgets/v2.script/scripts/radar.dps"
+      },
+      {
+        title:"Data Visualization. Line Chart",
+        url:"./widgets/v2.script/scripts/sample1.dps"
+      },
+      {
+        title:"Data Visualization. Area Chart",
+        url:"./widgets/v2.script/scripts/area.dps"
+      },
+      {
+        title:"Data Visualization. Scatter Chart",
+        url:"./widgets/v2.script/scripts/scatter.dps"
+      },
+      {
+        title:"Data Visualization. Dependency Exploration",
+        url:"./widgets/v2.script/scripts/deps.dps"
       }
     ]
 
@@ -94,11 +155,8 @@ let m = angular.module('app.widgets.v2.script', [
           $scope.script = "// Select example \n// and(or) write your script here ...\n"  
         }
         if((!$scope.widget.editor && $scope.widget.examples)){
-          if($scope.selectedExample){
             $scope.selectedExample = $scope.examples[0].title;
-          }else{
-            $scope.script = "// Select example and run it ..."
-          }
+             $scope.getScript($scope.selectedExample)
         }
         
 

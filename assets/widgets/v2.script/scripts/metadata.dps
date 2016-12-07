@@ -1,13 +1,14 @@
-/****************************************************************/
-/**             DJ Data Processing Script Example              **/
-/**                                                            **/
-/****************************************************************/
-/** File: metadata.dps                                         **/
-/** Description: Get metadata list and returns it length       **/
-/** Inputs: not available                                      **/
-/** Output: length of metadata list                            **/
-/**                                                            **/
-/****************************************************************/
-
+/***************************************************************
+* Copyright (c) 2014-2016 Andrey Boldak                        *
+* MIT License - http://opensource.org/licenses/mit-license.php *
+*                                                              *
+*              DJ Data Processing Script Example               *
+*                                                              *
+****************************************************************
+* File: metadata.dps                                           *
+*                                                              *
+* Description: Get metadata list and returns it length         *
+*                                                              *
+****************************************************************/
 meta()
 count()

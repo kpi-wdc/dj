@@ -5,11 +5,21 @@
 *              DJ Data Processing Script Example               *
 *                                                              *
 ****************************************************************
-* File: find_datasets.dps                                      *
+* File: custom-info.dps                                        *
 *                                                              *
-* Description: Select UUIDs for datasets from source #WB       *
+* Description: Create short custom info about first dataset    *
 *                                                              *
 ****************************************************************/
-
 meta()
-select(path:"$[?(@.dataset.source=='#WB')].dataset.id")
+select(path:'$[0].dataset')
+
+put(var:'id', value:'$[0].id')
+put(var:'commitNote', value:'$[0].commit.note')
+select(path:'$[0].label')
+translate()
+put(var:'name', value:'$[0]')
+
+source(ds:'{{$.id}}')
+select(path:'$.metadata.dataset.source')
+put(var:'source',value:'$[0]')
+get() 
