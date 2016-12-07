@@ -229,7 +229,8 @@ var typeMap = {
 		lookup 			: "json",
 		ver 			: "json",
 		get 			: "json",
-		put 			: "json"
+		put 			: "json",
+		"export" 		: "url"
 
 
 }
@@ -279,6 +280,8 @@ var executionMap = {
 		get				: require("../../wdc_libs/data-processing/variable/get.js"),
 		
 
+		"export"		: require("../../wdc_libs/data-processing/export"),
+
 		source			: sourceImpl,
 		save 			: saveImpl,
 		meta 			: metaImpl,
@@ -321,7 +324,8 @@ var executeStep = function (data, params, locale, script, scriptContext){
 			p = params.settings;
 			p = applyContext(p,scriptContext);
 			key = typeMap[params.processId];
-			key = (key == 'source')? (params.settings.dataset)? "dataset" : "table" : key
+			// logger.debug("RUN "+params.processId+" "+process)
+			// key = (key == 'source')? (params.settings.dataset)? "dataset" : "table" : key
 		}
 		if(process){
 			var res = process(((data) ? data.table : undefined), p, locale, script, scriptContext);
@@ -359,7 +363,10 @@ module.exports = function(script,locale){
 					})
 				
 			})	
-		},0).then(function(result){resolve(result)})	
+		},0).then(function(result){
+			result.context = scriptContext;
+			resolve(result)
+		})	
 	})
 }
 

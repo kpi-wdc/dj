@@ -584,10 +584,21 @@ module.exports = {
 
     execScript(script,locale)
       .then(function(result){
-        return resp.send({
-                data : result.table,
-                key: result.key
-              })
+        // console.log("CONTEXT",JSON.stringify(result.context))
+        
+        // if(result.context.$$mime){
+        //   console.log("Export file ",result.context.$$file,result.context.$$mime)
+        //   resp.setHeader('Content-disposition', 'attachment; filename=' + result.context.$$file);
+        //   resp.setHeader('Content-type', result.context.$$mime);
+        //   resp.setHeader("X-Filename", result.context.$$file);
+        //   resp.setHeader("Access-Control-Expose-Header","Content-disposition, Content-type, X-Filename");
+        //   return resp.send(result.table);
+        // }else{
+          return resp.send({
+                  data : result.table,
+                  key: result.key
+                })
+        // }  
       })
   }  
     

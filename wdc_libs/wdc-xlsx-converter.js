@@ -289,7 +289,7 @@ json_to_sheet = function (name, json) {
   return sheet;
 };
 
-exports.buildXLS = function (dataset) {
+exports.json2xlsx = function(dataset){
   var result = []
 
   if (dataset.metadata) {
@@ -367,8 +367,11 @@ exports.buildXLS = function (dataset) {
 
     result.push(json_to_sheet("i18n", i18n));
   }
+  return result
+}
 
-  result = simpleXLSX.build(result);
+exports.buildXLS = function (dataset) {
+  var result = simpleXLSX.build(exports.json2xlsx(dataset));
   return result;
 };
 

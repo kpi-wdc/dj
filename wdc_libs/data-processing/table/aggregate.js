@@ -20,6 +20,14 @@ module.exports = function(table,params){
 	// if(!params.aggregation.enable) return table;
 	
 	var aggregation = (params.aggregation)?params.aggregation:params;
+	aggregation.data = ((aggregation.data)
+							? ((aggregation.data.forEach)
+								? aggregation.data 
+								: [aggregation.data])
+							:["sum"]).map(function(item){
+								return (item=="Standartization") ? "std" : item
+							})
+
 
 	if(aggregation.direction == "Columns") table = transposeTable(table,{transpose:true});
 
@@ -58,8 +66,20 @@ module.exports = function(table,params){
 					if(item == "std"){
 						additional.push(STAT.std(v))
 					}
+					if(item == "stdr"){
+						additional.push(STAT.std(v)/STAT.mean(v))
+					}
 					if(item == "sum"){
 						additional.push(STAT.sum(v))
+					}
+					if(item == "range"){
+						additional.push(STAT.range(v))
+					}
+					if(item == "median"){
+						additional.push(STAT.median(v))
+					}
+					if(item == "count"){
+						additional.push(v.filter(function(val){return val}).length)
 					}
 			})
 			row.value = row.value.concat(additional);	
