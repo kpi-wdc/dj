@@ -41,6 +41,24 @@ var   valuesRE = 			/'((?:\\\\[\'bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\'\\\\])*)'|\
 	, nonbrackedParamsRE = 	/\(([\w\b\.\t\:\,\'\"0-9-_]+[\w\b\.\t\:\,\'\"\[\]\^0-9-_]*)\)/gi
 	, propertyNameRE = 		/([a-zA-Z-]+(?=[\(\)\{\}\:\[\]\s]+))/gim
 	, emptyPropsListRE = 	/\(\s*\)/gi
+	, defaultValueRE = /\:\{\^*[0-9]+\};/gi
+	, defaultStoredValueRE = /\:\^[0-9]+;/gi
+	, commandNameRE = /"[a-zA-Z0_-]+[a-zA-Z0-9_-]*":/gi
+	, paramsRE = /:[\{\^\[]+[a-zA-Z0-9_:",\^\{\}\[\]-]*[\}\]]+;*|:\^[0-9]+;*/gi
+	;
+
+var defaultPropName  = {
+	format 		: "p",
+	select		: "path",
+	"export" 	: "file",
+	order 		: "asc",
+	get 		: "path",
+	set 		: "var",
+	put 		: "var",
+	meta 		: "path"
+
+}
+
 
 module.exports = {
 	parse : function(str){
@@ -78,15 +96,59 @@ module.exports = {
 			.replace(emptyPropsListRE,"({})")
 			.replace(/\(/gim,":")
 			.replace(/\)/gim,"")
-			.replace(/\^[0-9]+/gim,varValue)
+			
+		try{	
+		p = p
+			.split(";")
+			.map(function(item){
+				return item +";"
+			})	
+		    .map(function(cmd){
+		    	logger.debug("parse "+cmd)
+		    	if(cmd == ";"){
+		    		// console.log("NOP")
+		    		return cmd
+		    	}
+				var cmdName = cmd.match(commandNameRE)[0];
+				cmdName = cmdName.substring(1,cmdName.length-2) 
+				var params = cmd.match(paramsRE).map(function(item){
+					if(item.match(defaultValueRE)){
+						var p; 
+						if(item.match(/\:\{\^/gi)){
+							p = item.substring(3,item.length-3)
+						}else if(item.match(/\:\{/gi)){
+							p = item.substring(2,item.length-2)
+						}
+						return ":{\""+defaultPropName[cmdName]+"\":"+p+"}"
+					}
+					if(item.match(defaultStoredValueRE)){
+						var p = item.substring(1,item.length-1)
+						return  ":{\""+defaultPropName[cmdName]+"\":"+p+"}"
+					}	
+					return item
+				});
+				
+				return "\""+cmdName+"\""+params[0]		
+			})
+			.join(";")
+			.replace(/;;/gi,";");
+
+		// console.log(p)	
+
+		p = p.replace(/\^[0-9]+/gim,varValue)
+		
+		// console.log(p)	
+
 
 		var script = [];
 		var cmd = p.split(";")
 		cmd.forEach(function(cm){
 			// if(c!=""){
-				logger.debug("parser process "+cm)
+			
+				logger.debug("process "+cm)
 				var t = lookup(JSON.parse("{"+cm+"}"));
 				script.push(t)
+
 			// }	
 		})
 		
@@ -96,6 +158,10 @@ module.exports = {
 							settings : c[Object.keys(c)[0]]
 						} 
 					})
+		}catch(e){
+				logger.error("Invalid syntax")
+				return undefined;
+			}
 		return result;
 	},
 

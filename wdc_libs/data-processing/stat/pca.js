@@ -87,4 +87,26 @@ module.exports = function(table,params){
 		})
 		return result;
 	}
+
+	if(pca.result == "loadings"){
+		var values = data.loadings;
+		result.header = values[0].map(function(item,index){
+			return {
+				metadata:[{
+					dimension:"pc",
+					dimensionLabel:"Principal Component",
+					id:"index",
+					label:("PC"+(index+1))
+				}]
+			}
+		})
+		result.body = values.map(function(r,index){
+			return {
+					metadata: table.header[index].metadata,
+					value: r
+			}
+		})
+		return result;
+	}	
+	
 }

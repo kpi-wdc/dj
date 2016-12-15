@@ -5,20 +5,28 @@ var fs = require("fs");
 
 var prepare = function (dataset,selection){
 
-// console.log("QUERY ", dataset, selection)
+// console.log("QUERY ", JSON.stringify(selection))
+var getId = function(index, collection){
+	if(util.isNumber(index)) return collection[index].id
+	return index
+}
 
 var getIDList = function(metadata,selection){
-	// console.log(metadata.dimension[selection.dimension])
-	return new query()
+	var d = metadata.dimension[selection.dimension].values
+	var result =  new query()
 		.from(metadata.dimension[selection.dimension].values)
-		.select(function(item){
+		.select(function(item,itemIndex){
+			if(!selection.collection) return true;
 			if (selection.collection.length == 0) return true;
 			return new query()
 				.from(selection.collection)
-				.select(function(current){return current == item.id;})
+				.select(function(current){
+					return getId(current,d) == item.id
+				})
 				.length() == 1
 		})
 		.get() 
+	return result	
 }
 
 var getDimensions = function(selection, role){
@@ -39,18 +47,24 @@ var splitColumnsDimensions = getDimensions(selection,"Split Columns");
 
 rowsDimension.IDList = getIDList(dataset.metadata,rowsDimension);
 columnsDimension.IDList = getIDList(dataset.metadata,columnsDimension);
+
 splitRowsDimensions.forEach(function(current){
 	current.IDList = getIDList(dataset.metadata,current);
 })
+
 splitColumnsDimensions.forEach(function(current){
 	// console.log(current);
 	current.IDList = getIDList(dataset.metadata,current);
 })
+// console.log("IDS ", JSON.stringify(selection))
+
+selection.forEach(function(s){
+	if(s.collection && s.collection.map)
+		s.collection = s.collection.map(function(item) {return getId(item,s.IDList)} )
+})
 
 
-
-
-  var result = dataset.data.filter(function(row){
+  var result = dataset.data.filter(function(row,rowIndex){
 	  var r = true;
 	  new query()
 	  .from(selection)
@@ -60,7 +74,7 @@ splitColumnsDimensions.forEach(function(current){
 	  .get()
 	  .forEach(function(dim){
 	  		var r1 = false;
-	  		if(dim.collection.length>0){
+	  		if(dim.collection && dim.collection.length>0){
 	  			dim.collection.forEach(function(item){ 
 	  				r1 |= row['#'+dim.dimension] == item;
 	  				if (r1 == true) return; 

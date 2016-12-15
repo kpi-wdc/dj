@@ -148,6 +148,8 @@ module.exports = {
     x: "axisX",
 
     index: "index",
+    series: "index",
+    y: "index",
 
     category: "category",
     cat: "category",
@@ -205,17 +207,20 @@ module.exports = {
     p: "precision",
 
     test: "test",
+    on:"test",
+    "with" : "with",
+    
     cond: "test",
     condition: "test",
 
-    "left join": "left join",
-    "lj": "left join",
+    "left join": "left",
+    "lj": "left",
 
-    "inner join": "inner join",
-    "ij": "inner join",
+    "inner join": "inner",
+    "ij": "inner",
 
-    "outer join": "outer join",
-    "oj": "outer join",
+    "outer join": "outer",
+    "oj": "outer",
 
     start: "start",
     length: "length",

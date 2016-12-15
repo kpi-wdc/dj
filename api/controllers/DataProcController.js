@@ -559,96 +559,20 @@ module.exports = {
 
   },
 
-  // applyScript: function(data,script){
-  //   return  new Promise(function(resolve,reject){
-  //     dataProcess({table:data, key:""},{script:script})
-  //         .then(function(result){
-  //           // result.dataset = source.dataset
-  //           resolve({
-  //             data : result.table,
-  //             key: result.key
-  //           })
-  //     })
-  //   })
-  // },
-
   runScript : function(req,resp){
     var script = req.body.data;
-    // var key = req.body.key;
-    // var self = this;
+    logger.clear();
     var locale = req.body.locale || "en";
     locale = (req.body.locale == "uk") ? "ua" : req.body.locale; //|| "en";
-    // var parsed = scriptParser.parse(str);
-    // var source = parsed.source;
-    // var script = parsed.script;
-
+    
     execScript(script,locale)
       .then(function(result){
-        // console.log("CONTEXT",JSON.stringify(result.context))
-        
-        // if(result.context.$$mime){
-        //   console.log("Export file ",result.context.$$file,result.context.$$mime)
-        //   resp.setHeader('Content-disposition', 'attachment; filename=' + result.context.$$file);
-        //   resp.setHeader('Content-type', result.context.$$mime);
-        //   resp.setHeader("X-Filename", result.context.$$file);
-        //   resp.setHeader("Access-Control-Expose-Header","Content-disposition, Content-type, X-Filename");
-        //   return resp.send(result.table);
-        // }else{
+          logger.clear();
           return resp.send({
                   data : result.table,
                   key: result.key
                 })
-        // }  
       })
   }  
-    
-    // var apply = function(data,script){
-    //   dataProcess({table:data, key:"dataset"},{script:script})
-    //         .then(function(result){
-    //           result.dataset = source.dataset
-    //           resp.send({
-    //             data : result.table,
-    //             key: result.key
-    //           })
-    //   })
-    // }
-
-  //   if(source.dataset){
-  //     Dataset.findOne({"dataset/id": source.dataset, "commit/HEAD": true})
-  //      .then(function(dataset){
-  //         Dictionary.find({})
-  //         .then(function(json){
-  //           i18n = new I18N(json);
-  //           dataset.data = i18n.translate(dataset.data,locale);
-  //           dataset.metadata = i18n.translate(dataset.metadata,locale);
-          
-  //           for(i in dataset.metadata.dimension){
-  //             dataset.metadata.dimension[i].values = 
-  //             i18n.translate(dataset.metadata.dimension[i].values,locale)  
-  //             dataset.metadata.dimension[i].label = i18n.translate(dataset.metadata.dimension[i].label,locale);
-  //           } 
-  //            console.log("SAIlS DS",sails)
-  //           self.applyScript(dataset,script,sails)
-  //             .then(function(result){
-  //               return resp.send(result)
-  //             })
-  //         })  
-  //       }) 
-  //   }else{
-  //     Cache
-  //       .getById(source.table)
-  //       .then(function(cached){
-  //         // logger.debug("select "+JSON.stringify(cached))
-  //         self.applyScript(cached.value,script,sails)
-  //             .then(function(result){
-  //               return resp.send(result)
-  //             })
-  //         // apply(cached.value, script)
-  //       })  
-  //   }
-  // }
-
-
-
 };//eof
 

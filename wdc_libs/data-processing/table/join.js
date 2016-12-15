@@ -9,9 +9,24 @@ module.exports = function(tables,params){
 	var join = (params.join) ? params.join : params;
 	var result = {metadata:{}};
 	var direction = join.direction || "Rows";
-	var joinMode = join.mode || "left join"; // "inner"// "outer"
-	var metaTest = join.test || []; // [t1.metadataindex. t2metadataindex]
-	var table1 = tables[0];
+	var joinMode = join.mode || "left"; // "inner"// "outer"
+	joinMode = (joinMode == "left join") ? "left" : joinMode;
+	joinMode = (joinMode == "inner join") ? "inner" : joinMode;
+	joinMode = (joinMode == "outer join") ? "outer" : joinMode;
+	 
+	var as = join.as || "";
+	var metaTest = join.test || [[0,0]]; // [t1.metadataindex. t2metadataindex]
+	var table1 = (tables.forEach) ? tables[0] : tables;
+	var table2 = (tables.forEach) 
+					? tables[1]
+					: (join["with"])
+						? join["with"]
+						: table1;
+
+	// console.log("TABLE1", JSON.stringify(table1))
+	// console.log("TABLE2", JSON.stringify(table2))
+	// console.log(metaTest)
+	
 	table1.header.forEach(function (col){
 		var cc = col.metadata.map(function(m){return m.label}).join(",")
 		col.metadata = [{
@@ -24,12 +39,11 @@ module.exports = function(tables,params){
 	})
 
 	
-	var table2 = tables[1];
 	table2.header.forEach(function (col){
 		var cc = col.metadata.map(function(m){return m.label}).join(",")
 		col.metadata = [{
 			id: cc, 
-			label: cc, 
+			label: as+cc, 
 			dimension: "Concatenated Meta", 
 			dimensionLabel: "Concatenated Meta"
 		}]
@@ -49,7 +63,7 @@ module.exports = function(tables,params){
 						);
 
 	var equalsMetas = function (m1,m2,test){
-
+		
 		var f = test.length>0;
 		test.forEach(function(t){
 			f &= (m1[t[0]].dimension == m2[t[1]].dimension) && (m1[t[0]].id == m2[t[1]].id)
@@ -63,7 +77,7 @@ module.exports = function(tables,params){
 		return _r;	
 	}
 
-	if(joinMode == "left join"){
+	if(joinMode == "left"){
 		result.body = new Query()
 			.from(table1.body)
 			.wrap("a")
@@ -86,7 +100,7 @@ module.exports = function(tables,params){
 			.get()
 		return result;	
 	} 
-	if(joinMode == "inner join"){
+	if(joinMode == "inner"){
 		result.body = new Query()
 			.from(table1.body)
 			.wrap("a")
@@ -110,7 +124,7 @@ module.exports = function(tables,params){
 		return result;	
 	}
 
-	if(joinMode == "outer join"){
+	if(joinMode == "outer"){
 		result.body = new Query()
 			.from(table1.body)
 			.wrap("a")

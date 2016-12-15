@@ -6,6 +6,7 @@ var Cache = require("./Cache");
 var logger = require("../../wdc_libs/wdc-log").global;
 var scriptParser = require("../../wdc_libs/data-processing/script/parser");
 var I18N = require("../../wdc_libs/wdc-i18n");
+var jp= require("jsonpath");
 
 
 var getDataset = function (id,locale){
@@ -90,7 +91,13 @@ var metaImpl = function(data, params, locale, script){
 			            } 
 		        		resolve()	
 	            	})
-	           },0).then(function(){resolve(datasets)})
+	           },0).then(function(){
+	           	if(params.path )
+	           		if(params.path){
+						resolve(jp.query(datasets,params.path))
+					}
+					resolve(datasets)
+	           })
 	    	})	
        	})
     })   		
@@ -230,6 +237,7 @@ var typeMap = {
 		ver 			: "json",
 		get 			: "json",
 		put 			: "json",
+		json 			: "json",
 		"export" 		: "url"
 
 
@@ -246,7 +254,7 @@ var executionMap = {
 		join 			: require("../../wdc_libs/data-processing/table/join"),
 		merge 			: require("../../wdc_libs/data-processing/table/merge"),
 		table 			: require("../../wdc_libs/data-processing/table/nop"),
-
+		json 			: require("../../wdc_libs/data-processing/json/nop"),
 
 		norm 			: require("../../wdc_libs/data-processing/stat/norm"),
 		pca 			: require("../../wdc_libs/data-processing/stat/pca"),
@@ -353,20 +361,29 @@ module.exports = function(script,locale){
 	return new Promise(function(resolve){
 		var currentData;
 		var scriptContext = {};
-
-		Promise.reduce(scriptParser.parse(script), function(currentData, operation, index){
-			return new Promise(function(resolve){
-				executeStep(currentData, operation, locale, script, scriptContext)
-					.then(function(res){
-						currentData = res;
-						resolve(currentData);		
-					})
-				
-			})	
-		},0).then(function(result){
-			result.context = scriptContext;
-			resolve(result)
-		})	
+		var scriptObject = scriptParser.parse(script);
+		if(!scriptObject){
+			resolve({key:"json", table: {log: logger.get()}})
+			return;
+		}
+		try{
+			Promise.reduce(scriptObject, function(currentData, operation, index){
+				return new Promise(function(resolve){
+					executeStep(currentData, operation, locale, script, scriptContext)
+						.then(function(res){
+							currentData = res;
+							resolve(currentData);		
+						})
+					
+				})	
+			},0).then(function(result){
+				result.context = scriptContext;
+				resolve(result)
+			})
+		}catch(e){
+			console.log("ERROR "+ e )
+			resolve({key:"json", table: {error: JSON.stringify(e)}})
+		}		
 	})
 }
 

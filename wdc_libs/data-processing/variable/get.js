@@ -1,5 +1,6 @@
 var util = require("util");
 var jp = require("jsonpath");
+var copyObject = require('../../wdc-deep-copy');
 
 var getProperty = function(d,path){
 	var result = undefined;
@@ -22,8 +23,8 @@ module.exports = function(data, params, locale, script, scriptContext){
 			|| 	util.isUndefined(params.path) 
 			|| 	params.path =="" 
 			|| 	params.path=="$"){
-			return scriptContext;
+			return copyObject(scriptContext);
 		}
-		return getProperty(scriptContext,params.path)
+		return copyObject(getProperty(scriptContext,params.path))
 }	
 	

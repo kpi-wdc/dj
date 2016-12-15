@@ -15,11 +15,11 @@ var example =
 	+'\n    ])'
 	+'\n'
 	+'\n  transpose()' 
-	+'\norder(asc:"az",dir:"row",index:0);'
+	+'\norder("az"); format(2) export(\'f.txt\');'
 	+'\nline-serie ( '
 	+'\n	 xaxis:-1,' 
 	+'\n	"index":[0])'
-	+'\n select(path:"$..dataset[@.source==\'#WDC\'].label"'
+	+'\n select("$..dataset[@.source==\'#WDC\'].label"'
 	+'\n)';
 
 // var example= "source(table:'5843ff26496b7de842437a4d');format(precision:2);order(direction:'Row', asc:'A-Z', index:-1);select(path:'$[?(@.dataset.source==\"aaaaaaa\")]');aggregate(direction:'Rows', data:['min','max','avg','std','sum'])"
