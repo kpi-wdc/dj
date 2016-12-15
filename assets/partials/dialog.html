@@ -20,6 +20,17 @@
 	             type="text" ng-disabled="!field.editable">
 	    </div>
 
+	    <div class="column large-9" ng-if="!field.type || field.type=='textarea'">
+			<textarea 
+				rows="30" 
+				cols="10" 
+				ng-model="field.value" 
+				id="{{field.id}}" 
+				ng-disabled="!field.editable"
+				style="font-family: monospace;line-height: 1;">
+       		</textarea>
+        </div>
+
 
 	    <div class="column large-9" ng-if="field.type=='typeahead'">
 	      <input type="text" ng-model="field.value" id="{{field.id}}" ng-disabled="!field.editable"

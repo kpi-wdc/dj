@@ -7,7 +7,7 @@
 ****************************************************************
 * File: postprocess.dps                                        *
 *                                                              *
-* Description: Principal Component Analysis. Get Eigen Values  *
+* Description: Join tables                                     *
 *                                                              *
 ****************************************************************/
 
@@ -15,9 +15,26 @@ source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')
 
 query([
   { dim:'time', role:'row', items:[] },
-  { dim:'indicator', role:'col', items:[] } 
+  { dim:'indicator', role:'col', items:[0] } 
 ])
+set('t1')
 
-
-pca(dir:'row',result:'ev')
+norm(dir:'col', mode:'0,1')
 format(p:3)
+set('t2')
+
+get('t1')norm(dir:'col', mode:'std')
+format(p:3)
+set('t3')
+
+get('t1')
+norm(dir:'col', mode:'log')
+format(p:3)
+set('t4')
+
+get("t1")
+join( with:'{{t2}}', mode:'left', as:'Ranged ')
+join( with:'{{t3}}', mode:'left', as:'Standartized ')
+join( with:'{{t4}}', mode:'left', as:'Logistic ')
+
+scatter(x:0,index:[1,2,3])

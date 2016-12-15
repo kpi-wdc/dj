@@ -12,10 +12,10 @@ let m = angular.module('app.widgets.v2.script', [
   'react',
   'custom-react-directives',
   'ngPrettyJson'])
-  
+
 
   m.controller('ScriptController', function ($scope, $http, $dps, EventEmitter, 
-    APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n, $scroll,clipboard) {
+    APIProvider, pageSubscriptions, $lookup, $translate,$modal, user, i18n, $scroll,clipboard, dialog) {
     
     const eventEmitter = new EventEmitter($scope);
 
@@ -55,6 +55,10 @@ let m = angular.module('app.widgets.v2.script', [
       {
         title:"Data Normalization",
         url:"./widgets/v2.script/scripts/normalization.dps"
+      },
+      {
+        title:"Join tables",
+        url:"./widgets/v2.script/scripts/join.dps"
       },
       {
         title:"Correlation matrix",
@@ -99,7 +103,16 @@ let m = angular.module('app.widgets.v2.script', [
       {
         title:"Data Visualization. Dependency Exploration",
         url:"./widgets/v2.script/scripts/deps.dps"
+      },
+      {
+        title:"Export xlsx",
+        url:"./widgets/v2.script/scripts/export-source.dps"
+      },
+      {
+        title:"Export csv",
+        url:"./widgets/v2.script/scripts/export-table.dps"
       }
+
     ]
 
 
@@ -107,13 +120,24 @@ let m = angular.module('app.widgets.v2.script', [
         var e = $scope.examples.filter(item => item.title == s)[0]
         if(e){
           if(e.script){
-            $scope.script = e.script
+            if($scope.widget.editor){
+              $scope.escript = e.script;
+              $scope.script = e.script
+            }else{
+              $scope.script = e.script
+            }
+            
           }else{
             $http
               .get(e.url)
               .then(function(resp){
                 e.script = resp.data;
-                $scope.script = e.script 
+                if($scope.widget.editor){
+                  $scope.escript = e.script;
+                  $scope.script = e.script
+                }else{
+                  $scope.script = e.script
+                }
               })
           }
         }
@@ -122,11 +146,21 @@ let m = angular.module('app.widgets.v2.script', [
     $scope.selectedExample;
 
     $scope.$watch('selectedExample', (newValue, oldValue) => {
-          console.log("SELECT",newValue,oldValue)
-          if (newValue !== oldValue) {
+         if (newValue !== oldValue) {
             $scope.getScript(newValue)
           }
         });
+
+    // $scope.$watch('script', (newValue, oldValue) => {
+    //      if (newValue !== oldValue) {
+    //         console.log("WATCH", newValue)
+    //       }
+    //     });
+    //     
+    $scope.change = function(str){
+      $scope.script = str;
+      if($scope.examplesEnable) $scope.examplesEnable = false; 
+    }
 
     $scope.runScript = function(){
        $scope.response = undefined;
@@ -139,36 +173,46 @@ let m = angular.module('app.widgets.v2.script', [
           })
         .then(function(response){
               if(response.data.key == "url"){
-                $scope.response = {
-                  data:{
-                    success: $dps.getUrl()+response.data.data.url
-                  },  
-                  key:"json"
-                }
-                window.open($dps.getUrl()+response.data.data.url,'_blank')
+                if(!response.data.data.error){
+                  $scope.response = {
+                    data:{
+                      success: $dps.getUrl()+response.data.data.url
+                    },  
+                    key:"json"
+                  }
+                  window.open($dps.getUrl()+response.data.data.url,'_blank')
+                }else{
+                   $scope.response = {
+                      key:"json",
+                      data: response.data.data
+                   }
+                }  
               }else{
                 $scope.response = response.data
               }  
               eventEmitter.emit('setData', $scope.response);
             })
-            // .error(function(response){
-            //   $scope.response = response
-            // })
+           
     }
     
     new APIProvider($scope)
       .config(() => {
-        if(($scope.widget.editor && !$scope.widget.examples)){
-          $scope.script = "// Write your script here ...\n"  
-        }
-        if(($scope.widget.editor && $scope.widget.examples)){
-          $scope.script = "// Select example \n// and(or) write your script here ...\n"  
-        }
-        if((!$scope.widget.editor && $scope.widget.examples)){
+        // console.log("SCRIPT CONFIG", $scope.widget)
+        
+        if((!$scope.widget.editor && !$scope.widget.examples)){
+          $scope.script = $scope.widget.script  
+        }else if(($scope.widget.editor && !$scope.widget.examples)){
+          $scope.escript = $scope.widget.script || "// Write your script here ...\n"  
+          $scope.script = $scope.escript
+        }else if(($scope.widget.editor && $scope.widget.examples)){
+          $scope.escript = $scope.widget.script || "// Select example \n// and(or) write your script here ...\n"  
+          $scope.script = $scope.escript
+        }else if((!$scope.widget.editor && $scope.widget.examples)){
             $scope.selectedExample = $scope.examples[0].title;
              $scope.getScript($scope.selectedExample)
         }
         
+        $scope.examplesEnable = $scope.widget.examples;
 
         console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
         $scope.d_listeners = ($scope.widget.d_listeners) ? $scope.widget.d_listeners.split(",") : [];
@@ -193,6 +237,56 @@ let m = angular.module('app.widgets.v2.script', [
         );
         
          eventEmitter.emit('setData', undefined);
+      })
+
+      .openCustomSettings(function () {
+        return dialog({
+            title:"DJ DP Script settings",
+            fields:{
+              title:{
+                title:"Title",
+                type:"text",
+                value:$scope.widget.title,
+                required:false
+              },
+              examples:{
+                title:"Enable Examples",
+                type:"checkbox",
+                value: $scope.widget.examples
+              },
+              editor:{
+                title:"Enable Editor",
+                type:"checkbox",
+                value: $scope.widget.editor
+              },
+              runnable:{
+                title:"Enable Run",
+                type:"checkbox",
+                value: $scope.widget.runnable
+              },
+              script:{
+                title:"DP Script",
+                type:"textarea",
+                value: $scope.script,
+                required: false
+              },
+
+              d_listeners:{
+                title:"Listeners",
+                type:"text",
+                value:$scope.widget.d_listeners,
+                required:false
+              }
+            }  
+        })
+          .then(function(form){
+            $scope.widget.title = form.fields.title.value;
+            $scope.widget.examples = form.fields.examples.value;
+            $scope.widget.editor = form.fields.editor.value;
+            $scope.widget.d_listeners = form.fields.d_listeners.value;
+            $scope.widget.runnable = form.fields.runnable.value;
+            $scope.widget.script = form.fields.script.value;
+          })
       })
 
       .removal(() => {

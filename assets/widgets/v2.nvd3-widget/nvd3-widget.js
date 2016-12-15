@@ -579,10 +579,8 @@ define(["angular",
         })
 
         .provide('setData', (e, context) => {
-          console.log("LINE SETDATA HANDLER", context)
-          if(!params.acceptData){ console.log("no acceptData handler", params);return }
+          if(!params.acceptData) return 
           if(!context){
-            console.log("Context is undefined")
             $scope.hidden = true;
             return
           }

@@ -2,20 +2,21 @@
 
   .commitDate, .tableHead {
     font-size:smaller; 
-    color:#154163;
+   /* color:#154163;*/
     padding: 0.2rem 0.625rem;
   }
   
   .commitNote {
     font-size:smaller; 
-    color:#154163;
+    /*color:#154163;*/
     padding: 0.2rem 0.625rem;
   }
 
 </style>
 
 <div 
-    ng-controller="DataManagerDSHistoryController">
+    ng-controller="DataManagerDSHistoryController"     style="margin: 0 1.5em;
+    line-height: 1;">
   <div ng-if="ds" 
        class="row" 
        style="    margin: 1.5em 0 0 0;
@@ -23,9 +24,9 @@
                   font-size:small;
                   line-height: 1;" >   
   
-    <div class="row">   
+    <div class="row" style="margin:0;">   
       <h5 ng-if="title && title.length>0"
-            style="    color: #0078a0;
+            style="    
                         margin: 0 0 0.5em;
                         line-height: 1;">
               {{title | translate}}
@@ -34,7 +35,7 @@
     <center ng-if="!commits" >
         <img src="./img/ajax-loader.gif">
     </center>
-    <div class="row" ng-if="commits" style="font-size:small;">   
+    <div class="row" ng-if="commits" style="font-size:small;margin:0;">   
       <table width="100%">
         <thead>
           <tr>

@@ -2,13 +2,13 @@
   .dsMetadataValue {
       font-size: small;
       margin: 0.35em 0.5em;
-      color: #222;
+      /*color: #222;*/
       font-weight: normal;
   }
 
   .dsMetadataKey {
       margin: 0.2em 0 0 0;
-      color: #0078a0;
+     /* color: #0078a0;*/
       font-stretch: condensed;
       font-weight: bold;
       font-size: inherit;
@@ -16,7 +16,8 @@
 </style>
 
 <div 
-    ng-controller="DataManagerDSInfoController">
+    ng-controller="DataManagerDSInfoController" style="    margin: 0 1.5em;
+    line-height: 1;">
   <div ng-if="ds" 
        class="row" 
        style="    margin: 0 0 0.5em 0;
@@ -24,13 +25,13 @@
                   line-height: 1;" >   
   <div class="row">   
     <h3 ng-if="title && title.length>0"
-          style="    color: #0078a0;
-                      margin: 0 0 0.5em;
+          style="    
+                      margin: 0 0 0.5em 0;
                       line-height: 1;">
             {{title | translate}}
     </h3>
   </div>  
-    <h4 style=" color: #0078a0;
+    <h4 style=" 
                   margin: 0 0 0.5em;
                   padding: 0 0 0.5em 0;
                   line-height: 1;">
@@ -98,7 +99,7 @@
     <div  ng-if="topics.length>0" 
           style=" font-size: small;
                   text-align: justify; 
-                  color:#008CBA;">
+                  ">
       <a ng-repeat="k in topics track by $index" ng-click="selectTopic(k)">
               {{(lookup(k).label) ? lookup(k).label : k | translate}}
               {{($index < (topics.length-1))?', ':''}}

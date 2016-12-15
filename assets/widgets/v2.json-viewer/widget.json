@@ -1,2 +1,24 @@
 {
+	"keywords":["application","management","portal","list","search"],		
+	"schema": {
+	    "type": "object",
+	    "title": "JSON Viewer",
+	    "properties": {
+		    "title":{
+		    	"type":"string",
+		      	"title":"Title",
+		      	"default":"JSON Preview"
+		    },
+		    "scroll":{
+		        "type":"boolean",
+		        "title":"Use Scroll",
+		        "default":true
+		    },
+			"height":{
+		        "type":"integer",
+		        "title":"Widget Height",
+		        "default":250
+		    }
+	    }
+	}  
 }

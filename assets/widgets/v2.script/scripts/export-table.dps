@@ -5,9 +5,9 @@
 *              DJ Data Processing Script Example               *
 *                                                              *
 ****************************************************************
-* File: postprocess.dps                                        *
+* File: export-source.dps                                      *
 *                                                              *
-* Description: Principal Component Analysis. Get Eigen Values  *
+* Description: Export table as comma separated values          *
 *                                                              *
 ****************************************************************/
 
@@ -18,6 +18,6 @@ query([
   { dim:'indicator', role:'col', items:[] } 
 ])
 
-
-pca(dir:'row',result:'ev')
+pca(dir:'row',result:'scores')
 format(p:3)
+export(file:'pca_results.csv')

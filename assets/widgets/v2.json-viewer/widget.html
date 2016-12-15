@@ -24,16 +24,15 @@
 </style>
 <div class="row" ng-controller="JsonViewerController" 
   style="margin: 0; padding: 0;">
-    
     <div ng-if="!hidden" 
         style="margin: 0.5rem;
               padding: 0.5rem;
               border:1px solid #ddd">
-      <h5>JSON Preview</h5>               
+      <h5>{{widget.title}}</h5>               
       <div 
             class="row scriptOutput" 
             style="    margin: 0.5em 0px 0px;
-                        height: 506px;
+                        {{(widget.scroll) ? 'height:'+widget.height+'px;':''}}
                         overflow: auto;
                         border: 1px solid #ddd;">
            <pretty-json json="data"></pretty-json>

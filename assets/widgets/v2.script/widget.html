@@ -6,40 +6,73 @@
         color: #007095;
         line-height: 0.9;
   }
+
+  .prettify-dps {
+    font-size:medium;
+    line-height:1;
+    background: #efefef;
+  }
+
+  .prettify-dps .comment{
+    color:#777;
+  }
+
+  .prettify-dps .command{
+    color:#a0a;
+  }
+
+  .prettify-dps .property{
+    color:#00a;
+  }
+
+  .prettify-dps .textValue{
+    color:#0a0;
+  }
+  
+  
 </style>
 <div ng-controller="ScriptController" 
-  style=" border: 1px solid #ddd;
+  style=" 
           padding: 0.5rem;
           margin-top: 0.5rem;">
     <h4>{{widget.title}}</h4>
-    <div class="row" style="margin: 0.5em 0 0 0; height:auto;">
+    <div ng-show = "examplesEnable" class="row" style="margin: 0.5em 0 0 0; height:auto;">
        <label style="    float: left;
                           margin: 0.5rem;">
         Script
       </label>
 
-      <select ng-model="selectedExample"  ng-show = "widget.examples" 
+      <select ng-model="selectedExample"   
               style="width: 70%;margin: 0 0 0.5rem 1rem;" >
             <option ng-repeat="option in examples" value="{{option.title}}">
               {{option.title}}
             </option>
       </select>
+    </div>  
+
+    <div class="row" style="margin: 0.5em 0 0 0; height:auto;">
+       <textarea ng-if="widget.editor" rows="30" cols="20" ng-change="change(escript)" ng-model="escript" class="scriptInput">
+       </textarea>
+       
+       <!-- <pretty-dps ng-if="widget.editor" script="script" style="overflow:hidden; padding:1em; border:1px solid #aaa"></pretty-dps>
+ -->
+       <pretty-dps ng-if="!widget.editor" script="script" style="overflow:hidden; padding:1em; border:1px solid #aaa"></pretty-dps>    
+    </div>
+
+    <div ng-if="widget.runnable" class="row" style="margin: 0.5em 0 0 0;">
       <img  ng-show="!response" 
-            src="./img/ajax-loader.gif" 
-            class="right" 
-            style="margin:0.5rem 1rem;"/>
+        src="./img/ajax-loader.gif" 
+        class="right" 
+        style="margin:0.5rem 1rem;"/>
        <button
           ng-show="response"
           ng-click = "runScript()"  
-          class="button right small radius" 
+          class="button right small radius success" 
           style="     padding: 0.5em;
                       font-stretch: ultra-condensed;
                       margin: 0.3rem 0.5em 0.1rem;">
-          <i class="fi-play" style="margin: 0 0.5rem 0 0;"></i>Run
+          Run <i class="fi-play" style="margin: 0 0.5rem;"></i>
        </button>
-
-       <textarea ng-disabled="!widget.editor" rows="30" cols="20" ng-model="script" class="scriptInput">
-       </textarea>
-    </div>
+    </div>   
 </div>
 

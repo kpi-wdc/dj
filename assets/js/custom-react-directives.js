@@ -15,9 +15,9 @@ let WdcTable = React.createClass( {
       textAlign: "center",
       fontStretch: "ultra-condensed",
       fontSize: "medium",
-      color: "#008CBA",
-      padding: "0.3em 1em",
-      border: "solid 1px #DDDDDD"
+      // color: "#008CBA",
+      padding: "0.3em 1em"
+      // border: "solid 1px #DDDDDD"
   },
 
   defaultHeaderValueStyle:{
@@ -25,17 +25,17 @@ let WdcTable = React.createClass( {
       fontStretch: "ultra-condensed",
       fontSize: "small",
       fontWeight: "normal",
-      color: "#008CBA",
-      padding: "0.3em 1em",
-      border: "solid 1px #DDDDDD"
+      // color: "#008CBA",
+      padding: "0.3em 1em"
+      // border: "solid 1px #DDDDDD"
   },
 
   defaultValueStyle: {
       fontStretch: "ultra-condensed",
       fontSize: "small",
       padding: "0.3em 1em",
-      textAlign: "right",
-      border: "solid 1px #DDDDDD"
+      textAlign: "right"
+      // border: "solid 1px #DDDDDD"
 
   },
 

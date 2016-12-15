@@ -63,6 +63,7 @@ modals.controller('WidgetModalAddNewController', function ($scope, $modalInstanc
     };
 
 
+
     const translationId = `WIDGET.${type.toUpperCase()}.DESCRIPTION`;
     $translate(translationId).then(translation => {
       if (translation === translationId) {

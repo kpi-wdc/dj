@@ -8,6 +8,11 @@
         "type": "string",
         "title": "Title"
       },
+      "collapced":{
+        "type": "boolean",
+        "title": "Collapsed",
+        "default":false
+      },
 
       "category": {
         "type": "string",

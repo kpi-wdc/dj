@@ -1260,27 +1260,37 @@ m.controller("JoinDialogController", function(
 
       $scope.resultTable = undefined;
       $scope.loaded = true;
-
       $dps
-          .post("/api/data/process/",
-            {
-              "cache": false,
-              "data_id": [$scope.t1_data_id,$scope.t2_data_id],
-              "params": {
-                join:{
-                  enable : true,
-                  mode : $scope.mode,
-                  test:$scope.test
-                }  
-              },
-              "proc_name": "post-process",
-              "response_type": "data"
-            }    
-          )
+          .post("/api/data/script",{
+            "data"  : 
+               "source(table:'"+$scope.t2_data_id+"')"
+              +"set('t1')"
+              + "source(table:'"+$scope.t1_data_id+"')"
+              +"join(with:'{{t1}}', mode:'"+$scope.mode+"', on:"+JSON.stringify($scope.test)+")"
+              +"cache()",
+            "locale": i18n.locale()
+          })
+
+      // $dps
+      //     .post("/api/data/process/",
+      //       {
+      //         "cache": false,
+      //         "data_id": [$scope.t1_data_id,$scope.t2_data_id],
+      //         "params": {
+      //           join:{
+      //             enable : true,
+      //             mode : $scope.mode,
+      //             test:$scope.test
+      //           }  
+      //         },
+      //         "proc_name": "post-process",
+      //         "response_type": "data"
+      //       }    
+      //     )
           .success(function (resp) {
-              $scope.resultTable = resp.data;
+              $scope.resultTable = resp.data.data;
               $scope.loaded = false;
-              $scope.data_id = resp.data_id;
+              $scope.data_id = resp.data.data_id;
           })
 
     }

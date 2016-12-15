@@ -16,6 +16,14 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
     $scope.tagList = [];
     $scope.collapsed = true;
     $scope.processed = false;
+    $scope.selectedTags = [];
+    $scope.tags = [];
+
+
+    $scope.getLabel = function(obj){
+      var result = (obj.lookup.label) ? obj.lookup.label : obj.tag 
+      return $translate.instant(result)
+    }
 
     $scope.changeState = function(){
       $scope.collapsed = !$scope.collapsed;      
@@ -50,7 +58,25 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
         }
       };
 
+    $scope.selectTag = function(t){
+      let index = $scope.tags.indexOf(t);
+      $scope.tags.splice(index,1);
+      $scope.selectedTags.push(t);
+      $scope.selectedObject = "";
+      $scope.$viewValue = "";
+      $scope.selectItem($scope.tagList.filter(tag => $scope.getLabel(tag) == t)[0].tag)
+    };
 
+    $scope.unselectTag = function(t){
+      let index = $scope.selectedTags.indexOf(t);
+      $scope.selectedTags.splice(index,1);
+      $scope.tags.push(t);
+    };  
+
+    $scope.hasTags = function(item){
+      if($scope.selectedTags.length == 0) return true;
+      return $scope.selectedTags.filter(t => (t == $scope.getLabel(item))).length == 1
+    };
 
     $scope.selectItem = function(key){
       eventEmitter.emit('setLookupKey', key, $scope.category);
@@ -59,7 +85,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
       // let query = [tmp];
       let query = $scope.query.split("{{}}").join(key);
       
-      console.log(query);
+      // console.log(query);
 
       eventEmitter.emit('searchQuery', query);
     }
@@ -88,6 +114,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
               // item.lookup.label = item.lookup.label || item.lookup["Short Name"] 
             }); 
             $scope.tagList = resp;
+            $scope.tags = $scope.tagList.map( item => $scope.getLabel(item))
           });
     }
 
@@ -99,7 +126,7 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
         $scope.icon_class = $scope.widget.icon_class;
         $scope.property = $scope.widget.property || $scope.property;
         $scope.query = $scope.widget.query || $scope.query;
-
+        $scope.collapsed = $scope.widget.collapsed;
 
         $scope.lookupListeners = ($scope.widget.lookupListeners) ? $scope.widget.lookupListeners.split(",") : [];
         
@@ -178,10 +205,14 @@ angular.module('app.widgets.dm-tag-list', ['app.dictionary',"app.dps"])
           // });
           $scope.refresh();
         })
+      
       .provide('refresh', (evt) => {
         $scope.refresh();
       })
-      
+      .translate(()=>{
+        $scope.tags = $scope.tagList.map( item => $scope.getLabel(item));
+        $scope.selectedTags = [];
+      })
       .removal(() => {
         console.log('TagsTotal widget is destroyed');
       });

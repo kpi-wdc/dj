@@ -1,6 +1,6 @@
  <div  class="row" 
   ng-controller="DataManagerSearchResultController" 
-  style="    margin: 1.5em 0 0 0;
+  style="    margin:0 1.5em;
     padding: 0 1em;">
    <div ng-if="query"> 
   
@@ -9,9 +9,9 @@
   </center>
   
   <div ng-if="query && (total > 0)" >
-  <div class = "row" >
-    <h5 style="    margin: 0 0 0.5em;
-                    color: #0078a0;
+  <div class = "row" style="margin:0;">
+    <h5 style="    margin: 0 0 0.5em 0;
+                    
                     ">
       {{widget.title | translate}}
     </h5>
@@ -62,7 +62,7 @@
               cursor:pointer;">
         <h5 style="font-stretch: semi-condensed;
               margin: 0;
-              color: #555555;
+             
               font-weight: bold;
               font-size: initial;">
           <span ng-click="step.select(item)" 
