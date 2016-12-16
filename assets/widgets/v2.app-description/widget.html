@@ -25,7 +25,7 @@
 			">
 				
 				<button
-					ng-if="isOwner(app)"
+					ng-if="isOwner(app) || isAdmin()"
 					ng-click="deleteApp(app)" 
 			        class="button radius right tiny toolbar alert" 
 			        style="margin:0 0.2em; padding: 0.3em 1em;"
@@ -48,7 +48,7 @@
 			    </button>
 			    
 				<button
-					ng-if="isOwner(app) || isCollaborator(app)"
+					ng-if="isOwner(app) || isCollaborator(app) || isAdmin()"
 					ng-click="renameApp(app)" 
 			        class="button radius right tiny toolbar warning" 
 			        style="margin:0 0.2em; padding: 0.3em 1em;"

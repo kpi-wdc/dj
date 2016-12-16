@@ -1,0 +1,1711 @@
+{
+  "skinName": "default1",
+  "title": "SSE ChNPP Open Data",
+  "description": "Description",
+  "keywords": [
+    ""
+  ],
+  "isPublished": true,
+  "appWidgets": [
+    {
+      "type": "language-selector",
+      "instanceName": "language-selector",
+      "showFlags": true
+    },
+    {
+      "type": "page-list",
+      "instanceName": "page-list-nav"
+    },
+    {
+      "instanceName": "AppTopbar",
+      "type": "v2.topbar",
+      "icon": "/widgets/v2.topbar/icon.png",
+      "decoration": {
+        "languageSelector": {
+          "enable": true,
+          "showFlag": true,
+          "showTitle": true
+        },
+        "loginButton": true,
+        "gotoApps": false
+      },
+      "content": [
+        {
+          "key": "8nv21o45o0b7ht85bnk5a5rk9",
+          "title": "In Action",
+          "content": [
+            {
+              "key": "2b6yoadipe9002evlgso0nqaor",
+              "title": "Search",
+              "href": "/app/SSEChNPP-Open/search"
+            },
+            {
+              "key": "xrz1cvp5w0t0ictk1gxskyb9",
+              "title": "Analysis",
+              "href": "/app/SSEChNPP-Open/processing"
+            },
+            {
+              "key": "19feq721nayk9w7ewg4xwdn29",
+              "title": "Usage",
+              "href": "/app/SSEChNPP-Open/usage"
+            }
+          ]
+        },
+        {
+          "key": "dlbwln8wa4xic3td4af5pzaor",
+          "title": "What is this",
+          "href": "/app/SSEChNPP-Open"
+        }
+      ]
+    },
+    {
+      "enabled": false,
+      "bgImage": "./api/resource/ChData-ch-banner-en.png",
+      "height": 150,
+      "type": "v2.banner",
+      "instanceName": "Banner",
+      "icon": "/widgets/v2.banner/icon.png"
+    }
+  ],
+  "pages": [
+    {
+      "shortTitle": "main",
+      "href": "",
+      "template": "f-layout-home",
+      "holders": {
+        "header": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/use_banner.png",
+              "height": 350,
+              "type": "v2.banner",
+              "instanceName": "2kqftocp9yygir68tj0xusor",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "SSE ChNPP Open Data",
+              "intro": "Search, analyze and use data for your interdisciplinary research",
+              "text": "We provide open access to data from integrated security monitoring system to be used by the scientific community for interdisciplinary studies. With the proposed tools to find, process and use our data. We offer more than 130 data sets containing indicators safety at Chernobyl",
+              "type": "html-article",
+              "instanceName": "v4p2mqy30hh6ou6vm4cf8ncdi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "title": "About project",
+              "intro": "",
+              "text": "SSE ChNPP Open Data is the data portal based on DJ platform that provides over 100 dataset about  Integrated Automated Monitoring System (IAMS) of Chornobyl Nuclear Power Plant. You can search, analyze and use this data for interdisciplinary research. Data is tagged by type of measurements, periodicity, device location and IAMS subsystems. Rich metadata about datasets is available. We provides demo for easy to use data processing and data mining via DJ Data Processing Script You can use online Single Page App builder for developing interactive reports about your research results",
+              "type": "html-article",
+              "instanceName": "un2t4k5xx37q8k71hxquayvi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "title": "About IAMS",
+              "intro": "IAMS is an acronym for Integrated Automated Monitoring System Its main objective is monitoring of nuclear, radiation and industrial hazard sources located at Chernobyl NPP unit 4 Shelter. It provides information on the basic parameters of the Shelter status, the ChNPP site and local area.",
+              "text": "IAMS ensures the integration of the separate, specific, monitoring systems into a unified automated system that allows a comprehensive processing, display, storage of the information, in a single entity. This information are used to ensure timely implementation of activities to maintain the achieved safety level and improve it as well as to allow the Shelter personnel to determine the negative tendencies in changing of the status of the Shelter hazard 2 determine the negative tendencies in changing of the status of the Shelter hazard sources.",
+              "type": "html-article",
+              "instanceName": "fdp4fhs9vtb50vcksrvayk3xr",
+              "icon": "/widgets/html-article/icon.png"
+            }
+          ],
+          "width": 1200
+        },
+        "callout0": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/search_banner.png",
+              "height": 150,
+              "type": "v2.banner",
+              "instanceName": "0pvh44rby6wmvqp5d4zwzsemi",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "Search",
+              "intro": "Over 100 dataset about IAMS of Chernobyl Nuclear Power Plant",
+              "text": "You can search, analyze and use this data for interdisciplinary research. Data is tagged by type of measurements, periodicity, device location and IAMS subsystems. Rich metadata about datasets is available.",
+              "href": {
+                "url": "./app/SSEChNPP-Open/search",
+                "description": "learn more about...",
+                "target": "_blank"
+              },
+              "type": "html-article",
+              "instanceName": "sj2rxc6kwpm29hjbgikl3ow29",
+              "icon": "/widgets/html-article/icon.png"
+            }
+          ],
+          "width": 413
+        },
+        "callout1": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/analyze_banner.png",
+              "height": 150,
+              "type": "v2.banner",
+              "instanceName": "dlvnczzp28zyz552oxg30udi",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "Analyze",
+              "intro": "Easy to use data processing via DJ DP script",
+              "text": "You can use command for metadata manipulation, data preprocessing, data mining and visualization. Over 30 examples of data processing, data mining and data visualization.",
+              "href": {
+                "url": "./app/SSEChNPP-Open/processing",
+                "description": "learn more about...",
+                "target": "_blank"
+              },
+              "type": "html-article",
+              "instanceName": "rfrenk7kdawzx3gp66cl0izfr",
+              "icon": "/widgets/html-article/icon.png"
+            }
+          ],
+          "width": 413
+        },
+        "callout2": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/use_banner.png",
+              "height": 150,
+              "type": "v2.banner",
+              "instanceName": "7oq1cdosdkhstokzf6irnyu8fr",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "Use",
+              "intro": "Live interactive reports",
+              "text": "You can use online Single Page App builder for developing interactive reports about your research results",
+              "href": {
+                "url": "./app/SSEChNPP-Open/usage",
+                "description": "learn more about...",
+                "target": "_blank"
+              },
+              "type": "html-article",
+              "instanceName": "zoxgxpjbnbfm7jcygd12lnmi",
+              "icon": "/widgets/html-article/icon.png"
+            }
+          ],
+          "width": 413
+        },
+        "main": {
+          "widgets": [
+            {
+              "title": "Open science data",
+              "intro": "Open science data is a type of open data focused on publishing observations and results of scientific activities available for anyone to analyze and reuse.",
+              "text": "The concept of open access to scientific data was institutionally established with the formation of the World Data Center system (now the World Data System), in preparation for the International Geophysical Year of 1957-1958. The International Council of Scientific Unions (now the International Council for Science) established several World Data Centers to minimize the risk of data loss and to maximize data accessibility.  Now, the World Data System of the International Council for Science adopted a new set of Data Sharing Principles to embody the spirit of 'open science'. These Principles are in line with data policies of national and international initiatives and they express core ethical commitments operationalized in the WDS Certification of trusted data repositories and service.",
+              "href": {
+                "url": "https://en.wikipedia.org/wiki/Open_science_data",
+                "description": "learn more about...",
+                "target": "_blank"
+              },
+              "type": "html-article",
+              "instanceName": "poyoutpkuxl3wk9v59izfr",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "title": "Open access",
+              "intro": "",
+              "text": "By \"open access\" we mean its free availability on the public internet, permitting any users to read, download, copy, distribute, print, search, or link to the full texts of these articles, crawl them for indexing, pass them as data to software, or use them for any other lawful purpose, without financial, legal, or technical barriers other than those inseparable from gaining access to the internet itself. The only constraint on reproduction and distribution, and the only role for copyright in this domain, should be to give authors control over the integrity of their work and the right to be properly acknowledged and cited.",
+              "href": {
+                "url": "#",
+                "description": "learn more about..."
+              },
+              "type": "html-article",
+              "instanceName": "rq2hu1d7mari3o6bus9fz85mi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "title": "Open research computation",
+              "intro": "To make sense of scientific data they must be analysed",
+              "text": "In all but the simplest cases, this is done by software. The extensive use of software poses problems for the reproducibility of research. To keep research reproducible, it is necessary to publish not only all data, but also the source code of all software used, and all the parametrization used in running this software.",
+              "href": {
+                "url": "#",
+                "description": "learn more about..."
+              },
+              "type": "html-article",
+              "instanceName": "77tlvyg3nn2ueafowyjwtgldi",
+              "icon": "/widgets/html-article/icon.png"
+            }
+          ],
+          "width": 1200
+        },
+        "feature0": {
+          "widgets": [],
+          "width": 310
+        },
+        "feature1": {
+          "widgets": [],
+          "width": 310
+        },
+        "feature2": {
+          "widgets": [],
+          "width": 310
+        },
+        "feature3": {
+          "widgets": [],
+          "width": 310
+        },
+        "footer": {
+          "widgets": [],
+          "width": 1358
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "apps",
+          "receiver": "r27bklu7jmgdujujoh1714i",
+          "signal": "setApplication",
+          "slot": "setApplication"
+        },
+        {
+          "emitter": "r27bklu7jmgdujujoh1714i",
+          "receiver": "apps",
+          "signal": "refresh",
+          "slot": "refresh"
+        }
+      ]
+    },
+    {
+      "shortTitle": "processing",
+      "href": "processing",
+      "template": "2-cols",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/analyze_banner.png",
+              "height": 350,
+              "type": "v2.banner",
+              "instanceName": "nhntyk6vz7gaunmaezpqilik9",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "Data Processing Script",
+              "intro": "Easy to use data processing via DJ DP script",
+              "text": "You can use command for metadata manipulation, data preprocessing, data mining and visualization",
+              "type": "html-article",
+              "instanceName": "iydr59e9fsql3yntcv81wnrk9",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "targets": [
+                {
+                  "title": "Demo",
+                  "target": {
+                    "widget": "script",
+                    "url": ""
+                  },
+                  "class": "success"
+                }
+              ],
+              "type": "html-scroll-button",
+              "instanceName": "fa8a5p9cr3btdqy90sjk4eu3di",
+              "icon": "/widgets/html-scroll-button/icon.png"
+            }
+          ],
+          "width": 1200
+        },
+        "left": {
+          "widgets": [
+            {
+              "title": "DJ Data Processing script",
+              "examples": true,
+              "editor": false,
+              "d_listeners": "line1, json,area,radar,  pie, geochart, deps, scatter, table, hbar, bar",
+              "script": "/***************************************************************\r\n* Copyright (c) 2014-2016 Andrey Boldak                        *\r\n* MIT License - http://opensource.org/licenses/mit-license.php *\r\n*                                                              *\r\n*              DJ Data Processing Script Example               *\r\n*                                                              *\r\n****************************************************************\r\n* File: version.dps                                            *\r\n*                                                              *\r\n* Description: Get DJDP script version                         *\r\n*                                                              *\r\n****************************************************************/\r\n\r\nversion()",
+              "type": "v2.script",
+              "instanceName": "script",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true
+            },
+            {
+              "queries": [
+                {
+                  "$id": "4825fff047019724818c736204c47145",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "222",
+                  "context": {
+                    "query": {
+                      "commitID": "5836ce6730c0f1580c1a2fb1",
+                      "datasetID": "47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02",
+                      "query": [
+                        {
+                          "dimension": "indicator",
+                          "role": "Columns",
+                          "collection": []
+                        },
+                        {
+                          "dimension": "time",
+                          "role": "Rows",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "en"
+                    },
+                    "queryResultId": "5843ff26496b7de842437a4d"
+                  }
+                },
+                {
+                  "$id": "04ae2733a7c29d04dd80744d6ed1d358",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "corr",
+                  "context": {
+                    "queryResultId": "5844328b45fe8398509857fc",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5843ff26496b7de842437a4d')"
+                      },
+                      {
+                        "shortName": "corr(direction:'Columns')",
+                        "correlation": {
+                          "enable": true,
+                          "direction": "Columns"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "7a067c414d3640a9bcbea40cc3343688",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "geo",
+                  "context": {
+                    "query": {
+                      "commitID": "56d3fc6bedbc1bd439a7b7ae",
+                      "datasetID": "a6817290-c0f5-11e5-9400-8d6215c250e0",
+                      "query": [
+                        {
+                          "dimension": "region",
+                          "role": "Rows",
+                          "collection": []
+                        },
+                        {
+                          "dimension": "concept",
+                          "role": "Ignore",
+                          "collection": [
+                            "KAP"
+                          ]
+                        },
+                        {
+                          "dimension": "year",
+                          "role": "Columns",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "uk"
+                    },
+                    "queryResultId": "5844367545fe8398509857ff"
+                  }
+                },
+                {
+                  "$id": "f2389aeeecdf18fc95a6f003aad9bd71",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "line",
+                  "context": {
+                    "queryResultId": "584438e545fe839850985808",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5843ff26496b7de842437a4d')"
+                      },
+                      {
+                        "shortName": "order(direction:'Row', asc:'A-Z', index:-1)",
+                        "order": {
+                          "enable": true,
+                          "direction": "Rows",
+                          "asc": "A-Z",
+                          "index": "-1"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": "v2.query-manager",
+              "instanceName": "n776mrqj2brjsu26u61fhto6r",
+              "icon": "/widgets/v2.query-manager/icon.png"
+            }
+          ],
+          "width": 654
+        },
+        "right": {
+          "widgets": [
+            {
+              "type": "v2.json-viewer",
+              "instanceName": "json",
+              "icon": "/widgets/v2.json-viewer/icon.png"
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "line1",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "interpolation": "cardinal",
+                "showLabels": false,
+                "width": 659,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02",
+                  "#a6761d",
+                  "#666666"
+                ]
+              },
+              "serieDataId": "58443ce045fe839850985812",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": -1,
+              "index": [
+                0
+              ]
+            },
+            {
+              "type": "v2.nvd3-stacked-area",
+              "instanceName": "area",
+              "icon": "/widgets/v2.nvd3-stacked-area/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": null,
+                "yAxisName": null,
+                "staggerLabels": false,
+                "showControls": true,
+                "showLabels": false,
+                "interpolation": "linear",
+                "style": "stack",
+                "width": 659
+              },
+              "serieDataId": "584438f145fe839850985809",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": -1,
+              "index": []
+            },
+            {
+              "type": "v2.nvd3-radar",
+              "instanceName": "radar",
+              "icon": "/widgets/v2.nvd3-radar/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "isArea": false,
+                "showLabels": false,
+                "ticks": 5,
+                "tickLabel": true,
+                "grid": true,
+                "axisLabel": true,
+                "width": 659
+              },
+              "serieDataId": "5844399e45fe83985098580b",
+              "queryID": "7a067c414d3640a9bcbea40cc3343688",
+              "dataID": "5844367545fe8398509857ff"
+            },
+            {
+              "type": "v2.nvd3-pie",
+              "instanceName": "pie",
+              "icon": "/widgets/v2.nvd3-pie/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "donut": true,
+                "donutRatio": 0.4,
+                "labelsOutside": true,
+                "valueAsLabel": false,
+                "width": 659,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02",
+                  "#a6761d",
+                  "#666666"
+                ]
+              },
+              "serieDataId": "5844399e45fe83985098580b",
+              "queryID": "7a067c414d3640a9bcbea40cc3343688",
+              "dataID": "5844367545fe8398509857ff"
+            },
+            {
+              "type": "v2.nvd3-geochart",
+              "instanceName": "geochart",
+              "icon": "/widgets/v2.nvd3-geochart/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "Write Your Title",
+                "subtitle": "Write Your Subtitle",
+                "caption": "Figure 1. Write Your Caption text.",
+                "color": [
+                  "#ffffcc",
+                  "#c2e699",
+                  "#78c679",
+                  "#31a354",
+                  "#006837"
+                ],
+                "showLabels": false,
+                "showValues": false,
+                "showTiles": false,
+                "selectedTiles": "mapbox.outdoors",
+                "interactive": true,
+                "defaultFill": "#f0f0f0",
+                "defaultFillOpacity": 0,
+                "defaultStroke": "#909095",
+                "defaultStrokeWidth": 1,
+                "defaultStrokeOpacity": 0.75,
+                "selectedFillOpacity": 0.5,
+                "selectedStrokeWidth": 3,
+                "boundary": {},
+                "width": 659
+              },
+              "serieDataId": "584704315a70acec4c6b1620",
+              "queryID": "7a067c414d3640a9bcbea40cc3343688",
+              "dataID": "5844367545fe8398509857ff",
+              "direction": "Rows",
+              "dataIndex": [
+                0
+              ],
+              "bins": 5,
+              "scope": "none"
+            },
+            {
+              "type": "v2.nvd3-chord",
+              "instanceName": "deps",
+              "icon": "/widgets/v2.nvd3-chord/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "isArea": true,
+                "showLabels": false,
+                "ticks": 5,
+                "tickLabel": true,
+                "grid": true,
+                "axisLabel": true,
+                "width": 659
+              },
+              "serieDataId": "5844333645fe8398509857fd",
+              "queryID": "04ae2733a7c29d04dd80744d6ed1d358",
+              "dataID": "5844328b45fe8398509857fc"
+            },
+            {
+              "type": "v2.nvd3-scatter",
+              "instanceName": "scatter",
+              "icon": "/widgets/v2.nvd3-scatter/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "X Axis",
+                "yAxisName": "Y Axis",
+                "staggerLabels": false,
+                "showLabels": false,
+                "width": 659,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02",
+                  "#a6761d",
+                  "#666666"
+                ]
+              },
+              "serieDataId": "584708d45a70acec4c6b1624",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": 0,
+              "index": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "type": "v2.table",
+              "instanceName": "table",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 560,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 659,
+                "scroll": true
+              },
+              "dataID": "5843ff26496b7de842437a4d",
+              "queryID": "4825fff047019724818c736204c47145"
+            },
+            {
+              "type": "v2.nvd3-bar-h",
+              "instanceName": "hbar",
+              "icon": "/widgets/v2.nvd3-bar-h/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "color": [
+                  "#e41a1c",
+                  "#377eb8",
+                  "#4daf4a",
+                  "#984ea3",
+                  "#ff7f00",
+                  "#ffff33",
+                  "#a65628",
+                  "#f781bf",
+                  "#999999"
+                ],
+                "showControls": true,
+                "stacked": false,
+                "width": 659
+              },
+              "serieDataId": "58442f2245fe8398509857fa",
+              "queryID": "4825fff047019724818c736204c47145",
+              "dataID": "5843ff26496b7de842437a4d"
+            },
+            {
+              "type": "v2.nvd3-bar",
+              "instanceName": "bar",
+              "icon": "/widgets/v2.nvd3-bar/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "xAxisAngle": 0,
+                "reduceXTicks": false,
+                "staggerLabels": false,
+                "color": [
+                  "#e41a1c",
+                  "#377eb8",
+                  "#4daf4a",
+                  "#984ea3",
+                  "#ff7f00",
+                  "#ffff33",
+                  "#a65628",
+                  "#f781bf",
+                  "#999999"
+                ],
+                "showControls": true,
+                "stacked": false,
+                "width": 659
+              },
+              "serieDataId": "58443ac245fe83985098580c",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808"
+            }
+          ],
+          "width": 654
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "script",
+          "receiver": "radar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "bar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "pie",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "table",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "deps",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "line1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "json",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "hbar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "scatter",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "geochart",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "area",
+          "signal": "setData",
+          "slot": "setData"
+        }
+      ]
+    },
+    {
+      "shortTitle": "usage",
+      "href": "usage",
+      "template": "2-cols",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/use_banner.png",
+              "height": 350,
+              "type": "v2.banner",
+              "instanceName": "nhntyk6vz7gaunmaezpqilik9",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "Single Page Apps",
+              "intro": "Data Management, Data Analysis, Data Scientists Collaboration and other BI solution",
+              "text": "DJ key features:Online SPA design, SPA Hosting, Widget based dashboards, Widgets interaction, Flexible navigation, Flexible page layout (device independent), Skins, Full app i18n (without reload), Management of app resources, User collaboration support, Apps Access policy. Available DJ toolkits: Toolkit for Apps Management. Toolkit for Data Management: Rich metadata support (tags, categories, lookups), full dataset i18n, dataset version service, data uploads/downloads. Toolkit for Data Analysis and Visualization: multidimensional data cube manipulation, data queries (projections, selections, joins), interactive charts, multilayered maps, tables, embedded data processing and data mining. Dj Data Processing Scripts.",
+              "type": "html-article",
+              "instanceName": "iydr59e9fsql3yntcv81wnrk9",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "targets": [
+                {
+                  "title": "Available Apps",
+                  "target": {
+                    "widget": "apps",
+                    "url": ""
+                  },
+                  "class": "success"
+                }
+              ],
+              "type": "html-scroll-button",
+              "instanceName": "fa8a5p9cr3btdqy90sjk4eu3di",
+              "icon": "/widgets/html-scroll-button/icon.png"
+            }
+          ],
+          "width": 1200
+        },
+        "left": {
+          "widgets": [
+            {
+              "appWidget": "",
+              "type": "v2.app-list",
+              "instanceName": "apps",
+              "icon": "/widgets/v2.app-list/icon.png"
+            }
+          ],
+          "width": 654
+        },
+        "right": {
+          "widgets": [
+            {
+              "appWidget": "apps",
+              "tagListeners": "",
+              "type": "v2.app-description",
+              "instanceName": "k3siiangrll0l3ek55crqkt9",
+              "icon": "/widgets/v2.app-description/icon.png",
+              "appListeners": [
+                "apps"
+              ]
+            }
+          ],
+          "width": 654
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "script",
+          "receiver": "line1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "json",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "hbar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "scatter",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "geochart",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "area",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "radar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "bar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "pie",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "table",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "script",
+          "receiver": "deps",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "apps",
+          "receiver": "k3siiangrll0l3ek55crqkt9",
+          "signal": "setApplication",
+          "slot": "setApplication"
+        },
+        {
+          "emitter": "k3siiangrll0l3ek55crqkt9",
+          "receiver": "apps",
+          "signal": "refresh",
+          "slot": "refresh"
+        }
+      ]
+    },
+    {
+      "shortTitle": "manager",
+      "href": "manager",
+      "template": "2(3x9)details",
+      "holders": {
+        "column": {
+          "widgets": [],
+          "width": 1200
+        },
+        "topleft": {
+          "widgets": [
+            {
+              "title": "Sources",
+              "category": "Source",
+              "property": "$..metadata.dataset.source",
+              "query": "$[?(@.dataset.source=='{{}}')]",
+              "lookupListeners": "key",
+              "searchListeners": "datasets",
+              "icon_class": "",
+              "type": "dm-tag-list",
+              "instanceName": "w4u3prhpiwmg87d68t7ta9k9",
+              "icon": "/widgets/dm-tag-list/icon.png"
+            }
+          ],
+          "width": 297
+        },
+        "topright": {
+          "widgets": [
+            {
+              "title": "",
+              "icon_class": "",
+              "type": "v2.dm-lookup",
+              "instanceName": "key",
+              "icon": "/widgets/v2.dm-lookup/icon.png"
+            },
+            {
+              "title": "",
+              "l_listeners": "key",
+              "s_listeners": "datasets",
+              "d_listeners": "table_preview, line_preview, bar_preview",
+              "type": "v2.dm-ds-description",
+              "instanceName": "dataset_info",
+              "icon": "/widgets/v2.dm-ds-description/icon.png"
+            }
+          ],
+          "width": 971
+        },
+        "detail1": {
+          "widgets": [
+            {
+              "type": "v2.table",
+              "instanceName": "table_preview",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 180,
+                "opacity": 0.5,
+                "direction": "Columns",
+                "width": 310,
+                "scroll": true,
+                "title": "Table preview"
+              },
+              "dataID": "5841371bd3f157ac3439258f",
+              "queryID": "fa34fb5e28e4b44bd5df1e1f36cac1f2"
+            }
+          ],
+          "width": 309
+        },
+        "detail2": {
+          "widgets": [
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "line_preview",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 120,
+                "title": "Line chart preview",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "isArea": true,
+                "color": [
+                  "#e41a1c",
+                  "#377eb8",
+                  "#4daf4a",
+                  "#984ea3",
+                  "#ff7f00",
+                  "#ffff33",
+                  "#a65628",
+                  "#f781bf",
+                  "#999999"
+                ],
+                "interpolation": "cardinal",
+                "showPoints": false,
+                "showLabels": false,
+                "width": 310
+              },
+              "serieDataId": "584137f8d3f157ac34392591",
+              "queryID": "fa34fb5e28e4b44bd5df1e1f36cac1f2",
+              "dataID": "5841371bd3f157ac3439258f",
+              "axisX": -1,
+              "index": [
+                0
+              ]
+            }
+          ],
+          "width": 309
+        },
+        "detail3": {
+          "widgets": [
+            {
+              "type": "v2.nvd3-bar-h",
+              "instanceName": "bar_preview",
+              "icon": "/widgets/v2.nvd3-bar-h/icon.png",
+              "decoration": {
+                "height": 120,
+                "title": "Bar chart preview",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "showControls": false,
+                "stacked": "false",
+                "width": 310
+              },
+              "serieDataId": "584139e2d3f157ac3439259a",
+              "queryID": "9d148e71b2bc47056a9c416e1d993231",
+              "dataID": "584139c9d3f157ac34392599"
+            }
+          ],
+          "width": 309
+        },
+        "bottomright": {
+          "widgets": [
+            {
+              "title": "Available datasets",
+              "query": "",
+              "layout": "panel",
+              "listeners": "key",
+              "rlisteners": "",
+              "dslisteners": "dataset_info",
+              "type": "v2.dm-ds-panel",
+              "instanceName": "datasets",
+              "icon": "/widgets/v2.dm-ds-panel/icon.png"
+            }
+          ],
+          "width": 1019
+        },
+        "bottom": {
+          "widgets": [
+            {
+              "queries": [
+                {
+                  "$id": "f8847b96bea528c73b163f933c45f9ce",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "1",
+                  "context": {
+                    "query": {
+                      "commitID": "5836ce6730c0f1580c1a2fb1",
+                      "datasetID": "47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02",
+                      "query": [
+                        {
+                          "dimension": "indicator",
+                          "role": "Columns",
+                          "collection": [
+                            "NSMS_DAU001_NFD004"
+                          ]
+                        },
+                        {
+                          "dimension": "time",
+                          "role": "Rows",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "uk"
+                    },
+                    "queryResultId": "584123bdd3f157ac34392587"
+                  }
+                },
+                {
+                  "$id": "fa34fb5e28e4b44bd5df1e1f36cac1f2",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "2",
+                  "context": {
+                    "queryResultId": "5841371bd3f157ac3439258f",
+                    "script": [
+                      {
+                        "shortName": "Select 1(584123bdd3f157ac34392587)",
+                        "select": {
+                          "source": "1"
+                        }
+                      },
+                      {
+                        "shortName": "Sort Rows A-Z order by Time",
+                        "order": {
+                          "enable": true,
+                          "direction": "Rows",
+                          "asc": "A-Z",
+                          "index": "-1"
+                        }
+                      },
+                      {
+                        "shortName": "Number precision: 2",
+                        "precision": 2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "9d148e71b2bc47056a9c416e1d993231",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "3",
+                  "context": {
+                    "query": {
+                      "commitID": "58400018ed408590244bcd33",
+                      "datasetID": "3a37ea80-93a8-11e5-b62f-dfcea48fc8d9",
+                      "query": [
+                        {
+                          "dimension": "country",
+                          "role": "Rows",
+                          "collection": [
+                            "LBY",
+                            "AGO"
+                          ]
+                        },
+                        {
+                          "dimension": "concept",
+                          "role": "Ignore",
+                          "collection": []
+                        },
+                        {
+                          "dimension": "year",
+                          "role": "Columns",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "uk"
+                    },
+                    "queryResultId": "584139c9d3f157ac34392599"
+                  }
+                }
+              ],
+              "type": "v2.query-manager",
+              "instanceName": "pl94rqwh7rgcga7x3ebwewmi",
+              "icon": "/widgets/v2.query-manager/icon.png"
+            }
+          ],
+          "width": 1200
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "ds_info",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "ds_info",
+          "receiver": "key",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "dataset_info",
+          "receiver": "line_preview",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "dataset_info",
+          "receiver": "bar_preview",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "datasets",
+          "receiver": "key",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "datasets",
+          "receiver": "dataset_info",
+          "signal": "setDataSet",
+          "slot": "setDataSet"
+        },
+        {
+          "emitter": "w4u3prhpiwmg87d68t7ta9k9",
+          "receiver": "key",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "w4u3prhpiwmg87d68t7ta9k9",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "dataset_info",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "dataset_info",
+          "receiver": "key",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "dataset_info",
+          "receiver": "table_preview",
+          "signal": "setData",
+          "slot": "setData"
+        }
+      ]
+    },
+    {
+      "shortTitle": "search",
+      "href": "search",
+      "template": "2(3x9)-cols",
+      "holders": {
+        "column": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/ssechnpp/search_banner.png",
+              "height": 350,
+              "type": "v2.banner",
+              "instanceName": "f97qxl7igz6d71k4u1wtgldi",
+              "icon": "/widgets/v2.banner/icon.png"
+            },
+            {
+              "title": "Search Data",
+              "intro": "Our data consists of more than 130 sets of data, which are updated every month. For each indicator, we publish the average values with a periodicity of the day and month",
+              "text": "",
+              "type": "html-article",
+              "instanceName": "jagbwo9okygpx2qlabajj1yvi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "targets": [
+                {
+                  "title": "Start",
+                  "target": {
+                    "widget": "splitter",
+                    "url": ""
+                  },
+                  "class": "success"
+                }
+              ],
+              "type": "html-scroll-button",
+              "instanceName": "ebxxglk067gezzect417xvfgvi",
+              "icon": "/widgets/html-scroll-button/icon.png"
+            },
+            {
+              "text": "<hr id=\"null\">",
+              "type": "htmlwidget",
+              "instanceName": "splitter",
+              "icon": "/widgets/htmlwidget/icon.png"
+            }
+          ],
+          "width": 1200
+        },
+        "topleft": {
+          "widgets": [
+            {
+              "title": "Indicators",
+              "collapced": false,
+              "category": "Indicator",
+              "property": "$..metadata.dimension.indicator.values..label",
+              "query": "$[?(@.dimension.indicator.values.contains(function(item){return item.label.startWith('{{}}')}))]",
+              "lookupListeners": "info,meta",
+              "searchListeners": "datasets",
+              "icon_class": "fi-graph-trend",
+              "type": "dm-tag-list",
+              "instanceName": "indicators",
+              "icon": "/widgets/dm-tag-list/icon.png"
+            },
+            {
+              "title": "Topics",
+              "collapsed": true,
+              "category": "Topic",
+              "property": "$..metadata.dataset.topics",
+              "query": "$[?(@.dataset.topics.contains(function(d){return d.startWith('{{}}')}))]",
+              "lookupListeners": "info,meta",
+              "searchListeners": "datasets",
+              "icon_class": "fi-database",
+              "collapced": true,
+              "type": "dm-tag-list",
+              "instanceName": "hs4jomvxnre955x0erj6k1emi",
+              "icon": "/widgets/dm-tag-list/icon.png"
+            }
+          ],
+          "width": 317
+        },
+        "topright": {
+          "widgets": [
+            {
+              "title": "",
+              "icon_class": "",
+              "type": "v2.dm-lookup",
+              "instanceName": "info",
+              "icon": "/widgets/v2.dm-lookup/icon.png"
+            },
+            {
+              "title": "Dataset",
+              "l_listeners": "info",
+              "s_listeners": "datasets",
+              "d_listeners": "table,line",
+              "type": "v2.dm-ds-description",
+              "instanceName": "dsinfo",
+              "icon": "/widgets/v2.dm-ds-description/icon.png"
+            }
+          ],
+          "width": 991
+        },
+        "detail1": {
+          "widgets": [
+            {
+              "type": "v2.table",
+              "instanceName": "table",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 493,
+                "title": "Table Preview"
+              },
+              "dataID": "5852c2fc5844f4e01579615a",
+              "queryID": "7b0de9006651d9fc565b4b903357965b"
+            }
+          ],
+          "width": 489
+        },
+        "detail2": {
+          "widgets": [
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "line",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 250,
+                "title": "Chart Preview",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02",
+                  "#a6761d",
+                  "#666666"
+                ],
+                "interpolation": "cardinal",
+                "showPoints": false,
+                "showLabels": false,
+                "width": 493
+              },
+              "serieDataId": "5852c3585844f4e01579615b",
+              "queryID": "7b0de9006651d9fc565b4b903357965b",
+              "dataID": "5852c2fc5844f4e01579615a",
+              "axisX": -1,
+              "index": []
+            }
+          ],
+          "width": 489
+        },
+        "bottomright": {
+          "widgets": [
+            {
+              "title": "Last Updates",
+              "l_listeners": "",
+              "s_listeners": "",
+              "type": "v2.dm-ds-history",
+              "instanceName": "history",
+              "icon": "/widgets/v2.dm-ds-history/icon.png"
+            },
+            {
+              "title": "Available Datasets",
+              "query": "",
+              "layout": "panel",
+              "listeners": "",
+              "rlisteners": "",
+              "dslisteners": "dsinfo,history",
+              "type": "v2.dm-ds-panel",
+              "instanceName": "datasets",
+              "icon": "/widgets/v2.dm-ds-panel/icon.png"
+            }
+          ],
+          "width": 991
+        },
+        "bottom": {
+          "widgets": [
+            {
+              "queries": [
+                {
+                  "$id": "7b0de9006651d9fc565b4b903357965b",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "1",
+                  "context": {
+                    "query": {
+                      "commitID": "583c02b923d59a5825ccfa78",
+                      "datasetID": "a118a0b3-b237-11e6-8a1a-0f91ca29d77e_2016_01",
+                      "query": [
+                        {
+                          "dimension": "indicator",
+                          "role": "Columns",
+                          "collection": []
+                        },
+                        {
+                          "dimension": "time",
+                          "role": "Rows",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "uk"
+                    },
+                    "queryResultId": "5852c2fc5844f4e01579615a"
+                  }
+                }
+              ],
+              "type": "v2.query-manager",
+              "instanceName": "pei260nft8l1chs88jgntrzfr",
+              "icon": "/widgets/v2.query-manager/icon.png"
+            }
+          ],
+          "width": 1318
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "indicators",
+          "receiver": "info",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "hs4jomvxnre955x0erj6k1emi",
+          "receiver": "meta",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "table",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "datasets",
+          "receiver": "history",
+          "signal": "setDataSet",
+          "slot": "setDataSet"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "meta",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "hs4jomvxnre955x0erj6k1emi",
+          "receiver": "info",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "hs4jomvxnre955x0erj6k1emi",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "info",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "line",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "datasets",
+          "receiver": "dsinfo",
+          "signal": "setDataSet",
+          "slot": "setDataSet"
+        }
+      ]
+    }
+  ],
+  "name": "SSEChNPP-Open",
+  "i18n": {
+    "uk": {
+      "#bg": "./img/default-banner-uk.png",
+      "#dataSource": "Джерело даних",
+      "#Datasource": "Джерело даних",
+      "#Topic": "Розділ",
+      "#dataset": "Набір даних:",
+      "#title": "Як створити застосунок",
+      "#aaa": "Uuu",
+      "#about": "Про  DJ Data",
+      "#pages": "Сторінки",
+      "#Search_and_Download _Dataset": "Пошук та завантаження наборів даних",
+      "#Datasets": "Набори даних",
+      "#Sources": "Джерела",
+      "#Authors": "Автори",
+      "#Indicators": "Показники",
+      "#Countries": "Країни",
+      "#Total": "Всього:",
+      "#Topics": "Теми",
+      "#Keywords": "Ключові слова",
+      "#Search_Result": "Результати пошуку",
+      "#Key": "Ключ пошуку",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-uk.html",
+      "#Home": "Головна",
+      "#WDC Datasets Exploration": "Розвідка даних СЦД",
+      "#Data Management": "Управління даними",
+      "#World Data System": "Світова система даних",
+      "#Sustainable Development": "Сталий розвиток",
+      "#WDC description": "\"Розвідка даних СЦД\" це застосунок, який допоможе знайти, вибрати та завантажити наші дані.",
+      "#apps": "Доступні застосунки",
+      "#info": "Інформація про застосунок",
+      "#AvDS": "Доступні набори даних:",
+      "#topics": "Теми",
+      "#sources": "Джерела",
+      "#countries": "Країни",
+      "#ukraine": "Регіони України",
+      "#keywords": "Ключові слова",
+      "#description": "Портал \"Doggy Jam\" надає дружній  WEB интерфейс для дослідження даних",
+      "#AvailableDatasets": "Доступні набори даних:",
+      "#selectRegion": "Виберіть одну або декілька областей",
+      "#tags": "Пошукові теги",
+      "#t": "Фактори впливу",
+      "#st": "Ключові події та процеси",
+      "#history": "Оновлення",
+      "#searchRes": "Знайдені набори даних",
+      "#MDL": "Метадані",
+      "#go": "Вперед"
+    },
+    "en": {
+      "#bg": "./img/default-banner.png",
+      "#dataSource": "Data Source",
+      "#Datasource": "Data Source",
+      "#Topic": "Topic",
+      "#dataset": "Dataset:",
+      "#title": "How to create app",
+      "#aaa": "Aaa",
+      "#about": "About DJ Data",
+      "#pages": "Pages",
+      "#Search_and_Download _Dataset": "Search and Download  Dataset",
+      "#Datasets": "Datasets",
+      "#Sources": "Sources",
+      "#Authors": "Authors",
+      "#Indicators": "Indicators",
+      "#Countries": "Countries",
+      "#Total": "Total:",
+      "#Topics": "Topics",
+      "#Keywords": "Keywords",
+      "#Search_Result": "Search Result",
+      "#Key": "Search Key",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-en.html",
+      "#Home": "Home",
+      "#WDC Datasets Exploration": "Exploration of  WDC Datasets",
+      "#Data Management": "Data Management",
+      "#World Data System": "World Data System",
+      "#Sustainable Development": "Sustainable Development",
+      "#WDC description": "Exploration of WDC Datasets is the single page application. You can use it for search and retrieve WDC data.",
+      "#apps": "Available Applications",
+      "#info": "About App",
+      "#AvDS": "Available Datasets:",
+      "#topics": "Topics",
+      "#sources": "Sources",
+      "#countries": "Countries",
+      "#ukraine": "Ukraine",
+      "#keywords": "Keywords",
+      "#description": "\"Doggy Jam\" portal provide user frendly WEB interface for data exploration",
+      "#AvailableDatasets": "Available datasets:",
+      "#selectRegion": "Select one or more regions",
+      "#tags": "Tags",
+      "#t": "Impact Factors",
+      "#st": "Key Events and Processes",
+      "#history": "Dataset History",
+      "#searchRes": "Available Datasets",
+      "#MDL": "Full Metadata List",
+      "#go": "Go!"
+    },
+    "ru": {
+      "#bg": "./img/default-banner.png",
+      "#dataSource": "Data Source",
+      "#Datasource": "Data Source",
+      "#Topic": "Topic",
+      "#dataset": "Dataset:",
+      "#title": "How to create app",
+      "#aaa": "Rrr",
+      "#Search_and_Download _Dataset": "Поиск и загрузка наборов данных",
+      "#Datasets": "Наборы данных",
+      "#Sources": "Источники",
+      "#Authors": "Авторы",
+      "#Indicators": "Показатели",
+      "#Countries": "Страны",
+      "#Total": "Всего:",
+      "#Topics": "Темы",
+      "#Keywords": "Ключевые слова",
+      "#Search_Result": "Результаты поиска",
+      "#Key": "Ключ поиска",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-en.html",
+      "#Home": "Главная",
+      "#Sustainable Development": "Устойчивое развитие",
+      "#AvDS": "Доступные наборы данных:",
+      "#topics": "Темы",
+      "#sources": "Источники",
+      "#countries": "Страны",
+      "#ukraine": "Регионы Украины",
+      "#keywords": "Ключевые слова",
+      "#about": "Про  DJ Data",
+      "#description": "Портал \"Doggy Jam\" предоставляет дружественный  WEB интерфейс для исследования данных",
+      "#AvailableDatasets": "Доступные наборы данных:",
+      "#selectRegion": "Select one or more regions",
+      "#tags": "Теги",
+      "#t": "Фактори впливу",
+      "#st": "Ключові події та процеси",
+      "#history": "Dataset History",
+      "#searchRes": "Available Datasets",
+      "#MDL": "Full Metadata List",
+      "#go": "Вперед"
+    }
+  },
+  "icon": "./api/resource/ChData-ssechnpp3.png",
+  "dps": "http://localhost:8088",
+  "importedFromURL": "http://localhost:8080/app/SSEChNPP-Open",
+  "importedFromAuthor": "Andrey Boldak"
+}

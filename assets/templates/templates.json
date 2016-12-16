@@ -37,6 +37,9 @@
       "column",
       "topleft",
       "topright",
+      "detail1",
+      "detail2",
+      "bottomright",
       "bottom"
     ]
   },

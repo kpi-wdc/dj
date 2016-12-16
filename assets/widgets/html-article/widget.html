@@ -8,6 +8,11 @@
 			{{widget.intro | translate}}
 		</h4>
 		<p ng-if="widget.text" style="text-align: center;">{{widget.text | translate}}</p>
-		<a ng-if="widget.href" href="{{widget.href.url | translate}}" class="right">{{widget.href.description | translate}}</a>
+		<a 	ng-if="widget.href" 
+			href="{{widget.href.url | translate}}"
+			target="{{widget.href.target}}" 
+			class="right"
+			style="font-size:small">
+			{{widget.href.description | translate}}</a>
 	</div>
 </div>	

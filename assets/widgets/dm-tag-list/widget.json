@@ -8,7 +8,7 @@
         "type": "string",
         "title": "Title"
       },
-      "collapced":{
+      "collapsed":{
         "type": "boolean",
         "title": "Collapsed",
         "default":false

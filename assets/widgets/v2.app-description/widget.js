@@ -107,6 +107,10 @@ angular.module('app.widgets.v2.app-description', [])
         });
     };
 
+    $scope.isAdmin = function(){
+      return user.isAdmin
+    }
+
     $scope.isOwner = function(app) {
       if (!user.id) {
         return false;
