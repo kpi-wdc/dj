@@ -157,12 +157,15 @@ module.exports = {
   getTagList: function (req, res) {
     sails.log.debug("MetadataController#getTagList");
     var params = req.body;
-    sails.log.debug(params);
+   
+    // sails.log.debug(params);
     
     if (!params) {
       return res.send([]);
     }
-
+     if(!params.property || params.property==''){
+      return res.send([]);
+    }
 
     var mq = {"commit/HEAD": true};
     if (!params || !params.status || params.status == "public") {

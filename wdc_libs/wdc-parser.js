@@ -5,7 +5,7 @@ var fs = require('fs');
 var xmltojson = require('xml2js');
 var iconv = require('iconv-lite');
 var request = require("request");
-
+var logger = require("./wdc-log").global;
 
 // Supported encodings
 // All node.js native encodings: utf8, ucs2 / utf16-le, ascii, binary, base64, hex.
@@ -24,6 +24,7 @@ var fileFormatter = {
 			fs.readFile(filename,  function(err, data ) {
 				data = iconv.decode(new Buffer(data), encoding);
 				converter.fromString(data,function(err,result){
+					logger.debug("Read "+ filename)
 					resolve(result)
 				});	
 			});

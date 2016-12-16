@@ -77,6 +77,7 @@ var translateQueryResult = function(obj,locale){
   return r;            
 }
 
+
 var prepareCachedResult = function(d){
   d = (util.isArray(d))? d[0] : d;
   d = d || {};

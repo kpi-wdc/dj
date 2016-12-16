@@ -268,6 +268,7 @@ module.exports = {
     var promises = [];
 
 
+
      logger.info("Import datasets")
      req.file('file')
       .upload({},function (err, uploadedFiles) {
@@ -359,10 +360,10 @@ module.exports = {
                                 $createDataset(dataset)
                                   .then(function(result){
                                     logger.info("update "+result.metadata.dataset.id)
-                                    dataprocController.updateCache(result.metadata.dataset.id)
-                                      .then(function(){
+                                    // dataprocController.updateCache(result.metadata.dataset.id)
+                                      // .then(function(){
                                         resolve(result);
-                                      })                                  
+                                      // })                                  
                                   })
                             })
                       }

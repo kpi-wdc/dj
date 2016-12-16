@@ -11,9 +11,11 @@
 var fs = require('fs');
 
 var addDefaultAppConfigs = function () {
+  sails.log.debug("Update default apps")
   fs.readdir('apps', function (err, files) {
     if (!err) {
       files.forEach(function (filename) {
+        sails.log.debug("App "+filename)
         var match = /^(.*)\.json$/i.exec(filename);
         if (match) {
           var appName = match[1];
@@ -40,6 +42,8 @@ var addDefaultAppConfigs = function () {
 };
 
 var addDefaultPortalConfig = function(){
+
+  sails.log.debug("Update portal config")
   PortalConfig.find({})
     .then(function(config){
       if(config.length>0){
@@ -54,6 +58,8 @@ var addDefaultPortalConfig = function(){
 } 
 
 module.exports.bootstrap = function (cb) {
+  sails.log.debug("Initialize server")
+  sails.log.debug("Use DB " + JSON.stringify(sails.config.connections.mongodbServer))
   sails.services.passport.loadStrategies();
 
   // add default admins; you can add others later on using mongodb console
@@ -61,7 +67,6 @@ module.exports.bootstrap = function (cb) {
     var adminEmail = sails.config.admins[i];
     User.update({email: adminEmail}, {isAdmin: true}).exec(_.noop);
   }
-
   AppConfig.native(function (err, collection) {
     // replace with createIndex after updating to MongoDB 3.*
     collection.ensureIndex({name: 1}, {unique: true}, function (err) {

@@ -1,5 +1,5 @@
 var http = require('request-promise');
-var logger = require("../wdc-log").global.consoleLevel("success");
+var logger = require("../wdc-log").global;
 var fs = require("fs");
 var datasetGroupParser =  require("../parsers/ch-ftp");
 var Promise = require("bluebird");
@@ -52,6 +52,7 @@ logger.success("Source dir "+srcDir);
 
 
 fs.readdir(srcDir, function(err, files) {
+	
 
 	Promise.reduce(files, function(s, file){
 		
