@@ -84,7 +84,7 @@
               "icon": "/widgets/v2.banner/icon.png"
             }
           ],
-          "width": 1358
+          "width": 1348
         },
         "header": {
           "widgets": [
@@ -139,7 +139,7 @@
               "icon": "/widgets/html-article/icon.png"
             }
           ],
-          "width": 413
+          "width": 409
         },
         "callout1": {
           "widgets": [
@@ -165,7 +165,7 @@
               "icon": "/widgets/html-article/icon.png"
             }
           ],
-          "width": 413
+          "width": 409
         },
         "callout2": {
           "widgets": [
@@ -191,7 +191,7 @@
               "icon": "/widgets/html-article/icon.png"
             }
           ],
-          "width": 413
+          "width": 409
         },
         "main": {
           "widgets": [
@@ -239,19 +239,19 @@
         },
         "feature0": {
           "widgets": [],
-          "width": 310
+          "width": 307
         },
         "feature1": {
           "widgets": [],
-          "width": 310
+          "width": 307
         },
         "feature2": {
           "widgets": [],
-          "width": 310
+          "width": 307
         },
         "feature3": {
           "widgets": [],
-          "width": 310
+          "width": 307
         },
         "footer": {
           "widgets": []
@@ -282,7 +282,7 @@
             {
               "title": "Single Page Apps",
               "intro": "Data Management, Data Analysis, Data Scientists Collaboration and other BI solution",
-              "text": "DJ key features:Online SPA design, SPA Hosting, Widget based dashboards, Widgets interaction, Flexible navigation, Flexible page layout (device independent), Skins, Full app i18n (without reload), Management of app resources, User collaboration support, Apps Access policy. Available DJ toolkits: Toolkit for Apps Management. Toolkit for Data Management: Rich metadata support (tags, categories, lookups), full dataset i18n, dataset version service, data uploads/downloads. Toolkit for Data Analysis and Visualization: multidimensional data cube manipulation, data queries (projections, selections, joins), interactive charts, multilayered maps, tables, embedded data processing and data mining. Dj Data Processing Scripts.",
+              "text": "DJ key features:Online SPA design, SPA Hosting, Widget based dashboards, Widgets interaction, Flexible navigation, Flexible page layout (device independent), Skins, Full app i18n (without reload), Management of app resources, User collaboration support, Apps Access policy.",
               "type": "html-article",
               "instanceName": "lqgvhonfdud8frlt0dgzoxbt9",
               "icon": "/widgets/html-article/icon.png"
@@ -373,7 +373,7 @@
               "icon": "/widgets/v2.banner/icon.png"
             }
           ],
-          "width": 1358
+          "width": 1348
         },
         "column": {
           "widgets": [
@@ -423,14 +423,14 @@
               "runnable": true
             }
           ],
-          "width": 659
+          "width": 654
         },
         "topright": {
           "widgets": [
             {
               "title": "JSON Preview",
               "scroll": true,
-              "height": 200,
+              "height": 450,
               "type": "v2.json-viewer",
               "instanceName": "json",
               "icon": "/widgets/v2.json-viewer/icon.png"
@@ -701,7 +701,7 @@
               "dataID": "5855488230d9ae60277a474c"
             }
           ],
-          "width": 659
+          "width": 654
         },
         "bottom": {
           "widgets": [
@@ -797,36 +797,6 @@
       "subscriptions": [
         {
           "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
-          "receiver": "json",
-          "signal": "setData",
-          "slot": "setData"
-        },
-        {
-          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
-          "receiver": "area",
-          "signal": "setData",
-          "slot": "setData"
-        },
-        {
-          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
-          "receiver": "radar.table",
-          "signal": "setData",
-          "slot": "setData"
-        },
-        {
-          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
-          "receiver": "radar",
-          "signal": "setData",
-          "slot": "setData"
-        },
-        {
-          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
-          "receiver": "table",
-          "signal": "setData",
-          "slot": "setData"
-        },
-        {
-          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
           "receiver": "bar",
           "signal": "setData",
           "slot": "setData"
@@ -858,6 +828,30 @@
         {
           "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
           "receiver": "pie",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
+          "receiver": "json",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
+          "receiver": "area",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
+          "receiver": "radar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "q70qf3suhjv5l2qu5knm3rf6r",
+          "receiver": "table",
           "signal": "setData",
           "slot": "setData"
         }
@@ -978,7 +972,8 @@
                 "height": 250,
                 "opacity": 0.5,
                 "direction": "Rows",
-                "width": 489
+                "width": 493,
+                "title": "Preview"
               },
               "dataID": "58554f8130d9ae60277a4755",
               "queryID": "7d326be79506b7147a847137f6cb7839"
@@ -1118,60 +1113,12 @@
       "subscriptions": [
         {
           "emitter": "indicators",
-          "receiver": "info",
-          "signal": "setLookupKey",
-          "slot": "setLookupKey"
-        },
-        {
-          "emitter": "topics",
           "receiver": "meta",
           "signal": "setLookupKey",
           "slot": "setLookupKey"
         },
         {
-          "emitter": "dsinfo",
-          "receiver": "line",
-          "signal": "setData",
-          "slot": "setData"
-        },
-        {
-          "emitter": "datasets",
-          "receiver": "history",
-          "signal": "setDataSet",
-          "slot": "setDataSet"
-        },
-        {
-          "emitter": "indicators",
-          "receiver": "meta",
-          "signal": "setLookupKey",
-          "slot": "setLookupKey"
-        },
-        {
-          "emitter": "indicators",
-          "receiver": "datasets",
-          "signal": "searchQuery",
-          "slot": "searchQuery"
-        },
-        {
           "emitter": "topics",
-          "receiver": "info",
-          "signal": "setLookupKey",
-          "slot": "setLookupKey"
-        },
-        {
-          "emitter": "topics",
-          "receiver": "datasets",
-          "signal": "searchQuery",
-          "slot": "searchQuery"
-        },
-        {
-          "emitter": "dsinfo",
-          "receiver": "datasets",
-          "signal": "searchQuery",
-          "slot": "searchQuery"
-        },
-        {
-          "emitter": "dsinfo",
           "receiver": "info",
           "signal": "setLookupKey",
           "slot": "setLookupKey"
@@ -1185,6 +1132,54 @@
         {
           "emitter": "datasets",
           "receiver": "dsinfo",
+          "signal": "setDataSet",
+          "slot": "setDataSet"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "info",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "indicators",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "topics",
+          "receiver": "meta",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "topics",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "datasets",
+          "signal": "searchQuery",
+          "slot": "searchQuery"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "info",
+          "signal": "setLookupKey",
+          "slot": "setLookupKey"
+        },
+        {
+          "emitter": "dsinfo",
+          "receiver": "line",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "datasets",
+          "receiver": "history",
           "signal": "setDataSet",
           "slot": "setDataSet"
         }
@@ -1238,7 +1233,8 @@
       "#history": "Оновлення",
       "#searchRes": "Знайдені набори даних",
       "#MDL": "Метадані",
-      "#go": "Вперед"
+      "#go": "Вперед",
+      "#Search data and get info about it": "Шукаємо дані та інформацію про них"
     },
     "en": {
       "#bg": "./img/default-banner.png",
@@ -1285,7 +1281,8 @@
       "#history": "Dataset History",
       "#searchRes": "Available Datasets",
       "#MDL": "Full Metadata List",
-      "#go": "Go!"
+      "#go": "Go!",
+      "#Search data and get info about it": "Search data and get info about it"
     },
     "ru": {
       "#bg": "./img/default-banner.png",
@@ -1325,10 +1322,11 @@
       "#history": "Dataset History",
       "#searchRes": "Available Datasets",
       "#MDL": "Full Metadata List",
-      "#go": "Вперед"
+      "#go": "Вперед",
+      "#Search data and get info about it": "Search data and get info about it"
     }
   },
-  "icon": "./api/resource/ChData-ssechnpp3.png",
+  "icon": "./img/sseopen.png",
   "dps": "http://localhost:8088",
   "importedFromURL": "http://localhost:8080/app/SSEChNPP-Open",
   "importedFromAuthor": "Andrey Boldak"

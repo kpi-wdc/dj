@@ -1,0 +1,1529 @@
+{
+  "skinName": "default1",
+  "title": "SDA Roadmap",
+  "description": "How to analyze data dependencies via DJ Data Processing script. Step by step tutorial.",
+  "keywords": [
+    ""
+  ],
+  "isPublished": true,
+  "appWidgets": [
+    {
+      "type": "language-selector",
+      "instanceName": "language-selector",
+      "showFlags": true
+    },
+    {
+      "type": "page-list",
+      "instanceName": "page-list-nav"
+    },
+    {
+      "instanceName": "AppTopbar",
+      "type": "v2.topbar",
+      "icon": "/widgets/v2.topbar/icon.png",
+      "decoration": {
+        "languageSelector": {
+          "enable": true,
+          "showFlag": true,
+          "showTitle": true
+        },
+        "loginButton": false,
+        "gotoApps": false
+      },
+      "content": [
+        {
+          "key": "dlbwln8wa4xic3td4af5pzaor",
+          "title": "Tutorial",
+          "href": "/app/SDA%20Roadmap/"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "shortTitle": "tutorial",
+      "href": "",
+      "template": "1-col",
+      "holders": {
+        "banner": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/three-ways-banner.png",
+              "height": 150,
+              "type": "v2.banner",
+              "instanceName": "59cirwms2xpn42y68bkaoiggb9",
+              "icon": "/widgets/v2.banner/icon.png"
+            }
+          ],
+          "width": 1358
+        },
+        "column": {
+          "widgets": [
+            {
+              "title": "STATISTICAL DEPENDENCE ANALYSIS: A Roadmap for DJ platform",
+              "intro": "Step by step tutorial",
+              "text": "Одною із ключових проблем, яка вирішується в рамках наукових досліджень, є виявлення прихованих причинно-наслідкових та зв’язків між різноманітними явищами та процесами. На початкових стадіях наукових досліджень необхідно опрацювати наявну інформацію про досліджувані об’єкти та зробити попередні висновки щодо того, чи пов’язані ці об’єкти між собою причинно-наслідковими зв’язками. ",
+              "type": "html-article",
+              "instanceName": "7hnmm031eecj5bie82zq5gsyvi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "text": "Розвідувальний аналіз є такою науковою галуззю, яка використовує різноманітні способи аналітичного опрацювання та візуалізації даних з метою формування попереднього уявлення про досліджувані об’єкти та формування стратегії того, яким чином побудувати аналітичні моделі, що описують область дослідження. В цьому керівництві показано, як можна оцінити залежності даних за допомогою інструментарію статистичного опрацювання даних, реалізованих в платформі DJ.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "z1z2l9fy3m4vdisurs02j4i",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Preparation Stage",
+              "intro": "На стадії підготовки треба знайти необхідні дані, привести їх до потрібного в дослідженні вигляду та, вразі необхідності, візуалізувати їх.",
+              "text": "",
+              "type": "html-article",
+              "instanceName": "z9xqpvgxqsvg9jiuad2m4pldi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "title": "Working with metadata",
+              "level": 2,
+              "type": "title",
+              "instanceName": "kdhkfi7ta8c8wl6fzsb8rggb9",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "text": "DJ Data Processing Script надає можливість обробляти метадані, що супроводжують набори даних, використовувати вибірки, зберігати контекст виконання скрипта в змінних та відновлювати його.  ",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "5u5i9kp4bwr7kcp51kbsqhncdi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "text": "Знайдемо інформацію про набір даних, який містить значення щільності потоку нейтронів  від система моніторингу атомної безпеки за лютий 2016 р. Цьому набору даних відповідає значення «NSMS_DAU_NFD» у полі метаданих dataset.label та UUID цього набору закінчується на «_2016_02».",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "vjolxroke559jrpwc9885mi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "text": "Наведений нижче скрипт описує чергу процесів (pipe), які виконуються на контексті виконання. Так команда  meta заносить в контекст виконання метадані тих наборів даних, що відповідають умові, заданій в параметрах цієї команди. Наступна команда select здійснює вибірку даних з контексту ( вибирає лише UUID знайдених наборів даних). Наступна команда put зберігає нульовий елемент поточного контексту в змінній id. Команда source здійснює вибірку набору даних за його UUID, значення якого зберігається в змінній id. Таким чином формується структура, яка містить інформацію про знайдений набір даних. Остання команда відновлює контекст з змінних, який в подальшому передається користувачеві.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "g367g3xnoynseu6yvcpduz0k9",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "#Search data and get info about it",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "js1",
+              "type": "v2.script",
+              "instanceName": "get_ds_info",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "meta('$[?(@.dataset.label.indexOf(\"NSMS_DAU_NFD\")>=0 && @.dataset.id.indexOf(\"_2016_02\")>=0)]')\nselect('$..dataset.id')\nput(var:'id', value:'$[0]')\nsource(ds:'{{$.id}}')\nselect('$..metadata.dimension.indicator.values..label')\nput('indicators')\nsource(ds:'{{$.id}}')\nselect('$..metadata.dataset.label')\nextend()\ntranslate()\nput('name')\n\nget()"
+            },
+            {
+              "title": "Preview",
+              "scroll": false,
+              "height": 250,
+              "type": "v2.json-viewer",
+              "instanceName": "js1",
+              "icon": "/widgets/v2.json-viewer/icon.png"
+            },
+            {
+              "title": "Data preprocessing",
+              "level": 2,
+              "type": "title",
+              "instanceName": "7xppxp2wxhb2xyco8fhnmcayvi",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "text": "Дані в DJ зберігаються у вигляді багатовимірних кубів, тому після вибірки набору даних необхідно отримати таблицю. Для цього використовується команда query, яка вибирає проекцію, задану в параметрах. Необхідно для кожного з напрямів куба вказати роль та значення, що входять до проекції. В результаті виконання цієї команди контекст буде містити таблицю, в якій стовбці відповідають показникам, а рядки – відлікам часу. В подальшому рядки таблиці впорядковуються в прямому порядку за значеннями часу (команда  order). Значення index:-1 задає те, що значення, за якими впорядковуються рядки таблиці, знаходяться в першому елементі метаданих рядків, тобто у відліках часу.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "vr3qxnlpzik9y1z1hn5m0wwmi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Вибираємо та опрацьовуємо дані",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "t1",
+              "type": "v2.script",
+              "instanceName": "4s3sxd04epsg1yj2fsvxyiizfr",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { \n    dim:'indicator', \n    role:'col', \n    items:[] \n  } \n])\n\norder(dir:'row', asc:'az', index:-1)"
+            },
+            {
+              "type": "v2.table",
+              "instanceName": "t1",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 1200,
+                "scroll": true
+              },
+              "dataID": "5843ff26496b7de842437a4d",
+              "queryID": "4825fff047019724818c736204c47145"
+            },
+            {
+              "text": "Дані можна відображувати у вигляді різноманітних графіків. Наприклад, наведений нижче скрипт відображує ті самі дані у вигляді звичайного графіка. Команда line генерує дані у вигляді, придатному для відображення графіка типу Line Chart. Параметр x:-1 задає вісь x, за замовченням відображаються всі серії.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "mx21vkuh45ms21iun9zw4gqfr",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Відображуємо графік",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "l1",
+              "type": "v2.script",
+              "instanceName": "5yn3n2w0f665v098cn7gl7syvi",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { \n    dim:'indicator', \n    role:'col', \n    items:[] \n  } \n])\n\norder(dir:'row', asc:'az', index:-1)\nline(x:-1)"
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "l1",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 250,
+                "title": "Input data",
+                "subtitle": "Non normalized",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "color": [
+                  "#e41a1c",
+                  "#377eb8",
+                  "#4daf4a",
+                  "#984ea3",
+                  "#ff7f00",
+                  "#ffff33",
+                  "#a65628",
+                  "#f781bf"
+                ],
+                "interpolation": "linear",
+                "showLabels": false,
+                "width": 1200
+              },
+              "serieDataId": "584438fc45fe83985098580a",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": -1,
+              "index": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "title": "Analysis Stage",
+              "intro": "Існує декілька способів оцінювання статистичної залежності даних. Ми порівнюємо три з них: коефіцієнт кореляції, кластерування та метод головних компонент.",
+              "text": "У будь-якому випадку, досліджувані об’єкти розглядаються як деякі елементи багатовимірного простору, а їх геометричні  співвідношення в цьому просторі інтерпретуються як взаємна статистична залежність. ",
+              "type": "html-article",
+              "instanceName": "i8m7rfmdkvzxzxczxxls1yvi",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "title": "Кореляційна матриця",
+              "level": 2,
+              "type": "title",
+              "instanceName": "maffkjydeqo1rrwttopfrbe29",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "text": "В цьому випадку часові серії значень показників розглядаються як вектори з координатами, заданими значеннями показників для кожного відліку часу. Тобто, для наших даних розглядаються 6 векторів з 29 координатами (кількість днів у лютому 2016 р.). Коефіцієнт кореляції пропорційний куту між такими векторами, тому може використовуватись в якості оцінки статистичної близькості. ",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "9a8rt74kmhi90cwsblb5zsemi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Будуємо кореляційну матрицю",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "t2",
+              "type": "v2.script",
+              "instanceName": "yqui5p2rwvg9aypzmjmqdunmi",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\n\ncorr(dir:'col')\n\nformat(p:3)"
+            },
+            {
+              "type": "v2.table",
+              "instanceName": "t2",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": true,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "All",
+                "width": 1200,
+                "scroll": false,
+                "reversePalette": false,
+                "color": [
+                  "#2c7bb6",
+                  "#abd9e9",
+                  "#fdae61",
+                  "#d7191c"
+                ]
+              },
+              "dataID": "584438e545fe839850985808",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71"
+            },
+            {
+              "text": "У випадку, коли кількість об’єктів велика, зручно використовувати спеціальний графік для  візуалізації залежності.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "v7hxudgdh2b13vq79osx20529",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Будуємо графік залежності",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "h1",
+              "type": "v2.script",
+              "instanceName": "335x1wssejzapvfswka7yl23xr",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\n\ncorr(dir:'col')\n\ndeps()"
+            },
+            {
+              "type": "v2.nvd3-chord",
+              "instanceName": "h1",
+              "icon": "/widgets/v2.nvd3-chord/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "Dependecy Wheel",
+                "subtitle": "",
+                "caption": "",
+                "isArea": true,
+                "showLabels": false,
+                "ticks": 5,
+                "tickLabel": true,
+                "grid": true,
+                "axisLabel": true,
+                "width": 1200
+              },
+              "serieDataId": "585017073b6852ac903c7c96",
+              "queryID": "b0677286f1148d9beea62497c1294ef6",
+              "dataID": "585016e43b6852ac903c7c95"
+            },
+            {
+              "text": "Як бачимо з кореляційної матриці, існує три групи показників, що пов’язані тісною залежністю. Але дві останні групи так само близькі одна до одної.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "qdilnjcz7n9begsdlmwijm7vi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Кластерування",
+              "level": 2,
+              "type": "title",
+              "instanceName": "1elgh6fx4t0dzprsrfubygy14i",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "text": "В цьому випадку часові серії розглядаються як точки багатовимірного простору. Реалізований в DJ метод к-середніх дозволяє ітераційно розбити множину точок на групи (кластери) за критерієм найменшої сумарної відстані між точками всередині кластера та найбільшої сумарної відстані між кластерами. При цьому можуть використовуватись  різні функції відстані. Однак умовою коректного обчислення відстаней є принаймні те, що дані подано в однаковому масштабі, шо не можна сказати про наш випадок (дивись графік часових серій вище). Для вирівнювання масштабу даних та для приведення їх у безрозмірні величини використовують нормування.  ",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "4invsax4cwjptyeonp1yxmvx6r",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Нормуємо дані",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "l2,l4",
+              "type": "v2.script",
+              "instanceName": "bq5cueogukdzx9htxrjedygb9",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { \n    dim:'indicator', \n    role:'col', \n    items:[] \n  } \n])\n\norder(dir:'row', asc:'az', index:-1)\nnorm(dir:'col',mode:'std')\nline(x:-1)"
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "l2",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 250,
+                "title": "Standartized Data",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02"
+                ],
+                "interpolation": "cardinal",
+                "showLabels": false,
+                "width": 1200
+              },
+              "serieDataId": "584438fc45fe83985098580a",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": -1,
+              "index": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "text": "Тепер дані в одному масштабі. Можна будувати кластери. Кількість кластерів визначимо у відповідності до результатів, отриманих при аналізі кореляційної матриці. Тобто, будемо розбивати серії на три групи.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "xrdnnz57il9lpgewwcst0rudi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Будуємо кластери",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "t4",
+              "type": "v2.script",
+              "instanceName": "amr7xggkt8zwevxsp3a3jtt9",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\nnorm(dir:'col', mode:'std')\ncls(dir:'col',count:3)\n\nlimit(start:30, length:1)\ntranspose()\norder(dir:'row', asc:'az', index:[0])"
+            },
+            {
+              "type": "v2.table",
+              "instanceName": "t4",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 1200
+              },
+              "dataID": "584438e545fe839850985808",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71"
+            },
+            {
+              "title": "Аналіз головних компонент",
+              "level": 2,
+              "type": "title",
+              "instanceName": "bnu6rdxbmtyhhdh5xtuykwewmi",
+              "icon": "/widgets/title/icon.png"
+            },
+            {
+              "text": "При використанні методу кластерування ми забезпечили те, що базис простору, в якому розглядаються серії даних, є нормованим, але не робили ніяких зауважень відносно того, що цей базис повинен бути ще й ортогональним. Неортогональність базису може мати суттєвий вплив на вірність обчислення відстаней, а саме вони визначають результати кластерування.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "z3a2b8w7lzxughwx3aojvpldi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "text": "Метод головних компонент дозволяє у визначеному просторі перейти до нового ортонормованого базису та отримати координати точок в ньому. Таке перетворення є лінійним. До результатів аналізу головних компонентів відносять: навантаження (loadings) – координати одиничних векторів старого базису в новому базисі, координати точок в новому базисі (scores) та власні значення коваріаційної матриці (eigen values).",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "jqe7qiq94lp93p0cecx979zfr",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "text": "Особливість метода головних компонентів полягає в тому, що вектори ортонормованого базису вибираються таким чином, щоб мінімізувати остатню дисперсію, яка пропорційна власним значенням. Тобто інформативність останніх векторів базису невелика. Це означає, що останні координати можуть бути відкинуті без суттєвої втрати інформації. Приходимо до висновку, що метод головних компонентів можна використовувати для зменшення розмірності простору. Скільки напрямів можна відкинути? Зазвичай відкидають ті напрями для яких відповідні власні значення менші від 1.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "0jo0wxkc50jxqs9b2ks7mhd7vi",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Аналізуємо власні значення",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "bar",
+              "type": "v2.script",
+              "instanceName": "xjwoslx6i25x95yxiyynwmi",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\npca(dir:'row',result:'ev')\nformat(p:3)\nbar()"
+            },
+            {
+              "type": "v2.nvd3-bar",
+              "instanceName": "bar",
+              "icon": "/widgets/v2.nvd3-bar/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "xAxisAngle": 0,
+                "reduceXTicks": false,
+                "staggerLabels": false,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02",
+                  "#a6761d"
+                ],
+                "showControls": true,
+                "stacked": false,
+                "width": 1200
+              },
+              "serieDataId": "58443ac245fe83985098580c",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808"
+            },
+            {
+              "text": "Як бачимо достатньо однієї координати, для того щоб розрізняти досліджувані серії даних.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "xde4iipyna8x5qjpx03sor",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Візуалізуємо першу координату навантажень",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "hbar",
+              "type": "v2.script",
+              "instanceName": "l08nvof5uz5mepil7j02j4i",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\npca(dir:'row',result:'loadings')\n\ntranspose()\nformat(p:3)\nlimit(start:1, length:1)\nhbar()"
+            },
+            {
+              "type": "v2.nvd3-bar-h",
+              "instanceName": "hbar",
+              "icon": "/widgets/v2.nvd3-bar-h/icon.png",
+              "decoration": {
+                "height": 350,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "color": [
+                  "#984ea3",
+                  "#4daf4a",
+                  "#377eb8",
+                  "#e41a1c"
+                ],
+                "showControls": true,
+                "stacked": false,
+                "width": 1200,
+                "reversePalette": true
+              },
+              "serieDataId": "58443ac245fe83985098580c",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808"
+            },
+            {
+              "text": "Тепер можна застосувати кластерування, оскільки базис головних компонент є ортонормованим і будуть обчислюватись коректні відстані. Враховуючи те, що за першою головною компонентою  вирізняються дві групи серій, виберемо кількість кластерів рівним 2.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "p96m15pl30bgeg4q39fcg14i",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Аналізуємо кластери в просторі головних компонент",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "scatter",
+              "type": "v2.script",
+              "instanceName": "slmz8fsd50xsai2u3jn1rwwmi",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\npca(dir:'row',result:'loadings')\ncls(dir:'row', count:2)\nformat(p:3)\nscatter(x:0, index:[1], cat:6)"
+            },
+            {
+              "type": "v2.nvd3-scatter",
+              "instanceName": "scatter",
+              "icon": "/widgets/v2.nvd3-scatter/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "X Axis",
+                "yAxisName": "Y Axis",
+                "staggerLabels": false,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e"
+                ],
+                "showLabels": true,
+                "width": 1200,
+                "reversePalette": true
+              },
+              "serieDataId": "585581cc30d9ae60277a4764",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": 0,
+              "index": [
+                0
+              ]
+            },
+            {
+              "title": "Conclusion",
+              "intro": "",
+              "text": "",
+              "type": "html-article",
+              "instanceName": "3a716ug9s8o5x8l0jzvmo0f6r",
+              "icon": "/widgets/html-article/icon.png"
+            },
+            {
+              "text": "Таким чином, серед розглянутих підходів до оцінювання статистичної залежності найбільш потужним є комбінація методів головних компонент та кластерування, застосування якої гарантує коректність отриманих результатів. Нижче можна спостерігати візуально, яким чином для вибраних даних було виокремлено групи серій, що мають сильний статистичний зв’язок одна з однією.",
+              "img": {
+                "url": "",
+                "width": "20%"
+              },
+              "ref": {
+                "url": "",
+                "text": ""
+              },
+              "type": "html-paragraph",
+              "instanceName": "5rh4rvohj98nylxojllzestt9",
+              "icon": "/widgets/html-paragraph/icon.png"
+            },
+            {
+              "title": "Будуємо графіки першої групи серій",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "l4",
+              "type": "v2.script",
+              "instanceName": "e8orpihq1a9486fm21z3bx1or",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\nnorm(dir:'col', mode:'std')\norder(dir:'row', mode:'std', acs:'az')\nformat(2)\nline(x:-1,index:[0,1])"
+            },
+            {
+              "title": "Будуємо графіки другої групи серій",
+              "examples": false,
+              "editor": false,
+              "d_listeners": "l5",
+              "type": "v2.script",
+              "instanceName": "tpi33rc5huqiouv9kvai6n7b9",
+              "icon": "/widgets/v2.script/icon.png",
+              "runnable": true,
+              "script": "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n\nquery([\n  { dim:'time', role:'row', items:[] },\n  { dim:'indicator', role:'col', items:[] } \n])\n\nnorm(dir:'col', mode:'std')\norder(dir:'row', mode:'std', acs:'az')\nformat(2)\nline(x:-1,index:[2,3,4,5])"
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "l4",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 250,
+                "title": "Cluster 1",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "color": [
+                  "#1b9e77",
+                  "#d95f02",
+                  "#7570b3",
+                  "#e7298a",
+                  "#66a61e",
+                  "#e6ab02",
+                  "#a6761d"
+                ],
+                "interpolation": "cardinal",
+                "showLabels": false,
+                "width": 1200
+              },
+              "serieDataId": "584438fc45fe83985098580a",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": -1,
+              "index": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "l5",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 250,
+                "title": "Cluster 2",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "color": [
+                  "#a6761d",
+                  "#e6ab02",
+                  "#66a61e",
+                  "#e7298a",
+                  "#7570b3",
+                  "#d95f02",
+                  "#1b9e77"
+                ],
+                "interpolation": "cardinal",
+                "showLabels": false,
+                "width": 1200,
+                "reversePalette": true
+              },
+              "serieDataId": "584438fc45fe83985098580a",
+              "queryID": "f2389aeeecdf18fc95a6f003aad9bd71",
+              "dataID": "584438e545fe839850985808",
+              "axisX": -1,
+              "index": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "type": "v2.query-manager",
+              "instanceName": "e8tuwqmb4uqy7hpnrc32gr2j4i",
+              "icon": "/widgets/v2.query-manager/icon.png",
+              "queries": [
+                {
+                  "$id": "4825fff047019724818c736204c47145",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "pr",
+                  "context": {
+                    "query": {
+                      "commitID": "5836ce6730c0f1580c1a2fb1",
+                      "datasetID": "47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02",
+                      "query": [
+                        {
+                          "dimension": "indicator",
+                          "role": "Columns",
+                          "collection": []
+                        },
+                        {
+                          "dimension": "time",
+                          "role": "Rows",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "en"
+                    },
+                    "queryResultId": "5843ff26496b7de842437a4d"
+                  }
+                },
+                {
+                  "$id": "f2389aeeecdf18fc95a6f003aad9bd71",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "line",
+                  "context": {
+                    "queryResultId": "584438e545fe839850985808",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5843ff26496b7de842437a4d')"
+                      },
+                      {
+                        "shortName": "order(direction:'Row', asc:'A-Z', index:-1)",
+                        "order": {
+                          "enable": true,
+                          "direction": "Rows",
+                          "asc": "A-Z",
+                          "index": "-1"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "b0677286f1148d9beea62497c1294ef6",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "corr",
+                  "context": {
+                    "queryResultId": "585016e43b6852ac903c7c95",
+                    "script": [
+                      {
+                        "shortName": "source(table:'584438e545fe839850985808')"
+                      },
+                      {
+                        "shortName": "corr(direction:'Columns')",
+                        "correlation": {
+                          "enable": true,
+                          "direction": "Columns"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "width": 1200
+        }
+      },
+      "subscriptions": [
+        {
+          "emitter": "ve8m08rbycvzk365za2oi529",
+          "receiver": "json",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "cu7lc4fbf26vpuhq9j640r7ldi",
+          "receiver": "l4",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "cu7lc4fbf26vpuhq9j640r7ldi",
+          "receiver": "t5",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "uzghqc29lxqx3nb7ilfjbrzfr",
+          "receiver": "j2",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "mqxbf59y2uxr1mda63r57y14i",
+          "receiver": "js1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "bq5cueogukdzx9htxrjedygb9",
+          "receiver": "l4",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "get_ds_info",
+          "receiver": "js1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "4s3sxd04epsg1yj2fsvxyiizfr",
+          "receiver": "t1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "5yn3n2w0f665v098cn7gl7syvi",
+          "receiver": "l1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "yqui5p2rwvg9aypzmjmqdunmi",
+          "receiver": "t2",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "335x1wssejzapvfswka7yl23xr",
+          "receiver": "h1",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "bq5cueogukdzx9htxrjedygb9",
+          "receiver": "l2",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "amr7xggkt8zwevxsp3a3jtt9",
+          "receiver": "t4",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "xjwoslx6i25x95yxiyynwmi",
+          "receiver": "bar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "l08nvof5uz5mepil7j02j4i",
+          "receiver": "hbar",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "slmz8fsd50xsai2u3jn1rwwmi",
+          "receiver": "scatter",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "e8orpihq1a9486fm21z3bx1or",
+          "receiver": "l4",
+          "signal": "setData",
+          "slot": "setData"
+        },
+        {
+          "emitter": "tpi33rc5huqiouv9kvai6n7b9",
+          "receiver": "l5",
+          "signal": "setData",
+          "slot": "setData"
+        }
+      ]
+    },
+    {
+      "shortTitle": "dashboard",
+      "href": "dashboard",
+      "template": "left-right-bottom",
+      "holders": {
+        "banner": {
+          "widgets": [
+            {
+              "enabled": true,
+              "bgImage": "./img/three-ways-banner.png",
+              "height": 300,
+              "type": "v2.banner",
+              "instanceName": "vivsoktfnop1zmnyj7l8ilik9",
+              "icon": "/widgets/v2.banner/icon.png"
+            }
+          ],
+          "width": 1358
+        },
+        "column": {
+          "widgets": [
+            {
+              "title": "Data Dependencies Dashboard",
+              "intro": "",
+              "text": "",
+              "type": "html-article",
+              "instanceName": "ovjl9axs57we3j3pjfzz7iudi",
+              "icon": "/widgets/html-article/icon.png"
+            }
+          ],
+          "width": 1200
+        },
+        "topleft": {
+          "widgets": [
+            {
+              "type": "v2.table",
+              "instanceName": "bmihw6y8i2v3guf0yty44pldi",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 654,
+                "scroll": true,
+                "title": "Input Data"
+              },
+              "dataID": "5853c73321c713300aef9d42",
+              "queryID": "8124503535cfaeb07d20a322c513b710"
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "5yh7jefrw091jjigvbgj8m2t9",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "Input data",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "interpolation": "cardinal",
+                "showLabels": false,
+                "width": 654
+              },
+              "serieDataId": "5853d60121c713300aef9d47",
+              "queryID": "8124503535cfaeb07d20a322c513b710",
+              "dataID": "5853c73321c713300aef9d42",
+              "axisX": -1,
+              "index": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "type": "v2.table",
+              "instanceName": "ncdwb6u7306hmzchuud9ggb9",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": true,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "All",
+                "width": 654,
+                "color": [
+                  "#2166ac",
+                  "#67a9cf",
+                  "#d1e5f0",
+                  "#f7f7f7",
+                  "#fddbc7",
+                  "#ef8a62",
+                  "#b2182b"
+                ],
+                "reversePalette": true,
+                "title": "Correlation matrix"
+              },
+              "dataID": "5853d6a721c713300aef9d4a",
+              "queryID": "4999854e2d22efc6ca99f4374e5b7f30"
+            },
+            {
+              "type": "v2.table",
+              "instanceName": "3xyoyl7b206pb21rex3eopqfr",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 659,
+                "title": "Clusters"
+              },
+              "dataID": "5853c85d21c713300aef9d44",
+              "queryID": "3bb1d38ae79706ef4b4c17b7b39f6fcf"
+            }
+          ],
+          "width": 659
+        },
+        "topright": {
+          "widgets": [
+            {
+              "type": "v2.table",
+              "instanceName": "py30bipj87qpobt4706bt9",
+              "icon": "/widgets/v2.table/icon.png",
+              "decoration": {
+                "colorize": false,
+                "height": 250,
+                "opacity": 0.5,
+                "direction": "Rows",
+                "width": 659,
+                "scroll": true,
+                "title": "Standartized Data"
+              },
+              "dataID": "5853c77021c713300aef9d43",
+              "queryID": "e065a059631a5f4523aa15ec157c98e0"
+            },
+            {
+              "type": "v2.nvd3-line",
+              "instanceName": "63hbjqnjcl9oaej9kh0bpgb9",
+              "icon": "/widgets/v2.nvd3-line/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "Standartized data",
+                "subtitle": "",
+                "caption": "",
+                "xAxisName": "",
+                "yAxisName": "",
+                "staggerLabels": false,
+                "interpolation": "cardinal",
+                "showLabels": false,
+                "width": 654
+              },
+              "serieDataId": "5853d63e21c713300aef9d49",
+              "queryID": "e065a059631a5f4523aa15ec157c98e0",
+              "dataID": "5853c77021c713300aef9d43",
+              "axisX": -1,
+              "index": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "type": "v2.nvd3-chord",
+              "instanceName": "myknfqqwox0gre2iw3nq257b9",
+              "icon": "/widgets/v2.nvd3-chord/icon.png",
+              "decoration": {
+                "height": 450,
+                "title": "Dependencies Wheel",
+                "subtitle": "",
+                "caption": "",
+                "isArea": true,
+                "showLabels": false,
+                "ticks": 5,
+                "tickLabel": true,
+                "grid": true,
+                "axisLabel": true,
+                "width": 654
+              },
+              "serieDataId": "5853d6d321c713300aef9d4b",
+              "queryID": "4999854e2d22efc6ca99f4374e5b7f30",
+              "dataID": "5853d6a721c713300aef9d4a"
+            }
+          ],
+          "width": 659
+        },
+        "bottom": {
+          "widgets": [
+            {
+              "type": "v2.query-manager",
+              "instanceName": "qwy67dwahisorardpcfjbrzfr",
+              "icon": "/widgets/v2.query-manager/icon.png",
+              "queries": [
+                {
+                  "$id": "508fac5ba448b0810dd7622d4724ea5f",
+                  "$listeners": 0,
+                  "$type": "projection",
+                  "$title": "query",
+                  "context": {
+                    "query": {
+                      "commitID": "5852aed45844f4e0157960c5",
+                      "datasetID": "47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02",
+                      "query": [
+                        {
+                          "dimension": "indicator",
+                          "role": "Columns",
+                          "collection": []
+                        },
+                        {
+                          "dimension": "time",
+                          "role": "Rows",
+                          "collection": []
+                        }
+                      ],
+                      "locale": "en"
+                    },
+                    "queryResultId": "5843ff26496b7de842437a4d"
+                  }
+                },
+                {
+                  "$id": "8124503535cfaeb07d20a322c513b710",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "input",
+                  "context": {
+                    "queryResultId": "5853c73321c713300aef9d42",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5843ff26496b7de842437a4d')"
+                      },
+                      {
+                        "shortName": "order(direction:'Row', asc:'A-Z', index:-1)",
+                        "order": {
+                          "enable": true,
+                          "direction": "Rows",
+                          "asc": "A-Z",
+                          "index": "-1"
+                        }
+                      },
+                      {
+                        "shortName": "format(precision:4)",
+                        "precision": 4
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "e065a059631a5f4523aa15ec157c98e0",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "normalized",
+                  "context": {
+                    "queryResultId": "5853c77021c713300aef9d43",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5853c73321c713300aef9d42')"
+                      },
+                      {
+                        "shortName": "norm(direction:'Columns', mode:'Standartization')",
+                        "normalization": {
+                          "enable": true,
+                          "mode": "Standartization",
+                          "direction": "Columns"
+                        }
+                      },
+                      {
+                        "shortName": "format(precision:4)",
+                        "precision": 4
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "3bb1d38ae79706ef4b4c17b7b39f6fcf",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "clusters",
+                  "context": {
+                    "queryResultId": "5853c85d21c713300aef9d44",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5853c77021c713300aef9d43')"
+                      },
+                      {
+                        "shortName": "transpose()",
+                        "transpose": true
+                      },
+                      {
+                        "shortName": "cluster(count:'3',direction : 'Rows')",
+                        "cluster": {
+                          "enable": true,
+                          "direction": "Rows",
+                          "count": 3
+                        }
+                      },
+                      {
+                        "shortName": "order(direction:'Row', asc:'A-Z', index:29)",
+                        "order": {
+                          "enable": true,
+                          "direction": "Rows",
+                          "asc": "A-Z",
+                          "index": "29"
+                        }
+                      },
+                      {
+                        "shortName": "transpose()",
+                        "transpose": true
+                      },
+                      {
+                        "shortName": "limit(start:30, length:1)",
+                        "limit": {
+                          "enable": true,
+                          "start": 30,
+                          "length": 1
+                        }
+                      },
+                      {
+                        "shortName": "transpose()",
+                        "transpose": true
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "89ae74c9db7db5eb317ab90e03aea5ab",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "corr",
+                  "context": {
+                    "queryResultId": "5853d56921c713300aef9d45",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5853c73321c713300aef9d42')"
+                      },
+                      {
+                        "shortName": "corr(direction:'Columns')",
+                        "correlation": {
+                          "enable": true,
+                          "direction": "Columns"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$id": "4999854e2d22efc6ca99f4374e5b7f30",
+                  "$listeners": 0,
+                  "$type": "preparation",
+                  "$title": "corr1",
+                  "context": {
+                    "queryResultId": "5853d6a721c713300aef9d4a",
+                    "script": [
+                      {
+                        "shortName": "source(table:'5853d56921c713300aef9d45')"
+                      },
+                      {
+                        "shortName": "format(precision:2)",
+                        "precision": 2
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "width": 1200
+        }
+      },
+      "subscriptions": []
+    }
+  ],
+  "name": "SDA Roadmap",
+  "i18n": {
+    "uk": {
+      "#bg": "./img/default-banner-uk.png",
+      "#aaa": "Uuu",
+      "#about": "Про  DJ Data",
+      "#pages": "Сторінки",
+      "#Search_and_Download _Dataset": "Пошук та завантаження наборів даних",
+      "#Datasets": "Набори даних",
+      "#Sources": "Джерела",
+      "#Authors": "Автори",
+      "#Indicators": "Показники",
+      "#Countries": "Країни",
+      "#Total": "Всього:",
+      "#Topics": "Теми",
+      "#Keywords": "Ключові слова",
+      "#Search_Result": "Результати пошуку",
+      "#Key": "Ключ пошуку",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-uk.html",
+      "#Home": "Головна",
+      "#WDC Datasets Exploration": "Розвідка даних СЦД",
+      "#Data Management": "Управління даними",
+      "#World Data System": "Світова система даних",
+      "#Sustainable Development": "Сталий розвиток",
+      "#WDC description": "\"Розвідка даних СЦД\" це застосунок, який допоможе знайти, вибрати та завантажити наші дані.",
+      "#apps": "Доступні застосунки",
+      "#info": "Інформація про застосунок",
+      "#AvDS": "Доступні набори даних:",
+      "#topics": "Теми",
+      "#sources": "Джерела",
+      "#countries": "Країни",
+      "#ukraine": "Регіони України",
+      "#keywords": "Ключові слова",
+      "#title": "Як створити застосунок",
+      "#description": "Портал \"Doggy Jam\" надає дружній  WEB интерфейс для дослідження даних",
+      "#AvailableDatasets": "Доступні набори даних:",
+      "#selectRegion": "Виберіть одну або декілька областей",
+      "#tags": "Пошукові теги",
+      "#dataSource": "Джерело даних",
+      "#Datasource": "Джерело даних",
+      "#Topic": "Розділ",
+      "#dataset": "Набір даних:",
+      "#t": "Фактори впливу",
+      "#st": "Ключові події та процеси",
+      "#history": "Оновлення",
+      "#searchRes": "Знайдені набори даних",
+      "#MDL": "Метадані",
+      "#go": "Вперед",
+      "#Search data and get info about it": "Шукаємо дані та інформацію про них"
+    },
+    "en": {
+      "#bg": "./img/default-banner.png",
+      "#aaa": "Aaa",
+      "#about": "About DJ Data",
+      "#pages": "Pages",
+      "#Search_and_Download _Dataset": "Search and Download  Dataset",
+      "#Datasets": "Datasets",
+      "#Sources": "Sources",
+      "#Authors": "Authors",
+      "#Indicators": "Indicators",
+      "#Countries": "Countries",
+      "#Total": "Total:",
+      "#Topics": "Topics",
+      "#Keywords": "Keywords",
+      "#Search_Result": "Search Result",
+      "#Key": "Search Key",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-en.html",
+      "#Home": "Home",
+      "#WDC Datasets Exploration": "Exploration of  WDC Datasets",
+      "#Data Management": "Data Management",
+      "#World Data System": "World Data System",
+      "#Sustainable Development": "Sustainable Development",
+      "#WDC description": "Exploration of WDC Datasets is the single page application. You can use it for search and retrieve WDC data.",
+      "#apps": "Available Applications",
+      "#info": "About App",
+      "#AvDS": "Available Datasets:",
+      "#topics": "Topics",
+      "#sources": "Sources",
+      "#countries": "Countries",
+      "#ukraine": "Ukraine",
+      "#keywords": "Keywords",
+      "#title": "How to create app",
+      "#description": "\"Doggy Jam\" portal provide user frendly WEB interface for data exploration",
+      "#AvailableDatasets": "Available datasets:",
+      "#selectRegion": "Select one or more regions",
+      "#tags": "Tags",
+      "#dataSource": "Data Source",
+      "#Datasource": "Data Source",
+      "#Topic": "Topic",
+      "#dataset": "Dataset:",
+      "#t": "Impact Factors",
+      "#st": "Key Events and Processes",
+      "#history": "Dataset History",
+      "#searchRes": "Available Datasets",
+      "#MDL": "Full Metadata List",
+      "#go": "Go!",
+      "#Search data and get info about it": "Search data and get info about it"
+    },
+    "ru": {
+      "#bg": "./img/default-banner.png",
+      "#aaa": "Rrr",
+      "#Search_and_Download _Dataset": "Поиск и загрузка наборов данных",
+      "#Datasets": "Наборы данных",
+      "#Sources": "Источники",
+      "#Authors": "Авторы",
+      "#Indicators": "Показатели",
+      "#Countries": "Страны",
+      "#Total": "Всего:",
+      "#Topics": "Темы",
+      "#Keywords": "Ключевые слова",
+      "#Search_Result": "Результаты поиска",
+      "#Key": "Ключ поиска",
+      "#url": "./api/resource/Exploration of WDC Datasets-dm-default-en.html",
+      "#Home": "Главная",
+      "#Sustainable Development": "Устойчивое развитие",
+      "#AvDS": "Доступные наборы данных:",
+      "#topics": "Темы",
+      "#sources": "Источники",
+      "#countries": "Страны",
+      "#ukraine": "Регионы Украины",
+      "#keywords": "Ключевые слова",
+      "#about": "Про  DJ Data",
+      "#title": "How to create app",
+      "#description": "Портал \"Doggy Jam\" предоставляет дружественный  WEB интерфейс для исследования данных",
+      "#AvailableDatasets": "Доступные наборы данных:",
+      "#selectRegion": "Select one or more regions",
+      "#tags": "Теги",
+      "#dataSource": "Data Source",
+      "#Datasource": "Data Source",
+      "#Topic": "Topic",
+      "#dataset": "Dataset:",
+      "#t": "Фактори впливу",
+      "#st": "Ключові події та процеси",
+      "#history": "Dataset History",
+      "#searchRes": "Available Datasets",
+      "#MDL": "Full Metadata List",
+      "#go": "Вперед",
+      "#Search data and get info about it": "Search data and get info about it"
+    }
+  },
+  "icon": "./img/sseopen.png",
+  "dps": "http://localhost:8088",
+  "importedFromURL": "http://localhost:8080/app/SDA Roadmap",
+  "importedFromAuthor": "Andrey Boldak"
+}
