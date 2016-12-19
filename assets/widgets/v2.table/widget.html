@@ -1,7 +1,7 @@
 <div class="widget" ng-controller="TableCtrl">
   <div ng-if="widget.dataID && !hidden"> 
-    <div class="table caption" ng-if="widget.decoration.caption">{{widget.decoration.caption}}</div>
-    <div class="table title" ng-if="widget.decoration.title">{{widget.decoration.title}}</div>
+    <div class="table caption skin-color" ng-if="widget.decoration.caption">{{widget.decoration.caption}}</div>
+    <div class="table title skin-color" ng-if="widget.decoration.title">{{widget.decoration.title}}</div>
     <center>
     <img ng-if="pending" src="./img/ajax-loader.gif"/>
     <div ng-if="table" style="

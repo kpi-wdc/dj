@@ -95,7 +95,12 @@ m.factory("MakeQuery",['$http', '$dps','$timeout', "$lookup", "$translate", '$q'
         dialog({
             title:"Enter Data Projection Title",
             fields:{
-              title:{title:"Title",value:"",editable:true,required:true}
+              title:{
+                title:"Title",
+                value:"",
+                editable:true,
+                required:true
+              }
             } 
         })
         .then(function(form){

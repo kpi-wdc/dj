@@ -221,7 +221,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
 
     const url = appUrls.templateHTML(pageConfig.template);
     return $http.get(url, {cache: $templateCache})
-      .then(result => result.data);
+      .then((result) => {
+        return result.data
+      });
   };
 
   $stateProvider
@@ -263,11 +265,28 @@ app.factory('templateTypesPromise', function ($http, appUrls) {
 
 
 
-app.factory('config', function (initialConfig, $log) {
+app.factory('config', function (initialConfig, $log, templateTypesPromise) {
   if (initialConfig.pages.length <= 1) {
     $log.info('When there is no 404 page you might have problems with page routing!');
   }
+
+  // console.log("GET CONFIG")
+  // templateTypesPromise.then((resp) => {
+  //   var pageTemplates = resp.data;
+  //   var pages = initialConfig.pages
+  //   pages.forEach((page) => {
+  //     var pageTemplate = pageTemplates[page.template];
+  //     pageTemplate.holders.forEach((holder) => {
+  //       if(!page.holders[holder]){
+  //         page.holders[holder] = {widgets:[]}
+  //       }
+  //     })
+  //   })
+  // })
+  // console.log("UPDATED CONFIG", initialConfig)
+  
   var c = angular.copy(initialConfig);
+
   //c.dps="https://dj-app.herokuapp.com"; 
   return c;
 });
@@ -298,11 +317,12 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
                              $translate, appUrls, appName, fullReload, eventWires, APIUser, 
                              // APIProvider, 
                              hotkeys, splash, appHotkeysInfo,globalConfig,
-                             dialog, portal) {
+                             dialog, portal,templateTypesPromise,initialConfig) {
 
   let pageConf;
  
-
+  
+  
  
 
   angular.extend(this, {
@@ -905,10 +925,22 @@ app.controller('MainController', function ($scope, $location, $cookies, $window,
   };
 });
 
-app.controller('PageController', function ($scope, pageConfig) {
-  angular.extend($scope, {
-    config: pageConfig
-  });
+app.controller('PageController', function ($scope, pageConfig, templateTypesPromise) {
+  // console.log("Init page controller")
+  // templateTypesPromise.then((resp) => {
+  //   var pageTemplate = resp.data[pageConfig.template];
+  //   console.log(pageConfig.template,pageTemplate)
+  //   pageTemplate.holders.forEach((holder) => {
+  //     if(!pageConfig.holders[holder]){
+  //       console.log(holder)
+  //       pageConfig.holders[holder] = {widgets:[]}
+  //       console.log("append",pageConfig)
+  //     }
+  //   })
+    angular.extend($scope, {
+      config: pageConfig
+    });  
+  // })
 });
 
 app.directive('widgetHolder', function (appUrls, widgetManager, app, selectHolder) {

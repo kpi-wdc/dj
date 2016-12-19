@@ -63,7 +63,7 @@
   "title": {
     "enable": true,
     "text": "Write Your Title",
-    "class": "chartTitle",
+    "class": "chartTitle skin-color",
     "css": {
       "width": "nullpx",
       "textAlign": "center"
@@ -72,12 +72,12 @@
   "subtitle": {
     "enable": true,
     "text": "Write Your Subtitle",
-    "class": "chartSubTitle"
+    "class": "chartSubTitle skin-color"
   },
   "caption": {
     "enable": true,
     "text": "Figure 1. Write Your Caption text.",
-    "class": "chartCaption"
+    "class": "chartCaption skin-color"
   },
   "styles": {
     "classes": {

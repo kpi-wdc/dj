@@ -25,6 +25,19 @@
 			">
 				
 				<button
+					class="button radius right tiny toolbar apply" 
+			        style="margin:0 0.2em; padding: 0.3em 1em;"
+			    >
+			    	<a class="right"
+			    	style="padding:0;color:#ffffff;"
+					href="{{'./app/'+app.name}}"
+					target = "{{'blank'+app.name}}"
+					>
+			      		<widget-translate>VIEW</widget-translate>
+			      	</a>	
+			    </button>
+
+				<button
 					ng-if="isOwner(app) || isAdmin()"
 					ng-click="deleteApp(app)" 
 			        class="button radius right tiny toolbar alert" 
@@ -56,18 +69,7 @@
 			      <widget-translate>RENAME</widget-translate>
 			    </button>
 
-			    <button
-					class="button radius right tiny toolbar apply" 
-			        style="margin:0 0.2em; padding: 0.3em 1em;"
-			    >
-			    	<a class="right"
-			    	style="padding:0;color:#ffffff"
-					href="{{'./app/'+app.name}}"
-					target = "{{'blank'+app.name}}"
-					>
-			      		<widget-translate>VIEW</widget-translate>
-			      	</a>	
-			    </button>
+			    
 
 
 

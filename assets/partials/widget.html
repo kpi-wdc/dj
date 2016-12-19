@@ -75,6 +75,7 @@
 <div ng-if="(widgetCodeLoaded && !globalConfig.designMode) ||(widgetCodeLoaded && globalConfig.designMode && (!widgetPanel.collapsed && !drag))"
      ng-include="widgetTemplateUrl"
      class="widget-contents"
-     ng-class="{'widget-design-mode': globalConfig.designMode}">
+     ng-class="{'widget-design-mode': globalConfig.designMode}"
+     style="margin:0; padding:0;">
   <ng-transclude></ng-transclude>
 </div>

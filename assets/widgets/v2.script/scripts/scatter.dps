@@ -21,4 +21,4 @@ query([
 norm(dir:'col', mode:'log')
 cls(dir:'row',count:4)
 format(p:3)
-scatter(x:0,index:[1], cat:5)
+scatter(x:0,index:[1], cat:6)

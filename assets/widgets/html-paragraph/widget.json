@@ -1,0 +1,42 @@
+{
+    "keywords": ["html", "paragraph"],
+    "schema": {
+        "type": "object",
+        "title": "HTML Paragraph",
+        "properties": {
+            "text": {
+                "type": "string",
+                "title": "Text"
+            },
+            "img": {
+                "type": "object",
+                "title": "Image",
+                "properties":{
+                    "url": {
+                        "type": "string",
+                        "title": "URL"
+                    },
+                    "width": {
+                        "type": "string",
+                        "title": "Image Width",
+                        "default": "20%"
+                    }
+                }
+            },
+            "ref": {
+                "type": "object",
+                "title": "Reference",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "title": "URL"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Text"
+                    }
+                }
+            }
+        }
+    }
+}

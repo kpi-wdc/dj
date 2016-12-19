@@ -1,4 +1,4 @@
-<div  	
+<!-- <div  	
 		ng-controller="BannerController" 
 		style="	padding:0; 
 				margin:0;
@@ -9,4 +9,8 @@
 			    background-size: 100%;
 				height:{{height}}px;
 				">
+</div>
+ -->
+<div ng-controller="BannerController" style="margin: 0 -1px;overflow:hidden;">
+	<img src="{{bgImage | translate}}" style="width:100%; margin:-4% 0;"/>
 </div>

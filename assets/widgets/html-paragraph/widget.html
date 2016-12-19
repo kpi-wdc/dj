@@ -1,0 +1,32 @@
+<div  class="row" 
+      ng-controller="ParaController" 
+      style="     margin: 1em 0.5em 0.5em 3em;
+                  line-height: 1.5;
+                  color: #333;
+                  text-align: justify;">
+ 
+  <div  ng-if="withImage"  class="row" style="margin:0;">
+      <img ng-src="{{img.url}}" 
+        style="
+          float:left;
+          margin: 10px 10px 10px 0px;
+          width:{{img.width}};
+      ">
+     {{text | translate}}
+  </div> 
+  
+  <div  ng-if="!withImage"  class="row" style="margin:0;">
+    {{text | translate}}
+  </div>  
+
+  <div ng-if="withRef"  class="row" style="margin:0;">
+    <a  href="{{ref.url}}" 
+        target="blank" 
+        style="     float: right;
+                    font-size: small;
+                    margin: 10px;">
+      {{ref.text | translate}}
+    </a>
+  </div>
+      
+</div>

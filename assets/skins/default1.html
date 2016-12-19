@@ -45,6 +45,9 @@
 h1, h2, h3, h4, h5, a{
   color: #84a258;
 }
+.skin-color{
+  color: #84a258;
+}
 
 .has-tip:hover, .has-tip:focus {
     /*border-bottom: dotted 1px #003f54;*/
@@ -140,7 +143,9 @@ div.tags{
   <!-- <login-google-button ng-if="!user.isLoggedIn"></login-google-button> -->
   <widget type="v2.topbar" instanceName="AppTopbar" skin="true"></widget>
 </div>
-
+<!-- <div class="row">
+  <widget type="v2.banner" instanceName="Banner" skin="true"></widget>
+</div> -->
 <!-- <div class="row"  style="border-bottom:0.1rem solid #ddd; width:100%; margin:0 0 1em 0;">
   <language-selector-nav show-flags="true" show-titles="true"></language-selector-nav>
 </div>
@@ -327,13 +332,29 @@ div.tags{
 
 
 
-<div class="zurb-footer-bottom">
-  <div class="row">
+<div class="zurb-footer-bottom"> 
+ <div class="row">
     <div class="medium-6 columns">
-      <p style="margin: 0 0 0 1em;"> Based on <a href="http://dj-app.herokuapp.com/app/aps/about"><img src="./img/dj.png" style="height:24px;"/> platform </a></p>
     </div>  
     <div class="medium-6 columns">
       <div class="medium-4 columns right">
+        <p style="font-size:x-small; margin: 0;"> 
+          Developed by <a href="http://wdc.org.ua">WDC Data Mining Lab</a>. 
+        </p>
+        <p style="font-size:x-small; margin: 0;">Designed by <a href="mailto:alina.kalapa@ukr.net">Alina Kalapa</a>
+        </p>
+      </div>  
+    </div>  
+ </div>
+ 
+ <div class="row" style="margin: 0.3em 0;">
+    <div class="medium-4 columns">
+    </div>  
+    <div class="medium-4 columns">
+      <div class="medium-6 columns">
+        <p style="margin: 0 0 0 1em;"> Based on <a href="http://dj-app.herokuapp.com/app/aps/about"><img src="./img/dj.png" style="height:24px;"/> platform </a></p>
+      </div>
+      <div class="medium-6 columns" style="padding:0 0 0 0.6em;">
         <p style="font-size:x-small; margin: 0;"> 
           Copyright &copy; 2014-2016 <a href="mailto:boldak.andrey@gmail.com">Andrey Boldak</a>. 
         </p>
@@ -342,4 +363,6 @@ div.tags{
         </p>
       </div>  
     </div>  
-</div>
+  </div>
+    
+</div>  
