@@ -1327,7 +1327,7 @@
     }
   },
   "icon": "./img/sseopen.png",
-  "dps": "http://localhost:8088",
+  "dps": "http://chnppdps.wdc.org.ua",
   "importedFromURL": "http://localhost:8080/app/SSEChNPP-Open",
   "importedFromAuthor": "Andrey Boldak"
 }

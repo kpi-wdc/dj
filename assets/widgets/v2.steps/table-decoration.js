@@ -110,7 +110,8 @@ m.factory("TableDecoration",[
 		              thos.wizard.context.postprocessedTable = resp.value;
 		              thos.table = resp.value;
 		              thos.conf.decoration.width = parentHolder(thos.wizard.conf).width;
-		        })
+		          })
+		          
 			},
 
 			activate : function(wizard){

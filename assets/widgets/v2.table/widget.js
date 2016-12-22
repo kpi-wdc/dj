@@ -133,6 +133,7 @@ m.controller('TableCtrl', function (
         $scope.dataset = context.dataset;
         $scope.table = context.data;
         $scope.hidden = false;
+        $scope.pending = false;
         $scope.settings = {table:angular.copy($scope.table), decoration:angular.copy($scope.decoration)}
       }else{
         if($scope.dataset!=context.dataset){

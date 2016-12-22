@@ -60,8 +60,8 @@
         "column": {
           "widgets": [
             {
-              "title": "STATISTICAL DEPENDENCE ANALYSIS: A Roadmap for DJ platform",
-              "intro": "Step by step tutorial",
+              "title": "#roadmap",
+              "intro": "#tutorial",
               "text": "Одною із ключових проблем, яка вирішується в рамках наукових досліджень, є виявлення прихованих причинно-наслідкових та зв’язків між різноманітними явищами та процесами. На початкових стадіях наукових досліджень необхідно опрацювати наявну інформацію про досліджувані об’єкти та зробити попередні висновки щодо того, чи пов’язані ці об’єкти між собою причинно-наслідковими зв’язками. ",
               "type": "html-article",
               "instanceName": "7hnmm031eecj5bie82zq5gsyvi",
@@ -82,7 +82,7 @@
               "icon": "/widgets/html-paragraph/icon.png"
             },
             {
-              "title": "Preparation Stage",
+              "title": "#prestate",
               "intro": "На стадії підготовки треба знайти необхідні дані, привести їх до потрібного в дослідженні вигляду та, вразі необхідності, візуалізувати їх.",
               "text": "",
               "type": "html-article",
@@ -90,7 +90,7 @@
               "icon": "/widgets/html-article/icon.png"
             },
             {
-              "title": "Working with metadata",
+              "title": "#workwithmeta",
               "level": 2,
               "type": "title",
               "instanceName": "kdhkfi7ta8c8wl6fzsb8rggb9",
@@ -158,7 +158,7 @@
               "icon": "/widgets/v2.json-viewer/icon.png"
             },
             {
-              "title": "Data preprocessing",
+              "title": "#preproc",
               "level": 2,
               "type": "title",
               "instanceName": "7xppxp2wxhb2xyco8fhnmcayvi",
@@ -268,7 +268,7 @@
               ]
             },
             {
-              "title": "Analysis Stage",
+              "title": "#analysis_state",
               "intro": "Існує декілька способів оцінювання статистичної залежності даних. Ми порівнюємо три з них: коефіцієнт кореляції, кластерування та метод головних компонент.",
               "text": "У будь-якому випадку, досліджувані об’єкти розглядаються як деякі елементи багатовимірного простору, а їх геометричні  співвідношення в цьому просторі інтерпретуються як взаємна статистична залежність. ",
               "type": "html-article",
@@ -276,7 +276,7 @@
               "icon": "/widgets/html-article/icon.png"
             },
             {
-              "title": "Кореляційна матриця",
+              "title": "#corr",
               "level": 2,
               "type": "title",
               "instanceName": "maffkjydeqo1rrwttopfrbe29",
@@ -390,7 +390,7 @@
               "icon": "/widgets/html-paragraph/icon.png"
             },
             {
-              "title": "Кластерування",
+              "title": "#cls",
               "level": 2,
               "type": "title",
               "instanceName": "1elgh6fx4t0dzprsrfubygy14i",
@@ -497,7 +497,7 @@
               "queryID": "f2389aeeecdf18fc95a6f003aad9bd71"
             },
             {
-              "title": "Аналіз головних компонент",
+              "title": "#pca",
               "level": 2,
               "type": "title",
               "instanceName": "bnu6rdxbmtyhhdh5xtuykwewmi",
@@ -695,7 +695,7 @@
               ]
             },
             {
-              "title": "Conclusion",
+              "title": "#conclusion",
               "intro": "",
               "text": "",
               "type": "html-article",
@@ -927,7 +927,7 @@
         },
         {
           "emitter": "bq5cueogukdzx9htxrjedygb9",
-          "receiver": "l4",
+          "receiver": "l2",
           "signal": "setData",
           "slot": "setData"
         },
@@ -963,7 +963,7 @@
         },
         {
           "emitter": "bq5cueogukdzx9htxrjedygb9",
-          "receiver": "l2",
+          "receiver": "l4",
           "signal": "setData",
           "slot": "setData"
         },
@@ -1430,7 +1430,17 @@
       "#searchRes": "Знайдені набори даних",
       "#MDL": "Метадані",
       "#go": "Вперед",
-      "#Search data and get info about it": "Шукаємо дані та інформацію про них"
+      "#Search data and get info about it": "Шукаємо дані та інформацію про них",
+      "#roadmap": "СТАТИСТИЧНИЙ АНАЛІЗ ЗАЛЕЖНОСТЕЙ. Дорожня карта для платформи DJ",
+      "#tutorial": "Покроковий підручник",
+      "#prestate": "Стадія підготовки",
+      "#workwithmeta": "Робота з метаданими",
+      "#preproc": "Підготовка даних",
+      "#analysis_state": "Стадія аналізу",
+      "#cls": "Кластерний аналіз",
+      "#corr": "Кореляційний аналіз",
+      "#pca": "Аналіз головних компонент",
+      "#conclusion": "Висновки"
     },
     "en": {
       "#bg": "./img/default-banner.png",
@@ -1478,7 +1488,17 @@
       "#searchRes": "Available Datasets",
       "#MDL": "Full Metadata List",
       "#go": "Go!",
-      "#Search data and get info about it": "Search data and get info about it"
+      "#Search data and get info about it": "Search data and get info about it",
+      "#roadmap": "STATISTICAL DEPENDENCE ANALYSIS: A Roadmap for DJ platform",
+      "#tutorial": "Step by step tutorial",
+      "#prestate": "Preparation Stage",
+      "#workwithmeta": "Working with metadata",
+      "#preproc": "Data preprocessing",
+      "#analysis_state": "Analysis Stage",
+      "#cls": "Cluster analysis",
+      "#corr": "Correlation Analysis",
+      "#pca": "Principal Component Analysis",
+      "#conclusion": "Conclusion"
     },
     "ru": {
       "#bg": "./img/default-banner.png",
@@ -1519,11 +1539,21 @@
       "#searchRes": "Available Datasets",
       "#MDL": "Full Metadata List",
       "#go": "Вперед",
-      "#Search data and get info about it": "Search data and get info about it"
+      "#Search data and get info about it": "Search data and get info about it",
+      "#roadmap": "STATISTICAL DEPENDENCE ANALYSIS: A Roadmap for DJ platform",
+      "#tutorial": "Step by step tutorial",
+      "#prestate": "Preparation Stage",
+      "#workwithmeta": "Working with metadata",
+      "#preproc": "Data preprocessing",
+      "#analysis_state": "Analysis Stage",
+      "#cls": "Cluster analysis",
+      "#corr": "Correlation Analysis",
+      "#pca": "Principal Component Analysis",
+      "#conclusion": "Conclusion"
     }
   },
   "icon": "./img/sseopen.png",
-  "dps": "http://localhost:8088",
+  "dps": "http://chnppdps.wdc.org.ua",
   "importedFromURL": "http://localhost:8080/app/SDA Roadmap",
   "importedFromAuthor": "Andrey Boldak"
 }

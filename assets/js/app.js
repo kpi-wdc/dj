@@ -770,7 +770,11 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
     cloneWidget(holder, widget){
       const newWidget = angular.copy(widget);
       newWidget.instanceName = randomWidgetName();
-      holder.widgets.push(newWidget);
+      console.log("Cloned", widget)
+      console.log("Holder", holder)
+      var pos = holder.widgets.map(function(item){return item.instanceName}).indexOf(widget.instanceName)
+      holder.widgets.splice(pos,0,newWidget)
+      // holder.widgets.push(newWidget);
       app.markModified(true);
     }
   });
