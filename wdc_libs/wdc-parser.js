@@ -21,10 +21,12 @@ var fileFormatter = {
 		var converter = new csvtojson(options);
 		var transform = function(resolve){
 			encoding = encoding || "utf8";
+			logger.debug("Read "+ filename)
 			fs.readFile(filename,  function(err, data ) {
+				if(err) logger.error("CSV READER ERROR: " + err)
 				data = iconv.decode(new Buffer(data), encoding);
 				converter.fromString(data,function(err,result){
-					logger.debug("Read "+ filename)
+					if(err) logger.error("CSV CONVERTER ERROR: "+ err)
 					resolve(result)
 				});	
 			});
@@ -140,16 +142,18 @@ var requestFormatter = {
 
 
 var Parser = function(options){
-	var thos = this;
+	this._data = undefined;
 	this.options = options;
 
 	if(this.options.filename){
-		this.loadPromise = fileFormatter[options.reader.type](options.filename,options.reader.options,options.reader.encoding);
+		this._reader = fileFormatter[options.reader.type]
+			//(options.filename,options.reader.options,options.reader.encoding);
 		return
 	}
 	
 	if(this.options.url){
-		this.loadPromise = requestFormatter[options.reader.type](options.url,options.reader.options,options.reader.encoding);
+		this._downloader = requestFormatter[options.reader.type]
+		//(options.url,options.reader.options,options.reader.encoding);
 		return
 	}
 
@@ -159,13 +163,29 @@ Parser.prototype = {
 	execute: function(cb, args){
 		var thos = this;
 		var _execute = function(resolve){
-			if(thos.loadPromise){
-				thos.loadPromise.then(function(data){
-					thos.src = data;
-					thos.loadPromise = undefined;
-					resolve(cb(thos.src, args))
-				})
-			} else { resolve(cb(thos.src, args)) }	
+			if(thos._data) {
+				resolve(cb(thos._data, args))
+				return;
+			}	
+
+			if(!thos.loadPromise && thos._reader){
+				thos.loadPromise = thos._reader(thos.options.filename,
+												thos.options.reader.options,
+												thos.options.reader.encoding);
+			}
+			if(!thos.loadPromise && thos._downloader){
+				thos.loadPromise = thos._downloader(
+													thos.options.url,
+													thos.options.reader.options,
+													thos.options.reader.encoding);
+			}
+
+			thos.loadPromise.then(function(data){
+				thos.src = data;
+				thos.loadPromise = undefined;
+				resolve(cb(thos.src, args))
+			})
+			
 		}
 		return new Promise(function(resolve){ _execute(resolve)})
 	},

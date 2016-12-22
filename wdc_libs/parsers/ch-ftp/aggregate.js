@@ -112,7 +112,7 @@ module.exports = function(dataset){
 	var periodicity = dataset.metadata.layout.aggregation.periodicity;
 	var aggregationMethod = aggregations[dataset.metadata.layout.aggregation.method];
 	
-	logger.info("Aggregate dataset for periodicity ["+periodicity.reduce(function(v,item){return v+","+item})+"]")
+	// logger.info("Aggregate dataset for periodicity ["+periodicity.reduce(function(v,item){return v+","+item})+"]")
 	
 	periodicity.forEach(function(period){
 		var tp = timePeriod[period];

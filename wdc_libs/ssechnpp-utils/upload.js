@@ -6,9 +6,9 @@ var Promise = require("bluebird");
 
 
 // var host = 'https://dj-dps.herokuapp.com';
-var host = 'http://localhost:8088';
+var host = 'http://chnppdps.wdc.org.ua';//'http://localhost:8088';
 // var srcDir = './dsrc';
-var srcDir = './new data';
+var srcDir = /*'./test'//*/'./new data';
 
 var updateDataset = function(ds){
 	var options = {

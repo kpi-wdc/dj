@@ -13,8 +13,25 @@ var downloadData = require("./download");
 var aggregate = require("./aggregate");
 var clean = require("./clean");
 var logger = require("../../wdc-log").global;
+var mm = require("minimatch");
 
 var product = {};
+
+
+
+function fileList(patterns){
+	var result = [];
+	if(patterns){
+    	if(patterns.forEach){
+	    	patterns.forEach(function(pattern){
+	    		result = result.concat(files.filter(mm.filter(pattern,{matchBase: true})))	
+	    	})
+    	}else{
+    		result = result.concat(files.filter(mm.filter(patterns,{matchBase: true})))
+    	}
+    }
+	return result;	    	
+} 
 
 module.exports = function (filename){
 	var product = {};
@@ -113,16 +130,12 @@ module.exports = function (filename){
 				return downloadData(conf)
 					.then( function(){
 
-
-
-
 					var result = [];
+					var processes = [];
 					var promises = [];
 					for(var id in indicators){
 						indicators[id].files = glob.sync(conf.dest+indicators[id].files)
-						logger.info ("For indicator "+id+" "+indicators[id].files+" files processed")
 						indicators[id].files.forEach(function(file){
-							logger.debug("process "+file);
 							var csvParser = new Parser(
 								{
 									filename : file,
@@ -135,8 +148,6 @@ module.exports = function (filename){
 									},
 									data: function(src,args){
 										var id = args[0];
-										logger.debug(id)
-										logger.debug("insert "+src.length+" records")
 										return src.map(function(item){
 											var t = item.DATE.toString() 
 													+ ":"
@@ -154,27 +165,30 @@ module.exports = function (filename){
 									}
 								}
 							);
-							promises.push(csvParser.data(id)
-								.then(function(data){
-									result = result.concat(data)
-								})
-							)
+							processes.push({parser:csvParser, id:id})
 						})
 					}
-					return Promise.all(promises)
-					.then(function(resolve){
+
+					return Promise.reduce(processes,function(result,p,index){
+						if(!util.isArray(result)) result= []
+						return p.parser.data(p.id)
+								.then(function(d){
+									result = result.concat(d)
+									return result
+								})
+
+					},0).then(function(result){
+						logger.debug("Resolve all csv files")
 						return clean(conf)
 							.then(function(){
-								logger.info("Temporary files deleted")
+								// logger.info("Temporary files deleted")
+								
 								return result		
 							})
-						// console.log("promises", promises)
-						// return result
-					});
+						resolve(result)
+					})
 				})	
 			}
-				
-
 		});
 
 	 return new Promise(function(resolve){

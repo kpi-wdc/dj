@@ -1,0 +1,48 @@
+
+<%
+	This_is_lookuped_ID
+%>
+set('id')
+
+<%
+	meta('$[?(@.dataset.label.indexOf("NSMS_DAU_NFD")>=0 && @.dataset.id.indexOf("_2016_02")>=0)]')
+
+	select('$..dataset.id')
+
+	put(var:'id', value:'$[0]')
+	source(ds:'{{id}}')
+	select('$..metadata.dimension.indicator.values..label')
+
+	put('indicators')
+	source(ds:'{{$.id}}')
+	select('$..metadata.dataset.label')
+	extend()
+	translate()
+	put('name')
+
+	get()
+%>
+set('serverScript')
+
+
+
+set('call_Server ')
+
+<%	
+	log()
+	select('$.data.resp')
+	emit(event:"setData")	
+%>
+
+set('script')
+ctx('Hello')
+set(var:'greating', value:'')
+ctx("Andrey")
+set('name')
+q()
+set("promise")
+ctx(value:5)
+set('number')
+get('$..number');
+//run()
+cast("json")
