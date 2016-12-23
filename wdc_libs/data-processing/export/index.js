@@ -1,9 +1,13 @@
 var mime = require("mime")
 var path = require("path")
 var logger = require("../../wdc-log").global;
+var fs = require("fs");
 
 
-
+ if (!fs.existsSync("./.tmp/public/downloads/")) {
+ 		console.log("Create folder for downloaded files: ./.tmp/public/downloads/")
+        fs.mkdirSync("./.tmp/public/downloads/");
+    }
 
 var exportMap = {
 	"text/csv": require("./csv"),
