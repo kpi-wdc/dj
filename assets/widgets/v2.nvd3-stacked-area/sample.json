@@ -1,0 +1,315 @@
+{
+    "data": {
+        "data": [{
+            "category": 0,
+            "key": "Neutron flux density in room #304-3 (well # 3.10.g)",
+            "base": "Time",
+            "axisX": {
+                "label": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            },
+            "values": [{
+                "category": 0,
+                "x": "2016/02/02",
+                "y": 0.144,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/02"
+            }, {
+                "category": 0,
+                "x": "2016/02/03",
+                "y": 0.17,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/03"
+            }, {
+                "category": 0,
+                "x": "2016/02/04",
+                "y": 0.332,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/04"
+            }, {
+                "category": 0,
+                "x": "2016/02/05",
+                "y": 0.365,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/05"
+            }, {
+                "category": 0,
+                "x": "2016/02/06",
+                "y": 0.316,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/06"
+            }, {
+                "category": 0,
+                "x": "2016/02/07",
+                "y": 0.424,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/07"
+            }, {
+                "category": 0,
+                "x": "2016/02/08",
+                "y": 0.431,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/08"
+            }, {
+                "category": 0,
+                "x": "2016/02/09",
+                "y": 0.292,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/09"
+            }, {
+                "category": 0,
+                "x": "2016/02/10",
+                "y": 0.257,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/10"
+            }, {
+                "category": 0,
+                "x": "2016/02/11",
+                "y": 0.375,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/11"
+            }, {
+                "category": 0,
+                "x": "2016/02/12",
+                "y": 0.569,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/12"
+            }, {
+                "category": 0,
+                "x": "2016/02/13",
+                "y": 0.412,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/13"
+            }, {
+                "category": 0,
+                "x": "2016/02/14",
+                "y": 0.328,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/14"
+            }, {
+                "category": 0,
+                "x": "2016/02/15",
+                "y": 0.641,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/15"
+            }, {
+                "category": 0,
+                "x": "2016/02/16",
+                "y": 0.44,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/16"
+            }, {
+                "category": 0,
+                "x": "2016/02/17",
+                "y": 0.406,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/17"
+            }, {
+                "category": 0,
+                "x": "2016/02/18",
+                "y": 0.594,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/18"
+            }, {
+                "category": 0,
+                "x": "2016/02/19",
+                "y": 0.657,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/19"
+            }, {
+                "category": 0,
+                "x": "2016/02/20",
+                "y": 0.452,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/20"
+            }, {
+                "category": 0,
+                "x": "2016/02/21",
+                "y": 0.279,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/21"
+            }, {
+                "category": 0,
+                "x": "2016/02/22",
+                "y": 0.381,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/22"
+            }, {
+                "category": 0,
+                "x": "2016/02/23",
+                "y": 0.44,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/23"
+            }, {
+                "category": 0,
+                "x": "2016/02/24",
+                "y": 0.788,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/24"
+            }, {
+                "category": 0,
+                "x": "2016/02/25",
+                "y": 0.824,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/25"
+            }, {
+                "category": 0,
+                "x": "2016/02/26",
+                "y": 0.781,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/26"
+            }, {
+                "category": 0,
+                "x": "2016/02/27",
+                "y": 0.898,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/27"
+            }, {
+                "category": 0,
+                "x": "2016/02/28",
+                "y": 0.731,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/28"
+            }, {
+                "category": 0,
+                "x": "2016/02/29",
+                "y": 0.838,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/02/29"
+            }, {
+                "category": 0,
+                "x": "2016/03/01",
+                "y": 0.76,
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g), 2016/03/01"
+            }]
+        }, {
+            "category": 0,
+            "key": "Neutron flux density in room #505-3 (well # v.19.103)",
+            "base": "Time",
+            "axisX": {
+                "label": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            },
+            "values": [{
+                "category": 0,
+                "x": "2016/02/02",
+                "y": 0.387,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/02"
+            }, {
+                "category": 0,
+                "x": "2016/02/03",
+                "y": 0.175,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/03"
+            }, {
+                "category": 0,
+                "x": "2016/02/04",
+                "y": 0.187,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/04"
+            }, {
+                "category": 0,
+                "x": "2016/02/05",
+                "y": 0.348,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/05"
+            }, {
+                "category": 0,
+                "x": "2016/02/06",
+                "y": 0.384,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/06"
+            }, {
+                "category": 0,
+                "x": "2016/02/07",
+                "y": 0.298,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/07"
+            }, {
+                "category": 0,
+                "x": "2016/02/08",
+                "y": 0.257,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/08"
+            }, {
+                "category": 0,
+                "x": "2016/02/09",
+                "y": 0.249,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/09"
+            }, {
+                "category": 0,
+                "x": "2016/02/10",
+                "y": 0.356,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/10"
+            }, {
+                "category": 0,
+                "x": "2016/02/11",
+                "y": 0.422,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/11"
+            }, {
+                "category": 0,
+                "x": "2016/02/12",
+                "y": 0.482,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/12"
+            }, {
+                "category": 0,
+                "x": "2016/02/13",
+                "y": 0.481,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/13"
+            }, {
+                "category": 0,
+                "x": "2016/02/14",
+                "y": 0.662,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/14"
+            }, {
+                "category": 0,
+                "x": "2016/02/15",
+                "y": 0.328,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/15"
+            }, {
+                "category": 0,
+                "x": "2016/02/16",
+                "y": 0.498,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/16"
+            }, {
+                "category": 0,
+                "x": "2016/02/17",
+                "y": 0.771,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/17"
+            }, {
+                "category": 0,
+                "x": "2016/02/18",
+                "y": 0.38,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/18"
+            }, {
+                "category": 0,
+                "x": "2016/02/19",
+                "y": 0.583,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/19"
+            }, {
+                "category": 0,
+                "x": "2016/02/20",
+                "y": 0.226,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/20"
+            }, {
+                "category": 0,
+                "x": "2016/02/21",
+                "y": 0.373,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/21"
+            }, {
+                "category": 0,
+                "x": "2016/02/22",
+                "y": 0.443,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/22"
+            }, {
+                "category": 0,
+                "x": "2016/02/23",
+                "y": 0.479,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/23"
+            }, {
+                "category": 0,
+                "x": "2016/02/24",
+                "y": 0.899,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/24"
+            }, {
+                "category": 0,
+                "x": "2016/02/25",
+                "y": 0.777,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/25"
+            }, {
+                "category": 0,
+                "x": "2016/02/26",
+                "y": 0.726,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/26"
+            }, {
+                "category": 0,
+                "x": "2016/02/27",
+                "y": 0.772,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/27"
+            }, {
+                "category": 0,
+                "x": "2016/02/28",
+                "y": 0.807,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/28"
+            }, {
+                "category": 0,
+                "x": "2016/02/29",
+                "y": 0.823,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/02/29"
+            }, {
+                "category": 0,
+                "x": "2016/03/01",
+                "y": 0.754,
+                "label": "Neutron flux density in room #505-3 (well # v.19.103), 2016/03/01"
+            }]
+        }]
+    }
+}

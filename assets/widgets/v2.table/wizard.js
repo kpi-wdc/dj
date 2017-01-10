@@ -47,6 +47,7 @@ m.factory("TableWizard",["$http",
 	          	wizard.parentScope.widget.instanceName  =  wizard.conf.instanceName;
 	            wizard.parentScope.widget.decoration = wizard.conf.decoration;
 	            wizard.parentScope.widget.dataID = wizard.conf.dataID;
+	             wizard.parentScope.widget.script = wizard.conf.script;
 	            wizard.parentScope.widget.queryID = wizard.conf.queryID;
 	            wizard.parentScope.widget.emitters = wizard.conf.emitters;
 			    

@@ -20,6 +20,7 @@ m.controller('Nvd3StackedAreaChartCtrlV2', function ($scope, NVD3WidgetV2, Stack
           wizard: StackedAreaChartWizard,
           decorationAdapter: StackedAreaAdapter,
           optionsURL: "/widgets/v2.nvd3-stacked-area/options.json",
+          sampleURL: "/widgets/v2.nvd3-stacked-area/sample.json",
           acceptData : function(context){
               return context.key == "area"
           },

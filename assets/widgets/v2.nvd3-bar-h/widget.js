@@ -19,6 +19,8 @@ m.controller('Nvd3HBarChartCtrlV2', function ($scope, NVD3WidgetV2, HBarChartWiz
           wizard: HBarChartWizard,
           decorationAdapter: HBarChartAdapter,
           optionsURL: "/widgets/v2.nvd3-bar-h/options.json",
+          sampleURL: "/widgets/v2.nvd3-bar-h/sample.json",
+          
           acceptData : function(context){
               return context.key == "hbar"
           },

@@ -1,0 +1,140 @@
+{
+    "value": {
+        "header": [{
+            "metadata": [{
+                "id": "NSMS_DAU001_NFD004",
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "dimension": "indicator",
+                "dimensionLabel": "Index",
+                "role": "metric"
+            }]
+        }, {
+            "metadata": [{
+                "id": "NSMS_DAU001_NFD009",
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "dimension": "indicator",
+                "dimensionLabel": "Index",
+                "role": "metric"
+            }]
+        }, {
+            "metadata": [{
+                "id": "NSMS_DAU002_NFD015",
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "dimension": "indicator",
+                "dimensionLabel": "Index",
+                "role": "metric"
+            }]
+        }, {
+            "metadata": [{
+                "id": "NSMS_DAU003_NFD016",
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "dimension": "indicator",
+                "dimensionLabel": "Index",
+                "role": "metric"
+            }]
+        }, {
+            "metadata": [{
+                "id": "NSMS_DAU006_NFD005",
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "dimension": "indicator",
+                "dimensionLabel": "Index",
+                "role": "metric"
+            }]
+        }, {
+            "metadata": [{
+                "id": "NSMS_DAU005_NFD006",
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "dimension": "indicator",
+                "dimensionLabel": "Index",
+                "role": "metric"
+            }]
+        }],
+        "body": [{
+            "metadata": [{
+                "id": "2016/02/02",
+                "label": "2016/02/02",
+                "dimension": "time",
+                "dimensionLabel": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            }],
+            "value": [
+                366.707,
+                928.255,
+                333.838,
+                36.633,
+                1142.889,
+                20.003
+            ]
+        }, {
+            "metadata": [{
+                "id": "2016/02/03",
+                "label": "2016/02/03",
+                "dimension": "time",
+                "dimensionLabel": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            }],
+            "value": [
+                367.072,
+                922.611,
+                335.03,
+                36.339,
+                1120.789,
+                20
+            ]
+        }, {
+            "metadata": [{
+                "id": "2016/02/04",
+                "label": "2016/02/04",
+                "dimension": "time",
+                "dimensionLabel": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            }],
+            "value": [
+                368.742,
+                923.048,
+                334.554,
+                36.347,
+                1127.193,
+                19.932
+            ]
+        }, {
+            "metadata": [{
+                "id": "2016/02/05",
+                "label": "2016/02/05",
+                "dimension": "time",
+                "dimensionLabel": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            }],
+            "value": [
+                369.011,
+                927.378,
+                333.387,
+                36.079,
+                1137.084,
+                19.986
+            ]
+        }, {
+            "metadata": [{
+                "id": "2016/02/06",
+                "label": "2016/02/06",
+                "dimension": "time",
+                "dimensionLabel": "Time",
+                "role": "time",
+                "format": "YYYY/MM/DD"
+            }],
+            "value": [
+                368.602,
+                928.179,
+                333.543,
+                36.192,
+                1148.771,
+                20.051
+            ]
+        }]
+    }
+
+}

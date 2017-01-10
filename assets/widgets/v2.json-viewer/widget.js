@@ -14,7 +14,11 @@ let m = angular.module('app.widgets.v2.json-viewer', [
           $scope.hidden = true;
           return
         }
-        if(context.key == "json"){
+        if(   context.key == "json" 
+            ||context.key == "url" 
+            // || context.key == "help" 
+            // || context.key == "error"
+        ){
           $scope.dataset = context.dataset;
           $scope.data = context.data;
           data = context.data;

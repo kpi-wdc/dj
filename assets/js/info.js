@@ -99,6 +99,19 @@ info.factory('dialog', function($modal) {
     };
 });
 
+info.factory('$error', function($modal) {
+    return (msg) => {
+        return $modal.open({
+            templateUrl: '/partials/error.html',
+            controller: 'ErrorController',
+            windowClass: "dialog-modal",
+            resolve: {
+                msg: () => msg
+            }
+        }).result;
+    };
+});
+
 info.factory('splash', function($modal) {
     return (form, wait) => {
         return $modal.open({
@@ -139,6 +152,11 @@ info.factory('progress', function($modal) {
 
 info.controller('AlertController', function($scope, msg, $modalInstance) {
     $scope.msg = msg;
+    $scope.close = () => { $modalInstance.dismiss() }
+});
+
+info.controller('ErrorController', function($scope, msg, $modalInstance) {
+    $scope.error = msg;
     $scope.close = () => { $modalInstance.dismiss() }
 });
 

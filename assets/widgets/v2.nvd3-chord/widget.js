@@ -18,6 +18,7 @@ m.controller('Nvd3ChordChartCtrlV2', function ($scope, NVD3WidgetV2, ChordChartW
           wizard: ChordChartWizard,
           decorationAdapter: NVD3ChordAdapter,
           optionsURL: "/widgets/v2.nvd3-chord/options.json",
+          sampleURL: "/widgets/v2.nvd3-chord/sample.json",
           acceptData : function(context){
               return context.key == "deps"
           },

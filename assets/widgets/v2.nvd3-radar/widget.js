@@ -19,6 +19,7 @@ m.controller('Nvd3RadarChartCtrlV2', function ($scope, NVD3WidgetV2, RadarChartW
           wizard: RadarChartWizard,
           decorationAdapter: RadarChartAdapter,
           optionsURL: "/widgets/v2.nvd3-radar/options.json",
+          sampleURL: "/widgets/v2.nvd3-radar/sample.json",
           acceptData : function(context){
               return context.key == "radar"
           },

@@ -16,14 +16,14 @@ m.factory("LineChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"LineChartAdapter",
-	"pageWidgets","i18n", 
+	"pageWidgets","i18n", "dialog", "$error",
 	function(
 		$http,
 		$dps, 
 		$q, 
 		parentHolder, 
 		LineChartAdapter,
-		pageWidgets, i18n ){
+		pageWidgets, i18n, dialog, $error ){
 		
 		let chartAdapter = LineChartAdapter;
 
@@ -48,6 +48,7 @@ m.factory("LineChartDecoration",[
 	    			index : (wizard.conf.index) ? wizard.conf.index : [],
 	    			decoration : wizard.conf.decoration,
 	    			dataID : wizard.conf.dataID,
+	    			script : wizard.conf.script,
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-line/options.json",
@@ -76,6 +77,7 @@ m.factory("LineChartDecoration",[
 	    		wizard.conf.serieDataId  = this.conf.serieDataId; 
 	    		wizard.conf.queryID  = this.conf.queryID;
 	    		wizard.conf.dataID  = this.conf.dataID;
+	    		wizard.conf.script  = this.conf.script;
 	    		wizard.conf.axisX = this.conf.axisX;
 	    		wizard.conf.category = this.conf.category;
 	    		wizard.conf.index = this.conf.index;
@@ -117,17 +119,32 @@ m.factory("LineChartDecoration",[
 
 			loadSeries : function(){
 				this.data = undefined; 
+				if(this.conf.dataID)
+					return $dps
+					          .post("/api/data/script",{
+					            "data"  : 	"source(table:'"+this.conf.dataID+"');"+
+					            			"line(x:"+this.conf.axisX+","+
+					            				"index:"+ JSON.stringify(this.conf.index)+","+
+					            				"category:"+this.conf.category+
+					            			");"+
+					            			"save()",
+					            "locale": i18n.locale()
+					          })
 
-				return $dps
-				          .post("/api/data/script",{
-				            "data"  : 	"source(table:'"+this.conf.dataID+"');"+
-				            			"line(x:"+this.conf.axisX+","+
-				            				"index:"+ JSON.stringify(this.conf.index)+","+
-				            				"category:"+this.conf.category+
-				            			");"+
-				            			"save()",
-				            "locale": i18n.locale()
-				          })
+				 if(this.conf.script)
+                    return $dps.post("/api/script",{
+                                "script": this.conf.script,
+                                "locale": i18n.locale()
+                            })
+                            .then((resp) => {
+                            	if (resp.data.type == "error") {
+                                $error(resp.data.data)
+                                return
+                            };
+                                return {data:resp}
+                            })	          
+					          
+				return $http.get("./widgets/v2.nvd3-line/sample.json")          
 			},
 
 			makeAxisXList : function(table){
@@ -309,10 +326,29 @@ m.factory("LineChartDecoration",[
 				});
 			},
 
+			editScript: function(){
+                var thos = this;
+                dialog({
+                    title: "Edit dpscript",
+                    fields: {
+                        script: {
+                            title: "Script",
+                            type: "textarea",
+                            value: thos.conf.script,
+                            required: false
+                        }
+                    }
+                }).then((form) => {
+                    thos.conf.script = form.fields.script.value;
+                    thos.loadData();
+                })     
+                    
+            },
+
 			activate : function(wizard){
-				if (this.conf.dataID){
+				// if (this.conf.dataID){
 					this.loadData();
-				}
+				// }
 			},
 
 			apply: function(){

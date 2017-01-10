@@ -216,7 +216,7 @@ let WdcTable = React.createClass( {
 
     if (angular.isUndefined(dataTable)) return <h5>{this.noDataAvailable}</h5>;
     if (dataTable.body.length == 0) return <h5>No Data Available</h5>;
-    if (angular.isUndefined(dataTable.metadata)) return <h5>No Metadata Available</h5>; 
+    // if (angular.isUndefined(dataTable.metadata)) return <h5>No Metadata Available</h5>; 
 
     // prepare palettes
     this.preparePalette();

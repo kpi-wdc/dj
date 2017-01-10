@@ -19,6 +19,7 @@ m.controller('Nvd3LineChartCtrlV2', function ($scope, NVD3WidgetV2, LineChartWiz
           wizard: LineChartWizard,
           decorationAdapter: LineChartAdapter,
           optionsURL: "/widgets/v2.nvd3-line/options.json",
+          sampleURL: "/widgets/v2.nvd3-line/sample.json",
           
           acceptData : function(context){
               return context.key == "line"

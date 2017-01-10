@@ -58,6 +58,7 @@ m.factory("LineChartWizard",["$http",
 	            wizard.parentScope.widget.serieDataId = wizard.conf.serieDataId;
 	            wizard.parentScope.widget.queryID = wizard.conf.queryID;
 	            wizard.parentScope.widget.dataID = wizard.conf.dataID;
+	              wizard.parentScope.widget.script = wizard.conf.script;
 	            wizard.parentScope.widget.axisX = wizard.conf.axisX;
 	            wizard.parentScope.widget.category = wizard.conf.category;
 	            wizard.parentScope.widget.index = wizard.conf.index;

@@ -1,0 +1,131 @@
+{
+    "data": {
+        "data": [{
+            "key": "Neutron flux density in room #304-3 (well # 3.10.g)",
+            "values": [{
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "value": 1
+            }, {
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "value": 0.7439458735936918
+            }, {
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "value": -0.5858803613143387
+            }, {
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "value": -0.5537827189191785
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "value": -0.6323213635740607
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "value": -0.64551461299049
+            }]
+        }, {
+            "key": "Neutron flux density in room #505-3 (well # v.19.103)",
+            "values": [{
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "value": 0.7439458735936918
+            }, {
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "value": 1
+            }, {
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "value": -0.5144752892432402
+            }, {
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "value": -0.35484508542786064
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "value": -0.5375919174817824
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "value": -0.5292027255831732
+            }]
+        }, {
+            "key": "Neutron flux density in room #504-2 (well # 3.15.j)",
+            "values": [{
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "value": -0.5858803613143387
+            }, {
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "value": -0.5144752892432402
+            }, {
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "value": 1
+            }, {
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "value": 0.775805370063662
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "value": 0.533528482768683
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "value": 0.6138808794824507
+            }]
+        }, {
+            "key": "Neutron flux density in CH (well # 3.22.b)",
+            "values": [{
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "value": -0.5537827189191785
+            }, {
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "value": -0.35484508542786064
+            }, {
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "value": 0.775805370063662
+            }, {
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "value": 1
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "value": 0.5419671632130365
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "value": 0.7174872743262406
+            }]
+        }, {
+            "key": "Neutron flux density in room #305-2 (well # 3.9.j)",
+            "values": [{
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "value": -0.6323213635740607
+            }, {
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "value": -0.5375919174817824
+            }, {
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "value": 0.533528482768683
+            }, {
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "value": 0.5419671632130365
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "value": 1
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "value": 0.8404505149294428
+            }]
+        }, {
+            "key": "Neutron flux density in room #305-2 (well # 3.9.68)",
+            "values": [{
+                "label": "Neutron flux density in room #304-3 (well # 3.10.g)",
+                "value": -0.64551461299049
+            }, {
+                "label": "Neutron flux density in room #505-3 (well # v.19.103)",
+                "value": -0.5292027255831732
+            }, {
+                "label": "Neutron flux density in room #504-2 (well # 3.15.j)",
+                "value": 0.6138808794824507
+            }, {
+                "label": "Neutron flux density in CH (well # 3.22.b)",
+                "value": 0.7174872743262406
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.j)",
+                "value": 0.8404505149294428
+            }, {
+                "label": "Neutron flux density in room #305-2 (well # 3.9.68)",
+                "value": 1
+            }]
+        }]
+    }
+}

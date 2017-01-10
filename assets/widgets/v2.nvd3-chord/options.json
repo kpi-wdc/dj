@@ -3,6 +3,7 @@
     "type": "chordChart",
     "height": 450,
     "isArea": true,
+    "showLegend": false,
     "margin": {
       "top": 20,
       "right": 10,

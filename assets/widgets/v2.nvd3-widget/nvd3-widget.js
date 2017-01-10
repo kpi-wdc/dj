@@ -172,6 +172,7 @@ define(["angular",
                               "Selector",
                               "EventEmitter",
                               "pageSubscriptions",
+                              "$error",
                               
                                
   function (  $http, 
@@ -186,7 +187,8 @@ define(["angular",
               dialog,
               Selector,
               EventEmitter,
-              pageSubscriptions
+              pageSubscriptions,
+              $error
            ) {
     
     $ocLazyLoad.load({
@@ -310,14 +312,29 @@ define(["angular",
         return options          
       }
 
-
+      $scope.loadOptions = function(){
+          return $q((resolve, reject) => {
+            if( $scope.options ){
+              // resolve(angular.copy($scope.expandOptions($scope.options)))
+              resolve($scope.options)
+              return
+            }else{
+               $http.get(params.optionsURL)
+                .then((resp) => {
+                  // resolve(angular.copy($scope.expandOptions(resp.data)))
+                  resolve(resp.data)
+                  return
+                })
+            }
+          })  
+        }
 
       $scope.updateChart = function(){
         
-        if(!$scope.widget.serieDataId){
-          $scope.configured = false;
-          return;  
-        }
+        // if(!$scope.widget.serieDataId){
+        //   $scope.configured = false;
+        //   return;  
+        // }
         $scope.configured = true;
         $scope.process();
         
@@ -339,7 +356,23 @@ define(["angular",
         }
 
         function loadData(){
-          return $dps.get("/api/data/process/"+$scope.widget.serieDataId)
+          
+          if($scope.widget.serieDataId)
+            return $dps.get("/api/data/process/"+$scope.widget.serieDataId)
+          
+          if($scope.widget.script)
+            return $dps.post("/api/script",{
+                "script": $scope.widget.script,
+                "locale": i18n.locale()
+            }).then((resp) => {
+              if (resp.data.type == "error") {
+                                $error(resp.data.data)
+                                return
+                            };
+              return {data:{value:resp.data.data}}
+            })
+          
+          return $http.get(params.sampleURL)
         }
 
         $q.all([
@@ -458,12 +491,17 @@ define(["angular",
                   })
                 }
 
-                $scope.settings = {
-                  options : angular.copy($scope.expandOptions($scope.options)), 
-                  data : angular.copy($scope.data)
-                }
+                $scope.loadOptions()
+                  .then((options)=>{
+                    $scope.options = options;
+                    $scope.settings = {
+                      options : angular.copy($scope.expandOptions($scope.options)), 
+                      data : angular.copy($scope.data)
+                    }
                 
-                $scope.complete();
+                    $scope.complete();    
+                  })
+                
       }
 
       $scope.APIProvider
@@ -587,6 +625,7 @@ define(["angular",
           if(params.acceptData(context)){
             $scope.dataset = context.dataset;
             $scope.hidden = false;
+            $scope.configured = true;
             $scope.setData(context.data)
           }else{
             if($scope.dataset!=context.dataset){

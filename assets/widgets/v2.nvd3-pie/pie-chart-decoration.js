@@ -16,14 +16,14 @@ m.factory("PieChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"PieChartAdapter",
-	"pageWidgets", "i18n", 
+	"pageWidgets", "i18n", "dialog", "$error",
 	function(
 		$http, 
 		$dps,
 		$q, 
 		parentHolder, 
 		PieChartAdapter,
-		pageWidgets, i18n ){
+		pageWidgets, i18n, dialog, $error ){
 		
 		let chartAdapter = PieChartAdapter;
 
@@ -42,6 +42,7 @@ m.factory("PieChartDecoration",[
 	    			decoration : wizard.conf.decoration,
 	    			dataID : wizard.conf.dataID,
 	    			queryID : wizard.conf.queryID,
+	    			script : wizard.conf.script,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-pie/options.json",
 	    			dataUrl : "/api/data/process/",
@@ -67,6 +68,7 @@ m.factory("PieChartDecoration",[
 	    		wizard.conf.decoration = this.conf.decoration;
 	    		wizard.conf.serieDataId  = this.conf.serieDataId; 
 	    		wizard.conf.queryID  = this.conf.queryID;
+	    		wizard.conf.script  = this.conf.script;
 	    		wizard.conf.dataID  = this.conf.dataID;
 	    		wizard.conf.emitters  = this.conf.emitters;
 
@@ -99,11 +101,27 @@ m.factory("PieChartDecoration",[
 			},
 
 			loadSeries : function(){
-				return $dps
-				          .post("/api/data/script",{
-				            "data"  : "source(table:'"+this.conf.dataID+"');bar();save()",
-				            "locale": i18n.locale()
-				          })
+				if(this.conf.dataID)
+					return $dps
+					          .post("/api/data/script",{
+					            "data"  : "source(table:'"+this.conf.dataID+"');bar();save()",
+					            "locale": i18n.locale()
+					          })
+
+				 if(this.conf.script)
+                    return $dps.post("/api/script",{
+                                "script": this.conf.script,
+                                "locale": i18n.locale()
+                            })
+                            .then((resp) => {
+                            	if (resp.data.type == "error") {
+                                $error(resp.data.data)
+                                return
+                            };
+                                return {data:resp}
+                            })
+                            	          
+				return $http.get("./widgets/v2.nvd3-pie/sample.json")          
 			}, 
 
 			loadData: function(){
@@ -152,10 +170,29 @@ m.factory("PieChartDecoration",[
 				});
 			},
 
+			editScript: function(){
+                var thos = this;
+                dialog({
+                    title: "Edit dpscript",
+                    fields: {
+                        script: {
+                            title: "Script",
+                            type: "textarea",
+                            value: thos.conf.script,
+                            required: false
+                        }
+                    }
+                }).then((form) => {
+                    thos.conf.script = form.fields.script.value;
+                    thos.loadData();
+                })     
+                    
+            },
+
 			activate : function(wizard){
-				if (this.conf.dataID){
+				// if (this.conf.dataID){
 					this.loadData();
-				}
+				// }
 			},
 
 			apply: function(){

@@ -8,8 +8,12 @@
 	          <option ng-repeat="item in step.queries">{{item.$title}}</option>
 	        </select>
 		</div>
+		
+		<div class="row wizard setting">
+			<button class="button radius right toolbar apply tiny" ng-click="step.editScript()">Edit script</button>
+		</div>
 
-		<div class="row wizard setting" ng-if="step.wizard.context.postprocessedTable">
+		<div class="row wizard setting">
 				<h5>Decoration</h5>
 					
 				<accordion class="wizard" close-others="false">		
@@ -35,8 +39,8 @@
 				<accordion-group heading="X Axis">
 				
 						<div class="row wizard setting">
-						<div class="row wizard setting">
-							<label class="wizard left section">
+						<div class="row wizard setting"  ng-if="step.wizard.context.postprocessedTable">
+							<label class="wizard left section" >
 					        	Column:
 					        </label>
 					        <select ng-model="step.axisXColumn" ng-change="step.selectAxisX()" class="wizard">
@@ -83,7 +87,7 @@
 				</accordion-group>
 				
 
-					<accordion-group heading="Categories">
+					<accordion-group heading="Categories"  ng-if="step.wizard.context.postprocessedTable">
 				
 						<div class="row wizard setting">
 							<label class="wizard left">
@@ -111,7 +115,7 @@
 					</accordion-group>
 				
 
-				<accordion-group heading = "Y Axis">	
+				<accordion-group heading = "Y Axis"  ng-if="step.wizard.context.postprocessedTable">	
 					<div class="row wizard setting">
 						<div class="row wizard setting">
 							<label class="wizard left section">
@@ -325,7 +329,7 @@
 		    </div>    	
 	</div>
 
-	<div class="column medium-9 left" ng-if="step.wizard.context.postprocessedTable">
+	<div class="column medium-9 left">
 		<h5 class="section-title">
 			<img src="./widgets/v2.query-manager/preparation.png" style="width: 32px;margin: 0 0.3em;"/>
 			{{step.inputQuery}}

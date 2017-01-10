@@ -11,14 +11,14 @@ m.factory("TableDecoration",[
 	"$dps",
 	"$q", 
 	"parentHolder",
-	"pageWidgets",
+	"pageWidgets", "i18n", "dialog", "$error",
 	
 	function(
 		$http, 
 		$dps,
 		$q, 
 		parentHolder,
-		pageWidgets){
+		pageWidgets, i18n, dialog, $error){
 
 		
 
@@ -37,6 +37,7 @@ m.factory("TableDecoration",[
 	    		this.conf = {
 	    			decoration : (wizard.conf.decoration) ? wizard.conf.decoration : {},
 	    			dataID : wizard.conf.dataID,
+	    			script : wizard.conf.script,
 	    			queryID : wizard.conf.queryID,
 	    			dataUrl : "/api/data/process/",
 	    			emitters: wizard.conf.emitters
@@ -76,6 +77,7 @@ m.factory("TableDecoration",[
 	    	onFinishWizard:  function(wizard){
 	    		wizard.conf.decoration = this.conf.decoration;
 	    		wizard.conf.dataID  = this.conf.dataID; 
+	    		wizard.conf.script  = this.conf.script; 
 	    		wizard.conf.queryID = this.conf.queryID;
 	    		wizard.conf.emitters  = this.conf.emitters;
 	    		
@@ -103,19 +105,68 @@ m.factory("TableDecoration",[
 
 			loadData: function(){
 				let thos = this;
+				if(this.conf.dataID){
 
-				$dps
-		          .get("/api/data/process/"+this.conf.dataID)
-		          .success(function (resp) {
-		              thos.wizard.context.postprocessedTable = resp.value;
-		              thos.table = resp.value;
-		              thos.conf.decoration.width = parentHolder(thos.wizard.conf).width;
-		          })
+					$dps
+			          .get("/api/data/process/"+this.conf.dataID)
+			          .success(function (resp) {
+			              thos.wizard.context.postprocessedTable = resp.value;
+			              thos.table = resp.value;
+			              thos.conf.decoration.width = parentHolder(thos.wizard.conf).width;
+			          })
+			    }else{
+
+			    	if(this.conf.script){
+			    		$dps
+		                    .post("/api/script", {
+		                        "script": this.conf.script,
+		                        "locale": i18n.locale()
+		                    })
+		                    .then((resp) => {
+		                    	if (resp.data.type == "error") {
+                                $error(resp.data.data)
+                                return
+                            };
+		                    	thos.wizard.context.postprocessedTable = resp.data.data;
+				              	thos.table = resp.data.data;
+				              	thos.conf.decoration.width = parentHolder(thos.wizard.conf).width;	
+		                    })
+			    	}else{
+
+				    	$http.get("./widgets/v2.table/sample.json")
+				            .success((resp) => {
+				            	console.log(resp);  
+				              	thos.wizard.context.postprocessedTable = resp.value;
+				              	thos.table = resp.value;
+				              	thos.conf.decoration.width = parentHolder(thos.wizard.conf).width;	
+				            })
+			        }    
+			    }      
 		          
 			},
 
+			editScript: function(){
+                var thos = this;
+                dialog({
+                    title: "Edit dpscript",
+                    fields: {
+                        script: {
+                            title: "Script",
+                            type: "textarea",
+                            value: thos.conf.script,
+                            required: false
+                        }
+                    }
+                }).then((form) => {
+                    thos.conf.script = form.fields.script.value;
+                    thos.loadData();
+                })     
+                    
+            },
+
 			activate : function(wizard){
-				if (this.conf.dataID) this.loadData();
+				// if (this.conf.dataID) 
+					this.loadData();
 			}
 	    }
 }]);    	

@@ -6011,7 +6011,7 @@ d3.geo.tile = function () {
     var margin = { top: 30, right: 20, bottom: 20, left: 20 },
         width = null,
         height = null,
-        showLegend = true,
+        showLegend = false,
         color = nv.utils.defaultColor(),
         tooltips = true,
         tooltip = function (key, y, e, graph) {
@@ -6107,22 +6107,22 @@ d3.geo.tile = function () {
         //------------------------------------------------------------
         // Legend
 
-        if (showLegend) {
-          legend.width(availableWidth).key(function (d) {
-            return d.key;
-          }).min(2).color(function (d) {
-            return "#238443";
-          });
+        // if (showLegend) {
+        //   legend.width(availableWidth).key(function (d) {
+        //     return d.key;
+        //   }).min(2).color(function (d) {
+        //     return "#238443";
+        //   });
 
-          wrap.select(".nv-legendWrap").datum(data).call(legend);
+        //   wrap.select(".nv-legendWrap").datum(data).call(legend);
 
-          if (margin.top != legend.height()) {
-            margin.top = legend.height();
-            availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
-          }
+        //   if (margin.top != legend.height()) {
+        //     margin.top = legend.height();
+        //     availableHeight = (height || parseInt(container.style("height")) || 400) - margin.top - margin.bottom;
+        //   }
 
-          wrap.select(".nv-legendWrap").attr("transform", "translate(0," + -margin.top + ")");
-        }
+        //   wrap.select(".nv-legendWrap").attr("transform", "translate(0," + -margin.top + ")");
+        // }
 
         //------------------------------------------------------------
 
@@ -6147,11 +6147,11 @@ d3.geo.tile = function () {
         // Event Handling/Dispatching (in chart's scope)
         //------------------------------------------------------------
 
-        legend.dispatch.on("stateChange", function (newState) {
-          state = newState;
-          dispatch.stateChange(state);
-          chart.update();
-        });
+        // legend.dispatch.on("stateChange", function (newState) {
+        //   state = newState;
+        //   dispatch.stateChange(state);
+        //   chart.update();
+        // });
 
         //chord.dispatch.on('elementMouseout.tooltip', function(e) {
         //    dispatch.tooltipHide(e);

@@ -1,0 +1,77 @@
+
+meta('$..dataset.topics')
+distinct()
+extend()
+translate()
+set('tg')
+
+<%
+  $context.tg = $context.tg.map(function(item){
+   return item.map(function(d){
+     return ((d.label) ? d.label : d)
+   })
+})
+%>js()
+
+get('tg')
+concat()
+distinct()
+set('t')
+
+meta('$..dataset.label')
+distinct()
+translate()
+set('ds')
+
+<%
+
+ $context.tab = {};
+ 
+ $context.tab.header = $context.t.map(function(tag){
+    return {
+      metadata:[{
+        id:tag, 
+        label:tag, 
+        dimension:'tag',
+        dimensionLabel:'tag',
+        role:'metric'
+      }]
+    }
+ })
+
+ var dm = [];
+ $context.tg.forEach(function(s){
+   var row = [] 
+   for(var i = 0; i<$context.t.length; i++) row.push(0)
+   s.forEach(function(tag){
+    row[$context.t.indexOf(tag)] = 1;
+   })
+   dm.push(row)   
+ })
+
+$context.tab.body = dm.map(function(row,index){
+  return {
+    metadata:[{
+      id:$context.ds[index], 
+      label:$context.ds[index], 
+      dimension:'indicator',
+      dimensionLabel:'indicator', 
+      role:'metric'
+    }], 
+    value: row
+  }
+})
+
+
+
+%>js()
+get('tab')
+
+table()
+
+pca(for:'col', return:'scores')
+limit(2)
+transpose()
+scatter(x:0,y:[1])
+cache()
+

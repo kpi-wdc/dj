@@ -1,0 +1,30 @@
+<%
+
+var mapRow = function(d){
+  return "<tr>"+ d.value.map(function(v){
+     return '<td style="font-size:x-small">'+v+"</td>"
+  }).join("")
+}
+
+%>
+js()set('cb')
+
+
+
+src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")
+json()
+dataset()
+proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])
+format(2)
+json()
+select('$.body.*')
+
+
+map('{{cb.mapRow}}')
+concat()
+set('body')
+
+<%<table>%>
+append('{{body}}')
+append('</table>')
+html()

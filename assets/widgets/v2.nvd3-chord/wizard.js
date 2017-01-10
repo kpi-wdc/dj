@@ -57,6 +57,7 @@ m.factory("ChordChartWizard",["$http",
 	            wizard.parentScope.widget.decoration = wizard.conf.decoration;
 	            wizard.parentScope.widget.serieDataId = wizard.conf.serieDataId;
 	            wizard.parentScope.widget.queryID = wizard.conf.queryID;
+	            wizard.parentScope.widget.script = wizard.conf.script;
 	            wizard.parentScope.widget.dataID = wizard.conf.dataID;
 	           
 			    wizard.parentScope.updateChart();

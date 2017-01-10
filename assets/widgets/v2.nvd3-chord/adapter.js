@@ -19,6 +19,7 @@ m.service('NVD3ChordAdapter', function () {
       options.chart.lines.tickLabel = decoration.tickLabel;
       options.chart.lines.grid = decoration.grid;
       options.chart.lines.axisLabel = decoration.axisLabel;
+      options.chart.showLegend = false;
     }
     return options;
   };

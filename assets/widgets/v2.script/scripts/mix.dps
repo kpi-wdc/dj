@@ -1,0 +1,61 @@
+meta('$..dataset.topics')
+set('tg')
+
+concat()
+distinct()
+set('t')
+<%
+
+ $context.dm = [];
+ $context.t.forEach(function(){
+   var row = [] 
+   for(var i = 0; i<$context.t.length; i++) row.push(0)
+   $context.dm.push(row)   
+ })
+
+ 
+ $context.tg.forEach(function(s){
+   for( var i=0; i<s.length; i++){
+     for(var j=i; j<s.length; j++){
+      var t1 = $context.t.indexOf(s[i])
+      var t2 = $context.t.indexOf(s[j])
+      $context.dm[t1][t2] = $context.dm[t2][t1]+= 1;
+     }
+   }
+ })
+
+$context.dm = $context.dm.map(function(row,index){
+  return {
+    key:$context.t[index], 
+    values: row.map(function(d,jndex){
+      return{
+        label: $context.t[jndex],
+        value:d/row[index]
+      }
+    })
+  }
+})
+
+
+
+%>js()
+get('dm')
+extend()
+translate()
+set('dm')
+
+<%
+  $context.dm = $context.dm.map(function(row,index){
+    return {
+      key:((row.key.label) ? row.key.label: row.key), 
+      values: row.values.map(function(d,jndex){
+        return{
+          label: ((d.label.label) ? d.label.label : d.label),
+          value:d.value
+        }
+      })
+    }
+  })
+%>js()
+get("dm")
+cache()

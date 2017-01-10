@@ -16,7 +16,7 @@ m.factory("ChordChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"NVD3ChordAdapter", 
-	"pageWidgets","i18n",
+	"pageWidgets","i18n", "dialog", "$error",
 	
 	function(
 		$http, 
@@ -24,7 +24,7 @@ m.factory("ChordChartDecoration",[
 		$q, 
 		parentHolder, 
 		NVD3ChordAdapter,
-		pageWidgets, i18n ){
+		pageWidgets, i18n, dialog, $error ){
 
 		let chartAdapter = NVD3ChordAdapter;
 
@@ -43,6 +43,7 @@ m.factory("ChordChartDecoration",[
 	    		this.conf = {
 	    			decoration : wizard.conf.decoration,
 	    			dataID : wizard.conf.dataID,
+	    			script : wizard.conf.script,
 	    			queryID : wizard.conf.queryID,
 	    			serieDataId : wizard.conf.serieDataId,
 	    			optionsUrl : "./widgets/v2.nvd3-chord/options.json",
@@ -67,6 +68,7 @@ m.factory("ChordChartDecoration",[
 	    		wizard.conf.decoration = this.conf.decoration;
 	    		wizard.conf.serieDataId  = this.conf.serieDataId; 
 	    		wizard.conf.queryID  = this.conf.queryID;
+	    		wizard.conf.script  = this.conf.script;
 	    		wizard.conf.dataID  = this.conf.dataID;
 
 	    		this.settings = {options:angular.copy(this.options), data:[]};
@@ -98,12 +100,28 @@ m.factory("ChordChartDecoration",[
 			},
 
 			loadSeries : function(){
+				if(this.conf.dataID)
+					return $dps
+					          .post("/api/data/script",{
+					            "data"  : "source(table:'"+this.conf.dataID+"');deps();save()",
+					            "locale": i18n.locale()
+					          })
 
-				return $dps
-				          .post("/api/data/script",{
-				            "data"  : "source(table:'"+this.conf.dataID+"');deps();save()",
-				            "locale": i18n.locale()
-				          })
+
+				if(this.conf.script)
+                    return $dps.post("/api/script",{
+                                "script": this.conf.script,
+                                "locale": i18n.locale()
+                            })
+                            .then((resp) => {
+                            	if (resp.data.type == "error") {
+                                $error(resp.data.data)
+                                return
+                            };
+                                return {data:resp}
+                            })
+                            	    	          
+				return $http.get("./widgets/v2.nvd3-chord/sample.json")          
 
 			}, 
 
@@ -161,11 +179,31 @@ m.factory("ChordChartDecoration",[
 				});
 			},
 
+			editScript: function(){
+                var thos = this;
+                dialog({
+                    title: "Edit dpscript",
+                    fields: {
+                        script: {
+                            title: "Script",
+                            type: "textarea",
+                            value: thos.conf.script,
+                            required: false
+                        }
+                    }
+                }).then((form) => {
+                    thos.conf.script = form.fields.script.value;
+                    thos.loadData();
+                })     
+                    
+            },
+
+
 			activate : function(wizard){
 				this.dataset = wizard.context.dataset;
-				if (this.conf.dataID){
+				// if (this.conf.dataID){
 					this.loadData();
-				}
+				// }
 			},
 
 			apply: function(){
