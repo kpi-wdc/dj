@@ -1,0 +1,45 @@
+<%
+   var mapper = function(d){return {key:d, value:d}}
+   
+var transform = function(d){
+        return {label:d.key, value: d.values.length}
+   }
+
+var transform1 = function(d){
+        return {label:((d.label.label)?d.label.label:d.label), value: d.value}
+   }
+   
+var criteria = function(a,b){
+       return b.value-a.value
+   }
+%>
+
+js()
+set('cb')
+
+
+<%
+  [{
+    "key": "tags",
+    "role": "metric",
+    "format": "YYYY/MM/DD",
+    "label": {
+      "role": "metric"
+    },
+    "values":[]
+  }]
+%>json()
+set('res')
+
+
+meta('$..dataset.topics.*')
+group('{{cb.mapper}}')
+map('{{cb.transform}}')
+sort('{{cb.criteria}}')
+extend()
+translate()
+map('{{cb.transform1}}')
+set('res.[0].values')
+get('res')
+json()
+cache()

@@ -73,6 +73,9 @@ module.exports.routes = {
   'post /api/data/process' : 'DataProcController.process1',
   'post /api/data/script' : 'DataProcController.runScript',
 
+  'post /api/script' : 'DPSController.run',
+
+
   'get /api/data/process/:dataId' : 'DataProcController.getById1',
 
   'get /api/data/process/update/:id' : 'DataProcController.updateProcData',

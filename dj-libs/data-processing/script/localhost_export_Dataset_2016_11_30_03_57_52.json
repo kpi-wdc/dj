@@ -1,0 +1,1360 @@
+ 
+
+{
+  "log": [
+    {
+      "logger": 0,
+      "scope": "global",
+      "timeStamp": "30/11/16 03:57:49",
+      "level": "info",
+      "message": [
+        "Get Dataset from localhost"
+      ]
+    },
+    {
+      "logger": 0,
+      "scope": "global",
+      "timeStamp": "30/11/16 03:57:52",
+      "level": "success",
+      "message": [
+        "total: 1 from 148"
+      ]
+    }
+  ],
+  "data": {
+    "source": "localhost",
+    "file": "localhost_export_Dataset_2016_11_30_03_57_52.json",
+    "type": "application/json",
+    "downloadedAt": "2016-11-30T13:57:52.010Z",
+    "collection": "Dataset",
+    "list": [
+      {
+        "metadata": {
+          "dataset": {
+            "id": "32a00120-b230-11e6-8a1a-0f91ca29d77e_2016_02",
+            "status": "public",
+            "preview":{
+            	"line":"source({dataset:'32a00120-b230-11e6-8a1a-0f91ca29d77e_2016_02'});query([{dim:'indicator',role:'col',items:[]},{dim:'time', role:'row',items:[]}]); format({p:2}); order({asc:'az',dir:'row',index:0});line-serie({xaxis:-1,'index':[0]})"
+            },
+            "commit": {
+              "author": "internal actor",
+              "note": "Upload from SSE ChNPP source at 2016/11/28 11:32:41",
+              "HEAD": true,
+              "createdAt": "2016-11-28T09:32:49.020Z",
+              "id": "583bf9c123d59a5825ccf9f3"
+            },
+            "locale": [
+              "#en",
+              "#ukr",
+              "#ru"
+            ],
+            "label": "#NSMS_DAU_GDR",
+            "note": "#NSMS_DAU_GDR_NOTE",
+            "source": "#CNPP_Data",
+            "topics": [
+              "#NSMS",
+              "#DAU",
+              "#EDI",
+              "#CH",
+              "#room_304-3",
+              "#room_505-3",
+              "#room_504-2",
+              "#room_305-2",
+              "#well_3.10.g",
+              "#well_v.19.103",
+              "#well_3.15.j",
+              "#well_3.22.b",
+              "#well_3.9.68",
+              "#well_3.9.j",
+              "#R-h"
+            ],
+            "units": "#R-h",
+            "periodicity": "day",
+            "ext": "( 2016.02 )"
+          },
+          "dimension": {
+            "indicator": {
+              "label": "Index",
+              "role": "metric",
+              "unit": "#R-h",
+              "scale": "nominal",
+              "values": [
+                {
+                  "id": "NSMS_DAU001_GDR004",
+                  "label": "#NSMS_DAU001_GDR004"
+                },
+                {
+                  "id": "NSMS_DAU001_GDR009",
+                  "label": "#NSMS_DAU001_GDR009"
+                },
+                {
+                  "id": "NSMS_DAU002_GDR015",
+                  "label": "#NSMS_DAU002_GDR015"
+                },
+                {
+                  "id": "NSMS_DAU003_GDR016",
+                  "label": "#NSMS_DAU003_GDR016"
+                },
+                {
+                  "id": "NSMS_DAU006_GDR005",
+                  "label": "#NSMS_DAU006_GDR005"
+                }
+              ]
+            },
+            "time": {
+              "label": "Time",
+              "role": "time",
+              "scale": "ordinal",
+              "values": [
+                {
+                  "id": "2016/02/02",
+                  "label": "2016/02/02"
+                },
+                {
+                  "id": "2016/03/01",
+                  "label": "2016/03/01"
+                },
+                {
+                  "id": "2016/02/04",
+                  "label": "2016/02/04"
+                },
+                {
+                  "id": "2016/02/05",
+                  "label": "2016/02/05"
+                },
+                {
+                  "id": "2016/02/06",
+                  "label": "2016/02/06"
+                },
+                {
+                  "id": "2016/02/07",
+                  "label": "2016/02/07"
+                },
+                {
+                  "id": "2016/02/08",
+                  "label": "2016/02/08"
+                },
+                {
+                  "id": "2016/02/09",
+                  "label": "2016/02/09"
+                },
+                {
+                  "id": "2016/02/10",
+                  "label": "2016/02/10"
+                },
+                {
+                  "id": "2016/02/11",
+                  "label": "2016/02/11"
+                },
+                {
+                  "id": "2016/02/12",
+                  "label": "2016/02/12"
+                },
+                {
+                  "id": "2016/02/13",
+                  "label": "2016/02/13"
+                },
+                {
+                  "id": "2016/02/14",
+                  "label": "2016/02/14"
+                },
+                {
+                  "id": "2016/02/15",
+                  "label": "2016/02/15"
+                },
+                {
+                  "id": "2016/02/03",
+                  "label": "2016/02/03"
+                },
+                {
+                  "id": "2016/02/17",
+                  "label": "2016/02/17"
+                },
+                {
+                  "id": "2016/02/18",
+                  "label": "2016/02/18"
+                },
+                {
+                  "id": "2016/02/19",
+                  "label": "2016/02/19"
+                },
+                {
+                  "id": "2016/02/20",
+                  "label": "2016/02/20"
+                },
+                {
+                  "id": "2016/02/21",
+                  "label": "2016/02/21"
+                },
+                {
+                  "id": "2016/02/22",
+                  "label": "2016/02/22"
+                },
+                {
+                  "id": "2016/02/23",
+                  "label": "2016/02/23"
+                },
+                {
+                  "id": "2016/02/24",
+                  "label": "2016/02/24"
+                },
+                {
+                  "id": "2016/02/25",
+                  "label": "2016/02/25"
+                },
+                {
+                  "id": "2016/02/26",
+                  "label": "2016/02/26"
+                },
+                {
+                  "id": "2016/02/27",
+                  "label": "2016/02/27"
+                },
+                {
+                  "id": "2016/02/28",
+                  "label": "2016/02/28"
+                },
+                {
+                  "id": "2016/02/29",
+                  "label": "2016/02/29"
+                },
+                {
+                  "id": "2016/02/16",
+                  "label": "2016/02/16"
+                }
+              ],
+              "format": "YYYY/MM/DD"
+            }
+          },
+          "layout": {
+            "aggregation": {
+              "periodicity": [
+                "month",
+                "day"
+              ],
+              "method": "avg"
+            },
+            "indicator": {
+              "NSMS_DAU001_GDR004": {
+                "files": [
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_01.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_02.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_03.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_04.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_05.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_06.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_07.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_08.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_09.CSV",
+                  "./data/NSMS-DAU001-GDR004-VAL_2016_10.CSV"
+                ],
+                "label": "#NSMS_DAU001_GDR004"
+              },
+              "NSMS_DAU001_GDR009": {
+                "files": [
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_01.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_02.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_03.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_04.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_05.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_06.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_07.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_08.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_09.CSV",
+                  "./data/NSMS-DAU001-GDR009-VAL_2016_10.CSV"
+                ],
+                "label": "#NSMS_DAU001_GDR009"
+              },
+              "NSMS_DAU002_GDR015": {
+                "files": [
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_01.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_02.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_03.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_04.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_05.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_06.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_07.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_08.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_09.CSV",
+                  "./data/NSMS-DAU002-GDR015-VAL_2016_10.CSV"
+                ],
+                "label": "#NSMS_DAU002_GDR015"
+              },
+              "NSMS_DAU003_GDR016": {
+                "files": [
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_01.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_02.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_03.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_04.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_05.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_06.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_07.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_08.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_09.CSV",
+                  "./data/NSMS-DAU003-GDR016-VAL_2016_10.CSV"
+                ],
+                "label": "#NSMS_DAU003_GDR016"
+              },
+              "NSMS_DAU006_GDR005": {
+                "files": [
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_01.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_02.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_03.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_04.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_05.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_06.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_07.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_08.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_09.CSV",
+                  "./data/NSMS-DAU006-GDR005-VAL_2016_10.CSV"
+                ],
+                "label": "#NSMS_DAU006_GDR005"
+              },
+              "id": "indicatorAbbr",
+              "label": "indicator"
+            },
+            "ftp": {
+              "host": "193.108.226.67",
+              "user": "iask01",
+              "password": "kuhgyf503",
+              "dest": "./data/",
+              "patterns": [
+                "NSMS-DAU001-GDR004-VAL*.CSV",
+                "NSMS-DAU001-GDR009-VAL*.CSV",
+                "NSMS-DAU002-GDR015-VAL*.CSV",
+                "NSMS-DAU003-GDR016-VAL*.CSV",
+                "NSMS-DAU006-GDR005-VAL*.CSV"
+              ]
+            },
+            "sheet": "data",
+            "value": "Value",
+            "time": {
+              "id": "timestamp",
+              "label": "timestamp"
+            }
+          }
+        },
+        "validation": {
+          
+        },
+        "data": [
+          {
+            "time": "2016/02/02",
+            "#time": "2016/02/02",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.03749999999997
+          },
+          {
+            "time": "2016/02/02",
+            "#time": "2016/02/02",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.135
+          },
+          {
+            "time": "2016/02/02",
+            "#time": "2016/02/02",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.009166666666665
+          },
+          {
+            "time": "2016/02/02",
+            "#time": "2016/02/02",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.4775
+          },
+          {
+            "time": "2016/02/02",
+            "#time": "2016/02/02",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.8337499999999
+          },
+          {
+            "time": "2016/02/03",
+            "#time": "2016/02/03",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.13416666666666
+          },
+          {
+            "time": "2016/02/03",
+            "#time": "2016/02/03",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.0391666666665
+          },
+          {
+            "time": "2016/02/03",
+            "#time": "2016/02/03",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.01
+          },
+          {
+            "time": "2016/02/03",
+            "#time": "2016/02/03",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.48083333333331
+          },
+          {
+            "time": "2016/02/03",
+            "#time": "2016/02/03",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.9379166666667
+          },
+          {
+            "time": "2016/02/04",
+            "#time": "2016/02/04",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.19583333333335
+          },
+          {
+            "time": "2016/02/04",
+            "#time": "2016/02/04",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.090833333333
+          },
+          {
+            "time": "2016/02/04",
+            "#time": "2016/02/04",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.009583333333335
+          },
+          {
+            "time": "2016/02/04",
+            "#time": "2016/02/04",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.41833333333335
+          },
+          {
+            "time": "2016/02/04",
+            "#time": "2016/02/04",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.76375
+          },
+          {
+            "time": "2016/02/05",
+            "#time": "2016/02/05",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.21249999999998
+          },
+          {
+            "time": "2016/02/05",
+            "#time": "2016/02/05",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.024166666667
+          },
+          {
+            "time": "2016/02/05",
+            "#time": "2016/02/05",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.01
+          },
+          {
+            "time": "2016/02/05",
+            "#time": "2016/02/05",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.39083333333335
+          },
+          {
+            "time": "2016/02/05",
+            "#time": "2016/02/05",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.61125000000004
+          },
+          {
+            "time": "2016/02/06",
+            "#time": "2016/02/06",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.11666666666665
+          },
+          {
+            "time": "2016/02/06",
+            "#time": "2016/02/06",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.020833333333
+          },
+          {
+            "time": "2016/02/06",
+            "#time": "2016/02/06",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.008333333333344
+          },
+          {
+            "time": "2016/02/06",
+            "#time": "2016/02/06",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38624999999999
+          },
+          {
+            "time": "2016/02/06",
+            "#time": "2016/02/06",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.64125000000007
+          },
+          {
+            "time": "2016/02/07",
+            "#time": "2016/02/07",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.05208333333337
+          },
+          {
+            "time": "2016/02/07",
+            "#time": "2016/02/07",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.057916666667
+          },
+          {
+            "time": "2016/02/07",
+            "#time": "2016/02/07",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.0075
+          },
+          {
+            "time": "2016/02/07",
+            "#time": "2016/02/07",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38208333333334
+          },
+          {
+            "time": "2016/02/07",
+            "#time": "2016/02/07",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.6433333333333
+          },
+          {
+            "time": "2016/02/08",
+            "#time": "2016/02/08",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.04500000000002
+          },
+          {
+            "time": "2016/02/08",
+            "#time": "2016/02/08",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.998333333333
+          },
+          {
+            "time": "2016/02/08",
+            "#time": "2016/02/08",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.008750000000006
+          },
+          {
+            "time": "2016/02/08",
+            "#time": "2016/02/08",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38291666666666
+          },
+          {
+            "time": "2016/02/08",
+            "#time": "2016/02/08",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.5425000000001
+          },
+          {
+            "time": "2016/02/09",
+            "#time": "2016/02/09",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.05041666666668
+          },
+          {
+            "time": "2016/02/09",
+            "#time": "2016/02/09",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.03125
+          },
+          {
+            "time": "2016/02/09",
+            "#time": "2016/02/09",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.007083333333338
+          },
+          {
+            "time": "2016/02/09",
+            "#time": "2016/02/09",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.3825
+          },
+          {
+            "time": "2016/02/09",
+            "#time": "2016/02/09",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.34124999999995
+          },
+          {
+            "time": "2016/02/10",
+            "#time": "2016/02/10",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.2475
+          },
+          {
+            "time": "2016/02/10",
+            "#time": "2016/02/10",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.9883333333337
+          },
+          {
+            "time": "2016/02/10",
+            "#time": "2016/02/10",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.00708333333333
+          },
+          {
+            "time": "2016/02/10",
+            "#time": "2016/02/10",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38708333333334
+          },
+          {
+            "time": "2016/02/10",
+            "#time": "2016/02/10",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.08416666666676
+          },
+          {
+            "time": "2016/02/11",
+            "#time": "2016/02/11",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.31
+          },
+          {
+            "time": "2016/02/11",
+            "#time": "2016/02/11",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.0283333333336
+          },
+          {
+            "time": "2016/02/11",
+            "#time": "2016/02/11",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 31.00625
+          },
+          {
+            "time": "2016/02/11",
+            "#time": "2016/02/11",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38374999999999
+          },
+          {
+            "time": "2016/02/11",
+            "#time": "2016/02/11",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.13541666666663
+          },
+          {
+            "time": "2016/02/12",
+            "#time": "2016/02/12",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.21375
+          },
+          {
+            "time": "2016/02/12",
+            "#time": "2016/02/12",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.903333333333
+          },
+          {
+            "time": "2016/02/12",
+            "#time": "2016/02/12",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.99625
+          },
+          {
+            "time": "2016/02/12",
+            "#time": "2016/02/12",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38708333333332
+          },
+          {
+            "time": "2016/02/12",
+            "#time": "2016/02/12",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.1166666666666
+          },
+          {
+            "time": "2016/02/13",
+            "#time": "2016/02/13",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.1595833333333
+          },
+          {
+            "time": "2016/02/13",
+            "#time": "2016/02/13",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.939166666666
+          },
+          {
+            "time": "2016/02/13",
+            "#time": "2016/02/13",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.989583333333332
+          },
+          {
+            "time": "2016/02/13",
+            "#time": "2016/02/13",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.38041666666666
+          },
+          {
+            "time": "2016/02/13",
+            "#time": "2016/02/13",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.1062499999999
+          },
+          {
+            "time": "2016/02/14",
+            "#time": "2016/02/14",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.1329166666667
+          },
+          {
+            "time": "2016/02/14",
+            "#time": "2016/02/14",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.04125
+          },
+          {
+            "time": "2016/02/14",
+            "#time": "2016/02/14",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.984166666666667
+          },
+          {
+            "time": "2016/02/14",
+            "#time": "2016/02/14",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.37791666666668
+          },
+          {
+            "time": "2016/02/14",
+            "#time": "2016/02/14",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.0966666666667
+          },
+          {
+            "time": "2016/02/15",
+            "#time": "2016/02/15",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.2720833333333
+          },
+          {
+            "time": "2016/02/15",
+            "#time": "2016/02/15",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.6537499999995
+          },
+          {
+            "time": "2016/02/15",
+            "#time": "2016/02/15",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.967083333333335
+          },
+          {
+            "time": "2016/02/15",
+            "#time": "2016/02/15",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.37958333333333
+          },
+          {
+            "time": "2016/02/15",
+            "#time": "2016/02/15",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 403.9870833333333
+          },
+          {
+            "time": "2016/02/16",
+            "#time": "2016/02/16",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.30958333333336
+          },
+          {
+            "time": "2016/02/16",
+            "#time": "2016/02/16",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.2
+          },
+          {
+            "time": "2016/02/16",
+            "#time": "2016/02/16",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.960833333333333
+          },
+          {
+            "time": "2016/02/16",
+            "#time": "2016/02/16",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.37875
+          },
+          {
+            "time": "2016/02/16",
+            "#time": "2016/02/16",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.13166666666655
+          },
+          {
+            "time": "2016/02/17",
+            "#time": "2016/02/17",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.25249999999997
+          },
+          {
+            "time": "2016/02/17",
+            "#time": "2016/02/17",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.2
+          },
+          {
+            "time": "2016/02/17",
+            "#time": "2016/02/17",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.9575
+          },
+          {
+            "time": "2016/02/17",
+            "#time": "2016/02/17",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.36749999999999
+          },
+          {
+            "time": "2016/02/17",
+            "#time": "2016/02/17",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 404.15
+          },
+          {
+            "time": "2016/02/18",
+            "#time": "2016/02/18",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.25375
+          },
+          {
+            "time": "2016/02/18",
+            "#time": "2016/02/18",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.2
+          },
+          {
+            "time": "2016/02/18",
+            "#time": "2016/02/18",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.945416666666667
+          },
+          {
+            "time": "2016/02/18",
+            "#time": "2016/02/18",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.31
+          },
+          {
+            "time": "2016/02/18",
+            "#time": "2016/02/18",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.3154166666667
+          },
+          {
+            "time": "2016/02/19",
+            "#time": "2016/02/19",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.31
+          },
+          {
+            "time": "2016/02/19",
+            "#time": "2016/02/19",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.025833333333
+          },
+          {
+            "time": "2016/02/19",
+            "#time": "2016/02/19",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.944166666666668
+          },
+          {
+            "time": "2016/02/19",
+            "#time": "2016/02/19",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.25291666666666
+          },
+          {
+            "time": "2016/02/19",
+            "#time": "2016/02/19",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.21666666666675
+          },
+          {
+            "time": "2016/02/20",
+            "#time": "2016/02/20",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.31
+          },
+          {
+            "time": "2016/02/20",
+            "#time": "2016/02/20",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.4649999999992
+          },
+          {
+            "time": "2016/02/20",
+            "#time": "2016/02/20",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.943750000000005
+          },
+          {
+            "time": "2016/02/20",
+            "#time": "2016/02/20",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.26083333333334
+          },
+          {
+            "time": "2016/02/20",
+            "#time": "2016/02/20",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.0766666666667
+          },
+          {
+            "time": "2016/02/21",
+            "#time": "2016/02/21",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.31
+          },
+          {
+            "time": "2016/02/21",
+            "#time": "2016/02/21",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2104.420833333333
+          },
+          {
+            "time": "2016/02/21",
+            "#time": "2016/02/21",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.944583333333334
+          },
+          {
+            "time": "2016/02/21",
+            "#time": "2016/02/21",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.27166666666666
+          },
+          {
+            "time": "2016/02/21",
+            "#time": "2016/02/21",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.1912500000001
+          },
+          {
+            "time": "2016/02/22",
+            "#time": "2016/02/22",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.31
+          },
+          {
+            "time": "2016/02/22",
+            "#time": "2016/02/22",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2105.2
+          },
+          {
+            "time": "2016/02/22",
+            "#time": "2016/02/22",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.943333333333335
+          },
+          {
+            "time": "2016/02/22",
+            "#time": "2016/02/22",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.30583333333333
+          },
+          {
+            "time": "2016/02/22",
+            "#time": "2016/02/22",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.2729166666667
+          },
+          {
+            "time": "2016/02/23",
+            "#time": "2016/02/23",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.17583333333337
+          },
+          {
+            "time": "2016/02/23",
+            "#time": "2016/02/23",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2100.417083333333
+          },
+          {
+            "time": "2016/02/23",
+            "#time": "2016/02/23",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.944166666666668
+          },
+          {
+            "time": "2016/02/23",
+            "#time": "2016/02/23",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.33624999999999
+          },
+          {
+            "time": "2016/02/23",
+            "#time": "2016/02/23",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.22166666666675
+          },
+          {
+            "time": "2016/02/24",
+            "#time": "2016/02/24",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.08
+          },
+          {
+            "time": "2016/02/24",
+            "#time": "2016/02/24",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.2450000000003
+          },
+          {
+            "time": "2016/02/24",
+            "#time": "2016/02/24",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.945833333333336
+          },
+          {
+            "time": "2016/02/24",
+            "#time": "2016/02/24",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.34916666666666
+          },
+          {
+            "time": "2016/02/24",
+            "#time": "2016/02/24",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.2425
+          },
+          {
+            "time": "2016/02/25",
+            "#time": "2016/02/25",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.20208333333338
+          },
+          {
+            "time": "2016/02/25",
+            "#time": "2016/02/25",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.237083333334
+          },
+          {
+            "time": "2016/02/25",
+            "#time": "2016/02/25",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.945
+          },
+          {
+            "time": "2016/02/25",
+            "#time": "2016/02/25",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.33541666666667
+          },
+          {
+            "time": "2016/02/25",
+            "#time": "2016/02/25",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.25083333333333
+          },
+          {
+            "time": "2016/02/26",
+            "#time": "2016/02/26",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.26666666666668
+          },
+          {
+            "time": "2016/02/26",
+            "#time": "2016/02/26",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.3308333333334
+          },
+          {
+            "time": "2016/02/26",
+            "#time": "2016/02/26",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.94708333333333
+          },
+          {
+            "time": "2016/02/26",
+            "#time": "2016/02/26",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.25833333333333
+          },
+          {
+            "time": "2016/02/26",
+            "#time": "2016/02/26",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 401.1712500000001
+          },
+          {
+            "time": "2016/02/27",
+            "#time": "2016/02/27",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.13041666666666
+          },
+          {
+            "time": "2016/02/27",
+            "#time": "2016/02/27",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.3341666666665
+          },
+          {
+            "time": "2016/02/27",
+            "#time": "2016/02/27",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.945000000000004
+          },
+          {
+            "time": "2016/02/27",
+            "#time": "2016/02/27",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.28166666666668
+          },
+          {
+            "time": "2016/02/27",
+            "#time": "2016/02/27",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 400.9325
+          },
+          {
+            "time": "2016/02/28",
+            "#time": "2016/02/28",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.02708333333328
+          },
+          {
+            "time": "2016/02/28",
+            "#time": "2016/02/28",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.335416666667
+          },
+          {
+            "time": "2016/02/28",
+            "#time": "2016/02/28",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.942500000000003
+          },
+          {
+            "time": "2016/02/28",
+            "#time": "2016/02/28",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.27333333333333
+          },
+          {
+            "time": "2016/02/28",
+            "#time": "2016/02/28",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 400.80125
+          },
+          {
+            "time": "2016/02/29",
+            "#time": "2016/02/29",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.01999999999995
+          },
+          {
+            "time": "2016/02/29",
+            "#time": "2016/02/29",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.28125
+          },
+          {
+            "time": "2016/02/29",
+            "#time": "2016/02/29",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.943333333333335
+          },
+          {
+            "time": "2016/02/29",
+            "#time": "2016/02/29",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.26041666666666
+          },
+          {
+            "time": "2016/02/29",
+            "#time": "2016/02/29",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 400.59250000000003
+          },
+          {
+            "time": "2016/03/01",
+            "#time": "2016/03/01",
+            "indicator": "#NSMS_DAU001_GDR004",
+            "#indicator": "NSMS_DAU001_GDR004",
+            "#value": 143.0341666666667
+          },
+          {
+            "time": "2016/03/01",
+            "#time": "2016/03/01",
+            "indicator": "#NSMS_DAU001_GDR009",
+            "#indicator": "NSMS_DAU001_GDR009",
+            "#value": 2099.2970833333334
+          },
+          {
+            "time": "2016/03/01",
+            "#time": "2016/03/01",
+            "indicator": "#NSMS_DAU002_GDR015",
+            "#indicator": "NSMS_DAU002_GDR015",
+            "#value": 30.95375
+          },
+          {
+            "time": "2016/03/01",
+            "#time": "2016/03/01",
+            "indicator": "#NSMS_DAU003_GDR016",
+            "#indicator": "NSMS_DAU003_GDR016",
+            "#value": 89.27208333333333
+          },
+          {
+            "time": "2016/03/01",
+            "#time": "2016/03/01",
+            "indicator": "#NSMS_DAU006_GDR005",
+            "#indicator": "NSMS_DAU006_GDR005",
+            "#value": 400.5983333333333
+          }
+        ]
+      }
+    ]
+  }
+}

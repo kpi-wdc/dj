@@ -1,0 +1,33 @@
+meta('$..dimension[?(@.role == "metric")].values.*')
+unique()
+count()
+html()
+wrap(tag:'span', class:'skin')
+set('indicators')
+
+
+
+meta()
+count()
+html()
+wrap(tag:'span', class:'skin')
+set('datasets')
+
+meta('$..dataset.topics.*')
+unique()
+count()
+html()
+wrap(tag:'span', class:'skin')
+set('tags')
+
+<%
+ DB totals:<br/>datasets:&nbsp; 
+%>html()
+append('{{datasets}}')
+append(',&nbsp;indicators:&nbsp;')
+append('{{indicators}}')
+append(',&nbsp;tags:&nbsp;')
+append('{{tags}}')
+wrap('center')
+wrap('h5')
+wrap(tag:'div', class:'row', style:'margin:0')

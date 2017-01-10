@@ -1,0 +1,66 @@
+// Transpose Table
+
+
+module.exports = {
+    name: "transpose",
+    synonims: {},
+    defaultProperty: {},
+
+    execute: function(command, state, config) {
+        if (state.head.type != "table") throw "Incompatible context " + state.head.type + " for command 'transpose'"
+        var table = state.head.data;
+        
+
+        state.head = {
+            data: this.transpose(table),
+            type: "table"
+        }
+        return state;
+    },
+    help: {
+        synopsis: "Transpose table",
+
+        name: {
+            "default": "transpose",
+            synonims: []
+        },
+        input:["table"],
+        output:"table",
+        "default param": "none",
+        params: [],
+        example: {
+            description: "Transpose table",
+            code: "src(cache:'5855481930d9ae60277a474a')\njson()\ntable()\norder(for:'row',by:-1, as:'az')\ntranspose()"
+        }
+    },
+    transpose: function(table){
+    	var tBody = table.header;
+        var values = [];
+        table.body.forEach(function(row) {
+            values.push(row.value)
+        })
+
+
+        tValues = [];
+        for (var i = 0; i < values[0].length; i++) {
+            tValues.push(
+                values.map(function(item) {
+                    return item[i]
+                })
+            )
+        }
+
+        var tHeader = table.body;
+        tHeader.forEach(function(item) {
+            item.value = undefined;
+        })
+
+        tBody.forEach(function(item, index) {
+            item.value = tValues[index]
+        })
+
+        table.body = tBody;
+        table.header = tHeader;
+        return table
+    }
+}

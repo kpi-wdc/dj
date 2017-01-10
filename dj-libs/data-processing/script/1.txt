@@ -1,0 +1,46 @@
+source({dataset:'32a00120-b230-11e6-8a1a-0f91ca29d77e_2016_02'});
+    query([
+    {dim:"indicator",role:"col",items:[]},
+    {dim:"time", role:"row",items:[]}
+    ]);
+
+format({p:2});
+order({asc:"az",dir:"row",index:0});
+line-serie ( {
+    xaxis:-1,
+    "index":[0]
+})
+"source":{"dataset":"32a00120-b230-11e6-8a1a-0f91ca29d77e_2016_02"}
+"query":[{"dim":"indicator","role":"col","items":[]},{"dim":"time", "role":"row","items":[]}    ]
+"format":{"p":2}
+"order":{"asc":"az","dir":"row","index":0}
+"line-serie" : {"xaxis":-1,"index":[0]}
+{"source":{"dataset":"32a00120-b230-11e6-8a1a-0f91ca29d77e_2016_02"},"script":[{"processId":"query","settings":[{"dimension":"indicator","role":"Columns","collection":[]},{"dimension":"time","role":"Rows","collection":[]}]},{"processId":"format","settings":{"precision":2}},{"processId":"order","settings":{"asc":"A-Z","direction":"Rows","index":0}},{"processId":"line","settings":{"axisX":-1,"index":[0]}}]}
+
+
+source({dataset:'3a37ea80-93a8-11e5-b62f-dfcea48fc8d9'});
+query([
+    {dim:"concept",role:"col",items:[]},
+    {dim:"country",role:"col-split",items:["UKR","USA"]},
+    {dim:"year", role:"row",items:[]}
+]);
+
+format({p:2});
+
+order({asc:"az",dir:"row",index:-1});
+
+source({table:'58418cbfa0e077f041b06244'});
+
+[object Object]
+
+[object Object]
+source({dataset:'3a37ea80-93a8-11e5-b62f-dfcea48fc8d9'});
+query([
+    {dim:"concept",role:"col",items:[]},
+    {dim:"country",role:"col-split",items:["UKR","USA"]},
+    {dim:"year", role:"row",items:[]}
+]);
+
+{"message":"Write script and execute it"}
+
+

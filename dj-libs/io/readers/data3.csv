@@ -1,0 +1,138 @@
+Type;key.country;key.serie;Description
+Country-Series;Argentina (ARG);Overall level of statistical capacity (scale 0 - 100) (IQ.SCI.OVRL);The government of Argentina has declared a state of emergency in the national statistical system on 07 January 2016. As a consequence, Argentina's Instituto Nacional de Estad?stica y Censos (INDEC) has temporarily suspended publication of certain official statistics under its responsibility, pending re-organization. See the following link: https://www.boletinoficial.gob.ar/pdf/linkQR/QlFlS1dmVmpOWXMrdTVReEh2ZkU0dz09. The SCI Indicator may not reflect the latest development in Argentina.
+Country-Series;Argentina (ARG);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Comisi?n Nacional de Comunicaciones.
+Country-Series;Argentina (ARG);Inflation, GDP deflator (annual %) (NY.GDP.DEFL.KD.ZG);Data are officially reported statistics by the National Statistics and Censuses Institute of Argentina before June 2016. On February 1, 2013, the International Monetary Fund (IMF) issued a declaration of censure, and in December 2013 called on Argentina to implement specified actions to address the quality of its official GDP data according to a specified timetable. On June 3, 2015, the IMF Executive Board recognized the material progress in remedying the inaccurate provision of data since 2013, but found that some specified actions called for by the end of February 2015 had not yet been completely implemented. The IMF Executive Board will review this issue again by July 15, 2016.
+Country-Series;Argentina (ARG);GDP growth (annual %) (NY.GDP.MKTP.KD.ZG);Data are officially reported statistics by the National Statistics and Censuses Institute of Argentina before June 2016. On February 1, 2013, the International Monetary Fund (IMF) issued a declaration of censure, and in December 2013 called on Argentina to implement specified actions to address the quality of its official GDP data according to a specified timetable. On June 3, 2015, the IMF Executive Board recognized the material progress in remedying the inaccurate provision of data since 2013, but found that some specified actions called for by the end of February 2015 had not yet been completely implemented. The IMF Executive Board will review this issue again by July 15, 2016.
+Country-Series;Argentina (ARG);GNI, Atlas method (current US$) (NY.GNP.ATLS.CD);Based on data officially reported by the National Statistics and Censuses Institute of Argentina before June 2016. On February 1, 2013, the International Monetary Fund (IMF) issued a declaration of censure, and in December 2013 called on Argentina to implement specified actions to address the quality of its official GDP data according to a specified timetable. On June 3, 2015, the IMF Executive Board recognized the material progress in remedying the inaccurate provision of data since 2013, but found that some specified actions called for by the end of February 2015 had not yet been completely implemented. The IMF Executive Board will review this issue again by July 15, 2016.
+Country-Series;Argentina (ARG);GNI, PPP (current international $) (NY.GNP.MKTP.PP.CD);Data series will be calculated once ongoing revisions to official statistics reported by the National Statistics and Censuses Institute of Argentina have been finalized.
+Country-Series;Argentina (ARG);GNI per capita, Atlas method (current US$) (NY.GNP.PCAP.CD);Based on data officially reported by the National Statistics and Censuses Institute of Argentina before June 2016. On February 1, 2013, the International Monetary Fund (IMF) issued a declaration of censure, and in December 2013 called on Argentina to implement specified actions to address the quality of its official GDP data according to a specified timetable. On June 3, 2015, the IMF Executive Board recognized the material progress in remedying the inaccurate provision of data since 2013, but found that some specified actions called for by the end of February 2015 had not yet been completely implemented. The IMF Executive Board will review this issue again by July 15, 2016.
+Country-Series;Argentina (ARG);GNI per capita, PPP (current international $) (NY.GNP.PCAP.PP.CD);Data series will be calculated once ongoing revisions to official statistics reported by the National Statistics and Censuses Institute of Argentina have been finalized.
+Country-Series;Argentina (ARG);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Argentina (ARG);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Argentina (ARG);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;Argentina (ARG);Population growth (annual %) (SP.POP.GROW);Data sources: United Nations World Population Prospects
+Country-Series;Argentina (ARG);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;Australia (AUS);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Australian Department of Broadband, Communications and the Digital Economy (DBCDE).
+Country-Series;Australia (AUS);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Australia (AUS);Adolescent fertility rate (births per 1,000 women ages 15-19) (SP.ADO.TFRT);Including Christmas Island, Cocos (Keeling) Islands and Norfolk Island.
+Country-Series;Australia (AUS);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Australia (AUS);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Australian Bureau of Statistics
+Country-Series;Australia (AUS);Population growth (annual %) (SP.POP.GROW);Data sources: Australian Bureau of Statistics
+Country-Series;Australia (AUS);Population, total (SP.POP.TOTL);Data sources : Australian Bureau of Statistics
+Country-Series;Brazil (BRA);External debt stocks, total (DOD, current US$) (DT.DOD.DECT.CD);Long-term public and publicly guaranteed and long-term private nonguaranteed debt data for 2014 are based on reports provided by the country. Short-term debt data for 2014 are based on reports provided by the country.
+Country-Series;Brazil (BRA);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Telecomunica?oes Brasileiras S.A. From 1998: Ag?ncia Nacional de Telecomunica??es (ANATEL).
+Country-Series;Brazil (BRA);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Brazil (BRA);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Brazil (BRA);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;Brazil (BRA);Population growth (annual %) (SP.POP.GROW);Data sources: United Nations World Population Prospects
+Country-Series;Brazil (BRA);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;Switzerland (CHE);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Swisscom. From 1999: OFCOM.
+Country-Series;Switzerland (CHE);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Switzerland (CHE);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Switzerland (CHE);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat
+Country-Series;Switzerland (CHE);Population growth (annual %) (SP.POP.GROW);Data sources : Eurostat
+Country-Series;Switzerland (CHE);Population, total (SP.POP.TOTL);Data sources : Eurostat
+Country-Series;China (CHN);Foreign direct investment, net inflows (BoP, current US$) (BX.KLT.DINV.CD.WD);Data based on BPM6.
+Country-Series;China (CHN);External debt stocks, total (DOD, current US$) (DT.DOD.DECT.CD);Long-term public and publicly guaranteed and long-term private nonguaranteed debt data for 2014 are World Bank staff estimates based on creditors and market data. Short-term debt data for 2014 are sourced by the Quarterly External Debt Statistics database (http://datatopics.worldbank.org/debt/qeds).
+Country-Series;China (CHN);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Ministry of Information Industry (MII). Ministry of Industry and Information Technology.
+Country-Series;China (CHN);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;China (CHN);Adolescent fertility rate (births per 1,000 women ages 15-19) (SP.ADO.TFRT);"The data for China do not include Hong Kong SAR, China; Macao SAR, China; and Taiwan, China."
+Country-Series;China (CHN);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;China (CHN);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;China (CHN);Population growth (annual %) (SP.POP.GROW);Data sources: National Bureau of Statistics
+Country-Series;China (CHN);Population, total (SP.POP.TOTL);Data sources : National Bureau of Statistics
+Country-Series;Germany (DEU);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Bundesnetzagentur (BNetzA, formerly Regulierungsbeh?rde f?r Telekommunikation und Post).
+Country-Series;Germany (DEU);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Germany (DEU);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Germany (DEU);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat
+Country-Series;Germany (DEU);Population growth (annual %) (SP.POP.GROW);Data sources : Eurostat
+Country-Series;Germany (DEU);Population, total (SP.POP.TOTL);Data sources : Eurostat
+Country-Series;Spain (ESP);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Telef?nica de Espa?a, S.A.. Ministerio de Ciencia y Technolog?a. Since 2002: Comisi?n del Mercado de las Telecomunicaciones (CMT).
+Country-Series;Spain (ESP);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Spain (ESP);Adolescent fertility rate (births per 1,000 women ages 15-19) (SP.ADO.TFRT);Including Canary Islands, Ceuta and Melilla.
+Country-Series;Spain (ESP);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Spain (ESP);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat
+Country-Series;Spain (ESP);Population growth (annual %) (SP.POP.GROW);Data sources : Eurostat
+Country-Series;Spain (ESP);Population, total (SP.POP.TOTL);Data sources : Eurostat
+Country-Series;France (FRA);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Until 1996: France T?l?com. Autorit? de R?gulation des Communications Electroniques et des Postes (ACREP) (formerly ART).
+Country-Series;France (FRA);Net migration (SM.POP.NETM);Data sources and note : United Nations World Population Prospects. Including the French overseas departments of French Guiana, Guadeloupe, Martinique, R?union.
+Country-Series;France (FRA);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;France (FRA);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources and note : Eurostat, United Nations World Population Prospects. Including the French overseas departments of French Guiana, Guadeloupe, Martinique, R?union.
+Country-Series;France (FRA);Population growth (annual %) (SP.POP.GROW);Data sources: Eurostat, United Nations World Population Prospects. Including the French overseas departments of French Guiana, Guadeloupe, Martinique, Mayotte, and R?union.
+Country-Series;France (FRA);Population, total (SP.POP.TOTL);Data sources : Eurostat, United Nations World Population Prospects. Including the French overseas departments of French Guiana, Guadeloupe, Martinique, Mayotte, and R?union.
+Country-Series;United Kingdom (GBR);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Office of Communications (Ofcom).
+Country-Series;United Kingdom (GBR);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;United Kingdom (GBR);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;United Kingdom (GBR);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat
+Country-Series;United Kingdom (GBR);Population growth (annual %) (SP.POP.GROW);Data sources: Eurostat
+Country-Series;United Kingdom (GBR);Population, total (SP.POP.TOTL);Data sources : Eurostat
+Country-Series;Indonesia (IDN);External debt stocks, total (DOD, current US$) (DT.DOD.DECT.CD);Long-term public and publicly guaranteed and long-term private nonguaranteed debt data for 2014 are based on reports provided by the country. Short-term debt data for 2014 are sourced by the Quarterly External Debt Statistics database (http://datatopics.worldbank.org/debt/qeds).
+Country-Series;Indonesia (IDN);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Directorate General of Posts and Telecommunications (POSTEL), PT Indosat, PT Telekom.
+Country-Series;Indonesia (IDN);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Indonesia (IDN);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Indonesia (IDN);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;Indonesia (IDN);Population growth (annual %) (SP.POP.GROW);Data sources: United Nations World Population Prospects
+Country-Series;Indonesia (IDN);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;India (IND);External debt stocks, total (DOD, current US$) (DT.DOD.DECT.CD);Long-term public and publicly guaranteed and long-term private nonguaranteed debt data for 2014 are based on reports provided by the country. Short-term debt data for 2014 are sourced by the Quarterly External Debt Statistics database (http://datatopics.worldbank.org/debt/qeds).
+Country-Series;India (IND);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Department of Telecommunications (DOT). Ministry of Communications and Information Technology.
+Country-Series;India (IND);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;India (IND);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;India (IND);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;India (IND);Population growth (annual %) (SP.POP.GROW);Data sources: United Nations World Population Prospects
+Country-Series;India (IND);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;Italy (ITA);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Telecom Italia. Ministry of ECONOMIC DEVELOPMENT - Communications
+Country-Series;Italy (ITA);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Italy (ITA);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Italy (ITA);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat
+Country-Series;Italy (ITA);Population growth (annual %) (SP.POP.GROW);Data sources : Eurostat
+Country-Series;Italy (ITA);Population, total (SP.POP.TOTL);Data sources : Eurostat
+Country-Series;Japan (JPN);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);"Ministry of Internal Affairs and Communications (MIC); Telecommunications Carriers Associations (TCA)."
+Country-Series;Japan (JPN);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Japan (JPN);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Japan (JPN);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Ministry of Internal Affairs and Communications, Statistics Bureau
+Country-Series;Japan (JPN);Population growth (annual %) (SP.POP.GROW);"Data sources: Ministry of Internal Affairs and Communications, Statistics Bureau; United Nations Population and Vital Statistics Report"
+Country-Series;Japan (JPN);Population, total (SP.POP.TOTL);"Data sources : Ministry of Internal Affairs and Communications, Statistics Bureau; United Nations Population and Vital Statistics Report"
+Country-Series;Korea, Rep. (KOR);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Ministry of Information and Communication. Korea Communications Commission.
+Country-Series;Korea, Rep. (KOR);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Korea, Rep. (KOR);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Korea, Rep. (KOR);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Korean Statistical Information Service, United Nations World Population Prospects
+Country-Series;Korea, Rep. (KOR);Population growth (annual %) (SP.POP.GROW);Data sources: Korean Statistical Information Service
+Country-Series;Korea, Rep. (KOR);Population, total (SP.POP.TOTL);Data sources : Korean Statistical Information Service
+Country-Series;Mexico (MEX);External debt stocks, total (DOD, current US$) (DT.DOD.DECT.CD);Long-term public and publicly guaranteed and long-term private nonguaranteed debt data for 2014 are based on reports provided by the country. Short-term debt data for 2014 are sourced by the Quarterly External Debt Statistics database (http://datatopics.worldbank.org/debt/qeds).
+Country-Series;Mexico (MEX);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Comisi?n Federal de Telecomunicaciones (CFT).
+Country-Series;Mexico (MEX);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Mexico (MEX);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Mexico (MEX);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;Mexico (MEX);Population growth (annual %) (SP.POP.GROW);Data sources: United Nations World Population Prospects
+Country-Series;Mexico (MEX);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;Netherlands (NLD);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);KPN, Libertel. From 2001: Independent Post and Telecommunications Authority (OPTA).
+Country-Series;Netherlands (NLD);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Netherlands (NLD);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Netherlands (NLD);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat
+Country-Series;Netherlands (NLD);Population growth (annual %) (SP.POP.GROW);Data sources : Eurostat
+Country-Series;Netherlands (NLD);Population, total (SP.POP.TOTL);Data sources : Eurostat
+Country-Series;Russian Federation (RUS);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);General State Supervisory Department for Communications. Ministry of Posts and Telecommunications. From 2005: Ministry for Information Technologies and Communications.
+Country-Series;Russian Federation (RUS);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Russian Federation (RUS);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Russian Federation (RUS);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : Eurostat, Russian Federation Federal State Statistics Service, TransMonEE
+Country-Series;Russian Federation (RUS);Population growth (annual %) (SP.POP.GROW);Data sources : Russian Federation Federal State Statistics Service (its January 1st populations were adjusted to mid-year populations by using geometric mean), 1979 Census, 1989 Census.
+Country-Series;Russian Federation (RUS);Population, total (SP.POP.TOTL);Data sources : Russian Federation Federal State Statistics Service (its January 1st populations were adjusted to mid-year populations by using geometric mean), 1979 Census, 1989 Census.
+Country-Series;Saudi Arabia (SAU);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Saudi Telecommunications Company. From 2005: Communication and Information Technology Commission.
+Country-Series;Saudi Arabia (SAU);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Saudi Arabia (SAU);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Saudi Arabia (SAU);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;Saudi Arabia (SAU);Population growth (annual %) (SP.POP.GROW);Data sources: United Nations World Population Prospects
+Country-Series;Saudi Arabia (SAU);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;Turkey (TUR);External debt stocks, total (DOD, current US$) (DT.DOD.DECT.CD);Long-term public and publicly guaranteed and long-term private nonguaranteed debt data for 2014 are based on reports provided by the country. Short-term debt data for 2014 are sourced by the Quarterly External Debt Statistics database (http://datatopics.worldbank.org/debt/qeds).
+Country-Series;Turkey (TUR);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);T?rk Telekom?nikasyon A.S. From 2002: Telecommunications Authority.
+Country-Series;Turkey (TUR);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;Turkey (TUR);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;Turkey (TUR);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : United Nations World Population Prospects
+Country-Series;Turkey (TUR);Population growth (annual %) (SP.POP.GROW);Data sources : United Nations World Population Prospects
+Country-Series;Turkey (TUR);Population, total (SP.POP.TOTL);Data sources : United Nations World Population Prospects
+Country-Series;United States (USA);Mobile cellular subscriptions (per 100 people) (IT.CEL.SETS.P2);Federal Communications Commission (FCC).
+Country-Series;United States (USA);Net migration (SM.POP.NETM);Data sources : United Nations World Population Prospects
+Country-Series;United States (USA);Life expectancy at birth, total (years) (SP.DYN.LE00.IN);Derived using male and female life expectancy
+Country-Series;United States (USA);Fertility rate, total (births per woman) (SP.DYN.TFRT.IN);Data sources : National Center for Health Statistics
+Country-Series;United States (USA);Population growth (annual %) (SP.POP.GROW);Data sources: U.S. Census Bureau
+Country-Series;United States (USA);Population, total (SP.POP.TOTL);Data sources : U.S. Census Bureau

@@ -1,0 +1,72 @@
+key;value.en;value.ua
+#DIM_COUNTRY;Country;Країна
+#WB_NAME;World Bank;Світовий Банк
+#DIM_INDICATOR;Indicator;Показник
+#EC_NOTE;The combination of all factors (material and spiritual) that are available to the person or the human community (host) and the use of tools which enables needs.;Cукупність всіх чинників (матеріальних і духовних), які є у розпорядженні людини чи людської спільноти (господаря) і використання яких дозволяє отримувати засоби задоволення потреб.
+#WB_NOTE;World Bank Open Data: free and open access to data about development in countries around the globe.;World Bank Open Data: вільний і відкритий доступ до даних про розвиток в країнах по всьому світу.
+#DIM_YEAR;Year;Рік
+#EC_LABEL;Economy;Економіка
+#BOLDAK_NAME;Ivan Pyshnograiev;Пишнограєв Іван
+#GDP_NOTE;GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.;ВВП на душу населення валовий внутрішній продукт ділиться на середньорічну кількість населення. ВВП є сумою валової доданої вартості по всіх виробниках резидентів в економіці плюс будь-які податки на продукцію і мінус будь субсидії, не включені у вартість продукції вартості. Він розраховується без урахування амортизації готових активів в або для виснаження і деградації природних ресурсів. Дані наведені в поточних доларах США.
+#WDI_LABEL/#EC_LABEL/#GDP_ABBR;World Development Indicators/Economy/GDP;Світові індикатори розвитку/Економіка/ВВП
+#GDP_ABBR;GDP;ВВП
+#BOLDAK_INFO;Areas of scientific interests: data reliability, validity and consistency, multivariate data exploration techniques, data integration and indices design, application of cause-effect models, image processing and patterns recognition, design and development information system.;Коло наукових інтересів: надійність, обґрунтованість і послідовність даних, методи дослідження багатовимірних даних, інтеграція даних і проектування показників, застосування причинно-наслідкових моделей, обробка зображень і розпізнавання образів, інформаційна система проектування і розробки.
+#GDP_DATASET_LABEL;GDP per capita (current US$);ВВП на душу населения (current US$)
+#GDP_LABEL;Gross Domestic Product per capita (current USD);Валовий Внутрішній Продукт на душу населення (в дол. США)
+#UKR_LABEL;Ukraine;Україна
+#WDI_LABEL;World Development Indicators;Світові індикатори розвитку
+#S_LABEL;Society;Суспільство
+#ECO_LABEL;Enviroment;Екологія
+#Ie;Index of environmental dimension;Індекс екологічного напряму
+#G;Harmonization degree;Гармонізація
+#Isd;Index of sustainable development;Індекс сталого розвитку
+#NEW_DATASET_LABEL;New Dataset Label;Назва нового набору даних
+#Is;Index of social and institutional dimension;Індекс соціально-інституціонального напрямку
+#Isd_label;Index of sustainable development;Індекс сталого розвитку
+#LAYOUT_VALUE_INFO;Column name that contains data values;Імя стовпчика, який містить значення
+#SDI_U;Sustainable Development Indicators of Ukraine 2015;Показники сталого розвитку для України 2015
+#ECO_NOTE;From an ecological perspective, sustainable development provides for the integrity of both natural biological and physical systems and ensures their viability. The global stability of the biosphere depends upon it. Special significance is attached to the ability of such systems to self reproduce and adapt to various changes, as opposed to being preserved in a static condition within a vacuum or deteriorating and losing its biological variety.;З погляду екології сталий розвиток має забезпечити цілісність біологічних і фізичних природних систем, їх життєздатність, від чого залежить глобальна стабільність усієї біосфери. Особливого значення набуває здатність таких систем самооновлюватися й адаптуватися до різноманітних змін, замість збереження в певному статичному стані або деградації та втрати біологічної різноманітності.
+#WDC_LABEL;WORLD DATA CENTER FOR GEOINFORMATICS AND SUSTAINABLE DEVELOPMENT;СВІТОВИЙ ЦЕНТР ДАНИХ З ГЕОІНФОРМАТИКИ ТА СТАЛОГО РОЗВИТКУ
+#Cql;Quality of Life Component;Компонента якості життя
+#SDI_U_NOTE;The dataset includes values of sustainable development index, components of quality and security of life and ecological, economic and social dimensions for Ukraine for 2014 year.;Набір даних включає значення показників індексу сталого розвитку, компонент якості і безпеки життя людей та екологічного, економічного і соціального вимірів для Украхїни за 2014 рік.
+#S_NOTE;The social component is oriented to human development, preserved stability of public and cultural systems, and the reduction of the amount of societal conflict. The human being should not be viewed as an object, but rather the subject of development. He or she should take part in the formation of their own life, making and executing decisions, and exercising control over their implementation. An important part in creating these conditions belongs to the fair distribution of benefits amongst people (the reduction of the so-called GINI-index), the pluralism of opinions and tolerance for relations between people, the preservation of cultural capital and its varieties, first of all, of the heritage of non-dominating cultures.;Соціальна складова орієнтована на людський розвиток, на збереження стабільності суспільних і культурних систем, на зменшення кількості конфліктів у суспільстві. Людина має стати не об’єктом, а суб’єктом розвитку. Вона повинна брати участь у процесах формування своєї життєдіяльності, прийнятті й реалізації рішень, контролі за їх виконанням. Важливе значення для забезпечення цих умов має справедливий розподіл благ між людьми (зменшення так званого GINI-індексу), плюралізм думок та толерантність у стосунках між ними, збереження культурного капіталу і його розмаїття, насамперед спадщини не домінуючих культур.
+#TOPICS_INFO;Comma separated list of topics;Список ключових слів
+#WDC_NOTE;WDC-Ukraine is a part of World Data Center System of the International Council of Science (ICSU), and acts according to the “WDC System Guide”.;Світовий центр даних з геоінформатики та сталого розвитку (СЦД-Україна) є частиною системи Світових центрів даних Міжнародної ради з науки, його діяльність провадиться у відповідності до «Керівництва для системи Світових центрів даних».
+#SOURCE_INFO;Key for Data Source;Ключ  джерела даних
+#Isd_note;Coordinating a system and balance of these three components is a massive and complex task. Particularly, the interrelationship between social and ecological components results in the necessity of preserving identical opportunities for today’s and future generations to exploit natural resources. The interaction of social and economic components compels achieving a valid distribution of material benefits amongst people and granting targeted help to poor layers of society. Finally, the interrelationship of natural protection and economic factors demands a cost assessment of the influence of technology on the environment.;Системне узгодження та збалансування цих трьох складових — завдання величезної складності. Зокрема взаємний зв’язок соціальної та екологічної складових приводить до необхідності збереження однакових прав сьогоднішніх і майбутніх поколінь на використання природних ресурсів. Взаємодія соціальної та економічної складових вимагає досягнення справедливості при розподілі матеріальних благ між людьми й надання цілеспрямованої допомоги бідним прошаркам суспільства. І, нарешті, взаємозв’язок природоохоронної та економічної складових потребує вартісної оцінки техногенних впливів на довкілля. Вирішення цих завдань — найголовніший виклик сьогодення для національних урядів, авторитетних міжнародних організацій та всіх прогресивних людей світу.
+#LAYOUT_DATA_SHEET_INFO;Sheet Name refered to data;Імя листа з даними
+#DIM_REGION;Region;Регіон
+#SDI_NOTE;The concept is a continuation of the theory of «noosphere» formulated by the Russian academician Vladimir Vernadsky. The theory and practice testify that the «noosphere» doctrine at the turn of the century proves to be a necessary platform for the development of the «triune» concept of sustainable ecological, social and economic development. The extrapolation of this concept was implemented during the world summits of the United Nations in 1992 in Rio de Janeiro and 2002 in Johannesburg, with the participation of more than 180 countries, and numerousinternational organizations and renowned scientists. Hence, the new concept has united in a system way the three main components of sustainable development in society: economic, ecological and social.;Теорія і практика засвідчили, що на межі століть вчення про ноосферу виявилося необхідною платформою для напрацювання триєдиної концепції сталого еколого-соціально-економічного розвитку. Узагальнення цієї концепції були зроблені всесвітніми саммітами ООН, за участі понад 180 країн світу, багатьох міжнародних організацій та провідних учених, у 1992 році в Ріо де Жанейро та у 2002 році в Йоханесбургу. Таким чином, нова концепція системно поєднала три головні компоненти сталого розвитку суспільства: економічну, природоохоронну і соціальну.
+#Iec;Index of economic dimension;Індекс економічного напряму
+#SDI;Sustainable Development Indicators;Показники Сталого розвитку
+#NEW_DATASET_NOTE;New Dataset Note;Опис нового набору даних
+#NI;Prolifiration Index;Індекс розповсюдження зброї
+#CP;Corruption Perception;Корупція
+#PYSHNOGRAIEV_INFO;Areas of scientific interests: data analysis, operation research, optimal control, sustainable development.;Коло наукових інтересів: аналiз даних, дослiдження операцiи?, оптимальне керування, сталии? розвиток.
+#PWA;Water Access;Доступ до питної води
+#ESB;Energy Security;Енергетична безпека
+#PYSHNOGRAIEV_NAME;Ivan Pyshnograiev;Пишнограєв Іван
+#WBGINI;Inequality of Population Income (Gini coefficient);Нерівність доходів населення (Gini коефіцієнт)
+#GDI;Global  Diseases;Вразливість до глобальних хвороб
+#BBP;Biological Balance;Біологічний баланс
+#SDI_THREAT;The global threats indicators for Ukraine 2015;Показники глобальних загроз регіонів України 2015
+#CSL_NOTE;As global threats for sustainable development we will single out those which are determined as the main in XXI century by such authoritative international organization as U.O.N., World Health Organization (WHO), international organizations “World Economic Forum”, “Transparency International”, “Global Footprint Network”, “International Energy Agency”, “World Resources Institute”, the company “British Petroleum” and others. The analysis of every threat will give the possibility to determine the degree of approximation (remoteness) of different world countries to their accumulation (vulnerability).;
+#NDI;Natural Disasters;Вразливість до природних катастроф
+#CM5;Child Mortality;Дитяча смертність
+#SDI_THREAT_NOTE;Data set consists of the values of the global threats indicators for Ukraine 2015.;Набір даних містить значення показників глобальних загроз для регіонів України 2015.
+#WBSF;State Fragility;Державна нестабільність
+#GWK;Global Warming;Глобальне потепління
+#CI;Conflict Intensity;Інтенсивність конфліктів
+#Csl;Security of Life Component;Компонента безпеки життя
+#CIR;Social inequality;Соціальна нерівність
+#LIFE_EXP;The decline in life expectancy;Зниження тривалості життя
+#CORR_PER;Corruption Perceptions;Корупція
+#CCH;Climate change;Вплив на змінювання клімату
+#HEALTH_DEC;Deteriorating health;Погіршення здоров’я
+#WRS;Interregional water resources;Дефіцит водних ресурсів
+#BN;Unemployment rate;Рівень безробіття
+#TH;Technological hazards;Техногенна небезпека
+#RZOF;Technological backwardness;Технологічна відсталість
+#POL;Pollution of environment;Забруднення довкілля
+#DNO;Reducing welfare;Зниження добробуту населення
+#CRIME;Criminality;Злочинність
