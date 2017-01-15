@@ -40,7 +40,7 @@ module.exports = {
       "default" : "json",
       synonims:["json","JSON"]
     },
-    input:["json"],
+    input:["any"],
     output:"json",
     "default param": "none",
     

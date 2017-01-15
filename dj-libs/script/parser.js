@@ -27,7 +27,8 @@ var valuesRE = /'((?:\\\\[\'bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\'\\\\])*)'|\"((?:
     commandNameRE = /"[a-zA-Z0_-]+[a-zA-Z0-9_-]*":/gi,
     paramsRE = /:[\{\^\[]+[a-zA-Z0-9_:",\^\{\}\[\]-]*[\}\]]+;*|:\^[0-9]+;*/gi,
     // scriptRE = /\<\%[\w\d_\-\"\'\?\!\$\(\)\=\:\#\@\/\[\]\^\.\>\<\}\{\|\&\s\,\r\n\f\t]*\%\>/gim,
-    scriptRE = /(\<\%([^%]|(\%+[^%\>]))*\%\>)/g,
+    scriptRE = /(\<\?([^?]|(\?+[^?\>]))*\?\>)/g,
+    bindableRE = /({{[a-zA-Z\$\_]+[a-zA-Z0-9\$\_\.\[\]\"\']*}})/g,
     // urlRE = /http\:\/\/[\w\s\d\:\.\?\=\&\/\%]*/gim;
     urlRE = /((https?:\/\/)([a-zA-Z0-9]+[a-zA-Z0-9_-]*)(:\d{0,4})?([a-zA-Z0-9_\-\/\%\=\{\}\?\+\&\.\:]*))/g
 
@@ -93,12 +94,28 @@ ScriptParser.prototype.parse = function(str) {
 
     function varIndex(tag) {
         var key = tag.substring(1, tag.length - 1)
-        if (key.indexOf("%") == 0) {
+        if (key.indexOf("?") == 0) {
             key = key
                 .replace(/\"/gim, '\\"');
+           
+            var postProcess;
+            key = key.replace(
+                /(?:\?)(javascript|json|text|html|dps|xml|csv)/,
+                    function(m){
+                        postProcess = m.substring(1);
+                        return ""
+                    }
+                )
+                .replace(/(^\?)|(\?$)/g, "")
+                .replace(/\r/gim, "\\r")
+                .replace(/\n/gim, "\\n")
+                .replace(/\t/gim, "\\t")
+                //.replace(/\"/gim, "'")
+                
             values.push(key)
-            return "context(value:" + "^" + (values.length - 1) + ")"
+            return "context(value:" + "^" + (values.length - 1) + ");"+postProcess+"();"
         } else {
+            key = key.replace(/\"/gi, "'")
             values.push(key)
             return "^" + (values.length - 1)
         }
@@ -124,22 +141,17 @@ ScriptParser.prototype.parse = function(str) {
             r = values[Number(key)]
         }
 
-        if (r.indexOf("%") == 0) {
-            r = r
-                .replace(/(^\%)|(\%$)/g, "")
-                .replace(/\r/gim, "\\r")
-                .replace(/\n/gim, "\\n")
-                .replace(/\t/gim, "\\t")
-                .trim()
-                
-            return '"' + r + '"'
-        }
-        return '"' + r.replace(/\"/gi, "'") + '"'
+        // if (r.indexOf("?") == (r.length-1)) {
+        //     return '"' + r + '"'
+        // }
+
+        return '"' + r + '"'
     }
 
     var p = str
         .replace(scriptRE, varIndex)
         .replace(urlRE, pushUrl)
+        .replace(bindableRE,"\"$1\"")
 
         .replace(lineCommentRE, "")
         .replace(valuesRE, varIndex)
@@ -156,7 +168,8 @@ ScriptParser.prototype.parse = function(str) {
         .replace(/\(/gim, ":")
         .replace(/\)/gim, "")
 
-
+    
+        
     try {
         p = p
             .split(";")
@@ -198,6 +211,7 @@ ScriptParser.prototype.parse = function(str) {
         var script = [];
         var cmd = p.split(";")
         cmd.forEach(function(cm) {
+            console.log('Parse:',"{" + cm.replace(/\^[0-9]+/gim, varValue) + "}")
             var t = JSON.parse("{" + cm.replace(/\^[0-9]+/gim, varValue) + "}");
             script.push(t)
 
@@ -223,6 +237,7 @@ ScriptParser.prototype.parse = function(str) {
             c.settings.value = c.settings.value.replace(urlLookup, getUrl)
         }
     })
+    console.log(JSON.stringify(result))
     return result;
 }
 

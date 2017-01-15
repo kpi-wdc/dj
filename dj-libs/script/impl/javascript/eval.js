@@ -16,7 +16,7 @@ module.exports = {
         "eval": "eval",
         "evaluate": "eval",
         "js": "eval",
-        "javasript": "eval"
+        "javascript": "eval"
     },
 
     defaultProperty: {},

@@ -3,7 +3,8 @@ module.exports = {
   name: "string",
   synonims:{
     "string" : "string",
-    "str" : "string"
+    "str" : "string",
+    "text": "string"
   },
   
   defaultProperty:{},
@@ -24,9 +25,9 @@ module.exports = {
     
     name:{
       "default" : "string",
-      synonims:["string","str"]
+      synonims:["string","str", "text"]
     },
-    input:["json"],
+    input:["any"],
     output:"string",
 
     "default param": "none",
@@ -35,7 +36,7 @@ module.exports = {
     
     example:{
       description:"Convert string value '[1,1,1]' to string value '[1,1,1]'",
-      code:"<%[1,1,1]%>\njson()\n str()\ninfo()\nlog()"
+      code:"<?json\n[1,1,1]\n?>\nstr()\ninfo()\nlog()"
     }
   }
 }

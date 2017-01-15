@@ -27,25 +27,25 @@ module.exports = {
     
     example:{
       description:"Build HTML table",
-      code:   '<%\n'+
+      code:   '<?javascript\n'+
               'var mapRow = function(d){\n'+
               '  return "<tr>"+ d.value.map(function(v){\n'+
               '     return "<td style=\\"font-size:x-small\\">"+v+"</td>"\n'+
               '  }).join("")\n'+
               '}\n'+
               '\n'+
-              '%>\n'+
-              'js()set("cb")\n'+
+              '?>\n'+
+              'set("cb")\n'+
               '\n'+
               '\n'+
-              '<%\n'+
+              '<?dps\n'+
               'map("{{cb.mapRow}}")\n'+
               'concat()\n'+
               'html()\n'+
               'wrapHtml("table")\n'+
-              '%>\n'+
+              '?>\n'+
               '\n'+
-              'dps()set("t2html")\n'+
+              'set("t2html")\n'+
               '\n'+
               '\n'+
               '\n'+
@@ -56,7 +56,7 @@ module.exports = {
               'format(2)\n'+
               'json()\n'+
               'select("$.body.*")\n'+
-              'run("{{t2html}}")'
+              'run({{t2html}})'
     }
   }
 }

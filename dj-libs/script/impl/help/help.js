@@ -1,5 +1,13 @@
 require('string-natural-compare');
 
+
+var HelpError = function(message) {
+    this.message = message;
+    this.name = "Command 'help' implementation error";
+}
+HelpError.prototype = Object.create(Error.prototype);
+HelpError.prototype.constructor = HelpError;
+
 module.exports = {
     name: "help",
     synonims: {
@@ -16,12 +24,15 @@ module.exports = {
     },
 
     execute: function(command, state, config) {
+        console.log("invoke",JSON.stringify(command))
+        try{
         command.settings.command = command.settings.command || "help";
 
         var c = config.filter(function(cmd) {
+            console.log(cmd.name,cmd.synonims)
             return cmd.name == command.settings.command || cmd.synonims[command.settings.command]
         })[0]
-
+        console.log("Find", JSON.stringify(c))
         if (!c) {
             state.head = {
                 type: "help",
@@ -39,13 +50,15 @@ module.exports = {
                     type: "help",
                     data: c.help
                 }
-                }
+            }
         }
 
         state.head.data["implemented commands"] = config
                     .map(function(item){return item.name})
                     .sort(function(a,b){return String.naturalCompare((a).toLowerCase(),(b).toLowerCase())})
-            
+        } catch (e){
+            throw new HelpError(e.toString())
+        }    
         return state;
     },
 

@@ -20,14 +20,17 @@ html()
 wrap(tag:'span', class:'skin')
 set('tags')
 
-<%
+<?html
  DB totals:<br/>datasets:&nbsp; 
-%>html()
-append('{{datasets}}')
+?>
+
+append({{datasets}})
 append(',&nbsp;indicators:&nbsp;')
-append('{{indicators}}')
+append({{indicators}})
 append(',&nbsp;tags:&nbsp;')
-append('{{tags}}')
+append({{tags}})
 wrap('center')
 wrap('h5')
 wrap(tag:'div', class:'row', style:'margin:0')
+html()
+cache()

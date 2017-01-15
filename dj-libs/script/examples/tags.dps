@@ -1,24 +1,38 @@
-<%
-   var mapper = function(d){return {key:d, value:d}}
-   
-var transform = function(d){
-        return {label:d.key, value: d.values.length}
-   }
 
-var transform1 = function(d){
-        return {label:((d.label.label)?d.label.label:d.label), value: d.value}
-   }
-   
-var criteria = function(a,b){
-       return b.value-a.value
-   }
-%>
+<?javascript
 
-js()
+    var mapper = function(d){
+        return {key:d, value:d}
+        
+    }
+   
+    var transform = function(d){
+            return {
+                label:d.key, 
+                value: d.values.length
+                
+            }
+       }
+
+    var transform1 = function(d){
+            return {
+                label:((d.label.label)?d.label.label:d.label), 
+                value: d.value
+                
+            }
+       }
+   
+    var criteria = function(a,b){
+           return b.value-a.value
+       };
+   
+?>
+
 set('cb')
 
 
-<%
+<?json
+
   [{
     "key": "tags",
     "role": "metric",
@@ -28,17 +42,18 @@ set('cb')
     },
     "values":[]
   }]
-%>json()
+?>
+
 set('res')
 
 
 meta('$..dataset.topics.*')
-group('{{cb.mapper}}')
-map('{{cb.transform}}')
-sort('{{cb.criteria}}')
+group({{cb.mapper}})
+map({{cb.transform}})
+sort({{cb.criteria}})
 extend()
 translate()
-map('{{cb.transform1}}')
+map({{cb.transform1}})
 set('res.[0].values')
 get('res')
 json()
