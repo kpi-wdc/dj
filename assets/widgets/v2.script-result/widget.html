@@ -1,122 +1,30 @@
 <style>
-.scriptInput {
-    font-family: monospace, monospace;
-    font-size: medium;
-    /*font-weight: bold;*/
-    color: #007095;
-    line-height: 0.9;
-}
-
-.prettify-dps {
-    font-size: medium;
+  .highlighter {
     line-height: 1;
-    background: #efefef;
-}
-
-.prettify-dps .comment {
-    color: #777;
-}
-
-.prettify-dps .command {
-    color: #a0a;
-}
-
-.prettify-dps .property {
-    color: #00a;
-}
-
-.prettify-dps .textValue {
-    color: #0a0;
-}
-
-.prettify-dps .injection {
-    color: #a00;
-}
-
-.help {
-    color: #333;
-}
-
-.help p {
-    line-height: 1.2;
-    margin: 0;
     font-size: small;
-    font-stretch: normal;
-}
-
-.str {
-    color: #cf6e0e;
-}
+  }
 </style>
-<div class="help" ng-controller="ScriptHelpController" style=" 
-          padding: 0.5rem;
-          margin-top: 0.5rem;">
-    <div ng-if="!hidden">
-        <h4><img src="./img/dj.png" style="height:1.2em;"/> dps help for <span class="str">{{help.name.default}}</span></h4>
-        <div ng-if="help.warning">
-            <h4 class="str">{{help.warning}}</h4>
+
+<div ng-controller="ScriptResultController">
+    <div    ng-if="!hidden && !globalConfig.designMode" 
+            style=  "padding: 0.5rem;
+                    margin-top: 0.5rem;
+                    "
+    >     
+        <h5>{{widget.title | translate}}</h5>
+        <div  class="row" style="margin:0;"> 
+            <span class="right alert">{{settings.type}}</span>
         </div>
-        <div style="padding: 0 0 1em 1em;">
-            <p class="synopsis" style="font-size: large;">{{help.synopsis}}</p>
-        </div>
-        <div ng-if="help.name.synonims.length>0">
-            <p><b>Aliases: </b> <span class="str">{{help.name.synonims.join(', ')}}</span></p>
-        </div>
-        <div ng-if="help.input">
-            <p><b>Available input context types: </b>
-                <span class="str">
-            {{help.input.join(", ")}}
-            </span></p>
-        </div>
-        <div ng-if="help.output">
-            <p><b>Output context type: </b>
-                <span class="str">
-            {{help.output}}
-            </span></p>
-        </div>
-        <div ng-if="help['default param']">
-            <p><b>Default parameter name: </b>
-                <span class="str">
-            {{help['default param']}}
-            </span></p>
-        </div>
-        
-        
-        <div ng-if="help.params.length>0">
-            <h5 style="">Parameters:</h5>
-            <div ng-repeat="p in help.params" style="padding: 0 0 0.5em 0.5em;">
-                <p><b><span class="str">{{p.name}}</span></b> - {{p.synopsis}}</p>
-                <p style="padding:0.3em 0 0 0.5em;" ng-if="p.type && p.type.length>0">
-                  <b>Available values or value types: </b>
-                  <span class="str">{{p.type.join(", ")}}</span>
-                </p>
-                <p style="padding:0.3em 0 0 0.5em;">
-                  <b>Default value: </b>
-                  <span class="str">{{p['default value']}}</span>
-                </p>
-                <p ng-if="p.synonims.length>0" style="padding:0.3em 0 0 0.5em;">
-                  <b>Aliases: </b> 
-                  <span class="str">{{p.synonims.join(', ')}}</span>
-                </p>
-            </div>
-        </div>
-        <div ng-if="!help.warning">
-            <h5>Example: {{help.example.description}} </h5>
-            <pretty-dps script="script" style="overflow:hidden; padding:1em; border:1px solid #aaa"></pretty-dps>
-        </div>
-        <h5>See help for:</h5>
-        <div class="row" style="padding: 0 0 1em 1em; margin: 0;">
-            <!-- <span ng-repeat="c in help['implemented commands']"> -->
-          <a ng-repeat="c in help['implemented commands']"
-            class="left" 
-            style=" line-height: 1.2;
-                    margin: 0;
-                    font-size: small;
-                    font-stretch: initial;" 
-            ng-click="getCommandHelp(c)"
-          >{{c}},&nbsp;
-          </a>
-          <!-- </span> -->
+        <div  class="row" 
+              style="
+                margin: 0; 
+                padding: 0.1em; 
+                border: 1px solid #aaa;
+                {{(widget.scroll) ? 'height:'+widget.height+'px;':''}}
+                overflow: auto;
+                ">
+          <highlight settings = "settings"></highlight>
         </div>
     </div>
 </div>
+

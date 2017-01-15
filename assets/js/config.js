@@ -30,6 +30,8 @@ System.config({
     "angular-clipboard": "components/angular-clipboard/angular-clipboard.js",
     "angular-scroll": "components/angular-scroll/angular-scroll.js",
     "angular-file-saver": "components/angular-file-saver/dist/angular-file-saver.bundle.js",
+   
+    "ng-ace":"js/lib/ng-ace/ng-ace.js",
     "react": "components/react/react.js",
     "react-dom": "components/react/react-dom.js",
     "ngReact": "components/ngReact/ngReact.js",
@@ -142,6 +144,14 @@ System.config({
         "angular"
       ]
     },
+
+    "ng-ace": {
+      "deps": [
+        "angular"
+      ]
+    },
+    
+
     "ngstorage": {
       "deps": [
         "angular"

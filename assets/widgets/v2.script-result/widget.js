@@ -1,69 +1,130 @@
 import angular from 'angular';
-import 'dictionary';
-import 'ngReact';
-import 'custom-react-directives';
-import 'ng-prettyjson';
-
-// console.log("REACT",React);
-let m = angular.module('app.widgets.v2.script-help', [
-    'app.dictionary',
-    'app.dps',
-    'ngFileUpload',
-    'react',
-    'custom-react-directives',
-    'ngPrettyJson'
-])
+import 'ng-ace';
+let m = angular.module('app.widgets.v2.script-result', ['ng.ace'])
 
 
-m.controller('ScriptHelpController', function($scope, $http, $dps, EventEmitter,
-    APIProvider, pageSubscriptions, $lookup, $translate, $modal,
-    user, i18n, $scroll, clipboard, dialog, $error) {
+var rx = {
+    entities: /((&)|(<)|(>))/g,
+    json: /"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|(null))\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g
+};
+// mapping of chars to entities
+var entities = ['&amp;','&lt;','&gt;'];
+// lookup of positional regex matches in rx.json to CSS classes
+var classes = ['number','string','key','boolean','null'];
+var reverseCoalesce = function reverseCoalesce() {
+    var i = arguments.length - 2;
+    do {
+      i--;
+    } while (!arguments[i]);
+    return i;
+  };
+
+var markup = function markup(match) {
+    var idx;
+      // the final two arguments are the length, and the entire string itself;
+      // we don't care about those.
+      if (arguments.length < 7) {
+        throw new Error('markup() must be called from String.prototype.replace()');
+      }
+      idx = reverseCoalesce.apply(null, arguments);
+      return match;
+    };
+
+var makeEntities = function makeEntities() {
+    var idx;
+    if (arguments.length < 5) {
+      throw new Error('makeEntities() must be called from String.prototype.replace()');
+    }
+    idx = reverseCoalesce.apply(null, arguments);
+    return entities[idx - 2];
+  };
+        
+var prettify = function(json){
+    if (!angular.isString(json))
+      json = JSON.stringify(json, null, 2);
+    if (angular.isDefined(json)) {
+      return json.replace(rx.entities, makeEntities)
+      .replace(rx.json, markup);
+    }
+}
 
 
-    $scope.getCommandHelp = function(command) {
 
-        $dps.post("/api/script", {
-                "script": "help('" + command + "')",
-                "locale": i18n.locale()
-            })
-            .then(function(response) {
-                response.data.key = response.data.type;
-                if (response.data.key == 'error') {
-                    $error(response.data.data)
-                } else {
-                    $scope.help = response.data.data;
-                    if(!$scope.help.warning){
-                        $scope.script = $scope.help.example.code
-                            .replace(/\\n/g, "\n")
-                            .replace(/\\t/g, "\t");
-                    }        
-                }
-            })
+
+m.controller('ScriptResultController', 
+    function($scope, APIProvider) {
+    
+    $scope.settings = {
+        options:{
+            mode: 'text',
+            theme: 'tomorrow'
+        },
+        type: 'text',
+        data: 'Script Result Viewer\n Supported types: text, xml, html, csv, javascript, json, dps'
     }
 
+    var supportedMode = {
+        text:           "text", 
+        string:         "text", 
+        xml:            "xml", 
+        csv:            "csv", 
+        javascript:     "javascript", 
+        json:           "json",
+        object:         "json",
+        "function":     "json", 
+        dps:            "dps",
+        dataset:        "json",
+    }
+
+    var extention = {
+        help:           "json",
+        html:           "html", 
+        json:           "json", 
+        table:          "json",
+        error:          "json",
+        bar:            "json",
+        hbar:           "json",
+        line:           "json",
+        area:           "json",
+        scatter:        "json",
+        radar:          "json",
+        deps:           "json",
+        pie:            "json"    
+    }
+
+    
     new APIProvider($scope)
         .config(() => {
             console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
-            $scope.getCommandHelp("")
         })
         .provide('setData', (e, context) => {
             if (!context) {
                 $scope.hidden = true;
                 return
             }
-            if (context.key == "help") {
-                $scope.help = context.data;
-                if(!$scope.help.warning){
-                    $scope.script = $scope.help.example.code
-                        .replace(/\\n/g, "\n")
-                        .replace(/\\t/g, "\t");
-                }
+            
+            var mode = supportedMode[context.key];
+            
+            if($scope.widget.extention){
+                mode = mode || extention[context.key]
+            }
+
+            if(mode){
                 $scope.hidden = false;
-            } else {
+                $scope.settings = {
+                    options:{
+                        mode: mode,
+                        theme: "tomorrow"
+                    },
+                    type: context.key,
+                    data: angular.isString(context.data) ? context.data : prettify(context.data)
+                }
+            }else{
                 $scope.hidden = true;
             }
+    
         })
         .removal(() => {
-            console.log('Script widget is destroyed');
+            console.log('Result Script widget is destroyed');
         });
 })

@@ -3,14 +3,16 @@ import 'dictionary';
 import 'ngReact';
 import 'custom-react-directives';
 import 'ng-prettyjson';
+import 'ng-ace';
 
 let m = angular.module('app.widgets.v2.script', [
-    'app.dictionary',
+    // 'app.dictionary',
     'app.dps',
-    'ngFileUpload',
-    'react',
-    'custom-react-directives',
-    'ngPrettyJson'
+    // 'ngFileUpload',
+    // 'react',
+    // 'custom-react-directives',
+    // 'ngPrettyJson',
+    "ng.ace"
 ])
 
 
@@ -19,6 +21,20 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
     user, i18n, $scroll, clipboard, dialog, $error, log) {
 
     const eventEmitter = new EventEmitter($scope);
+    
+    var __script;
+    
+    $scope.options = {
+        mode:'dps', 
+        theme:'tomorrow',
+        onChange: function(e){
+         __script = e[1].getSession().getValue();
+        }
+    }
+
+    $scope.getEditorScript = function(){
+        return __script;
+    }    
 
     $scope.examples = [{
             title: "DJ DPS version",
@@ -98,54 +114,49 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
         var e = $scope.examples.filter(item => item.title == s)[0]
         if (e) {
             if (e.script) {
-                if ($scope.widget.editor) {
-                    $scope.escript = e.script;
-                    $scope.script = e.script
-                } else {
-                    $scope.script = e.script
+                $scope.script = e.script
+                $scope.settings = {
+                    options: $scope.options,
+                    data: $scope.script
                 }
-
             } else {
                 $http
                     .get(e.url)
                     .then(function(resp) {
                         e.script = resp.data;
-                        if ($scope.widget.editor) {
-                            $scope.escript = e.script;
-                            $scope.script = e.script
-                        } else {
-                            $scope.script = e.script
+                        $scope.script = e.script
+                        $scope.settings = {
+                            options: $scope.options,
+                            data: $scope.script
                         }
                     })
             }
         }
+
     }
 
     $scope.selectedExample;
 
     $scope.$watch('selectedExample', (newValue, oldValue) => {
-        if (newValue !== oldValue) {
+        // if (newValue !== oldValue) {
             $scope.getScript(newValue)
-        }
+        // }
     });
 
-    // $scope.$watch('script', (newValue, oldValue) => {
-    //      if (newValue !== oldValue) {
-    //         console.log("WATCH", newValue)
-    //       }
-    //     });
-    //     
-    $scope.change = function(str) {
-        $scope.script = str;
-        if ($scope.examplesEnable) $scope.examplesEnable = false;
-    }
+        
+    
 
+    
     $scope.runScript = function() {
         $scope.response = undefined;
         eventEmitter.emit('setData', undefined);
-
+        
+        var s = ($scope.widget.editor) 
+                    ? $scope.getEditorScript()
+                    : $scope.script;
+        
         $dps.post("/api/script", {
-                "script": $scope.script,
+                "script": s,
                 "key": $scope.key,
                 "locale": i18n.locale()
             })
@@ -157,6 +168,7 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
                         key: "error",
                         data: response.data.data
                     }
+                    eventEmitter.emit('setData', $scope.response);
                 } else {
                     if (response.data.key == "url") {
                         $scope.response = {
@@ -178,27 +190,27 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
                 }
             })
     }
-
+    
+    
     new APIProvider($scope)
         .config(() => {
-            // console.log("SCRIPT CONFIG", $scope.widget)
+            
+            $scope.script = $scope.widget.script
+            
 
-            if ((!$scope.widget.editor && !$scope.widget.examples)) {
-                $scope.script = $scope.widget.script
-            } else if (($scope.widget.editor && !$scope.widget.examples)) {
-                $scope.escript = $scope.widget.script || "// Write your script here ...\n"
-                $scope.script = $scope.escript
-            } else if (($scope.widget.editor && $scope.widget.examples)) {
-                $scope.escript = $scope.widget.script || "// Select example \n// and(or) write your script here ...\n"
-                $scope.script = $scope.escript
-            } else if ((!$scope.widget.editor && $scope.widget.examples)) {
+
+            if (($scope.widget.examples)) {
                 $scope.selectedExample = $scope.examples[0].title;
                 $scope.getScript($scope.selectedExample)
             }
 
             $scope.examplesEnable = $scope.widget.examples;
 
-            console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
+            $scope.settings = {
+                options: $scope.options,
+                data: $scope.script
+            }
+
             $scope.d_listeners = ($scope.widget.d_listeners) ? $scope.widget.d_listeners.split(",") : [];
             pageSubscriptions().removeListeners({
                 emitter: $scope.widget.instanceName,
@@ -248,12 +260,19 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
                         type: "checkbox",
                         value: $scope.widget.runnable
                     },
-                    script: {
-                        title: "DP Script",
-                        type: "textarea",
-                        value: $scope.script,
-                        required: false
+                    height: {
+                        title: "Editor height in (em)",
+                        type: "number",
+                        min: 5,
+                        value: $scope.widget.height || 20
                     },
+
+                    // script: {
+                    //     title: "DP Script",
+                    //     type: "textarea",
+                    //     value: $scope.script,
+                    //     required: false
+                    // },
 
                     d_listeners: {
                         title: "Listeners",
@@ -265,11 +284,13 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
             })
             .then(function(form) {
                 $scope.widget.title = form.fields.title.value;
+                $scope.widget.height = form.fields.height.value;
                 $scope.widget.examples = form.fields.examples.value;
                 $scope.widget.editor = form.fields.editor.value;
                 $scope.widget.d_listeners = form.fields.d_listeners.value;
                 $scope.widget.runnable = form.fields.runnable.value;
-                $scope.widget.script = form.fields.script.value;
+                $scope.widget.script = $scope.getEditorScript();//$scope.session.getValue();
+                //$scope.script = $scope.widget.script; // = form.fields.script.value;
             })
     })
 

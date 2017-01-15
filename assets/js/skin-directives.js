@@ -1,5 +1,10 @@
 import angular from 'angular';
 
+// console.log("ace",ace)
+var highlight = ace.require("ace/ext/static_highlight")
+// console.log("highlight",highlight)
+// 
+// 
 const skin = angular.module('app.skinDirectives', []);
 
 skin.directive('designPanel', () => {
@@ -54,7 +59,7 @@ skin.directive('loginGoogleButton', () => {
 });
 
 skin.directive('prettyDps', function() {
-    console.log("prettyDps")
+    // console.log("prettyDps")
     var isDefined = angular.isDefined;
     var lookups = {
         comment: {
@@ -147,6 +152,68 @@ skin.directive('prettyDps', function() {
             scope.$watch(exp, function(newValue, oldValue) {
                 elm.html(markup(newValue))
             }, true);
+        }
+
+    };
+})
+
+skin.directive('highlight', function() {
+
+    
+    
+    return {
+        restrict: 'AE',
+        template: '<div class="highlighter"></div>',
+
+        replace: true,
+
+        scope: {
+            settings: '=?'
+        },
+
+        link: function(scope, elm, attrs) {
+           
+            var render = function(scope){
+                var mode = ace.require("ace/mode/"+scope.settings.options.mode);
+                mode = (mode)? mode.Mode : mode;  
+                var theme = ace.require("ace/theme/"+scope.settings.options.theme);
+                
+                if(!mode){
+                    console.error("Highlighter mode: "+scope.settings.options.mode+" not supported")
+                    return
+                }
+                
+                if(!theme){
+                    console.error("Highlighter theme: "+scope.settings.options.theme+" not supported")
+                }
+
+
+                var highlighted = highlight.renderSync(
+                        scope.settings.data,
+                        new mode(),
+                        theme
+                );
+                
+
+                ace.require("ace/lib/dom").importCssString(
+                    highlighted.css
+                        .replace("font-size: 12px;","")
+                        .replace(
+                            ".ace_static_highlight .ace_gutter-cell:before {",
+                            ".ace_static_highlight .ace_gutter-cell:before { font-size: xx-small; padding-right: 0.5em; "
+                        ),
+                    "ace_highlight"
+                );     
+                
+                elm.html(highlighted.html)
+                
+            }
+
+            scope.$watch("settings", function() {
+                render(scope)
+            }, true);
+
+            
         }
 
     };

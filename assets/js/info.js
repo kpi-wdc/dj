@@ -2,8 +2,9 @@ import angular from 'angular';
 import 'angular-foundation';
 import 'file-upload';
 import 'i18n';
+import 'ng-ace';
 
-const info = angular.module('app.info', ['mm.foundation', 'ngFileUpload', 'app.i18n']);
+const info = angular.module('app.info', ['mm.foundation', 'ngFileUpload', 'app.i18n',"ng.ace"]);
 
 info.service('alert', function($modal, $log) {
     this.message = (msg) => {
@@ -80,6 +81,21 @@ info.factory('log', function($modal) {
             windowClass: 'dialog-modal',
             resolve: {
                 log: () => log
+            }
+        }).result;
+    };
+});
+
+
+info.factory('dpsEditor', function($modal) {
+    return (script) => {
+        return $modal.open({
+            templateUrl: '/partials/dps-editor.html',
+            controller: 'DpsEditorController',
+            // windowClass: 'dialog-modal',
+            backdrop: 'static',
+            resolve: {
+                script: () => script
             }
         }).result;
     };
@@ -177,6 +193,36 @@ info.controller('PromptController', function($scope, $modalInstance, text, value
         }
     };
 });
+
+
+
+info.controller('DpsEditorController', function($scope, $modalInstance, script) {
+   
+    var __script;
+    
+    $scope.options = {
+        mode:'dps', 
+        theme:'tomorrow',
+        onChange: function(e){
+            __script = e[1].getSession().getValue();
+        }
+    }
+
+    $scope.getEditorScript = function(){
+            return __script;
+        }    
+    
+    $scope.script = script;
+
+    $scope.close = () => {
+        $modalInstance.close(__script);
+    }
+    
+    $scope.dismiss = () => {
+            $modalInstance.dismiss();
+    };
+});
+
 
 info.controller('DialogController', function($scope, $modalInstance, form) {
 

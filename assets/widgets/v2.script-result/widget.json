@@ -1,1 +1,29 @@
-{}
+{
+	"keywords":["application","management","portal","list","search"],		
+	"schema": {
+	    "type": "object",
+	    "title": "Script Result Viewer",
+	    "properties": {
+		    "title":{
+		    	"type":"string",
+		      	"title":"Title",
+		      	"default":"Script Result"
+		    },
+		    "extention":{
+		        "type":"boolean",
+		        "title":"Extentions",
+		        "default":true
+		    },
+		    "scroll":{
+		        "type":"boolean",
+		        "title":"Use Scroll",
+		        "default":true
+		    },
+			"height":{
+		        "type":"integer",
+		        "title":"Widget Height",
+		        "default":250
+		    }
+	    }
+	}  
+}

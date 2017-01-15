@@ -16,14 +16,14 @@ m.factory("StackedAreaChartDecoration",[
 	"$q", 
 	"parentHolder",
 	"StackedAreaAdapter",
-	"pageWidgets", "i18n", "dialog", "$error",
+	"pageWidgets", "i18n", "dialog", "$error", "dpsEditor",
 	function(
 		$http, 
 		$dps,
 		$q, 
 		parentHolder, 
 		StackedAreaAdapter,
-		pageWidgets,i18n, dialog, $error ){
+		pageWidgets,i18n, dialog, $error, dpsEditor ){
 		
 		let chartAdapter = StackedAreaAdapter;
 
@@ -306,23 +306,13 @@ m.factory("StackedAreaChartDecoration",[
 				});
 			},
 
-			editScript: function(){
+			editScript: function() {
                 var thos = this;
-                dialog({
-                    title: "Edit dpscript",
-                    fields: {
-                        script: {
-                            title: "Script",
-                            type: "textarea",
-                            value: thos.conf.script,
-                            required: false
-                        }
-                    }
-                }).then((form) => {
-                    thos.conf.script = form.fields.script.value;
-                    thos.loadData();
-                })     
-                    
+                dpsEditor(thos.conf.script)
+                    .then((script) => {
+                        thos.conf.script = script;
+                        thos.loadData();
+                    })
             },
 
 			activate : function(wizard){

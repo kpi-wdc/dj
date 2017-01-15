@@ -394,7 +394,7 @@ define(["angular",
                 }  
                 $scope.data = (params.serieAdapter && params.serieAdapter.getSeries) ? 
                     params.serieAdapter.getSeries(resp.data.value) : resp.data.value;
-                    if($scope.data.forEach){
+                    if($scope.data && $scope.data.forEach){
                       $scope.data.forEach((d, index) => {
                         d.colorIndex = index;
                       })
@@ -405,18 +405,20 @@ define(["angular",
                 
             })
         ]).then( () =>{
-            $scope.selector = new Selector(params.serieAdapter,$scope.data,$scope.EventEmitter);
-            if( $scope.widget.emitters && $scope.widget.emitters.split(",").length > 0){
-                $scope.data.forEach((item,index) =>{
-                  item.disabled = index != 0
-                })    
-            }
-          // console.log("q.all()")
-            $scope.settings = {
-                options : angular.copy($scope.expandOptions($scope.options)), 
-                data : angular.copy($scope.data)
-            }
-            $scope.complete();
+            if($scope.data){
+              $scope.selector = new Selector(params.serieAdapter,$scope.data,$scope.EventEmitter);
+              if( $scope.widget.emitters && $scope.widget.emitters.split(",").length > 0){
+                  $scope.data.forEach((item,index) =>{
+                    item.disabled = index != 0
+                  })    
+              }
+            // console.log("q.all()")
+              $scope.settings = {
+                  options : angular.copy($scope.expandOptions($scope.options)), 
+                  data : angular.copy($scope.data)
+              }
+              $scope.complete();
+            }  
         });
       };
 

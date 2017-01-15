@@ -4,6 +4,9 @@ import "widgets/v2.steps/palettes";
 import "d3";
 import "date-and-time";
 
+
+
+
 let m = angular.module("custom-react-directives",['react','app.widgets.palettes']);
 m.service("d3", function(){return d3});
 

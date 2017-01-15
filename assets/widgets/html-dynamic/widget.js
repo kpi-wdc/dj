@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 angular.module('app.widgets.html-dynamic', [])
-    .controller('HtmlDynaController', function($scope, APIProvider, i18n, dialog, $dps, $error) {
+    .controller('HtmlDynaController', function($scope, APIProvider, i18n, dialog, $dps, $error, dpsEditor) {
         
         $scope.update = function(){
             if($scope.script){
@@ -28,22 +28,13 @@ angular.module('app.widgets.html-dynamic', [])
                 $scope.update()
             })
 
-            .openCustomSettings(() =>{
-                dialog({
-                    title: "Edit dpscript for html generation",
-                    fields: {
-                        script: {
-                            title: "Script",
-                            type: "textarea",
-                            value: $scope.script,
-                            required: false
-                        }
-                    }
-                }).then((form) => {
-                    $scope.widget.script = form.fields.script.value;
-                    $scope.script = form.fields.script.value;
-                    $scope.update();
-                })     
+            .openCustomSettings(() => {
+                dpsEditor($scope.script)
+                    .then((script) => {
+                        $scope.script = script;
+                        $scope.widget.script = script;
+                        $scope.update();
+                    })
             })
             
     });

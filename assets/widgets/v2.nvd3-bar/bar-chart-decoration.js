@@ -21,6 +21,7 @@ m.factory("BarChartDecoration", [
     "i18n",
     "dialog",
     "$error",
+    "dpsEditor",
 
     function(
         $http,
@@ -31,7 +32,8 @@ m.factory("BarChartDecoration", [
         pageWidgets,
         i18n,
         dialog, 
-        $error) {
+        $error,
+        dpsEditor) {
 
 
 
@@ -123,7 +125,6 @@ m.factory("BarChartDecoration", [
                             "locale": i18n.locale()
                         })
                         .then((resp) => {
-                            console.log("resp", resp.data )
                             if (resp.data.type == "error") {
                                 $error(resp.data.data)
                                 return
@@ -155,7 +156,6 @@ m.factory("BarChartDecoration", [
                         }
 
                         thos.conf.decoration.setColor = (palette) => {
-                            console.log(thos, palette);
                             thos.conf.decoration.color = angular.copy(palette)
                         }
                         thos.options.chart.x = function(d) {
@@ -197,21 +197,11 @@ m.factory("BarChartDecoration", [
 
             editScript: function() {
                 var thos = this;
-                dialog({
-                    title: "Edit dpscript",
-                    fields: {
-                        script: {
-                            title: "Script",
-                            type: "textarea",
-                            value: thos.conf.script,
-                            required: false
-                        }
-                    }
-                }).then((form) => {
-                    thos.conf.script = form.fields.script.value;
-                    thos.loadData();
-                })
-
+                dpsEditor(thos.conf.script)
+                    .then((script) => {
+                        thos.conf.script = script;
+                        thos.loadData();
+                    })
             },
 
             apply: function() {

@@ -33,14 +33,26 @@
     color:#a00;
   }
   
+  .editor {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-size: 1em;
+        line-height: 0.9;
+  }
+
+  .highlighter {
+    line-height: 1;
+  }
   
 </style>
 <div ng-controller="ScriptController" 
   style=" 
           padding: 0.5rem;
-          margin-top: 0.5rem;">
+          margin-top: 0.5rem;
+         ">
     <h5>{{widget.title | translate}}</h5>
-    <div ng-show = "examplesEnable" class="row" style="margin: 0.5em 0 0 0; height:auto;">
+    <div ng-show = "widget.examples" class="row" style="margin: 0.5em 0 0 0; height:auto;">
        <label style="    float: left;
                           margin: 0.5rem;">
         Script
@@ -53,16 +65,28 @@
             </option>
       </select>
     </div>  
-
-    <div class="row" style="margin: 0.5em 0 0 0; height:auto;">
-       <textarea ng-if="widget.editor" rows="30" cols="20" ng-change="change(escript)" ng-model="escript" class="scriptInput">
-       </textarea>
-       
-       <!-- <pretty-dps ng-if="widget.editor" script="script" style="overflow:hidden; padding:1em; border:1px solid #aaa"></pretty-dps>
- -->
-       <pretty-dps ng-if="!widget.editor" script="script" style="overflow:hidden; padding:1em; border:1px solid #aaa"></pretty-dps>    
+    <div class="row" style="margin:0" ng-if="globalConfig.designMode && !widget.editor">
+      <span class="right alert">IN PRESENTATION MODE WILL BE READ ONLY !!!</span>
     </div>
-
+    <div  class="row" 
+          ng-if="!widget.editor && !globalConfig.designMode"
+          style="margin: 0; padding: 0.1em; border: 1px solid #aaa;">
+      <highlight settings = "settings"></highlight>
+    </div>
+    
+    <div  class="row"
+          ng-if="widget.editor || globalConfig.designMode"
+          style="padding: 0.1rem; border: 1px solid #aaa; margin:0; height:{{(widget.height || 20)+'em'}}">
+      
+      <div  class= "editor"
+            ng-ace
+            data="script" 
+            options = "options">
+      </div>
+   
+    </div>
+    
+   
     <div ng-if="widget.runnable" class="row" style="margin: 0.5em 0 0 0;">
       <img  ng-show="!response" 
         src="./img/ajax-loader.gif" 
@@ -77,6 +101,8 @@
                       margin: 0.3rem 0.5em 0.1rem;">
           Run <i class="fi-play" style="margin: 0 0.5rem;"></i>
        </button>
-    </div>   
+    </div>  
+    
+   
 </div>
 
