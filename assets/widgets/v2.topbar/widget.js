@@ -178,7 +178,10 @@ m.controller('TopBarController', function (
         $lookup, 
         EventEmitter, 
         i18n,
-        randomItemID){
+        randomItemID,
+        $scroll,
+        $location,
+        $window){
  
 
   
@@ -188,12 +191,29 @@ m.controller('TopBarController', function (
         app,
         appName,
         config,
+        
+        navigate:(href) => {
+          let href = href.split('#');
+          let path = (href[0].length>0) ? href[0] : $location.path();
+          let id = href[1];
+          
+          if(path == $location.path() && id){
+            $scroll(id)
+            return
+          } 
+
+          if(path.length>0 && path != $location.path()){
+            $window.location.href = path;  
+          }
+
+        },
+
         languages: [
           {key: "en", title: "Eng."},
-          {key: "uk", title: "Укр."},
-          {key: "ru", title: "Рус."}
+          {key: "uk", title: "Укр."}
+          // {key: "ru", title: "Рус."}
         ],
-         selectLanguage(langKey) {
+        selectLanguage(langKey) {
           $scope.currentLang = $scope.languages.filter((item) => item.key == langKey)[0]
           $translate.use(langKey);
           $translate.refresh().then(() => {i18n.refresh()});
@@ -201,7 +221,7 @@ m.controller('TopBarController', function (
         },
     });    
    
-   $scope.currentLang = $scope.languages.filter((item) => item.key == ($translate.use() || "en"))[0];
+   $scope.currentLang = $scope.languages.filter((item) => item.key == i18n.locale())[0];
    
    new APIProvider($scope)
     .config( () => {
@@ -217,6 +237,10 @@ m.controller('TopBarController', function (
           gotoApps : true
         };
       $scope.widget.content = ($scope.widget.content) ? $scope.widget.content : [];
+      console.log("Select lang", $scope.currentLang.key)
+      $scope.selectLanguage($scope.currentLang.key)
+      // eventEmitter.emit("selectLanguage",$scope.currentLang.key);
+      
       //   [ {
       //        key:randomItemID(),
       //       title: "Getting Started",

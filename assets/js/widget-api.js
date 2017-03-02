@@ -173,6 +173,11 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
       return this;
     }
 
+    pageComplete(slotFn) {
+      this.provide( APIProvider.PAGE_COMPLETE_SLOT, slotFn);
+      return this;
+    }
+
     // beforeConfig(slotFn) {
     //   this.provide(APIProvider.BEFORE_CONFIG_SLOT, slotFn);
     //   return this;
@@ -188,6 +193,7 @@ widgetApi.factory('APIProvider', function ($rootScope, $log,
   }
 
   APIProvider.RECONFIG_SLOT = 'RECONFIG_SLOT';
+  APIProvider.PAGE_COMPLETE_SLOT = 'PAGE_COMPLETE_SLOT';
   APIProvider.TRANSLATE_SLOT = 'TRANSLATE_SLOT';
   APIProvider.REMOVAL_SLOT = 'DESTROY_SLOT';
   APIProvider.OPEN_CUSTOM_SETTINGS_SLOT = 'OPEN_CUSTOM_SETTINGS_SLOT';

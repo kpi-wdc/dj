@@ -46,11 +46,13 @@
   }
   
 </style>
-<div ng-controller="ScriptController" 
+<div ng-controller="ScriptController"
+     ng-show = "(!widget.hidden && !globalConfig.designMode) || globalConfig.designMode"  
   style=" 
           padding: 0.5rem;
           margin-top: 0.5rem;
          ">
+    
     <h5>{{widget.title | translate}}</h5>
     <div ng-show = "widget.examples" class="row" style="margin: 0.5em 0 0 0; height:auto;">
        <label style="    float: left;
@@ -64,9 +66,12 @@
               {{option.title}}
             </option>
       </select>
+    </div>
+    <div class="row" style="margin:0" ng-if="globalConfig.designMode && widget.hidden">
+      <span class="right alert">HIDDEN IN PRESENTATION MODE</span>
     </div>  
     <div class="row" style="margin:0" ng-if="globalConfig.designMode && !widget.editor">
-      <span class="right alert">IN PRESENTATION MODE WILL BE READ ONLY !!!</span>
+      <span class="right alert">READ ONLY IN PRESENTATION MODE</span>
     </div>
     <div  class="row" 
           ng-if="!widget.editor && !globalConfig.designMode"

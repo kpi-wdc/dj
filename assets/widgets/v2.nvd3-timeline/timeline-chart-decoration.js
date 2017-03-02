@@ -2,12 +2,12 @@ import angular from 'angular';
 import 'widgets/v2.nvd3-widget/nvd3-widget';
 import "widgets/v2.nvd3-timeline/adapter";
 import "wizard-directives";
-
+import 'ng-ace';
 
 var m = angular.module("app.widgets.v2.steps.timeline-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.timeline-chart-adapter", 
-    "wizard-directives", "app.dps"]);
+    "wizard-directives", "app.dps", "ng.ace"]);
 
 m.factory("TimelineChartDecoration",[
 	"$http",
@@ -21,6 +21,7 @@ m.factory("TimelineChartDecoration",[
 	"i18n",
 	"$lookup",
 	"EventEmitter",
+	"dpsEditor",
 	function(
 		$http, 
 		$q, 
@@ -32,7 +33,8 @@ m.factory("TimelineChartDecoration",[
 		pageWidgets,
 		i18n,
 		$lookup,
-		EventEmitter ){
+		EventEmitter,
+		dpsEditor ){
 		
 		let chartAdapter = TimelineChartAdapter;
 
@@ -55,11 +57,12 @@ m.factory("TimelineChartDecoration",[
 	    		this.conf = {
 	    			decoration : wizard.conf.decoration,
 	    			dataID : wizard.conf.dataID,
+	    			script : wizard.conf.script,
 	    			serieDataId: wizard.conf.dataID,
 	    			optionsUrl : "./widgets/v2.nvd3-timeline/options.json",
 	    			dataUrl : "/api/data/process/"
 	    		}
-	    		 //console.log("Start step", this)
+	    		// console.log("Start step", this)
 	    		// var d = new Date()
 	    		// this.formatlist.forEach(function(item){
 	    		// 	console.log(d3.locale(i18n.localeDef()).timeFormat(item)(d))
@@ -69,11 +72,12 @@ m.factory("TimelineChartDecoration",[
 	    	onFinishWizard:  function(wizard){
 	    		wizard.conf.decoration = this.conf.decoration;
 	    		wizard.conf.dataID  = this.conf.dataID;
+	    		wizard.conf.script  = this.conf.script;
 	    		wizard.conf.serieDataId  = this.conf.serieDataId;
 	    		this.settings = {options:angular.copy(this.options), data:[]};
 	    		this.conf = {};
 	    		this.data = undefined;
-	    		 //console.log("Finish step", this)
+	    		// console.log("Finish step", this)
 	    	},
 
 	    	onCancelWizard: function(wizard){
@@ -171,12 +175,30 @@ m.factory("TimelineChartDecoration",[
 			},
 
 			loadSeries : function(){
-				return $dps.get("/api/data/process/"+this.conf.serieDataId)
+				// console.log('load series')
+				if(this.conf.serieDataId)
+					return $dps.get("/api/data/process/"+this.conf.serieDataId)
+
+				if(this.conf.script)
+                    return $dps.post("/api/script",{
+                                "script": this.conf.script,
+                                "locale": i18n.locale()
+                            })
+                            .then((resp) => {
+                            	if (resp.data.type == "error") {
+                                $error(resp.data.data)
+                                return
+                            };
+                                return {data:resp}
+                            })
+                            	          
+                // console.log("sample")            
+				return $http.get("/widgets/v2.nvd3-timeline/sample.json")   
 			}, 
 
 			
 		   loadData: function(){
-		   		//console.log("load data for", this.wizard.conf.instanceName,this.conf.serieDataId)
+		   		// console.log("load data for", this.wizard.conf.instanceName,this.conf.serieDataId)
 				let thos = this;
 				$q
 					.all([
@@ -189,7 +211,7 @@ m.factory("TimelineChartDecoration",[
 			            	// console.log("thos.options",thos.options)
 						}),
 						thos.loadSeries().then((resp) => {
-							// console.log("resp",resp.data.value)
+							// console.log("DECORATION LOAD DATA",resp.data.value)
 							thos.metadata = resp.data.value.metadata; 
 							thos.data =resp.data.value.data.series; //thos._prepare( resp.data.value)
 							
@@ -215,10 +237,19 @@ m.factory("TimelineChartDecoration",[
 			},
 
 			activate : function(wizard){
-				if (this.conf.dataID){
+				// if (this.conf.dataID){
 					this.loadData();
-				}
+				// }
 			},
+
+			editScript: function() {
+                var thos = this;
+                dpsEditor(thos.conf.script)
+                    .then((script) => {
+                        thos.conf.script = script;
+                        thos.loadData();
+                    })
+            },
 
 			apply: function(){
 				this.conf.decoration.width = parentHolder(this.wizard.conf).width;

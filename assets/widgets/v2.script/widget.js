@@ -1,9 +1,10 @@
 import angular from 'angular';
-import 'dictionary';
-import 'ngReact';
-import 'custom-react-directives';
-import 'ng-prettyjson';
+// import 'dictionary';
+// import 'ngReact';
+// import 'custom-react-directives';
+// import 'ng-prettyjson';
 import 'ng-ace';
+
 
 let m = angular.module('app.widgets.v2.script', [
     // 'app.dictionary',
@@ -39,6 +40,9 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
     $scope.examples = [{
             title: "DJ DPS version",
             url: "./widgets/v2.script/scripts/version.dps"
+        }, {
+            title: "DJ DPS help",
+            url: "./widgets/v2.script/scripts/help.dps"
         }, {
             title: "Working with metadata",
             url: "./widgets/v2.script/scripts/metadata.dps"
@@ -260,6 +264,11 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
                         type: "checkbox",
                         value: $scope.widget.runnable
                     },
+                    hidden: {
+                        title: "Hidden in presentation mode",
+                        type: "checkbox",
+                        value: $scope.widget.hidden || false
+                    },
                     height: {
                         title: "Editor height in (em)",
                         type: "number",
@@ -289,6 +298,7 @@ m.controller('ScriptController', function($scope, $http, $dps, EventEmitter,
                 $scope.widget.editor = form.fields.editor.value;
                 $scope.widget.d_listeners = form.fields.d_listeners.value;
                 $scope.widget.runnable = form.fields.runnable.value;
+                $scope.widget.hidden = form.fields.hidden.value;
                 $scope.widget.script = $scope.getEditorScript();//$scope.session.getValue();
                 //$scope.script = $scope.widget.script; // = form.fields.script.value;
             })

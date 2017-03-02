@@ -26,7 +26,7 @@
 </style>
 <div 
      ng-controller="DatasetsManagerController" 
-     ng-show="globalConfig.designMode"
+     ng-show="globalConfig.designMode || presentationMode"
 >
 
 <div ng-if="user.isAdmin" >
@@ -35,8 +35,8 @@
               margin: 0;
               padding: 0 0 0.2em 0;
               border-bottom: 0.1rem solid #ddd;">
-    <img src="./widgets/dm-dataset-manager/icon.png" width="32px"/>
-    Datasets Management
+   <!--  <img src="./widgets/dm-dataset-manager/icon.png" width="32px"/>-->
+    &nbsp;
     <div class="column-6" style="
       float: right; 
       padding: 0.2em;    
@@ -66,29 +66,29 @@
                      <i class="fi-results"/>Show Available Datasets
                   </a>
                 </li>
-                <li class="dsmenusection">Create</li>
-                <li ng-click="getDatasetUUID()" class="dsmenuitem">
+                <li ng-if="!readOnly" class="dsmenusection">Create</li>
+                <li ng-if="!readOnly" ng-click="getDatasetUUID()" class="dsmenuitem">
                   <a>
                      <i class="fi-plus"/>New Dataset UUID
                   </a>
                 </li>
-                <li ng-click="showDatasetList()" class="dsmenuitem">
+                <li ng-if="!readOnly" ng-click="showDatasetList()" class="dsmenuitem">
                   <a href="{{dps+'/api/dataset/create'}}" target="blank">
                      <i class="fi-plus"/>Download New Dataset Template
                   </a>
                 </li>
-                <li class="dsmenusection">Upload XSLX</li>
-                <li ng-click="uploadCommit()" class="dsmenuitem">
+                <li ng-if="!readOnly" class="dsmenusection">Upload XSLX</li>
+                <li ng-if="!readOnly" ng-click="uploadCommit()" class="dsmenuitem">
                   <a>
                      <i class="fi-upload"/>Create/Update Dataset
                   </a>
                 </li>
-                <li ng-click="uploadfromFTP()" class="dsmenuitem">
+                <li ng-if="!readOnly" ng-click="uploadfromFTP()" class="dsmenuitem">
                   <a>
                      <i class="fi-upload"/>Upload from FTP (SSE ChNPP)
                   </a>
                 </li>
-                <li ng-click="uploadDictionary()" class="dsmenuitem">
+                <li ng-if="!readOnly" ng-click="uploadDictionary()" class="dsmenuitem">
                   <a>
                      <i class="fi-upload"/>Update Dictionaries
                   </a>
@@ -104,13 +104,13 @@
                      <i class="fi-arrow-right"/>Export Dictionaries
                   </a>
                 </li>
-                <li class="dsmenusection">Import JSON</li>             
-                <li ng-click="importDatasets()" class="dsmenuitem">
+                <li ng-if="!readOnly" class="dsmenusection">Import JSON</li>             
+                <li ng-if="!readOnly" ng-click="importDatasets()" class="dsmenuitem">
                   <a>
                      <i class="fi-arrow-left"/>Import Datasets
                   </a>
                 </li>
-                <li ng-click="importDictionary()" class="dsmenuitem">
+                <li ng-if="!readOnly" ng-click="importDictionary()" class="dsmenuitem">
                   <a>
                      <i class="fi-arrow-left"/>Import Dictionaries
                   </a>
@@ -201,7 +201,7 @@
   <!-- <h4 style="margin: 1em 0 0 1em; color: #888;">Dataset</h4> -->
   <h4 style="font-stretch: ultra-condensed; margin:0; color:#0078a0">
   <button
-          ng-if="item.dataset.status == 'private'"
+          ng-if="item.dataset.status == 'private' && !readOnly"
           ng-click="setCommitStatus(item.dataset.commit.id,'public')"
                   class="button radius toolbar warning"
                 style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
@@ -209,7 +209,7 @@
                   <b>Private</b>
   </button>
   <button
-          ng-if="item.dataset.status == 'public'"
+          ng-if="item.dataset.status == 'public'  && !readOnly"
           ng-click="setCommitStatus(item.dataset.commit.id,'private')"
                   class="button radius toolbar success"
                 style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
@@ -307,7 +307,7 @@
                 </a>  
           </button>
         <button 
-          ng-if="c.metadata.dataset.commit.HEAD==false"
+          ng-if="c.metadata.dataset.commit.HEAD==false  && !readOnly"
                 ng-click="upToHEAD(c)"
                   class="button radius tiny toolbar warning"
                 style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
@@ -315,7 +315,7 @@
                   Up to HEAD
           </button>
           <button 
-          ng-if="c.metadata.dataset.commit.HEAD==false"
+          ng-if="c.metadata.dataset.commit.HEAD==false  && !readOnly"
                 ng-click="deleteCommit(c)"
                   class="button radius tiny toolbar alert"
                 style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
@@ -323,7 +323,7 @@
                   Delete
           </button>
           <button 
-          ng-if="c.metadata.dataset.commit.HEAD==true && commits.length == 1"
+          ng-if="c.metadata.dataset.commit.HEAD==true && commits.length == 1  && !readOnly"
                 ng-click="deleteDataset(c)"
                   class="button radius tiny toolbar alert"
                 style="margin:0.1rem 0.1rem 0.3rem 0rem; padding-top:0.2rem; padding-bottom:0.2rem;font-stretch: ultra-condensed;">
@@ -335,5 +335,8 @@
   </table>
 </div>
 </div>
+</div>
+  <div ng-if="!user.isAdmin">
+    <h4>You cannot use this app without administrator grant</h4>
 </div>
 </div>

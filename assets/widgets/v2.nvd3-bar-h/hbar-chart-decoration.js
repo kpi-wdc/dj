@@ -2,13 +2,14 @@ import angular from 'angular';
 import 'widgets/v2.nvd3-widget/nvd3-widget';
 import "widgets/v2.nvd3-bar-h/adapter";
 import "wizard-directives";
+import 'ng-ace';
 
 
 var m = angular.module("app.widgets.v2.hbar-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.hbar-chart-adapter",  
     "wizard-directives",
-    "app.dps"]);
+    "app.dps", "ng.ace"]);
 
 m.factory("HBarChartDecoration",[
 	"$http",
@@ -51,7 +52,7 @@ m.factory("HBarChartDecoration",[
 	    			emitters: wizard.conf.emitters
 	    		}	
 
-	    		this.queries = [];
+	    		this.queries = [{$id:'eventSource', $title:'setData(updateWithData) event'}];
 
 	    		pageWidgets()
 	    			.filter((item) => item.type =="v2.query-manager")
@@ -92,7 +93,7 @@ m.factory("HBarChartDecoration",[
 				let thos = this;
 				thos.wizard.context.postprocessedTable = undefined;
       			let iq = this.queries.filter((item) => item.$title == thos.inputQuery)[0];
-				this.conf.dataID = iq.context.queryResultId;
+				this.conf.dataID = (iq.context) ? iq.context.queryResultId: undefined;
 				this.conf.queryID = iq.$id;
 				this.loadData();
 			},

@@ -202,8 +202,13 @@ angular.module('app.widgets.v2.app-description', [])
       })
 
       .provide("setApplication", (evt, app) => {
+        console.log("set app", evt, app)
           $scope.app = app;
       })
 
+      // .translate(() => {
+      //   // console.log('translate app desc')
+      //   // if(!$scope.app) $scope.app = $scope.app
+      // })
       
   });

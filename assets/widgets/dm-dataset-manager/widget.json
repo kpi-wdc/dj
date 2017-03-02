@@ -7,6 +7,16 @@
       "rlisteners": {
         "type": "string",
         "title": "Refresh Listeners"
+      },
+      "readOnly":{
+        "type":"boolean",
+        "title": "Read only",
+        "default": true
+      },
+      "presentationMode":{
+        "type":"boolean",
+        "title": "Presentation Mode",
+        "default": false
       }
     }
   }

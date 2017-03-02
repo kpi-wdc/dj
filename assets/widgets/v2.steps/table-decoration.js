@@ -1,10 +1,10 @@
 import angular from 'angular';
 import "custom-react-directives";
 import "wizard-directives";
-
+import 'ng-ace';
 
 var m = angular.module("app.widgets.v2.steps.table-decoration",[
-	 "custom-react-directives", "wizard-directives", 'app.dps']);
+	 "custom-react-directives", "wizard-directives", 'app.dps', "ng.ace"]);
 
 m.factory("TableDecoration",[
 	"$http",
@@ -58,7 +58,7 @@ m.factory("TableDecoration",[
 	    		this.conf.decoration.direction = (this.conf.decoration.direction) ? 
 	    			this.conf.decoration.direction : "Rows";
 
-	    		this.queries = [];
+	    		this.queries = [{$id:'eventSource', $title:'setData(updateWithData) event'}];
 	    		
 	    		pageWidgets()
 	    			.filter((item) => item.type =="v2.query-manager")
@@ -98,7 +98,7 @@ m.factory("TableDecoration",[
 			selectInputData: function(){
 				let thos = this;
       			let iq = this.queries.filter((item) => item.$title == thos.inputQuery)[0];
-				this.conf.dataID = iq.context.queryResultId;
+				this.conf.dataID = (iq.context) ? iq.context.queryResultId: undefined;
 				this.conf.queryID = iq.$id;
 				this.loadData();
 			},

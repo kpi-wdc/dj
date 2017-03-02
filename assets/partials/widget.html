@@ -72,7 +72,7 @@
 
 </div>
 
-<div ng-if="(widgetCodeLoaded && !globalConfig.designMode) ||(widgetCodeLoaded && globalConfig.designMode && (!widgetPanel.collapsed && !drag))"
+<div  id="{{widget.instanceName}}" ng-if="(widgetCodeLoaded && !globalConfig.designMode) ||(widgetCodeLoaded && globalConfig.designMode && (!widgetPanel.collapsed && !drag))"
      ng-include="widgetTemplateUrl"
      class="widget-contents"
      ng-class="{'widget-design-mode': globalConfig.designMode}"

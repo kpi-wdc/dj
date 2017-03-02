@@ -3,7 +3,7 @@
 	  <img ng-if="form.icon" src="{{form.icon}}" width="72px">
 	  {{form.title}}
 	  </h5>
-	  <div class="row" ng-repeat="section in form.sections">
+	  <div class="row"  style="margin:0; padding:0.5em;" ng-repeat="section in form.sections">
 	  	<h5>{{section.title | translate}}</h5>			
 		  <div class="row" ng-repeat="field in section.fields">
 		   <b>{{field.key | translate}}</b> {{field.value | translate}}

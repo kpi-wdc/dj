@@ -23,6 +23,7 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
                 o.disabled = true
               }
             })
+          // console.log("Emit selectObject1")
            $scope.emitter.emit("selectObject",this.objects);  
         };
 
@@ -41,24 +42,31 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
             selectedObject.disabled = !selectedObject.disabled;
             this.inverseObjectSelection();
           } 
+          // console.log("Emit selectObject2")
           $scope.emitter.emit("selectObject",this.objects);  
         }
 
       }
 
-    $scope.getSelectorData = (table) => {
-      let list = ($scope.widget.decoration.direction == "Rows")
-          ? table.body
-          : table.header;
+    $scope.$parent.getSelectorData = (list) => {
+      
         
-        $scope.selectorData = list.map((item) => {
-          return { key:item.metadata[$scope.widget.decoration.meta.index].label, disabled: true}
-        }) 
+        $scope.selectorData = list;
 
         $scope.selector = new Selector();
         $scope.selected = [];
         $scope.unselected = $scope.selectorData.map(item => item);
     }
+
+    $scope.$watch('selectorData', function(newList, oldList){
+      // console.log("selectorData changed")
+      // if(newList == oldList) return;
+      if(newList && newList.forEach){
+        $scope.selector = new Selector();
+        $scope.selected = [];
+        $scope.unselected = newList.map(item => item); 
+      }  
+    })
 
     $scope.select = (key) => {
       let index = -1;
@@ -102,8 +110,14 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
       $dps
         .get("/api/data/process/"+$scope.widget.dataID)  
         .then((resp) => {
-
-          $scope.getSelectorData(resp.data.value)
+          let table = resp.data.value;
+          let list = ($scope.widget.decoration.direction == "Rows")
+          ? table.body
+          : table.header;
+          list = list.map((item) => {
+            return { key:item.metadata[$scope.widget.decoration.meta.index].label, disabled: true}
+          }) 
+          $scope.$parent.getSelectorData(list)
         })
     }  
 
@@ -113,6 +127,7 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
 
     
     .config(()=>{
+      console.log("Config selector")
       $scope.load();
     })
     

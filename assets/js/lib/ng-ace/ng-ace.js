@@ -290,8 +290,15 @@ angular.module('ng.ace', [])
         updateOptions(options);
 
         var updateData = function(newValue){
-          if(newValue === session.getValue()) return
-            session.setValue(newValue) 
+          
+          // console.log("updateData", newValue);
+          newValue = (newValue) ? newValue : "";
+          
+          if(newValue === session.getValue()) {
+            return
+          }  
+          // console.log("set")
+          session.setValue(newValue) 
         }
 
         updateData(scope.data)

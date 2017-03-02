@@ -11,10 +11,9 @@ i18n.config(function ($translateProvider) {
   i18n.translateProvider = $translateProvider; 
   $translateProvider
     .useSanitizeValueStrategy('escape')
-    .registerAvailableLanguageKeys(['en', 'uk', 'ru'], {
+    .registerAvailableLanguageKeys(['en', 'uk'], {
       'en*': 'en',
-      'uk*': 'uk',
-      'ru*': 'ru'
+      'uk*': 'uk'
     })
     .useStaticFilesLoader({
       prefix: '/i18n/',
@@ -29,7 +28,7 @@ i18n.run(function ($translate) {
   // HACK. $translateProvider.fallbackLanguage Should have been used in i18n.config
   // This caused problems - see
   // https://github.com/angular-translate/angular-translate/issues/1075
-  $translate.fallbackLanguage(['en', 'uk', 'ru']);
+  $translate.fallbackLanguage(['en', 'uk']);
 });
 
 i18n.constant('i18nTemp',{});
@@ -104,6 +103,11 @@ i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
     i18n.translateProvider.translations(locale,config.i18n[locale]);
   }
 
+  let lang = $translate.use() || "en";
+      lang = (lang =='ru')? 'en' : lang;
+  $translate.use(lang)
+  console.log("LOCALE", $translate.use())
+  
   var user = new APIUser();
   user.invokeAll(APIProvider.TRANSLATE_SLOT);
   
@@ -212,11 +216,14 @@ i18n.service('i18n',function($translate,config, i18nTemp, APIProvider, APIUser){
           return this;
     }
   }
+  
 
   angular.extend(this,{
 
     locale : function(){
-      return $translate.use() || "en";
+      let res = $translate.use() || "en";
+      res = (res =='ru')? 'en' : res;
+      return res;
     },
 
     translation: function(translations){

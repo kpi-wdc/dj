@@ -2,13 +2,13 @@ import angular from 'angular';
 import 'widgets/v2.nvd3-widget/nvd3-widget';
 import "widgets/v2.nvd3-stacked-area/adapter";
 import "wizard-directives";
-
+import 'ng-ace';
 
 var m = angular.module("app.widgets.v2.steps.stacked-area-chart-decoration",[
 	'app.widgets.v2.nvd3-widget',
     "app.widgets.v2.stacked-area-chart-adapter", 
     "wizard-directives",
-    "app.dps"]);
+    "app.dps", "ng.ace"]);
 
 m.factory("StackedAreaChartDecoration",[
 	"$http",
@@ -56,8 +56,8 @@ m.factory("StackedAreaChartDecoration",[
 	    			emitters: wizard.conf.emitters
 	    		}	
 
-	    		this.queries = [];
-
+	    		this.queries = [{$id:'eventSource', $title:'setData(updateWithData) event'}];
+	    		
 	    		pageWidgets()
 	    			.filter((item) => item.type =="v2.query-manager")
 	    			.map((item) => item.queries)
@@ -105,7 +105,7 @@ m.factory("StackedAreaChartDecoration",[
 				let thos = this;
 				thos.wizard.context.postprocessedTable = undefined;
       			let iq = this.queries.filter((item) => item.$title == thos.inputQuery)[0];
-				this.conf.dataID = iq.context.queryResultId;
+				this.conf.dataID = (iq.context) ? iq.context.queryResultId: undefined;
 				this.conf.queryID = iq.$id;
 				this.conf.axisX = -1;
 				this.conf.category = undefined;

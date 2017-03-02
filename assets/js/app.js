@@ -144,11 +144,11 @@ app.service("$scroll",function($document,APIUser){
 })
 
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
-                     $locationProvider, $ocLazyLoadProvider, JSONEditorProvider,
-                     appName, defaultApp) {
+                     $locationProvider, $ocLazyLoadProvider, $ViewScrollProvider,
+                     JSONEditorProvider, appName, defaultApp) {
 
   $ocLazyLoadProvider.config({
-    loadedModules: ['app'],
+    loadedModules: ['app'],,
     asyncLoader: System.amdRequire.bind(System)
   });
 
@@ -172,18 +172,20 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
   });
 
   $locationProvider.html5Mode(true);
+  $ViewScrollProvider.useAnchorScroll();
 
   // this doesn't seem to work, that's why the next snippet does the same
   $urlMatcherFactoryProvider.strictMode(false);
 
   $urlRouterProvider.when(`/app/${appName}`, ($state) => {
-    
+    console.log("WHEN state", $state)
     $state.go('page', {href: ''});
   });
 
   // If url is not in this app URL scope - reload the whole page.
   $urlRouterProvider
     .otherwise(($injector, $location) => {
+      console.log("otherwise location", $location)
       $injector.get('$window').location.href = $location.url();
     });
 
@@ -706,7 +708,8 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
           invocation.result.then(() => {
             const user = new APIUser();
             user.invokeAll(APIProvider.RECONFIG_SLOT);
-            app.markModified(true);    
+            app.markModified(true);
+            user.invokeAll(APIProvider.PAGE_COMPLETE_SLOT)    
           })
         }
       }
@@ -737,6 +740,7 @@ app.service('widgetManager', function ($modal, $timeout, APIUser, APIProvider,
           const user = new APIUser();
           user.invokeAll(APIProvider.RECONFIG_SLOT);
           app.markModified(true);
+          user.invokeAll(APIProvider.PAGE_COMPLETE_SLOT)
         });
     },
 

@@ -54,7 +54,12 @@
         		"type":"boolean",
         		"title":"Text",
         		"default":true
-        	}
+        	},
+            "html":{
+                "type":"boolean",
+                "title":"Html",
+                "default":true
+            }
         }
       }
 

@@ -705,6 +705,8 @@ angular.module('app.widgets.dm-dataset-manager', ['app.dictionary', 'ngFileUploa
     new APIProvider($scope)
         .config(() => {
             console.log(`widget ${$scope.widget.instanceName} is (re)configuring...`);
+            $scope.readOnly = $scope.widget.readOnly;
+            $scope.presentationMode = $scope.widget.presentationMode;
             $scope.collapsed = true;
             $scope.rlisteners = ($scope.widget.rlisteners) ? $scope.widget.rlisteners.split(",") : [];
 

@@ -1,0 +1,14 @@
+{
+  "name": "pretty-data",
+  "homepage": "https://github.com/vkiryukhin/pretty-data",
+  "_release": "4712536416",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "4712536416bd994bbe16881fdc66991126519e9e"
+  },
+  "_source": "git://github.com/vkiryukhin/pretty-data.git",
+  "_target": "*",
+  "_originalSource": "vkiryukhin/pretty-data",
+  "_direct": true
+}

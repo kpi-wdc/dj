@@ -1,0 +1,23 @@
+<style>
+.editor {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-size: 1em;
+    line-height: 0.9;
+}
+</style>
+<div ng-controller="MediatorController" ng-show="globalConfig.designMode" style=" 
+          padding: 0.5rem;
+          margin-top: 0.5rem;
+         ">
+    <div class="row" style="padding: 0.1rem; border: 1px solid #aaa; margin:0; height:36em;">
+        <div class="editor" ng-ace data="widget.script" options="options">
+        </div>
+    </div>
+    <div class="row" style="margin: 0.5em 0 0 0;">
+        <button ng-click="runScript()" class="button right small radius success" style="padding: 0.5em;font-stretch: ultra-condensed; margin: 0.3rem 0.5em 0.1rem;">
+            Run <i class="fi-play" style="margin: 0 0.5rem;"></i>
+        </button>
+    </div>
+</div>

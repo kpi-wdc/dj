@@ -1,0 +1,64 @@
+<div ng-controller="TagSelectorCtrlV2">
+    <div ng-if="!hidden">
+        <h4> {{widget.decoration.title | translate}} </h4>
+        <!-- List -->
+        <div class="row" ng-if="widget.decoration.view == 'List'" style=" margin: 0.1em 0.05em;
+							    font-size: small;
+							    padding: 0 0.5em;
+							    color: #008CBA;
+							    cursor:pointer;
+							    font-stretch: extra-condensed;" ng-repeat="o in selectorData track by $index">
+            <i class="fi-check" ng-if="!o.disabled" style="	font-size: x-small;
+						margin: 0 0.5em 0 0;">
+			</i>
+            <span ng-click="selector.selectObject(o.key)" ng-dblclick="selector.selectOneObject(o.key)"> {{o.key}} </span>
+        </div>
+        <div class="row" style="margin:0" ng-if="widget.decoration.view == 'Grid'">
+            <div class="left" ng-click="selector.selectObject(o.key)" ng-dblclick="selector.selectOneObject(o.key)" style=" margin: 0.1em 0.05em;
+							    font-size: small;
+							    padding: 0 0.5em;
+							    border: 0.15rem solid #008CBA;
+							    color: #008CBA;
+							    border-radius: 8px;
+							    cursor:pointer;
+							    font-stretch: extra-condensed;" ng-repeat="o in selectorData track by $index">
+                <i class="fi-check" ng-if="!o.disabled" style="	font-size: x-small;
+							margin: 0 0.5em 0 0;">
+				</i>
+                <span> {{o.key}} </span>
+            </div>
+        </div>
+        <div class="row" style="margin:0" ng-if="widget.decoration.view == 'Select'">
+            <select ng-model="selectedObject" ng-change="selector.selectOneObject(selectedObject)">
+                <option ng-repeat="o in selectorData track by $index">
+                    {{o.key}}
+                </option>
+            </select>
+        </div>
+        <div class="row" style="margin:0" ng-if="widget.decoration.view == 'Typeahead'">
+            <div class="row" style="margin:0; padding:0 0.5em;">
+                <input style="margin:0.3em;" type="text" ng-model="selectedObject" ng-change='change(selectedObject)' ng-keydown='keydown($event)' typeahead="o.key for o in unselected | filter:$viewValue | limitTo:8" typeahead-editable="true" typeahead-on-select="select(selectedObject)">
+            </div>
+            <div class="row" style="margin:0 0 1em 0;">
+                <div class="left" ng-click="unselect(o.key)" style=" margin: 0.1em 0.05em;
+							    font-size: small;
+							    padding: 0 0.5em;
+							    border: 0.15rem solid #008CBA;
+							    color: #008CBA;
+							    border-radius: 8px;
+							    cursor:pointer;
+							    font-stretch: extra-condensed;" ng-repeat="o in selected track by $index">
+                    <span> {{o.key}}</span>
+                    <i style="	font-size: x-small;
+								margin: 0 0 0 0.5em;" class="fi-x" ng-if="selected.length > 1">
+					</i>
+                </div>
+            </div>
+        </div>
+        <div ng-if="widget.decoration.runnable" class="row" style="margin: 0.5em 0 0 0;">
+            <button ng-click="selector.emit()" class="button right small radius success" style="padding: 0.5em;font-stretch: ultra-condensed; margin: 0.3rem 0.5em 0.1rem;">
+                {{widget.button}} <i class="fi-play" style="margin: 0 0.5rem;"></i>
+            </button>
+        </div>
+    </div>
+</div>

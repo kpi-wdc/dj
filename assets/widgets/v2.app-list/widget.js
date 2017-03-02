@@ -74,7 +74,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
           })
           i18n.refresh();
         });
-       emitter.emit("setApplication",undefined);  
+       // emitter.emit("setApplication",undefined);  
     },
     isOwner(app) {
       if (!user.id) {
@@ -139,7 +139,6 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
     },
     
     openCreateAppDialog() {
-      console.log(appSkins)
       dialog({
         title:`${$translate.instant('WIDGET.V2.APP-LIST.ADD_NEW_APP')}:`,
           fields:{
@@ -268,6 +267,11 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
         $scope.update();
 
     })
+
+    .translate(() => {
+      console.log("transl",$scope.selection)
+      emitter.emit("setApplication",$scope.selection);
+    })
     
     .provide("refresh", () => {
       $scope.update();
@@ -275,7 +279,7 @@ appListWidget.controller('AppListController', function ($scope, $http, $translat
 
     .provide("appTags", (e,tags) => {
       $scope.tags = tags;
-      emitter.emit("setApplication",undefined);  
+      emitter.emit("setApplication",$scope.selection);  
     })
 
     .provide("setApplication", (evt, app) => {

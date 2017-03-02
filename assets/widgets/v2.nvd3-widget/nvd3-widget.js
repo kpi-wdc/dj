@@ -313,6 +313,7 @@ define(["angular",
       }
 
       $scope.loadOptions = function(){
+        // console.log("LOAD OPTIONS1",params.optionsURL)
           return $q((resolve, reject) => {
             if( $scope.options ){
               // resolve(angular.copy($scope.expandOptions($scope.options)))
@@ -339,6 +340,7 @@ define(["angular",
         $scope.process();
         
         function loadOptions(){
+          // console.log("LOAD OPTIONS2",params.optionsURL)
           return $q((resolve, reject) => {
             if( $scope.options ){
               // resolve(angular.copy($scope.expandOptions($scope.options)))
@@ -356,7 +358,7 @@ define(["angular",
         }
 
         function loadData(){
-          
+          // console.log("LOAD DATA",$scope.widget.serieDataId,$scope.widget.script,params.sampleURL)
           if($scope.widget.serieDataId)
             return $dps.get("/api/data/process/"+$scope.widget.serieDataId)
           
@@ -635,6 +637,46 @@ define(["angular",
             }
           }
 
+        })
+
+         .provide('updateWithData', (e, context) => {
+          // console.log($scope.widget.instanceName,'updateWithData', context)
+          if(!params.acceptData || !context) return 
+
+          if(context.widget){
+            context.widget = (context.widget.forEach) ? context.widget : [context.widget]
+          }
+
+          if(
+              params.acceptData(context) 
+              && (!context.widget || (context.widget.indexOf($scope.widget.instanceName) >=0 ))
+            ){
+            // console.log("ACCEPT")
+            $scope.dataset = context.dataset;
+            $scope.configured = true;
+            $scope.setData(context.data)
+            if (context.options){
+                $scope.hidden = context.options.hidden;
+            }
+          }
+
+          
+
+        })
+        
+        .provide('updateWithOptions', (e, context) => {
+          // console.log($scope.widget.instanceName,'updateWithOptions', context)
+          if(!context) return 
+          
+          if(context.widget){
+            context.widget = (context.widget.forEach) ? context.widget : [context.widget]
+          }
+          
+          if  (!context.widget || (context.widget.indexOf($scope.widget.instanceName) >=0 )){  
+            // console.log("ACCEPT")
+            $scope.hidden = context.options.hidden;
+          }
+        
         })
 
     };

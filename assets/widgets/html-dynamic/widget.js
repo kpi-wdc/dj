@@ -1,7 +1,8 @@
 import angular from 'angular';
 
+
 angular.module('app.widgets.html-dynamic', [])
-    .controller('HtmlDynaController', function($scope, APIProvider, i18n, dialog, $dps, $error, dpsEditor) {
+    .controller('HtmlDynaController', function($scope, APIProvider, i18n, dialog, $dps, $error, $sce, dpsEditor) {
         
         $scope.update = function(){
             if($scope.script){
@@ -12,13 +13,16 @@ angular.module('app.widgets.html-dynamic', [])
                 .then((resp) => {
                     if (resp.data.type == "error") {
                                 $error(resp.data.data);
-                                 $scope.container.getElement()[0].children[0].children[0].innerHTML = "";
+                                $scope.html =  "";
+                                 // $scope.container.getElement()[0].children[0].children[0].innerHTML = "";
                                 return
                             };
-                    $scope.container.getElement()[0].children[0].children[0].innerHTML = resp.data.data;
+                    $scope.html =  $sce.trustAsHtml(resp.data.data);
+                    // $scope.container.getElement()[0].children[0].children[0].innerHTML = resp.data.data;
                 })
             }else{
-                 $scope.container.getElement()[0].children[0].children[0].innerHTML = "";
+                 $scope.html =  "";
+                 // $scope.container.getElement()[0].children[0].children[0].innerHTML = "";
             }
         }
 

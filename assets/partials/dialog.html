@@ -7,6 +7,7 @@
 				    border-bottom: 1px solid #ddd;">
   		{{form.note}}
   	</div>
+  
 
 	<div class="row" style="margin: 0.5em 0 0 0; height:auto;"
 		ng-repeat="field in form.fields track by $index">
@@ -114,12 +115,12 @@
 
 
 	  <div class="row">
-		  <button class="button alert tiny right seq" ng-click="form.dismiss()"
+		  <button ng-if="form.cancelable" class="button alert tiny right seq" ng-click="form.dismiss()"
 		          translate>CANCEL</button>
 		  <button type="submit" class="button tiny right seq" ng-disabled="!completed(form)" translate>OK</button>
 		          
 	  </div>
   
   </div>        
-  <a class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>
+  <a ng-if="form.cancelable" class="close-reveal-modal" ng-click="form.dismiss()">&#215;</a>
 </form>

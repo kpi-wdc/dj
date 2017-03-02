@@ -1,7 +1,7 @@
-<div  class="row" ng-controller="EventViewerController" style="margin:0 0.5em;">
-
-  <div ng-if = "context">
-    <h4  ng-if="widget.showDetails.category" style="
+<div class="row" ng-show="!hidden" ng-controller="EventViewerController" style="margin:0 0.5em;">
+  
+    <div ng-if="context">
+        <h4 ng-if="widget.showDetails.category" style="
           color: {{context.context.color}};
           font-weight: bold;
           margin: 0px 5px 0px 5px;
@@ -11,8 +11,7 @@
     ">
       {{context.category}}:
     </h4>
-
-    <h4 ng-if="widget.showDetails.timestamp" style="
+        <h4 ng-if="widget.showDetails.timestamp" style="
           color: {{context.context.color}};
           /* font-weight: bold; */
           /* text-align: right; */
@@ -22,7 +21,7 @@
     ">
       {{context.timestamp}}
     </h4>
-    <h4 ng-if="widget.showDetails.headline" style="
+        <h4 ng-if="widget.showDetails.headline" style="
           color: {{context.context.color}};
           margin: 0px 5px 5px 5px;
           font-stretch: condensed;
@@ -32,46 +31,45 @@
     ">
       {{context.context.headline}}
     </h4>
-    <div ng-if="widget.showDetails.text" style="
+        <div ng-if="widget.showDetails.text" style="
           font-stretch: extra-condensed;
           /* font-size: small; */
           text-align: justify;
           line-height: 1.1;
-          margin: 5px;
-    ">
-    <div  ng-if="context.context.media"  class="row"  style="margin:0; line-height: 0.9;">
-      <!-- <div class="column medium-6 left-column"> -->
-        <img ng-if="context.context.media" ng-src="{{context.context.media}}" 
-          style="
+          margin: 5px;">
+            <div ng-if="context.context.media" class="row" style="margin:0; line-height: 0.9;">
+                <!-- <div class="column medium-6 left-column"> -->
+                <img ng-if="context.context.media" ng-src="{{context.context.media}}" style="
             float:left;
             margin: 10px 10px 10px 0px;
-            width:{{(context.context.text)?'50%':'100%'}};
-        ">
-      <!-- </div> -->
-      <!-- <div class="column medium-6 left-column"> -->
-       {{context.context.text}}
-      <!-- </div> -->
-      
-
-    </div> 
-    <div  ng-if="!context.context.media"  class="row"  style="margin:0; line-height: 0.9;">
-      {{context.context.text}}
-    </div>  
-
-    <div ng-if="context.context.url"  class="row" style="margin:0;">
-      <a  href="{{context.context.url.href}}" 
-          target="blank" 
-          style="     float: right;
+            width:{{(context.context.text)?'50%':'100%'}};">
+                <!-- </div> -->
+                <!-- <div class="column medium-6 left-column"> -->
+                {{context.context.text}}
+                <!-- </div> -->
+            </div>
+            <div ng-if="!context.context.media" class="row" style="margin:0; line-height: 0.9;">
+                {{context.context.text}}
+            </div>
+            <div ng-if="context.context.url" class="row" style="margin:0;">
+                <a href="{{context.context.url.href}}" target="blank" style="     float: right;
                       font-size: small;
                       margin: 10px;">
         {{context.context.url.label}}
       </a>
+            </div>
+        </div>
     </div>
-      
+    <div ng-if="widget.showDetails.html">
+      <div  ng-if="context.context.html"  
+            class="row" 
+            style="margin:0; font-size:small"
+            ng-bind-html = "context.context.html"
+            >
+      </div>
     </div>
-  </div>
 </div>
-      <!-- <div class="row"  style="margin:0">
+<!-- <div class="row"  style="margin:0">
         <div class="column medium-6 left-column">
           <input 
             style="margin:0.3em;" 

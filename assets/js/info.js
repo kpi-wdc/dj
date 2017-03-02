@@ -58,6 +58,17 @@ info.factory('confirm', function($modal) {
     }).result;
 });
 
+info.factory('$info', function($modal) {
+    return text => $modal.open({
+        templateUrl: '/partials/info.html',
+        controller: 'InfoController',
+        windowClass: 'dialog-modal',
+        resolve: {
+            text: () => text
+        }
+    }).result;
+});
+
 info.factory('prompt', function($modal) {
     return (text, value) => {
         return $modal.open({
@@ -88,14 +99,16 @@ info.factory('log', function($modal) {
 
 
 info.factory('dpsEditor', function($modal) {
-    return (script) => {
+    return (script, title) => {
         return $modal.open({
             templateUrl: '/partials/dps-editor.html',
             controller: 'DpsEditorController',
             // windowClass: 'dialog-modal',
             backdrop: 'static',
             resolve: {
-                script: () => script
+                script: () => script,
+                title: () => title
+                   
             }
         }).result;
     };
@@ -196,7 +209,7 @@ info.controller('PromptController', function($scope, $modalInstance, text, value
 
 
 
-info.controller('DpsEditorController', function($scope, $modalInstance, script) {
+info.controller('DpsEditorController', function($scope, $modalInstance, script, title) {
    
     var __script;
     
@@ -213,6 +226,7 @@ info.controller('DpsEditorController', function($scope, $modalInstance, script) 
         }    
     
     $scope.script = script;
+    $scope.title = title;
 
     $scope.close = () => {
         $modalInstance.close(__script);
@@ -227,6 +241,7 @@ info.controller('DpsEditorController', function($scope, $modalInstance, script) 
 info.controller('DialogController', function($scope, $modalInstance, form) {
 
     $scope.form = form;
+    $scope.form.cancelable = (angular.isDefined($scope.form.cancelable))?$scope.form.cancelable:true;
     for (let i in form.fields) {
         form.fields[i].id = Math.random().toString(36).substring(2);
         form.fields[i].editable = (angular.isDefined(form.fields[i].editable)) ? form.fields[i].editable : true;
@@ -312,6 +327,7 @@ info.controller('DialogController', function($scope, $modalInstance, form) {
 
 info.controller('SplashController', function($scope, $modalInstance, form, wait) {
     $scope.form = form;
+    wait = wait || 1500;
     if (wait) {
         setTimeout(() => { $modalInstance.dismiss(); }, wait);
     }
@@ -348,4 +364,11 @@ info.controller('ConfirmController', function($scope, $modalInstance, text) {
             $modalInstance.dismiss();
         }
     };
+});
+
+info.controller('InfoController', function($scope, $modalInstance, text) {
+    $scope.text = text;
+    $scope.close = () => {
+            $modalInstance.close(true);
+    }
 });

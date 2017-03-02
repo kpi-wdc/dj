@@ -43,7 +43,8 @@
     "angular-scroll": "~1.0.0",
     "angular-file-saver": "~1.1.2",
     "ng-prettyjson": "~0.2.0",
-    "angular-ui-ace": "bower"
+    "angular-ui-ace": "bower",
+    "pretty-data": "vkiryukhin/pretty-data"
   },
   "resolutions": {
     "d3": "v3.5.17"

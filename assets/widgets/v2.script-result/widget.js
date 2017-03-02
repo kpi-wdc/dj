@@ -1,51 +1,55 @@
 import angular from 'angular';
 import 'ng-ace';
+import "pretty-data";
+
+console.log("pretty-data", pd)
 let m = angular.module('app.widgets.v2.script-result', ['ng.ace'])
 
 
-var rx = {
-    entities: /((&)|(<)|(>))/g,
-    json: /"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|(null))\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g
-};
-// mapping of chars to entities
-var entities = ['&amp;','&lt;','&gt;'];
-// lookup of positional regex matches in rx.json to CSS classes
-var classes = ['number','string','key','boolean','null'];
-var reverseCoalesce = function reverseCoalesce() {
-    var i = arguments.length - 2;
-    do {
-      i--;
-    } while (!arguments[i]);
-    return i;
-  };
+// var rx = {
+//     entities: /((&)|(<)|(>))/g,
+//     json: /"(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|(null))\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g
+// };
+// // mapping of chars to entities
+// var entities = ['&amp;','&lt;','&gt;'];
+// // lookup of positional regex matches in rx.json to CSS classes
+// var classes = ['number','string','key','boolean','null'];
+// var reverseCoalesce = function reverseCoalesce() {
+//     var i = arguments.length - 2;
+//     do {
+//       i--;
+//     } while (!arguments[i]);
+//     return i;
+//   };
 
-var markup = function markup(match) {
-    var idx;
-      // the final two arguments are the length, and the entire string itself;
-      // we don't care about those.
-      if (arguments.length < 7) {
-        throw new Error('markup() must be called from String.prototype.replace()');
-      }
-      idx = reverseCoalesce.apply(null, arguments);
-      return match;
-    };
+// var markup = function markup(match) {
+//     var idx;
+//       // the final two arguments are the length, and the entire string itself;
+//       // we don't care about those.
+//       if (arguments.length < 7) {
+//         throw new Error('markup() must be called from String.prototype.replace()');
+//       }
+//       idx = reverseCoalesce.apply(null, arguments);
+//       return match;
+//     };
 
-var makeEntities = function makeEntities() {
-    var idx;
-    if (arguments.length < 5) {
-      throw new Error('makeEntities() must be called from String.prototype.replace()');
-    }
-    idx = reverseCoalesce.apply(null, arguments);
-    return entities[idx - 2];
-  };
+// var makeEntities = function makeEntities() {
+//     var idx;
+//     if (arguments.length < 5) {
+//       throw new Error('makeEntities() must be called from String.prototype.replace()');
+//     }
+//     idx = reverseCoalesce.apply(null, arguments);
+//     return entities[idx - 2];
+//   };
         
-var prettify = function(json){
-    if (!angular.isString(json))
-      json = JSON.stringify(json, null, 2);
-    if (angular.isDefined(json)) {
-      return json.replace(rx.entities, makeEntities)
-      .replace(rx.json, markup);
+var prettify = function(context){
+    if(['html','xml'].indexOf(context.key) >=0 ){
+        return pd.xml(context.data)
     }
+    if(angular.isString(context.data)){
+        return context.data
+    }
+    return pd.json(context.data)
 }
 
 
@@ -117,7 +121,7 @@ m.controller('ScriptResultController',
                         theme: "tomorrow"
                     },
                     type: context.key,
-                    data: angular.isString(context.data) ? context.data : prettify(context.data)
+                    data: prettify(context)
                 }
             }else{
                 $scope.hidden = true;

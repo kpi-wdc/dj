@@ -22,7 +22,7 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
   TimelineChartAdapter,
   i18n) {
  
-
+  console.log("CREATE CONTROLLER")
   new NVD3WidgetV2(
       $scope, 
         {
@@ -31,7 +31,13 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
           decorationAdapter: TimelineChartAdapter,
           
           optionsURL: "/widgets/v2.nvd3-timeline/options.json",
+          sampleURL: "/widgets/v2.nvd3-timeline/sample.json",
           
+          acceptData : function(context){
+            if(!context || !context.data) return false;
+              return (context.key == "timeline") || (context.data.tag == "timeline")
+           },
+
           translate: () => {
             $scope.data = $scope.params.serieAdapter.getSeries($scope.loadedData)
             $scope.options.chart.localeDef = i18n.localeDef();
@@ -67,10 +73,31 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
 
 
           dictionary: (data) => {
+            if(!data) return []
+            
+            if(!data.dictionary){
+              data = data.value;
+            }
+            
+            if(!data) return [];
+            
+            if(!data.dictionary) return [];
+              
             return data.dictionary;
           },
 
           translations: (data) => {
+            console.log("TRANSLATIONS", data)
+            if(!data) return []
+            
+            if(!data.dictionary){
+              data = data.value;
+            }
+
+            if(!data) return [];
+            
+            if(!data.dictionary) return [];
+            
             return  data.dictionary.filter((item) => {return item.type =="i18n"})
           },
 
@@ -86,6 +113,15 @@ m.controller('Nvd3TimelineChartCtrlV2', function (
             },
 
             getSeries : (data) => {
+              if(!data) return []
+              if(!data.dictionary){
+                data = data.value;
+              }
+              
+              if(!data) return [];
+              if(!data.data) return [];
+              if(!data.data.series) return [];
+              
               
               var result = angular.copy(data.data.series);
               

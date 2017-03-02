@@ -78,9 +78,9 @@ m.controller('TableCtrl', function(
                     })
                     .then((resp) => {
                         if (resp.data.type == "error") {
-                                $error(resp.data.data)
-                                return
-                            };
+                            $error(resp.data.data)
+                            return
+                        };
                         $scope.table = resp.data.data;
                         $scope.decoration = $scope.widget.decoration;
                         $scope.settings = { table: angular.copy($scope.table), decoration: angular.copy($scope.decoration) }
@@ -164,6 +164,42 @@ m.controller('TableCtrl', function(
                 if ($scope.dataset != context.dataset) {
                     $scope.hidden = true;
                 }
+            }
+
+        })
+        .provide('updateWithData', (e, context) => {
+            
+            if (!context) return
+
+            if (context.widget) {
+                context.widget = (context.widget.forEach) ? context.widget : [context.widget]
+            }
+
+            if (!context.widget || (context.widget.indexOf($scope.widget.instanceName) >= 0)) {
+
+                $scope.dataset = context.dataset;
+                $scope.table = context.data;
+                $scope.pending = false;
+                $scope.settings = { table: angular.copy($scope.table), decoration: angular.copy($scope.decoration) }
+                
+                if (context.options){
+                    $scope.hidden = context.options.hidden;
+                }
+            }
+
+
+
+        })
+        .provide('updateWithOptions', (e, context) => {
+            
+            if (!context) return
+
+            if (context.widget) {
+                context.widget = (context.widget.forEach) ? context.widget : [context.widget]
+            }
+
+            if (!context.widget || (context.widget.indexOf($scope.widget.instanceName) >= 0)) {
+                $scope.hidden = context.options.hidden;
             }
 
         })

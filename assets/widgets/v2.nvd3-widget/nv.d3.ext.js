@@ -20,11 +20,13 @@
             if(serie.role == "time"){
               serie.key = date.format(new Date(serie.key), ((serie.format)?serie.format:"YY.MM.DD"))
             }
-            if(serie.label.role == "time"){
-              serie.values.forEach(function(value){
-                value.label = date.format(new Date(value.label), ((serie.label.format)?serie.label.format:"YY.MM.DD"))
-              })
-            }
+            if(serie.label){
+              if(serie.label.role == "time"){
+                serie.values.forEach(function(value){
+                  value.label = date.format(new Date(value.label), ((serie.label.format)?serie.label.format:"YY.MM.DD"))
+                })
+              }
+            }  
         })
  }     
 

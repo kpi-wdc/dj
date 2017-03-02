@@ -3,15 +3,12 @@ import 'dictionary';
 import 'ngReact';
 import 'custom-react-directives';
 import 'ng-prettyjson';
+import 'ng-ace';
 
 // console.log("REACT",React);
 let m = angular.module('app.widgets.v2.script-help', [
-    'app.dictionary',
     'app.dps',
-    'ngFileUpload',
-    'react',
-    'custom-react-directives',
-    'ngPrettyJson'
+    'ng.ace'
 ])
 
 
@@ -19,6 +16,14 @@ m.controller('ScriptHelpController', function($scope, $http, $dps, EventEmitter,
     APIProvider, pageSubscriptions, $lookup, $translate, $modal,
     user, i18n, $scroll, clipboard, dialog, $error) {
 
+    $scope.settings = {
+        options:{
+            mode: 'dps',
+            theme: 'tomorrow'
+        },
+        type: 'dps',
+        data: ''
+    }
 
     $scope.getCommandHelp = function(command) {
 
@@ -36,6 +41,7 @@ m.controller('ScriptHelpController', function($scope, $http, $dps, EventEmitter,
                         $scope.script = $scope.help.example.code
                             .replace(/\\n/g, "\n")
                             .replace(/\\t/g, "\t");
+                        $scope.settings.data = $scope.script;    
                     }        
                 }
             })
@@ -57,6 +63,7 @@ m.controller('ScriptHelpController', function($scope, $http, $dps, EventEmitter,
                     $scope.script = $scope.help.example.code
                         .replace(/\\n/g, "\n")
                         .replace(/\\t/g, "\t");
+                    $scope.settings.data = $scope.script;    
                 }
                 $scope.hidden = false;
             } else {

@@ -114,7 +114,7 @@
     <top-bar-section ng-repeat="item in widget.content">
       <ul class="right">
         <li ng-if="!item.content">
-          <a href="{{item.href}}">
+          <a ng-click="navigate(item.href)">
             {{item.title | translate}}
           </a>
         </li>
@@ -124,7 +124,7 @@
           </a>
           <ul ng-if="item.content" top-bar-dropdown>
             <li ng-repeat="p in item.content">
-              <a href="{{p.href}}">
+              <a ng-click="navigate(p.href)">
                   {{p.title | translate}}
               </a>
             </li>

@@ -1,0 +1,8 @@
+{
+  "keywords":["data","management","interactive", "description"],
+  "schema": {
+    "type": "object",
+    "title": "Event Mediator Script",
+    "properties": {}
+  }
+}

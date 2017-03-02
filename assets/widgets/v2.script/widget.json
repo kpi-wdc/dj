@@ -19,6 +19,11 @@
         "type":"boolean",
         "default": false
        },
+       "hidden":{
+          "title": "Hidden in presentation mode",
+          "type":"boolean",
+          "default": false
+        },
       "d_listeners": {
         "type": "string",
         "title": "Preview Listeners"
