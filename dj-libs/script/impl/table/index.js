@@ -7,5 +7,6 @@ module.exports = [
     require("./merge"),
     require("./order"),
     require("./aggregate"),
-    require("./join")
+    require("./join"),
+    require('./last')
 ]

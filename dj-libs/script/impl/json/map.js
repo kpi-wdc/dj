@@ -67,24 +67,8 @@ module.exports = {
 
         example: {
             description: "Build list of tags",
-            code:   "<%\n"+
-                    "   var mapper = function(d){return {key:d, value:d}}\n"+
-                    "   var transform = function(d){\n"+
-                    "        return {key:d.key, count: d.values.length}\n"+
-                    "   }\n"+
-                    "   var criteria = function(a,b){\n"+
-                    "       return b.count-a.count\n"+
-                    "   }\n"+
-                    "%>\n"+
-                    "js()\n"+
-                    "set('cb')\n"+
-                    "meta('$..dataset.topics.*')\n"+
-                    "group('{{cb.mapper}}')\n"+
-                    "map('{{cb.transform}}')\n"+
-                    "sort('{{cb.criteria}}')\n"+
-                    "extend()\n"+
-                    "translate()\n"+
-                    "log()"
+            code:   "<?javascript\r\n   \r\n   $context.mapper = function(d){\r\n       return {\r\n           key:d, \r\n           value:d\r\n           \r\n       }\r\n   };\r\n   \r\n   $context.transform = function(d){\r\n        return {\r\n            key:d.key, \r\n            count: d.values.length\r\n        }\r\n   };\r\n   \r\n   $context.criteria = function(a,b){\r\n       return b.count-a.count\r\n   };\r\n   \r\n?>\r\n\r\nmeta('$..dataset.topics.*')\r\n\r\ngroup({{mapper}})\r\nmap({{transform}})\r\nsort({{criteria}})\r\n\r\nextend()\r\ntranslate()\r\n"
+
         }
     }
 }

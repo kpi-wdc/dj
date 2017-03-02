@@ -106,15 +106,7 @@ module.exports = {
                         }],
                         example: {
                             description: "Build correlation matrix for columns",
-                            code:   "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                                    "json()dataset()\n"+
-                                    "proj([\n"+
-                                    "  { dim:'time', as:'row'},\n"+
-                                    "  { dim:'indicator', as:'col'}\n"+
-                                    "])\n"+
-                                    "corr(for:'col')\n"+
-                                    "format(3)\n"+
-                                    "info()log()"
+                            code:   "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n  { dim:'time', as:'row'},\r\n  { dim:'indicator', as:'col'}\r\n])\r\n\r\ncorr(for:'col')\r\nformat(3)\r\n"
                         }
                     }
         }

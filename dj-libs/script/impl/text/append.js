@@ -56,7 +56,8 @@ module.exports = {
     
     example:{
       description:"Convert string value '[1,1,1]' to string value '[1,1,1]'",
-      code:"<%[1,1,1]%>\njson()\n str()\ninfo()\nlog()"
+      code:"<?html\n    <h1>\n?>\nappend('hello')\nappend('</h1>')\n\n// or\n\n<?html hello ?>\nwrap('h1')\n"
+
     }
   }
 }

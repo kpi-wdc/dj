@@ -50,7 +50,7 @@ module.exports = {
     ],
     example:{
       description:"Put string 'Hello' into context",
-      code:"context(value:'Hello')\n//or with synonims and defaults\nctx('Hello')\ninfo()\n//or with injection\n<% Hello %>\n//or get string from var\ninfo()\nset('helloStr')\nctx('{{helloStr}}')\ninfo()\nlog()"
+      code:"context(value:'Hello')\r\n\r\n//or with synonims and defaults\r\nctx('Hello')\r\nset('b')\r\ninfo()\r\n\r\n//or with injection\r\n<?text Hello ?>\r\n\r\n//or get string from var\r\ninfo()\r\nset('a')\r\nctx({{a}})\r\ninfo()\r\nctx({{b}})\r\ninfo()\r\n\r\nlog()\r\n"
     }
 
   }

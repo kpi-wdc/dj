@@ -44,7 +44,7 @@ module.exports = {
 
         example: {
             description: "Get length of array",
-            code: "<%[0,1,2]%>json()count()\n"
+            code:  "<?json\n\n[0,1,2]\n\n?>\n\ncount()\n"
         }
     }
 }

@@ -184,19 +184,7 @@ module.exports = {
         }],
         example: {
             description: "Add column with count of nulls for each row",
-            code:   '<%\n'+
-                    'var nullCount = function(values){\n'+
-                    '  return values.filter(function(d){return d == null}).length\n'+
-                    '}\n'+
-                    '%>js()\n'+
-                    'set("f")\n'+
-                    'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-                    'json()\n'+
-                    'dataset()\n'+
-                    'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-                    'agg(for:"row",add:["{{f.nullCount}}"])\n'+
-                    'info()\n'+
-                    'log()'
+            code:   "<?javascript\r\n    var nullCount = function(values){\r\n      return values.filter(function(d){\r\n          return d == null\r\n          \r\n      }).length\r\n    };\r\n?>\r\n\r\nset(\"f\")\r\n\r\nimport(\r\n    ds:\"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02\",\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:\"time\", as:\"row\"},\r\n    {dim:\"indicator\",as:\"col\"}\r\n])\r\n\r\nagg(for:\"row\",add:[{{f.nullCount}}])\r\n\r\ninfo()\r\nlog()"
         }
     }
 }

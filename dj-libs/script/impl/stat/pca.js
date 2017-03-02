@@ -210,23 +210,7 @@ module.exports = {
         }],
         example: {
             description: "Build all PCA results",
-            code:   "src(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                    "json()\n"+
-                    "dataset()\n"+
-                    "proj([\n"+
-                    "  { dim:'time', role:'row', items:[] },\n"+
-                    "  { dim:'indicator', role:'col', items:[] }\n"+
-                    "])\n"+
-                    "set('t')\n"+
-                    "pca(for:'row',return:'scores')\n"+
-                    "info()\n"+
-                    "get('t')table()\n"+
-                    "pca(for:'row',return:'ev')\n"+
-                    "info()\n"+
-                    "get('t')table()\n"+
-                    "pca(for:'row',return:'loadings')\n"+
-                    "info()\n"+
-                    "log()"
+            code:  "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:\"dataset\"\r\n)\r\nproj([\r\n  { dim:'time', role:'row', items:[] },\r\n  { dim:'indicator', role:'col', items:[] }\r\n])\r\nset('t')\r\npca(for:'row',return:'scores')\r\ninfo()\r\n\r\nget(var:'t', as:'table')\r\npca(for:'row',return:'ev')\r\ninfo()\r\n\r\nget(var:'t', as:'table')\r\npca(for:'row',return:'loadings')\r\ninfo()\r\n\r\nlog()\r\n"
         }
     }
 }

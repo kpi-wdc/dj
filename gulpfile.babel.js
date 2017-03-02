@@ -18,6 +18,8 @@ function handleError(err) {
 // BUILD CONFIGURATION
 const buildDir = '.tmp';
 const buildPublicDir = '.tmp/public';
+const libDir = "./lib/**";
+const libDestDir = buildPublicDir+'/lib';
 
 // BUILD SETTINGS
 const production = isEnvEnabled('PRODUCTION');
@@ -41,8 +43,17 @@ const plugins = gulpLoadPlugins(conf);
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-css', 'build-js', 'build-translations', 'merge-widget-configs',
-  'copy-templates-json', 'build-template-images', 'copy-static-files', 'build-deps','copy-license']);
+gulp.task('build', [
+  'build-css', 
+  'build-js', 
+  'build-translations', 
+  'merge-widget-configs',
+  'copy-templates-json', 
+  'build-template-images', 
+  'copy-static-files', 
+  'build-deps',
+  'copy-license',
+  'copy-libs']);
 
 gulp.task('bower-install', ['generate-bower-json'], () =>
   plugins.bower({cwd: '.tmp'}, [undefined, {
@@ -126,6 +137,15 @@ gulp.task('copy-license', () =>
   gulp.src("assets/license.html")
     .pipe(plugins.cached('copy-license'))
     .pipe(gulp.dest(`${buildPublicDir}`))
+);
+
+gulp.task('copy-libs', () => {
+    gulp.src(`${libDir}`)
+      .pipe(plugins.cached('copy-libs'))
+      .pipe(plugins.changed(`${libDestDir}`))
+      .pipe(plugins.if(showFilesLog, plugins.size({showFiles: true, title: 'LIBS'})))
+      .pipe(gulp.dest(`${libDestDir}`))
+  }
 );
 
 gulp.task('generate-bower-json', ['collect-widgets-with-deps'], () =>

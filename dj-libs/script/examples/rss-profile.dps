@@ -1,0 +1,81 @@
+load(
+    url:'http://127.0.0.1:8088/lib/rss/all-news.xml',
+    as:'xml'
+)
+json()
+select('$..item.*')
+set('items')
+
+<?javascript
+    $context.items = $context.items.map(function(item){
+        return {
+            category:item.category[0]._text,
+            title: item.title[0],
+            date:  new Date(item.pubDate)
+        }
+    }) 
+
+    $context.grouper = function(item){
+        return {
+            key:item.category,
+            value:item
+        }
+    }
+    $context.mapper = function(item){
+        return {
+            key: item.key,
+            dates: item.values.map(function(d){return d.date})
+        }
+    };
+
+?>
+
+get('items')
+group({{grouper}})
+map({{mapper}})
+set('categories')
+
+get('items')
+select('$..date')
+set('dates')
+
+<?javascript
+    $context.table = {}
+    
+    $context.table.header = $context.categories.map(function(c){
+        return {
+            metadata:[ {
+                  "id": c.key,
+                  "label": c.key,
+                  "dimension": "Cat",
+                  "dimensionLabel": "Category",
+                  "role": "metric"
+                }]
+        }
+    })
+    
+    $context.table.body = $context.dates.map(function(d){
+        return {
+             metadata:[ {
+                  "id": d,
+                  "label": d,
+                  "dimension": "time",
+                  "dimensionLabel": "Time",
+                  "role": "time",
+                  "format":"DD.MM.YY:HH:mm"
+                  
+            }],
+            value:$context.categories.map(function(c){
+              return (c.dates.indexOf(d)>=0)?1:0  
+            })
+        }
+    });
+?>
+
+get(var:'table', as:'table')
+order(for:'row', by:-1, as:'az')
+agg(for:'col', add:['sum'])
+limit(s:21)
+order(for:'col', by:0, as:'za')
+radar()
+//line(x:-1)

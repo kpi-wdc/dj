@@ -77,7 +77,7 @@ module.exports =  {
         params: [],
         example: {
             description: "Save context into cache",
-            code: "src(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\njson()\nselect($.metadata)\nextend()\ntranslate()\ncache()"
+            code: "load(\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\n    as:'json'\n)\nselect('$.metadata')\nextend()\ntranslate()\ncache()\nselect(\"$.data_id\")\n"
         }
 
     }

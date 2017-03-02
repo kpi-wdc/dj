@@ -57,15 +57,7 @@ module.exports = {
         }],
         example: {
             description: "Select various items of array [1,2,3]",
-            code:   "<%[1,2,3]%>\n"+
-                    "json()\n"+
-                    "set('a')\n"+
-                    "select('$[0]')\n"+
-                    "info()\n"+
-                    "get('a')\n"+
-                    "select('$[?(@>1)]')\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "<?json\n    [1,2,3]\n?>\n\nset('a')\nselect('$[0]')\ninfo()\nget('a')\nselect('$[?(@>1)]')\ninfo()\nlog()\n"
         }
     }
 }

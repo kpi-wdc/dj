@@ -35,13 +35,8 @@ module.exports = {
         params: [],
         example: {
             description: "Build radar chart serie",
-            code:   'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-                    'json()\n'+
-                    'dataset()\n'+
-                    'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-                    'order(by:-1, as:"az")\n'+
-                    'limit(s:1,l:3)\n'+
-                    'radar()'
+            code: "load(\r\n    dataset:\"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02\",\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:\"time\", as:\"row\"},\r\n    {dim:\"indicator\",as:\"col\"}\r\n])\r\norder(by:-1, as:\"az\")\r\nlimit(s:1,l:3)\r\nradar()\r\n"
+        
         }
     }
 }

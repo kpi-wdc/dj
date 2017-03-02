@@ -1,3 +1,4 @@
 module.exports = [
-    require("./lag")
+    require("./lag"),
+    require("./run-length")
 ]

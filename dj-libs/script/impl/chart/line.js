@@ -265,14 +265,7 @@ module.exports = {
         }],
         example: {
             description: "Build line chart series",
-            code:   "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                    "json()dataset()\n"+
-                    "proj([{dim:'time', as:'row'},{dim:'indicator', as:'col'}])\n"+
-                    "norm(for:'col', mode:'log')\n"+
-                    "format(3)\n"+
-                    "line(x:-1)\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:\"dataset\")\r\n    \r\nproj([\r\n    { dim:'time', as:'row'},\r\n    { dim:'indicator', as:'col'}\r\n])\r\n\r\nnorm(for:'col', mode:'log')\r\nformat(3)\r\n\r\nline(x:-1)\r\n"
         }
     },
     build: function(table, params) {

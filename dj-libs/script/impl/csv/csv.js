@@ -30,7 +30,7 @@ module.exports = {
         params: [],
         example: {
             description: "Set 'csv' type for script context",
-            code: '<%xml <parent><child-list><child id="0"/><child id="1"/></child-list></parent> %>'
+            code: "<?csv\n\nDATE;HOUR;MINUTE;AVG;MIN;MAX;HH;H;L;LL;MEASURE\n20160101;0;;143.73;;;;;;;Rh/h\n20160101;1;;143.79;;;;;;;Rh/h\n20160101;2;;143.68;;;;;;;Rh/h\n\n?>\n\njson()\n\nset('data')\n\n<?javascript\n    $context.data.forEach(function(row){\n        row.DATE = _util.parse.date(row.DATE,\"YYYYMMDD\")\n        row.AVG  = _util.parse.number(row.AVG)   \n    })\n?>\n\nget('data')\n"
         }
     }
 }

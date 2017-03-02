@@ -189,13 +189,7 @@ module.exports = {
         ],
         example: {
             description: "Sort table by first metadata values (time)",
-            code:   'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-                    'json()\n'+
-                    'dataset()\n'+
-                    'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-                    'order(for:"row",by:-1, as:"az")\n'+
-                    'info()\n'+
-                    'log()'
+            code:   "load(\r\n    ds:\"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02\",\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:\"time\", as:\"row\"},\r\n    {dim:\"indicator\",as:\"col\"}\r\n])\r\n\r\norder(for:\"row\",by:-1, as:\"az\")\r\n\r\nformat(2)\r\n\r\n"
         }
     }
 }

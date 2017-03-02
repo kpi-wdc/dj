@@ -306,11 +306,21 @@ Query.criteria = {
 
   "String" : {
     "A-Z" : function(selector){
+      if(!selector){
+          return function(a,b){
+            return String.naturalCompare((a+'').toLowerCase(),(b+'').toLowerCase())
+        }  
+      }
       return function(a,b){
         return String.naturalCompare((selector(a)+'').toLowerCase(),(selector(b)+'').toLowerCase())
       }
     },
     "Z-A": function(selector){
+      if(!selector){
+       return function(a,b){
+          return String.naturalCompare((b+'').toLowerCase(),(a+'').toLowerCase())
+        } 
+      }
         return function(a,b){
           return String.naturalCompare((selector(b)+'').toLowerCase(),(selector(a)+'').toLowerCase())
         }
@@ -319,11 +329,21 @@ Query.criteria = {
 
   "Number":{
     "A-Z" : function(selector){
+      if(!selector){
+          return function(a,b){
+           return a-b
+        }  
+      }
         return function(a,b){
           return selector(a)-selector(b)
         }  
     },
     "Z-A": function(selector){
+        if(!selector){
+          return function(a,b){
+           return b-a
+        }  
+      }
         return function(a,b){
           return selector(b)-selector(a)
         }
@@ -332,11 +352,21 @@ Query.criteria = {
 
   "Date": {
     "A-Z" : function(selector){
+      if(!selector){
+       return function(a,b){
+          return date.subtract(new Date(a), new Date(b)).toMilliseconds();
+        } 
+      }
         return function(a,b){
           return date.subtract(new Date(selector(a)), new Date(selector(b))).toMilliseconds();
         }
     },  
     "Z-A": function(selector){
+      if(!selector){
+       return function(a,b){
+          return date.subtract(new Date(b), new Date(a)).toMilliseconds();
+        } 
+      }
         return function(a,b){
           return date.subtract(new Date(selector(b)), new Date(selector(a))).toMilliseconds();
         }

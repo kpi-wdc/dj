@@ -78,7 +78,7 @@ module.exports =  {
         params: [],
         example: {
             description: "Extend and translate dataset metadata",
-            code: "src(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\njson()\nselect('$.metadata')\nextend()\ntranslate()"
+            code: "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:'json'\r\n)\r\nselect('$.metadata')\r\nextend()\r\ntranslate()\r\n\r\n"
         }
 
     }

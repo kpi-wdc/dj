@@ -3,7 +3,7 @@ var util = require("util");
 var query = require("../../../query/query");
 var flat = require("../../../deep-copy").plain;
 var mime = require('mime');
-var converter = require("./xlsx-converter");
+var convert = require("./xlsx-converter");
 var logger = require("../../../log").global;
 var fs = require("fs");
 
@@ -25,7 +25,7 @@ var isWdcSource = function(data) {
 
 var exportWdcSource = function(data) {
     logger.debug("EXPORT SOURCE")
-    return converter.json2xlsx(data)
+    return convert(data)
 }
 
 

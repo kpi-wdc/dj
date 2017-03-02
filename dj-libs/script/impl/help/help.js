@@ -14,7 +14,7 @@ module.exports = {
         "help": "help",
         "h": "help"
     },
-    "internal aliases":{
+    "internal aliases": {
         "cmd": "command",
         "c": "command"
     },
@@ -24,41 +24,44 @@ module.exports = {
     },
 
     execute: function(command, state, config) {
-        console.log("invoke",JSON.stringify(command))
-        try{
-        command.settings.command = command.settings.command || "help";
+        try {
 
-        var c = config.filter(function(cmd) {
-            console.log(cmd.name,cmd.synonims)
-            return cmd.name == command.settings.command || cmd.synonims[command.settings.command]
-        })[0]
-        console.log("Find", JSON.stringify(c))
-        if (!c) {
-            state.head = {
-                type: "help",
-                data: {error: "Command '" + command.settings.command + "' not implemented"}
-            }
-        } else {
-            if (!c.help) {
+            command.settings.command = command.settings.command || "help";
+
+            
+
+            var c = config.filter(function(cmd) {
+                return cmd.name == command.settings.command || cmd.synonims[command.settings.command]
+            })[0]
+
+            if (!c) {
                 state.head = {
                     type: "help",
-                    data: {warning: "Command '" + command.settings.command + "' found but help not exists"}
+                    data: { error: "Command '" + command.settings.command + "' not implemented" }
                 }
             } else {
+                if (!c.help) {
+                    state.head = {
+                        type: "help",
+                        data: { warning: "Command '" + command.settings.command + "' found but help not exists" }
+                    }
+                } else {
 
-                state.head = {
-                    type: "help",
-                    data: c.help
+                    state.head = {
+                        type: "help",
+                        data: c.help
+                    }
                 }
             }
-        }
 
-        state.head.data["implemented commands"] = config
-                    .map(function(item){return item.name})
-                    .sort(function(a,b){return String.naturalCompare((a).toLowerCase(),(b).toLowerCase())})
-        } catch (e){
+            state.head.data["implemented commands"] = config
+                .map(function(item) {
+                    return item.name })
+                .sort(function(a, b) {
+                    return String.naturalCompare((a).toLowerCase(), (b).toLowerCase()) })
+        } catch (e) {
             throw new HelpError(e.toString())
-        }    
+        }
         return state;
     },
 
@@ -72,8 +75,8 @@ module.exports = {
         params: [{
             name: "command",
             synopsis: "Command name for help",
-            type:["string"],
-            synonims: ["command","cmd","c"],
+            type: ["string"],
+            synonims: ["command", "cmd", "c"],
             "default value": "help"
         }],
         example: {

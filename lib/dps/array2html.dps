@@ -1,0 +1,20 @@
+<?javascript
+
+    $context.mapRow = function(d,index){
+      return    "<!-- row "+index+" -->"
+                +"<tr>"
+                + d.map(function(v){
+                    return '<td style="font-size:x-small">'
+                    +v
+                    +"</td>"
+                }).join()
+                +"</tr>"
+    };
+
+?>
+
+    get('_params.data')
+    map({{mapRow}})
+    concat()
+    html()
+    wrap("table")

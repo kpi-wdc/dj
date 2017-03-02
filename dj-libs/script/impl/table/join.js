@@ -284,33 +284,7 @@ module.exports = {
         }],
         example: {
             description: "Explore methods of data normalization",
-            code: "<%\n"+
-                  "var eqFirstMeta = function(a,b){\n"+
-                  "  return a.metadata[0].id == b.metadata[0].id\n"+
-                  "}\n"+
-                  "%>js()\n"+
-                  "set(\"f\")\n"+
-                  "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                  "json()dataset()\n"+
-                  "proj([{ dim:'time', as:'row'},{ dim:'indicator', as:'col'}])\n"+
-                  "set('t1')\n"+
-                  "norm(for:'col', method:'0,1')\n"+
-                  "format(p:3)\n"+
-                  "set('t2')\n"+
-                  "get('t1')json()table()\n"+
-                  "norm(for:'col', method:'std')\n"+
-                  "format(p:3)\n"+
-                  "set('t3')\n"+
-                  "get('t1')json()table()\n"+
-                  "norm(dir:'col', method:'log')\n"+
-                  "format(p:3)\n"+
-                  "set('t4')\n"+
-                  "get(\"t1\")json()table()\n"+
-                  "join( with:'{{t2}}', on:'{{f.eqFirstMeta}}', method:'left', pref:'Ranged ')\n"+
-                  "join( with:'{{t3}}', on:'{{f.eqFirstMeta}}',method:'left', pref:'Standartized ')\n"+
-                  "join( with:'{{t4}}', on:'{{f.eqFirstMeta}}',method:'left', pref:'Logistic ')\n"+
-                  "info()\n"+
-                  "log()\n"
+            code: "<?javascript\r\n\r\n    $context.eqFirstMeta = function(a,b){\r\n      return a.metadata[0].id == b.metadata[0].id\r\n    };\r\n\r\n?>\r\n\r\nload(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    { dim:'time', as:'row'},\r\n    { dim:'indicator', as:'col'}\r\n])\r\n\r\nset('t1')\r\n\r\nnorm(for:'col', method:'0,1')\r\nset('t2')\r\n\r\nget(var:'t1', as:'table')\r\nnorm(for:'col', method:'std')\r\nset('t3')\r\n\r\nget(var:'t1', as:'table')\r\nnorm(dir:'col', method:'log')\r\nset('t4')\r\n\r\nget(var:'t1', as:'table')\r\n\r\njoin( \r\n    with:{{t2}}, \r\n    on:{{eqFirstMeta}}, \r\n    method:'left', \r\n    pref:'Ranged '\r\n)\r\n\r\njoin( \r\n    with:{{t3}}, \r\n    on:{{eqFirstMeta}},\r\n    method:'left', \r\n    pref:'Standartized '\r\n)\r\n\r\njoin( \r\n    with:{{t4}}, \r\n    on:{{eqFirstMeta}},\r\n    method:'left', \r\n    pref:'Logistic '\r\n)\r\n\r\nformat(3)\r\n\r\n"
         }
     }
 }

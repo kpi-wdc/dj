@@ -54,7 +54,8 @@ module.exports = {
                     params: [],
                     example: {
                         description: "Returns unique values",
-                        code: "<%[1,1,2]%>\n json()\n unique()"
+                        code: "<?json\r\n    [3,1,3,2,2,2,3,1,1,3,2]\r\n?>\r\n\r\nunique()\r\n\r\n"
+
                     }
                 }
         }

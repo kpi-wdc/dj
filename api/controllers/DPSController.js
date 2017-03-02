@@ -10,15 +10,21 @@ logger.debug("Start DPS Service")
 module.exports = {
 
     run: function(req, resp) {
-        // logger.debug("Run DP script", req.host)
         var script = req.body.script;
+        
+        var state = req.body.state;
+        
+      
         var locale = req.body.locale || "en";
         locale = (locale == "uk") ? "ua" : locale;
+
+        state = (state) || {locale : locale}
 
         var executable = new Script()
             .config(conf)
             .script(script)
-            .run({ locale: locale })
+            // .state(state)
+            .run(state)
             .then(function(result) {
                 resp.send(result)
             })

@@ -1,0 +1,26 @@
+/********************************************************
+*	Name:	getChannelItems								*
+*														*
+*	Description: 	Extracts channel items from rss		*
+*					channel 							*
+*														*
+*	Arguments:											*
+*														*
+*		url - 		url for rss channel (required)		*
+*														*
+*		encoding - 	rss file encoding (optional, 		*
+*					default value: "utf8")				*
+*														*
+*	Returns:	array of channel items as "json"		*
+*														*
+********************************************************/
+
+    load(
+        url:{{_arguments.url}},
+        as:'xml',
+        encode:{{_arguments.encoding}}
+    )
+    
+    json()
+    select("$.rss..item.*")
+    return()

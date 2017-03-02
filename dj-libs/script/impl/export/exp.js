@@ -43,9 +43,12 @@ module.exports = {
 
     synonims: {
         "export": "export",
-        "download": "export",
+        "download": "export"
+   },
+
+    "internal aliases":{
         "file": "file"
-    },
+     },
     
     defaultProperty: {
         "export": "file",

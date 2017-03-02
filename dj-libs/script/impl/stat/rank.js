@@ -178,12 +178,7 @@ module.exports = {
         }],
         example: {
             description: "Rank first column values",
-            code:   'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-                    'json()\n'+
-                    'dataset()\n'+
-                    'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-                    'rank(for:"col",items:[0],as:"az")\n'+
-                    'order(by:0, as:"az")'
+            code:   "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:\"dataset\"\r\n)\r\nproj([\r\n  { dim:'time', role:'row', items:[] },\r\n  { dim:'indicator', role:'col', items:[] }\r\n])\r\n\r\nrank(for:\"col\",items:[0],as:\"az\")\r\n\r\norder(by:0, as:\"az\")\r\n\r\n"
         }
     }
 }

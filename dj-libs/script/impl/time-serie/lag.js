@@ -147,15 +147,8 @@ module.exports = {
         }],
         example: {
             description: "Shift first time serie",
-            code:   'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-                    'json()\n'+
-                    'dataset()\n'+
-                    'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-                    'order(for:"row",as:"az", by:-1)\n'+
-                    'norm(for:"col",method:"std")\n'+
-                    'format(1)\n'+
-                    'shift(for:"col", interval:-3, series:[0])\n'+
-                    'line(x:-1,y:[0,1])'
+            code:   "<?javascript\r\n\r\n    $context.eqFirstMeta = function(a,b){\r\n      return a.metadata[0].id == b.metadata[0].id\r\n    };\r\n\r\n?>\r\n\r\nload(\r\n    ds:\"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02\",\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:\"time\", as:\"row\"},\r\n    {dim:\"indicator\",as:\"col\",items:[\"NSMS_DAU001_NFD004\"]}\r\n])\r\n\r\norder(for:\"row\",as:\"az\", by:-1)\r\nnorm(for:\"col\",method:\"std\")\r\nformat(1)\r\n\r\nset('srcSerie')\r\n\r\nshift(for:\"col\", interval:-3, series:[0])\r\n\r\njoin(\r\n    with:{{srcSerie}}, \r\n    on:{{eqFirstMeta}},\r\n    method:'left',\r\n    pref:'srcSerie: '\r\n)\r\n\r\nline(x:-1,y:[0,1])\r\n"
+
         }
     }
 }

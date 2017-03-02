@@ -1,0 +1,110 @@
+
+
+<?javascript
+    
+    var words = function(s){
+return s.toString().toLowerCase().split(/[\\.\\ \\,\\?\\!\\:\\;\\-\\"\\'\\(\\)\\[\\]]+/g)    
+    }
+
+    if(!$scope._arguments)
+        throw new Error("Extention args is undefined")
+    if(!$scope._arguments.news)
+        throw new Error("Extention args.news is undefined")
+    if(!$scope._arguments.tags)
+        throw new Error("Extention args.tags is undefined")
+        
+    $scope.news =  $scope._arguments.news
+        //.concat($scope._arguments.tags)   
+        .map(function(n){
+            return {
+                text: n,
+                words: words(n)
+            }    
+        });
+
+    $scope.tags = $scope._arguments.tags 
+        .map(function(n){
+            return {
+                text: n,
+                words: words(n)
+            }    
+        });     
+    
+    
+    $scope.above3letters = function(w){
+        return w.length>=4
+    };
+
+?>
+
+
+lib("http://127.0.0.1:8088/api/extension")
+import('imports.words.distance')
+run()
+set('distance')
+
+<?javascript
+    var d = $scope.distance.levenshtein;//ngram;
+    
+    $scope.table = {};
+    
+    $scope.table.header = $scope.tags
+        .map(function(item,index){
+            return {
+                metadata:[ {
+                  "id": index,
+                  "label": item.text,
+                  "dimension": "tag",
+                  "dimensionLabel": "Tags",
+                  "role": "metric"
+                }]
+            }
+        })
+
+
+    $scope.table.body = $scope.news
+    
+        .map(function(n,index){
+            return {
+                metadata:[{
+                    "id": index,
+                    "label": n.text,
+                    "dimension": "news",
+                    "dimensionLabel": "News",
+                    "role": "metric"
+                }],
+                value: $scope.tags
+                    
+                    .map(function(t){
+                        
+                        var rr = [];
+                        t.words.forEach(function(tword){
+                            n.words.forEach(function(nword){
+                                var k = Math.abs(tword.length-nword.length);
+                                k /= _.max([
+                                            tword.length,
+                                            nword.length
+                                        ])
+                                k = Math.sqrt(Math.sqrt(1-k));
+                                rr.push(k*d(tword,nword))
+                            })
+
+                        })
+                        
+                        var r = _.max(rr);
+                        r = (r <= 0.50)? 0 : r         
+                        return r
+                      
+                    })
+            }
+        })
+        
+        .filter(function(item){
+            return _.sum(item.value) > 0
+        });
+        
+          
+        
+?>
+
+return(var:'table', as:'table')

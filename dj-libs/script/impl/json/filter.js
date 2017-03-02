@@ -57,27 +57,7 @@ module.exports = {
 
         example: {
             description: "Split array by thrishold",
-            code:   "<%\n"+
-                    " var f1 = function(d){ return d < 0}\n"+
-                    " var f2 = function(d){ return d == 0}\n"+
-                    " var f3 = function(d){ return d > 0}\n"+
-                    "%>\n"+
-                    "js()\n"+
-                    "set('filters')\n"+
-                    "<%\n"+
-                    " [-2, -1, 0, 1, 2]\n"+
-                    "%>\n"+
-                    "json()\n"+
-                    "set('data')\n"+
-                    "filter('{{filters.f1}}')\n"+
-                    "info()\n"+
-                    "get('data')json()\n"+
-                    "filter('{{filters.f2}}')\n"+
-                    "info()\n"+
-                    "get('data')json()\n"+
-                    "filter('{{filters.f3}}')\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "<?javascript\r\n\r\n     var f1 = function(d){ \r\n         return d < 0\r\n         \r\n     };\r\n     var f2 = function(d){ \r\n         return d == 0\r\n         \r\n     };\r\n     var f3 = function(d){ \r\n         return d > 0\r\n         \r\n     };\r\n\r\n?>\r\nset('filters')\r\n\r\n<?json\r\n\r\n [-2, -1, 0, 1, 2]\r\n\r\n?>\r\nset('data')\r\n\r\nfilter({{filters.f1}})\r\ninfo()\r\n\r\nget(var:'data'), as:'json')\r\nfilter({{filters.f2}})\r\ninfo()\r\n\r\nget(var:'data'), as:'json')\r\nfilter({{filters.f3}})\r\ninfo()\r\nlog()\r\n\r\n"
         }
     }
 }

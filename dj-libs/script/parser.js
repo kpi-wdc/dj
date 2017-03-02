@@ -17,14 +17,14 @@ var valuesRE = /'((?:\\\\[\'bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\'\\\\])*)'|\"((?:
     lineCommentRE = /\/\/[\w\S\ .\t\:\,;\'\"\(\)\{\}\[\]0-9-_]*(?:[\n\r]*)/gi,
     lineRE = /[\r\n\t\s]*/gim,
     inlineCommentRE = /\/\*[\w\W\b\.\t\:\,;\'\"\(\)\{\}\[\]\*0-9-_]*(?:\*\/)/gim,
-    commandSplitRE = /(\))([a-zA-Z])/gim,
+    commandSplitRE = /(\))([a-zA-Z@])/gim,
     nonbrackedParamsRE = /\(([\w\b\.\t\:\,\'\"0-9-_]+[\w\b\.\t\:\,\'\"\[\]\^0-9-_]*)\)/gi,
-    propertyNameRE = /([a-zA-Z-]+(?=[\(\)\{\}\:\[\]\s]+))/gim,
+    propertyNameRE = /((@[a-zA-Z\-_]+|[a-zA-Z\-_]+)(?=[\(\)\{\}\:\[\]\s]+))/gim,
     emptyPropsListRE = /\(\s*\)/gi,
     defaultValueRE = /\:\{\^*[0-9]+\};/gi,
     defaultStoredValueRE = /\:\^[0-9]+;/gi,
     urlLookup = /\^[0-9]+/gi,
-    commandNameRE = /"[a-zA-Z0_-]+[a-zA-Z0-9_-]*":/gi,
+    commandNameRE = /"@*[a-zA-Z0_-]+[a-zA-Z0-9_-]*":/gi,
     paramsRE = /:[\{\^\[]+[a-zA-Z0-9_:",\^\{\}\[\]-]*[\}\]]+;*|:\^[0-9]+;*/gi,
     // scriptRE = /\<\%[\w\d_\-\"\'\?\!\$\(\)\=\:\#\@\/\[\]\^\.\>\<\}\{\|\&\s\,\r\n\f\t]*\%\>/gim,
     scriptRE = /(\<\?([^?]|(\?+[^?\>]))*\?\>)/g,
@@ -168,7 +168,7 @@ ScriptParser.prototype.parse = function(str) {
         .replace(/\(/gim, ":")
         .replace(/\)/gim, "")
 
-    
+    // console.log(p)
         
     try {
         p = p
@@ -180,6 +180,7 @@ ScriptParser.prototype.parse = function(str) {
                 if (cmd == ";") {
                     return cmd
                 }
+                // console.log("MAP ", cmd)
                 var cmdName = cmd.match(commandNameRE)[0];
                 cmdName = cmdName.substring(1, cmdName.length - 2)
                 var params = cmd.match(paramsRE).map(function(item) {
@@ -204,14 +205,14 @@ ScriptParser.prototype.parse = function(str) {
             .join(";")
             .replace(/;;/gi, ";");
 
-
+        // console.log("AFTER MAP ", p)    
         //p = p.replace(/\^[0-9]+/gim, varValue)
 
 
         var script = [];
         var cmd = p.split(";")
         cmd.forEach(function(cm) {
-            console.log('Parse:',"{" + cm.replace(/\^[0-9]+/gim, varValue) + "}")
+            // console.log('Parse:',"{" + cm.replace(/\^[0-9]+/gim, varValue) + "}")
             var t = JSON.parse("{" + cm.replace(/\^[0-9]+/gim, varValue) + "}");
             script.push(t)
 
@@ -237,7 +238,7 @@ ScriptParser.prototype.parse = function(str) {
             c.settings.value = c.settings.value.replace(urlLookup, getUrl)
         }
     })
-    console.log(JSON.stringify(result))
+    // console.log(JSON.stringify(result))
     return result;
 }
 

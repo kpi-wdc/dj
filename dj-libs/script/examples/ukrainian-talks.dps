@@ -1,0 +1,116 @@
+
+lib('http://127.0.0.1:8088/lib')
+
+
+import(ext:'imports.load.rss.getChannelHeadlines', into:'getHeadlines')
+
+run(
+    script: {{getHeadlines}},
+    url:'http://www.pravda.com.ua/rss/view_news/',
+    // url: 'http://127.0.0.1:8088/libs/rss/pravda.xml',
+    encoding: 'win1251'
+)
+set('pravda')
+
+run(
+    script: {{getHeadlines}},
+    url:'http://tyzhden.ua/RSS/News/'
+    // url: 'http://127.0.0.1:8088/libs/rss/tyzhden.xml'
+)
+set('tyzhden')
+
+run(
+    script: {{getHeadlines}},
+    url:'http://news.liga.net/all/rss.xml'//,
+    // url: 'http://127.0.0.1:8088/libs/rss/finance.xml',
+    //encoding: 'win1251'
+)
+set('ff')
+
+run(
+    script: {{getHeadlines}},
+    url:'http://112.ua/rss/index.rss'
+    // url: 'http://127.0.0.1:8088/libs/rss/all-news.xml'
+)
+set('l')
+
+
+run(
+    script: {{getHeadlines}},
+    url:'http://espreso.tv/rss'
+    // url: 'http://127.0.0.1:8088/libs/rss/all-news.xml'
+)
+set('esp')
+
+
+
+<?javascript
+    
+    $context.news = $context.pravda
+                        .concat($context.tyzhden)
+                        .concat($context.ff)
+                        .concat($context.l)
+                        .concat($context.esp);
+    
+    $context.pravda = undefined;
+    $context.tyzhden = undefined;
+    $context.ff = undefined;
+    $context.l = undefined;
+    $context.esp = undefined;
+    
+
+?>
+
+<?json
+   [ 
+     "администрация",
+     "президент",
+     "украина",
+     "захарченко",
+     "порошенко"]
+?>
+set('tags')
+
+call(
+    ext:'imports.load.rss.newsWordTable', 
+    news:{{news}},
+    tags:{{tags}}
+)
+
+
+pca(for:'row', return:'scores')
+set('table')
+
+<?javascript
+    $context.table.header.push(
+        {
+            metadata:[{
+                "id": "tag",
+                "label": "is Tag",
+                "dimension": "tag",
+                "dimensionLabel": "Tags",
+                "role": "metric"
+                
+            }]
+        }
+    )
+    
+    $context.table.body = $context.table.body
+        .map(function(row){
+            row.value.push(
+                ($context.tags.indexOf(row.metadata[0].label) >=0 )
+                    ? 1 : 0
+                )
+            return {
+                metadata: [row.metadata[0]],
+                value: row.value
+            }    
+        })
+?>
+
+get(var:'table', as:'table')
+scatter(x:0,y:[1], cat:5)
+
+
+
+

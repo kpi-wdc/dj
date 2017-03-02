@@ -80,6 +80,10 @@ module.exports.routes = {
 
   'get /api/data/process/update/:id' : 'DataProcController.updateProcData',
   
+// Extensions URLs
+  
+  'get /api/extension' : 'ExtensionController.getLibraryDef',
+  'post /api/extension/call/:extension': 'ExtensionController.runExtension',
 
 
 // Dataset Dictionary API

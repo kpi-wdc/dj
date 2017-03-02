@@ -27,36 +27,7 @@ module.exports = {
     
     example:{
       description:"Build HTML table",
-      code:   '<?javascript\n'+
-              'var mapRow = function(d){\n'+
-              '  return "<tr>"+ d.value.map(function(v){\n'+
-              '     return "<td style=\\"font-size:x-small\\">"+v+"</td>"\n'+
-              '  }).join("")\n'+
-              '}\n'+
-              '\n'+
-              '?>\n'+
-              'set("cb")\n'+
-              '\n'+
-              '\n'+
-              '<?dps\n'+
-              'map("{{cb.mapRow}}")\n'+
-              'concat()\n'+
-              'html()\n'+
-              'wrapHtml("table")\n'+
-              '?>\n'+
-              '\n'+
-              'set("t2html")\n'+
-              '\n'+
-              '\n'+
-              '\n'+
-              'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-              'json()\n'+
-              'dataset()\n'+
-              'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-              'format(2)\n'+
-              'json()\n'+
-              'select("$.body.*")\n'+
-              'run({{t2html}})'
+      code:   "<?javascript\r\n    \r\n    $context.rowMapper = function(d){\r\n      return \"<tr>\"+ d.value.map(function(v){\r\n         return \"<td style=\\\\\"font-size:x-small\\\\\">\"+v+\"</td>\"\r\n      }).join(\"\")+\"</tr>\"\r\n    };\r\n\r\n?>\r\n\r\n<?dps\r\n\r\n    map({{rowMapper}})\r\n    concat()\r\n    html()\r\n    wrapHtml(tag:\"table\", class:\"skin\", style:'background:#ded;')\r\n\r\n?>\r\nset(\"t2html\")\r\n\r\n\r\n\r\nload(\r\n    ds:\"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02\",\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:\"time\", as:\"row\"},\r\n    {dim:\"indicator\",as:\"col\"}\r\n])\r\n\r\nformat(2)\r\njson()\r\nselect(\"$.body.*\")\r\nrun({{t2html}})\r\n"
     }
   }
 }

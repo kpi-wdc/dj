@@ -1,0 +1,121 @@
+{
+	"name":"Default DJ dps extention library",
+	"description":"This library provide basic extentions for data processing",
+	"type": "category",
+	"words":{
+		"name":"Module \"words\" ",
+		"description":"Provides extensions for word proseccing",
+		"type": "category",
+		"distance":{
+			"name":"Extension \"distance\" ",
+			"description":"provide various word distances js implementation",
+			"type": "extention",
+			"path": "/words/words-distance.dps"	
+		}
+	},
+	"load":{
+		"name":"Module \"load\" ",
+		"description":"Provides extensions for data preparation",
+		"type": "category",
+		"rss":{
+			"name":"Module \"rss\" ",
+			"description":"Provides extensions for data extraction from rss",
+			"type": "category",
+			"getChannelItems":{
+				"name":"Extension \"getChannelItems\" ",
+				"description":"Extract channel items from rss. \nArguments: \nurl: url for rss (required); encoding: rss file encoding (optional, defualt value: \"utf8\")",
+				"type": "extention",
+				"path": "/load/rss/get-channel-items.dps"	
+			},
+			"getChannelHeadlines":{
+				"name":"Extension \"getChannelHeadlines\" ",
+				"description":"Extract item titles from rss. \nArguments: \nurl: url for rss (required); encoding: rss file encoding (optional, defualt value: \"utf8\")",
+				"type": "extention",
+				"path": "/load/rss/get-channel-headlines.dps"	
+			},
+
+			"newsWordTable":{
+				"name":"Extension \"newsWordTable\" ",
+				"description":"Extract item titles from rss. \nArguments: \nurl: url for rss (required); encoding: rss file encoding (optional, defualt value: \"utf8\")",
+				"type": "extention",
+				"path": "/load/rss/news-word-table.dps"	
+			}
+
+		}
+		
+	},
+
+	"text":{
+		"name":"Module \"text\" ",
+		"description":"Provides extensions for data preparation",
+		"type": "category",
+		"processing":{
+			"name":"Module \"processing\" ",
+			"description":"Provides extensions for data extraction from rss",
+			"type": "category",
+			"wordDistance":{
+				"name":"Extension \"wordDistance\" ",
+				"description":"Extract channel items from rss. \nArguments: \nurl: url for rss (required); encoding: rss file encoding (optional, defualt value: \"utf8\")",
+				"type": "extention",
+				"path": "/text/processing/word-distance.dps"	
+			}
+		}
+	},
+	
+	"js":{
+		"name":"Module \"data\" ",
+		"description":"Exports various data examples",
+		"type": "category",
+		"join":{
+			"name":"join",
+			"description":"Returns csv sample",
+			"type": "extention",
+			"path":"/join-js-callbacks.dps"
+		}
+	},
+
+	"data":{
+		"name":"Module \"data\" ",
+		"description":"Exports various data examples",
+		"type": "category",
+		
+		"csv":{
+			"name":"csv",
+			"description":"Returns csv sample",
+			"type": "extention",
+			"path":"/data/csv.dps"
+		},
+
+		"xml":{
+			"name":"xml",
+			"description":"Returns xml sample",
+			"type": "extention",
+			"path":"/data/xml.dps"
+		},
+
+		"html":{
+			"name":"html",
+			"description":"Returns html sample",
+			"type": "extention",
+			"path":"/data/html.dps"
+		},
+		"echo":{
+			"name":"echo",
+			"description":"Returns html sample",
+			"type": "extention",
+			"path":"/echo.dps"
+		}
+	},
+
+	"preprocess":{
+		"name":"Module \"preprocess\" ",
+		"description":"Exports various data preparation extentions",
+		"type": "category",
+		"parseDate":{
+			"name":"formatDate",
+			"description":"Parse string as date",
+			"type": "extention",
+			"path":"/preprocess/parseDate.dps"
+		}
+	}
+}

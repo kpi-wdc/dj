@@ -14,7 +14,7 @@ module.exports = {
     defaultProperty: {},
 
     execute: function(command, state, config) {
-        if (state.head.type != "string") throw new DPSError("Incompatible context type: " + state.head.type+". Use context injection or 'str()' command to convert context to 'string' type")
+        if (state.head.type != "string") throw new DPSError("Incompatible context type: " + state.head.type+". Use context injection or 'str()' command to convert context to 'string' type\nState: "+JSON.stringify(state.head))
         state.head.type = "dps";
         return state;
     },
@@ -32,7 +32,7 @@ module.exports = {
         params: [],
         example: {
             description: "Set 'dps' type for script context",
-            code: "<% version() %> dps()"
+            code: "<?dps\n    version() \n?> \n\nset('getVersion')\n\nrun({{getVersion}})\n"
         }
     }
 }

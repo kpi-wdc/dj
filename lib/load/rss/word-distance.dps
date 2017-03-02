@@ -1,0 +1,29 @@
+
+<?javascript
+	$context.wordDistance = function(w1, w2) {
+	    var short, long;
+
+	    if (w1.length > w2.length) {
+	        short = _.values(w2)
+	        long = _.values(w1)
+	    } else {
+	        short = _.values(w1)
+	        long = _.values(w2)
+	    }
+	    var res = [];
+	    var l = short.length+long.length-1;
+	    var c = 0;
+	    for(var shift = -short.length+1; shift < long.length-1; shift++){
+	    	for(var pos=0; pos<short.length; pos++){
+	    		if(short[pos] && long[pos+shift] && short[pos]==long[pos+shift]){
+	    			c++
+	    		} else {
+	    			res.push(c)
+	    			c = 0;
+	    		}
+	    	}
+	    }
+	    return (1 - _.max(res)/long.length)
+	}
+?>
+return('wordDistance')	

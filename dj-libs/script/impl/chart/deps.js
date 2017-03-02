@@ -54,13 +54,7 @@ module.exports = {
         params: [],
         example: {
             description: "Build dependency wheel chart serie",
-            code:   "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                    "json()dataset()\n"+
-                    "proj([{dim:'time', as:'row'},{dim:'indicator', as:'col'}])\n"+
-                    "corr(for:'col')\n"+
-                    "deps()\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:'time', as:'row'},\r\n    {dim:'indicator', as:'col'}\r\n])\r\n\r\ncorr(for:'col')\r\ndeps()\r\n"
         }
     }
 }

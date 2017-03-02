@@ -139,14 +139,7 @@ module.exports = {
         }],
         example: {
             description: "Build clusters for row",
-            code:   "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                    "json()dataset()\n"+
-                    "query([{dim:'time', as:'row'},{dim:'indicator', as:'col'}])\n"+
-                    "norm(for:'col', mode:'log')\n"+
-                    "cls(for:'row',count:2)\n"+
-                    "format(3)\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "load(\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\n    as:'dataset'\n)\n\nquery([\n    {dim:'time', as:'row'},\n    {dim:'indicator', as:'col'}\n])\n\nnorm(for:'col', mode:'log')\ncls(for:'row',count:2)\nformat(3)\n"
         }
     }
 }

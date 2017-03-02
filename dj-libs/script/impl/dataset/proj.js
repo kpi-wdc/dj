@@ -114,12 +114,7 @@ module.exports = {
         }],
         example: {
             description: "Get projection from dataset",
-            code:   'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\n'+
-                    'json()\n'+
-                    'dataset()\n'+
-                    'proj([{dim:"time", as:"row"},{dim:"indicator",as:"col"}])\n'+
-                    'info()\n'+
-                    'log()'
+            code:   "src(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\r\njson()\r\ndataset()\r\nproj([{dim:'time', as:'row'},{dim:'indicator', as:'col'}])\r\n\r\n//or \r\n\r\nload(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02', \r\n    as:'dataset'\r\n)\r\n\r\nproj([\r\n    {dim:'time', as:'row'},\r\n    {dim:'indicator', as:'col'}\r\n])\r\n\r\n\r\n//or \r\n\r\nload(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02', \r\n    as:'dataset',\r\n    into:'data'\r\n)\r\n\r\n// other data processing ...\r\n\r\nget(var:'data', as:'dataset')\r\n\r\nproj([\r\n    {dim:'time', as:'row'},\r\n    {dim:'indicator', as:'col'}\r\n])\r\n"
         }
     }
 }

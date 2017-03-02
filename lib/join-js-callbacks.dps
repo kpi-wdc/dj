@@ -1,0 +1,9 @@
+<?javascript
+
+    $context.eqFirstMeta = function(a,b){
+      return a.metadata[0].id == b.metadata[0].id
+    };
+
+?>
+get()
+return()

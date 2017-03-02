@@ -1,0 +1,50 @@
+
+lib(url:{{_arguments.url}})
+set('lib')
+
+<?javascript
+    
+    var  transform = function(obj, acc, path){
+        if(obj.type && obj.type == 'category'){
+            acc += '<h4>'+obj.name+'</h4>';
+            acc += '<p>'+obj.description+'</p>';
+            
+            acc += '<ul style="list-style-type: none;">'
+            
+            _.forOwn(obj, function(value, key){
+              if(_.isObject(value) && key != "baseUrl"){
+                  acc += '<li>'+transform(value,"",path+'.'+key)+'</li>' 
+              }  
+            })
+            acc += '</ul>'
+            return acc;
+        }
+        if(obj.type && obj.type == 'extension'){
+            acc += '<h5>'+path+' ';
+
+            if(obj.import){
+                acc += '<span style="font-size:small;background:#F5871F;color:#fff;border-radius:3px; padding:0 0.5em; margin-left:0.25em;">'
+                acc += "importable"
+                acc += "</span>"
+            }
+            if(obj.call){
+                acc += '<span style="font-size:small;background:#F5871F;color:#fff;border-radius:3px; padding:0 0.5em; margin-left:0.25em;">'
+                acc += "implemented on server"
+                acc += "</span>"
+            }
+            acc += '</h5>'
+            
+            acc += '<p>'+obj.name+": "+obj.description+'</p>';
+            return acc;
+        }
+        
+        return "";
+    };
+    
+    $scope.h ="<h3>Library Description</h3>" 
+        +transform($scope.lib,"","&lt;library alias&gt;");
+    
+?>
+
+get(var:'h', as:'html')
+return()

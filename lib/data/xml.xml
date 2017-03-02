@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="http://default.namespace.uri">
+    <a>
+        <b id="1">one</b>
+        <b id="2"><![CDATA[some <cdata>]]>two</b>
+        <ns:c xmlns:ns="http://another.namespace" ns:id="3">three</ns:c>
+    </a>
+</xml>

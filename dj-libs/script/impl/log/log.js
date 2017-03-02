@@ -36,7 +36,7 @@ module.exports = {
     
     example:{
       description:"Logger info",
-      code:"info(value:'Direct')\n<%Hello injection! %>info()\nset('helloStr')\ninfo('From var')\ninfo('{{helloStr}}')\nlog()"
+      code:"\r\ninfo(value:'Direct')\r\n\r\n<?text\r\n    Hello injection! \r\n?>\r\n\r\ninfo()\r\nset('helloStr')\r\ninfo('From var')\r\ninfo({{helloStr}})\r\n\r\nlog()\r\n"
     }
   }
 }

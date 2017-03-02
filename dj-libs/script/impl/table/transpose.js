@@ -30,7 +30,8 @@ module.exports = {
         params: [],
         example: {
             description: "Transpose table",
-            code: "src(cache:'5855481930d9ae60277a474a')\njson()\ntable()\norder(for:'row',by:-1, as:'az')\ntranspose()"
+            code:  "load(\r\n    cache:'5855481930d9ae60277a474a',\r\n    as:'table'\r\n)\r\n\r\norder(for:'row',by:-1, as:'az')\r\n\r\ntranspose()\r\n"
+
         }
     },
     transpose: function(table){

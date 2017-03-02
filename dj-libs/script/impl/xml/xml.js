@@ -30,7 +30,7 @@ module.exports = {
         params: [],
         example: {
             description: "Set 'xml' type for script context",
-            code: '<%xml <parent><child-list><child id="0"/><child id="1"/></child-list></parent> %>'
+            code: "load(\n    url:'http://127.0.0.1:8080/api/resource/scripting-xml.xml',\n    as:'xml',\n    into:'external'\n)\n\n<?xml\n    <a><b>text</b></a>\n?>\nset('internal')\n\nget()\n\n"
         }
     }
 }

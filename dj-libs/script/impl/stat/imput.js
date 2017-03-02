@@ -1,6 +1,6 @@
 // data imputation
 
-var transposeTable = require("../table/transpose");
+var transposeTable = require("../table/transpose").transpose;
 var util = require("util");
 
 
@@ -127,7 +127,7 @@ module.exports = {
                 data: impl(table, params)
             }
         } catch (e) {
-            throw e
+            throw new ImputImplError(e.toString())
         }
         return state;
     },
@@ -163,7 +163,8 @@ module.exports = {
         }],
         example: {
             description: "Fill backspaces for each columns by fill from top",
-            code: "imput(for:'col', from:'top',method:'fill')"
+            code: "<?json\n    {\n  \"header\": [\n    {\n      \"metadata\": [\n        {\n          \"id\": \"0\",\n          \"label\": \"Col 0\",\n          \"dimension\": \"Columns\",\n          \"dimensionLabel\": \"Columns\",\n          \"role\": \"metric\"\n        }\n      ]\n    },\n    {\n      \"metadata\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"Col 1\",\n          \"dimension\": \"Columns\",\n          \"dimensionLabel\": \"Columns\",\n          \"role\": \"metric\"\n        }\n      ]\n    },\n    {\n      \"metadata\": [\n        {\n          \"id\": \"2\",\n          \"label\": \"Col 2\",\n          \"dimension\": \"Columns\",\n          \"dimensionLabel\": \"Columns\",\n          \"role\": \"metric\"\n        }\n      ]\n    }\n  ],\n  \"body\": [\n    {\n      \"metadata\": [\n        {\n          \"id\": \"0\",\n          \"label\": \"0\",\n          \"dimension\": \"Rows\",\n          \"dimensionLabel\": \"Rows\",\n          \"role\": \"metric\"\n        }\n      ],\n      \"value\": [\n        366.71,\n        928.25,\n        null\n      ]\n    },\n    {\n      \"metadata\": [\n        {\n          \"id\": \"1\",\n          \"label\": \"1\",\n          \"dimension\": \"Rows\",\n          \"dimensionLabel\": \"Rows\",\n          \"role\": \"metric\"\n        }\n      ],\n      \"value\": [\n        null,\n        null,\n        null\n      ]\n    },\n    {\n      \"metadata\": [\n        {\n          \"id\": \"2\",\n          \"label\": \"2\",\n          \"dimension\": \"Rows\",\n          \"dimensionLabel\": \"Rows\",\n          \"role\": \"metric\"\n        }\n      ],\n      \"value\": [\n        null,\n        923.05,\n        null\n      ]\n    },\n    {\n      \"metadata\": [\n        {\n          \"id\": \"3\",\n          \"label\": \"3\",\n          \"dimension\": \"Rows\",\n          \"dimensionLabel\": \"Rows\",\n          \"role\": \"metric\"\n        }\n      ],\n      \"value\": [\n        null,\n        927.38,\n        null\n      ]\n    },\n    {\n      \"metadata\": [\n        {\n          \"id\": \"4\",\n          \"label\": \"4\",\n          \"dimension\": \"Rows\",\n          \"dimensionLabel\": \"Rows\",\n          \"role\": \"metric\"\n        }\n      ],\n      \"value\": [\n        368.6,\n        928.18,\n        null\n      ]\n    }\n  ]\n}\n?>\n\ntable()\n\nremove(dir:\"col\", mode:'all')\nremove(dir:'row', mode:'all')\nimput(for:'col', from:'top', method:'fill')\n\n"
+
         }
     }
 }

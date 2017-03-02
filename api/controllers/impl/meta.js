@@ -13,10 +13,17 @@ MetaImplError.prototype.constructor = MetaImplError;
 
 var impl = function(params) {
     return new Promise(function(resolve, reject) {
-        Dataset.find({ "commit/HEAD": true })
+        // Dataset.find({ "commit/HEAD": true })
+        Dataset.find({})
             .then(function(datasets) {
                 datasets = datasets.map(function(item) {
-                    return item.metadata
+                    var res = item.metadata;
+                    res.dataset.commit.createdAt = item.createdAt;
+                    res.dataset.commit.id = item.id;
+                    res.dataset.commit.author = item["commit/author"];
+                    res.dataset.commit.HEAD = item["commit/HEAD"];
+                    res.dataset.status = item["dataset/status"];
+                    return res
                 })
                 Dictionary.find({})
                     .then(function(json) {

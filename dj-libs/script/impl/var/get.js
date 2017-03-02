@@ -21,6 +21,9 @@ module.exports = {
     "internal aliases":{
         "path": "path",
         "select": "path",
+        "var":"path",
+        "as": "as",
+        "type":"as"
     },
     
     defaultProperty: {
@@ -47,14 +50,8 @@ module.exports = {
         ],
         example: {
             description: "Inspect variables",
-            code:   '<% "Hello" %>\njson()\nset("str")\n'+
-                    '<% var notNull = function(item){return item != undefined} %>\n'+
-                    'js()\nset("functions")\n'+
-                    'src(ds:"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02")\njson();'+
-                    '\nselect("$.metadata.dataset.commit")\n'+
-                    'set(var:"commitNote", val:"$[0].note")\nget("str")\ninfo()\n'+
-                    'get("functions.notNull")\ninfo()\nget("commitNote")\ninfo()\n'+
-                    '// equals for previus\nget("$.commitNote")\ninfo()\nlog()'
+            code:  "<?json \r\n    \"Hello\" \r\n?>\r\nset(\"str\")\r\n\r\n<?javascript \r\n    var notNull = function(item){\r\n        return item != undefined\r\n        \r\n    }; \r\n?>\r\nset(\"functions\")\r\n\r\nload(\r\n    ds:\"47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02\", \r\n    as:'json'\r\n)\r\n\r\nselect(\"$.metadata.dataset.commit\")\r\n\r\nset(var:\"commitNote\", val:\"$[0].note\")\r\nget(\"str\")\r\ninfo()\r\nget(\"functions.notNull\")\r\ninfo()\r\nget(\"commitNote\")\r\ninfo()\r\n// equals for previus\r\nget(\"$.commitNote\")\r\ninfo()\r\nlog()\r\n"
+
         }
 
     },
@@ -82,8 +79,9 @@ module.exports = {
 
                 state.head = {
                     data: copy(state.storage),
-                    type: "json"
+                    type: command.settings.as || "json"
                 }
+                
                 if (util.isFunction(state.head.data)) state.head.type = 'function'
                 return state;
             }
@@ -94,9 +92,15 @@ module.exports = {
             //     type: typeof res
             //   }
             // }else{
+            
+                
+
+
+
+
             state.head = {
                 data: copy(getProperty(state.storage, command.settings.path)),
-                type: "json"
+                type: command.settings.as || "json"
             }
             if (util.isFunction(state.head.data)) state.head.type = 'function'
                 // }

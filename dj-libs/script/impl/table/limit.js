@@ -96,12 +96,7 @@ module.exports = {
         ],
         example: {
             description: "Limit table rows",
-            code:   "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                    "json()dataset()\n"+
-                    "proj([{ dim:'time', as:'row'},{ dim:'indicator', as:'col'}])\n"+
-                    "limit(s:1,l:2)\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:\"dataset\")\r\n    \r\nproj([\r\n    { dim:'time', as:'row'},\r\n    { dim:'indicator', as:'col'}\r\n])\r\n\r\nlimit(s:1,l:2)\r\n"
         }
     }
 }

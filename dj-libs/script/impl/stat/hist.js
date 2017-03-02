@@ -151,21 +151,8 @@ module.exports = {
             ],
         example: {
             description: "Build histogram for indicator NSMS_DAU001_NFD004",
-            code:   "source(ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02')\n"+
-                    "json()dataset()\n"+
-                    "proj([\n"+
-                    "  { dim:'time', as:'row'},\n"+
-                    "  {\n"+
-                    "    dim:'indicator',\n"+
-                    "    as:'col',\n"+
-                    "    values:['NSMS_DAU001_NFD004']\n"+
-                    "  }\n"+
-                    "])\n"+
-                    "// create histogramm\n"+
-                    "hist(for:'col', beans:7)\n"+
-                    "format(3)\n"+
-                    "info()\n"+
-                    "log()"
+            code:   "\r\n\r\n// load data from dataset storage\r\n\r\n    load(\r\n        ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n        as:'dataset'\r\n    )\r\n\r\n\r\n// get data cube projection\r\n\r\n    proj([\r\n      { dim:'time', as:'row'},\r\n      {\r\n        dim:'indicator',\r\n        as:'col',\r\n        values:['NSMS_DAU001_NFD004']\r\n      }\r\n    ])\r\n\r\n\r\n// create histogramm\r\n\r\n    hist(for:'col', beans:7)\r\n    format(3)\r\n\r\n\r\n// create bar chart\r\n\r\n    bar()\r\n"
+
         }
     }
 }
