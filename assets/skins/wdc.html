@@ -1,14 +1,14 @@
 <style>
 .zurb-footer-top.bg-fblue {
-    background: #45552e;/*#074e68;*/
+    background: #005c8e;/*#0737a3;*//*#45552e;*//*#074e68;*/
 }
 .zurb-footer-top, .zurb-footer-top h3, .zurb-footer-top h4, .zurb-footer-top a {
     padding: 10px 0;
-    color:#c3cec4;/*#aeaeae;*/
+    color:#ddd;/*#c3cec4;*//*#aeaeae;*/
 }
 
 .zurb-footer-top a:hover, .zurb-footer-top a:focus{
-    color: #f2fff3 !important;/*#afafaf;*//*#5e666c*/;
+    color: #f2f2f2 !important;/*#afafaf;*//*#5e666c*/;
 }
 
 .zurb-footer-bottom {
@@ -43,34 +43,34 @@
 }
 
 h1, h2, h3, h4, h5, a{
-  color: #45552E;
+  color: #0065a4;/*#005c8e;*//*#0737a3;*//*#45552E;*/
 }
 .skin-color{
-  color: #45552E;
+  color: #0065a4;/*#005c8e;*//*#0737a3;*//*#45552E;*/
 }
 
 .has-tip:hover, .has-tip:focus {
     /*border-bottom: dotted 1px #003f54;*/
-    color: #45552e;
+    color: #005c8e;/*#0737a3;*//*#45552e;*/
 }
  a:hover, a:focus {
-   color: #45552e;
+   color: #005c8e;/*#0737a3;*//*#45552e;*/
   /*color:#fff;*/
   /*background: #6a8247;*/
 }
 
 button.success, .button.success {
-    background-color: #6a8247;
-    border-color: #45552e;
-    color: #ffffff;
+    background-color: #0065a4;/*#6a8247;*/
+    border-color: #005c8e;/*#45552e;*/
+    color: #ddd;/*#ffffff;*/
 }
     
 button.success:hover, 
 button.success:focus, 
 .button.success:hover, 
 .button.success:focus {
-    background-color: #45552e;
-}
+    background-color: #005c8e;/*#0737a3;*//*#45552e;
+*/}
 
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
     background: #f6f8f4;
@@ -80,11 +80,11 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
     background: ##f6f8f4;
 }*/
 table thead {
-    background: #d5dccb;
+    background: #dee7f2;/*#ddd;*//*#d5dccb;*/
 }
 
 table thead tr th, table thead tr td {
-    color: #485831;
+    color:#0e65a4;/*#005c8e;*//*#0737a3;*//* #485831;*/
     /*font-size: 0.875rem;*/
     font-weight: bold;
     /*padding: 0.5rem 0.625rem 0.625rem;*/
@@ -93,33 +93,33 @@ table thead tr th, table thead tr td {
 table tr th, table tr td {
     padding: 0.2rem 0.5rem;
     /* font-size: 0.875rem; */
-    color: #45552e;
+    color: #444;/*#0737a3;*//*#45552e;*/
     text-align: left;
-    border: 1px solid #84a258;
+    border: 1px solid #aaa;/*#005c8e;*//*#0737a3;*//*#84a258;*/
    /* border-right: 1px solid #84a258;*/
 }
 
 
 h1.panel, h2.panel, h3.panel, h4.panel,  h5.panel, i.panel {
-    background-color: #6a8247;
+    background-color: #0065a4;/*#6a8247;*/
     border-style: none;
     /*border-color: #45552e;
 */    color: #e9e9e9;
 }
 
 .tag{
-    border: 0.1rem solid #6a8247;
-    color: #6a8247;
+    border: 0.1rem solid #0065a4;/*#6a8247;*/
+    color: #0065a4;/*#6a8247;*/
     background: #e9e9e9;
 }
 
-.tagPanel {
-  border: 1px solid #6a8247;
-  background: #f5f5f5;
+div.tags{
+  background: #0065a4;/*#6a8247;*/
 }
 
-div.tags{
-  background: #6a8247;
+.tagPanel {
+  border: 1px solid #0065a4;/*#6a8247;*/
+  background: #fff;
 }
 
 .top-bar .name h1 a, .top-bar .name h2 a, .top-bar .name h3 a, .top-bar .name h4 a, .top-bar .name p a, .top-bar .name span a {
@@ -224,17 +224,19 @@ div.tags{
     <div class="medium-6 columns">
       <div class="property-info">
           <h3>
-            <img src="./img/sseopen.png" style="height: 48px;margin: 0 0.2em 0 0;"/> 
-            SSE ChNPP Open Data
+            <img src="{{(config.icon)?config.icon:'./img/default-app-icon.png'}}" style="height: 48px;margin: 0 0.2em 0 0;"/> 
+            {{config.title | translate}}
           </h3>
-          <p>
-            SSECHNPP Open Data є спільним проектом ДСП "Чорнобильська АЕС" та Світового центру даних "Геоінформатика та сталий розвиток", мета якого забезпечити відкритий доступ до даних інтегрованої автоматизованої системи моніторингу об'єкту "Укриття" Чорнобильської АЕС. Ці дані можуть бути використані міжнародною науковою спільнотою для проведення різноманітних міждисциплінарних досліджень.<!-- 
+          <p>{{config.description | translate}}</p>
+           <!--  SSECHNPP Open Data є спільним проектом ДСП "Чорнобильська АЕС" та Світового центру даних "Геоінформатика та сталий розвиток", мета якого забезпечити відкритий доступ до даних інтегрованої автоматизованої системи моніторингу об'єкту "Укриття" Чорнобильської АЕС. Ці дані можуть бути використані міжнародною науковою спільнотою для проведення різноманітних міждисциплінарних досліджень. --><!-- 
+          }
+          }
           SSE ChNPP Open Data is the data portal based on DJ platform that provides over 100 dataset about integrated security monitoring system (IAMS) of Chernobyl Nuclear Power Plant. You can search, analyze and use this data for interdisciplinary research.
           Data is tagged by type of measurements, periodicity, device location and IAMS subsystems. Rich metadata about datasets is available.
           We provides demo for easy to use data processing and data mining via DJ Data Processing Script
           You can use online Single Page App builder for developing interactive reports about your research results   -->
       </div>
-      <div ng-if="user.isAdmin" style="padding: 0.5em;border: 1px solid; width: 50%;">
+      <!-- <div ng-if="user.isAdmin" style="padding: 0.5em;border: 1px solid; width: 50%;">
         <h4 class="hide-for-small" style="margin: 0; padding: 0;"><img src="./img/sseopen.png" style="height: 36px;margin: 0 0.2em 0 0;"/> Administrator area</h4>
          <div style="margin: 0 0 0 3em">
           <div>
@@ -244,7 +246,7 @@ div.tags{
             <a href="./app/SSEChNPP-data" target="_blank" style="font-size: small;line-height: 1;padding: 0;"><i class="fi-widget"></i> Data Management </a>  
           </div>
          </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="medium-6 columns">
@@ -252,7 +254,7 @@ div.tags{
         <div class="medium-6 columns">
           <div class="learn-links">
             <h4 class="hide-for-small">Organizations</h4>
-              <div class="row" style="padding: 0.3em 0;">
+              <!-- <div class="row" style="padding: 0.3em 0;">
                 <div class="medium-2 columns" style="padding:0;">
                     <img src="./img/ssechnpp.png" style="height:24px">
                 </div>
@@ -261,7 +263,7 @@ div.tags{
                       SSE ChNPP
                     </a>
                 </div>
-              </div>
+              </div> -->
               <div class="row" style="padding: 0.3em 0;">
                 <div class="medium-2 columns" style="padding:0;">
                     <img src="./img/wdcfooter.png" style="width:48px">
@@ -359,8 +361,8 @@ div.tags{
         <p style="font-size:x-small; margin: 0;"> 
           Developed by <a href="http://wdc.org.ua" target="_blank">WDC Data Mining Lab</a>. 
         </p>
-        <p style="font-size:x-small; margin: 0;">Designed by <a href="mailto:alina.kalapa@ukr.net" target="_blank">Alina Kalapa</a>
-        </p>
+        <!-- <p style="font-size:x-small; margin: 0;">Designed by <a href="mailto:alina.kalapa@ukr.net" target="_blank">Alina Kalapa</a>
+        </p> -->
       </div>  
     </div>  
  </div>
@@ -382,5 +384,5 @@ div.tags{
       </div>  
     </div>  
   </div>
-    
+   
 </div>  
