@@ -115,6 +115,22 @@ info.factory('dpsEditor', function($modal) {
 });
 
 
+info.factory('jsonEditor', function($modal) {
+    return (json, title) => {
+        return $modal.open({
+            templateUrl: '/partials/json-editor.html',
+            controller: 'JsonEditorController',
+            // windowClass: 'dialog-modal',
+            backdrop: 'static',
+            resolve: {
+                json: () => json,
+                title: () => title
+                   
+            }
+        }).result;
+    };
+});
+
 info.factory('dialog', function($modal) {
     return (form) => {
         return $modal.open({
@@ -226,6 +242,34 @@ info.controller('DpsEditorController', function($scope, $modalInstance, script, 
         }    
     
     $scope.script = script;
+    $scope.title = title;
+
+    $scope.close = () => {
+        $modalInstance.close(__script);
+    }
+    
+    $scope.dismiss = () => {
+            $modalInstance.dismiss();
+    };
+});
+
+info.controller('JsonEditorController', function($scope, $modalInstance, json, title) {
+   
+    var __script;
+    
+    $scope.options = {
+        mode:'json', 
+        theme:'tomorrow',
+        onChange: function(e){
+            __script = e[1].getSession().getValue();
+        }
+    }
+
+    $scope.getEditorScript = function(){
+            return __script;
+        }    
+    
+    $scope.script = json;
     $scope.title = title;
 
     $scope.close = () => {

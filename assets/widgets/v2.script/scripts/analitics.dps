@@ -12,11 +12,11 @@
 ****************************************************************/
     <?javascript
         
-        $context.meanEstimation = function(values){
+        $scope.meanEstimation = function(values){
           return (values[values.length-2]+values[values.length-1])/2
         };
         
-        $context.diff = function(values){
+        $scope.diff = function(values){
           return (values[values.length-4]-values[values.length-1])/values[values.length-4]
         };
         

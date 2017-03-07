@@ -1,0 +1,23 @@
+<style>
+	.editor {
+	    width: 100%;
+	    height: 100%;
+	    margin: 0;
+	    font-size: 1em;
+	    line-height: 0.9;
+	}
+
+	.highlighter {
+	    line-height: 1;
+	}
+</style>
+<form>
+	<h5>{{title}}</h5>
+    <a class="close-reveal-modal" ng-click="dismiss()">&#215;</a>
+    <div class="row" style="padding: 0.1rem; border: 1px solid #aaa; margin:2em 0 0 0; height:32em">
+        <div class="editor" ng-ace data="script" options="options">
+        </div>
+    </div>
+    <button class="button tiny right alert seq" ng-click="dismiss()" translate>CANCEL</button>
+    <button type="submit" class="button tiny right seq " translate ng-click="close()">OK</button>
+</form>

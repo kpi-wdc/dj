@@ -224,11 +224,11 @@ div.tags{
     <div class="medium-6 columns">
       <div class="property-info">
           <h3>
-            <img src="./img/sseopen.png" style="height: 48px;margin: 0 0.2em 0 0;"/> 
-            SSE ChNPP Open Data
+            <img src="{{(config.icon)?config.icon:'./img/default-app-icon.png'}}" style="height: 48px;margin: 0 0.2em 0 0;"/> 
+             {{config.title | translate}}<!-- SSE ChNPP Open Data -->
           </h3>
-          <p>
-            SSECHNPP Open Data є спільним проектом ДСП "Чорнобильська АЕС" та Світового центру даних "Геоінформатика та сталий розвиток", мета якого забезпечити відкритий доступ до даних інтегрованої автоматизованої системи моніторингу об'єкту "Укриття" Чорнобильської АЕС. Ці дані можуть бути використані міжнародною науковою спільнотою для проведення різноманітних міждисциплінарних досліджень.<!-- 
+          <p>{{config.description | translate}}</p>
+            <!-- SSECHNPP Open Data є спільним проектом ДСП "Чорнобильська АЕС" та Світового центру даних "Геоінформатика та сталий розвиток", мета якого забезпечити відкритий доступ до даних інтегрованої автоматизованої системи моніторингу об'єкту "Укриття" Чорнобильської АЕС. Ці дані можуть бути використані міжнародною науковою спільнотою для проведення різноманітних міждисциплінарних досліджень. --><!-- 
           SSE ChNPP Open Data is the data portal based on DJ platform that provides over 100 dataset about integrated security monitoring system (IAMS) of Chernobyl Nuclear Power Plant. You can search, analyze and use this data for interdisciplinary research.
           Data is tagged by type of measurements, periodicity, device location and IAMS subsystems. Rich metadata about datasets is available.
           We provides demo for easy to use data processing and data mining via DJ Data Processing Script
@@ -374,7 +374,7 @@ div.tags{
       </div>
       <div class="medium-6 columns" style="padding:0 0 0 0.6em;">
         <p style="font-size:x-small; margin: 0;"> 
-          Copyright &copy; 2014-2016 <a href="mailto:boldak.andrey@gmail.com" target="_blank">Andrey Boldak</a>. 
+          Copyright &copy; 2014-2017 <a href="mailto:boldak.andrey@gmail.com" target="_blank">Andrey Boldak</a>. 
         </p>
         <p style="font-size:x-small; margin: 0;"> Licensed under the terms of the 
           <a href="./license.html" target="_blank">MIT License</a>

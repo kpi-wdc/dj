@@ -12,7 +12,7 @@ set('ds')
 
   var dm = [];
   
-  $context.ds.forEach(function(d, index){
+  $scope.ds.forEach(function(d, index){
     
     var row = [] 
     for(var i = 0; i<$context.ds.length; i++){ 
@@ -31,7 +31,7 @@ set('ds')
   
   })
 
-  $context.dm = dm;
+  $scope.dm = dm;
 
 
 %>js()

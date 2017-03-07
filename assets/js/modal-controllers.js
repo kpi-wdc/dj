@@ -662,6 +662,12 @@ modals.controller('PageManagerController', function (
     clonePage(){
       app.clonePage();
     },
+    copyPage(){
+      app.copyPage();
+    },
+    pastePage(){
+      app.pastePage();
+    },
     deletePageWithConfirmation(page) {
       $translate('WIDGET.PAGE-LIST.ARE_YOU_SURE_DELETE_PAGE')
         .then(confirm)

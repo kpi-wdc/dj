@@ -33,6 +33,7 @@ import 'widget-api';
 
 
 
+
 const app = angular.module('app', ['ui.router', 'ngStorage', 'ngAnimate', 'oc.lazyLoad', 'mm.foundation',
   'ngCookies', 'angular-json-editor', 'ui.tree','angular-clipboard','cfp.hotkeys',
   'app.templates', 'react', 'duScroll',
@@ -144,11 +145,11 @@ app.service("$scroll",function($document,APIUser){
 })
 
 app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider,
-                     $locationProvider, $ocLazyLoadProvider, $ViewScrollProvider,
+                     $locationProvider, $ocLazyLoadProvider, //$ViewScrollProvider,
                      JSONEditorProvider, appName, defaultApp) {
 
   $ocLazyLoadProvider.config({
-    loadedModules: ['app'],,
+    loadedModules: ['app'],
     asyncLoader: System.amdRequire.bind(System)
   });
 
@@ -172,7 +173,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvi
   });
 
   $locationProvider.html5Mode(true);
-  $ViewScrollProvider.useAnchorScroll();
+  // $ViewScrollProvider.useAnchorScroll();
 
   // this doesn't seem to work, that's why the next snippet does the same
   $urlMatcherFactoryProvider.strictMode(false);
@@ -319,7 +320,8 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
                              $translate, appUrls, appName, fullReload, eventWires, APIUser, 
                              // APIProvider, 
                              hotkeys, splash, appHotkeysInfo,globalConfig,
-                             dialog, portal,templateTypesPromise,initialConfig) {
+                             dialog, portal,templateTypesPromise,
+                             initialConfig, clipboard, jsonEditor) {
 
   let pageConf;
  
@@ -435,6 +437,37 @@ app.service('app', function ($http, $state, $stateParams, $log, config, $rootSco
             $state.go('page', {href: clone.href}, {reload: true});
             this.markModified(true);
         })
+    },
+
+    copyPage() {
+
+       dialog({
+          title:"Copy Page",
+          fields:{
+            page:{
+              title:"Page",
+              type:"select",
+              options: config.pages.map((item) => {return {title:item.shortTitle, value: item}})
+            }
+
+          }
+        })
+        .then((form) => {
+            let copy = form.fields.page.value;
+            clipboard.copyText(copy)
+            
+        })
+    },
+
+    pastePage(){
+      let self = this;
+      jsonEditor("","Paste and modify page configuration")
+      .then(function(json){
+        let p = JSON.parse(json);
+        config.pages.push(p);
+        $state.go('page', {href: p.href}, {reload: true});
+        self.markModified(true);
+      })
     },
 
     openShareSettings() {
