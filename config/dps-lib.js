@@ -1,7 +1,7 @@
 module.exports.dpsLibrary = {
     "baseUrl":{
-    	"import": "http://127.0.0.1:8088/lib/",
-    	"call": "http://127.0.0.1:8088/api/extension/call/"
+    	"import": "https://dj-dps.herokuapp.com/lib/",
+    	"call": "https://dj-dps.herokuapp.com/api/extension/call/"
     },
     "name": 		"Default DJ dps extension library",
     "description": 	"This library provide basic extensions for data processing",
