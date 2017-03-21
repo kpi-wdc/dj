@@ -14,12 +14,6 @@
         "title": "Background",
         "type": "string",
         "default": "./img/default-banner.png"
-      },
-
-      "height":{
-        "title":"Height",
-        "type":"integer",
-        "default":150
       }
     }
   }

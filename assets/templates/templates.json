@@ -24,6 +24,17 @@
       "footer"
     ]
   },
+
+  "tutorial-layout": {
+    "description": "Tutorial layout",
+    "holders" : [
+      "banner",
+      "header",
+      "callout0",
+      "callout1",
+      "main"
+    ]
+  },
   
   "2-cols": {
     "description": "Two-column layout",

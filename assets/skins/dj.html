@@ -1,0 +1,278 @@
+<style>
+.zurb-footer-top.bg-fblue {
+    background: #eee;/*#005c8e;*//*#0737a3;*//*#45552e;*//*#074e68;*/
+}
+.zurb-footer-top, .zurb-footer-top h3, .zurb-footer-top h4, .zurb-footer-top a {
+    padding: 10px 0;
+    color:#333;/*#ddd;*//*#c3cec4;*//*#aeaeae;*/
+}
+
+.zurb-footer-top a:hover, .zurb-footer-top a:focus{
+    color: #f2f2f2 !important;/*#afafaf;*//*#5e666c*/;
+}
+
+.zurb-footer-bottom {
+    background: #333;/*#2c3840;*/
+    padding: 10px 0 10px;
+    color: #c3cec4;/*#afafaf;*//*#5e666c*/;
+    font-family: "Proxima Nova","proxima-nova","Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
+.zurb-footer-bottom  a{
+    color: #c3cec4;
+}
+
+.zurb-footer-bottom  a:hover, .zurb-footer-bottom  a:focus{
+    color: #f2fff3 !important;
+}
+
+.zurb-footer-bottom .zurb-links {
+    margin: 0;
+    display: inline-block;
+    padding-bottom: 0px;
+}
+
+.learn-links ul {
+    margin-left: 0;
+    list-style-type: none;
+    line-height: 1;
+    font-stretch: condensed;
+}
+
+.learn-links ul li{
+    margin: 0 0 0.5em;
+}
+
+h1, h2, h3, h4, h5, a{
+  color: #555;/*#0065a4;*//*#005c8e;*//*#0737a3;*//*#45552E;*/
+}
+.skin-color{
+  color:#555;/*#0065a4;*//*#005c8e;*//*#0737a3;*//*#45552E;*/
+}
+
+.has-tip:hover, .has-tip:focus {
+    /*border-bottom: dotted 1px #003f54;*/
+    color: #005c8e;/*#0737a3;*//*#45552e;*/
+}
+ a:hover, a:focus {
+   color: #555;/*#005c8e;*//*#0737a3;*//*#45552e;*/
+   text-decoration: underline;
+  /*color:#fff;*/
+  /*background: #6a8247;*/
+}
+
+button.success, .button.success {
+    background-color: #0065a4;/*#6a8247;*/
+    border-color: #005c8e;/*#45552e;*/
+    color: #ddd;/*#ffffff;*/
+}
+    
+button.success:hover, 
+button.success:focus, 
+.button.success:hover, 
+.button.success:focus {
+    background-color: #005c8e;/*#0737a3;*//*#45552e;
+*/}
+
+button.normal, .button.normal {
+    background-color: #607d8b;/*#6a8247;*/
+    border-color: #005c8e;/*#45552e;*/
+    color: #ddd;/*#ffffff;*/
+}
+    
+button.normal:hover, 
+button.normal:focus, 
+.button.normal:hover, 
+.button.normal:focus {
+    background-color: #607d8b;/*#0737a3;*//*#45552e;
+*/}
+
+table tr.even, table tr.alt, table tr:nth-of-type(even) {
+    background: #fcfcfc;
+}
+
+/*table thead {
+    background: ##f6f8f4;
+}*/
+table thead {
+    background: #eee;/*#ddd;*//*#d5dccb;*/
+}
+
+table thead tr th, table thead tr td {
+    color:#333;/*#005c8e;*//*#0737a3;*//* #485831;*/
+    /*font-size: 0.875rem;*/
+    font-weight: bold;
+    /*padding: 0.5rem 0.625rem 0.625rem;*/
+}
+
+table tr th, table tr td {
+    padding: 0.2rem 0.5rem;
+    /* font-size: 0.875rem; */
+    color: #333;/*#0737a3;*//*#45552e;*/
+    text-align: left;
+    border: 1px solid #aaa;/*#005c8e;*//*#0737a3;*//*#84a258;*/
+   /* border-right: 1px solid #84a258;*/
+}
+
+
+h1.panel, h2.panel, h3.panel, h4.panel,  h5.panel, i.panel {
+    background-color: #607d8b;/*#6a8247;*/
+    border-style: none;
+    /*border-color: #45552e;
+*/    color: #e9e9e9;
+}
+
+.tag{
+    border: 0.1rem solid #0065a4;/*#6a8247;*/
+    color: #607d8b;/*#6a8247;*/
+    background: #e9e9e9;
+}
+
+div.tags{
+  background: #607d8b;/*#6a8247;*/
+}
+
+.tagPanel {
+  border: 1px solid #0065a4;/*#6a8247;*/
+  background: #fff;
+}
+
+.top-bar .name h1 a, .top-bar .name h2 a, .top-bar .name h3 a, .top-bar .name h4 a, .top-bar .name p a, .top-bar .name span a {
+    color: #e7e7e7;
+    display: block;
+    font-weight: normal;
+    padding: 0 0.9375rem;
+    font-size: x-large;
+}
+
+
+</style>
+
+<div id="scroll-container">
+<!-- <div class="row">
+  <design-panel ng-if="user.isOwner || user.isCollaborator"></design-panel>
+</div> -->
+
+<div class="row" ng-if="globalConfig.designMode">
+  <design-panel></design-panel>
+</div>
+<!-- <div class="row">
+  <widget type="v2.banner" instanceName="Banner" skin="true"></widget>
+</div> -->
+<div class="row">
+  <!-- <login-google-button ng-if="!user.isLoggedIn"></login-google-button> -->
+  <widget type="v2.topbar" instanceName="AppTopbar" skin="true"></widget>
+</div>
+<!-- <div class="row">
+  <widget type="v2.banner" instanceName="Banner" skin="true"></widget>
+</div> -->
+<!-- <div class="row"  style="border-bottom:0.1rem solid #ddd; width:100%; margin:0 0 1em 0;">
+  <language-selector-nav show-flags="true" show-titles="true"></language-selector-nav>
+</div>
+ -->
+<!-- <div class="row">
+  <widget-holder name="app"></widget-holder>
+</div> -->
+
+<div class="row">
+  <div id="page-view" style="margin:0 1em;">
+    <application-view>
+      <translate>LOADING_DOTS</translate>
+    </application-view>
+  </div>
+
+  <!-- <nav class="medium-2 pull-10 columns"> -->
+    <!-- <app-logo></app-logo> -->
+    <!-- <page-list-nav></page-list-nav> -->
+    <!-- <b style="font-size: 14px" translate>LANGUAGE</b> -->
+    <!-- <language-selector-nav show-flags="true"></language-selector-nav> -->
+  <!-- </nav> -->
+</div>
+
+<!-- <footer class="row">
+  <div class="medium-12 columns">
+    <hr>
+    <div class="row">
+      <center>
+        <a href="https://www.mongodb.org"  alt="mongodb.org" target="_blank"><img src="/img/mongodb.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="https://www.nodejs.org"  alt="nodejs.org" target="_blank"><img src="/img/nodejs.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="http://sailsjs.org"  alt="sailsjs.org" target="_blank"><img src="/img/sails1.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="http://foundation.zurb.com"  alt="foundation.zurb.com" target="_blank"><img src="/img/foundation5.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="http://angularjs.org"  alt="angularjs.org" target="_blank"><img src="/img/angular.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="http://facebook.github.io/react/"  alt="facebook.github.io/react/" target="_blank"><img src="/img/reactjs.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href=""  alt="" target="_blank"><img src="/img/dj.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="http://d3js.org"  alt="d3js.org" target="_blank"><img src="/img/d3.png" width="32px" style="margin: 0 0.2em"/></a>
+        <a href="http://nvd3.org"  alt="nvd3.org" target="_blank"><img src="/img/novus.png" width="32px" style="margin: 0 0.2em"/></a>
+        <span style="font-size: small;"> 
+          and <a href="dependencies.html" target="_blank">more...</a>
+        </span>
+      </center>
+    </div>
+    <div class="row">
+      <div class="columns" style="text-align: right;">
+        <p style="font-size:x-small; margin: 0;"> 
+        Copyright &copy; 2014-2016 <a href="mailto:boldak.andrey@gmail.com">Andrey Boldak</a>. 
+        </p>
+        <p style="font-size:x-small"> Licensed under the terms of the 
+        <a href="license.html" target="_blank">MIT License</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer> -->
+
+</div>
+<!-- <div class="row">
+  <div ng-if="user.isLoggedIn">
+    <logout-button></logout-button>
+    <translate>LOGGED_IN_AS</translate> {{user.name }} ({{user.email}})
+  </div>
+  <login-google-button ng-if="!user.isLoggedIn"></login-google-button>
+</div> -->
+
+
+
+
+
+<div class="zurb-footer-top bg-fblue layout-default">
+  <div class="row property">
+    <div class="medium-6 columns">
+      <div class="property-info">
+          <h3>
+            <img src="{{(config.icon)?config.icon:'./img/default-app-icon.png'}}" style="height: 48px;margin: 0 0.2em 0 0;"/> 
+            {{config.title | translate}}
+          </h3>
+          <p>{{config.description | translate}}</p>
+           
+      </div>
+     
+    </div>
+
+    
+  </div>
+</div>
+
+
+
+
+<div class="zurb-footer-bottom"> 
+ 
+ 
+ <div class="row" style="margin: 0.3em 0;">
+    <div class="medium-4 columns">
+    </div>  
+    <div class="medium-4 columns">
+      <div class="medium-6 columns">
+        <p style="margin: 0 0 0 1em;"> Based on <a href="./app/Apps/about" target="_blank"><img src="./img/dj.png" style="height:24px;"/> platform </a></p>
+      </div>
+      <div class="medium-6 columns" style="padding:0 0 0 0.6em;">
+        <p style="font-size:x-small; margin: 0;"> 
+          Copyright &copy; 2014-2017 <a href="mailto:boldak.andrey@gmail.com" target="_blank">Andrey Boldak</a>. 
+        </p>
+        <p style="font-size:x-small; margin: 0;"> Licensed under the terms of the 
+          <a href="./license.html" target="_blank">MIT License</a>
+        </p>
+      </div>  
+    </div>  
+  </div>
+   
+</div>  

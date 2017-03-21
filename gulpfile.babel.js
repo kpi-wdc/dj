@@ -18,7 +18,7 @@ function handleError(err) {
 // BUILD CONFIGURATION
 const buildDir = '.tmp';
 const buildPublicDir = '.tmp/public';
-const libDir = "./lib/**";
+const libDir = "./assets/lib/**";
 const libDestDir = buildPublicDir+'/js/lib'
 
 // BUILD SETTINGS
