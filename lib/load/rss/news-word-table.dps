@@ -38,7 +38,7 @@ return s.toString().toLowerCase().split(/[\\.\\ \\,\\?\\!\\:\\;\\-\\"\\'\\(\\)\\
 ?>
 
 
-lib("http://127.0.0.1:8088/api/extension")
+lib("https://dj-dps.herokuapp.com/api/extension")
 import('imports.words.distance')
 run()
 set('distance')
