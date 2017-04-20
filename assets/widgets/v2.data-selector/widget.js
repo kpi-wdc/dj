@@ -42,7 +42,7 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
             selectedObject.disabled = !selectedObject.disabled;
             this.inverseObjectSelection();
           } 
-          // console.log("Emit selectObject2")
+          // console.log("Emit selectObject", this.objects);
           $scope.emitter.emit("selectObject",this.objects);  
         }
 
@@ -115,7 +115,11 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
           ? table.body
           : table.header;
           list = list.map((item) => {
-            return { key:item.metadata[$scope.widget.decoration.meta.index].label, disabled: true}
+            return { 
+              id:item.metadata[$scope.widget.decoration.meta.index].id,
+              key:item.metadata[$scope.widget.decoration.meta.index].label, 
+              disabled: true
+            }
           }) 
           $scope.$parent.getSelectorData(list)
         })
@@ -127,7 +131,7 @@ m.controller('DataSelectorCtrlV2', function ($scope, $http, $dps, DataSelectorWi
 
     
     .config(()=>{
-      console.log("Config selector")
+      // console.log("Config selector")
       $scope.load();
     })
     

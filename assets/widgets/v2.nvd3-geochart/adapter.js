@@ -25,6 +25,7 @@ m.service("GeochartAdapter", [
   this.onSelectObject = (selection,settings,api) => {
     // console.log("selectObjects",selection)
     let selectedObjects = selection.filter(s => !s.disabled);
+    // console.log("features", settings.data[0].features)
     settings.data[0].features.forEach((o) => {
       if(selectedObjects.filter(so => 
                            o.properties.name.en == so.key
@@ -39,13 +40,27 @@ m.service("GeochartAdapter", [
                         || so.key.indexOf(o.properties.name.en)>=0
                         || so.key.indexOf(o.properties.name.uk)>=0
                         || so.key.indexOf(o.properties.name.ru)>=0
+
+
+                        || o.properties.name.en == so.id
+                        || o.properties.name.uk == so.id
+                        || o.properties.name.ru == so.id
+                        || o.properties.geocode == so.id
+                        
+                        || o.properties.name.en.indexOf(so.id)>=0
+                        || o.properties.name.uk.indexOf(so.id)>=0
+                        || o.properties.name.ru.indexOf(so.id)>=0
+
+                        || so.id.indexOf(o.properties.name.en)>=0
+                        || so.id.indexOf(o.properties.name.uk)>=0
+                        || so.id.indexOf(o.properties.name.ru)>=0
                       ).length > 0){
         o.disabled = false
       }else{
         o.disabled = true
       }      
     })
-    // console.log("settings",settings)  
+     // console.log("settings",settings)  
     return settings;
   }  
     

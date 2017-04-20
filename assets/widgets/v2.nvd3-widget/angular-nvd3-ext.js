@@ -27,6 +27,7 @@
         scope._config = angular.extend(defaultConfig, scope.config);
         scope._onReady = undefined;
         //directive global api
+        
         scope.api = {
           getScope: function(){ return scope; },
 
@@ -143,6 +144,9 @@
             scope.chart = null;
           }
         };
+
+        
+        scope.$parent.$parent.api = scope.api;
 
         // Configure the chart model with the passed options
         function configure(chart, options, chartType) {

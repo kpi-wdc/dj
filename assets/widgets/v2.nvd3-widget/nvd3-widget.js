@@ -202,6 +202,8 @@ define(["angular",
     var NVD3WidgetV2 = function ($scope, params) {
       
       // console.log("create NVD3WidgetV2")
+      // console.log("its scope", $scope)
+      // console.log("its params", params)
 
       $scope.APIProvider = new APIProvider($scope);
       $scope.APIUser = new APIUser($scope);
