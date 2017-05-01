@@ -32,7 +32,7 @@ module.exports = {
     help: {
         synopsis: "Get deep copy of variable and set context",
         name: {
-            "default": "get",
+            "default": "return",
             synonims: []
         },
         input:["any"],
@@ -43,7 +43,13 @@ module.exports = {
                 name: "path",
                 synopsis: "Json path to selected value (optional). If 'value' is not assigned then storage will be restored.",
                 type:["json-path"],
-                synonims: ["path","select"],
+                synonims: ["var"],
+                "default value": "$"
+            },{
+                name: "as",
+                synopsis: "Json as to selected value (optional). If 'value' is not assigned then storage will be restored.",
+                type:["json-path"],
+                synonims: ["type"],
                 "default value": "$"
             }
         ],

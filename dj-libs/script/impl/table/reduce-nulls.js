@@ -59,7 +59,7 @@ module.exports = {
         synopsis: "Remove columns or rows with nulls from table",
 
         name: {
-            "default": "reduce",
+            "default": "reducenulls",
             synonims: ["reduce", "red", "remove"]
         },
         input:["table"],

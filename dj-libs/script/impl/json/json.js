@@ -102,7 +102,25 @@ module.exports = {
         output: "json",
         "default param": "none",
 
-        params: [],
+        params: [{
+            name: "delimiter",
+            synopsis: "Code separator",
+            type:["bindable"],
+            synonims: [],
+            "default value": 0
+        },{
+            name: "quote",
+            synopsis: "Quote in code",
+            type:["bindable"],
+            synonims: [],
+            "default value": 0
+        },{
+            name: "encode",
+            synopsis: "Encoding of programs",
+            type:["bindable"],
+            synonims: ["encode", "encoding"],
+            "default value": 2
+        }],
 
         example: {
             description: "Convert string value '[1,1,1]' to array of numbers",

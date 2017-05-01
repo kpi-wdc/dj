@@ -52,7 +52,7 @@ module.exports = {
         params: [{
             name: "path",
             synopsis: "Json path to selected value (optional). if path is not assigned then input context will be selected.",
-            synonims: [],
+            synonims: ["p", "path"],
             "default value": "empty"
         }],
         example: {

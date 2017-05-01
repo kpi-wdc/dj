@@ -48,8 +48,8 @@ module.exports = {
     params:[{
         name:"value",
         synopsis:"Value of info message",
-        type:["string","number","bindable","injection"],
-        synonims:[],
+        type:["string","number","bindable","injection", "message", "msg"],
+        synonims:["value", "v"],
         "default value": "current context"
       }],
     

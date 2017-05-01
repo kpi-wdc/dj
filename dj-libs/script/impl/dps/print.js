@@ -37,11 +37,11 @@ module.exports = {
 
         name: {
             "default": "print",
-            synonims: []
+            synonims: ["print"]
         },
         input:["any"],
         output:"json",
-        "default param": "none",
+        "default param": "script",
         params: [],
         example: {
             description: "Set 'dps' type for script context",

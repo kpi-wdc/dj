@@ -44,15 +44,21 @@ module.exports = {
     synopsis:"Convert script context to string",
     
     name:{
-      "default" : "string",
-      synonims:["string","str"]
+      "default" : "append",
+      synonims:[]
     },
-    input:["json","string","html"],
-    output:"string",
+    input:["text"],
+    output:"text",
 
-    "default param": "none",
+    "default param": "value",
     
-    params:[],
+    params:[{
+            name: "value",
+            synopsis: "The meaning of the text",
+            type:[],
+            synonims: ["value"],
+            "default value": "none"
+        }],
     
     example:{
       description:"Convert string value '[1,1,1]' to string value '[1,1,1]'",

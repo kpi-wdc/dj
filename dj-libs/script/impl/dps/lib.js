@@ -93,20 +93,26 @@ module.exports = {
     },
 
     help: {
-        synopsis: "Get deep copy of variable and set context",
+        synopsis: "Connection and work with a library",
         name: {
-            "default": "get",
-            synonims: []
+            "default": "library",
+            synonims: ["library", "lib"]
         },
         input:["any"],
         output:"type of variable",
-        "default param": "path",
+        "default param": "url",
         params: [
             {
-                name: "path",
-                synopsis: "Json path to selected value (optional). If 'value' is not assigned then storage will be restored.",
+                name: "url",
+                synopsis: "Single resource index.",
                 type:["json-path"],
-                synonims: ["path","select"],
+                synonims: ["uri","ref"],
+                "default value": "$"
+            },{
+                name: "alias",
+                synopsis: "Additional domain name of the same site.",
+                type:["json-path"],
+                synonims: ["into","as"],
                 "default value": "$"
             }
         ],

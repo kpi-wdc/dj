@@ -256,7 +256,7 @@ module.exports = {
             synonims: ["mode", "method"],
             "default value": "left"
         }, {
-            name: "prefix",
+            name: "as",
             synopsis: "Joined columns metadata prefix (optional)",
             type:["string"],
             synonims: ["prefix", "pref"],

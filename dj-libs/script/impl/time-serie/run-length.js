@@ -128,20 +128,20 @@ module.exports = {
             name: "direction",
             synopsis: "Direction of iteration (optional)",
             type:["Rows", "row", "Columns", "col"],
-            synonims: ["direction", "dir"],
+            synonims: ["direction", "dir", "for"],
             "default value": "Columns"
         }, {
             name: "indexes",
             synopsis: "Array of 0-based index of time series (optional)",
             type:["array of index"],
-            synonims: ["values", "series"],
+            synonims: ["values", "series", "indexes"],
             "default value": []
         },
         {
             name: "interval",
             synopsis: "Shift interval (optional)",
             type:["number"],
-            synonims: ["interval", "lag"],
+            synonims: ["interval", "window"],
             "default value": 0
         }],
         example: {
