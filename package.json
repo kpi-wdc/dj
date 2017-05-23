@@ -38,9 +38,11 @@
   "dependencies": {
     "avg": "file:proc/avg",
     "babel": "4.7.16",
+    "bayes-simulator": "^0.4.0",
     "bcryptjs": "2.1.0",
     "bluebird": "^3.0.5",
     "bower-json": "^0.8.1",
+    "connect": "^3.6.2",
     "connect-mongo": "0.8.1",
     "copy-object": "^1.0.0",
     "csvjson": "^4.0.0",

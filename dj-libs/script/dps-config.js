@@ -18,6 +18,7 @@ module.exports =
         .concat(require("./impl/xml"))
         .concat(require("./impl/csv"))
         .concat(require("./impl/text"))
+        .concat(require("./impl/bbn"))
     
     
     
