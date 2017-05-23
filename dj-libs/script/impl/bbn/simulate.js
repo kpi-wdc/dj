@@ -6,7 +6,8 @@ SimulateImplError.prototype = Object.create(Error.prototype);
 SimulateImplError.prototype.constructor = SimulateImplError;
 
 // because of saving in storage
-var initParents = function(bbn) {
+var restoreRefs = function(simulator) {
+    var bbn = simulator.bbn;
     bbn.nodeMap = undefined;
     bbn.nodes.forEach(function(node) {
         if (!node.parents) {
@@ -36,28 +37,16 @@ module.exports = {
     },
 
     execute: function(command, state) {
-        if (!command.settings.simulator && state.head.type != "bbn-simulator")
+        if (!command.settings.simulator && state.head.type != "bbn-simulator" ||
+                !command.settings.evidences && state.head.type != "bbn-evidences")
             throw new SimulateImplError("Incompatible context type: '" + state.head.type + "'.");
+
         var simulator = command.settings.simulator || state.head.data;
-        var bbn = simulator.bbn;
-        initParents(bbn);
-        var evidences = command.settings.evidences;
+        restoreRefs(simulator);
+        var evidences = command.settings.evidences || state.head.data;
         try {           
-            for (var nodeName in evidences) {
-                bbn.observe(nodeName, evidences[nodeName]);
-            }
-            bbn.sample(10000);
-            var conclusions = {};
-            bbn.nodes.forEach(function(node) {
-                var probs = node.probs();
-                var conclusion = {};
-                node.values.forEach(function(value, index) {
-                    conclusion[value] = probs[index];
-                });
-                conclusions[node.name] = conclusion;
-            });
             state.head = {
-                data: conclusions,
+                data: simulator.getConclusions(evidences),
                 type: "bbn-conclusions"
             }
         } catch (e) {
