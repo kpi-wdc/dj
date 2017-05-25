@@ -1,0 +1,213 @@
+<?javascript 
+    $scope.model= {
+	"metadata":{
+		"type":"bbn-model"
+	},
+	"variables": {
+		"High" : {
+	  		"domain":["true", "false"],
+	  		"range":{
+	  			"boundary": {
+	  				"low":1,
+	  				"high":5
+	  			},
+	  			"step":1
+	  		},
+	  		"layer":"output",
+	  		"causes":[{
+	  			"ref": "Traffic",
+	  			"metadata": {}
+	  		}],
+	  		"cpt":[[1,0],[0,1],[0,1]],
+	  		"metadata": {}
+	  	},
+	  	"Medium": {
+	  		"domain":["true", "false"],
+	  		"range":{
+	  			"boundary": {
+	  				"low":1,
+	  				"high":5
+	  			},
+	  			"step":1
+	  		},
+	  		"layer":"output",
+	  		"causes":[{
+	  			"ref": "Traffic",
+	  			"metadata": {}
+	  		}],
+	  		"cpt":[[0,1],[1,0],[0,1]],
+	  		"metadata": {}
+	  	},
+	  	"Low": {
+	  		"domain":["true", "false"],
+	  		"range":{
+	  			"boundary": {
+	  				"low":1,
+	  				"high":5
+	  			},
+	  			"step":1
+	  		},
+	  		"layer":"output",
+	  		"causes":[{
+	  			"ref": "Traffic",
+	  			"metadata": {}
+	  		}],
+	  		"cpt":[[0,1],[0,1],[1,0]],
+	  		"metadata": {}
+	  	},
+	  	"Traffic": {
+	  		"domain":["high", "medium", "low"],
+	  		"range":{
+	  			"boundary": {
+	  				"low":1,
+	  				"high":5
+	  			},
+	  			"step":1
+	  		},
+	  		"layer":"model",
+	  		"causes":[{
+	  			"ref": "Day",
+	  			"metadata": {}
+	  		},{
+	  			"ref": "Time",
+	  			"metadata": {}
+	  		}],
+	  		"cpt":[
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55],
+
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55],
+		  	],
+	  		"metadata": {}
+	  	},
+	  	"Day": {
+	  		"domain":["monday", "tuesday"],
+	  		"indicators":{
+	  			"monday":{
+	  				"start":{
+	  					"stamp":"2017-05-22",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-23",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
+	  			},
+	  			"tuesday":{
+	  				"start":{
+	  					"stamp":"2017-05-23",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-24",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
+	  			}
+	  		},
+	  		"layer":"model",
+	  		"causes":[],
+		  	"cpt":[0.5,0.5],
+	  		"metadata": {}
+	  	},
+	  	"Time": {
+	  		"domain":["morning", "day", "evening", "night"],
+	  		"indicators":{
+	  			"morning":{
+	  				"start":{
+	  					"stamp":"2017-05-22 04:01",
+	  					"format":"YYYY-MM-DD HH:mm"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-22 11:30",
+	  					"format":"YYYY-MM-DD HH:mm"
+	  				},
+	  				"distribution": [{
+	  					"fromStart":"0ms",
+	  					"prob":0.4
+	  				}, {
+	  					"fromStart":"2h",
+	  					"prob":1.0
+	  				}],
+	  				"period":"1d"
+	  			},
+	  			"day":{
+	  				"start":{
+	  					"stamp":"2017-05-22 11:31",
+	  					"format":"YYYY-MM-DD HH:mm"	
+	  				},
+	  				"distribution": [{
+	  					"fromStart":"0ms",
+	  					"prob":0.4
+	  				}, {
+	  					"fromStart":"2h",
+	  					"prob":1.0
+	  				}],
+	  				"end": {
+	  					"stamp":"2017-05-22 17:00",
+	  					"format":"YYYY-MM-DD HH:mm"
+	  				},
+	  				"period":"1d"
+	  			},
+	  			"evening": {
+	  				"start":{
+	  					"stamp":"2017-05-22 17:01",
+	  					"format":"YYYY-MM-DD HH:mm"	
+	  				},
+	  				"distribution": [{
+	  					"fromStart":"0ms",
+	  					"prob":0.4
+	  				}, {
+	  					"fromStart":"2h",
+	  					"prob":1.0
+	  				}],
+	  				"end": {
+	  					"stamp":"2017-05-22 23:30",
+	  					"format":"YYYY-MM-DD HH:mm"
+	  				},
+	  				"period":"1d"
+	  			},
+	  			"night": {
+	  				"start":{
+	  					"stamp":"2017-05-22 23:31",
+	  					"format":"YYYY-MM-DD HH:mm"	
+	  				},
+	  				"distribution": [{
+	  					"fromStart":"0ms",
+	  					"prob":0.4
+	  				}, {
+	  					"fromStart":"2h",
+	  					"prob":1.0
+	  				}],
+	  				"end": {
+	  					"stamp":"2017-05-23 04:00",
+	  					"format":"YYYY-MM-DD HH:mm"
+	  				},
+	  				"period":"1d"
+	  			}
+	  		},
+	  		"layer":"model",
+	  		"causes":[],
+		  	"cpt":[0.25,0.25,0.25,0.25],
+	  		"metadata": {}
+	  	}
+	}
+}
+
+$scope.time = {
+    "stamp":"2017-05-23 10:00",
+	"format":"YYYY-MM-DD HH:mm"
+}
+
+?>
+simulator({{model}})
+set(var:"sim")
+evids({{time}})
+set(var:"evids")
+get("evids")
