@@ -111,9 +111,8 @@
 	  				"period":"7d"
 	  			}
 	  		},
-	  		"layer":"model",
+	  		"layer":"input",
 	  		"causes":[],
-		  	"cpt":[0.5,0.5],
 	  		"metadata": {}
 	  	},
 	  	"Time": {
@@ -192,17 +191,21 @@
 	  				"period":"1d"
 	  			}
 	  		},
-	  		"layer":"model",
+	  		"layer":"input",
 	  		"causes":[],
-		  	"cpt":[0.25,0.25,0.25,0.25],
 	  		"metadata": {}
 	  	}
 	}
 }
 
 $scope.time = {
-    "stamp":"2017-05-23 10:00",
+    "stamp":"2017-05-23 18:40",
 	"format":"YYYY-MM-DD HH:mm"
+}
+
+$scope.evids = {
+    "Day":"monday",
+    "Time":"day"
 }
 
 ?>
@@ -210,4 +213,6 @@ simulator({{model}})
 set(var:"sim")
 evids({{time}})
 set(var:"evids")
-get("evids")
+propagate(evids:{{evids}}, sim:{{sim}})
+set(var:"conclusions")
+get("conclusions")
