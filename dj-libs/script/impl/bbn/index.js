@@ -1,5 +1,6 @@
 module.exports = [
 	require("./bbn"),
 	require("./simulate"),
-	require("./evidences")
+	require("./evidences"),
+	require("./situation")
 ] 

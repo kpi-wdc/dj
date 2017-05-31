@@ -82,11 +82,36 @@
 			   [0.20, 0.40, 0.40],
 			   [0.75, 0.22, 0.03],
 			   [0.15, 0.30, 0.55],
+			   
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55],
+			   
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55],
+			   
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55],
+			   
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55],
+			   
+			   [0.70, 0.25, 0.05],
+			   [0.20, 0.40, 0.40],
+			   [0.75, 0.22, 0.03],
+			   [0.15, 0.30, 0.55]
 		  	],
 	  		"metadata": {}
 	  	},
 	  	"Day": {
-	  		"domain":["monday", "tuesday"],
+	  		"domain":["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
 	  		"indicators":{
 	  			"monday":{
 	  				"start":{
@@ -109,6 +134,61 @@
 	  					"format":"YYYY-MM-DD"
 	  				},
 	  				"period":"7d"
+	  			},
+	  			"wednesday":{
+	  				"start":{
+	  					"stamp":"2017-05-24",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-25",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
+	  			},
+	  			"thursday":{
+	  				"start":{
+	  					"stamp":"2017-05-25",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-26",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
+	  			},
+	  			"friday":{
+	  				"start":{
+	  					"stamp":"2017-05-26",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-27",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
+	  			},
+	  			"saturday":{
+	  				"start":{
+	  					"stamp":"2017-05-27",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-28",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
+	  			},
+	  			"sunday":{
+	  				"start":{
+	  					"stamp":"2017-05-28",
+	  					"format":"YYYY-MM-DD"	
+	  				},
+	  				"end": {
+	  					"stamp":"2017-05-29",
+	  					"format":"YYYY-MM-DD"
+	  				},
+	  				"period":"7d"
 	  			}
 	  		},
 	  		"layer":"input",
@@ -120,7 +200,7 @@
 	  		"indicators":{
 	  			"morning":{
 	  				"start":{
-	  					"stamp":"2017-05-22 04:01",
+	  					"stamp":"2017-05-22 04:00",
 	  					"format":"YYYY-MM-DD HH:mm"	
 	  				},
 	  				"end": {
@@ -131,22 +211,40 @@
 	  					"fromStart":"0ms",
 	  					"prob":0.4
 	  				}, {
-	  					"fromStart":"2h",
+	  					"fromStart":"1h30m",
 	  					"prob":1.0
+	  				}, {
+	  				    "fromStart":"3h",
+	  					"prob":0.7
+	  				}, {
+	  				    "fromStart":"6h",
+	  					"prob":0.35
+	  				}, {
+	  				    "fromStart":"7h",
+	  					"prob":0.1
 	  				}],
 	  				"period":"1d"
 	  			},
 	  			"day":{
 	  				"start":{
-	  					"stamp":"2017-05-22 11:31",
+	  					"stamp":"2017-05-22 10:30",
 	  					"format":"YYYY-MM-DD HH:mm"	
 	  				},
 	  				"distribution": [{
 	  					"fromStart":"0ms",
-	  					"prob":0.4
+	  					"prob":0.2
 	  				}, {
-	  					"fromStart":"2h",
+	  					"fromStart":"1h",
+	  					"prob":0.8
+	  				}, {
+	  				    "fromStart":"2h30m",
 	  					"prob":1.0
+	  				}, {
+	  				    "fromStart":"4h",
+	  					"prob":0.5
+	  				}, {
+	  				    "fromStart":"6h",
+	  					"prob":0.1
 	  				}],
 	  				"end": {
 	  					"stamp":"2017-05-22 17:00",
@@ -156,15 +254,24 @@
 	  			},
 	  			"evening": {
 	  				"start":{
-	  					"stamp":"2017-05-22 17:01",
+	  					"stamp":"2017-05-22 16:30",
 	  					"format":"YYYY-MM-DD HH:mm"	
 	  				},
 	  				"distribution": [{
 	  					"fromStart":"0ms",
-	  					"prob":0.4
+	  					"prob":0.1
 	  				}, {
 	  					"fromStart":"2h",
+	  					"prob":0.6
+	  				}, {
+	  				    "fromStart":"3h30m",
 	  					"prob":1.0
+	  				}, {
+	  				    "fromStart":"5h",
+	  					"prob":0.7
+	  				}, {
+	  				    "fromStart":"6h",
+	  					"prob":0.3
 	  				}],
 	  				"end": {
 	  					"stamp":"2017-05-22 23:30",
@@ -174,7 +281,7 @@
 	  			},
 	  			"night": {
 	  				"start":{
-	  					"stamp":"2017-05-22 23:31",
+	  					"stamp":"2017-05-22 22:00",
 	  					"format":"YYYY-MM-DD HH:mm"	
 	  				},
 	  				"distribution": [{
@@ -183,9 +290,18 @@
 	  				}, {
 	  					"fromStart":"2h",
 	  					"prob":1.0
+	  				}, {
+	  				    "fromStart":"4h30m",
+	  					"prob":0.7
+	  				}, {
+	  				    "fromStart":"5h",
+	  					"prob":0.35
+	  				}, {
+	  				    "fromStart":"6h",
+	  					"prob":0.1
 	  				}],
 	  				"end": {
-	  					"stamp":"2017-05-23 04:00",
+	  					"stamp":"2017-05-23 05:00",
 	  					"format":"YYYY-MM-DD HH:mm"
 	  				},
 	  				"period":"1d"
@@ -199,13 +315,8 @@
 }
 
 $scope.time = {
-    "stamp":"2017-05-23 18:40",
+    "stamp":"2017-05-21 22:30",
 	"format":"YYYY-MM-DD HH:mm"
-}
-
-$scope.evids = {
-    "Day":"monday",
-    "Time":"day"
 }
 
 ?>
@@ -213,6 +324,7 @@ simulator({{model}})
 set(var:"sim")
 evids({{time}})
 set(var:"evids")
+get("evids")
 propagate(evids:{{evids}}, sim:{{sim}})
 set(var:"conclusions")
 get("conclusions")
