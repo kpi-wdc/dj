@@ -286,7 +286,7 @@
 	  				},
 	  				"distribution": [{
 	  					"fromStart":"0ms",
-	  					"prob":0.4
+	  					"prob":0.3
 	  				}, {
 	  					"fromStart":"2h",
 	  					"prob":1.0
@@ -315,7 +315,7 @@
 }
 
 $scope.time = {
-    "stamp":"2017-05-21 22:30",
+    "stamp":"2017-05-21 22:00",
 	"format":"YYYY-MM-DD HH:mm"
 }
 
@@ -324,7 +324,6 @@ simulator({{model}})
 set(var:"sim")
 evids({{time}})
 set(var:"evids")
-get("evids")
 propagate(evids:{{evids}}, sim:{{sim}})
 set(var:"conclusions")
 get("conclusions")

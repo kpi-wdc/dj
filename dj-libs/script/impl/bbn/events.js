@@ -1,9 +1,9 @@
-var SituationImplError = function(message) {
+var EventsImplError = function(message) {
     this.message = message;
-    this.name = "Command 'situation' implementation error";
+    this.name = "Command 'events' implementation error";
 }
-SituationImplError.prototype = Object.create(Error.prototype);
-SituationImplError.prototype.constructor = SituationImplError;
+EventsImplError.prototype = Object.create(Error.prototype);
+EventsImplError.prototype.constructor = EventsImplError;
 
 // because of saving in storage
 var restoreRefs = function(simulator) {
@@ -22,12 +22,11 @@ var restoreRefs = function(simulator) {
 }
 
 module.exports = {
-    name: "situation",
+    name: "events",
     synonims:{
     },
     "internal aliases": {
-        "evids": "evidences",
-        "sim" : "simulator",
+        "events": "eventNames",
         "start" : "fromT",
         "end" : "toT"
     },
@@ -37,20 +36,20 @@ module.exports = {
 
     execute: function(command, state) {
         if (!command.settings.simulator && state.head.type != "bbn-simulator")
-            throw new SituationImplError("Incompatible context type: '" + state.head.type + "'.");
+            throw new EventsImplError("Incompatible context type: '" + state.head.type + "'.");
 
         var simulator = command.settings.simulator || state.head.data;
         restoreRefs(simulator);
-        var evidences = command.settings.evidences;
+        var eventNames = command.settings.eventNames;
         var fromT = command.settings.fromT;
         var toT = command.settings.toT;
         try {           
             state.head = {
-                data: simulator.getSituationData(evidences, fromT, toT),
-                type: "situation-data"
+                data: simulator.getIndicatorsData(eventNames, fromT, toT),
+                type: "indicators-data"
             }
         } catch (e) {
-            throw new SituationImplError(e.toString());
+            throw new EventsImplError(e.toString());
         }
 
         return state;

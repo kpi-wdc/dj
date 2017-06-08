@@ -7,17 +7,6 @@ var BbnImplError = function(message) {
 BbnImplError.prototype = Object.create(Error.prototype);
 BbnImplError.prototype.constructor = BbnImplError;
 
-// var validateModel = function(model) {
-//     if (!model.metadata)
-//         throw new BbnImplError("No metadata.");
-//     if (model.metadata.type != "bbn-model") {
-//         throw new BbnImplError("Incompatible metadata type: '" + model.metadata.type + "'.");
-//     }
-//     model.variables.forEach(function(variable) {
-
-//     });
-// }
-
 module.exports = {
     name: "bbn",
     synonims:{

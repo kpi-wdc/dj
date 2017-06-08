@@ -326,13 +326,14 @@ $scope.toT = {
 }
 
 
-$scope.evids = {
-    "High":"true"
-}
+$scope.eventNames = [
+    "Time",
+    "Day=monday"
+]
 
 ?>
 simulator({{model}})
 set(var:"sim")
-situation(evids:{{evids}}, fromT:{{fromT}}, toT:{{toT}})
+events(events:{{eventNames}}, fromT:{{fromT}}, toT:{{toT}})
 set(var:"data")
 get("data")
