@@ -1,0 +1,157 @@
+{
+  "id": "http://example.com/bbn_schema.json",
+  "definitions": {
+    "time": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "stamp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "stamp"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "bbn-model"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "variables": {
+      "type": "object",
+      "patternProperties": {
+        "^.+$": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "layer": {
+              "type": "string",
+              "enum": [
+                "input",
+                "model",
+                "output"
+              ]
+            },
+            "causes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ref": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "ref"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "cpt": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "indicators": {
+              "type": "object",
+              "patternProperties": {
+                "^.+$": {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "$ref": "#/definitions/time"
+                    },
+                    "end": {
+                      "$ref": "#/definitions/time"
+                    },
+                    "distribution": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fromStart": {
+                            "type": "string"
+                          },
+                          "prob": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          }
+                        },
+                        "required": [
+                          "fromStart",
+                          "prob"
+                        ]
+                      }
+                    },
+                    "period": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "start"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "metadata": {
+              "type": "object"
+            }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "cpt"
+              ]
+            },
+            {
+              "required": [
+                "indicators"
+              ]
+            }
+          ],
+          "required": [
+            "domain",
+            "layer",
+            "causes"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "metadata",
+    "variables"
+  ]
+}
