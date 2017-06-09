@@ -170,7 +170,9 @@ var getTimePointsFromIndicators = function(indicators, fromT, toT) {
 			} while(pDuration && isInInterval(sDate, fromDate, toDate));
 		}
 	}
-	return Array.from(timePointsSet);
+	var timePointsArray = [];
+	timePointsSet.forEach(v => timePointsArray.push(v));
+	return timePointsArray;
 }
 
 module.exports = function(bbnModel) {
@@ -334,6 +336,7 @@ module.exports = function(bbnModel) {
 						node.values.forEach(function(valueName) {
 							probs.push(evid[valueName] ? evid[valueName] : 0);
 						});
+						probs.splice(node.values.indexOf(UNDEF_VALUE_NAME), 1);
 					} else {
 						probs.push(evid[names[1]] ? evid[names[1]] : 0)
 					}
