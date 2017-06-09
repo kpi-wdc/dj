@@ -10,7 +10,7 @@ BbnImplError.prototype.constructor = BbnImplError;
 module.exports = {
     name: "bbn",
     synonims:{
-        "simulator":"bbn"
+        "simulator":"bbn "
     },
     "internal aliases": {
         "model": "model",
