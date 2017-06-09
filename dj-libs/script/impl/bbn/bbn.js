@@ -1,4 +1,4 @@
-var bayesSimulator = require("../../../bayes-simulator");
+var bayesSimulator = require("./../../../bayes-simulator");
 
 var BbnImplError = function(message) {
     this.message = message;
