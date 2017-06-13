@@ -216,7 +216,7 @@ module.exports = {
             name: "axisX",
             synopsis: "0-based index of x axis values (optional)",
             type:["number"],
-            synonims: ["axisX", "xaxis", "x"],
+            synonims: ["axisX", "xaxis", "x", "axisx"],
             "default value": 0
         }, {
             name: "index",

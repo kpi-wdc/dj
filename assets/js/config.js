@@ -45,7 +45,6 @@ System.config({
     "jsinq": "components/jsinq/source/jsinq.js",
     "jsinq-query": "components/jsinq/source/jsinq-query.js",
     "json-stat": "components/jsonstat/json-stat.max.js",
-   
     "nv.d3": "components/nvd3/nv.d3.js",
     "wizard-directives": "widgets/v2.steps/wizard-directives.js",
     "md5": "components/md5/js/md5.js",
@@ -53,7 +52,6 @@ System.config({
     "github:*": "../../jspm_packages/github/*.js"
   }
 });
-
 
 System.config({
   "meta": {

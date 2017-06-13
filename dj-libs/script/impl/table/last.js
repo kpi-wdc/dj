@@ -93,22 +93,22 @@ module.exports = {
         output:"table",
         "default param": "count",
         params: [{
-                name: "start",
-                synopsis: "1-based index of start row (optional)",
-                type:["number"],
-                synonims: ["start", "s"],
+                name: "direction",
+                synopsis: "Direction of iteration (optional)",
+                type:["Rows", "row", "Columns", "col"],
+                synonims: ["direction", "dir", "for"],
                 "default value": 1
             }, {
-                name: "length",
-                synopsis: "Number of rows (optional)",
+                name: "count",
+                synopsis: " (optional)",
                 type:["number"],
-                synonims: ["length", "l"],
+                synonims: ["length", "count"],
                 "default value": 1
             }
 
         ],
         example: {
-            description: "Limit table rows",
+            description: "Get last rows of table",
             code:   "load(\r\n    ds:'47611d63-b230-11e6-8a1a-0f91ca29d77e_2016_02',\r\n    as:\"dataset\")\r\n    \r\nproj([\r\n    { dim:'time', as:'row'},\r\n    { dim:'indicator', as:'col'}\r\n])\r\n\r\nlimit(s:1,l:2)\r\n"
         }
     }

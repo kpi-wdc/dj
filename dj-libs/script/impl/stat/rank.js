@@ -173,7 +173,7 @@ module.exports = {
             name: "asc",
             synopsis: "Define order (optional)",
             type:["A-Z", "az", "direct", "Z-A", "za", "inverse"],
-            synonims: ["asc", "as"],
+            synonims: ["order", "as"],
             "default value": "A-Z"
         }],
         example: {

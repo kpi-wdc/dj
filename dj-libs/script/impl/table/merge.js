@@ -108,7 +108,7 @@ module.exports = {
                 name: "direction",
                 synopsis: "Direction of iteration (optional)",
                 type:["Rows", "row", "Columns", "col"],
-                synonims: ["direction", "dir"],
+                synonims: ["direction", "dir", "for"],
                 "default value": "Columns"
             }, {
                 name: "master",

@@ -104,12 +104,24 @@ module.exports = {
         },
         input:["dataset"],
         output:"table",
-        "default param": "query",
+        "default param": "projection",
         params: [{
-            name: "query",
+            name: "dimension",
+            synopsis: "Array of selections (required) such as {dimension: dim.id, role: [row, col, split-row, split-row, ign], values: array of dim.values.id}",
+            type:["columns splitter", "split-col", "scol", "cs", "col-split", "rows splitter", "split-row", "sr", "rs", "row-split"],
+            synonims: ["dimension", "dim"],
+            "default value": 2
+        },{
+            name: "role",
+            synopsis: "Array of selections (required) such as {dimension: dim.id, role: [row, col, split-row, split-row, ign], values: array of dim.values.id}",
+            type:["ignored", "ignore", "ign"],
+            synonims: ["role", "as"],
+            "default value": "Ignore"
+        },{
+            name: "collection",
             synopsis: "Array of selections (required) such as {dimension: dim.id, role: [row, col, split-row, split-row, ign], values: array of dim.values.id}",
             type:["array of selections"],
-            synonims: [],
+            synonims: ["columns", "column", "col"],
             "default value": "none"
         }],
         example: {

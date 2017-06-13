@@ -170,13 +170,13 @@ module.exports = {
                 name: "direction",
                 synopsis: "Direction of  iteration (optional)",
                 type:["Rows", "row", "Columns", "col"],
-                synonims: ["direction", "dir"],
+                synonims: ["direction", "dir", "for"],
                 "default value": "Columns"
             }, {
                 name: "asc",
                 synopsis: "Define order (optional)",
                 type:["A-Z", "az", "direct", "Z-A", "za", "inverse"],
-                synonims: ["asc", "as"],
+                synonims: ["order", "as"],
                 "default value": "A-Z"
             }, {
                 name: "index",

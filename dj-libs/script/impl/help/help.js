@@ -69,7 +69,7 @@ module.exports = {
         synopsis: "Helps for command usage",
         name: {
             "default": "help",
-            synonims: ["h"]
+            synonims: ["h", "help"]
         },
         "default param": "command",
         params: [{

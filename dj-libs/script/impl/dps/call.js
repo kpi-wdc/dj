@@ -113,9 +113,9 @@ module.exports = {
     },
 
     help: {
-        synopsis: "Get deep copy of variable and set context",
+        synopsis: "Call from server",
         name: {
-            "default": "get",
+            "default": "call",
             synonims: []
         },
         input: ["any"],
@@ -125,7 +125,7 @@ module.exports = {
             name: "path",
             synopsis: "Json path to selected value (optional). If 'value' is not assigned then storage will be restored.",
             type: ["json-path"],
-            synonims: ["path", "select"],
+            synonims: ["path", "extension", "ext"],
             "default value": "$"
         }],
         example: {
