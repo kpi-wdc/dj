@@ -12,7 +12,7 @@ module.exports = {
   name: "append",
   synonims:{},
    "internal aliases": {
-        "value": "value"
+        // "value": "value"
     },
 
   defaultProperty:{
