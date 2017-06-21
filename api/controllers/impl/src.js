@@ -1,5 +1,5 @@
 var iconv = require('iconv-lite');
-iconv.extendNodeEncodings();
+// iconv.extendNodeEncodings();
 
 
 var Promise = require("bluebird");

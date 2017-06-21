@@ -164,7 +164,7 @@ module.exports = {
             type: ["bindable"],
             synonims: [],
             "default value": "script context"
-        }{
+        },{
             name: "host",
             synopsis: "Provision of client-server format in server mode.",
             type: ["bindable"],
