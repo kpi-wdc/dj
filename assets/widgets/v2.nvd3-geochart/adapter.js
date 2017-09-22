@@ -65,7 +65,7 @@ m.service("GeochartAdapter", [
   }  
     
   this.applyDecoration = function (options, decoration, selector,api) {
-    if (angular.isDefined(decoration) && angular.isDefined(options)) {
+    if (angular.isDefined(decoration) && angu
       options.chart.height = decoration.height;
       // options.chart.width = decoration.width;
       options.title.text = decoration.title;
